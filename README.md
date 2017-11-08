@@ -1,2 +1,2 @@
-# tilitintin
-Web UI for Tilitin
+# Tilitintin
+Web UI for [Tilitin](https://github.com/thelineva/tilitin).
