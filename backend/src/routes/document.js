@@ -1,15 +1,11 @@
 const express = require('express');
-const moment = require('moment');
 const router = express.Router();
 const db = require('../lib/db');
+const data = require('../lib/data');
 
 router.get('/', (req, res) => {
   db.select('*').from('document').orderBy('number').then(
-    data => res.send(data.map(e => {
-      e.class = 'document';
-      e.date = moment(e.date);
-      return e;
-    }))
+    entries => res.send(data.api(entries, 'document', ['date']))
   );
 });
 
