@@ -8,11 +8,12 @@ const dateFields = {
 };
 
 module.exports = {
-  api: (entries, className) => {
+  api: (entries, className, additionalDates=[]) => {
     return entries.map(e => {
       dateFields[className].forEach(d => e[d] = moment(e[d]));
+      additionalDates.forEach(d => e[d] = moment(e[d]));
       e.class = className;
-      e.link = config.BASEURL + '/' + className + '/' + e.id;
+      e.links = {view: config.BASEURL + '/' + className + '/' + e.id};
       return e;
     });
   }

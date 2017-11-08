@@ -10,7 +10,14 @@ app.use(d.middleware());
 app.use(bodyParser.json());
 app.use(cors());
 app.get('/', (req, res) => {
-  res.redirect('/period/');
+  res.send({
+    links: {
+      periods: config.BASEURL + '/period',
+      accounts: config.BASEURL + '/account',
+      documents: config.BASEURL + '/document',
+      entries: config.BASEURL + '/entry',
+    }
+  });
 });
 app.use('/period', require('./routes/period'));
 app.use('/account', require('./routes/account'));
