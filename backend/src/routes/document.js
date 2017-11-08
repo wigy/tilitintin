@@ -12,7 +12,8 @@ router.get('/', (req, res) => {
 router.get('/:document', (req, res) => {
   const {document} = req.params;
   db.select('entry.*', 'document.date').from('document').where({'document.id': document}).leftJoin('entry', 'document.id', 'entry.document_id').orderBy('row_number').then(
-    entries => res.send(data.api(entries, 'entry', ['date']))
+    // TODO: Change this logic: read single entry first, then add linked items under `entries`.
+    entries => res.send(data.api(entries, 'entry', 'document'))
   );
 });
 
