@@ -55,6 +55,8 @@ router.get('/:id', (req, res) => {
         account.total = account.debit + account.credit;
       });
 
+      data.balances = data.balances.sort((a, b) => (a.number > b.number ? 1 : (a.number < b.number ? -1 : 0)));
+
       delete data.debit;
       delete data.credit;
 
