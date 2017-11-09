@@ -1,18 +1,25 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import { Route, Link } from 'react-router-dom';
 import './App.css';
+import Periods from './Pages/Periods.js';
+import Accounts from './Pages/Accounts.js';
+import Reports from './Pages/Reports.js';
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
+        <header className="Menu">
+          <Link to="/periods">Periods</Link> |
+          <Link to="/accounts">Accounts</Link> |
+          <Link to="/reports">Reports</Link>
         </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <div className="Page">
+          <Route path="/" component={Periods}/>
+          <Route path="/periods" component={Periods}/>
+          <Route path="/accounts" component={Accounts}/>
+          <Route path="/reports" component={Reports}/>
+        </div>
       </div>
     );
   }
