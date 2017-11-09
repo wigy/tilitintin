@@ -47,8 +47,9 @@ router.get('/:id', (req, res) => {
         accounts[item.id].credit = Math.round(item.amount * 100); // TODO: Maybe better on DB level?
       });
 
-      data.accounts = Object.values(accounts);
-      data.accounts.forEach(account => {
+      data.balances = Object.values(accounts);
+      data.balances.forEach(account => {
+        delete account.amount;
         account.debit = account.debit || 0;
         account.credit = -account.credit || 0;
         account.total = account.debit + account.credit;

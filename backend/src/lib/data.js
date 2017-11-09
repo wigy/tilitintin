@@ -105,7 +105,6 @@ function getOne(className, id, joinClass=null, joinClassOrder=null) {
 }
 
 module.exports = {
-  api: fillEntries, // TODO: Remove
   fillEntries: fillEntries,
   listAll: listAll,
   getOne: getOne
