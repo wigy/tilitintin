@@ -1,13 +1,25 @@
 import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react';
+import BalanceLine from '../Components/BalanceLine';
 
-class Period extends Component {
+export default inject('store')(observer(class Period extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {balances: []};
+  }
+
+  componentDidMount() {
+    this.props.store.getPeriod(this.props.match.params.id)
+    .then(data => this.setState({balances: data.balances}));
+}
+
   render() {
     return (
       <div className="Period">
         <h1>Period</h1>
-      </div>
+        {this.state.balances.map(balance => (<BalanceLine key={balance.id} line={balance} />))}
+        </div>
     );
   }
-}
-
-export default Period;
+}));

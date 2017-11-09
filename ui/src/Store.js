@@ -26,6 +26,10 @@ class Store {
     return this.fetch('/period')
       .then(periods => this.periods = periods);
   }
+
+  getPeriod(id) {
+    return this.fetch('/period/' + id);
+  }
 }
 
 export default Store;
