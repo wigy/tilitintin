@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Route, Link } from 'react-router-dom';
-import { inject, observer } from 'mobx-react';
 import './App.css';
 import Periods from './Pages/Periods';
+import Period from './Pages/Period';
 import Accounts from './Pages/Accounts';
 import Reports from './Pages/Reports';
 
-export default inject('store')(observer(class App extends Component {
+class App extends Component {
 
   render() {
     return (
@@ -16,12 +16,17 @@ export default inject('store')(observer(class App extends Component {
           <Link to="/account">Accounts</Link> |
           <Link to="/report">Reports</Link>
         </header>
-        <div className="Page">
+        <div className="LeftPanel">
           <Route path="/period" component={Periods}/>
           <Route path="/account" component={Accounts}/>
           <Route path="/report" component={Reports}/>
         </div>
+       <div className="MainPanel">
+         <Route path="/period/:id" component={Period}/>
       </div>
+    </div>
     );
   }
-}));
+};
+
+export default App;
