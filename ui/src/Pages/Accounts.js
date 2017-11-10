@@ -8,7 +8,7 @@ export default inject('store')(observer(class Accounts extends Component {
     return (
       <div className="Accounts">
         <h1>Accounts</h1>
-        {this.props.store.accounts.map(account => (<div><AccountLink key={account.id} account={account}/></div>))}
+        {this.props.store.accounts.map(account => (<div key={account.id}><AccountLink key={account.id} account={account}/></div>))}
       </div>
     );
   }

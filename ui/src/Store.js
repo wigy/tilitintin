@@ -41,6 +41,16 @@ class Store {
       });
   }
 
+  getAccountPeriod(id, periodId) {
+    console.log('/account/' + id + '/' + periodId)
+
+    return this.fetch('/account/' + id + '/' + periodId)
+      .then(account => {
+        console.log(account);
+        return account;
+      });
+  }
+
   getPeriod(id) {
     return this.fetch('/period/' + id);
   }

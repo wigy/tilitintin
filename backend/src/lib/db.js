@@ -6,6 +6,7 @@ if (!fs.existsSync(config.DB)) {
   throw new Error('Configured DB ' + config.DB + ' does not exist. Please set environment DB.')
 }
 
+// TODO: Rename this module as knex.
 module.exports = knex({
   client: 'sqlite3',
   connection: {

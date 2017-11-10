@@ -18,7 +18,7 @@ export default inject('store')(observer(class Period extends Component {
     return (
       <div className="Period">
         <h1>Period</h1>
-        {this.state.balances.map(balance => (<BalanceLine key={balance.id} line={balance} />))}
+        {this.state.balances.map(balance => (<BalanceLine period={this.props.match.params.id} key={balance.id} line={balance} />))}
         </div>
     );
   }

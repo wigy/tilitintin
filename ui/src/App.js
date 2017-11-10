@@ -3,6 +3,7 @@ import { Route, Link } from 'react-router-dom';
 import './App.css';
 import Periods from './Pages/Periods';
 import Period from './Pages/Period';
+import Account from './Pages/Account';
 import Accounts from './Pages/Accounts';
 import Reports from './Pages/Reports';
 
@@ -23,7 +24,8 @@ class App extends Component {
         </div>
        <div className="MainPanel">
          <Route path="/period/:id" component={Period}/>
-      </div>
+         <Route path="/account/:id/:period" component={Account}/>
+       </div>
     </div>
     );
   }
