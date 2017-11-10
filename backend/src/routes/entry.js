@@ -4,7 +4,7 @@ const data = require('../lib/data');
 
 router.get('/', (req, res) => {
   data.listAll('entry', null, ['id'])
-    .then(data => res.send(data));
+    .then(entries => res.send(entries));
 });
 
 module.exports = router;

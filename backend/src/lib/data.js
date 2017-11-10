@@ -48,7 +48,6 @@ const fields = {
   },
 };
 
-// TODO: Rename.
 function fillEntries (entries, className, joinClass) {
   return entries.map(e => {
     dateFields[className].forEach(d => e[d] = moment(e[d]));
@@ -104,8 +103,85 @@ function getOne(className, id, joinClass=null, joinClassOrder=null) {
   );
 }
 
+function getPeriodCredits(periodId) {
+  return db.select('account.id', 'account.number', 'account.name', db.raw('SUM(entry.amount * 100) as amount')).from('entry')
+    .leftJoin('account', 'account.id', 'entry.account_id')
+    .leftJoin('document', 'document.id', 'entry.document_id')
+    .where({'document.period_id': periodId})
+    .where({'entry.debit': 0})
+    .orderBy('account.number')
+    .groupBy('entry.account_id');
+}
+
+function getPeriodDebits(periodId) {
+  return db.select('account.id', 'account.number', 'account.name', db.raw('SUM(entry.amount * 100) as amount')).from('entry')
+    .leftJoin('account', 'account.id', 'entry.account_id')
+    .leftJoin('document', 'document.id', 'entry.document_id')
+    .where({'document.period_id': periodId})
+    .where({'entry.debit': 1})
+    .orderBy('account.number')
+    .groupBy('entry.account_id');
+}
+
+function getPeriodBalances(periodId) {
+  return getOne('period', periodId)
+  .then(data => {
+    return getPeriodCredits(periodId)
+      .then(entries => {
+        data.credit = entries;
+        return data;
+      });
+  })
+  .then(data => {
+    return getPeriodDebits(periodId)
+      .then(entries => {
+        data.debit = entries;
+        return data;
+      });
+  })
+  .then(data => {
+    let accounts = {};
+    data.debit.forEach(item => {
+      accounts[item.id] = item;
+      accounts[item.id].debit = item.amount;
+    });
+    data.credit.forEach(item => {
+      accounts[item.id] = accounts[item.id] || item;
+      accounts[item.id].credit = item.amount;
+    });
+
+    data.balances = Object.values(accounts);
+    data.balances.forEach(account => {
+      delete account.amount;
+      account.debit = account.debit || 0;
+      account.credit = -account.credit || 0;
+      account.total = account.debit + account.credit;
+      account.links = {
+        view: config.BASEURL + '/account/' + account.id + '/' + periodId
+      };
+    });
+
+    data.balances = data.balances.sort((a, b) => (a.number > b.number ? 1 : (a.number < b.number ? -1 : 0)));
+
+    delete data.debit;
+    delete data.credit;
+
+    return data;
+  });
+}
+
+function getAccountTransactions(accountId, periodId) {
+  return db.select('*', db.raw('entry.amount * 100 as amount')).from('entry')
+  .leftJoin('document', 'document.id', 'entry.document_id')
+  .where({'document.period_id': periodId})
+  .where({'entry.account_id': accountId})
+  .orderBy(['document.number', 'entry.row_number']);
+}
+
 module.exports = {
   fillEntries: fillEntries,
   listAll: listAll,
-  getOne: getOne
+  getOne: getOne,
+  getPeriodBalances: getPeriodBalances,
+  getAccountTransactions: getAccountTransactions,
 };

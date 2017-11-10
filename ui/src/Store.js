@@ -6,10 +6,12 @@ class Store {
 
   constructor() {
     extendObservable(this, {
-      accounts: {},
+      accounts: [],
+      accountsById: {},
       periods: []
     });
     this.getPeriods();
+    this.getAccounts();
   }
 
   fetch(path) {
@@ -24,7 +26,19 @@ class Store {
 
   getPeriods() {
     return this.fetch('/period')
-      .then(periods => this.periods = periods);
+      .then(periods => {
+        this.periods = periods;
+        return periods;
+      });
+  }
+
+  getAccounts() {
+    return this.fetch('/account')
+      .then(accounts => {
+        this.accounts = accounts;
+        accounts.forEach(acc => this.accountsById[acc.id] = acc);
+        return accounts;
+      });
   }
 
   getPeriod(id) {
