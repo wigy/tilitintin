@@ -1,6 +1,6 @@
 const moment = require('moment');
 const config = require('../config');
-const db = require('./db');
+const knex = require('./knex');
 
 const dateFields = {
   account: [],
@@ -73,8 +73,8 @@ function fillEntries (entries, className, joinClass) {
   });
 }
 
-function listAll(className, where, order) {
-  let ret = db.select('*').from(className);
+function listAll(db, className, where, order) {
+  let ret = knex.db(db).select('*').from(className);
   if (where) {
     ret = ret.where(where);
   }
@@ -84,14 +84,14 @@ function listAll(className, where, order) {
   return ret.then(entries => fillEntries(entries, className));
 }
 
-function getOne(className, id, joinClass=null, joinClassOrder=null) {
+function getOne(db, className, id, joinClass=null, joinClassOrder=null) {
   let ret = null;
-  return db.select('*').from(className).where({'id': id}).then(entries => {
+  return knex.db(db).select('*').from(className).where({'id': id}).then(entries => {
       ret = entries.length ? fillEntries(entries, className)[0] : null;
       if (joinClass) {
         const where = {};
         where[className + '_id'] = id;
-        return listAll(joinClass, where, joinClassOrder)
+        return listAll(db, joinClass, where, joinClassOrder)
           .then(entries => {
             ret[plural[joinClass]] = fillEntries(entries, joinClass);
             return ret;
@@ -103,8 +103,8 @@ function getOne(className, id, joinClass=null, joinClassOrder=null) {
   );
 }
 
-function getPeriodCredits(periodId) {
-  return db.select('account.id', 'account.number', 'account.name', db.raw('SUM(entry.amount * 100) as amount')).from('entry')
+function getPeriodCredits(db, periodId) {
+  return knex.db(db).select('account.id', 'account.number', 'account.name', knex.db(db).raw('SUM(entry.amount * 100) as amount')).from('entry')
     .leftJoin('account', 'account.id', 'entry.account_id')
     .leftJoin('document', 'document.id', 'entry.document_id')
     .where({'document.period_id': periodId})
@@ -113,8 +113,8 @@ function getPeriodCredits(periodId) {
     .groupBy('entry.account_id');
 }
 
-function getPeriodDebits(periodId) {
-  return db.select('account.id', 'account.number', 'account.name', db.raw('SUM(entry.amount * 100) as amount')).from('entry')
+function getPeriodDebits(db, periodId) {
+  return knex.db(db).select('account.id', 'account.number', 'account.name', knex.db(db).raw('SUM(entry.amount * 100) as amount')).from('entry')
     .leftJoin('account', 'account.id', 'entry.account_id')
     .leftJoin('document', 'document.id', 'entry.document_id')
     .where({'document.period_id': periodId})
@@ -123,17 +123,17 @@ function getPeriodDebits(periodId) {
     .groupBy('entry.account_id');
 }
 
-function getPeriodBalances(periodId) {
-  return getOne('period', periodId)
+function getPeriodBalances(db, periodId) {
+  return getOne(db, 'period', periodId)
   .then(data => {
-    return getPeriodCredits(periodId)
+    return getPeriodCredits(db, periodId)
       .then(entries => {
         data.credit = entries;
         return data;
       });
   })
   .then(data => {
-    return getPeriodDebits(periodId)
+    return getPeriodDebits(db, periodId)
       .then(entries => {
         data.debit = entries;
         return data;
@@ -170,8 +170,8 @@ function getPeriodBalances(periodId) {
   });
 }
 
-function getAccountTransactions(accountId, periodId) {
-  return db.select('*', db.raw('entry.amount * 100 as amount')).from('entry')
+function getAccountTransactions(db, accountId, periodId) {
+  return knex.db(db).select('*', knex.db(db).raw('entry.amount * 100 as amount')).from('entry')
   .leftJoin('document', 'document.id', 'entry.document_id')
   .where({'document.period_id': periodId})
   .where({'entry.account_id': accountId})

@@ -12,17 +12,10 @@ app.use(cors());
 app.get('/', (req, res) => {
   res.send({
     links: {
-      periods: config.BASEURL + '/period',
-      accounts: config.BASEURL + '/account',
-      documents: config.BASEURL + '/document',
-      entries: config.BASEURL + '/entry',
-    }
-  });
+      databases: config.BASEURL + '/db'
+  }});
 });
-app.use('/period', require('./routes/period'));
-app.use('/account', require('./routes/account'));
-app.use('/document', require('./routes/document'));
-app.use('/entry', require('./routes/entry'));
+app.use('/db', require('./routes/index'));
 
 app.listen(config.PORT, function () {
   d.info('App listening on port ' + config.PORT);
