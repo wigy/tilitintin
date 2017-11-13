@@ -10,9 +10,9 @@ export default inject('store')(observer(class Period extends Component {
   }
 
   componentDidMount() {
-    this.props.store.getPeriod(this.props.match.params.id)
+    this.props.store.getPeriod(this.props.match.params.db, this.props.match.params.id)
     .then(data => this.setState({balances: data.balances}));
-}
+  }
 
   render() {
     return (

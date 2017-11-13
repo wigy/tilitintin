@@ -3,12 +3,23 @@ import { inject, observer } from 'mobx-react';
 import AccountLink from '../Components/AccountLink';
 
 export default inject('store')(observer(class Accounts extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {accounts: []};
+  }
+
+  componentDidMount() {
+    this.props.store.getAccounts(this.props.match.params.db)
+      .then(accounts => this.setState({accounts: accounts}));
+  }
+
   render() {
     // TODO: Headings from coa_heading table.
     return (
       <div className="Accounts">
         <h1>Accounts</h1>
-        {this.props.store.accounts.map(account => (<div key={account.id}><AccountLink key={account.id} account={account}/></div>))}
+        {this.state.accounts.map(account => (<div key={account.id}><AccountLink key={account.id} account={account}/></div>))}
       </div>
     );
   }

@@ -23,10 +23,10 @@ router.get('/:db', checkDb, (req, res) => {
   const {db} = req.params;
   res.send({
     links: {
-      periods: config.BASEURL + '/' + db + '/period',
-      accounts: config.BASEURL + '/' + db + '/account',
-      documents: config.BASEURL + '/' + db + '/document',
-      entries: config.BASEURL + '/' + db + '/entry',
+      periods: config.BASEURL + '/db/' + db + '/period',
+      accounts: config.BASEURL + '/db/' + db + '/account',
+      documents: config.BASEURL + '/db/' + db + '/document',
+      entries: config.BASEURL + '/db/' + db + '/entry',
   }});
 });
 
