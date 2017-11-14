@@ -7,4 +7,9 @@ router.get('/', (req, res) => {
     .then(entries => res.send(entries));
 });
 
+router.get('/:id', (req, res) => {
+  data.getOne(req.db, 'entry', req.params.id)
+    .then(entry => res.send(entry));
+});
+
 module.exports = router;

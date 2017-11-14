@@ -9,7 +9,8 @@ export default inject('store')(observer(class Account extends Component {
   }
 
   componentDidMount() {
-    this.props.store.getAccountPeriod(this.props.match.params.id, this.props.match.params.period)
+    const {db, id, period} = this.props.match.params;
+    this.props.store.getAccountPeriod(db, id, period)
       .then(account => this.setState({account: account}));
   }
 
@@ -17,6 +18,7 @@ export default inject('store')(observer(class Account extends Component {
     return (
       <div className="Account">
         <h1>Account</h1>
+        <h2>{this.state.account.number} {this.state.account.name}</h2>
         </div>
     );
   }

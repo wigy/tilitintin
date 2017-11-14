@@ -48,12 +48,13 @@ const fields = {
   },
 };
 
-function fillEntries (entries, className, joinClass) {
+function fillEntries (db, entries, className, joinClass) {
   return entries.map(e => {
     dateFields[className].forEach(d => e[d] = moment(e[d]));
     e.class = className;
+    e.db = db;
     if (e.id) {
-      e.links = {view: config.BASEURL + '/' + className + '/' + e.id};
+      e.links = {view: config.BASEURL + '/db/' + db + '/' + className + '/' + e.id};
     }
     if (joinClass) {
       let sub = {};
@@ -81,26 +82,26 @@ function listAll(db, className, where, order) {
   if (order) {
     ret.orderBy.apply(ret, order);
   }
-  return ret.then(entries => fillEntries(entries, className));
+  return ret.then(entries => fillEntries(db, entries, className));
 }
 
 function getOne(db, className, id, joinClass=null, joinClassOrder=null) {
   let ret = null;
-  return knex.db(db).select('*').from(className).where({'id': id}).then(entries => {
-      ret = entries.length ? fillEntries(entries, className)[0] : null;
+  return knex.db(db).select('*').from(className).where({'id': id})
+    .then(entries => {
+      ret = entries.length ? fillEntries(db, entries, className)[0] : null;
       if (joinClass) {
         const where = {};
         where[className + '_id'] = id;
         return listAll(db, joinClass, where, joinClassOrder)
           .then(entries => {
-            ret[plural[joinClass]] = fillEntries(entries, joinClass);
+            ret[plural[joinClass]] = fillEntries(db, entries, joinClass);
             return ret;
           });
       } else {
         return ret;
       }
-    }
-  );
+    });
 }
 
 function getPeriodCredits(db, periodId) {
@@ -157,7 +158,7 @@ function getPeriodBalances(db, periodId) {
       account.credit = -account.credit || 0;
       account.total = account.debit + account.credit;
       account.links = {
-        view: config.BASEURL + '/account/' + account.id + '/' + periodId
+        view: config.BASEURL + '/db/' + db + '/account/' + account.id + '/' + periodId
       };
     });
 
@@ -175,7 +176,8 @@ function getAccountTransactions(db, accountId, periodId) {
   .leftJoin('document', 'document.id', 'entry.document_id')
   .where({'document.period_id': periodId})
   .where({'entry.account_id': accountId})
-  .orderBy(['document.number', 'entry.row_number']);
+  .orderBy(['document.number', 'entry.row_number'])
+  .then(entries => fillEntries(db, entries, 'document'));
 }
 
 module.exports = {

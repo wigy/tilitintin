@@ -16,15 +16,15 @@ class App extends Component {
       <div className="App">
         <DbLinks />
         <Route path="/:db" component={Menu}/>
-        <div className="LeftPanel">
-          <Route path="/:db/period" component={Periods}/>
-          <Route path="/:db/account" component={Accounts}/>
-          <Route path="/:db/report" component={Reports}/>
-        </div>
-       <div className="MainPanel">
-         <Route path="/:db/period/:id" component={Period}/>
-         <Route path="/:db/account/:id/:period" component={Account}/>
-       </div>
+        <div className="MainPanel">
+        <Route path="/:db/period/:id" component={Period}/>
+        <Route path="/:db/account/:id/:period" component={Account}/>
+      </div>
+      <div className="LeftPanel">
+        <Route path="/:db/period" component={Periods}/>
+        <Route path="/:db/account" component={Accounts}/>
+        <Route path="/:db/report" component={Reports}/>
+      </div>
     </div>
     );
   }

@@ -6,19 +6,19 @@ export default inject('store')(observer(class Period extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {balances: []};
+    this.state = {period: {balances: []}};
   }
 
   componentDidMount() {
     this.props.store.getPeriod(this.props.match.params.db, this.props.match.params.id)
-    .then(data => this.setState({balances: data.balances}));
+      .then(period => this.setState({period: period}));
   }
 
   render() {
     return (
       <div className="Period">
         <h1>Period</h1>
-        {this.state.balances.map(balance => (<BalanceLine period={this.props.match.params.id} key={balance.id} line={balance} />))}
+        {this.state.period.balances.map(balance => (<BalanceLine period={this.state.period} key={balance.id} line={balance} />))}
         </div>
     );
   }
