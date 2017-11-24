@@ -21,7 +21,7 @@ router.get('/:id/:period', (req, res) => {
       .then(txs => {
         account.transactions = txs;
         res.send(account);
-      })
+      });
   });
 });
 

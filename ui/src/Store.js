@@ -59,7 +59,6 @@ class Store {
   getAccountPeriod(db, id, periodId) {
     return this.fetch('/db/' + db + '/account/' + id + '/' + periodId)
       .then(account => {
-        console.log(account);
         return account;
       });
   }
