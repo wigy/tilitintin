@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import Transaction from '../Components/Transaction';
+import TransactionTable from '../Components/TransactionTable';
 
 export default inject('store')(observer(class Account extends Component {
 
@@ -16,16 +16,12 @@ export default inject('store')(observer(class Account extends Component {
   }
 
   render() {
-    // TODO: Move table to TransactionList component.
+
     return (
       <div className="Account">
         <h1>Account</h1>
         <h2>{this.state.account.number} {this.state.account.name}</h2>
-        <table>
-          <tbody>
-            {this.state.account.transactions.map((tx) => (<Transaction key={tx.id} tx={tx} />))}
-          </tbody>
-        </table>
+        <TransactionTable txs={this.state.account.transactions} />
         </div>
     );
   }
