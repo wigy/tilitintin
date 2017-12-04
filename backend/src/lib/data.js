@@ -7,6 +7,7 @@ const dateFields = {
   document: ['date'],
   entry: [],
   period: ['start_date', 'end_date'],
+  coa_heading: [],
 };
 
 const plural = {
@@ -45,6 +46,11 @@ const fields = {
     "type": true,
     "vat_code": true,
     "vat_percentage": true,
+  },
+  "coa_heading": {
+    "number": true,
+    "text": true,
+    "level": true,
   },
 };
 

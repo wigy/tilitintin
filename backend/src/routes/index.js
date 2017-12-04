@@ -27,12 +27,14 @@ router.get('/:db', checkDb, (req, res) => {
       accounts: config.BASEURL + '/db/' + db + '/account',
       documents: config.BASEURL + '/db/' + db + '/document',
       entries: config.BASEURL + '/db/' + db + '/entry',
-  }});
+      headings: config.BASEURL + '/db/' + db + '/heading',
+    }});
 });
 
 router.use('/:db/period', checkDb, require('./period'));
 router.use('/:db/account', checkDb, require('./account'));
 router.use('/:db/document', checkDb, require('./document'));
 router.use('/:db/entry', checkDb, require('./entry'));
+router.use('/:db/heading', checkDb, require('./heading'));
 
 module.exports = router;
