@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import YYYYMMSS from './YYYYMMSS';
+import YYYYMMDD from './YYYYMMDD';
 
 const PeriodLink = (props) => {
   const dst = '/' + props.db + '/period/' + props.period.id;
   return (<Link to={dst}>
-    <YYYYMMSS date={props.period.start_date} /> <YYYYMMSS date={props.period.end_date} />
+    <YYYYMMDD date={props.period.start_date} /> <YYYYMMDD date={props.period.end_date} />
   </Link>);
 };
 

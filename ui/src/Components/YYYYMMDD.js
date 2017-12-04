@@ -1,4 +1,4 @@
-const YYYYMMSS = (props) => {
+const YYYYMMDD = (props) => {
 
   var d = new Date(props.date),
   month = '' + (d.getMonth() + 1),
@@ -11,4 +11,4 @@ const YYYYMMSS = (props) => {
   return [year, month, day].join('-');
 };
 
-export default YYYYMMSS;
+export default YYYYMMDD;
