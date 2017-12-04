@@ -176,7 +176,7 @@ function getAccountTransactions(db, accountId, periodId) {
   .leftJoin('document', 'document.id', 'entry.document_id')
   .where({'document.period_id': periodId})
   .where({'entry.account_id': accountId})
-  .orderBy(['document.number', 'entry.row_number'])
+  .orderBy(['document.date', 'document.number', 'entry.row_number'])
   .then(entries => fillEntries(db, entries, 'document'));
 }
 
