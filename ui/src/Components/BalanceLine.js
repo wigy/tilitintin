@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Money from './Money';
 
 const BalanceLine = (props) => {
-  // TODO: Use Money component to format.
   const dst = '/' + props.period.db + '/account/' + props.line.id + '/' + props.period.id;
   return (<div className="BalanceLine">
-    <Link to={dst}>{props.line.number} {props.line.name} {props.line.total/100}€</Link>
+    <Link to={dst}>{props.line.number} {props.line.name} <Money cents={props.line.total} currency="EUR"/></Link>
   </div>
   );
 };
