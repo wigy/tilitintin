@@ -18,7 +18,7 @@ export default inject('store')(observer(class Periods extends Component {
     return (
       <div className="Periods">
         <h1>Periods</h1>
-        {this.props.store.periods.map(period => (<PeriodLink key={period.id} db={this.props.match.params.db} period={period}/>))}
+        {this.state.periods.map(period => (<PeriodLink key={period.id} db={this.props.match.params.db} period={period}/>))}
       </div>
     );
   }

@@ -6,10 +6,7 @@ class Store {
 
   constructor() {
     extendObservable(this, {
-      dbs: [],
-      accounts: [],
-      accountsById: {},
-      periods: []
+      dbs: []
     });
     this.getDatabases();
   }
@@ -34,12 +31,7 @@ class Store {
   }
 
   getPeriods(db) {
-    // TODO: Do we need to store anything really? Cache perhaps?
-    return this.fetch('/db/' + db + '/period')
-      .then(periods => {
-        this.periods = periods;
-        return periods;
-      });
+    return this.fetch('/db/' + db + '/period');
   }
 
   getPeriod(db, id) {
@@ -48,19 +40,11 @@ class Store {
 
   getAccounts(db) {
     this.accounts = [];
-    return this.fetch('/db/' + db + '/account')
-      .then(accounts => {
-        this.accounts = accounts;
-        accounts.forEach(acc => this.accountsById[acc.id] = acc);
-        return accounts;
-      });
+    return this.fetch('/db/' + db + '/account');
   }
 
   getAccountPeriod(db, id, periodId) {
-    return this.fetch('/db/' + db + '/account/' + id + '/' + periodId)
-      .then(account => {
-        return account;
-      });
+    return this.fetch('/db/' + db + '/account/' + id + '/' + periodId);
   }
 }
 
