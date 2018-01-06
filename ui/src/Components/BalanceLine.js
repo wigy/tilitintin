@@ -1,12 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Money from './Money';
+import './BalanceLine.css';
 
 const BalanceLine = (props) => {
   const dst = '/' + props.period.db + '/period/' + props.period.id + '/' + props.line.id;
-  return (<div className="BalanceLine">
-    <Link to={dst}>{props.line.number} {props.line.name} <Money cents={props.line.total} currency="EUR"/></Link>
-  </div>
+  return (
+    <tr className="BalanceLine">
+      <td className="number"><Link to={dst}>{props.line.number}</Link></td>
+      <td className="name"><Link to={dst}>{props.line.name}</Link></td>
+      <td className="balance"><Link to={dst}><Money cents={props.line.total} currency="EUR"/></Link></td>
+    </tr>
   );
 };
 

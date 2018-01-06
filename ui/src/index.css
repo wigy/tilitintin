@@ -20,3 +20,11 @@ body a {
 body a:hover {
   text-decoration: underline;
 }
+
+table {
+  font-family: Times;
+}
+
+td {
+  vertical-align: top;
+}

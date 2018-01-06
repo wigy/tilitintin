@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import BalanceLine from '../Components/BalanceLine';
+import BalanceTable from '../Components/BalanceTable';
 
 // TODO: Rename this as Balances
 export default inject('store')(observer(class Period extends Component {
@@ -16,7 +16,7 @@ export default inject('store')(observer(class Period extends Component {
     return (
       <div className="Period">
         <h1>Period</h1>
-        {balances.map(balance => (<BalanceLine period={period} key={balance.id} line={balance} />))}
+        <BalanceTable balances={balances} period={period}/>
       </div>
     );
   }
