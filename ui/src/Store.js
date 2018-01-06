@@ -29,7 +29,20 @@ const URL = document.location.protocol + '//' + document.location.hostname + ':3
  *         }, ...
  *       }
  *     }
- *   }
+ *   },
+ *   accounts: {
+ *     dbname1: {
+ *       periodID: {
+ *         accountID: {
+ *           ...
+ *           transactions: [
+ *             ...,
+ *             ...
+ *           ]
+ *         }, ...
+ *       }
+ *     }
+ *   },
  * }
  */
 class Store {
@@ -38,7 +51,8 @@ class Store {
     extendObservable(this, {
       dbs: [],
       periods: {},
-      balances: {}
+      balances: {},
+      accounts: {},
     });
     this.getAll();
   }
@@ -91,9 +105,12 @@ class Store {
       .then((balances) => {
         this.balances[db] = this.balances[db] || {};
         this.balances[db][periodId] = this.balances[db][periodId] || {};
+        let promises = [];
         balances.balances.forEach((balance) => {
           this.balances[db][periodId][balance.id] = balance;
+          promises.push(this.getAccountPeriod(db, balance.id, periodId));
         });
+        return Promise.all(promises);
       });
   }
 
@@ -102,8 +119,14 @@ class Store {
     return this.fetch('/db/' + db + '/account');
   }
 
-  getAccountPeriod(db, id, periodId) {
-    return this.fetch('/db/' + db + '/account/' + id + '/' + periodId);
+  getAccountPeriod(db, accountId, periodId) {
+    return this.fetch('/db/' + db + '/account/' + accountId + '/' + periodId)
+      .then((account) => {
+        this.accounts[db] = this.accounts[db] || {};
+        this.accounts[db][periodId] = this.accounts[db][periodId] || {};
+        this.accounts[db][periodId][account.id] = account;
+        return account;
+      });
   }
 }
 

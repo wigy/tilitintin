@@ -2,6 +2,9 @@ import React from 'react';
 import Transaction from './Transaction';
 
 const TransactionTable = (props) => {
+  if (!props.txs) {
+    return;
+  }
   let sum = 0;
   return (<table className="TransactionTable">
     <tbody>
