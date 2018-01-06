@@ -4,20 +4,15 @@ import PeriodLink from '../Components/PeriodLink';
 
 export default inject('store')(observer(class Periods extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {periods: []};
-  }
-
-  componentDidMount() {
-    this.props.store.getPeriods(this.props.match.params.db)
-      .then(periods => this.setState({periods: periods}));
-  }
-
   render() {
+    let periods = this.props.store.periods[this.props.match.params.db];
+    if (!periods) {
+      return '';
+    }
+    periods = Object.values(periods);
     return (
       <div className="Periods">
-        {this.state.periods.map(period => (<PeriodLink key={period.id} db={this.props.match.params.db} period={period}/>))}
+        {periods.map(period => (<PeriodLink key={period.id} db={this.props.match.params.db} period={period}/>))}
       </div>
     );
   }

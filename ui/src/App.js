@@ -14,17 +14,17 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <div className="TopPanel">
+        <div className="TopPanel Panel">
           <DbLinks />
           <Route path="/:db" component={Periods}/>
           <Route path="/:db" component={Menu}/>
         </div>
-        <div className="SidePanel">
+        <div className="SidePanel Panel">
           <Route path="/:db/period/:id" component={Period}/>
           <Route path="/:db/account" component={Accounts}/>
           <Route path="/:db/report" component={Reports}/>
         </div>
-        <div className="MainPanel">
+        <div className="MainPanel Panel">
           <Route path="/:db/period/:period/:id" component={Account}/>
         </div>
       </div>

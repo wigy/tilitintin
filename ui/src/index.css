@@ -3,3 +3,8 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+:root {
+  --bg-color: #d3d3d3;
+  --border-color: #a0a0a0;
+}

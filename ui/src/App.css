@@ -1,5 +1,10 @@
+.Panel {
+  background-color: var(--bg-color);
+  border: 1px solid var(--border-color);
+  padding: 5px;
+}
+
 .TopPanel {
-  border: 1px solid red;
   position: absolute;
   top: 0;
   left: 0;
@@ -8,7 +13,6 @@
 }
 
 .SidePanel {
-  border: 1px solid green;
   position: absolute;
   top: 50px;
   left: 0px;
@@ -18,7 +22,6 @@
 }
 
 .MainPanel {
-  border: 1px solid blue;
   position: absolute;
   top: 50px;
   left: 400px;

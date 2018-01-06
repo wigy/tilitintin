@@ -10,6 +10,7 @@ export default inject('store')(observer(class Account extends Component {
   }
 
   render() {
+    return 'TODO';
     // TODO: Use store directly and do not touch state.
     const {db, id, period} = this.props.match.params;
     this.props.store.getAccountPeriod(db, id, period)
