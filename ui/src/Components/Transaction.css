@@ -1,0 +1,26 @@
+.Transaction .number {
+  padding-left: 0.5em;
+}
+
+.Transaction .date {
+  text-align: center;
+}
+
+.Transaction .description {
+  padding-left: 0.5em;
+}
+
+.Transaction .debit {
+  text-align: right;
+  padding-right: 0.5em;
+}
+
+.Transaction .credit {
+  text-align: right;
+  padding-right: 0.5em;
+}
+
+.Transaction .total {
+  text-align: right;
+  padding-right: 0.5em;
+}

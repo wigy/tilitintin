@@ -1,4 +1,15 @@
+.BalanceLine .number {
+  padding-left: 0.4em;
+  padding-right: 0.4em;
+}
+
+.BalanceLine .name {
+  padding-left: 0.4em;
+}
+
 .BalanceLine .balance {
   white-space: nowrap;
   text-align: right;
+  padding-left: 0.4em;
+  padding-right: 0.4em;
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import Transaction from './Transaction';
+import './TransactionTable.css';
 
 const TransactionTable = (props) => {
   if (!props.txs) {
