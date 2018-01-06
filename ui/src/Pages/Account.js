@@ -12,8 +12,7 @@ export default inject('store')(observer(class Account extends Component {
     const account = this.props.store.accounts[db][period][id];
     return (
       <div className="Account">
-        <h1>Account</h1>
-        <h2>{account.number} {account.name}</h2>
+        <h1>{account.number} {account.name}</h1>
         <TransactionTable txs={account.transactions} />
         </div>
     );

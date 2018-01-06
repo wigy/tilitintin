@@ -53,4 +53,6 @@
   margin: 0;
   border-bottom: 2px solid var(--fg-color);
   margin-bottom: 0.5ex;
+  overflow: hidden;
+  white-space: nowrap;
 }

@@ -15,7 +15,7 @@ export default inject('store')(observer(class Period extends Component {
     const period = this.props.store.periods[db][id];
     return (
       <div className="Period">
-        <h1>Period</h1>
+        <h1>Accounts</h1>
         <BalanceTable balances={balances} period={period}/>
       </div>
     );
