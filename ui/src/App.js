@@ -14,18 +14,20 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <DbLinks />
-        <Route path="/:db" component={Menu}/>
+        <div className="TopPanel">
+          <DbLinks />
+          <Route path="/:db" component={Menu}/>
+        </div>
+        <div className="SidePanel">
+          <Route path="/:db/period" component={Periods}/>
+          <Route path="/:db/account" component={Accounts}/>
+          <Route path="/:db/report" component={Reports}/>
+        </div>
         <div className="MainPanel">
-        <Route path="/:db/period/:id" component={Period}/>
-        <Route path="/:db/account/:id/:period" component={Account}/>
+          <Route path="/:db/period/:id" component={Period}/>
+          <Route path="/:db/account/:id/:period" component={Account}/>
+        </div>
       </div>
-      <div className="LeftPanel">
-        <Route path="/:db/period" component={Periods}/>
-        <Route path="/:db/account" component={Accounts}/>
-        <Route path="/:db/report" component={Reports}/>
-      </div>
-    </div>
     );
   }
 };

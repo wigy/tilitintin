@@ -1,0 +1,28 @@
+.TopPanel {
+  border: 1px solid red;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+}
+
+.SidePanel {
+  border: 1px solid green;
+  position: absolute;
+  top: 50px;
+  left: 0px;
+  width: 400px;
+  bottom: 0px;
+  overflow-y: auto;
+}
+
+.MainPanel {
+  border: 1px solid blue;
+  position: absolute;
+  top: 50px;
+  left: 400px;
+  right: 0px;
+  bottom: 0px;
+  overflow-y: auto;
+}
