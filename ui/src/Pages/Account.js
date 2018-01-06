@@ -9,13 +9,11 @@ export default inject('store')(observer(class Account extends Component {
     this.state = {account: {transactions: []}};
   }
 
-  componentDidMount() {
+  render() {
+    // TODO: Use store directly and do not touch state.
     const {db, id, period} = this.props.match.params;
     this.props.store.getAccountPeriod(db, id, period)
       .then(account => this.setState({account: account}));
-  }
-
-  render() {
 
     return (
       <div className="Account">
