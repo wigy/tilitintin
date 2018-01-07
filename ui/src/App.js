@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import './App.css';
-import Periods from './Pages/Periods';
-import Period from './Pages/Period';
-import Account from './Pages/Account';
-import Accounts from './Pages/Accounts';
-import Reports from './Pages/Reports';
+import Periods from './Components/Periods';
+import Period from './Components/Period';
+import Account from './Components/Account';
+import Accounts from './Components/Accounts';
+import Reports from './Components/Reports';
 import DbLinks from './Components/DbLinks';
 import Menu from './Components/Menu';
 
