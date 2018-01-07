@@ -5,6 +5,10 @@ import BalanceTable from '../Components/BalanceTable';
 // TODO: Rename this as Balances
 export default inject('store')(observer(class Period extends Component {
 
+  componentDidMount() {
+
+  }
+
   render() {
     const {db, id} = this.props.match.params;
     let balances = this.props.store.balances[db];

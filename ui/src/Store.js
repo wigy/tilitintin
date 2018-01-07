@@ -50,11 +50,11 @@ class Store {
   constructor() {
     extendObservable(this, {
       dbs: [],
-      periods: observable({}),
+      periods: [],
       balances: {},
       accounts: {},
     });
-    this.getAll();
+    this.getDatabases();
   }
 
   fetch(path) {
@@ -64,18 +64,6 @@ class Store {
     })
     .catch(err => {
       console.error(err);
-    });
-  }
-
-  getAll() {
-    // TODO: Slow down this process to avoid doing excessive fetches parallel.
-    runInAction(() => {
-      let dbs;
-      this.getDatabases()
-        .then((_dbs) => {
-          dbs = _dbs;
-          return Promise.all(dbs.map((db) => this.getPeriods(db)));
-        });
     });
   }
 
@@ -91,34 +79,29 @@ class Store {
   }
 
   getPeriods(db) {
+    this.periods = [];
     return this.fetch('/db/' + db + '/period')
       .then((periods) => {
         runInAction(() => {
-          this.periods[db] = this.periods[db] || observable({});
           periods.forEach((period) => {
-            this.periods[db][period.id] = period;
+            this.periods.push(period);
           });
         });
         return periods;
-      })
-      .then((periods) => {
-        return Promise.all(periods.map((period) => this.getBalances(db, period.id)));
       });
   }
 
   getBalances(db, periodId) {
     return this.fetch('/db/' + db + '/period/' + periodId)
       .then((balances) => {
-        let promises = [];
         runInAction(() => {
           this.balances[db] = this.balances[db] || {};
           this.balances[db][periodId] = this.balances[db][periodId] || {};
           balances.balances.forEach((balance) => {
             this.balances[db][periodId][balance.id] = balance;
-            promises.push(this.getAccountPeriod(db, balance.id, periodId));
           });
         });
-        return Promise.all(promises);
+        return balances;
       });
   }
 
