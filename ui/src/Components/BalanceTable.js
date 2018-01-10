@@ -5,7 +5,7 @@ const BalanceTable = (props) => {
   return (
     <table className="BalanceTable">
       <tbody>
-        {props.balances.map(balance => (<BalanceLine period={props.period} key={balance.id} line={balance} />))}
+        {props.balances.map(balance => (<BalanceLine key={balance.id} db={props.db} periodId={props.periodId} line={balance} />))}
       </tbody>
     </table>
   );

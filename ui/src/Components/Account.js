@@ -4,16 +4,26 @@ import TransactionTable from '../Components/TransactionTable';
 
 export default inject('store')(observer(class Account extends Component {
 
+  update(params) {
+    const {db, periodId, accountId} = params;
+    this.props.store.getAccountPeriod(db, accountId, periodId);
+  }
+
+  componentWillReceiveProps(props) {
+    this.update(props.match.params);
+  }
+
+  componentDidMount() {
+    this.update(this.props.match.params);
+  }
+
+  // TODO: Rename this as AccountTransactions
   render() {
-    const {db, id, period} = this.props.match.params;
-    if (!this.props.store.accounts[db] || !this.props.store.accounts[db][period] || !this.props.store.accounts[db][period][id]) {
-      return '';
-    }
-    const account = this.props.store.accounts[db][period][id];
+
     return (
       <div className="Account">
-        <h1>{account.number} {account.name}</h1>
-        <TransactionTable txs={account.transactions} />
+        <h1>{this.props.store.title}</h1>
+        <TransactionTable txs={this.props.store.transactions} />
         </div>
     );
   }

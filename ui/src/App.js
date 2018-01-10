@@ -21,14 +21,14 @@ class App extends Component {
         </div>
         <div className="SidePanel Panel">
           <div className="Frame">
-            <Route path="/:db/period/:id" component={Period}/>
+            <Route path="/:db/period/:periodId" component={Period}/>
             <Route path="/:db/account" component={Accounts}/>
             <Route path="/:db/report" component={Reports}/>
           </div>
         </div>
         <div className="MainPanel Panel">
           <div className="Frame">
-            <Route path="/:db/period/:period/:id" component={Account}/>
+            <Route path="/:db/period/:periodId/:accountId" component={Account}/>
           </div>
         </div>
       </div>

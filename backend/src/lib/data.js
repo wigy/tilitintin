@@ -163,6 +163,7 @@ function getPeriodBalances(db, periodId) {
       account.debit = account.debit || 0;
       account.credit = -account.credit || 0;
       account.total = account.debit + account.credit;
+      account.period_id = parseInt(periodId);
       account.links = {
         view: config.BASEURL + '/db/' + db + '/account/' + account.id + '/' + periodId
       };

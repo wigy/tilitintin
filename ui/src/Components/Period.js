@@ -6,21 +6,17 @@ import BalanceTable from '../Components/BalanceTable';
 export default inject('store')(observer(class Period extends Component {
 
   componentDidMount() {
-
+    const {db, periodId} = this.props.match.params;
+    this.props.store.getBalances(db, periodId);
   }
 
   render() {
-    const {db, id} = this.props.match.params;
-    let balances = this.props.store.balances[db];
-    if (!balances || !balances[id]) {
-      return '';
-    }
-    balances = Object.values(balances[id]);
-    const period = this.props.store.periods[db][id];
+    const {db, periodId} = this.props.match.params;
+    let balances = this.props.store.balances;
     return (
       <div className="Period">
         <h1>Accounts</h1>
-        <BalanceTable balances={balances} period={period}/>
+        <BalanceTable db={db} periodId={periodId} balances={balances}/>
       </div>
     );
   }

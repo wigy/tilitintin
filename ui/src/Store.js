@@ -1,4 +1,4 @@
-import { extendObservable, runInAction, observable } from 'mobx';
+import { extendObservable, runInAction } from 'mobx';
 
 const URL = document.location.protocol + '//' + document.location.hostname + ':3001';
 
@@ -6,43 +6,34 @@ const URL = document.location.protocol + '//' + document.location.hostname + ':3
  * The store structure is the following:
  * {
  *   dbs: ['dbname1', 'dbname2'],
- *   periods: {
- *     dbname1: {
- *       periodId: {
- *         id: 1,
- *         start_date: "2016-12-31T22:00:00.000Z",
- *         "end_date": "2017-12-30T22:00:00.000Z",
- *         "locked": 0,
+ *   periods: [
+ *     periodId: {
+ *       id: 1,
+ *       start_date: "2016-12-31T22:00:00.000Z",
+ *       "end_date": "2017-12-30T22:00:00.000Z",
+ *       "locked": 0,
+ *     }, ...
+ *   ],
+ *   balances: [
+ *       accountID: {
+ *         id: 94,
+ *         number: "1543",
+ *         name: "Arvopaperit",
+ *         debit: 3654285,
+ *         credit: -19228,
+ *         total: 3635057,
  *       }, ...
- *     }
+ *     ]
  *   },
- *   balances: {
- *     dbname1: {
- *       periodID: {
- *         accountID: {
- *           id: 94,
- *           number: "1543",
- *           name: "Arvopaperit",
- *           debit: 3654285,
- *           credit: -19228,
- *           total: 3635057,
- *         }, ...
- *       }
- *     }
- *   },
- *   accounts: {
- *     dbname1: {
- *       periodID: {
- *         accountID: {
- *           ...
- *           transactions: [
- *             ...,
- *             ...
- *           ]
- *         }, ...
- *       }
- *     }
- *   },
+ *   accounts: [
+ *     accountID: {
+ *       ...
+ *       transactions: [
+ *         ...,
+ *         ...
+ *       ]
+ *     }, ...
+ *   ]
  * }
  */
 class Store {
@@ -51,8 +42,10 @@ class Store {
     extendObservable(this, {
       dbs: [],
       periods: [],
-      balances: {},
-      accounts: {},
+      balances: [],
+      accounts: [],
+      title: '',
+      transactions: [],
     });
     this.getDatabases();
   }
@@ -79,10 +72,10 @@ class Store {
   }
 
   getPeriods(db) {
-    this.periods = [];
     return this.fetch('/db/' + db + '/period')
       .then((periods) => {
         runInAction(() => {
+          this.periods = [];
           periods.forEach((period) => {
             this.periods.push(period);
           });
@@ -95,10 +88,9 @@ class Store {
     return this.fetch('/db/' + db + '/period/' + periodId)
       .then((balances) => {
         runInAction(() => {
-          this.balances[db] = this.balances[db] || {};
-          this.balances[db][periodId] = this.balances[db][periodId] || {};
+          this.balances = [];
           balances.balances.forEach((balance) => {
-            this.balances[db][periodId][balance.id] = balance;
+            this.balances.push(balance);
           });
         });
         return balances;
@@ -114,9 +106,8 @@ class Store {
     return this.fetch('/db/' + db + '/account/' + accountId + '/' + periodId)
       .then((account) => {
         runInAction(() => {
-          this.accounts[db] = this.accounts[db] || {};
-          this.accounts[db][periodId] = this.accounts[db][periodId] || {};
-          this.accounts[db][periodId][account.id] = account;
+          this.transactions = account.transactions;
+          this.title = account.number + ' ' + account.name;
         });
         return account;
       });
