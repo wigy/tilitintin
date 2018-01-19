@@ -12,17 +12,6 @@ class Cli {
     this.__usage = 'Usage: ' + process.argv[1];
     // Current list of arg descriptions.
     this.__desc = [];
-    this.__promises = [];
-  }
-
-  /**
-   * Execute an asynchronic function or return value.
-   * @param {function} fn
-   */
-  async exec(name, fn) {
-    let promise = (fn(this));
-    this.__promises.push(promise);
-    return Promise.resolve(promise);
   }
 
   /**
@@ -34,6 +23,8 @@ class Cli {
   async arg(name, options, check) {
 
     const arg = '<' + name + '>';
+    this.__usage += ' ' + arg;
+
     let optionList = [];
     let promise = null;
 
@@ -42,9 +33,7 @@ class Cli {
         optionList = clone(options).map((item) => "" + item);
         options = options.length ? options.join(', ') : 'nothing available';
       } else if (options instanceof Function) {
-        console.log('exec', name);
-        options = await this.exec(name, options);
-        console.log('=>', options);
+        options = options(this);
       }
       if (options === undefined) {
         console.error('Failed to parse options for', arg);
@@ -58,7 +47,7 @@ class Cli {
     let n = this.__args.length + 2;
     if (process.argv.length <= n) {
       console.log();
-      console.log(this.__usage, arg);
+      console.log(this.__usage);
       console.log();
       console.log(this.__desc.join("\n"));
       console.log();
@@ -70,6 +59,7 @@ class Cli {
     if (!check) {
       check = (value) => optionList.includes(value);
     }
+
     if (!check(value)) {
       console.error('Invalid argument', JSON.stringify(value), 'for', arg + '.');
       process.exit(2);
