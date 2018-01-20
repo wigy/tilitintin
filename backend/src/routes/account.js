@@ -17,7 +17,7 @@ router.get('/:id', (req, res) => {
 router.get('/:id/:period', (req, res) => {
   data.getOne(req.db, 'account', req.params.id)
   .then(account => {
-    data.getAccountTransactions(req.db, req.params.id, req.params.period)
+    data.getAccountTransactions(req.db, req.params.period, req.params.id)
       .then(txs => {
         account.transactions = txs;
         res.send(account);

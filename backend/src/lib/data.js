@@ -110,6 +110,15 @@ function getOne(db, className, id, joinClass=null, joinClassOrder=null) {
     });
 }
 
+function getPeriodAccounts(db, periodId) {
+  return knex.db(db).select('account.id', 'account.number', 'account.name').from('entry')
+    .leftJoin('account', 'account.id', 'entry.account_id')
+    .leftJoin('document', 'document.id', 'entry.document_id')
+    .where({'document.period_id': periodId})
+    .orderBy('account.number')
+    .groupBy('entry.account_id');
+}
+
 function getPeriodCredits(db, periodId) {
   return knex.db(db).select('account.id', 'account.number', 'account.name', knex.db(db).raw('SUM(entry.amount * 100) as amount')).from('entry')
     .leftJoin('account', 'account.id', 'entry.account_id')
@@ -178,7 +187,7 @@ function getPeriodBalances(db, periodId) {
   });
 }
 
-function getAccountTransactions(db, accountId, periodId) {
+function getAccountTransactions(db, periodId, accountId) {
   return knex.db(db).select('*', knex.db(db).raw('entry.amount * 100 as amount')).from('entry')
   .leftJoin('document', 'document.id', 'entry.document_id')
   .where({'document.period_id': periodId})
@@ -187,10 +196,20 @@ function getAccountTransactions(db, accountId, periodId) {
   .then(entries => fillEntries(db, entries, 'document'));
 }
 
+function getAccountTransactionsByNumber(db, periodId, accountNumber) {
+  return knex.db(db).select('id').from('account')
+  .where({'account.number': accountNumber})
+  .then(account => {
+    return getAccountTransactions(db, periodId, account[0].id);
+  });
+}
+
 module.exports = {
   fillEntries: fillEntries,
   listAll: listAll,
   getOne: getOne,
+  getPeriodAccounts: getPeriodAccounts,
   getPeriodBalances: getPeriodBalances,
   getAccountTransactions: getAccountTransactions,
+  getAccountTransactionsByNumber: getAccountTransactionsByNumber,
 };

@@ -15,12 +15,19 @@ class Cli {
   }
 
   /**
+   * Return number of arguments.
+   */
+  args() {
+    return process.argv.length - 2;
+  }
+
+  /**
    * Append a new arg and check if it has been given in commandline already.
    * @param {string} name Name of the arg.
    * @param {array|string} options A list of values or value description.
    * @param {function} options Checker for validity.
    */
-  async arg(name, options, check) {
+  arg(name, options, check) {
 
     const arg = '<' + name + '>';
     this.__usage += ' ' + arg;
