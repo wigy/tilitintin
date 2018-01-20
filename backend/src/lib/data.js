@@ -1,3 +1,6 @@
+/**
+ * A collection of data fetching functions.
+ */
 const moment = require('moment');
 const config = require('../config');
 const knex = require('./knex');
@@ -54,6 +57,13 @@ const fields = {
   },
 };
 
+/**
+ * Fill in some additional information for the entries already fetched from the database.
+ * @param {string} db
+ * @param {array} entries
+ * @param {string} className
+ * @param {string} [joinClass]
+ */
 function fillEntries (db, entries, className, joinClass) {
   return entries.map(e => {
     dateFields[className].forEach(d => e[d] = moment(e[d]));
@@ -80,6 +90,13 @@ function fillEntries (db, entries, className, joinClass) {
   });
 }
 
+/**
+ * General purpose query for fetching all entries from a table.
+ * @param {string} db
+ * @param {string} className
+ * @param {object} where
+ * @param {array} order
+ */
 function listAll(db, className, where, order) {
   let ret = knex.db(db).select('*').from(className);
   if (where) {
@@ -110,6 +127,11 @@ function getOne(db, className, id, joinClass=null, joinClassOrder=null) {
     });
 }
 
+/**
+ * Get all accounts having activities on the period.
+ * @param {*} db
+ * @param {*} periodId
+ */
 function getPeriodAccounts(db, periodId) {
   return knex.db(db).select('account.id', 'account.number', 'account.name').from('entry')
     .leftJoin('account', 'account.id', 'entry.account_id')
@@ -139,6 +161,11 @@ function getPeriodDebits(db, periodId) {
     .groupBy('entry.account_id');
 }
 
+/**
+ * Get all balannces for accounts having entries on the given period.
+ * @param {*} db
+ * @param {*} periodId
+ */
 function getPeriodBalances(db, periodId) {
   return getOne(db, 'period', periodId)
   .then(data => {
@@ -187,6 +214,12 @@ function getPeriodBalances(db, periodId) {
   });
 }
 
+/**
+ * Get all transactions for an account during the given period.
+ * @param {*} db
+ * @param {*} periodId
+ * @param {*} accountId
+ */
 function getAccountTransactions(db, periodId, accountId) {
   return knex.db(db).select('*', knex.db(db).raw('entry.amount * 100 as amount')).from('entry')
   .leftJoin('document', 'document.id', 'entry.document_id')
@@ -196,6 +229,12 @@ function getAccountTransactions(db, periodId, accountId) {
   .then(entries => fillEntries(db, entries, 'document'));
 }
 
+/**
+ * Get all transactions for an account (specified by account number) during the given period.
+ * @param {*} db
+ * @param {*} periodId
+ * @param {*} accountNumber
+ */
 function getAccountTransactionsByNumber(db, periodId, accountNumber) {
   return knex.db(db).select('id').from('account')
   .where({'account.number': accountNumber})
