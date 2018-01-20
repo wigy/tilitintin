@@ -168,50 +168,50 @@ function getPeriodDebits(db, periodId) {
  */
 function getPeriodBalances(db, periodId) {
   return getOne(db, 'period', periodId)
-  .then(data => {
-    return getPeriodCredits(db, periodId)
-      .then(entries => {
-        data.credit = entries;
-        return data;
+    .then(data => {
+      return getPeriodCredits(db, periodId)
+        .then(entries => {
+          data.credit = entries;
+          return data;
+        });
+    })
+    .then(data => {
+      return getPeriodDebits(db, periodId)
+        .then(entries => {
+          data.debit = entries;
+          return data;
+        });
+    })
+    .then(data => {
+      let accounts = {};
+      data.debit.forEach(item => {
+        accounts[item.id] = item;
+        accounts[item.id].debit = item.amount;
       });
-  })
-  .then(data => {
-    return getPeriodDebits(db, periodId)
-      .then(entries => {
-        data.debit = entries;
-        return data;
+      data.credit.forEach(item => {
+        accounts[item.id] = accounts[item.id] || item;
+        accounts[item.id].credit = item.amount;
       });
-  })
-  .then(data => {
-    let accounts = {};
-    data.debit.forEach(item => {
-      accounts[item.id] = item;
-      accounts[item.id].debit = item.amount;
+
+      data.balances = Object.values(accounts);
+      data.balances.forEach(account => {
+        delete account.amount;
+        account.debit = account.debit || 0;
+        account.credit = -account.credit || 0;
+        account.total = account.debit + account.credit;
+        account.period_id = parseInt(periodId);
+        account.links = {
+          view: config.BASEURL + '/db/' + db + '/account/' + account.id + '/' + periodId
+        };
+      });
+
+      data.balances = data.balances.sort((a, b) => (a.number > b.number ? 1 : (a.number < b.number ? -1 : 0)));
+
+      delete data.debit;
+      delete data.credit;
+
+      return data;
     });
-    data.credit.forEach(item => {
-      accounts[item.id] = accounts[item.id] || item;
-      accounts[item.id].credit = item.amount;
-    });
-
-    data.balances = Object.values(accounts);
-    data.balances.forEach(account => {
-      delete account.amount;
-      account.debit = account.debit || 0;
-      account.credit = -account.credit || 0;
-      account.total = account.debit + account.credit;
-      account.period_id = parseInt(periodId);
-      account.links = {
-        view: config.BASEURL + '/db/' + db + '/account/' + account.id + '/' + periodId
-      };
-    });
-
-    data.balances = data.balances.sort((a, b) => (a.number > b.number ? 1 : (a.number < b.number ? -1 : 0)));
-
-    delete data.debit;
-    delete data.credit;
-
-    return data;
-  });
 }
 
 /**
@@ -222,11 +222,11 @@ function getPeriodBalances(db, periodId) {
  */
 function getAccountTransactions(db, periodId, accountId) {
   return knex.db(db).select('*', knex.db(db).raw('entry.amount * 100 as amount')).from('entry')
-  .leftJoin('document', 'document.id', 'entry.document_id')
-  .where({'document.period_id': periodId})
-  .where({'entry.account_id': accountId})
-  .orderBy(['document.date', 'document.number', 'entry.row_number'])
-  .then(entries => fillEntries(db, entries, 'document'));
+    .leftJoin('document', 'document.id', 'entry.document_id')
+    .where({'document.period_id': periodId})
+    .where({'entry.account_id': accountId})
+    .orderBy(['document.date', 'document.number', 'entry.row_number'])
+    .then(entries => fillEntries(db, entries, 'document'));
 }
 
 /**
@@ -236,11 +236,22 @@ function getAccountTransactions(db, periodId, accountId) {
  * @param {*} accountNumber
  */
 function getAccountTransactionsByNumber(db, periodId, accountNumber) {
+  return getAccountId(db, accountNumber)
+    .then(({id}) => {
+      return getAccountTransactions(db, periodId, id);
+    });
+}
+
+/**
+ * Convert account number to ID.
+ * @param {*} db
+ * @param {number} number Account number.
+ * @return An object {id: <id>, number: <number>}
+ */
+function getAccountId(db, number) {
   return knex.db(db).select('id').from('account')
-  .where({'account.number': accountNumber})
-  .then(account => {
-    return getAccountTransactions(db, periodId, account[0].id);
-  });
+    .where({'account.number': number})
+    .then(account => ({number: number, id: account[0].id}));
 }
 
 module.exports = {
@@ -249,6 +260,7 @@ module.exports = {
   getOne: getOne,
   getPeriodAccounts: getPeriodAccounts,
   getPeriodBalances: getPeriodBalances,
+  getAccountId: getAccountId,
   getAccountTransactions: getAccountTransactions,
   getAccountTransactionsByNumber: getAccountTransactionsByNumber,
 };

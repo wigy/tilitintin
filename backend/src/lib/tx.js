@@ -3,6 +3,7 @@
  */
 const moment = require('moment');
 const knex = require('./knex');
+const data = require('./data');
 
 /**
  * Create new document into the database.
@@ -46,14 +47,50 @@ function addDocument(db, periodId, date) {
  */
 function add(db, periodId, date, txs) {
 
+  // Unknown accounts to resolve.
+  let accountNumberToId = {};
+  // Total amount in transaction.
+  let total = 0;
+
   // Helper to fill in missing information and collect sum for each entry.
   function prepare(tx) {
+    if (!tx.accountId) {
+      if (!tx.number) {
+        throw new Error('Must have either accountId or number set in TX ' + JSON.stringify(tx));
+      }
+      accountNumberToId[tx.number] = null;
+    }
+    tx.debit = 1;
+    total += tx.amount;
+    if (tx.amount < 0) {
+      tx.amount = -tx.amount;
+      tx.debit = 0;
+    }
     return tx;
   }
 
   txs = txs.map((tx) => prepare(tx));
 
-  return addDocument(db, periodId, date);
+  // Check the total.
+  if (total) {
+    throw new Error('Invalid total ' + total + ' for TXs ' + JSON.stringify(txs));
+  }
+
+  // Second helper to fill missing account IDs and making final checks.
+  function fill(tx) {
+    tx.accountId = tx.accountId || accountNumberToId[tx.number];
+    return tx;
+  }
+
+  // Fill in account IDs, where missing.
+  return Promise.all(Object.keys(accountNumberToId).map((number) => data.getAccountId(db, number)))
+    .then((mapping) => {
+      mapping.forEach((map) => accountNumberToId[map.number] = map.id);
+      txs = txs.map((tx) => fill(tx));
+
+      return txs;
+    })
+  //return addDocument(db, periodId, date);
 }
 
 module.exports = {
