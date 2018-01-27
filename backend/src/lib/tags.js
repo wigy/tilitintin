@@ -41,7 +41,31 @@ function getAll(db) {
     .then(() => {})
 }
 
+/**
+ * Insert a tag.
+ * @param {string} db The database name without `.sqlite`.
+ * @param {string} tag
+ * @param {string} name
+ * @param {string} picture
+ * @param {string} type
+ * @param {integer} order
+ * @return {Promise}
+ */
+function add(db, tag, name, picture, type, order) {
+  return ensure(db)
+    .then(() => {
+      return knex.db(db)('tags').insert({
+        tag : tag,
+        name : name,
+        picture : picture,
+        type : type,
+        order : order,
+      });
+    });
+}
+
 module.exports = {
   isReady: isReady,
+  add: add,
   getAll: getAll
 };
