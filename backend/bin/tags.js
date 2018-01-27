@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-
 const knex = require('../src/lib/knex');
 const tags = require('../src/lib/tags');
 const cli = require('../src/lib/cli');
@@ -8,6 +7,7 @@ cli.arg('db', knex.dbs());
 cli.arg('operation', ['ls', 'add']);
 
 switch(cli.operation) {
+
   case 'add':
     cli.arg_('tag', 'a tag text');
     cli.arg_('name', 'a descrition text of the tag');
