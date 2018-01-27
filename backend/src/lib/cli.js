@@ -25,7 +25,7 @@ class Cli {
    * Append a new arg and check if it has been given in commandline already.
    * @param {string} name Name of the arg.
    * @param {array|string} options A list of values or value description.
-   * @param {function} options Checker for validity.
+   * @param {function|parseFloat|parseInt} check Checker function for validity.
    */
   arg(name, options, check) {
 
@@ -38,7 +38,7 @@ class Cli {
     while (typeof(options) !== 'string') {
       if (options instanceof Array) {
         optionList = clone(options).map((item) => "" + item);
-        options = options.length ? options.join(', ') : 'nothing available';
+        options = options.length ? '`' + options.join('`, `') + '`' : 'nothing available';
       } else if (options instanceof Function) {
         options = options(this);
       }
@@ -53,6 +53,9 @@ class Cli {
 
     let n = this.__args.length + 2;
     if (process.argv.length <= n) {
+      if (this.__no_exit) {
+        return;
+      }
       console.log();
       console.log(this.__usage);
       console.log();
@@ -61,10 +64,23 @@ class Cli {
       process.exit(1);
     }
 
-    const value = process.argv[n];
+    let value = process.argv[n];
+    let transform = (x) => x;
 
     if (!check) {
-      check = (value) => optionList.includes(value);
+      if (optionList.length) {
+        check = (value) => optionList.includes(value);
+      } else {
+        check = (value) => true;
+      }
+    }
+
+    if (check===parseInt) {
+      check = (str) => /^-?[0-9]+$/.test(str);
+      transform = (str) => parseInt(str);
+    } else if (check===parseFloat) {
+      check = (str) => /^-?[0-9.]+$/.test(str);
+      transform = (str) => parseFloat(str);
     }
 
     if (!check(value)) {
@@ -72,8 +88,18 @@ class Cli {
       process.exit(2);
     }
 
+    value = transform(value);
     this.__args.push(value);
     this[name] = value;
+  }
+
+  /**
+   * Simimlar to arg() but does not exit when not enough arguments.
+   */
+  arg_(name, options, check) {
+    this.__no_exit = true;
+    this.arg(name, options, check);
+    delete this.__no_exit;
   }
 }
 
