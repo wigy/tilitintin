@@ -6,4 +6,7 @@ const kraken = require('../src/lib/import/kraken');
 cli.arg_('db', knex.dbs());
 cli.arg('csv-file', 'transaction log from Kraken as CSV file');
 
-kraken.import(cli.db, cli['csv-file']);
+kraken.import(cli.db, cli['csv-file'])
+  .catch((err) => {
+    console.error(err);
+  });
