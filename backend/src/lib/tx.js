@@ -74,7 +74,7 @@ function addEntry(db, accountId, documentId, debit, amount, desc, row, flags) {
  * Missing pieces are filled in as necessary. Account can be gien as a `number` or
  * an `accountId`.
  */
-function add(db, periodId, date, txs) {
+function add(db, periodId, date, description, txs) {
 
   // Unknown accounts to resolve.
   let accountNumberToId = {};
@@ -83,7 +83,7 @@ function add(db, periodId, date, txs) {
   // Counter for line number.
   let line = 1;
   // Last description.
-  let desc = null;
+  let desc = description;
 
   // Helper to fill in missing information and collect sum for each entry.
   function prepare(tx) {
