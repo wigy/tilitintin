@@ -38,7 +38,9 @@ function ensure(db) {
 
 function getAll(db) {
   return ensure(db)
-    .then(() => {})
+    .then(() => {
+      return knex.db(db).select('*').from('tags').orderBy('order');
+    });
 }
 
 /**
