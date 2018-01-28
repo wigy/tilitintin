@@ -63,12 +63,13 @@ function addEntry(db, accountId, documentId, debit, amount, desc, row, flags) {
  * @param {string} db Name of the database.
  * @param {number} periodId ID of the period.
  * @param {string} date A date in YYYY-MM-DD format.
+ * @param {string} description A text to be added to each entry.
  * @param {array} txs List of transactions.
  * @return {array} A list on entry IDs created.
  *
  * The transaction is an array of entries like
  *   [
- *     {number: 1910, amount: -20.50, description: 'TRE - HKI - TRE'},
+ *     {number: 1910, amount: -20.50},
  *     {number: 7800, amount: 20.50}
  *   ]
  * Missing pieces are filled in as necessary. Account can be gien as a `number` or
