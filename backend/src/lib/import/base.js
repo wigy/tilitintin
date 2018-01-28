@@ -15,9 +15,11 @@ const csv = require('csvtojson');
  *    a) Each group is classified to transaction type using `recognize(txobject)`.
  *    b) Date is resolved with `date(txobject)`.
  *    c) Total amount is resolved with `total(txobject)`.
- *    d) Construct entries for transaction with `entries(txobject)`.
+ *    d) Find the target of the trade if any `target(txobject)`.
+ *    e) Find the amonunt of the target in the trade if any `amount(txobject)`.
+ *    f) Construct entries for transaction with `entries(txobject)`.
  *       - Based on the type, the function `<type>Entries(txobject)` is called.
- *    e) The description is constructed with `describe(txobject)`.
+ *    g) The description is constructed with `describe(txobject)`.
  * 6. Each transaction object is post-processed in `postprocess(txobject)`.
  */
 class Import {
@@ -31,6 +33,8 @@ class Import {
    * Make preparations for import.
    */
   init() {
+    // TODO: Find the latest period.
+    // TODO: Find the initial average prices bought for each this service provider for each crypto.
     return Promise.resolve();
   }
 
@@ -154,8 +158,7 @@ class Import {
       case 'withdrawal':
         return 'Nosto ' + this.serviceName + '-palvelusta';
       case 'buy':
-        // TODO: Currency? Amount?
-        return '? osto +-?';
+        return 'Osto ' + txo.amount + ' ' + txo.target;
       default:
         throw new Error('Cannot describe transaction of type ' + txo.type);
     }
@@ -169,6 +172,26 @@ class Import {
    */
   total(txo) {
     throw new Error('Importer does not implement total().');
+  }
+
+  /**
+   * Look up for the trade target
+   *
+   * @param {Object} txo An transaction object.
+   * @return {string}
+   */
+  target(txo) {
+    throw new Error('Importer does not implement target().');
+  }
+
+  /**
+   * Look up for the amount of the target to trade.
+   *
+   * @param {Object} txo An transaction object.
+   * @return {string} A number as a string.
+   */
+  amount(txo) {
+    throw new Error('Importer does not implement amount().');
   }
 
   /**
@@ -197,6 +220,8 @@ class Import {
    *   * `src` - original entry data
    *   * `type` - A classification of the transaction like ('withdrawal', 'deposit', 'sell', 'buy').
    *   * `total` - Total amount of the transaction, i.e. abs of debit/credit.
+   *   * `target` - Name of the target in the trade (like 'ETH' or 'BTC').
+   *   * `amount` - Amount of the target to trade as stringified decimal number.
    *   * `tx.date`- a transaction date
    *   * `tx.description` - a transaction description
    *   * `tx.entries` - a list of transaction entries
@@ -213,6 +238,15 @@ class Import {
     ret.type = this.recognize(ret);
     ret.tx.date = this.date(ret);
     ret.total = this.total(ret);
+    ret.target = this.target(ret);
+    ret.amount = this.amount(ret);
+    if (ret.amount !== null) {
+      if (!/^[+-]/.test(ret)) {
+        ret.amount = '+' + ret.amount;
+      }
+      ret.amount = ret.amount.replace(/0+$/,'');
+      ret.amount = ret.amount.replace(/\.$/,'');
+    }
     ret.tx.entries = this.entries(ret);
     ret.tx.description = (this.config.tags ? this.config.tags + ' ' : '') + this.describe(ret);
 

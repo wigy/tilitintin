@@ -56,6 +56,31 @@ class KrakenImport extends Import {
     return total;
   }
 
+  target(txo) {
+    if (txo.type !== 'buy' && txo.type !== 'sell') {
+      return null;
+    }
+    const crypto = txo.src.filter((entry) => entry.asset !== 'ZEUR');
+    if (crypto.length) {
+      switch (crypto[0].asset) {
+        case 'XETH':
+          return 'ETH';
+      }
+    }
+    throw new Error('Canno recognize trade target for ' + JSON.stringify(txo.src));
+  }
+
+  amount(txo) {
+    if (txo.type !== 'buy' && txo.type !== 'sell') {
+      return null;
+    }
+    const crypto = txo.src.filter((entry) => entry.asset !== 'ZEUR');
+    if (crypto.length) {
+      return crypto[0].amount;
+    }
+    throw new Error('Canno recognize amount of trade for ' + JSON.stringify(txo.src));
+  }
+
   buyEntries(txo) {
     return [
       {number: this.getAccount('euro'), amount: -txo.total},
