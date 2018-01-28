@@ -72,7 +72,7 @@ function addEntry(db, accountId, documentId, debit, amount, desc, row, flags) {
  *     {number: 1910, amount: -20.50},
  *     {number: 7800, amount: 20.50}
  *   ]
- * Missing pieces are filled in as necessary. Account can be gien as a `number` or
+ * Missing pieces are filled in as necessary. Account can be given as a `number` or
  * an `accountId`.
  */
 function add(db, periodId, date, description, txs) {

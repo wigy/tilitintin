@@ -122,6 +122,26 @@ class Import {
   }
 
   /**
+   * Create deposit entries.
+   */
+  depositEntries(txo) {
+    return [
+      {number: this.getAccount('euro'), amount: txo.total},
+      {number: this.getAccount('bank'), amount: -txo.total},
+    ];
+  }
+
+  /**
+   * Create withdrawal entries.
+   */
+  withdrawalEntries(txo) {
+    return [
+      {number: this.getAccount('bank'), amount: txo.total},
+      {number: this.getAccount('euro'), amount: -txo.total},
+    ];
+  }
+
+  /**
    * Construct the description for the transaction.
    *
    * @param {Object} txo An transaction object.
@@ -133,6 +153,9 @@ class Import {
         return 'Talletus ' + this.serviceName + '-palveluun';
       case 'withdrawal':
         return 'Nosto ' + this.serviceName + '-palvelusta';
+      case 'buy':
+        // TODO: Currency? Amount?
+        return '? osto +-?';
       default:
         throw new Error('Cannot describe transaction of type ' + txo.type);
     }
@@ -191,9 +214,13 @@ class Import {
     ret.tx.date = this.date(ret);
     ret.total = this.total(ret);
     ret.tx.entries = this.entries(ret);
-    ret.tx.description = this.describe(ret);
+    ret.tx.description = (this.config.tags ? this.config.tags + ' ' : '') + this.describe(ret);
 
-    console.log(ret);
+    console.log('');
+    console.log(group);
+    console.log('');
+    console.log('=>', ret.tx);
+    console.log('');
 
     return ret;
   }

@@ -7,16 +7,18 @@ cli.arg_('db', knex.dbs());
 cli.arg('csv-file', 'transaction log from Kraken as CSV file');
 
 kraken.configure({
+  tags: '[Kraken][KRY]',
   accounts: {
     bank: 1910,
     euro: 1931,
     crypto: 1549,
     eth: 1548,
     btc: 1547,
+    fees: 9690,
     rounding: 8570
   }
 });
 
 kraken.import(cli.db, cli['csv-file'])
-  .then((txs) => console.log(txs))
+//  .then((txs) => console.log(txs))
   .catch((err) => console.error(err));
