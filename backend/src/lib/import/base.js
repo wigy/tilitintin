@@ -45,6 +45,8 @@ class Import {
   init() {
     // TODO: Find the latest period.
     // TODO: Find the initial average prices bought for each this service provider for each crypto.
+    this.amounts = {};
+    this.costs = {};
     return Promise.resolve();
   }
 
@@ -276,7 +278,7 @@ class Import {
    */
   process(group) {
 
-    // Helper to calculate two numbers.
+    // Helper to add two numbers and keep string format.
     function add(a, b) {
       function num(a) {
         if (a===null || a===undefined) {
@@ -293,7 +295,8 @@ class Import {
       ret = ret.replace(/0+$/,'');
       ret = ret.replace(/\.$/,'');
       ret = ret.replace(/e-[0-9]+$/,'');
-      return ret==='+' ? '+0' : ret;
+
+      return ret === '+' ? '+0' : ret;
     }
 
     let ret = {
@@ -311,17 +314,18 @@ class Import {
     ret.target = this.target(ret);
     ret.tradeAmount = this.amount(ret);
     ret.fee = this.fee(ret);
+    ret.tx.entries = this.entries(ret);
+
     if (ret.tradeAmount !== null) {
       ret.tradeAmount = add(ret.tradeAmount);
       this.amounts[ret.target] = add(this.amounts[ret.target], ret.tradeAmount).replace(/^\+/, '');
       let amount =ret.total - ret.fee;
-      if (ret.tradeAmount[0]==='-') {
+      if (ret.tradeAmount[0] === '-') {
         amount = -amount;
       }
       this.costs[ret.target] = add(this.costs[ret.target], amount).replace(/^\+/, '');
-      console.log(ret.target, ret.total + '€', ret.tradeAmount, this.costs);
     }
-    ret.tx.entries = this.entries(ret);
+
     ret.tx.description = (this.config.tags ? this.config.tags + ' ' : '') + this.describe(ret);
 
     return ret;
