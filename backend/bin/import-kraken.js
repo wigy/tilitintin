@@ -16,6 +16,5 @@ kraken.configure({
 });
 
 kraken.import(cli.db, cli['csv-file'])
-  .catch((err) => {
-    console.error(err);
-  });
+  .then((txs) => console.log(txs))
+  .catch((err) => console.error(err));

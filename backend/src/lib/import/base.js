@@ -7,13 +7,30 @@ const csv = require('csvtojson');
  *
  * Process is the following, when calling `import(db, path)`:
  *
- * 1. File is loaded first with `load(path)`.
- * 2. An array of data is received and are then grouped to entries forming transactions with `grouping(data)`.
+ * 1. Preparations are done by fetching necessary data form database with `init()`.
+ * 2. File is loaded first with `load(path)`.
+ * 3. An array of data is received and is then grouped to arrays forming transactions with `grouping(data)`.
+ * 4. Each group is preprosessed with `preprocess(group)`.
+ * 5. Each group is converted to the transaction objects in `process(group)`.
+ *    a) Each group is classified to transaction type using `recognize(txobject)`.
+ *    b) Date is resolved with `date(txobject)`.
+ *    c) Total amount is resolved with `total(txobject)`.
+ *    d)
+ *    e) The description is constructed with `describe(txobject)`.
+ * 6. Each transaction object is post-processed in `postprocess(txobject)`.
  */
 class Import {
 
-  constructor() {
+  constructor(serviceName) {
     this.config = {};
+    this.serviceName = serviceName;
+  }
+
+  /**
+   * Make preparations for import.
+   */
+  init() {
+    return Promise.resolve();
   }
 
   /**
@@ -44,10 +61,10 @@ class Import {
 
   /**
    * Get the date of the transaction.
-   * @param {any} entry Input data.
+   * @param {Object} txo An transaction object.
    * @return {string} the date in YYYY-MM-DD format.
    */
-  date(entry) {
+  date(txo) {
     throw new Error('Importer does not implement date().');
   }
 
@@ -55,42 +72,96 @@ class Import {
    * Reorganize entries so that they are grouped to the arrays forming one single transaction.
    *
    * @param {Array<any>} entries
-   * @return {Array<Array<any>>}
+   * @return {Promise<Array<Array<any>>>}
    */
   grouping(entries) {
-    let ret = {};
-    entries.forEach((entry) => {
-      ret[entry.refid] = ret[entry.refid] || [];
-      ret[entry.refid].push(entry);
-    });
-
-    return Object.values(ret);
+    throw new Error('Importer does not implement grouping().');
   }
 
   /**
-   * Handler function for data, that has been loaded from the file converting it to the list of TXs.
+   * Recognize the type of the transaction.
    *
-   * @param {Array<any>} data
+   * @param {Object} txo An transaction object.
+   * @return {string}
+   */
+  recognize(txo) {
+    throw new Error('Importer does not implement recognize().');
+  }
+
+  /**
+   * Construct the description for the transaction.
+   *
+   * @param {Object} txo An transaction object.
+   * @return {string}
+   */
+  describe(txo) {
+    switch(txo.type) {
+      case 'deposit':
+        return 'Talletus ' + this.serviceName + '-palveluun';
+      case 'withdrawal':
+        return 'Nosto ' + this.serviceName + '-palvelusta';
+      default:
+        throw new Error('Cannot describe transaction of type ' + txo.type);
+    }
+  }
+
+  /**
+   * Calculate transaction total.
+   *
+   * @param {Object} txo An transaction object.
+   * @return {Number}
+   */
+  total(txo) {
+    throw new Error('Importer does not implement total().');
+  }
+
+  /**
+   * Pre-processing hook.
+   * @param {<Array<any>} group A group of original data forming a transaction.
+   */
+  preprocess(group) {
+    return group;
+  }
+
+  /**
+   * Post-processing hook.
+   * @param {Object} txo A transaction object.
+   */
+  postprocess(txo) {
+    return txo;
+  }
+
+  /**
+   * Process a group of original entries to the trasnaction data.
+   *
+   * @param {Array<any>} group
    * @return {Array<Object>}
    *
    * The processed entries are objects that contain properties:
+   *   * `src` - original entry data
+   *   * `type` - A classification of the transaction like ('withdrawal', 'deposit', 'sell', 'buy').
+   *   * `total` - Total amount of the transaction, i.e. abs of debit/credit.
    *   * `tx.date`- a transaction date
    *   * `tx.description` - a transaction description
    *   * `tx.entries` - a list of transaction entries
-   *   * `src` - original entry data
-   *   * possibly some additional data like running internal balance counters
    */
-  process(data) {
-    let ret = [];
-    data.forEach((entry) => {
-      let item = {
-        src: entry,
-        tx: {
-          date: this.date(entry)
-        }
-      };
-      ret.push(item);
-    });
+  process(group) {
+    let ret = {
+      src: group,
+      tx: {
+        date: null,
+        description: null,
+        entries: []
+      }
+    };
+    ret.type = this.recognize(ret);
+    ret.tx.date = this.date(ret);
+    ret.total = this.total(ret);
+
+    ret.tx.description = this.describe(ret);
+
+    console.log(ret);
+
     return ret;
   }
 
@@ -146,8 +217,12 @@ class Import {
    */
   import(db, file) {
     this.knex = knex.db(db);
-    return this.load(file)
-      .then((data) => this.grouping(data));
+    return this.init()
+      .then(() => this.load(file))
+      .then((data) => this.grouping(data))
+      .then((groups) => groups.map((group => this.preprocess(group))))
+      .then((groups) => groups.map((group => this.process(group))))
+      .then((txobjects) => txobjects.map((txobject => this.postprocess(txobject))));
   }
 }
 
