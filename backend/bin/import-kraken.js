@@ -22,5 +22,16 @@ kraken.configure({
 });
 
 kraken.import(cli.db, cli['csv-file'])
-//  .then((txs) => console.log(txs))
+  .then((txs) => {
+    if (1) {
+      return;
+    }
+    txs.forEach((item) => {
+      console.log('');
+      console.log(item.src);
+      console.log('');
+      console.log('=>', item.tx);
+      console.log('');
+    });
+  })
   .catch((err) => console.error(err));

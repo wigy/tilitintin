@@ -21,7 +21,8 @@ const csv = require('csvtojson');
  *    g) Construct entries for transaction with `entries(txobject)`.
  *       - Based on the type, the function `<type>Entries(txobject)` is called.
  *    h) The description is constructed with `describe(txobject)`.
- * 6. Each transaction object is post-processed in `postprocess(txobject)`.
+ * 6. All transactions are checked and rounding errors are fixed using fixRoundingErrors(list).
+ * 7. The list of transaction objects is post-processed in `postprocess(list)`.
  */
 class Import {
 
@@ -240,10 +241,10 @@ class Import {
 
   /**
    * Post-processing hook.
-   * @param {Object} txo A transaction object.
+   * @param {Array} lits All transaction objects.
    */
-  postprocess(txo) {
-    return txo;
+  postprocess(list) {
+    return list;
   }
 
   /**
@@ -288,13 +289,22 @@ class Import {
     ret.tx.entries = this.entries(ret);
     ret.tx.description = (this.config.tags ? this.config.tags + ' ' : '') + this.describe(ret);
 
-    console.log('');
-    console.log(group);
-    console.log('');
-    console.log('=>', ret.tx);
-    console.log('');
-
     return ret;
+  }
+
+  /**
+   * Scan for rouding errors in transactions and fix them.
+   *
+   * @param {Array<Object>} list All transaction objects.
+   */
+  fixRoudingErrors(list) {
+    list.forEach((item, i) => {
+      let err = Math.round(100 * list[i].tx.entries.reduce((sum, entry) => sum + entry.amount, 0)) / 100;
+      if (err !== 0) {
+        item.tx.entries.push({number: this.getAccount('rounding'), amount: -err});
+      }
+    });
+    return list;
   }
 
   /**
@@ -354,7 +364,8 @@ class Import {
       .then((data) => this.grouping(data))
       .then((groups) => groups.map((group => this.preprocess(group))))
       .then((groups) => groups.map((group => this.process(group))))
-      .then((txobjects) => txobjects.map((txobject => this.postprocess(txobject))));
+      .then((txobjects) => this.fixRoudingErrors(txobjects))
+      .then((txobjects) => this.postprocess(txobjects));
   }
 }
 
