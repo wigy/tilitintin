@@ -151,9 +151,21 @@ class Import {
    */
   buyEntries(txo) {
     return [
-      {number: this.getAccount('euro'), amount: -txo.total},
-      {number: this.getAccount('eth'), amount: txo.total - txo.fee},
+      {number: this.getAccount(txo.target.toLowerCase()), amount: Math.round((txo.total - txo.fee)*100) / 100},
       {number: this.getAccount('fees'), amount: txo.fee},
+      {number: this.getAccount('euro'), amount: -txo.total},
+    ];
+  }
+
+  /**
+   * Create selling entries.
+   */
+  sellEntries(txo) {
+    // TODO: Count losses or profits and record accordingly.
+    return [
+      {number: this.getAccount('euro'), amount: Math.round((txo.total - txo.fee)*100) / 100},
+      {number: this.getAccount('fees'), amount: txo.fee},
+      {number: this.getAccount(txo.target.toLowerCase()), amount: -txo.total},
     ];
   }
 
@@ -171,6 +183,8 @@ class Import {
         return 'Nosto ' + this.serviceName + '-palvelusta';
       case 'buy':
         return 'Osto ' + txo.amount + ' ' + txo.target;
+      case 'sell':
+        return 'Myynti ' + txo.amount + ' ' + txo.target;
       default:
         throw new Error('Cannot describe transaction of type ' + txo.type);
     }
@@ -264,7 +278,7 @@ class Import {
     ret.target = this.target(ret);
     ret.amount = this.amount(ret);
     if (ret.amount !== null) {
-      if (!/^[+-]/.test(ret)) {
+      if (!/^[+-]/.test(ret.amount)) {
         ret.amount = '+' + ret.amount;
       }
       ret.amount = ret.amount.replace(/0+$/,'');

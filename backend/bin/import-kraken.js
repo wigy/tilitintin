@@ -15,7 +15,9 @@ kraken.configure({
     eth: 1548,
     btc: 1547,
     fees: 9690,
-    rounding: 8570
+    rounding: 8570,
+    losses: 9751,
+    profits: 3461
   }
 });
 

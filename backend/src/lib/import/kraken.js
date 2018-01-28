@@ -73,6 +73,8 @@ class KrakenImport extends Import {
       switch (crypto[0].asset) {
         case 'XETH':
           return 'ETH';
+        case 'XXBT':
+          return 'BTC';
       }
     }
     throw new Error('Canno recognize trade target for ' + JSON.stringify(txo.src));
