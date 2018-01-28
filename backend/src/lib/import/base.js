@@ -8,9 +8,30 @@ const csv = require('csvtojson');
  * Process is the following, when calling `import(db, path)`:
  *
  * 1. File is loaded first with `load(path)`.
- * 2. An array of data is received and converted to
+ * 2. An array of data is received and are then grouped to entries forming transactions with `grouping(data)`.
  */
 class Import {
+
+  constructor() {
+    this.config = {};
+  }
+
+  /**
+   * Set the configuration for the importer.
+   *
+   * @param {Object} config
+   *
+   * Configuration variables are:
+   *   * `bankAccount` - account number for bank deposits and withdraws
+   *   * `euroAccount` - account number for storing € in the service
+   *   * `cryptoAccount` - account number for storing crypto currencies by default
+   *   * `ethAccount` - account number for storing ETH
+   *   * `btcAccount` - account number for  storing BTC
+   *   * `roundingAccount` - account number for trimming transaction rounding errors
+   */
+  configure(config) {
+    this.config = config;
+  }
 
   /**
    * Read in the data from the file and store it internally.
@@ -22,12 +43,28 @@ class Import {
   }
 
   /**
-   * Convert an entry to a transaction.
+   * Get the date of the transaction.
    * @param {any} entry Input data.
-   * @return {any} transaction data.
+   * @return {string} the date in YYYY-MM-DD format.
    */
-  map(entry) {
-    throw new Error('Importer does not implement map().');
+  date(entry) {
+    throw new Error('Importer does not implement date().');
+  }
+
+  /**
+   * Reorganize entries so that they are grouped to the arrays forming one single transaction.
+   *
+   * @param {Array<any>} entries
+   * @return {Array<Array<any>>}
+   */
+  grouping(entries) {
+    let ret = {};
+    entries.forEach((entry) => {
+      ret[entry.refid] = ret[entry.refid] || [];
+      ret[entry.refid].push(entry);
+    });
+
+    return Object.values(ret);
   }
 
   /**
@@ -36,16 +73,23 @@ class Import {
    * @param {Array<any>} data
    * @return {Array<Object>}
    *
-   * The processed entries are objects that contain transactions as field `tx`, original entry as `src`
-   * and possibly some additional data like running internal balance counters.
+   * The processed entries are objects that contain properties:
+   *   * `tx.date`- a transaction date
+   *   * `tx.description` - a transaction description
+   *   * `tx.entries` - a list of transaction entries
+   *   * `src` - original entry data
+   *   * possibly some additional data like running internal balance counters
    */
   process(data) {
     let ret = [];
     data.forEach((entry) => {
-      ret.push({
+      let item = {
         src: entry,
-        rx: this.map(entry)
-      });
+        tx: {
+          date: this.date(entry)
+        }
+      };
+      ret.push(item);
     });
     return ret;
   }
@@ -103,7 +147,7 @@ class Import {
   import(db, file) {
     this.knex = knex.db(db);
     return this.load(file)
-      .then((data) => this.process(data));
+      .then((data) => this.grouping(data));
   }
 }
 
