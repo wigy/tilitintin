@@ -17,9 +17,10 @@ const csv = require('csvtojson');
  *    c) Total amount is resolved with `total(txobject)`.
  *    d) Find the target of the trade if any `target(txobject)`.
  *    e) Find the amonunt of the target in the trade if any `amount(txobject)`.
- *    f) Construct entries for transaction with `entries(txobject)`.
+ *    f) Find the service fee in euros `fee(txobject)`.
+ *    g) Construct entries for transaction with `entries(txobject)`.
  *       - Based on the type, the function `<type>Entries(txobject)` is called.
- *    g) The description is constructed with `describe(txobject)`.
+ *    h) The description is constructed with `describe(txobject)`.
  * 6. Each transaction object is post-processed in `postprocess(txobject)`.
  */
 class Import {
@@ -146,6 +147,17 @@ class Import {
   }
 
   /**
+   * Create buying entries.
+   */
+  buyEntries(txo) {
+    return [
+      {number: this.getAccount('euro'), amount: -txo.total},
+      {number: this.getAccount('eth'), amount: txo.total - txo.fee},
+      {number: this.getAccount('fees'), amount: txo.fee},
+    ];
+  }
+
+  /**
    * Construct the description for the transaction.
    *
    * @param {Object} txo An transaction object.
@@ -195,6 +207,16 @@ class Import {
   }
 
   /**
+   * Look up for the service fee.
+   *
+   * @param {Object} txo An transaction object.
+   * @return {Number} Service fee.
+   */
+  fee(txo) {
+    throw new Error('Importer does not implement fee().');
+  }
+
+  /**
    * Pre-processing hook.
    * @param {<Array<any>} group A group of original data forming a transaction.
    */
@@ -222,6 +244,7 @@ class Import {
    *   * `total` - Total amount of the transaction, i.e. abs of debit/credit.
    *   * `target` - Name of the target in the trade (like 'ETH' or 'BTC').
    *   * `amount` - Amount of the target to trade as stringified decimal number.
+   *   * `fee` - Service fee in euros.
    *   * `tx.date`- a transaction date
    *   * `tx.description` - a transaction description
    *   * `tx.entries` - a list of transaction entries
@@ -247,6 +270,7 @@ class Import {
       ret.amount = ret.amount.replace(/0+$/,'');
       ret.amount = ret.amount.replace(/\.$/,'');
     }
+    ret.fee = this.fee(ret);
     ret.tx.entries = this.entries(ret);
     ret.tx.description = (this.config.tags ? this.config.tags + ' ' : '') + this.describe(ret);
 

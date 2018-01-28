@@ -44,16 +44,24 @@ class KrakenImport extends Import {
   }
 
   total(txo) {
-    // TODO: Improve handling for further transaction types.
     let total = 0;
     txo.src.forEach((entry) => {
       if (entry.asset === 'ZEUR') {
         total += Math.abs(parseFloat(entry.amount));
         total += Math.abs(parseFloat(entry.fee));
-        total = Math.round(total * 100) / 100;
       }
     });
-    return total;
+    return Math.round(total * 100) / 100;
+  }
+
+  fee(txo) {
+    let total = 0;
+    txo.src.forEach((entry) => {
+      if (entry.asset === 'ZEUR') {
+        total += Math.abs(parseFloat(entry.fee));
+      }
+    });
+    return Math.round(total * 100) / 100;
   }
 
   target(txo) {
@@ -79,14 +87,6 @@ class KrakenImport extends Import {
       return crypto[0].amount;
     }
     throw new Error('Canno recognize amount of trade for ' + JSON.stringify(txo.src));
-  }
-
-  buyEntries(txo) {
-    return [
-      {number: this.getAccount('euro'), amount: -txo.total},
-      {number: this.getAccount('eth'), amount: 0}, // TODO:
-      {number: this.getAccount('fees'), amount: 0}, // TODO:
-    ];
   }
 }
 
