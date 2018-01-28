@@ -46,6 +46,13 @@ class KrakenImport extends Import {
     });
     return total;
   }
+
+  depositEntries(txo) {
+    return [
+      {number: this.getAccount('euro'), amount: txo.total},
+      {number: this.getAccount('bank'), amount: -txo.total},
+    ];
+  }
 }
 
 module.exports = new KrakenImport();

@@ -15,7 +15,8 @@ const csv = require('csvtojson');
  *    a) Each group is classified to transaction type using `recognize(txobject)`.
  *    b) Date is resolved with `date(txobject)`.
  *    c) Total amount is resolved with `total(txobject)`.
- *    d)
+ *    d) Construct entries for transaction with `entries(txobject)`.
+ *       - Based on the type, the function `<type>Entries(txobject)` is called.
  *    e) The description is constructed with `describe(txobject)`.
  * 6. Each transaction object is post-processed in `postprocess(txobject)`.
  */
@@ -34,17 +35,31 @@ class Import {
   }
 
   /**
+   * Resolve account number based on its purpose.
+   * @param {string} name Account purpose (see `configure()`).
+   */
+  getAccount(name) {
+    if (this.config.accounts[name]) {
+      return this.config.accounts[name];
+    }
+    if(['eth', 'btc'].includes(name) && this.config.accounts.crypto) {
+      return this.config.accounts.crypto;
+    }
+    throw new Error('The account number `' + name + '` is not configured.');
+  }
+
+  /**
    * Set the configuration for the importer.
    *
    * @param {Object} config
    *
    * Configuration variables are:
-   *   * `bankAccount` - account number for bank deposits and withdraws
-   *   * `euroAccount` - account number for storing € in the service
-   *   * `cryptoAccount` - account number for storing crypto currencies by default
-   *   * `ethAccount` - account number for storing ETH
-   *   * `btcAccount` - account number for  storing BTC
-   *   * `roundingAccount` - account number for trimming transaction rounding errors
+   *   * `accounts.bank` - account number for bank deposits and withdraws
+   *   * `accounts.euro` - account number for storing € in the service
+   *   * `accounts.crypto` - account number for storing crypto currencies by default
+   *   * `accounts.eth` - account number for storing ETH
+   *   * `accounts.btc` - account number for  storing BTC
+   *   * `accounts.rounding` - account number for trimming transaction rounding errors
    */
   configure(config) {
     this.config = config;
@@ -86,6 +101,24 @@ class Import {
    */
   recognize(txo) {
     throw new Error('Importer does not implement recognize().');
+  }
+
+  /**
+   * Construct entries for the transaction.
+   *
+   * @param {Object} txo An transaction object.
+   * @return {Array<Object>}
+   */
+  entries(txo) {
+    const fn = txo.type + 'Entries';
+    if (!this[fn]) {
+      throw new Error('Importer does not implement ' + fn + '().');
+    }
+    let ret = this[fn](txo);
+    if (!(ret instanceof Array)) {
+      throw new Error('The function ' + fn + '() did not return an array for ' + JSON.stringify(txo));
+    }
+    return ret;
   }
 
   /**
@@ -132,7 +165,7 @@ class Import {
   }
 
   /**
-   * Process a group of original entries to the trasnaction data.
+   * Process a group of original entries to the transaction data.
    *
    * @param {Array<any>} group
    * @return {Array<Object>}
@@ -157,7 +190,7 @@ class Import {
     ret.type = this.recognize(ret);
     ret.tx.date = this.date(ret);
     ret.total = this.total(ret);
-
+    ret.tx.entries = this.entries(ret);
     ret.tx.description = this.describe(ret);
 
     console.log(ret);
