@@ -2,6 +2,8 @@ const fs = require('fs');
 const knex = require('../knex');
 const csv = require('csvtojson');
 
+const DIGITS = 1000000000; // Multiplier used to round trade amounts.
+
 /**
  * A base class for importing data files and converting them to the transactions.
  *
@@ -27,8 +29,14 @@ const csv = require('csvtojson');
 class Import {
 
   constructor(serviceName) {
-    this.config = {};
+    // Name of the service.
     this.serviceName = serviceName;
+    // Configuration variables.
+    this.config = {};
+    // Running totals of each trade target owned.
+    this.amounts = {};
+    // Tunning totals of the cost of each trade target in euros.
+    this.costs = {};
   }
 
   /**
@@ -258,13 +266,36 @@ class Import {
    *   * `type` - A classification of the transaction like ('withdrawal', 'deposit', 'sell', 'buy').
    *   * `total` - Total amount of the transaction, i.e. abs of debit/credit.
    *   * `target` - Name of the target in the trade (like 'ETH' or 'BTC').
-   *   * `amount` - Amount of the target to trade as stringified decimal number.
+   *   * `tradeAmount` - Amount of the target to trade as stringified decimal number.
+   *   * `tradeTotalAmount` - Total amount of the trade target owned after this transaction.
+   *   * `tradeTotalCost` - Total cost of the trade target owned after this transaction.
    *   * `fee` - Service fee in euros.
    *   * `tx.date`- a transaction date
    *   * `tx.description` - a transaction description
    *   * `tx.entries` - a list of transaction entries
    */
   process(group) {
+
+    // Helper to calculate two numbers.
+    function add(a, b) {
+      function num(a) {
+        if (a===null || a===undefined) {
+          return 0;
+        }
+        return parseFloat(a);
+      }
+
+      const sum = num(a) + num(b);
+      let ret = (Math.round(sum * DIGITS) / DIGITS).toString();
+      if (!/^[+-]/.test(ret)) {
+        ret = '+' + ret;
+      }
+      ret = ret.replace(/0+$/,'');
+      ret = ret.replace(/\.$/,'');
+      ret = ret.replace(/e-[0-9]+$/,'');
+      return ret==='+' ? '+0' : ret;
+    }
+
     let ret = {
       src: group,
       tx: {
@@ -273,19 +304,23 @@ class Import {
         entries: []
       }
     };
+
     ret.type = this.recognize(ret);
     ret.tx.date = this.date(ret);
     ret.total = this.total(ret);
     ret.target = this.target(ret);
-    ret.amount = this.amount(ret);
-    if (ret.amount !== null) {
-      if (!/^[+-]/.test(ret.amount)) {
-        ret.amount = '+' + ret.amount;
-      }
-      ret.amount = ret.amount.replace(/0+$/,'');
-      ret.amount = ret.amount.replace(/\.$/,'');
-    }
+    ret.tradeAmount = this.amount(ret);
     ret.fee = this.fee(ret);
+    if (ret.tradeAmount !== null) {
+      ret.tradeAmount = add(ret.tradeAmount);
+      this.amounts[ret.target] = add(this.amounts[ret.target], ret.tradeAmount).replace(/^\+/, '');
+      let amount =ret.total - ret.fee;
+      if (ret.tradeAmount[0]==='-') {
+        amount = -amount;
+      }
+      this.costs[ret.target] = add(this.costs[ret.target], amount).replace(/^\+/, '');
+      console.log(ret.target, ret.total + '€', ret.tradeAmount, this.costs);
+    }
     ret.tx.entries = this.entries(ret);
     ret.tx.description = (this.config.tags ? this.config.tags + ' ' : '') + this.describe(ret);
 
