@@ -172,12 +172,22 @@ class Import {
    * Create selling entries.
    */
   sellEntries(txo) {
-    // TODO: Count losses or profits and record accordingly.
-    return [
-      {number: this.getAccount('euro'), amount: Math.round((txo.total - txo.fee)*100) / 100},
+    const avgPrice = parseFloat(this.costs[txo.target]) / parseFloat(this.amounts[txo.target]);
+    const buyPrice = Math.round(100 * parseFloat(-txo.tradeAmount) * avgPrice) / 100;
+    let ret = [
+      {number: this.getAccount('euro'), amount: txo.total},
       {number: this.getAccount('fees'), amount: txo.fee},
-      {number: this.getAccount(txo.target.toLowerCase()), amount: -txo.total},
+      {number: this.getAccount(txo.target.toLowerCase()), amount: -buyPrice},
     ];
+    let diff = Math.round((buyPrice - txo.total) * 100) / 100;
+    if (diff) {
+      ret.push({
+        number: (buyPrice > txo.total ? this.getAccount('losses') : this.getAccount('profits')),
+        amount: diff
+      });
+    }
+    console.log(txo.tx.date, '\n', ret);
+    return ret;
   }
 
   /**
@@ -318,6 +328,7 @@ class Import {
 
     if (ret.tradeAmount !== null) {
       ret.tradeAmount = add(ret.tradeAmount);
+      // TODO: Update avg on buying, only amount on selling.
       this.amounts[ret.target] = add(this.amounts[ret.target], ret.tradeAmount).replace(/^\+/, '');
       let amount =ret.total - ret.fee;
       if (ret.tradeAmount[0] === '-') {
