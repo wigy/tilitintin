@@ -35,8 +35,8 @@ class Import {
     this.config = {};
     // Running totals of each trade target owned.
     this.amounts = {};
-    // Tunning totals of the cost of each trade target in euros.
-    this.costs = {};
+    // Tunning totals of the average cost of each trade target in euros.
+    this.averages = {};
   }
 
   /**
@@ -46,7 +46,7 @@ class Import {
     // TODO: Find the latest period.
     // TODO: Find the initial average prices bought for each this service provider for each crypto.
     this.amounts = {};
-    this.costs = {};
+    this.averages = {};
     return Promise.resolve();
   }
 
@@ -161,18 +161,22 @@ class Import {
    * Create buying entries.
    */
   buyEntries(txo) {
-    return [
+    let ret = [
       {number: this.getAccount(txo.target.toLowerCase()), amount: Math.round((txo.total - txo.fee)*100) / 100},
       {number: this.getAccount('fees'), amount: txo.fee},
       {number: this.getAccount('euro'), amount: -txo.total},
     ];
+
+console.log(txo.tx.date, txo.type, txo.tradeAmount, txo.target, 'avg.', this.averages[txo.target], 'has:', this.amounts[txo.target]);
+console.log(ret);
+    return ret;
   }
 
   /**
    * Create selling entries.
    */
   sellEntries(txo) {
-    const avgPrice = parseFloat(this.costs[txo.target]) / parseFloat(this.amounts[txo.target]);
+    const avgPrice = parseFloat(this.averages[txo.target]);
     const buyPrice = Math.round(100 * parseFloat(-txo.tradeAmount) * avgPrice) / 100;
     let ret = [
       {number: this.getAccount('euro'), amount: txo.total},
@@ -186,7 +190,10 @@ class Import {
         amount: diff
       });
     }
-    console.log(txo.tx.date, '\n', ret);
+
+    console.log(txo.tx.date, txo.type, txo.tradeAmount, txo.target, 'avg.', this.averages[txo.target], 'has:', this.amounts[txo.target]);
+    console.log(ret);
+
     return ret;
   }
 
@@ -326,15 +333,19 @@ class Import {
     ret.fee = this.fee(ret);
     ret.tx.entries = this.entries(ret);
 
+    // Update cumulative amounts.
     if (ret.tradeAmount !== null) {
       ret.tradeAmount = add(ret.tradeAmount);
-      // TODO: Update avg on buying, only amount on selling.
+      const oldTotal = parseFloat(this.amounts[ret.target]) || 0;
+      const oldAverage = parseFloat(this.averages[ret.target]) || 0;
+      const oldPrice = oldTotal * oldAverage;
+      const newPrice = ret.total - ret.fee;
       this.amounts[ret.target] = add(this.amounts[ret.target], ret.tradeAmount).replace(/^\+/, '');
-      let amount =ret.total - ret.fee;
-      if (ret.tradeAmount[0] === '-') {
-        amount = -amount;
+      const newTotal = parseFloat(this.amounts[ret.target]);
+      if (ret.type === 'buy') {
+        this.averages[ret.target] = add((oldPrice + newPrice) / newTotal);
       }
-      this.costs[ret.target] = add(this.costs[ret.target], amount).replace(/^\+/, '');
+      this.averages[ret.target] = this.averages[ret.target].replace(/^\+/, '');
     }
 
     ret.tx.description = (this.config.tags ? this.config.tags + ' ' : '') + this.describe(ret);
