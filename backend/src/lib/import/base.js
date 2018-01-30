@@ -1,7 +1,9 @@
 const fs = require('fs');
+const promiseSeq = require('promise-sequential');
 const knex = require('../knex');
 const csv = require('csvtojson');
 const num = require('../num');
+const tx = require('../tx');
 
 /**
  * A base class for importing data files and converting them to the transactions.
@@ -43,6 +45,7 @@ class Import {
    */
   init() {
     // TODO: Find the latest period.
+    this.periodId = 1;
     // TODO: Find the initial average prices bought for each this service provider for each crypto.
     this.amounts = {};
     this.averages = {};
@@ -411,10 +414,11 @@ class Import {
    * @param {string} db Name of the database.
    * @param {string} file A path to the file to be imported.
    * @param {boolean} dryRun If set, do not store but show on console instead.
-   * @return {Promise}
+   * @return {Promise} Promise resolving to the number of entries created.
    */
   import(db, file, dryRun) {
     this.knex = knex.db(db);
+
     return this.init()
       .then(() => this.load(file))
       .then((data) => this.grouping(data))
@@ -433,6 +437,15 @@ class Import {
           });
         }
         return txobjects;
+      })
+      .then((txobjects) => {
+        if (!dryRun) {
+          const creators = txobjects.map((txo) => () => tx.add(db, this.periodId, txo.tx.date, txo.tx.description, txo.tx.entries));
+          return promiseSeq(creators)
+            .then(() => txobjects.length);
+        } else {
+          return txobjects.length;
+        }
       });
   }
 }

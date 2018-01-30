@@ -119,6 +119,7 @@ function add(db, periodId, date, description, txs) {
   txs = txs.map((tx) => prepare(tx));
 
   // Check the total.
+  total = Math.round(100*total) / 100;
   if (total) {
     throw new Error('Invalid total ' + total + ' for TXs ' + JSON.stringify(txs));
   }
