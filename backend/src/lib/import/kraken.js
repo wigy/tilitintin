@@ -86,7 +86,7 @@ class KrakenImport extends Import {
     }
     const crypto = txo.src.filter((entry) => entry.asset !== 'ZEUR');
     if (crypto.length) {
-      return crypto[0].amount;
+      return parseFloat(crypto[0].amount);
     }
     throw new Error('Canno recognize amount of trade for ' + JSON.stringify(txo.src));
   }

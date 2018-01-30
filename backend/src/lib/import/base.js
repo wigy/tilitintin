@@ -1,8 +1,7 @@
 const fs = require('fs');
 const knex = require('../knex');
 const csv = require('csvtojson');
-
-const DIGITS = 1000000000; // Multiplier used to round trade amounts.
+const num = require('../num');
 
 /**
  * A base class for importing data files and converting them to the transactions.
@@ -168,6 +167,7 @@ class Import {
     ];
 
 console.log(txo.tx.date, txo.type, txo.tradeAmount, txo.target, 'avg.', this.averages[txo.target], 'has:', this.amounts[txo.target]);
+console.log(this.describe(txo));
 console.log(ret);
     return ret;
   }
@@ -176,8 +176,8 @@ console.log(ret);
    * Create selling entries.
    */
   sellEntries(txo) {
-    const avgPrice = parseFloat(this.averages[txo.target]);
-    const buyPrice = Math.round(100 * parseFloat(-txo.tradeAmount) * avgPrice) / 100;
+    const avgPrice = this.averages[txo.target] || 0;
+    const buyPrice = Math.round(100 * (-txo.tradeAmount) * avgPrice) / 100;
     let ret = [
       {number: this.getAccount('euro'), amount: txo.total},
       {number: this.getAccount('fees'), amount: txo.fee},
@@ -191,8 +191,9 @@ console.log(ret);
       });
     }
 
-    console.log(txo.tx.date, txo.type, txo.tradeAmount, txo.target, 'avg.', this.averages[txo.target], 'has:', this.amounts[txo.target]);
-    console.log(ret);
+console.log(txo.tx.date, txo.type, txo.tradeAmount, txo.target, 'avg.', this.averages[txo.target], 'has:', this.amounts[txo.target]);
+console.log(this.describe(txo));
+console.log(ret);
 
     return ret;
   }
@@ -210,9 +211,9 @@ console.log(ret);
       case 'withdrawal':
         return 'Nosto ' + this.serviceName + '-palvelusta';
       case 'buy':
-        return 'Osto ' + txo.amount + ' ' + txo.target;
+        return 'Osto ' + num.trim(txo.tradeAmount, txo.target);
       case 'sell':
-        return 'Myynti ' + txo.amount + ' ' + txo.target;
+        return 'Myynti ' + num.trim(txo.tradeAmount, txo.target);
       default:
         throw new Error('Cannot describe transaction of type ' + txo.type);
     }
@@ -242,7 +243,7 @@ console.log(ret);
    * Look up for the amount of the target to trade.
    *
    * @param {Object} txo An transaction object.
-   * @return {string} A number as a string.
+   * @return {Number} Amount traded.
    */
   amount(txo) {
     throw new Error('Importer does not implement amount().');
@@ -295,27 +296,6 @@ console.log(ret);
    */
   process(group) {
 
-    // Helper to add two numbers and keep string format.
-    function add(a, b) {
-      function num(a) {
-        if (a===null || a===undefined) {
-          return 0;
-        }
-        return parseFloat(a);
-      }
-
-      const sum = num(a) + num(b);
-      let ret = (Math.round(sum * DIGITS) / DIGITS).toString();
-      if (!/^[+-]/.test(ret)) {
-        ret = '+' + ret;
-      }
-      ret = ret.replace(/0+$/,'');
-      ret = ret.replace(/\.$/,'');
-      ret = ret.replace(/e-[0-9]+$/,'');
-
-      return ret === '+' ? '+0' : ret;
-    }
-
     let ret = {
       src: group,
       tx: {
@@ -325,27 +305,36 @@ console.log(ret);
       }
     };
 
+    // Get basics.
     ret.type = this.recognize(ret);
     ret.tx.date = this.date(ret);
     ret.total = this.total(ret);
     ret.target = this.target(ret);
+
+    // Initialize new targgets.
+    if (this.amounts[ret.target] === undefined) {
+      this.amounts[ret.target] = 0.0;
+    }
+    if (this.averages[ret.target] === undefined) {
+      this.averages[ret.target] = 0.0;
+    }
+
+    // Calculate amounts and entries.
     ret.tradeAmount = this.amount(ret);
     ret.fee = this.fee(ret);
     ret.tx.entries = this.entries(ret);
 
     // Update cumulative amounts.
     if (ret.tradeAmount !== null) {
-      ret.tradeAmount = add(ret.tradeAmount);
-      const oldTotal = parseFloat(this.amounts[ret.target]) || 0;
-      const oldAverage = parseFloat(this.averages[ret.target]) || 0;
+      const oldTotal = this.amounts[ret.target];
+      const oldAverage = this.averages[ret.target];
       const oldPrice = oldTotal * oldAverage;
       const newPrice = ret.total - ret.fee;
-      this.amounts[ret.target] = add(this.amounts[ret.target], ret.tradeAmount).replace(/^\+/, '');
-      const newTotal = parseFloat(this.amounts[ret.target]);
+      this.amounts[ret.target] += ret.tradeAmount;
+      const newTotal = this.amounts[ret.target];
       if (ret.type === 'buy') {
-        this.averages[ret.target] = add((oldPrice + newPrice) / newTotal);
+        this.averages[ret.target] = (oldPrice + newPrice) / newTotal;
       }
-      this.averages[ret.target] = this.averages[ret.target].replace(/^\+/, '');
     }
 
     ret.tx.description = (this.config.tags ? this.config.tags + ' ' : '') + this.describe(ret);
