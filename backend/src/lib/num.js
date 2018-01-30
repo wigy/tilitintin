@@ -1,3 +1,5 @@
+const sprintf = require('sprintf');
+
 // Multiplier used to round trade amounts.
 const DIGITS = 1000000000;
 
@@ -23,6 +25,17 @@ module.exports = {
     }
 
     return ret;
-  }
+  },
 
+  /**
+   * Convert a mumber to currency with unit.
+   */
+  currency: function(num, unit) {
+    let ret = sprintf('%.2f', num);
+    if (ret.length > 6) {
+      ret = ret.substr(0, ret.length - 6) + ',' + ret.substr(ret.length - 6);
+    }
+    ret += ' ' + unit;
+    return ret;
+  }
 };
