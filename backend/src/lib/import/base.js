@@ -428,10 +428,11 @@ class Import {
             console.log('\u001b[33;1m', txo.tx.date, txo.tx.description, '\u001b[0m');
             console.log('           ', txo.type, txo.tradeAmount, txo.target, 'owned', txo.targetTotal, 'avg.', txo.targetAverage);
             txo.tx.entries.forEach((entry) => {
-              console.log('           ', entry.number, entry.amount);
-            })
+              console.log('           \u001b[33m', entry.number, '\u001b[0m', entry.amount);
+            });
           });
         }
+        return txobjects;
       });
   }
 }
