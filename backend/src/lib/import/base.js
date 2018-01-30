@@ -166,9 +166,6 @@ class Import {
       {number: this.getAccount('euro'), amount: -txo.total},
     ];
 
-console.log(txo.tx.date, txo.type, txo.tradeAmount, txo.target, 'avg.', this.averages[txo.target], 'has:', this.amounts[txo.target]);
-console.log(this.describe(txo));
-console.log(ret);
     return ret;
   }
 
@@ -190,10 +187,6 @@ console.log(ret);
         amount: diff
       });
     }
-
-console.log(txo.tx.date, txo.type, txo.tradeAmount, txo.target, 'avg.', this.averages[txo.target], 'has:', this.amounts[txo.target]);
-console.log(this.describe(txo));
-console.log(ret);
 
     return ret;
   }
@@ -287,8 +280,8 @@ console.log(ret);
    *   * `total` - Total amount of the transaction, i.e. abs of debit/credit.
    *   * `target` - Name of the target in the trade (like 'ETH' or 'BTC').
    *   * `tradeAmount` - Amount of the target to trade as stringified decimal number.
-   *   * `tradeTotalAmount` - Total amount of the trade target owned after this transaction.
-   *   * `tradeTotalCost` - Total cost of the trade target owned after this transaction.
+   *   * `targetAverage` -Average price of the target after the transaction.
+   *   * `targetTotal` - Number of targets owned after the transaction.
    *   * `fee` - Service fee in euros.
    *   * `tx.date`- a transaction date
    *   * `tx.description` - a transaction description
@@ -298,6 +291,13 @@ console.log(ret);
 
     let ret = {
       src: group,
+      type: null,
+      total: null,
+      target: null,
+      tradeAmount: null,
+      targetAverage: null,
+      targetTotal: null,
+      fee: null,
       tx: {
         date: null,
         description: null,
@@ -335,6 +335,11 @@ console.log(ret);
       if (ret.type === 'buy') {
         this.averages[ret.target] = (oldPrice + newPrice) / newTotal;
       }
+      if (newTotal <= 0) {
+        this.averages[ret.target] = 0;
+      }
+      ret.targetAverage = this.averages[ret.target];
+      ret.targetTotal = newTotal;
     }
 
     ret.tx.description = (this.config.tags ? this.config.tags + ' ' : '') + this.describe(ret);
@@ -405,9 +410,10 @@ console.log(ret);
    *
    * @param {string} db Name of the database.
    * @param {string} file A path to the file to be imported.
+   * @param {boolean} dryRun If set, do not store but show on console instead.
    * @return {Promise}
    */
-  import(db, file) {
+  import(db, file, dryRun) {
     this.knex = knex.db(db);
     return this.init()
       .then(() => this.load(file))
@@ -415,7 +421,18 @@ console.log(ret);
       .then((groups) => groups.map((group => this.preprocess(group))))
       .then((groups) => groups.map((group => this.process(group))))
       .then((txobjects) => this.fixRoudingErrors(txobjects))
-      .then((txobjects) => this.postprocess(txobjects));
+      .then((txobjects) => this.postprocess(txobjects))
+      .then((txobjects) => {
+        if (dryRun) {
+          txobjects.forEach((txo) => {
+            console.log('\u001b[33;1m', txo.tx.date, txo.tx.description, '\u001b[0m');
+            console.log('           ', txo.type, txo.tradeAmount, txo.target, 'owned', txo.targetTotal, 'avg.', txo.targetAverage);
+            txo.tx.entries.forEach((entry) => {
+              console.log('           ', entry.number, entry.amount);
+            })
+          });
+        }
+      });
   }
 }
 

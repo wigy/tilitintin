@@ -3,6 +3,8 @@ const cli = require('../src/lib/cli');
 const knex = require('../src/lib/knex');
 const kraken = require('../src/lib/import/kraken');
 
+const DEBUG = true;
+
 cli.arg_('db', knex.dbs());
 cli.arg('csv-file', 'transaction log from Kraken as CSV file');
 
@@ -21,17 +23,5 @@ kraken.configure({
   }
 });
 
-kraken.import(cli.db, cli['csv-file'])
-  .then((txs) => {
-    if (1) {
-      return;
-    }
-    txs.forEach((item) => {
-      console.log('');
-      console.log(item.src);
-      console.log('');
-      console.log('=>', item.tx);
-      console.log('');
-    });
-  })
+kraken.import(cli.db, cli['csv-file'], DEBUG)
   .catch((err) => console.error(err));
