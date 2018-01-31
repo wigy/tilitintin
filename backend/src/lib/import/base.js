@@ -215,7 +215,7 @@ class Import {
       case 'withdrawal':
         return 'Nosto ' + this.serviceName + '-palvelusta';
       case 'buy':
-        return 'Osto ' + num.trim(txo.tradeAmount, txo.target) + ' (yht. ' + num.trim(txo.targetTotal, txo.target) + ')';
+        return 'Osto ' + num.trim(txo.tradeAmount, txo.target) + ' (yht. ' + num.trim(txo.targetTotal, txo.target) + ', k.h. nyt ' + num.currency(txo.targetAverage, '€/'  + txo.target) + ')';
       case 'sell':
         return 'Myynti ' + num.trim(txo.tradeAmount, txo.target) + ' (k.h. ' + num.currency(txo.targetAverage, '€/'  + txo.target) + ', jälj. ' + num.trim(txo.targetTotal, txo.target) + ')';
       default:
