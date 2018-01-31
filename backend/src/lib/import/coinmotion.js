@@ -89,7 +89,7 @@ class CoinmotionImport extends Import {
         total += Math.abs(parseFloat(entry.Amount.replace(/ [A-Z]+/, '')));
       }
     });
-    return total;
+    return txo.type === 'sell' ? -total : total;
   }
 }
 

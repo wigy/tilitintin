@@ -283,7 +283,7 @@ class Import {
    *   * `total` - Total amount of the transaction, i.e. abs of debit/credit.
    *   * `target` - Name of the target in the trade (like 'ETH' or 'BTC').
    *   * `tradeAmount` - Amount of the target to trade as stringified decimal number.
-   *   * `targetAverage` -Average price of the target after the transaction.
+   *   * `targetAverage` - Average price of the target after the transaction.
    *   * `targetTotal` - Number of targets owned after the transaction.
    *   * `fee` - Service fee in euros.
    *   * `tx.date`- a transaction date
@@ -341,9 +341,6 @@ class Import {
       const newTotal = this.amounts[ret.target];
       if (ret.type === 'buy') {
         this.averages[ret.target] = (oldPrice + newPrice) / newTotal;
-      }
-      if (newTotal <= 0) {
-        this.averages[ret.target] = 0;
       }
       ret.targetAverage = this.averages[ret.target];
       ret.targetTotal = newTotal;
