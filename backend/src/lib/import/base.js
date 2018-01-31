@@ -185,12 +185,20 @@ class Import {
     ];
     let diff = Math.round((buyPrice - txo.total) * 100) / 100;
     if (diff) {
-      ret.push({
-        number: (buyPrice > txo.total ? this.getAccount('losses') : this.getAccount('profits')),
-        amount: diff
-      });
+      if (diff > 0) {
+        // In losses, we deduct the fee from the losses.
+        ret.push({
+          number: this.getAccount('losses'),
+          amount: Math.round((diff - txo.fee) * 100) / 100
+        });
+      } else {
+        // In profits, we add the fee to the profits, since it is deducated later.
+        ret.push({
+          number: this.getAccount('profits'),
+          amount: Math.round((diff - txo.fee) * 100) / 100
+        });
+      }
     }
-
     return ret;
   }
 
@@ -423,6 +431,7 @@ class Import {
     return this.init()
       .then(() => this.load(file))
       .then((data) => this.grouping(data))
+      // TODO: Sort also sales before buys when the date is the same.
       .then(data => data.sort((a, b) => new Date(this.date(a[0])).getTime() - new Date(this.date(b[0])).getTime()))
       .then((groups) => this.preprocess(groups))
       .then((groups) => groups.map((group => this.process(group))))
