@@ -93,11 +93,11 @@ class Import {
   }
 
   /**
-   * Get the date of the transaction.
-   * @param {Object} txo An transaction object.
+   * Get the date from the original entry.
+   * @param {Object} entry Original data entry.
    * @return {string} the date in YYYY-MM-DD format.
    */
-  date(txo) {
+  date(entry) {
     throw new Error('Importer does not implement date().');
   }
 
@@ -115,7 +115,7 @@ class Import {
    * Recognize the type of the transaction.
    *
    * @param {Object} txo An transaction object.
-   * @return {string}
+   * @return {string} One of the 'deposit', 'withdrawal', 'sell' or 'buy'.
    */
   recognize(txo) {
     throw new Error('Importer does not implement recognize().');
@@ -209,7 +209,7 @@ class Import {
       case 'buy':
         return 'Osto ' + num.trim(txo.tradeAmount, txo.target) + ' (yht. ' + num.trim(txo.targetTotal, txo.target) + ')';
       case 'sell':
-        return 'Myynti ' + num.trim(txo.tradeAmount, txo.target) + ' (k.h. ' + num.currency(txo.targetAverage, '€/'  + txo.target) + ', yht. ' + num.trim(txo.targetTotal, txo.target) + ')';
+        return 'Myynti ' + num.trim(txo.tradeAmount, txo.target) + ' (k.h. ' + num.currency(txo.targetAverage, '€/'  + txo.target) + ', jälj. ' + num.trim(txo.targetTotal, txo.target) + ')';
       default:
         throw new Error('Cannot describe transaction of type ' + txo.type);
     }
@@ -257,10 +257,10 @@ class Import {
 
   /**
    * Pre-processing hook.
-   * @param {<Array<any>} group A group of original data forming a transaction.
+   * @param {<Array<Object>} list A list of objects read from the file.
    */
-  preprocess(group) {
-    return group;
+  preprocess(list) {
+    return list;
   }
 
   /**
@@ -309,22 +309,26 @@ class Import {
     };
 
     // Get basics.
+    ret.tx.date = this.date(group[0]);
     ret.type = this.recognize(ret);
-    ret.tx.date = this.date(ret);
     ret.total = this.total(ret);
-    ret.target = this.target(ret);
+    ret.fee = this.fee(ret);
+    if (ret.type !== 'withdrawal' && ret.type !== 'deposit') {
+      ret.target = this.target(ret);
+    }
 
     // Initialize new targgets.
-    if (this.amounts[ret.target] === undefined) {
+    if (ret.target !== null && this.amounts[ret.target] === undefined) {
       this.amounts[ret.target] = 0.0;
     }
-    if (this.averages[ret.target] === undefined) {
+    if (ret.target !== null && this.averages[ret.target] === undefined) {
       this.averages[ret.target] = 0.0;
     }
 
     // Calculate amounts and entries.
-    ret.tradeAmount = this.amount(ret);
-    ret.fee = this.fee(ret);
+    if (ret.type !== 'withdrawal' && ret.type !== 'deposit') {
+      ret.tradeAmount = this.amount(ret);
+    }
     ret.tx.entries = this.entries(ret);
 
     // Update cumulative amounts.
@@ -422,7 +426,8 @@ class Import {
     return this.init()
       .then(() => this.load(file))
       .then((data) => this.grouping(data))
-      .then((groups) => groups.map((group => this.preprocess(group))))
+      .then(data => data.sort((a, b) => new Date(this.date(a[0])).getTime() - new Date(this.date(b[0])).getTime()))
+      .then((groups) => this.preprocess(groups))
       .then((groups) => groups.map((group => this.process(group))))
       .then((txobjects) => this.fixRoudingErrors(txobjects))
       .then((txobjects) => this.postprocess(txobjects))

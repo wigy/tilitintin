@@ -2,12 +2,16 @@ const Import = require('./base');
 
 class KrakenImport extends Import {
 
-  constructor(serviceName) {
+  constructor() {
     super('Kraken');
   }
 
   load(file) {
     return this.loadCSV(file);
+  }
+
+  date(entry) {
+    return entry.time.substr(0, 10);
   }
 
   grouping(entries) {
@@ -39,10 +43,6 @@ class KrakenImport extends Import {
     throw new Error('Cannot recognize entry ' + JSON.stringify(txo));
   }
 
-  date(txo) {
-    return txo.src[0].time.substr(0, 10);
-  }
-
   total(txo) {
     let total = 0;
     txo.src.forEach((entry) => {
@@ -65,9 +65,6 @@ class KrakenImport extends Import {
   }
 
   target(txo) {
-    if (txo.type !== 'buy' && txo.type !== 'sell') {
-      return null;
-    }
     const crypto = txo.src.filter((entry) => entry.asset !== 'ZEUR');
     if (crypto.length) {
       switch (crypto[0].asset) {
@@ -77,18 +74,15 @@ class KrakenImport extends Import {
           return 'BTC';
       }
     }
-    throw new Error('Canno recognize trade target for ' + JSON.stringify(txo.src));
+    throw new Error('Cannot recognize trade target for ' + JSON.stringify(txo.src));
   }
 
   amount(txo) {
-    if (txo.type !== 'buy' && txo.type !== 'sell') {
-      return null;
-    }
     const crypto = txo.src.filter((entry) => entry.asset !== 'ZEUR');
     if (crypto.length) {
       return parseFloat(crypto[0].amount);
     }
-    throw new Error('Canno recognize amount of trade for ' + JSON.stringify(txo.src));
+    throw new Error('Cannot recognize amount of trade for ' + JSON.stringify(txo.src));
   }
 }
 
