@@ -16,6 +16,12 @@ class CoinmotionImport extends Import {
     return sprintf('%04d-%02d-%02d', parseInt(y), parseInt(m), parseInt(d));
   }
 
+  time(entry) {
+    const [_, d, m, y, min, sec] = /^(\d+)\.(\d+)\.(\d+) (\d+):(\d+)/.exec(entry.Date);
+    const stamp = sprintf('%04d-%02d-%02d %02d:%02d:00', parseInt(y), parseInt(m), parseInt(d), parseInt(min), parseInt(sec));
+    return new Date(stamp).getTime();
+  }
+
   grouping(entries) {
     let ret = {};
     entries.forEach((entry) => {

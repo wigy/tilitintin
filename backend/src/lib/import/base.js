@@ -102,6 +102,15 @@ class Import {
   }
 
   /**
+   * Get the more accurate time from the original entry useful for sorting.
+   * @param {Object} entry Original data entry.
+   * @return {number} A number that can be compared, when sorting entries.
+   */
+  time(entry) {
+    throw new Error('Importer does not implement time().');
+  }
+
+  /**
    * Reorganize entries so that they are grouped to the arrays forming one single transaction.
    *
    * @param {Array<any>} entries
@@ -428,11 +437,15 @@ class Import {
   import(db, file, dryRun) {
     this.knex = knex.db(db);
 
+    // Helper to sort entries by the date
+    const sorter = (a, b) => {
+      return this.time(a[0]) - this.time(b[0]);
+    };
+
     return this.init()
       .then(() => this.load(file))
       .then((data) => this.grouping(data))
-      // TODO: Sort also sales before buys when the date is the same.
-      .then(data => data.sort((a, b) => new Date(this.date(a[0])).getTime() - new Date(this.date(b[0])).getTime()))
+      .then(data => data.sort(sorter))
       .then((groups) => this.preprocess(groups))
       .then((groups) => groups.map((group => this.process(group))))
       .then((txobjects) => this.fixRoudingErrors(txobjects))

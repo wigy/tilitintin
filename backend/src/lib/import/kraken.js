@@ -14,6 +14,10 @@ class KrakenImport extends Import {
     return entry.time.substr(0, 10);
   }
 
+  time(entry) {
+    return new Date(entry.time).getTime();
+  }
+
   grouping(entries) {
     let ret = {};
     entries.forEach((entry) => {
