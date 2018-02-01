@@ -152,6 +152,13 @@ class Import {
    * Create deposit entries.
    */
   depositEntries(txo) {
+    if (txo.fee) {
+      return [
+        {number: this.getAccount('euro'), amount: Math.round((txo.total - txo.fee) * 100) / 100},
+        {number: this.getAccount('fees'), amount: txo.fee},
+        {number: this.getAccount('bank'), amount: -txo.total},
+      ];
+    }
     return [
       {number: this.getAccount('euro'), amount: txo.total},
       {number: this.getAccount('bank'), amount: -txo.total},
@@ -162,6 +169,13 @@ class Import {
    * Create withdrawal entries.
    */
   withdrawalEntries(txo) {
+    if (txo.fee) {
+      return [
+        {number: this.getAccount('bank'), amount: Math.round((txo.total - txo.fee) * 100) / 100},
+        {number: this.getAccount('fees'), amount: txo.fee},
+        {number: this.getAccount('euro'), amount: -txo.total},
+      ];
+    }
     return [
       {number: this.getAccount('bank'), amount: txo.total},
       {number: this.getAccount('euro'), amount: -txo.total},
@@ -173,7 +187,7 @@ class Import {
    */
   buyEntries(txo) {
     let ret = [
-      {number: this.getAccount(txo.target.toLowerCase()), amount: Math.round((txo.total - txo.fee)*100) / 100},
+      {number: this.getAccount(txo.target.toLowerCase()), amount: Math.round((txo.total - txo.fee) * 100) / 100},
       {number: this.getAccount('fees'), amount: txo.fee},
       {number: this.getAccount('euro'), amount: -txo.total},
     ];
