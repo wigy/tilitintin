@@ -11,7 +11,7 @@ cli.arg('csv-file', 'transaction log from Kraken as CSV file');
 importer.configure({
   tags: '[Kraken][KRY]',
   accounts: {
-    bank: 1910,
+    bank: 1778,
     euro: 1931,
     crypto: 1549,
     eth: 1548,
