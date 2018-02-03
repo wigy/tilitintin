@@ -4,7 +4,7 @@ import './Tag.css';
 const Tag = (props) => {
   if (props.tag) {
     return (
-      <div className="Tag" title={props.tag.name}><span className="text">!</span></div>
+      <div className="Tag" title={props.tag.type + ': ' + props.tag.name}><img alt={props.tag.name} src={props.tag.picture} /></div>
     );
   } else {
     return (

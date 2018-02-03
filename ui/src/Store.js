@@ -8,7 +8,13 @@ const URL = document.location.protocol + '//' + document.location.hostname + ':3
  *   dbs: ['dbname1', 'dbname2'],
  *   title: "Current Title",
  *   tags: {
- *     TODO: Docs.
+ *     TagCode:
+ *       id: 1,
+ *       tag: "TagCode",
+ *       name: "Tag description",
+ *       picture: "https://site.to.store/picture",
+ *       type: "Category",
+ *       order: 102,
  *   },
  *   periods: [
  *     periodId: {
@@ -127,9 +133,11 @@ class Store {
           this.title = account.number + ' ' + account.name;
           this.transactions.forEach((tx, i) => {
             const regex = /^((\[[a-zA-Z0-9]+\])*)\s*(.*)/.exec(tx.description);
-            if (regex) {
+            if (regex[1]) {
               tx.description = regex[3];
               tx.tags = regex[1].substr(1, regex[1].length - 2).split('][');
+            } else {
+              tx.tags = [];
             }
           });
         });

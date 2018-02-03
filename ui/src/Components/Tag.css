@@ -19,3 +19,8 @@
   color: black;
   top: -1px;
 }
+
+.Tag img {
+  max-width: 100%;
+  max-height: 100%;
+}

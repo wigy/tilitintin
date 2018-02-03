@@ -6,6 +6,10 @@
   text-align: center;
 }
 
+.Transaction .tags {
+  min-width: 1ex;
+}
+
 .Transaction .tags .Tag {
   vertical-align: middle;
 }
