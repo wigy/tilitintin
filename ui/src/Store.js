@@ -8,6 +8,7 @@ const URL = document.location.protocol + '//' + document.location.hostname + ':3
  *   dbs: ['dbname1', 'dbname2'],
  *   title: "Current Title",
  *   tags: {
+ *     TODO: Docs.
  *   },
  *   periods: [
  *     periodId: {
@@ -68,7 +69,11 @@ class Store {
   }
 
   getTags(db) {
-
+    return this.fetch('/db/' + db + '/tags')
+      .then((tags) => {
+        this.tags = {};
+        tags.forEach((tag) => this.tags[tag.tag] = tag);
+      });
   }
 
   getDatabases() {
@@ -114,6 +119,7 @@ class Store {
   }
 
   getAccountPeriod(db, accountId, periodId) {
+    this.getTags(db);
     return this.fetch('/db/' + db + '/account/' + accountId + '/' + periodId)
       .then((account) => {
         runInAction(() => {
