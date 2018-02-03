@@ -6,6 +6,7 @@ const config = require('../config');
 const knex = require('./knex');
 
 const dateFields = {
+  tags: [],
   account: [],
   document: ['date'],
   entry: [],
@@ -21,6 +22,13 @@ const plural = {
 };
 
 const fields = {
+  "tags": {
+    "tag": true,
+    "name": true,
+    "picture": true,
+    "type": true,
+    "order": true,
+  },
   "period": {
     "end_date": true,
     "locked": true,
@@ -98,6 +106,9 @@ function fillEntries (db, entries, className, joinClass) {
  * @param {array} order
  */
 function listAll(db, className, where, order) {
+  if (!fields[className]) {
+    throw new Error('No definition for enries for ' + className);
+  }
   let ret = knex.db(db).select('*').from(className);
   if (where) {
     ret = ret.where(where);

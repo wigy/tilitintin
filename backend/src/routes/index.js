@@ -28,6 +28,7 @@ router.get('/:db', checkDb, (req, res) => {
       documents: config.BASEURL + '/db/' + db + '/document',
       entries: config.BASEURL + '/db/' + db + '/entry',
       headings: config.BASEURL + '/db/' + db + '/heading',
+      tags: config.BASEURL + '/db/' + db + '/tags',
     }});
 });
 
@@ -36,5 +37,6 @@ router.use('/:db/account', checkDb, require('./account'));
 router.use('/:db/document', checkDb, require('./document'));
 router.use('/:db/entry', checkDb, require('./entry'));
 router.use('/:db/heading', checkDb, require('./heading'));
+router.use('/:db/tags', checkDb, require('./tags'));
 
 module.exports = router;
