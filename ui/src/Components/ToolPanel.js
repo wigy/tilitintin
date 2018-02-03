@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import TransactionTable from '../Components/TransactionTable';
 
-export default inject('store')(observer(class Account extends Component {
+export default inject('store')(observer(class ToolPanel extends Component {
 
   update({db, periodId, accountId}) {
     this.props.store.getAccountPeriod(db, accountId, periodId);
@@ -16,13 +15,12 @@ export default inject('store')(observer(class Account extends Component {
     this.update(this.props.match.params);
   }
 
-  // TODO: Rename this as AccountTransactions
   render() {
-
     return (
-      <div className="Account">
-        <TransactionTable txs={this.props.store.transactions} />
-        </div>
+      <div className="ToolPanel">
+        <h1>{this.props.store.title}</h1>
+        TODO: Some filtering tools here.
+      </div>
     );
   }
 }));

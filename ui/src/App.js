@@ -8,6 +8,7 @@ import Accounts from './Components/Accounts';
 import Reports from './Components/Reports';
 import DbLinks from './Components/DbLinks';
 import Menu from './Components/Menu';
+import ToolPanel from './Components/ToolPanel';
 
 class App extends Component {
 
@@ -24,6 +25,11 @@ class App extends Component {
             <Route path="/:db/period/:periodId" component={Period}/>
             <Route path="/:db/account" component={Accounts}/>
             <Route path="/:db/report" component={Reports}/>
+          </div>
+        </div>
+        <div className="MainTopPanel Panel">
+          <div className="Frame">
+            <Route path="/:db/period/:periodId/:accountId" component={ToolPanel}/>
           </div>
         </div>
         <div className="MainPanel Panel">

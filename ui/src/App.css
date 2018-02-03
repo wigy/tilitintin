@@ -24,9 +24,18 @@
   overflow-y: auto;
 }
 
-.MainPanel {
+.MainTopPanel {
   position: absolute;
   top: 52px;
+  left: 402px;
+  right: 0px;
+  height: 100px;
+  overflow-y: auto;
+}
+
+.MainPanel {
+  position: absolute;
+  top: 154px;
   left: 402px;
   right: 0px;
   bottom: 0px;
@@ -56,4 +65,5 @@
   margin-bottom: 0.5ex;
   overflow: hidden;
   white-space: nowrap;
+  font-size: 13pt;
 }
