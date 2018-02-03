@@ -6,10 +6,10 @@ export default inject('store')(observer(class Tags extends Component {
 
   render() {
     const tags = this.props.store.tags;
-    // TODO: Sort to tag order.
+    const show = this.props.tags.sort((a, b) => ((tags[a] && tags[a].order) || 99999) - ((tags[b] && tags[b].order) || 99999));
     return (
       <div className="Tags">
-        {this.props.tags.map((tag) => (<Tag key={tag} name={tag} tag={tags[tag]}/>))}
+        {show.map((tag) => (<Tag key={tag} name={tag} tag={tags[tag]}/>))}
       </div>
     );
   }
