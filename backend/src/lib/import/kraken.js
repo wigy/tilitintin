@@ -49,12 +49,20 @@ class KrakenImport extends Import {
 
   total(txo) {
     let total = 0;
-    txo.src.forEach((entry) => {
-      if (entry.asset === 'ZEUR') {
-        total += Math.abs(parseFloat(entry.amount));
-        total += Math.abs(parseFloat(entry.fee));
-      }
-    });
+    if (txo.type === 'sell') {
+      txo.src.forEach((entry) => {
+        if (entry.asset === 'ZEUR') {
+          total += Math.abs(parseFloat(entry.amount));
+        }
+      });
+    } else {
+      txo.src.forEach((entry) => {
+        if (entry.asset === 'ZEUR') {
+          total += Math.abs(parseFloat(entry.amount));
+          total += Math.abs(parseFloat(entry.fee));
+        }
+      });
+    }
     return Math.round(total * 100) / 100;
   }
 
