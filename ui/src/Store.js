@@ -50,7 +50,8 @@ const URL = document.location.protocol + '//' + document.location.hostname + ':3
  *     id: 12,
  *     number: 1234,
  *     name: "Account Name",
- *     type: "ASSET/LIABILITY/EQUITY/REVENUE/EXPENSE/PROFIT_PREV/PROFIT"
+ *     type: "ASSET/LIABILITY/EQUITY/REVENUE/EXPENSE/PROFIT_PREV/PROFIT",
+ *     tags: ["Tag1", "Tag2"],
  *   },
  *   transactions: [
  *      TODO: Docs.
@@ -162,15 +163,18 @@ class Store {
           this.account = account;
           this.transactions = account.transactions;
           this.title = account.number + ' ' + account.name;
+          let tags = {};
           this.transactions.forEach((tx, i) => {
             const regex = /^((\[[a-zA-Z0-9]+\])*)\s*(.*)/.exec(tx.description);
             if (regex[1]) {
               tx.description = regex[3];
               tx.tags = regex[1].substr(1, regex[1].length - 2).split('][');
+              tx.tags.forEach((tag) => tags[tag] = true);
             } else {
               tx.tags = [];
             }
           });
+          this.account.tags = Object.keys(tags);
         });
         return account;
       });
