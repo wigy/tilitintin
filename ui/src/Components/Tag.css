@@ -8,6 +8,7 @@
   background-color: var(--border-color-light);
   user-select: none;
   cursor: default;
+  background-color: white;
 }
 
 .Tag.unknown {
