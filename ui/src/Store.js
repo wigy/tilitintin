@@ -6,6 +6,8 @@ const URL = document.location.protocol + '//' + document.location.hostname + ':3
  * The store structure is the following:
  * {
  *   dbs: ['dbname1', 'dbname2'],
+ *   db: 'currentdb',
+ *   periodId: 1,
  *   title: "Current Title",
  *   tags: {
  *     TagCode:
@@ -44,6 +46,12 @@ const URL = document.location.protocol + '//' + document.location.hostname + ':3
  *       ]
  *     }, ...
  *   ],
+ *   account: {
+ *     id: 12,
+ *     number: 1234,
+ *     name: "Account Name",
+ *     type: ?
+ *   },
  *   transactions: [
  *      TODO: Docs.
  *   ]
@@ -54,12 +62,15 @@ class Store {
   constructor() {
     extendObservable(this, {
       dbs: [],
+      db: null,
+      periodId: null,
       periods: [],
       balances: [],
       accounts: [],
       title: '',
       transactions: [],
       tags: {},
+      account: {},
     });
     this.getDatabases();
   }
@@ -74,11 +85,19 @@ class Store {
     });
   }
 
+  /**
+   * Get the tag definitions from the current database.
+   * @param {*} db
+   */
   getTags(db) {
+    if (this.db === db) {
+      return Promise.resolve(this.tags);
+    }
     return this.fetch('/db/' + db + '/tags')
       .then((tags) => {
         this.tags = {};
         tags.forEach((tag) => this.tags[tag.tag] = tag);
+        return this.tags;
       });
   }
 
@@ -124,11 +143,23 @@ class Store {
     return this.fetch('/db/' + db + '/account');
   }
 
+  /**
+   * Fetch the account data for the given period and store it to this store as current account.
+   * @param {*} db
+   * @param {*} accountId
+   * @param {*} periodId
+   */
   getAccountPeriod(db, accountId, periodId) {
     this.getTags(db);
+    if (this.db === db && this.account.id === accountId && this.periodId === periodId) {
+      return Promise.resolve(this.account);
+    }
     return this.fetch('/db/' + db + '/account/' + accountId + '/' + periodId)
       .then((account) => {
         runInAction(() => {
+          this.db = db;
+          this.periodId = periodId;
+          this.account = account;
           this.transactions = account.transactions;
           this.title = account.number + ' ' + account.name;
           this.transactions.forEach((tx, i) => {
