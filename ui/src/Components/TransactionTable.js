@@ -11,12 +11,12 @@ const TransactionTable = (props) => {
     <thead>
       <tr>
         <th className="number">#</th>
-        <th className="date">Date</th>
+        <th className="date">Päiväys</th>
         <th className="tags"></th>
-        <th className="description">Description</th>
-        <th className="debit">Debit</th>
-        <th className="credit">Credit</th>
-        <th className="total">Total</th>
+        <th className="description">Kuvaus</th>
+        <th className="debit">Debet</th>
+        <th className="credit">Kredit</th>
+        <th className="total">Yhteensä</th>
       </tr>
     </thead>
     <tbody>

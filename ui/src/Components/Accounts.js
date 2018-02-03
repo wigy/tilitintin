@@ -18,7 +18,7 @@ export default inject('store')(observer(class Accounts extends Component {
     // TODO: Headings from coa_heading table.
     return (
       <div className="Accounts">
-        <h1>Accounts</h1>
+        <h1>Tilit</h1>
         {this.state.accounts.map(account => (<div key={account.id}><AccountLink key={account.id} account={account}/></div>))}
       </div>
     );
