@@ -50,7 +50,7 @@ const URL = document.location.protocol + '//' + document.location.hostname + ':3
  *     id: 12,
  *     number: 1234,
  *     name: "Account Name",
- *     type: ?
+ *     type: "ASSET/LIABILITY/EQUITY/REVENUE/EXPENSE/PROFIT_PREV/PROFIT"
  *   },
  *   transactions: [
  *      TODO: Docs.

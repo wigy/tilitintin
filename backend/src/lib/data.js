@@ -65,6 +65,13 @@ const fields = {
   },
 };
 
+const transformer = {
+  "account": (acc) => {
+    acc.type = ['ASSET', 'LIABILITY', 'EQUITY', 'REVENUE', 'EXPENSE', 'PROFIT_PREV', 'PROFIT'][acc.type];
+    return acc;
+  }
+};
+
 /**
  * Fill in some additional information for the entries already fetched from the database.
  * @param {string} db
@@ -93,6 +100,9 @@ function fillEntries (db, entries, className, joinClass) {
       }
       sub = module.exports.api([sub], joinClass)[0];
       e[joinClass] = sub;
+    }
+    if (transformer[className]) {
+      e = transformer[className](e);
     }
     return e;
   });
