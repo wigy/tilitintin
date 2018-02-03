@@ -6,6 +6,15 @@
   text-align: center;
 }
 
+.Transaction .tags .Tag {
+  vertical-align: middle;
+}
+
+.Transaction .tags .Tag {
+  margin-right: 1px;
+  margin-top: 1px;
+}
+
 .Transaction .description {
   padding-left: 0.5em;
 }

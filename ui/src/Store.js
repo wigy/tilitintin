@@ -6,6 +6,9 @@ const URL = document.location.protocol + '//' + document.location.hostname + ':3
  * The store structure is the following:
  * {
  *   dbs: ['dbname1', 'dbname2'],
+ *   title: "Current Title",
+ *   tags: {
+ *   },
  *   periods: [
  *     periodId: {
  *       id: 1,
@@ -33,6 +36,9 @@ const URL = document.location.protocol + '//' + document.location.hostname + ':3
  *         ...
  *       ]
  *     }, ...
+ *   ],
+ *   transactions: [
+ *      TODO: Docs.
  *   ]
  * }
  */
@@ -46,6 +52,7 @@ class Store {
       accounts: [],
       title: '',
       transactions: [],
+      tags: {},
     });
     this.getDatabases();
   }
@@ -58,6 +65,10 @@ class Store {
     .catch(err => {
       console.error(err);
     });
+  }
+
+  getTags(db) {
+
   }
 
   getDatabases() {
@@ -108,6 +119,13 @@ class Store {
         runInAction(() => {
           this.transactions = account.transactions;
           this.title = account.number + ' ' + account.name;
+          this.transactions.forEach((tx, i) => {
+            const regex = /^((\[[a-zA-Z0-9]+\])*)\s*(.*)/.exec(tx.description);
+            if (regex) {
+              tx.description = regex[3];
+              tx.tags = regex[1].substr(1, regex[1].length - 2).split('][');
+            }
+          });
         });
         return account;
       });

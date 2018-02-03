@@ -1,6 +1,7 @@
 import React from 'react';
 import Money from './Money';
 import YYYYMMDD from './YYYYMMDD';
+import Tags from './Tags';
 import './Transaction.css';
 
 const Transaction = (props) => {
@@ -11,6 +12,7 @@ const Transaction = (props) => {
     <tr className="Transaction">
       <td className="number">{props.tx.number}</td>
       <td className="date"><YYYYMMDD date={props.tx.date}/></td>
+      <td className="tags" style={{width: (props.tx.tags.length) * 2.6 + 'ex'}}><Tags tags={props.tx.tags}/></td>
       <td className="description">{props.tx.description}</td>
       <td className="debit">{props.tx.debit ? money : ''}</td>
       <td className="credit">{props.tx.debit ? '' : money}</td>

@@ -1,0 +1,21 @@
+.Tag {
+  display: inline-block;
+  position: relative;
+  height: 2.15ex;
+  width: 2.15ex;
+  text-align: center;
+  border: 1px solid var(--border-color-dark);
+  background-color: var(--border-color-light);
+  user-select: none;
+  cursor: default;
+}
+
+.Tag.unknown {
+  font-weight: bold;
+}
+
+.Tag .text {
+  position: relative;
+  color: black;
+  top: -1px;
+}

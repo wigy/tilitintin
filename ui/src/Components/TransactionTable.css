@@ -1,3 +1,4 @@
 table.TransactionTable {
   width: 100%;
+  table-layout: auto;
 }
