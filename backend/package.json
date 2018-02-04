@@ -19,6 +19,7 @@
     "knex": "^0.14.0",
     "moment": "^2.19.1",
     "neat-dump": "^1.0.13",
+    "nodemon": "^1.14.12",
     "promise-sequential": "^1.1.1",
     "sprintf": "^0.1.5",
     "sqlite3": "^3.1.13"
