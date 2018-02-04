@@ -15,6 +15,10 @@ export default inject('store')(observer(class Accounts extends Component {
   }
 
   render() {
+    if (!this.props.store.token) {
+      return '';
+    }
+
     // TODO: Headings from coa_heading table.
     return (
       <div className="Accounts">

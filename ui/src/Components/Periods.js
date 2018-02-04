@@ -10,6 +10,10 @@ export default inject('store')(observer(class Periods extends Component {
   }
 
   render() {
+    if (!this.props.store.token) {
+      return '';
+    }
+
     const {db} = this.props.match.params;
     let periods = this.props.store.periods;
     return (

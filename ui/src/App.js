@@ -9,6 +9,7 @@ import Reports from './Components/Reports';
 import DbLinks from './Components/DbLinks';
 import Menu from './Components/Menu';
 import ToolPanel from './Components/ToolPanel';
+import Login from './Components/Login';
 
 export default (class App extends Component {
 
@@ -36,6 +37,7 @@ export default (class App extends Component {
         <div className="MainPanel Panel">
           <div className="Frame">
             <Route path="/:db/period/:periodId/:accountId" component={Account}/>
+            <Login />
           </div>
         </div>
       </div>

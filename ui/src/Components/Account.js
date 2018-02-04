@@ -18,7 +18,9 @@ export default inject('store')(observer(class Account extends Component {
 
   // TODO: Rename this as AccountTransactions
   render() {
-
+    if (!this.props.store.token) {
+      return '';
+    }
     return (
       <div className="Account">
         <TransactionTable txs={this.props.store.transactions} />

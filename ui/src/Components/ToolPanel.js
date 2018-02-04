@@ -18,6 +18,10 @@ export default inject('store')(observer(class ToolPanel extends Component {
   }
 
   render() {
+    if (!this.props.store.token) {
+      return '';
+    }
+
     let last = null;
     return (
       <div className="ToolPanel">
