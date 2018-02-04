@@ -102,7 +102,13 @@ class Store {
       });
   }
 
+  /**
+   * Get the list of available databases.
+   */
   getDatabases() {
+    if (this.dbs) {
+      return Promise.resolve(this.dbs);
+    }
     return this.fetch('/db')
       .then(dbs => {
         runInAction(() => {
@@ -113,6 +119,10 @@ class Store {
       });
   }
 
+  /**
+   * Get the list of periods available for the given DB.
+   * @param {*} db
+   */
   getPeriods(db) {
     return this.fetch('/db/' + db + '/period')
       .then((periods) => {
@@ -126,6 +136,11 @@ class Store {
       });
   }
 
+  /**
+   * Get the summary of balances for all accounts in the given period.
+   * @param {*} db
+   * @param {*} periodId
+   */
   getBalances(db, periodId) {
     return this.fetch('/db/' + db + '/period/' + periodId)
       .then((balances) => {
@@ -178,6 +193,18 @@ class Store {
         });
         return account;
       });
+  }
+
+  /**
+   * Sort the given list (or current account's) of tags to their official order.
+   * @param {Array<Object>|null} tags
+   */
+  sortTags(tags=null) {
+    if (tags === null) {
+      tags = this.account.tags || [];
+    }
+    let ret = tags.map((tag) => this.tags[tag] || {tag: tag, order: 9999999});
+    return ret.sort((a, b) => a.order - b.order);
   }
 }
 
