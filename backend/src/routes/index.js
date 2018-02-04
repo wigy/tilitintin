@@ -6,7 +6,7 @@ const knex = require('../lib/knex');
 
 router.post('/auth', (req, res) => {
   const {user, password} = req.body;
-  if (user === config.USER && password === config.PASSWORD) {
+  if (user === config.TILITIN_USER && password === config.TILITIN_PASSWORD) {
     const token = jwt.sign({service: 'Tilitintin', user: user}, config.SECRET);
     res.send({token: token});
   } else {
