@@ -29,13 +29,13 @@
   top: 52px;
   left: 402px;
   right: 0px;
-  height: 100px;
+  height: 110px;
   overflow-y: auto;
 }
 
 .MainPanel {
   position: absolute;
-  top: 154px;
+  top: 164px;
   left: 402px;
   right: 0px;
   bottom: 0px;

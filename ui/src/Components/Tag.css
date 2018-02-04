@@ -1,6 +1,5 @@
 .Tag {
-  display: inline-block;
-  position: relative;
+  float: left;
   height: 2.15ex;
   width: 2.15ex;
   text-align: center;
@@ -11,14 +10,17 @@
   background-color: white;
 }
 
+.Tag.x2 {
+  height: 4.3ex;
+  width: 4.3ex;
+}
+
 .Tag.unknown {
   font-weight: bold;
 }
 
 .Tag .text {
-  position: relative;
   color: black;
-  top: -1px;
 }
 
 .Tag img {

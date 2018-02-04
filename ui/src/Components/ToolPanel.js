@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import Tag from './Tag';
+import './ToolPanel.css';
 
 export default inject('store')(observer(class ToolPanel extends Component {
 
@@ -16,10 +18,24 @@ export default inject('store')(observer(class ToolPanel extends Component {
   }
 
   render() {
-    console.log(this.props.store.sortTags())
+    let last = null;
     return (
       <div className="ToolPanel">
         <h1>{this.props.store.title}</h1>
+          {this.props.store.sortTags().map((tag) => {
+            const spacer = (last && tag.type !== last);
+            last = tag.type;
+            return (
+              <div key={tag.tag}>
+                {spacer ?
+                  (<span style={{float: 'left'}}>&nbsp;&nbsp;&nbsp;</span>) :
+                  (<span></span>)
+                }
+
+                <Tag toggle={false} size="x2" tag={tag}/>
+              </div>)
+          })}
+        <div style={{clear: 'both'}}></div>
       </div>
     );
   }
