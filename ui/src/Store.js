@@ -5,6 +5,7 @@ const URL = document.location.protocol + '//' + document.location.hostname + ':3
 /**
  * The store structure is the following:
  * {
+ *   token: null
  *   dbs: ['dbname1', 'dbname2'],
  *   db: 'currentdb',
  *   periodId: 1,
@@ -62,6 +63,7 @@ class Store {
 
   constructor() {
     extendObservable(this, {
+      token: localStorage.getItem('token'),
       dbs: [],
       db: null,
       periodId: null,
@@ -77,7 +79,18 @@ class Store {
   }
 
   fetch(path) {
-    return fetch(URL + path)
+    // TODO: Support for POST.
+    if (!this.token) {
+      return Promise.resolve([]);
+    }
+    return fetch(URL + path, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.token
+      },
+    })
     .then(res => {
       return res.json();
     })
@@ -205,6 +218,31 @@ class Store {
     }
     let ret = tags.map((tag) => this.tags[tag] || {tag: tag, order: 9999999});
     return ret.sort((a, b) => a.order - b.order);
+  }
+
+  /**
+   * Login to the back-end.
+   * @param {String} user
+   * @param {String} password
+   */
+  login(user, password) {
+    // TODO: Use common fetch functionality.
+    this.token = null;
+    return fetch(URL + '/auth', {
+      method: 'POST',
+      headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
+      body: JSON.stringify({user: user, password: password})
+    })
+    .then((resp) => {
+      if (resp.status === 200) {
+        resp.json().then((data) => {
+          runInAction(() => {
+            this.token = data.token;
+            localStorage.setItem('token', data.token);
+          });
+        });
+      }
+    });
   }
 }
 
