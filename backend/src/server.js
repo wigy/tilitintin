@@ -9,13 +9,7 @@ global.d = require('neat-dump');
 app.use(d.middleware());
 app.use(bodyParser.json());
 app.use(cors());
-app.get('/', (req, res) => {
-  res.send({
-    links: {
-      databases: config.BASEURL + '/db'
-  }});
-});
-app.use('/db', require('./routes/index'));
+app.use('/', require('./routes/index'));
 
 app.listen(config.PORT, function () {
   d.info('App listening on port ' + config.PORT);

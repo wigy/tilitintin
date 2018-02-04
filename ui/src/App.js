@@ -16,6 +16,7 @@ class App extends Component {
     return (
       <div className="App">
         <div className="TopPanel Panel">
+          TODO: Neat display components for these.
           <DbLinks />
           <Route path="/:db" component={Periods}/>
           <Route path="/:db" component={Menu}/>
