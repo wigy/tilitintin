@@ -80,9 +80,11 @@ class Store {
 
   fetch(path) {
     // TODO: Support for POST.
+    /*
     if (!this.token) {
       return Promise.resolve([]);
     }
+    */
     return fetch(URL + path, {
       method: 'GET',
       headers: {

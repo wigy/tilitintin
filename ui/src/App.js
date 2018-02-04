@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { inject, observer } from 'mobx-react';
 import { Route } from 'react-router-dom';
 import './App.css';
 import Periods from './Components/Periods';
@@ -11,37 +10,9 @@ import DbLinks from './Components/DbLinks';
 import Menu from './Components/Menu';
 import ToolPanel from './Components/ToolPanel';
 
-export default inject('store')(observer(class App extends Component {
+export default (class App extends Component {
 
   render() {
-    let user = '';
-    let password = '';
-
-    const login = () => {
-      this.props.store.login(user, password);
-    };
-
-    // TODO: Some refactoring needed here to remove code duplication.
-    // TODO: Move login to separate component.
-    if (!this.props.store.token) {
-      return (
-        <div className="App">
-          <div className="TopPanel Panel">
-          TODO: Design visuals on this page.
-          </div>
-          <div className="SidePanel Panel">
-          </div>
-          <div className="MainTopPanel Panel">
-          <h1>Tilitintin</h1>
-          </div>
-          <div className="MainPanel Panel">
-            User: <input onChange={(event) => user=event.target.value} name="user"/><br/>
-            Password: <input onChange={(event) => password=event.target.value} name="password" type="password"/><br/>
-            <input onClick={login} type="submit"/>
-          </div>
-        </div>
-      );
-    }
     return (
       <div className="App">
         <div className="TopPanel Panel">
@@ -70,4 +41,4 @@ export default inject('store')(observer(class App extends Component {
       </div>
     );
   }
-}));
+});
