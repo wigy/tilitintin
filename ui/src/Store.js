@@ -80,11 +80,9 @@ class Store {
 
   fetch(path) {
     // TODO: Support for POST.
-    /*
     if (!this.token) {
-      return Promise.resolve([]);
+      return Promise.reject('Not authenticated.');
     }
-    */
     return fetch(URL + path, {
       method: 'GET',
       headers: {
@@ -241,10 +239,19 @@ class Store {
           runInAction(() => {
             this.token = data.token;
             localStorage.setItem('token', data.token);
+            this.getDatabases();
           });
         });
       }
     });
+  }
+
+  /**
+   * Log out the current user.
+   */
+  logout() {
+    this.token = null;
+    localStorage.removeItem('token');
   }
 }
 

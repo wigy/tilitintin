@@ -17,6 +17,8 @@ export default inject('store')(observer(class Login extends Component {
           User: <input onChange={(event) => user=event.target.value} name="user"/><br/>
           Password: <input onChange={(event) => password=event.target.value} name="password" type="password"/><br/>
           <input onClick={login} type="submit"/>
+          <br/>
+          TODO: Improve visuals for login screen.
         </div>
       );
     }
