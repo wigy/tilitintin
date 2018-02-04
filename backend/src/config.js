@@ -6,6 +6,6 @@ module.exports = {
   DBPATH: process.env.DBPATH || path.resolve(process.cwd(), 'databases'),
   SECRET: process.env.SECRET || 'oGBtRQBWIVUjnqw0nbmvbJ7zsd&67rtyr/r5fyft62',
   AUTHENTICATION: true,
-  TILITIN_USER: process.env.USER || 'user',
-  TILITIN_PASSWORD: process.env.PASSWORD || 'pass'
+  TILITIN_USER: process.env.TILITIN_USER || 'user',
+  TILITIN_PASSWORD: process.env.TILITIN_PASSWORD || 'pass'
 };

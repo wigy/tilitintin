@@ -1,0 +1,21 @@
+version: '2'
+
+services:
+
+  backend:
+    container_name: tilitintin-backend
+    build:
+      context: backend
+    ports:
+      - "3001:3001"
+    env_file:
+      - .env
+    volumes:
+      - ./backend/databases:/var/app/databases
+
+  ui:
+    container_name: tilitintin-ui
+    build:
+      context: ui
+    ports:
+      - "3002:3002"
