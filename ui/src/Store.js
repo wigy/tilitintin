@@ -106,7 +106,7 @@ class Store {
    * Get the list of available databases.
    */
   getDatabases() {
-    if (this.dbs) {
+    if (this.dbs.length) {
       return Promise.resolve(this.dbs);
     }
     return this.fetch('/db')

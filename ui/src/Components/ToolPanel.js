@@ -35,7 +35,7 @@ export default inject('store')(observer(class ToolPanel extends Component {
                 <Tag toggle={false} size="x2" tag={tag}/>
               </div>)
           })}
-        TODO: Filtering tools using these icons.
+          &nbsp;&nbsp;&nbsp;TODO: Filtering tools using these icons.
         <div style={{clear: 'both'}}></div>
       </div>
     );
