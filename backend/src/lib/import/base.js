@@ -202,23 +202,23 @@ class Import {
     const avgPrice = this.averages[txo.target] || 0;
     const buyPrice = Math.round(100 * (-txo.tradeAmount) * avgPrice) / 100;
     let ret = [
-      {number: this.getAccount('euro'), amount: txo.total},
+      {number: this.getAccount('euro'), amount: txo.total - txo.fee},
       {number: this.getAccount('fees'), amount: txo.fee},
       {number: this.getAccount(txo.target.toLowerCase()), amount: -buyPrice},
     ];
     let diff = Math.round((buyPrice - txo.total) * 100) / 100;
     if (diff) {
       if (diff > 0) {
-        // In losses, we deduct the fee from the losses.
+        // In losses, add to debit into losses.
         ret.push({
           number: this.getAccount('losses'),
-          amount: Math.round((diff - txo.fee) * 100) / 100
+          amount: diff
         });
-      } else {
-        // In profits, we add the fee to the profits, since it is deducated later.
+      } else if (diff < 0) {
+        // In profits, add to credit side into profits
         ret.push({
           number: this.getAccount('profits'),
-          amount: Math.round((diff - txo.fee) * 100) / 100
+          amount: diff
         });
       }
     }

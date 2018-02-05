@@ -3,7 +3,7 @@ const cli = require('../src/lib/cli');
 const knex = require('../src/lib/knex');
 const importer = require('../src/lib/import/kraken');
 
-const DEBUG = false;
+const DEBUG = true;
 
 cli.arg_('db', knex.dbs());
 cli.arg('csv-file', 'transaction log from Kraken as CSV file');
