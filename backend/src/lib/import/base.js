@@ -202,7 +202,7 @@ class Import {
     const avgPrice = this.averages[txo.target] || 0;
     const buyPrice = Math.round(100 * (-txo.tradeAmount) * avgPrice) / 100;
     let ret = [
-      {number: this.getAccount('euro'), amount: txo.total - txo.fee},
+      {number: this.getAccount('euro'), amount: Math.round((txo.total - txo.fee) * 100) / 100},
       {number: this.getAccount('fees'), amount: txo.fee},
       {number: this.getAccount(txo.target.toLowerCase()), amount: -buyPrice},
     ];

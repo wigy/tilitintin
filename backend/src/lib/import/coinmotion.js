@@ -64,17 +64,20 @@ class CoinmotionImport extends Import {
         total += Math.abs(parseFloat(entry.Amount.replace(/ €/, '')));
       }
     });
+    if (txo.type === 'sell') {
+      total += this.fee(txo, true);
+    }
     return Math.round(total * 100) / 100;
   }
 
-  fee(txo) {
+  fee(txo, noRounding=false) {
     let total = 0;
     txo.src.forEach((entry) => {
       if (entry.Account === 'EUR') {
         total += Math.abs(parseFloat(entry.Fee.replace(/ €/, '')));
       }
     });
-    return Math.round(total * 100) / 100;
+    return noRounding ? total : Math.round(total * 100) / 100;
   }
 
   target(txo) {
