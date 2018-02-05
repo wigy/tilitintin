@@ -192,7 +192,7 @@ class Store {
           this.transactions = account.transactions;
           this.title = account.number + ' ' + account.name;
           let tags = {};
-          this.transactions.forEach((tx, i) => {
+          this.transactions.forEach((tx) => {
             const regex = /^((\[[a-zA-Z0-9]+\])*)\s*(.*)/.exec(tx.description);
             if (regex[1]) {
               tx.description = regex[3];

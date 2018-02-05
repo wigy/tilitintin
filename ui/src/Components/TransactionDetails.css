@@ -1,0 +1,13 @@
+.TransactionDetails {
+  color: var(--fg-color-light);
+  border-top: 1px solid rgba(0,0,0,0.1);
+  margin-top: 5px;
+}
+
+.TransactionDetails .current {
+  font-weight: bold;
+}
+
+.TransactionDetails .filler {
+  color: transparent;
+}

@@ -9,7 +9,7 @@ const TransactionTable = (props) => {
   let sum = 0;
   return (<table className="TransactionTable">
     <thead>
-      <tr>
+      <tr className="heading">
         <th className="number">#</th>
         <th className="date">Päiväys</th>
         <th className="tags"></th>
@@ -20,7 +20,9 @@ const TransactionTable = (props) => {
       </tr>
     </thead>
     <tbody>
-    {props.txs.map((tx, idx) => (<Transaction key={idx} tx={tx} total={sum+=(tx.debit ? tx.amount : -tx.amount)} />))}
+    {props.txs.map((tx, idx) => (
+      <Transaction key={idx} tx={tx} total={sum+=(tx.debit ? tx.amount : -tx.amount)} />
+    ))}
     </tbody>
   </table>
   );

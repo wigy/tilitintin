@@ -1,9 +1,11 @@
 .Transaction .number {
   padding-left: 0.5em;
+  width: 5%;
 }
 
 .Transaction .date {
   text-align: center;
+  width: 10%;
 }
 
 .Transaction .tags {
@@ -26,14 +28,17 @@
 .Transaction .debit {
   text-align: right;
   padding-right: 0.5em;
+  width: 10%;
 }
 
 .Transaction .credit {
   text-align: right;
   padding-right: 0.5em;
+  width: 10%;
 }
 
 .Transaction .total {
   text-align: right;
   padding-right: 0.5em;
+  width: 10%;
 }

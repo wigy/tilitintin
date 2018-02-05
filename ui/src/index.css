@@ -1,8 +1,11 @@
 :root {
   --bg-color: #d3d3d3;
   --fg-color: rgb(0,0,93);
+  --fg-color-light: rgba(0,0,93,0.7);
   --border-color-light: #eee;
   --border-color-dark: #a0a0a0;
+  --even-color: rgba(255,255,255,0.2);
+  --odd-color: rgba(255,255,255,0.5);
 }
 
 body {
@@ -30,9 +33,9 @@ td {
 }
 
 table tr:nth-child(even) {
-  background: rgba(255,255,255,0.2);
+  background-color: var(--even-color);
 }
 
 table tr:nth-child(odd) {
-  background: rgba(255,255,255,0.5);
+  background-color: var(--odd-color);
 }
