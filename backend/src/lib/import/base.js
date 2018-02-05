@@ -75,7 +75,6 @@ class Import {
             }
           }
         });
-        process.exit();
       });
   }
 

@@ -1,10 +1,11 @@
 #!/usr/bin/env node
+const promiseSeq = require('promise-sequential');
 const knex = require('../src/lib/knex');
 const tags = require('../src/lib/tags');
 const cli = require('../src/lib/cli');
 
-cli.arg('db', knex.dbs());
-cli.arg('operation', ['ls', 'add']);
+cli.arg_('db', knex.dbs());
+cli.arg('operation', ['ls', 'add', 'remove-all']);
 
 switch(cli.operation) {
 
@@ -22,5 +23,23 @@ switch(cli.operation) {
       .then((tags) => {
         console.log(tags);
       });
+    break;
+
+  case 'remove-all':
+    knex.db(cli.db)
+    .select('id', 'description')
+    .from('entry')
+    .where('description', 'like', '[%')
+    .then((data) => {
+      let changers = [];
+      data.forEach((entry) => {
+        let id = entry.id;
+        let desc = entry.description.replace(/^(\[[A-Za-z0-9]+\])+\s*/, '')
+        console.log('Trimming description to `' + desc + '` for', id);
+        changers.push(() => knex.db(cli.db)('entry').where({id: id}).update({description: desc}));
+      });
+      return changers;
+    })
+    .then((changers) => promiseSeq(changers));
     break;
 }
