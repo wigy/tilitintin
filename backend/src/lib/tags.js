@@ -69,5 +69,6 @@ function add(db, tag, name, picture, type, order) {
 module.exports = {
   isReady: isReady,
   add: add,
+  ensure: ensure,
   getAll: getAll
 };

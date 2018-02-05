@@ -260,7 +260,12 @@ function getAccountTransactionsWithEntries(db, periodId, accountId) {
   return getAccountTransactions(db, periodId, accountId)
     .then((txs) => {
       let txByDocID = {};
-      const docIds = txs.map((tx) => {txByDocID[tx.document_id] = tx; tx.entries = []; return tx.document_id;});
+      const docIds = txs.map((tx) => {
+        txByDocID[tx.document_id] = txByDocID[tx.document_id] || [];
+        txByDocID[tx.document_id].push(tx);
+        tx.entries = [];
+        return tx.document_id;
+      });
       return knex.db(db).select('*', 'entry.id AS entry_id').from('entry').whereIn('document_id', docIds).orderBy(['document_id', 'row_number'])
         .leftJoin('account', 'account.id', 'entry.account_id')
         .then((entries) => {
@@ -268,7 +273,7 @@ function getAccountTransactionsWithEntries(db, periodId, accountId) {
             entry.amount = Math.round(entry.amount * 100);
             entry.id = entry.entry_id;
             delete entry.entry_id;
-            txByDocID[entry.document_id].entries.push(entry);
+            txByDocID[entry.document_id].forEach((tx) => tx.entries.push(entry));
           });
           return txs;
         });
