@@ -4,6 +4,7 @@ const knex = require('../knex');
 const csv = require('csvtojson');
 const num = require('../num');
 const tx = require('../tx');
+const data = require('../data');
 
 /**
  * A base class for importing data files and converting them to the transactions.
@@ -32,6 +33,10 @@ class Import {
   constructor(serviceName) {
     // Name of the service.
     this.serviceName = serviceName;
+    // Name of the database currently in use.
+    this.db = null;
+    // ID of the period to handle.
+    this.periodId = null;
     // Configuration variables.
     this.config = {};
     // Running totals of each trade target owned.
@@ -44,12 +49,34 @@ class Import {
    * Make preparations for import.
    */
   init() {
-    // TODO: Find the latest period.
-    this.periodId = 1;
-    // TODO: Find the initial average prices bought for each this service provider for each crypto.
     this.amounts = {};
     this.averages = {};
-    return Promise.resolve();
+    return this.knex.max('id AS max').from('period')
+      .then((data) => {
+        if (data && data.length) {
+          this.periodId = data[0].max;
+        } else {
+          throw new Error('Cannot find any periods from the database.');
+        }
+        return (this.knex.select('description')
+          .from('entry')
+          .where('description', 'LIKE', '%[' + this.config.service  + ']%k.h.%')
+          .leftJoin('document', 'entry.document_id', 'document.id').orderBy('date', 'desc'));
+      })
+      .then((data) => {
+        data.forEach((desc) => {
+          const regex = /\bk\.h\. (nyt )?([0-9,]+\.\d\d) €\/([A-Z]+)\b/.exec(desc.description);
+          if (regex) {
+            const price = parseFloat(regex[2].replace(/,/g, ''));
+            const target = regex[3];
+            if (!this.averages[target]) {
+              this.averages[target] = price;
+              console.log('Using average', num.currency(price, '€/' + target));
+            }
+          }
+        });
+        process.exit();
+      });
   }
 
   /**
@@ -377,7 +404,14 @@ class Import {
       ret.targetTotal = newTotal;
     }
 
-    ret.tx.description = (this.config.tags ? this.config.tags + ' ' : '') + this.describe(ret);
+    let tags = '';
+    if (this.config.service) {
+      tags += '[' + this.config.service + ']';
+    }
+    if (this.config.fund) {
+      tags += '[' + this.config.fund + ']';
+    }
+    ret.tx.description = (tags ? tags + ' ' : '') + this.describe(ret);
 
     return ret;
   }
@@ -449,6 +483,7 @@ class Import {
    * @return {Promise} Promise resolving to the number of entries created.
    */
   import(db, file, dryRun) {
+    this.db = db;
     this.knex = knex.db(db);
 
     // Helper to sort entries by the date
@@ -478,7 +513,9 @@ class Import {
       })
       .then((txobjects) => {
         if (!dryRun) {
+          // TODO: We could do sanity checks here and refuse if entries are there already. (Or in tx.add()?)
           const creators = txobjects.map((txo) => () => tx.add(db, this.periodId, txo.tx.date, txo.tx.description, txo.tx.entries));
+          console.log('Saving', creators.length, 'entries.');
           return promiseSeq(creators)
             .then(() => txobjects.length);
         } else {
