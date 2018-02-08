@@ -29,13 +29,16 @@
   top: 52px;
   left: 402px;
   right: 0px;
-  height: 110px;
-  overflow-y: auto;
+  height: 115px;
+}
+
+.MainTopPanel .Frame {
+  overflow: hidden;
 }
 
 .MainPanel {
   position: absolute;
-  top: 164px;
+  top: 169px;
   left: 402px;
   right: 0px;
   bottom: 0px;

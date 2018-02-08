@@ -16,13 +16,6 @@ const Tag = (props) => {
       <div className={classes + ' unknown'} title={props.tag.tag}><span className="text">?</span></div>
     );
   }
-  if (props.tag.toggle !== undefined) {
-    ret = (
-      <div className="toggle">
-        {ret}
-      </div>
-    );
-  }
   return ret;
 };
 

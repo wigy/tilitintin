@@ -1,2 +1,35 @@
-.ToolPanel {
+.ToolPanel .toggle-button {
+  float: left;
+  border-top: 1px solid var(--border-color-light);
+  border-left: 1px solid var(--border-color-light);
+  border-right: 1px solid var(--border-color-dark);
+  border-bottom: 1px solid var(--border-color-dark);
+  border-radius: 3px;
+  height: 5ex;
+  width: 5ex;
+  text-align: center;
+  vertical-align: middle;
+  user-select: none;
+  background-color: white;
+  margin-right: 3px;
+  cursor: pointer;
+}
+
+.ToolPanel .toggle-button:active {
+  transform: translateX(+2px) translateY(+2px);
+}
+
+.ToolPanel .toggle-button .fa-icon {
+  margin-top: 6px;
+}
+
+.ToolPanel .toggle-button .Tag {
+  margin-top: 3px;
+  margin-left: 3px;
+  border: none;
+  cursor: pointer;
+}
+
+.ToolPanel .toggle-button.off img {
+  filter: opacity(20%);
 }
