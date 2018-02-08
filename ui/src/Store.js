@@ -201,6 +201,7 @@ class Store {
             } else {
               tx.tags = [];
             }
+            tx.open = false;
           });
           this.account.tags = Object.keys(tags);
         });

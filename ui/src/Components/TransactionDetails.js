@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Money from './Money';
 import './TransactionDetails.css';
 
@@ -14,8 +15,13 @@ const TransactionDetails = (props) => {
       break;
     case 'description':
       text = (entry) => {
-        let desc = entry.description.replace(/^(\[[A-Z-a-z0-9]+\])+\s*/, '');
-        return entry.number + ' ' + entry.name + (props.tx.description !== desc ? ' - (' + desc  + ')': '');
+        const desc = entry.description.replace(/^(\[[A-Z-a-z0-9]+\])+\s*/, '');
+        const url = '/' + props.tx.db + '/period/' + props.tx.period_id + '/' + entry.account_id;
+        return (
+          <Link to={url}>
+            {entry.number + ' ' + entry.name + (props.tx.description !== desc ? ' - (' + desc  + ')': '')}
+          </Link>
+        );
       }
       break;
     default:

@@ -13,6 +13,10 @@ export default inject('store')(observer(class Transaction extends Component {
     this.state = {open: false};
   }
 
+  componentWillReceiveProps(props) {
+    this.setState({open: false});
+  }
+
   render() {
     const money = (<Money cents={this.props.tx.amount} currency="EUR" />);
     const total = (<Money cents={this.props.total} currency="EUR" />);
