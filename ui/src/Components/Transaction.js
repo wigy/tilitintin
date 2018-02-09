@@ -21,7 +21,6 @@ export default inject('store')(observer(class Transaction extends Component {
     const money = (<Money cents={this.props.tx.amount} currency="EUR" />);
     const total = (<Money cents={this.props.total} currency="EUR" />);
 
-    // TODO: This stays from one account to another. Needs some fixing.
     const onClick = () => {
       this.setState({open: !this.state.open});
     };

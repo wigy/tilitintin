@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import TransactionTable from '../Components/TransactionTable';
 
-export default inject('store')(observer(class Account extends Component {
+export default inject('store')(observer(class AccountTransactions extends Component {
 
   update({db, periodId, accountId}) {
     this.props.store.getAccountPeriod(db, accountId, periodId);
@@ -16,13 +16,12 @@ export default inject('store')(observer(class Account extends Component {
     this.update(this.props.match.params);
   }
 
-  // TODO: Rename this as AccountTransactions
   render() {
     if (!this.props.store.token) {
       return '';
     }
     return (
-      <div className="Account">
+      <div className="AccountTransactions">
         <TransactionTable txs={this.props.store.transactions} />
         </div>
     );

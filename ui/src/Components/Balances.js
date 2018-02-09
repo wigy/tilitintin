@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import BalanceTable from '../Components/BalanceTable';
 
-// TODO: Rename this as Balances
-export default inject('store')(observer(class Period extends Component {
+export default inject('store')(observer(class Balances extends Component {
 
   componentDidMount() {
     const {db, periodId} = this.props.match.params;

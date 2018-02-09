@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import './App.css';
 import Periods from './Components/Periods';
-import Period from './Components/Period';
-import Account from './Components/Account';
+import Balances from './Components/Balances';
+import AccountTransactions from './Components/AccountTransactions';
 import Accounts from './Components/Accounts';
 import Reports from './Components/Reports';
 import DbLinks from './Components/DbLinks';
@@ -27,7 +27,7 @@ export default (class App extends Component {
         </div>
         <div className="SidePanel Panel">
           <div className="Frame">
-            <Route path="/:db/period/:periodId" component={Period}/>
+            <Route path="/:db/period/:periodId" component={Balances}/>
             <Route path="/:db/account" component={Accounts}/>
             <Route path="/:db/report" component={Reports}/>
           </div>
@@ -39,7 +39,7 @@ export default (class App extends Component {
         </div>
         <div className="MainPanel Panel">
           <div className="Frame">
-            <Route path="/:db/period/:periodId/:accountId" component={Account}/>
+            <Route path="/:db/period/:periodId/:accountId" component={AccountTransactions}/>
             <Login />
           </div>
         </div>
