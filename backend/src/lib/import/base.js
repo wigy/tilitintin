@@ -276,7 +276,7 @@ class Import {
           parenthesis.push('k.h. ' + num.currency(txo.targetAverage, '€/'  + txo.target));
         }
         parenthesis.push('jälj. ' + num.trim(txo.targetTotal, txo.target));
-        return 'Myynti ' + num.trim(txo.tradeAmount, txo.target) + '(' + parenthesis.join(', ') + ')';
+        return 'Myynti ' + num.trim(txo.tradeAmount, txo.target) + ' (' + parenthesis.join(', ') + ')';
       default:
         throw new Error('Cannot describe transaction of type ' + txo.type);
     }
