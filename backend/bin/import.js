@@ -3,6 +3,7 @@ const cli = require('../src/lib/cli');
 const knex = require('../src/lib/knex');
 
 cli.opt('debug', false, 'To turn dry-run on.');
+cli.opt('noprofit', false, 'Turn off profit and losses calculations (to be calculated later).');
 cli.opt('service', null, 'Name of the service tag if any.');
 cli.opt('fund', null, 'Additional fund tag if any.');
 cli.opt('bank', 1910, 'Number of an account for banking.');
@@ -22,6 +23,7 @@ const importer = require('../src/lib/import/' + cli.format);
 importer.configure({
   service: cli.options.service,
   fund: cli.options.fund,
+  noProfit: cli.options.noprofit,
   accounts: {
     bank: cli.options.bank,
     euro: cli.options.euro,
