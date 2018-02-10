@@ -258,15 +258,25 @@ class Import {
    * @return {string}
    */
   describe(txo) {
+    let parenthesis = [];
     switch(txo.type) {
       case 'deposit':
         return 'Talletus ' + this.serviceName + '-palveluun';
       case 'withdrawal':
         return 'Nosto ' + this.serviceName + '-palvelusta';
       case 'buy':
-        return 'Osto ' + num.trim(txo.tradeAmount, txo.target) + ' (yht. ' + num.trim(txo.targetTotal, txo.target) + ', k.h. nyt ' + num.currency(txo.targetAverage, '€/'  + txo.target) + ')';
+        parenthesis = ['yht. ' + num.trim(txo.targetTotal, txo.target)];
+        if (!this.config.noProfit) {
+          parenthesis.push('k.h. nyt ' + num.currency(txo.targetAverage, '€/'  + txo.target));
+        }
+        return 'Osto ' + num.trim(txo.tradeAmount, txo.target) + ' (' + parenthesis.join(', ')  + ')';
       case 'sell':
-        return 'Myynti ' + num.trim(txo.tradeAmount, txo.target) + ' (k.h. ' + num.currency(txo.targetAverage, '€/'  + txo.target) + ', jälj. ' + num.trim(txo.targetTotal, txo.target) + ')';
+        parenthesis = [];
+        if (!this.config.noProfit) {
+          parenthesis.push('k.h. ' + num.currency(txo.targetAverage, '€/'  + txo.target));
+        }
+        parenthesis.push('jälj. ' + num.trim(txo.targetTotal, txo.target));
+        return 'Myynti ' + num.trim(txo.tradeAmount, txo.target) + '(' + parenthesis.join(', ') + ')';
       default:
         throw new Error('Cannot describe transaction of type ' + txo.type);
     }
