@@ -1,31 +1,55 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react';
 import Transaction from './Transaction';
 import './TransactionTable.css';
 
-const TransactionTable = (props) => {
-  if (!props.txs) {
-    return;
-  }
-  let sum = 0;
-  return (<table className="TransactionTable">
-    <thead>
-      <tr className="heading">
-        <th className="number">#</th>
-        <th className="date">Päiväys</th>
-        <th className="tags"></th>
-        <th className="description">Kuvaus</th>
-        <th className="debit">Debet</th>
-        <th className="credit">Kredit</th>
-        <th className="total">Yhteensä</th>
-      </tr>
-    </thead>
-    <tbody>
-    {props.txs.map((tx, idx) => (
-      <Transaction key={idx} tx={tx} total={sum+=(tx.debit ? tx.amount : -tx.amount)} />
-    ))}
-    </tbody>
-  </table>
-  );
-};
+export default inject('store')(observer(class TransactionTable extends Component {
 
-export default TransactionTable;
+  render() {
+
+    if (!this.props.txs) {
+      return;
+    }
+
+    const visible = (tx) => {
+      console.log('checking', tx.description);
+      if (!tx.tags || !tx.tags.length) {
+        console.log('  no tags');
+        return true;
+      }
+      let disabled = true;
+      tx.tags.forEach((tag) => {
+        if (!this.props.store.tools.tagDisabled[tag]) {
+          console.log('  tag', tag, 'not disabled');
+          disabled = false;
+        }
+      });
+      return !disabled;
+    };
+
+    const filter = (txs) => {
+      return txs.filter((tx) => visible(tx));
+    };
+
+    let sum = 0;
+    return (<table className="TransactionTable">
+      <thead>
+        <tr className="heading">
+          <th className="number">#</th>
+          <th className="date">Päiväys</th>
+          <th className="tags"></th>
+          <th className="description">Kuvaus</th>
+          <th className="debit">Debet</th>
+          <th className="credit">Kredit</th>
+          <th className="total">Yhteensä</th>
+        </tr>
+      </thead>
+      <tbody>{
+        filter(this.props.txs).map((tx, idx) => {
+          return <Transaction key={idx} tx={tx} total={sum+=(tx.debit ? tx.amount : -tx.amount)}/>;
+        })}
+      </tbody>
+    </table>
+    );
+  }
+}));

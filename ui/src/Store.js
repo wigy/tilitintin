@@ -56,7 +56,13 @@ const URL = document.location.protocol + '//' + document.location.hostname + ':3
  *   },
  *   transactions: [
  *      TODO: Docs.
- *   ]
+ *   ],
+ *   tools: {
+ *     tagDisabled: {
+ *       Tag1: true,
+ *       Tag2: false
+ *     }
+ *   }
  * }
  */
 class Store {
@@ -74,6 +80,10 @@ class Store {
       transactions: [],
       tags: {},
       account: {},
+      tools: {
+        tagDisabled: {
+        }
+      }
     });
     this.getDatabases();
   }

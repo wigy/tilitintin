@@ -8,6 +8,7 @@ export default inject('store')(observer(class ToolPanel extends Component {
   constructor(props) {
     super(props);
     this.state = {disabled: {}};
+    this.props.store.tools.tagDisabled = {};
   }
 
   update({db, periodId, accountId}) {
@@ -31,19 +32,27 @@ export default inject('store')(observer(class ToolPanel extends Component {
       let state = this.state.disabled;
       state[tag] = !state[tag];
       this.setState({disabled: state});
+      this.props.store.tools.tagDisabled = state;
     };
 
     const disableAll = () => {
       let state = {};
       this.props.store.sortTags().forEach((tag) => state[tag.tag]=true);
       this.setState({disabled: state});
+      this.props.store.tools.tagDisabled = state;
+    };
+
+    const enableAll = () => {
+      let state = {};
+      this.setState({disabled: state});
+      this.props.store.tools.tagDisabled = state;
     };
 
     let last = null;
     return (
       <div className="ToolPanel">
         <h1>{this.props.store.title}</h1>
-        <div className="toggle-button" title="Reset" onClick={() => this.setState({disabled: {}})}>
+        <div className="toggle-button" title="Reset" onClick={enableAll}>
           <div className="fa-icon">
             <i className="fas fa-home fa-2x"></i>
           </div>
@@ -69,7 +78,6 @@ export default inject('store')(observer(class ToolPanel extends Component {
                 </div>
               </div>)
           })}
-          &nbsp;&nbsp;&nbsp;TODO: Filtering using these icons.<br/>
         <div style={{clear: 'both'}}></div>
       </div>
     );
