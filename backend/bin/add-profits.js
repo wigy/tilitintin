@@ -7,16 +7,25 @@ const cli = require('../src/lib/cli');
 const knex = require('../src/lib/knex');
 const text = require('../src/lib/text');
 const num = require('../src/lib/num');
+const data = require('../src/lib/data');
 
 cli.opt('debug', false, 'To turn dry-run on.');
+cli.opt('euro', 1960, 'Number of an account for storing euros in service.');
+cli.opt('target', 1549, 'Number of an account for storing target amount changes.');
 cli.opt('losses', 9750, 'Number of an account for recording losses.');
 cli.opt('profits', 3490, 'Number of an account for recoring profit.');
 cli.arg_('db', knex.dbs());
 cli.arg('target', 'Trading code of the target like ETH or BTC.');
 
 let avgPrice = 0;
+let accountIdByNumber = {};
 
 knex.db(cli.db)
+  .from('account')
+  .select('id', 'number')
+  .then((accounts) => accounts.forEach((acc) => accountIdByNumber[acc.number] = acc.id))
+.then(() => {
+  knex.db(cli.db)
   .from('document')
   .select('document.id', 'document.number', 'entry.description')
   .sum('amount AS total')
@@ -70,11 +79,17 @@ knex.db(cli.db)
 
       if (item.desc.type === 'buy') {
         avgPrice = (oldPrice + newPrice) / newTotal;
-        // Check that total is correct in description.
-        if (Math.abs(item.total - item.desc.total) > num.ACCURACY || Math.abs(avgPrice - item.desc.avg) > 0.0099999) {
+
+        // Check that total and average is correct in description.
+        if (Math.abs(item.total - item.desc.total) > num.ACCURACY * 1000 || Math.abs(avgPrice - item.desc.avg) > 0.0099999) {
           item.desc.total = item.total;
           item.desc.setAvg(avgPrice);
           show(item);
+          if (cli.options.debug) {
+            return;
+          }
+
+          // Update all entry texts.
           return knex.db(cli.db)('entry')
             .where({document_id: item.line.id})
             .update({description: item.desc.toString()});
@@ -82,19 +97,74 @@ knex.db(cli.db)
       }
       if (item.desc.type === 'sell') {
         // Calculate profits or losses.
-        if (!alreadyDone || Math.abs(item.total - item.desc.total) > num.ACCURACY || Math.abs(avgPrice - item.desc.avg) > 0.0099999) {
+        if (!alreadyDone || Math.abs(item.total - item.desc.total) > num.ACCURACY * 1000 || Math.abs(avgPrice - item.desc.avg) > 0.0099999) {
           item.desc.total = item.total;
           item.desc.setAvg(avgPrice);
           const buyPrice = Math.round(100 * (-item.desc.amount) * avgPrice) / 100;
-          const diff = Math.round((buyPrice - totalTxEuros) * 100) / 100;
+          const diff = Math.round((totalTxEuros - buyPrice) * 100) / 100;
           show(item);
-          console.log(diff);
+          if (cli.options.debug) {
+            return;
+          }
+
+          // Update all entry texts.
           return knex.db(cli.db)('entry')
             .where({document_id: item.line.id})
-            .update({description: item.desc.toString()});
-          // TODO: Insert profit/losses.
+            .update({description: item.desc.toString()})
+
+          .then(() => {
+            // Find the target entry from the transaction.
+            const targetEntry = entries.filter((e) => e.number === cli.options.target);
+            if (!targetEntry.length) {
+              throw new Error('Cannot find target-account from transaction ' + JSON.stringify(entries));
+            }
+            const targetEntryId = targetEntry[0].id;
+
+            if (diff < 0) {
+              // Handle case of losses.
+
+              // Update buy amount
+              return knex.db(cli.db)('entry')
+                .where({id: targetEntryId})
+                .update({amount: buyPrice})
+              .then(() => {
+
+                // Insert losses.
+                return knex.db(cli.db)('entry')
+                  .insert({
+                    document_id: item.line.id,
+                    account_id: accountIdByNumber[cli.options.losses],
+                    debit: 1,
+                    amount: Math.round(-diff * 100) / 100,
+                    description: item.desc.toString(),
+                    row_number: entries.length + 1,
+                    flags: 0
+                  });
+              });
+            } else if (diff > 0) {
+              // Handle case of profits.
+              return knex.db(cli.db)('entry')
+                .where({id: targetEntryId})
+                .update({amount: buyPrice})
+              .then(() => {
+
+                // Insert profit.
+                return knex.db(cli.db)('entry')
+                  .insert({
+                    document_id: item.line.id,
+                    account_id: accountIdByNumber[cli.options.profits],
+                    debit: 0,
+                    amount: diff,
+                    description: item.desc.toString(),
+                    row_number: entries.length + 1,
+                    flags: 0
+                  });
+              });
+            }
+          });
         }
       }
     });
   })))
   .then((txs) => promiseSeq(txs));
+});
