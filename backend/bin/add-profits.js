@@ -85,7 +85,10 @@ knex.db(cli.db)
         if (!alreadyDone || Math.abs(item.total - item.desc.total) > num.ACCURACY || Math.abs(avgPrice - item.desc.avg) > 0.0099999) {
           item.desc.total = item.total;
           item.desc.setAvg(avgPrice);
+          const buyPrice = Math.round(100 * (-item.desc.amount) * avgPrice) / 100;
+          const diff = Math.round((buyPrice - totalTxEuros) * 100) / 100;
           show(item);
+          console.log(totalTxEuros, buyPrice,'=',-item.desc.amount,'*',avgPrice);
           return knex.db(cli.db)('entry')
             .where({document_id: item.line.id})
             .update({description: item.desc.toString()});
