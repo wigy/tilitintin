@@ -14,7 +14,7 @@ cli.opt('profits', 3490, 'Number of an account for recoring profit.');
 cli.arg_('db', knex.dbs());
 cli.arg('target', 'Trading code of the target like ETH or BTC.');
 
-let totalPrice = 0;
+let avgPrice = 0;
 
 knex.db(cli.db)
   .from('document')
@@ -60,20 +60,36 @@ knex.db(cli.db)
       .leftJoin('account', 'entry.account_id', 'account.id')
     .then((entries) => {
       // Check out each entry and maintain totals.
-      const totalEuros = entries.filter((e) => !e.debit).reduce((prev, curr) => prev + curr.amount, 0);
+      const totalTxEuros = entries.filter((e) => !e.debit).reduce((prev, curr) => prev + curr.amount, 0);
       const alreadyDone = entries.filter((e) => e.number === cli.options.losses || e.number === cli.options.profits).length > 0;
-      if (alreadyDone) {
-        return Promise.resolve();
-      }
+      const oldTotal = item.total - item.desc.amount;
+      const oldAverage = avgPrice;
+      const oldPrice = oldTotal * oldAverage;
+      const newPrice = totalTxEuros;
+      const newTotal = item.total;
+
       if (item.desc.type === 'buy') {
+        avgPrice = (oldPrice + newPrice) / newTotal;
         // Check that total is correct in description.
-        totalPrice += totalEuros;
-        if (Math.abs(item.total - item.desc.total) > num.ACCURACY) {
+        if (Math.abs(item.total - item.desc.total) > num.ACCURACY || Math.abs(avgPrice - item.desc.avg) > 0.0099999) {
           item.desc.total = item.total;
+          item.desc.setAvg(avgPrice);
           show(item);
           return knex.db(cli.db)('entry')
             .where({document_id: item.line.id})
             .update({description: item.desc.toString()});
+        }
+      }
+      if (item.desc.type === 'sell') {
+        // Calculate profits or losses.
+        if (!alreadyDone || Math.abs(item.total - item.desc.total) > num.ACCURACY || Math.abs(avgPrice - item.desc.avg) > 0.0099999) {
+          item.desc.total = item.total;
+          item.desc.setAvg(avgPrice);
+          show(item);
+          return knex.db(cli.db)('entry')
+            .where({document_id: item.line.id})
+            .update({description: item.desc.toString()});
+          // TODO: Insert profit/losses.
         }
       }
     });

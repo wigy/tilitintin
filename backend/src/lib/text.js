@@ -8,8 +8,8 @@ class Description {
   constructor() {
     // A list of tags in the entry.
     this.tags = [];
-    // A text that has replaced notes with `()`, amount with `+$`, target with `###`
-    // and total owned with `+#`.
+    // A text that has replaced notes with `()`, amount with `+$`, target with `###`,
+    // total owned with `+#` and average price with `+$/###`.
     this.text = null;
     // Notes extracted as text.
     this.notes = [];
@@ -30,12 +30,28 @@ class Description {
    */
   toString() {
     const tags = this.tags.map((tag) => '[' + tag + ']');
-    let notes = this.notes.map((note) => note.replace('+#', num.trim(this.total)));
+    let notes = this.notes.map((note) =>
+      note.replace('+#', num.trim(this.total)).replace('+$/###', num.currency(this.avg))
+    );
     let text = this.text.replace('()', '(' + notes.join(', ') + ')');
     if (this.amount !== null) {
       text = text.replace('+$ ###', num.trim(this.amount, this.target));
     }
     return (tags.length ? tags.join('') + ' ' : '') + text;
+  }
+
+  /**
+   * Update average price.
+   */
+  setAvg(avg) {
+    if (this.avg === null) {
+      if (this.type === 'sell') {
+        this.notes = ['k.h. +$/###'].concat(this.notes);
+      } else {
+        this.notes.push('k.h nyt +$/###');
+      }
+    }
+    this.avg = avg;
   }
 
   /**
@@ -81,7 +97,13 @@ class Description {
         ret.total = parseFloat(match[2]);
         ret.notes[idx] = match[1] + ' +# ' + match[3];
       } else {
-        throw new Error('Unable to parse ' + JSON.stringify(note));
+        match = /^(k\.h\.)( nyt)? ([0-9.,]+) (€\/\w+)$/.exec(note);
+        if (match) {
+          ret.avg = parseFloat(match[3].replace(/,/g, ''));
+          ret.notes[idx] = match[1] + (match[2] || '') + ' +$/### ' + match[4];
+        } else {
+          throw new Error('Unable to parse ' + JSON.stringify(note));
+        }
       }
     });
 

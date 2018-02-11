@@ -45,7 +45,9 @@ module.exports = {
     if (ret.length > 6) {
       ret = ret.substr(0, ret.length - 6) + ',' + ret.substr(ret.length - 6);
     }
-    ret += ' ' + unit;
+    if (unit) {
+      ret += ' ' + unit;
+    }
     return ret;
   }
 };
