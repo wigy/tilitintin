@@ -2,8 +2,12 @@ const sprintf = require('sprintf');
 
 // Multiplier used to round trade amounts.
 const DIGITS = 1000000;
+const ACCURACY = 1/DIGITS;
 
 module.exports = {
+
+  DIGITS: DIGITS,
+  ACCURACY: ACCURACY,
 
   /**
    * Trim a number with optional unit to the constant amount of decimals.

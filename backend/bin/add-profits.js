@@ -2,15 +2,19 @@
 /**
  * This script scans for trading transactions and adds profits and losses where missing.
  */
+const promiseSeq = require('promise-sequential');
 const cli = require('../src/lib/cli');
 const knex = require('../src/lib/knex');
 const text = require('../src/lib/text');
+const num = require('../src/lib/num');
 
 cli.opt('debug', false, 'To turn dry-run on.');
 cli.opt('losses', 9750, 'Number of an account for recording losses.');
 cli.opt('profits', 3490, 'Number of an account for recoring profit.');
 cli.arg_('db', knex.dbs());
 cli.arg('target', 'Trading code of the target like ETH or BTC.');
+
+let totalPrice = 0;
 
 knex.db(cli.db)
   .from('document')
@@ -24,9 +28,9 @@ knex.db(cli.db)
   .orderBy(['period.start_date', 'document.date', 'entry.row_number'])
   .groupBy('document.number')
   .then((data) => {
+    // Calculate totals and construct data for each entry.
     let total = 0;
     return data.map((line) => {
-      console.log('\u001b[33;1m', line.number, line.description, '\u001b[0m');
       const desc = text.parse(line.description);
       switch (desc.type) {
         case 'buy':
@@ -41,6 +45,37 @@ knex.db(cli.db)
       return {desc, total, line};
     });
   })
-  .then((data) => {
-    console.log(data);
-  });
+  .then((data) => data.map((item) => (() => {
+
+    const show = (item) => {
+      console.log('\u001b[33;1m', item.line.number, '\t', item.line.description, '\u001b[0m');
+      console.log('    => \u001b[33m\t', item.desc.toString(), '\u001b[0m');
+    };
+
+    // Handle each document.
+    return knex.db(cli.db)
+      .from('entry')
+      .select('entry.id', 'account.number', 'entry.amount', 'entry.debit')
+      .where('entry.document_id', '=', item.line.id)
+      .leftJoin('account', 'entry.account_id', 'account.id')
+    .then((entries) => {
+      // Check out each entry and maintain totals.
+      const totalEuros = entries.filter((e) => !e.debit).reduce((prev, curr) => prev + curr.amount, 0);
+      const alreadyDone = entries.filter((e) => e.number === cli.options.losses || e.number === cli.options.profits).length > 0;
+      if (alreadyDone) {
+        return Promise.resolve();
+      }
+      if (item.desc.type === 'buy') {
+        // Check that total is correct in description.
+        totalPrice += totalEuros;
+        if (Math.abs(item.total - item.desc.total) > num.ACCURACY) {
+          item.desc.total = item.total;
+          show(item);
+          return knex.db(cli.db)('entry')
+            .where({document_id: item.line.id})
+            .update({description: item.desc.toString()});
+        }
+      }
+    });
+  })))
+  .then((txs) => promiseSeq(txs));
