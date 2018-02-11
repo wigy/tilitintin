@@ -225,25 +225,28 @@ class Import {
    * Create selling entries.
    */
   sellEntries(txo) {
-    const avgPrice = this.averages[txo.target] || 0;
-    const buyPrice = Math.round(100 * (-txo.tradeAmount) * avgPrice) / 100;
-
     let ret = [
       {number: this.getAccount('euro'), amount: Math.round((txo.total - txo.fee) * 100) / 100},
       {number: this.getAccount('fees'), amount: txo.fee},
-      {number: this.getAccount(txo.target.toLowerCase()), amount: -buyPrice}
     ];
 
-    // If profit calculating is disabled, leave it as it is.
-    if (!this.config.noProfit) {
+    const avgPrice = this.averages[txo.target] || 0;
+    const buyPrice = Math.round(100 * (-txo.tradeAmount) * avgPrice) / 100;
+
+    if (this.config.noProfit) {
+      // In case of not calculating profits yet, put in only buy price.
+      ret.push({number: this.getAccount(txo.target.toLowerCase()), amount: -txo.total});
+    } else {
       // Otherwise calculate losses or profits from the average price.
       const diff = Math.round((buyPrice - txo.total) * 100) / 100;
       if (diff > 0) {
         // In losses, add to debit side into losses.
         ret.push({number: this.getAccount('losses'), amount: diff});
+        ret.push({number: this.getAccount(txo.target.toLowerCase()), amount: -buyPrice});
       } else if (diff < 0) {
         // In profits, add to credit side into profits
         ret.push({number: this.getAccount('profits'), amount: diff});
+        ret.push({number: this.getAccount(txo.target.toLowerCase()), amount: -buyPrice});
       }
     }
     return ret;

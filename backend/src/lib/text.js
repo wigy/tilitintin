@@ -46,9 +46,9 @@ class Description {
   setAvg(avg) {
     if (this.avg === null) {
       if (this.type === 'sell') {
-        this.notes = ['k.h. +$/###'].concat(this.notes);
+        this.notes = ['k.h. +$/### €/' + this.target].concat(this.notes);
       } else {
-        this.notes.push('k.h nyt +$/###');
+        this.notes.push('k.h. nyt +$/### €/' + this.target);
       }
     }
     this.avg = avg;

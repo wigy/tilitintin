@@ -88,7 +88,7 @@ knex.db(cli.db)
           const buyPrice = Math.round(100 * (-item.desc.amount) * avgPrice) / 100;
           const diff = Math.round((buyPrice - totalTxEuros) * 100) / 100;
           show(item);
-          console.log(totalTxEuros, buyPrice,'=',-item.desc.amount,'*',avgPrice);
+          console.log(diff);
           return knex.db(cli.db)('entry')
             .where({document_id: item.line.id})
             .update({description: item.desc.toString()});
