@@ -14,6 +14,7 @@ cli.opt('euro', 1960, 'Number of an account for storing euros in service.');
 cli.opt('target', 1549, 'Number of an account for storing target amount changes.');
 cli.opt('losses', 9750, 'Number of an account for recording losses.');
 cli.opt('profits', 3490, 'Number of an account for recoring profit.');
+cli.opt('fees', 9690, 'Number of an account for trading fees.');
 cli.arg_('db', knex.dbs());
 cli.arg('target', 'Trading code of the target like ETH or BTC.');
 
@@ -70,16 +71,16 @@ knex.db(cli.db)
     .then((entries) => {
       // Check out each entry and maintain totals.
       const totalTxEuros = entries.filter((e) => !e.debit).reduce((prev, curr) => prev + curr.amount, 0);
+      const totalTxFees = entries.filter((e) => e.number === cli.options.fees).reduce((prev, curr) => prev + curr.amount, 0);
       const alreadyDone = entries.filter((e) => e.number === cli.options.losses || e.number === cli.options.profits).length > 0;
       const oldTotal = item.total - item.desc.amount;
       const oldAverage = avgPrice;
       const oldPrice = oldTotal * oldAverage;
-      const newPrice = totalTxEuros;
+      const newPrice = totalTxEuros - totalTxFees;
       const newTotal = item.total;
 
       if (item.desc.type === 'buy') {
         avgPrice = (oldPrice + newPrice) / newTotal;
-
         // Check that total and average is correct in description.
         if (Math.abs(item.total - item.desc.total) > num.ACCURACY * 1000 || Math.abs(avgPrice - item.desc.avg) > 0.0099999) {
           item.desc.total = item.total;
