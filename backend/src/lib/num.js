@@ -1,7 +1,7 @@
 const sprintf = require('sprintf');
 
 // Multiplier used to round trade amounts.
-const DIGITS = 1000000;
+const DIGITS = 100000000;
 const ACCURACY = 1 / DIGITS;
 
 module.exports = {
@@ -19,6 +19,9 @@ module.exports = {
       ret = '0';
     } else {
       ret = (Math.round(num * DIGITS) / DIGITS).toString();
+      if (/e-\d+$/.test(ret)) {
+        ret = '0';
+      }
     }
 
     if (!/^-/.test(ret)) {
