@@ -55,7 +55,25 @@ const URL = document.location.protocol + '//' + document.location.hostname + ':3
  *     tags: ["Tag1", "Tag2"],
  *   },
  *   transactions: [
- *      TODO: Docs.
+ *      {
+ *        id: 1,
+ *        account_id:
+ *        document_id":158,
+ *        account_id":886,
+ *        debit":1,
+ *        amount:120000,
+ *        description: "Text description",
+ *        row_number": 1,
+ *        flags":0,
+ *        number:5,
+ *        period_id": 1,
+ *        date: "2017-07-31T21:00:00.000Z",
+ *        entries: [
+ *          { all entries linked to the same document_id in the same format as above transaction }
+ *        ],
+ *        open: false, // If UI has opened entries.
+ *        tags: [], // Tags extracted from description.
+ *      }
  *   ],
  *   tools: {
  *     tagDisabled: {
@@ -88,19 +106,21 @@ class Store {
     this.getDatabases();
   }
 
-  fetch(path) {
-    // TODO: Support for POST.
-    if (!this.token) {
-      return Promise.reject('Not authenticated.');
-    }
-    return fetch(URL + path, {
-      method: 'GET',
+  fetch(path, method='GET', data=null) {
+    let options = {
+      method: method,
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + this.token
       },
-    })
+    };
+    if (this.token) {
+      options.headers.Authorization = 'Bearer ' + this.token;
+    }
+    if (data !== null) {
+      options.body =  JSON.stringify(data);
+    }
+    return fetch(URL + path, options)
     .then(res => {
       return res.json();
     })
@@ -237,13 +257,8 @@ class Store {
    * @param {String} password
    */
   login(user, password) {
-    // TODO: Use common fetch functionality.
     this.token = null;
-    return fetch(URL + '/auth', {
-      method: 'POST',
-      headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
-      body: JSON.stringify({user: user, password: password})
-    })
+    return this.fetch(URL + '/auth', 'POST', {user: user, password: password})
     .then((resp) => {
       if (resp.status === 200) {
         resp.json().then((data) => {
