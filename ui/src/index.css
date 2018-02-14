@@ -39,3 +39,11 @@ table tr:nth-child(even) {
 table tr:nth-child(odd) {
   background-color: var(--odd-color);
 }
+
+table tr:nth-child(even) td {
+  border-right: 2px solid var(--odd-color);
+}
+
+table tr:nth-child(odd) td {
+  border-right: 2px solid var(--even-color);
+}

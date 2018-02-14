@@ -17,7 +17,7 @@
 
 .SidePanel {
   position: absolute;
-  top: 52px;
+  top: 50px;
   left: 0px;
   width: 400px;
   bottom: 0px;
@@ -26,8 +26,8 @@
 
 .MainTopPanel {
   position: absolute;
-  top: 52px;
-  left: 402px;
+  top: 50px;
+  left: 400px;
   right: 0px;
   height: 115px;
 }
@@ -38,8 +38,8 @@
 
 .MainPanel {
   position: absolute;
-  top: 169px;
-  left: 402px;
+  top: 165px;
+  left: 400px;
   right: 0px;
   bottom: 0px;
   overflow-y: auto;

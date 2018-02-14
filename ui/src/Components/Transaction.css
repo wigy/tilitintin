@@ -14,11 +14,12 @@
 
 .Transaction .tags .Tag {
   vertical-align: middle;
+  margin-right: 1px;
+  vertical-align: middle;
 }
 
-.Transaction .tags .Tag {
-  margin-right: 1px;
-  margin-top: 1px;
+.Transaction .tags .Tag img {
+  margin-top: -1.5ex;
 }
 
 .Transaction .description {

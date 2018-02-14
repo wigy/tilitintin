@@ -31,7 +31,7 @@ export default inject('store')(observer(class TransactionTable extends Component
     let sum = 0;
     return (<table className="TransactionTable">
       <thead>
-        <tr className="heading">
+        <tr className="Transaction heading">
           <th className="number">#</th>
           <th className="date">Päiväys</th>
           <th className="tags"></th>

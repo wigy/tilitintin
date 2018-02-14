@@ -19,7 +19,6 @@ export default (class App extends Component {
     return (
       <div className="App">
         <div className="TopPanel Panel">
-          TODO: Neat display components for these.
           <div style={{float: 'right'}} hreg="#"><Logout/></div>
           <DbLinks />
           <Route path="/:db" component={Periods}/>
