@@ -17,7 +17,10 @@ export default (class App extends Component {
       <div className="App">
         <div className="TopPanel Panel">
           <div style={{float: 'right'}} hreg="#"><Logout/></div>
-          <Route path="/" component={Menu}/>
+          <Route exact path="/" component={Menu}/>
+          <Route exact path="/:db" component={Menu}/>
+          <Route exact path="/:db/period/:periodId" component={Menu}/>
+          <Route exact path="/:db/period/:periodId/:accountId" component={Menu}/>
         </div>
         <div className="SidePanel Panel">
           <div className="Frame">

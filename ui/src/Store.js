@@ -130,7 +130,46 @@ class Store {
   }
 
   /**
-   * Get the tag definitions from the current database.
+   * Set the current database.
+   * @param {String} db
+   */
+  setDb(db) {
+    if (this.db === db) {
+      return true;
+    }
+    this.db = db;
+    this.periods = [];
+    this.setPeriod(null);
+    return false;
+  }
+
+  /**
+   * Set the current period.
+   * @param {Number} periodId
+   */
+  setPeriod(periodId) {
+    console.log('set period');
+    if (periodId && this.periodId === periodId) {
+      console.log('set skip');
+      return true;
+    }
+    this.period = this.periods.filter((period) => period.id === periodId)[0];
+    console.log('period set to', this.period);
+    this.periodId = periodId;
+    this.balances = [];
+    this.accounts = [];
+    this.title = '';
+    this.transactions = [];
+    this.tags = {};
+    this.account = {};
+    this.tools = {
+      tagDisabled: {
+      }
+    };
+  }
+
+  /**
+   * Get the tag definitions from the database.
    * @param {*} db
    */
   getTags(db) {
@@ -139,6 +178,7 @@ class Store {
     }
     return this.fetch('/db/' + db + '/tags')
       .then((tags) => {
+        console.log(tags);
         this.tags = {};
         tags.forEach((tag) => this.tags[tag.tag] = tag);
         return this.tags;
@@ -167,7 +207,10 @@ class Store {
    * @param {*} db
    */
   getPeriods(db) {
-    return this.fetch('/db/' + db + '/period')
+    if (this.setDb(db) && this.periods.length) {
+      return;
+    }
+    this.fetch('/db/' + db + '/period')
       .then((periods) => {
         runInAction(() => {
           this.periods = [];
@@ -175,7 +218,6 @@ class Store {
             this.periods.push(period);
           });
         });
-        return periods;
       });
   }
 
@@ -217,7 +259,6 @@ class Store {
       .then((account) => {
         runInAction(() => {
           this.db = db;
-          this.periodId = periodId;
           this.account = account;
           this.transactions = account.transactions;
           this.title = account.number + ' ' + account.name;
