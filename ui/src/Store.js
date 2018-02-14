@@ -134,7 +134,7 @@ class Store {
    * @param {String} db
    */
   setDb(db) {
-    if (this.db === db) {
+    if (db && this.db === db) {
       return true;
     }
     this.db = db;
@@ -148,13 +148,9 @@ class Store {
    * @param {Number} periodId
    */
   setPeriod(periodId) {
-    console.log('set period');
     if (periodId && this.periodId === periodId) {
-      console.log('set skip');
       return true;
     }
-    this.period = this.periods.filter((period) => period.id === periodId)[0];
-    console.log('period set to', this.period);
     this.periodId = periodId;
     this.balances = [];
     this.accounts = [];

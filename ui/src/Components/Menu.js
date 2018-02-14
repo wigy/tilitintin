@@ -13,10 +13,13 @@ export default inject('store')(observer(class Menu extends Component {
       this.props.store.getTags(db);
       if (periodId) {
         this.props.store.setPeriod(periodId);
-        console.log('db', db, 'period', periodId);
         this.props.store.getBalances(db, periodId);
       }
+    } else {
+      this.props.store.setDb(null);
     }
+    // TODO: Handle also account here.
+    // TODO: Try if you can now remove similar functionality from other components.
   }
 
   handleSelect(key) {
@@ -29,7 +32,7 @@ export default inject('store')(observer(class Menu extends Component {
       return '';
     }
 
-    const {db,period} = this.props.store;
+    const {db,periodId} = this.props.store;
 
     return (
       <Navbar>
@@ -48,7 +51,7 @@ export default inject('store')(observer(class Menu extends Component {
         </Nav>
 
         <Nav bsStyle="tabs" activeKey="1" onSelect={k => this.handleSelect(k)}>
-          <NavDropdown eventKey="1" title="Select Period" id="nav-dropdown">
+          <NavDropdown eventKey="1" title={periodId ? 'Period ' + periodId : 'Select Period'} id="nav-dropdown">
             {this.props.store.periods.map(period => (
               <MenuItem key={period.id} eventKey={'/' + db + '/period/' + period.id}>
                 <YYYYMMDD date={period.start_date} /> &mdash; <YYYYMMDD date={period.end_date} />
