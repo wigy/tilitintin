@@ -8,7 +8,6 @@ import Reports from './Components/Reports';
 import Menu from './Components/Menu';
 import ToolPanel from './Components/ToolPanel';
 import Login from './Components/Login';
-import Logout from './Components/Logout';
 
 export default (class App extends Component {
 
@@ -16,7 +15,6 @@ export default (class App extends Component {
     return (
       <div className="App">
         <div className="TopPanel Panel">
-          <div style={{float: 'right'}} hreg="#"><Logout/></div>
           <Route exact path="/" component={Menu}/>
           <Route exact path="/:db" component={Menu}/>
           <Route exact path="/:db/period/:periodId" component={Menu}/>
