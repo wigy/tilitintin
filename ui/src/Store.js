@@ -140,6 +140,7 @@ class Store {
     }
     this.db = db;
     this.periods = [];
+    this.tags = {};
     this.setPeriod(null);
     if (db) {
       this.getPeriods()
@@ -182,7 +183,6 @@ class Store {
     }
     this.title = '';
     this.transactions = [];
-    this.tags = {};
     this.account = {};
     this.tools = {
       tagDisabled: {
@@ -200,8 +200,10 @@ class Store {
   getTags() {
     return this.fetch('/db/' + this.db + '/tags')
       .then((tags) => {
-        this.tags = {};
-        tags.forEach((tag) => this.tags[tag.tag] = tag);
+        runInAction(() => {
+          this.tags = {};
+          tags.forEach((tag) => this.tags[tag.tag] = tag);
+        });
         return this.tags;
       });
   }

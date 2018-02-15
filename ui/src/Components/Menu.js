@@ -79,8 +79,4 @@ class Menu extends Component {
 }
 
 export default Menu;
-
-OLD Period list
-<Route path="/:db" component={Periods}/>
-
 */
