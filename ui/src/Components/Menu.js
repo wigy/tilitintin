@@ -52,7 +52,7 @@ export default inject('store')(observer(class Menu extends Component {
         </Nav>
 
         <Nav bsStyle="tabs" activeKey="2" onSelect={k => this.handleSelect(k)}>
-          <NavDropdown eventKey="2" title={periodId ? 'Period ' + periodId : 'Select Period'} id="nav-dropdown">
+          <NavDropdown eventKey="2" title={periodId ? 'Period ' + periodId : 'Select Period'} id="nav-dropdown" disabled={!this.props.store.db}>
             {this.props.store.periods.map(period => (
               <MenuItem key={period.id} eventKey={'/' + db + '/period/' + period.id}>
                 <YYYYMMDD date={period.start_date} /> &mdash; <YYYYMMDD date={period.end_date} />
