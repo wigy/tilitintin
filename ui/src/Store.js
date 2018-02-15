@@ -132,6 +132,7 @@ class Store {
   /**
    * Set the current database.
    * @param {String} db
+   * @return {Boolean} True if no changes needed.
    */
   setDb(db) {
     if (db && this.db === db) {
@@ -140,20 +141,45 @@ class Store {
     this.db = db;
     this.periods = [];
     this.setPeriod(null);
+    if (db) {
+      this.getPeriods()
+        .then(() => {
+          this.getTags();
+        });
+    }
     return false;
   }
 
   /**
    * Set the current period.
+   * @param {String} db
    * @param {Number} periodId
+   * @return {Boolean} True if no changes needed.
    */
-  setPeriod(periodId) {
-    if (periodId && this.periodId === periodId) {
+  setPeriod(db, periodId) {
+    if (periodId && this.setDb(db) && this.periodId === periodId) {
       return true;
     }
     this.periodId = periodId;
     this.balances = [];
     this.accounts = [];
+    this.setAccount(null);
+    if (periodId) {
+      this.getBalances();
+    }
+    return false;
+  }
+
+  /**
+   * Set the current period.
+   * @param {String} db
+   * @param {Number} periodId
+   * @return {Boolean} True if no changes needed.
+   */
+  setAccount(db, periodId, accountId) {
+    if (accountId && this.setPeriod(db, periodId) && this.accountId === accountId) {
+      return true;
+    }
     this.title = '';
     this.transactions = [];
     this.tags = {};
@@ -162,19 +188,18 @@ class Store {
       tagDisabled: {
       }
     };
+    if (accountId) {
+      this.getAccountPeriod(db, periodId, accountId);
+    }
+    return false;
   }
 
   /**
-   * Get the tag definitions from the database.
-   * @param {*} db
+   * Get the tag definitions from the current database.
    */
-  getTags(db) {
-    if (this.db === db) {
-      return Promise.resolve(this.tags);
-    }
-    return this.fetch('/db/' + db + '/tags')
+  getTags() {
+    return this.fetch('/db/' + this.db + '/tags')
       .then((tags) => {
-        console.log(tags);
         this.tags = {};
         tags.forEach((tag) => this.tags[tag.tag] = tag);
         return this.tags;
@@ -199,31 +224,26 @@ class Store {
   }
 
   /**
-   * Get the list of periods available for the given DB.
-   * @param {*} db
+   * Get the list of periods available for the current DB.
    */
-  getPeriods(db) {
-    if (this.setDb(db) && this.periods.length) {
-      return;
-    }
-    this.fetch('/db/' + db + '/period')
+  getPeriods() {
+    return this.fetch('/db/' + this.db + '/period')
       .then((periods) => {
         runInAction(() => {
           this.periods = [];
           periods.forEach((period) => {
             this.periods.push(period);
           });
+          return this.periods;
         });
       });
   }
 
   /**
-   * Get the summary of balances for all accounts in the given period.
-   * @param {*} db
-   * @param {*} periodId
+   * Get the summary of balances for all accounts in the current period.
    */
-  getBalances(db, periodId) {
-    return this.fetch('/db/' + db + '/period/' + periodId)
+  getBalances() {
+    return this.fetch('/db/' + this.db + '/period/' + this.periodId)
       .then((balances) => {
         runInAction(() => {
           this.balances = [];
@@ -243,18 +263,13 @@ class Store {
   /**
    * Fetch the account data for the given period and store it to this store as current account.
    * @param {*} db
-   * @param {*} accountId
    * @param {*} periodId
+   * @param {*} accountId
    */
-  getAccountPeriod(db, accountId, periodId) {
-    this.getTags(db);
-    if (this.db === db && this.account.id === accountId && this.periodId === periodId) {
-      return Promise.resolve(this.account);
-    }
+  getAccountPeriod(db, periodId, accountId) {
     return this.fetch('/db/' + db + '/account/' + accountId + '/' + periodId)
       .then((account) => {
         runInAction(() => {
-          this.db = db;
           this.account = account;
           this.transactions = account.transactions;
           this.title = account.number + ' ' + account.name;

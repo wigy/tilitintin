@@ -11,18 +11,6 @@ export default inject('store')(observer(class ToolPanel extends Component {
     this.props.store.tools.tagDisabled = {};
   }
 
-  update({db, periodId, accountId}) {
-    this.props.store.getAccountPeriod(db, accountId, periodId);
-  }
-
-  componentWillReceiveProps(props) {
-    this.update(props.match.params);
-  }
-
-  componentDidMount() {
-    this.update(this.props.match.params);
-  }
-
   render() {
     if (!this.props.store.token) {
       return '';

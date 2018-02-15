@@ -6,24 +6,21 @@ import './Menu.css';
 
 export default inject('store')(observer(class Menu extends Component {
 
+  update({db, periodId, accountId}) {
+    this.props.store.setDb(db);
+    this.props.store.setPeriod(db, periodId);
+    this.props.store.setAccount(db, periodId, accountId);
+  }
+
   componentDidMount() {
-    const {db, periodId} = this.props.match.params;
-    if (db) {
-      this.props.store.getPeriods(db);
-      this.props.store.getTags(db);
-      if (periodId) {
-        this.props.store.setPeriod(periodId);
-        this.props.store.getBalances(db, periodId);
-      }
-    } else {
-      this.props.store.setDb(null);
-    }
-    // TODO: Handle also account here.
-    // TODO: Try if you can now remove similar functionality from other components.
+    this.update(this.props.match.params);
+  }
+
+  componentWillReceiveProps(props) {
+    this.update(props.match.params);
   }
 
   handleSelect(key) {
-    const [, db] = key.split('/');
     this.props.history.push(key);
   }
 

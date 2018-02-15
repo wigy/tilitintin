@@ -10,6 +10,7 @@ export default inject('store')(observer(class Accounts extends Component {
   }
 
   componentDidMount() {
+    // TODO: Combine this to the current approach in the store.
     this.props.store.getAccounts(this.props.match.params.db)
       .then(accounts => this.setState({accounts: accounts}));
   }
