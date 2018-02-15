@@ -122,7 +122,11 @@ class Store {
     }
     return fetch(URL + path, options)
       .then(res => {
-        return res.json();
+        if ([200].includes(res.status)) {
+          return res.json();
+        } else {
+          return null;
+        }
       })
       .catch(err => {
         console.error(err);
@@ -314,7 +318,7 @@ class Store {
     this.token = null;
     return this.fetch('/auth', 'POST', {user: user, password: password})
     .then((resp) => {
-      if (resp.token) {
+      if (resp && resp.token) {
         runInAction(() => {
           this.token = resp.token;
           localStorage.setItem('token', resp.token);

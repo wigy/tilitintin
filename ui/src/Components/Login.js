@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 
 export default inject('store')(observer(class Login extends Component {
 
@@ -13,13 +14,16 @@ export default inject('store')(observer(class Login extends Component {
 
     if (!this.props.store.token) {
       return (
-        <div className="Login">
-          User: <input onChange={(event) => user=event.target.value} name="user"/><br/>
-          Password: <input onChange={(event) => password=event.target.value} name="password" type="password"/><br/>
-          <input onClick={login} type="submit"/>
-          <br/>
-          TODO: Improve visuals for login screen.
-        </div>
+        <form className="Login">
+          <FormGroup>
+            <ControlLabel>Käyttäjätunnus</ControlLabel>
+            <FormControl type="text" onChange={(event) => user=event.target.value}/>
+            <ControlLabel>Salasana</ControlLabel>
+            <FormControl type="password" onChange={(event) => password=event.target.value}/>
+            <br/>
+            <Button onClick={login}>Kirjaudu</Button>
+          </FormGroup>
+        </form>
       );
     }
     return '';

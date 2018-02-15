@@ -42,7 +42,7 @@ export default inject('store')(observer(class Menu extends Component {
           </Navbar.Header>
 
           <Nav bsStyle="tabs" activeKey="1" onSelect={k => this.handleSelect(k)}>
-            <NavDropdown eventKey="1" title={db || 'Select Database'} id="nav-dropdown" disabled={notLoggedIn}>
+            <NavDropdown eventKey="1" title={db || 'Valitse kanta'} id="nav-dropdown" disabled={notLoggedIn}>
               {this.props.store.dbs.map(db => (
                 <MenuItem key={db} eventKey={'/' + db}>{db}</MenuItem>
               ))}
@@ -50,7 +50,7 @@ export default inject('store')(observer(class Menu extends Component {
           </Nav>
 
           <Nav bsStyle="tabs" activeKey="2" onSelect={k => this.handleSelect(k)}>
-            <NavDropdown eventKey="2" title={periodId ? 'Period ' + periodId : 'Select Period'} id="nav-dropdown" disabled={!db || notLoggedIn}>
+            <NavDropdown eventKey="2" title={periodId ? 'Jakso ' + periodId : 'Valitse jakso'} id="nav-dropdown" disabled={!db || notLoggedIn}>
               {this.props.store.periods.map(period => (
                 <MenuItem key={period.id} eventKey={'/' + db + '/period/' + period.id}>
                   <YYYYMMDD date={period.start_date} /> &mdash; <YYYYMMDD date={period.end_date} />
@@ -61,7 +61,7 @@ export default inject('store')(observer(class Menu extends Component {
 
           <Nav bsStyle="tabs" pullRight activeKey="5" onSelect={() => this.handleSelect('logout')}>
             <NavItem eventKey="5" disabled={notLoggedIn}>
-              Logout
+              Poistu
             </NavItem>
           </Nav>
 
