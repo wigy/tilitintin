@@ -36,38 +36,40 @@ export default inject('store')(observer(class Menu extends Component {
     const {db,periodId} = this.props.store;
 
     return (
-      <Navbar fluid>
-        <Navbar.Header>
-          <Navbar.Brand>
-            Tilitintin
-          </Navbar.Brand>
-        </Navbar.Header>
+      <div className="Menu">
+        <Navbar fluid>
+          <Navbar.Header>
+            <Navbar.Brand>
+              <span className="brand">Tilitintin</span>
+            </Navbar.Brand>
+          </Navbar.Header>
 
-        <Nav bsStyle="tabs" activeKey="1" onSelect={k => this.handleSelect(k)}>
-          <NavDropdown eventKey="1" title={this.props.store.db || 'Select Database'} id="nav-dropdown">
-            {this.props.store.dbs.map(db => (
-              <MenuItem key={db} eventKey={'/' + db}>{db}</MenuItem>
-            ))}
-          </NavDropdown>
-        </Nav>
+          <Nav bsStyle="tabs" activeKey="1" onSelect={k => this.handleSelect(k)}>
+            <NavDropdown eventKey="1" title={this.props.store.db || 'Select Database'} id="nav-dropdown">
+              {this.props.store.dbs.map(db => (
+                <MenuItem key={db} eventKey={'/' + db}>{db}</MenuItem>
+              ))}
+            </NavDropdown>
+          </Nav>
 
-        <Nav bsStyle="tabs" activeKey="2" onSelect={k => this.handleSelect(k)}>
-          <NavDropdown eventKey="2" title={periodId ? 'Period ' + periodId : 'Select Period'} id="nav-dropdown" disabled={!this.props.store.db}>
-            {this.props.store.periods.map(period => (
-              <MenuItem key={period.id} eventKey={'/' + db + '/period/' + period.id}>
-                <YYYYMMDD date={period.start_date} /> &mdash; <YYYYMMDD date={period.end_date} />
-              </MenuItem>
-            ))}
-          </NavDropdown>
-        </Nav>
+          <Nav bsStyle="tabs" activeKey="2" onSelect={k => this.handleSelect(k)}>
+            <NavDropdown eventKey="2" title={periodId ? 'Period ' + periodId : 'Select Period'} id="nav-dropdown" disabled={!this.props.store.db}>
+              {this.props.store.periods.map(period => (
+                <MenuItem key={period.id} eventKey={'/' + db + '/period/' + period.id}>
+                  <YYYYMMDD date={period.start_date} /> &mdash; <YYYYMMDD date={period.end_date} />
+                </MenuItem>
+              ))}
+            </NavDropdown>
+          </Nav>
 
-        <Nav bsStyle="tabs" pullRight activeKey="3" onSelect={() => this.handleSelect('logout')}>
-          <NavItem eventKey="3">
-            Logout
-          </NavItem>
-        </Nav>
+          <Nav bsStyle="tabs" pullRight activeKey="3" onSelect={() => this.handleSelect('logout')}>
+            <NavItem eventKey="3">
+              Logout
+            </NavItem>
+          </Nav>
 
-      </Navbar>
+        </Navbar>
+      </div>
     );
   }
 }));
