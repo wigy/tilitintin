@@ -19,6 +19,9 @@ export default (class App extends Component {
           <Route exact path="/:db" component={Menu}/>
           <Route exact path="/:db/period/:periodId" component={Menu}/>
           <Route exact path="/:db/period/:periodId/:accountId" component={Menu}/>
+          <Route exact path="/:db/account" component={Menu}/>
+          <Route exact path="/:db/account/:accountId2" component={Menu}/>
+          <Route exact path="/:db/report" component={Menu}/>
         </div>
         <div className="SidePanel Panel">
           <div className="Frame">

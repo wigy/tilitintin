@@ -40,7 +40,7 @@ export default inject('store')(observer(class Menu extends Component {
         <Navbar fluid>
           <Navbar.Header>
             <Navbar.Brand>
-              <span className="brand">Tilitintin</span>
+              <a href="/" className="brand">Tilitintin</a>
             </Navbar.Brand>
           </Navbar.Header>
 
@@ -62,9 +62,20 @@ export default inject('store')(observer(class Menu extends Component {
             </NavDropdown>
           </Nav>
 
-          <Nav bsStyle="tabs" pullRight activeKey="3" onSelect={() => this.handleSelect('logout')}>
-            <NavItem eventKey="3">
+          <Nav bsStyle="tabs" pullRight activeKey="5" onSelect={() => this.handleSelect('logout')}>
+            <NavItem eventKey="5">
               Logout
+            </NavItem>
+          </Nav>
+
+          <Nav bsStyle="tabs" pullRight activeKey="3" onSelect={() => this.handleSelect('/' + db + '/account/')}>
+            <NavItem eventKey="3" disabled={!this.props.store.db}>
+              Tilit
+            </NavItem>
+          </Nav>
+          <Nav bsStyle="tabs" pullRight activeKey="4" onSelect={() => this.handleSelect('/' + db + '/report/')}>
+            <NavItem eventKey="4" disabled={!this.props.store.db}>
+              Raportit
             </NavItem>
           </Nav>
 
@@ -73,22 +84,3 @@ export default inject('store')(observer(class Menu extends Component {
     );
   }
 }));
-
-/*
-OLD Menu
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-
-class Menu extends Component {
-  render() {
-    const {db} = this.props.match.params;
-    const ret=(<div className="Menu">
-      <Link to={'/' + db + '/account'}>Tilit</Link> |
-      <Link to={'/' + db + '/report'}>Raportit</Link>
-    </div>);
-    return ret && '';
-  }
-}
-
-export default Menu;
-*/

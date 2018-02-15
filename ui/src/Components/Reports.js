@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react';
 
-class Reports extends Component {
+export default inject('store')(observer(class Reports extends Component {
   render() {
     if (!this.props.store.token) {
       return '';
@@ -8,10 +9,9 @@ class Reports extends Component {
 
     return (
       <div className="Reports">
-        <h1>Reports</h1>
+        <h1>Raportit</h1>
+        Ei saatavilla
       </div>
     );
   }
-}
-
-export default Reports;
+}));
