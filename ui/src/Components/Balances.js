@@ -4,11 +4,6 @@ import BalanceTable from '../Components/BalanceTable';
 
 export default inject('store')(observer(class Balances extends Component {
 
-  componentDidMount() {
-    const {db, periodId} = this.props.match.params;
-    this.props.store.getBalances(db, periodId);
-  }
-
   render() {
     if (!this.props.store.token) {
       return '';

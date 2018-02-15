@@ -35,7 +35,7 @@ export default inject('store')(observer(class Menu extends Component {
     const {db,periodId} = this.props.store;
 
     return (
-      <Navbar>
+      <Navbar fluid>
         <Navbar.Header>
           <Navbar.Brand>
             Tilitintin
