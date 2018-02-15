@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Navbar, Nav, NavDropdown, MenuItem } from 'react-bootstrap';
+import { Navbar, Nav, NavDropdown, NavItem, MenuItem } from 'react-bootstrap';
 import YYYYMMDD from './YYYYMMDD';
 import './Menu.css';
 
@@ -21,7 +21,11 @@ export default inject('store')(observer(class Menu extends Component {
   }
 
   handleSelect(key) {
-    this.props.history.push(key);
+    if (key === 'logout') {
+      this.props.store.logout();
+    } else {
+      this.props.history.push(key);
+    }
   }
 
   render() {
@@ -47,14 +51,20 @@ export default inject('store')(observer(class Menu extends Component {
           </NavDropdown>
         </Nav>
 
-        <Nav bsStyle="tabs" activeKey="1" onSelect={k => this.handleSelect(k)}>
-          <NavDropdown eventKey="1" title={periodId ? 'Period ' + periodId : 'Select Period'} id="nav-dropdown">
+        <Nav bsStyle="tabs" activeKey="2" onSelect={k => this.handleSelect(k)}>
+          <NavDropdown eventKey="2" title={periodId ? 'Period ' + periodId : 'Select Period'} id="nav-dropdown">
             {this.props.store.periods.map(period => (
               <MenuItem key={period.id} eventKey={'/' + db + '/period/' + period.id}>
                 <YYYYMMDD date={period.start_date} /> &mdash; <YYYYMMDD date={period.end_date} />
               </MenuItem>
             ))}
           </NavDropdown>
+        </Nav>
+
+        <Nav bsStyle="tabs" pullRight activeKey="3" onSelect={() => this.handleSelect('logout')}>
+          <NavItem eventKey="3">
+            Logout
+          </NavItem>
         </Nav>
 
       </Navbar>

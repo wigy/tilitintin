@@ -121,12 +121,12 @@ class Store {
       options.body =  JSON.stringify(data);
     }
     return fetch(URL + path, options)
-    .then(res => {
-      return res.json();
-    })
-    .catch(err => {
-      console.error(err);
-    });
+      .then(res => {
+        return res.json();
+      })
+      .catch(err => {
+        console.error(err);
+      });
   }
 
   /**
@@ -312,15 +312,13 @@ class Store {
    */
   login(user, password) {
     this.token = null;
-    return this.fetch(URL + '/auth', 'POST', {user: user, password: password})
+    return this.fetch('/auth', 'POST', {user: user, password: password})
     .then((resp) => {
-      if (resp.status === 200) {
-        resp.json().then((data) => {
-          runInAction(() => {
-            this.token = data.token;
-            localStorage.setItem('token', data.token);
-            this.getDatabases();
-          });
+      if (resp.token) {
+        runInAction(() => {
+          this.token = resp.token;
+          localStorage.setItem('token', resp.token);
+          this.getDatabases();
         });
       }
     });
