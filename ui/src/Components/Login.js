@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 
+// TODO: i18n
+
 export default inject('store')(observer(class Login extends Component {
 
   render() {

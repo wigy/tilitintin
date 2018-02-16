@@ -4,6 +4,8 @@ import { Navbar, Nav, NavDropdown, NavItem, MenuItem } from 'react-bootstrap';
 import YYYYMMDD from './YYYYMMDD';
 import './Menu.css';
 
+// TODO: i18n
+
 export default inject('store')(observer(class Menu extends Component {
 
   update({db, periodId, accountId}) {
