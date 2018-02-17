@@ -19,7 +19,7 @@ const TransactionDetails = (props) => {
         const url = '/' + props.tx.db + '/period/' + props.tx.period_id + '/' + entry.account_id;
         return (
           <Link to={url}>
-            {entry.number + ' ' + entry.name + (props.tx.description !== desc ? ' - (' + desc  + ')': '')}
+            {entry.number + ' ' + entry.name + (desc && props.tx.description !== desc ? ' - (' + desc  + ')': '')}
           </Link>
         );
       }
