@@ -12,8 +12,9 @@ export default inject('store')(observer(class TransactionTable extends Component
     }
 
     const visible = (tx) => {
+      const allEnabled = Object.values(this.props.store.tools.tagDisabled).filter((v) => v).length === 0;
       if (!tx.tags || !tx.tags.length) {
-        return true;
+        return allEnabled;
       }
       let disabled = true;
       tx.tags.forEach((tag) => {
