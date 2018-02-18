@@ -83,6 +83,36 @@ function addEntry(db, accountId, documentId, debit, amount, desc, row, flags) {
 }
 
 /**
+ * Compare if two list of entries are essentially the same (amounts, debit, account).
+ * @param {*} e1
+ * @param {*} e2
+ */
+function _compareEntries(e1, e2) {
+  if (e1.length !== e2.length) {
+    return false;
+  }
+  // Construct mapping from account IDs to amounts and debit-flags.
+  let accountAmounts = {};
+  let accountDebits = {};
+  e1.forEach((e) => {
+    accountAmounts[e.accountId] = Math.round(100 * parseFloat(e.amount));
+    accountDebits[e.accountId] = parseInt(e.debit);
+  });
+  // Verify that no account amount or debit flag differs.
+  for (let i=0; i < e2.length; i++) {
+    const accountId = e2[i].accountId;
+    const amount = Math.round(100 * parseFloat(e2[i].amount));
+    const debit = parseInt(e2[i].debit);
+    if (accountAmounts[accountId] !== amount || accountDebits[accountId] !== debit) {
+      return false;
+    }
+    delete accountAmounts[accountId];
+  }
+  // As a sanity check, verify that all accounts has been checked and there's been no duplicates.
+  return Object.keys(accountAmounts).length === 0;
+}
+
+/**
  * Helper to check if the collection of entries is already in the database.
  * @param {string} db Name of the database.
  * @param {string} date A date in YYYY-MM-DD format.
@@ -90,12 +120,45 @@ function addEntry(db, accountId, documentId, debit, amount, desc, row, flags) {
  * @return {Promise<Boolean>} Promise resolving to true, if transaction is found.
  */
 function _checkTxs(db, date, txs) {
+  const seconds = moment(date + ' 00:00:00').format('x');
+  // Check the period.
   return periodOf(db, date)
     .then((periodId) => {
       if (!periodId) {
         return false;
       }
-      return Promise.reject(new Error('Just testing'));
+      // Check if there are documents having the same date.
+      return knex.db(db)('document')
+        .select('id')
+        .where({period_id: periodId, date: seconds})
+        .then((docs) => {
+          if (docs.length === 0) {
+            return false;
+          }
+          const docIds = docs.map((doc) => doc.id);
+          // Find all entries of those documents in the same date.
+          return knex.db(db)('entry')
+            .select('document_id AS documentId', 'account_id AS accountId', 'amount', 'debit')
+            .whereIn('document_id', docIds)
+            .then((entries) => {
+              // Group documents by their ID.
+              let docsById = {};
+              entries.forEach((entry) => {
+                docsById[entry.documentId] = docsById[entry.documentId] || [];
+                docsById[entry.documentId].push(entry);
+              });
+
+              // Compare each entry group if they are equal to the TXs to add.
+              const oldEntries = Object.values(docsById);
+              for (let i=0; i < oldEntries.length; i++) {
+                if (_compareEntries(oldEntries[i], txs)) {
+                  return true;
+                }
+              }
+              // return false; // TODO: This for real
+              return true;
+            });
+        });
     });
 }
 
@@ -192,10 +255,15 @@ function add(db, date, description, txs) {
       txs = txs.map((tx) => fill(tx));
       return _checkTxs(db, date, txs);
     })
-    .then(() => addDocument(db, date))
-    .then((documentId) => {
-      const creators = txs.map((tx) => () => addEntry(db, tx.accountId, documentId, tx.debit, tx.amount, tx.description, tx.row, tx.flags));
-      return promiseSeq(creators);
+    .then((hasAlready) => {
+      if (hasAlready) {
+        return [];
+      }
+      return addDocument(db, date)
+        .then((documentId) => {
+          const creators = txs.map((tx) => () => addEntry(db, tx.accountId, documentId, tx.debit, tx.amount, tx.description, tx.row, tx.flags));
+          return promiseSeq(creators);
+        });
     });
 }
 
