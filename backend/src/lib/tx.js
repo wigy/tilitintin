@@ -10,25 +10,37 @@ const data = require('./data');
  * Create new document into the database.
  *
  * @param {string} db Name of the database.
- * @param {number} periodId ID of the period.
  * @param {string} date A date in YYYY-MM-DD format.
  * @return {number} Document ID.
  */
-function addDocument(db, periodId, date) {
+function addDocument(db, date) {
   const seconds = moment(date + ' 00:00:00').format('x');
 
   return knex.db(db)
-    .select(knex.db(db).raw('MAX(number) + 1 as number'))
-    .from('document')
-    .then((nums) => nums ? nums[0].number : 1)
-    .then((number) => {
-      return knex.db(db)('document')
-      .insert({
-        number: number,
-        period_id: periodId,
-        date: seconds
-      })
-      .then((ids) => ids[0]);
+    .select('id')
+    .from('period')
+    .where('start_date', '>=', seconds)
+    .andWhere('end_date', '>', seconds)
+    .then((period) => {
+      if (!period) {
+        throw new Error('Cannot find period for ' + JSON.stringify(date) + ' from database ' + JSON.stringify(db));
+      }
+      return period[0].id;
+    })
+    .then((periodId) => {
+      return knex.db(db)
+      .select(knex.db(db).raw('MAX(number) + 1 as number'))
+      .from('document')
+      .then((nums) => nums ? nums[0].number : 1)
+      .then((number) => {
+        return knex.db(db)('document')
+        .insert({
+          number: number,
+          period_id: periodId,
+          date: seconds
+        })
+        .then((ids) => ids[0]);
+      });
     });
 }
 
@@ -61,7 +73,6 @@ function addEntry(db, accountId, documentId, debit, amount, desc, row, flags) {
  * Insert transaction into the database.
  *
  * @param {string} db Name of the database.
- * @param {number} periodId ID of the period.
  * @param {string} date A date in YYYY-MM-DD format.
  * @param {string} description A text to be added to each entry.
  * @param {array} txs List of transactions.
@@ -75,8 +86,7 @@ function addEntry(db, accountId, documentId, debit, amount, desc, row, flags) {
  * Missing pieces are filled in as necessary. Account can be given as a `number` or
  * an `accountId`.
  */
-function add(db, periodId, date, description, txs) {
-  // TODO: Can figure out periodId based on the date and throw error if not.
+function add(db, date, description, txs) {
 
   // Unknown accounts to resolve.
   let accountNumberToId = {};
@@ -151,7 +161,7 @@ function add(db, periodId, date, description, txs) {
       });
       txs = txs.map((tx) => fill(tx));
 
-      return addDocument(db, periodId, date);
+      return addDocument(db, date);
     })
     .then((documentId) => {
       const creators = txs.map((tx) => () => addEntry(db, tx.accountId, documentId, tx.debit, tx.amount, tx.description, tx.row, tx.flags));

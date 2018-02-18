@@ -35,8 +35,6 @@ class Import {
     this.serviceName = serviceName;
     // Name of the database currently in use.
     this.db = null;
-    // ID of the period to handle.
-    this.periodId = null;
     // Configuration variables.
     this.config = {};
     // Running totals of each trade target owned.
@@ -51,11 +49,10 @@ class Import {
   init() {
     this.amounts = {};
     this.averages = {};
+    // Make sanity check.
     return this.knex.max('id AS max').from('period')
       .then((data) => {
-        if (data && data.length) {
-          this.periodId = data[0].max;
-        } else {
+        if (!data || !data.length) {
           throw new Error('Cannot find any periods from the database.');
         }
         return (this.knex.select('description')
@@ -524,7 +521,7 @@ class Import {
       .then((txobjects) => {
         if (!dryRun) {
           // TODO: We could do sanity checks here and refuse if entries are there already. (Or in tx.add()?)
-          const creators = txobjects.map((txo) => () => tx.add(db, this.periodId, txo.tx.date, txo.tx.description, txo.tx.entries));
+          const creators = txobjects.map((txo) => () => tx.add(db, txo.tx.date, txo.tx.description, txo.tx.entries));
           console.log('Saving', creators.length, 'entries.');
           return promiseSeq(creators)
             .then(() => txobjects.length);
