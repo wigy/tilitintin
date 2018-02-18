@@ -128,13 +128,13 @@ function add(db, periodId, date, description, txs) {
   // Second helper to fill in missing account IDs and making final checks.
   function fill(tx) {
     tx.accountId = tx.accountId || accountNumberToId[tx.number];
-    if (tx.amount === undefined) {
+    if (!tx.amount) {
       throw new Error('Missing `amount` in TX ' + JSON.stringify(tx));
     }
-    if (tx.description === undefined) {
+    if (!tx.description) {
       throw new Error('Missing `description` in TX ' + JSON.stringify(tx));
     }
-    if (tx.accountId === undefined) {
+    if (!tx.accountId) {
       throw new Error('Missing `accountId` in TX ' + JSON.stringify(tx));
     }
     return tx;
@@ -143,7 +143,12 @@ function add(db, periodId, date, description, txs) {
   // Fill in account IDs, where missing and do final checks.
   return Promise.all(Object.keys(accountNumberToId).map((number) => data.getAccountId(db, number)))
     .then((mapping) => {
-      mapping.forEach((map) => accountNumberToId[map.number] = map.id);
+      mapping.forEach((map) => {
+        if (!map) {
+          return;
+        }
+        accountNumberToId[map.number] = map.id;
+      });
       txs = txs.map((tx) => fill(tx));
 
       return addDocument(db, periodId, date);

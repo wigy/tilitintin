@@ -297,12 +297,12 @@ function getAccountTransactionsByNumber(db, periodId, accountNumber) {
  * Convert account number to ID.
  * @param {*} db
  * @param {number} number Account number.
- * @return An object {id: <id>, number: <number>}
+ * @return An object {id: <id>, number: <number>} or null if not found.
  */
 function getAccountId(db, number) {
   return knex.db(db).select('id').from('account')
     .where({'account.number': number})
-    .then(account => ({number: number, id: account[0].id}));
+    .then(account => (account.length ? {number: number, id: account[0].id} : null));
 }
 
 module.exports = {
