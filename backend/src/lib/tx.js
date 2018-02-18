@@ -7,6 +7,30 @@ const knex = require('./knex');
 const data = require('./data');
 
 /**
+ * Find the period id for the date.
+ *
+ * @param {string} db Name of the database.
+ * @param {string} date A date in YYYY-MM-DD format.
+ * @param {Boolean} If set, raise error on missing period.
+ * @return {number} Period ID or null if not found.
+ */
+function periodOf(db, date, failOnError=false) {
+  const seconds = moment(date + ' 00:00:00').format('x');
+  return knex.db(db)
+    .select('id')
+    .from('period')
+    .where('start_date', '<=', seconds)
+    .andWhere('end_date', '>', seconds)
+    .then((period) => period.length ? period[0].id : null)
+    .then((periodId) => {
+      if (periodId === null && failOnError) {
+        throw new Error('Cannot find period for ' + JSON.stringify(date) + ' from database ' + JSON.stringify(db));
+      }
+      return periodId;
+    });
+}
+
+/**
  * Create new document into the database.
  *
  * @param {string} db Name of the database.
@@ -15,18 +39,7 @@ const data = require('./data');
  */
 function addDocument(db, date) {
   const seconds = moment(date + ' 00:00:00').format('x');
-
-  return knex.db(db)
-    .select('id')
-    .from('period')
-    .where('start_date', '>=', seconds)
-    .andWhere('end_date', '>', seconds)
-    .then((period) => {
-      if (!period) {
-        throw new Error('Cannot find period for ' + JSON.stringify(date) + ' from database ' + JSON.stringify(db));
-      }
-      return period[0].id;
-    })
+  return periodOf(db, date, true)
     .then((periodId) => {
       return knex.db(db)
       .select(knex.db(db).raw('MAX(number) + 1 as number'))
@@ -66,6 +79,23 @@ function addEntry(db, accountId, documentId, debit, amount, desc, row, flags) {
       description: desc,
       row_number: row,
       flags: flags,
+    });
+}
+
+/**
+ * Helper to check if the collection of entries is already in the database.
+ * @param {string} db Name of the database.
+ * @param {string} date A date in YYYY-MM-DD format.
+ * @param {Array} txs A list of object prepared by `add()`.
+ * @return {Promise<Boolean>} Promise resolving to true, if transaction is found.
+ */
+function _checkTxs(db, date, txs) {
+  return periodOf(db, date)
+    .then((periodId) => {
+      if (!periodId) {
+        return false;
+      }
+      return Promise.reject(new Error('Just testing'));
     });
 }
 
@@ -160,9 +190,9 @@ function add(db, date, description, txs) {
         accountNumberToId[map.number] = map.id;
       });
       txs = txs.map((tx) => fill(tx));
-
-      return addDocument(db, date);
+      return _checkTxs(db, date, txs);
     })
+    .then(() => addDocument(db, date))
     .then((documentId) => {
       const creators = txs.map((tx) => () => addEntry(db, tx.accountId, documentId, tx.debit, tx.amount, tx.description, tx.row, tx.flags));
       return promiseSeq(creators);
