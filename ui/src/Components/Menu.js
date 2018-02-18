@@ -5,7 +5,7 @@ import YYYYMMDD from './YYYYMMDD';
 import './Menu.css';
 
 // TODO: i18n
-
+// TODO: Keep account if changing period.
 export default inject('store')(observer(class Menu extends Component {
 
   update({db, periodId, accountId}) {

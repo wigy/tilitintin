@@ -76,6 +76,7 @@ function addEntry(db, accountId, documentId, debit, amount, desc, row, flags) {
  * an `accountId`.
  */
 function add(db, periodId, date, description, txs) {
+  // TODO: Can figure out periodId based on the date and throw error if not.
 
   // Unknown accounts to resolve.
   let accountNumberToId = {};
