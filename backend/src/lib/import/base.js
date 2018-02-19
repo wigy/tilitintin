@@ -520,13 +520,11 @@ class Import {
       })
       .then((txobjects) => {
         if (!dryRun) {
-          // TODO: We could do sanity checks here and refuse if entries are there already. (Or in tx.add()?)
           const creators = txobjects.map((txo) => () => tx.add(db, txo.tx.date, txo.tx.description, txo.tx.entries));
           console.log('Saving', creators.length, 'entries.');
-          return promiseSeq(creators)
-            .then(() => txobjects.length);
+          return promiseSeq(creators);
         } else {
-          return txobjects.length;
+          return 0;
         }
       });
   }

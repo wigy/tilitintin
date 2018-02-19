@@ -38,5 +38,4 @@ importer.configure({
 });
 
 importer.import(cli.db, cli['csv-file'], cli.options.debug)
-  .then((num) => console.log('Created', num, 'entries.'))
   .catch((err) => console.error(err));
