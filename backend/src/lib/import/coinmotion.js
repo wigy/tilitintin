@@ -57,6 +57,10 @@ class CoinmotionImport extends Import {
     throw new Error('Cannot recognize entry ' + JSON.stringify(txo));
   }
 
+  currency(txo) {
+    return 'euro';
+  }
+
   total(txo) {
     let total = 0;
     txo.src.forEach((entry) => {

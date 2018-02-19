@@ -7,7 +7,8 @@ cli.opt('noprofit', false, 'Turn off profit and losses calculations (to be calcu
 cli.opt('service', null, 'Name of the service tag if any.');
 cli.opt('fund', null, 'Additional fund tag if any.');
 cli.opt('bank', 1910, 'Number of an account for banking.');
-cli.opt('euro', 1960, 'Number of an account for storing euros in service.');
+cli.opt('euro', 1960, 'Number of an account for storing EUR in the service.');
+cli.opt('usd', null, 'Number of an account for storing USD in the service.');
 cli.opt('crypto', 1549, 'Number of an account for storing crypto currencies.');
 cli.opt('eth', null, 'Number of an account for storing ETH.');
 cli.opt('btc', null, 'Number of an account for storing BTC.');
@@ -27,6 +28,7 @@ importer.configure({
   accounts: {
     bank: cli.options.bank,
     euro: cli.options.euro,
+    usd: cli.options.usd,
     crypto: cli.options.crypto,
     eth: cli.options.eth,
     btc: cli.options.btc,

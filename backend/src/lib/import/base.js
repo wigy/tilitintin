@@ -177,13 +177,13 @@ class Import {
   depositEntries(txo) {
     if (txo.fee) {
       return [
-        {number: this.getAccount('euro'), amount: Math.round((txo.total - txo.fee) * 100) / 100},
+        {number: this.getAccount(txo.curreny), amount: Math.round((txo.total - txo.fee) * 100) / 100},
         {number: this.getAccount('fees'), amount: txo.fee},
         {number: this.getAccount('bank'), amount: -txo.total},
       ];
     }
     return [
-      {number: this.getAccount('euro'), amount: txo.total},
+      {number: this.getAccount(txo.curreny), amount: txo.total},
       {number: this.getAccount('bank'), amount: -txo.total},
     ];
   }
@@ -196,12 +196,12 @@ class Import {
       return [
         {number: this.getAccount('bank'), amount: Math.round((txo.total - txo.fee) * 100) / 100},
         {number: this.getAccount('fees'), amount: txo.fee},
-        {number: this.getAccount('euro'), amount: -txo.total},
+        {number: this.getAccount(txo.curreny), amount: -txo.total},
       ];
     }
     return [
       {number: this.getAccount('bank'), amount: txo.total},
-      {number: this.getAccount('euro'), amount: -txo.total},
+      {number: this.getAccount(txo.curreny), amount: -txo.total},
     ];
   }
 
@@ -212,7 +212,7 @@ class Import {
     let ret = [
       {number: this.getAccount(txo.target.toLowerCase()), amount: Math.round((txo.total - txo.fee) * 100) / 100},
       {number: this.getAccount('fees'), amount: txo.fee},
-      {number: this.getAccount('euro'), amount: -txo.total},
+      {number: this.getAccount(txo.currency), amount: -txo.total},
     ];
 
     return ret;
@@ -223,7 +223,7 @@ class Import {
    */
   sellEntries(txo) {
     let ret = [
-      {number: this.getAccount('euro'), amount: Math.round((txo.total - txo.fee) * 100) / 100},
+      {number: this.getAccount(txo.currency), amount: Math.round((txo.total - txo.fee) * 100) / 100},
       {number: this.getAccount('fees'), amount: txo.fee},
     ];
 
@@ -250,7 +250,9 @@ class Import {
   }
 
   dividentEntries(txo) {
-    // TODO: Implement.
+    const acc = this.getAccount(txo.currency);
+    // TODO: Implement tax().
+    // TODO: Implement this.
   }
 
   /**
@@ -292,6 +294,16 @@ class Import {
    */
   total(txo) {
     throw new Error('Importer does not implement total().');
+  }
+
+  /**
+   * Find out currency as account name option like 'euro' or 'usd'.
+   *
+   * @param {Object} txo An transaction object.
+   * @return {String}
+   */
+  currency(txo) {
+    throw new Error('Importer does not implement currency().');
   }
 
   /**
@@ -351,6 +363,7 @@ class Import {
    *   * `type` - A classification of the transaction like ('withdrawal', 'deposit', 'sell', 'buy', 'divident').
    *   * `total` - Total amount of the transaction, i.e. abs of debit/credit.
    *   * `target` - Name of the target in the trade (like 'ETH' or 'BTC').
+   *   * `currency` - Name of the currency used in the trade as account option (like 'euro' or 'usd')
    *   * `tradeAmount` - Amount of the target to trade as stringified decimal number.
    *   * `targetAverage` - Average price of the target after the transaction.
    *   * `targetTotal` - Number of targets owned after the transaction.
@@ -366,6 +379,7 @@ class Import {
       type: null,
       total: null,
       target: null,
+      currency: null,
       tradeAmount: null,
       targetAverage: null,
       targetTotal: null,
@@ -380,6 +394,7 @@ class Import {
     // Get basics.
     ret.tx.date = this.date(group[0]);
     ret.type = this.recognize(ret);
+    ret.currency = this.currency(ret);
     ret.total = this.total(ret);
     ret.fee = this.fee(ret);
     if (ret.type !== 'withdrawal' && ret.type !== 'deposit') {

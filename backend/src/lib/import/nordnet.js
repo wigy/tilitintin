@@ -39,6 +39,17 @@ class NordnetImport extends Import {
     throw new Error('Cannot recognize entry of type ' + type + ': ' + JSON.stringify(txo));
   }
 
+  currency(txo) {
+    switch (txo.src[0].Valuutta) {
+      case 'USD':
+        return 'usd';
+      case 'EUR':
+        return 'euro';
+      default:
+       throw new Error('Cannot figure out currency from ' + JSON.stringify(txo));
+    }
+  }
+
   total(txo) {
     let sum = 0;
     txo.src.forEach((tx) => {

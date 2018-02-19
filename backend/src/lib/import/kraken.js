@@ -10,6 +10,10 @@ class KrakenImport extends Import {
     return this.loadCSV(file);
   }
 
+  currency(txo) {
+    return 'euro';
+  }
+
   date(entry) {
     return entry.time.substr(0, 10);
   }
