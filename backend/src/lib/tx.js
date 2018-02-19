@@ -155,8 +155,7 @@ function _checkTxs(db, date, txs) {
                   return true;
                 }
               }
-              // return false; // TODO: This for real
-              return true;
+              return false;
             });
         });
     });
