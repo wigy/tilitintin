@@ -15,9 +15,9 @@ cli.opt('fees', 9690, 'Number of an account for trading fees.');
 cli.opt('rounding', 8570, 'Number of an account for rounding errors.');
 cli.opt('losses', 9750, 'Number of an account for recording losses.');
 cli.opt('profits', 3490, 'Number of an account for recoring profit.');
-cli.arg_('format', ['kraken', 'coinmotion']);
+cli.arg_('format', ['kraken', 'coinmotion', 'nordnet']);
 cli.arg_('db', knex.dbs());
-cli.arg('csv-file', 'transaction log from Kraken as CSV file');
+cli.arg('csv-file', 'transaction log as CSV file');
 
 const importer = require('../src/lib/import/' + cli.format);
 importer.configure({

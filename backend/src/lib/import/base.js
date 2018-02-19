@@ -442,15 +442,17 @@ class Import {
    * A loader for CSV file.
    *
    * @param {string} file A path to the file.
+   * @param {Objecr} opts Options for CSV-reader.
    * @return {Promise<Array<Object>>}
    *
    * The first row is assumed to have headers and they are used to construct
    * an array of objects containing each row as members defined by the first header row.
    */
-  loadCSV(file) {
+  loadCSV(file, opts = {}) {
     return new Promise((resolve, reject) => {
 
       let headers = null;
+      opts.noheader = true;
 
       fs.readFile(file, (err, data) => {
         if (err) {
@@ -461,11 +463,11 @@ class Import {
         data = data.toString();
         let lines = [];
 
-        csv({noheader:true})
+        csv(opts)
           .fromString(data)
           .on('csv',(row) => {
             if (headers === null) {
-              headers = row;
+              headers = row.map(r => r.replace(/[^a-zA-Z0-9]/g, '_'));
             } else {
               let line = {};
               for (let i = 0; i < row.length; i++) {
