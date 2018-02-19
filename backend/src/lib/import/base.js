@@ -344,7 +344,7 @@ class Import {
    *
    * The processed entries are objects that contain properties:
    *   * `src` - original entry data
-   *   * `type` - A classification of the transaction like ('withdrawal', 'deposit', 'sell', 'buy').
+   *   * `type` - A classification of the transaction like ('withdrawal', 'deposit', 'sell', 'buy', 'divident').
    *   * `total` - Total amount of the transaction, i.e. abs of debit/credit.
    *   * `target` - Name of the target in the trade (like 'ETH' or 'BTC').
    *   * `tradeAmount` - Amount of the target to trade as stringified decimal number.
@@ -467,7 +467,7 @@ class Import {
           .fromString(data)
           .on('csv',(row) => {
             if (headers === null) {
-              headers = row.map(r => r.replace(/[^a-zA-Z0-9]/g, '_'));
+              headers = row.map(r => r.replace(/\W/g, '_'));
             } else {
               let line = {};
               for (let i = 0; i < row.length; i++) {
