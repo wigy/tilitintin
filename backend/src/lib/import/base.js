@@ -249,6 +249,10 @@ class Import {
     return ret;
   }
 
+  dividentEntries(txo) {
+    // TODO: Implement.
+  }
+
   /**
    * Construct the description for the transaction.
    *
@@ -281,7 +285,7 @@ class Import {
   }
 
   /**
-   * Calculate transaction total.
+   * Calculate transaction total as positive number.
    *
    * @param {Object} txo An transaction object.
    * @return {Number}
@@ -442,11 +446,12 @@ class Import {
    * A loader for CSV file.
    *
    * @param {string} file A path to the file.
-   * @param {Objecr} opts Options for CSV-reader.
+   * @param {Object} opts Options for CSV-reader.
    * @return {Promise<Array<Object>>}
    *
    * The first row is assumed to have headers and they are used to construct
    * an array of objects containing each row as members defined by the first header row.
+   * Special option `headers` can be given as an explicit list of headers.
    */
   loadCSV(file, opts = {}) {
     return new Promise((resolve, reject) => {
@@ -467,7 +472,7 @@ class Import {
           .fromString(data)
           .on('csv',(row) => {
             if (headers === null) {
-              headers = row.map(r => r.replace(/\W/g, '_'));
+              headers = opts.headers || row.map(r => r.replace(/\W/g, '_'));
             } else {
               let line = {};
               for (let i = 0; i < row.length; i++) {
