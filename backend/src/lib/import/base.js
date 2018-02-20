@@ -16,15 +16,18 @@ const data = require('../data');
  * 3. An array of data is received and is then grouped to arrays forming transactions with `grouping(data)`.
  * 4. Each group is preprosessed with `preprocess(group)`.
  * 5. Each group is converted to the transaction objects in `process(group)`.
- *    a) Each group is classified to transaction type using `recognize(txobject)`.
- *    b) Date is resolved with `date(txobject)`.
- *    c) Total amount is resolved with `total(txobject)`.
- *    d) Find the target of the trade if any `target(txobject)`.
- *    e) Find the amonunt of the target in the trade if any `amount(txobject)`.
- *    f) Find the service fee in euros `fee(txobject)`.
- *    g) Construct entries for transaction with `entries(txobject)`.
+ *    a) Date is resolved with `date(txobject)`.
+ *    b) Each group is classified to transaction type using `recognize(txobject)`.
+ *    c) Main currency of the transaction is found out with `currency(txobject)`.
+ *    d) Currency exchange rate, where applicapable, is taken with `rate(txobject)`.
+ *    e) Total amount is resolved with `total(txobject)`.
+ *    f) Find the target of the trade if any `target(txobject)`.
+ *    g) Find the service fee in euros `fee(txobject)`.
+ *    h) Find the amount of tax in euros `tax(txobject)`.
+ *    i) Find the amonunt of the target in the trade if any `amount(txobject)`.
+ *    j) Construct entries for transaction with `entries(txobject)`.
  *       - Based on the type, the function `<type>Entries(txobject)` is called.
- *    h) The description is constructed with `describe(txobject)`.
+ *    k) The description is constructed with `describe(txobject)`.
  * 6. All transactions are checked and rounding errors are fixed using fixRoundingErrors(list).
  * 7. The list of transaction objects is post-processed in `postprocess(list)`.
  */
@@ -80,6 +83,7 @@ class Import {
    * @param {string} name Account purpose (see `configure()`).
    */
   getAccount(name) {
+    name = name.toLowerCase();
     if (this.config.accounts[name]) {
       return this.config.accounts[name];
     }
@@ -144,16 +148,6 @@ class Import {
   }
 
   /**
-   * Recognize the type of the transaction.
-   *
-   * @param {Object} txo An transaction object.
-   * @return {string} One of the 'deposit', 'withdrawal', 'sell' or 'buy'.
-   */
-  recognize(txo) {
-    throw new Error('Importer does not implement recognize().');
-  }
-
-  /**
    * Construct entries for the transaction.
    *
    * @param {Object} txo An transaction object.
@@ -210,12 +204,19 @@ class Import {
    */
   buyEntries(txo) {
     let ret = [
-      {number: this.getAccount(txo.target.toLowerCase()), amount: Math.round((txo.total - txo.fee) * 100) / 100},
+      {number: this.getAccountForTarget(txo), amount: Math.round((txo.total - txo.fee) * 100) / 100},
       {number: this.getAccount('fees'), amount: txo.fee},
       {number: this.getAccount(txo.currency), amount: -txo.total},
     ];
 
     return ret;
+  }
+
+  /**
+   * Find the account number for upkeeping the amount of target owned in euros.
+   */
+  getAccountForTarget(txo) {
+    return this.getAccount(txo.target);
   }
 
   /**
@@ -232,27 +233,57 @@ class Import {
 
     if (this.config.noProfit) {
       // In case of not calculating profits yet, put in only buy price.
-      ret.push({number: this.getAccount(txo.target.toLowerCase()), amount: -txo.total});
+      ret.push({number: this.getAccountForTarget(txo), amount: -txo.total});
     } else {
       // Otherwise calculate losses or profits from the average price.
       const diff = Math.round((buyPrice - txo.total) * 100) / 100;
       if (diff > 0) {
         // In losses, add to debit side into losses.
         ret.push({number: this.getAccount('losses'), amount: diff});
-        ret.push({number: this.getAccount(txo.target.toLowerCase()), amount: -buyPrice});
+        ret.push({number: this.getAccountForTarget(txo), amount: -buyPrice});
       } else if (diff < 0) {
         // In profits, add to credit side into profits
         ret.push({number: this.getAccount('profits'), amount: diff});
-        ret.push({number: this.getAccount(txo.target.toLowerCase()), amount: -buyPrice});
+        ret.push({number: this.getAccountForTarget(txo), amount: -buyPrice});
       }
     }
     return ret;
   }
 
+  /**
+   * Create divident entries.
+   */
   dividentEntries(txo) {
     const acc = this.getAccount(txo.currency);
-    // TODO: Implement tax().
-    // TODO: Implement this.
+    let ret = [
+      {number: this.getAccount(txo.currency), amount: txo.total},
+    ];
+    if (txo.tax) {
+      console.log('TODO: tax', txo.tax);
+    }
+    return ret;
+  }
+
+  /**
+   * Create foreign exchange entries.
+   */
+  fxEntries(txo) {
+    let ret = [
+      {number: this.getAccount(txo.currency), amount: txo.total},
+      {number: this.getAccount(txo.target), amount: Math.round(-100 * txo.total) / 100},
+    ];
+    return ret;
+  }
+
+  /**
+   * Create interest payment entries.
+   */
+  interestEntries(txo) {
+    let ret = [
+      {number: this.getAccount(txo.currency), amount: Math.round(-100 * txo.total) / 100},
+      {number: this.getAccount('interest'), amount: txo.total},
+    ];
+    return ret;
   }
 
   /**
@@ -275,12 +306,25 @@ class Import {
         }
         return 'Osto ' + num.trim(txo.tradeAmount, txo.target) + ' (' + parenthesis.join(', ')  + ')';
       case 'sell':
-        parenthesis = [];
         if (!this.config.noProfit) {
           parenthesis.push('k.h. ' + num.currency(txo.targetAverage, '€/'  + txo.target));
         }
         parenthesis.push('jälj. ' + num.trim(txo.targetTotal, txo.target));
         return 'Myynti ' + num.trim(txo.tradeAmount, txo.target) + ' (' + parenthesis.join(', ') + ')';
+      case 'divident':
+        parenthesis.push(txo.tradeAmount + ' x ' + num.currency(txo.total / txo.tradeAmount / txo.rate, txo.currency) + ' = ' + num.currency(txo.total / txo.rate, txo.currency));
+        if (txo.tax) {
+          parenthesis.push('vero ' + num.currency(txo.tax / txo.rate, txo.currency) + ' = ' + num.currency(txo.tax, '€'));
+        }
+        if (txo.currency !== 'EUR') {
+          parenthesis.push('kurssi ' + num.currency(txo.rate, txo.currency + '/€'));
+        }
+        return 'Osinko ' + txo.target + ' (' + parenthesis.join(', ') + ')';
+      case 'fx':
+        parenthesis.push('kurssi ' + num.currency(txo.rate, txo.currency + '/' + txo.target));
+        return 'Valuutanvaihto ' + txo.target + ' -> ' + txo.currency + ' (' + parenthesis.join(', ') + ')';
+      case 'interest':
+        return this.serviceName + ' lainakorko';
       default:
         throw new Error('Cannot describe transaction of type ' + txo.type);
     }
@@ -297,13 +341,23 @@ class Import {
   }
 
   /**
-   * Find out currency as account name option like 'euro' or 'usd'.
+   * Find out currency as 'EUR' or 'USD'.
    *
    * @param {Object} txo An transaction object.
    * @return {String}
    */
   currency(txo) {
     throw new Error('Importer does not implement currency().');
+  }
+
+  /**
+   * Find out currency conversion rate to €.
+   *
+   * @param {Object} txo An transaction object.
+   * @return {Number}
+   */
+  rate(txo) {
+    throw new Error('Importer does not implement rate().');
   }
 
   /**
@@ -337,6 +391,16 @@ class Import {
   }
 
   /**
+   * Look up for the tax.
+   *
+   * @param {Object} txo An transaction object.
+   * @return {Number} Amount of tax deducted.
+   */
+  tax(txo) {
+    throw new Error('Importer does not implement tax().');
+  }
+
+  /**
    * Pre-processing hook.
    * @param {<Array<Object>} list A list of objects read from the file.
    */
@@ -353,6 +417,18 @@ class Import {
   }
 
   /**
+   * Recognize the type of the transaction.
+   *
+   * @param {Object} txo An transaction object.
+   * @return {string} One of the 'deposit', 'withdrawal', 'sell', 'buy', 'divident', 'fx', 'interest'.
+   *
+   * Currency exchange type is 'fx' and `currency` is currency received while `target` is currency given.
+   */
+  recognize(txo) {
+    throw new Error('Importer does not implement recognize().');
+  }
+
+  /**
    * Process a group of original entries to the transaction data.
    *
    * @param {Array<any>} group
@@ -360,14 +436,16 @@ class Import {
    *
    * The processed entries are objects that contain properties:
    *   * `src` - original entry data
-   *   * `type` - A classification of the transaction like ('withdrawal', 'deposit', 'sell', 'buy', 'divident').
+   *   * `type` - A classification of the transaction (see recognize()).
    *   * `total` - Total amount of the transaction, i.e. abs of debit/credit.
    *   * `target` - Name of the target in the trade (like 'ETH' or 'BTC').
-   *   * `currency` - Name of the currency used in the trade as account option (like 'euro' or 'usd')
+   *   * `currency` - Name of the currency used in the transaction (like 'EUR' or 'USD')
+   *   * `rate` - Conversion rate to € for currency.
    *   * `tradeAmount` - Amount of the target to trade as stringified decimal number.
    *   * `targetAverage` - Average price of the target after the transaction.
    *   * `targetTotal` - Number of targets owned after the transaction.
    *   * `fee` - Service fee in euros.
+   *   * `tax` - Amount of tax deducted.
    *   * `tx.date`- a transaction date
    *   * `tx.description` - a transaction description
    *   * `tx.entries` - a list of transaction entries
@@ -380,10 +458,12 @@ class Import {
       total: null,
       target: null,
       currency: null,
+      rate: null,
       tradeAmount: null,
       targetAverage: null,
       targetTotal: null,
       fee: null,
+      tax: null,
       tx: {
         date: null,
         description: null,
@@ -395,8 +475,10 @@ class Import {
     ret.tx.date = this.date(group[0]);
     ret.type = this.recognize(ret);
     ret.currency = this.currency(ret);
+    ret.rate = this.rate(ret);
     ret.total = this.total(ret);
     ret.fee = this.fee(ret);
+    ret.tax = this.tax(ret);
     if (ret.type !== 'withdrawal' && ret.type !== 'deposit') {
       ret.target = this.target(ret);
     }

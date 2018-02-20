@@ -18,6 +18,12 @@ class NordnetImport extends Import {
     return parseInt(entry.Id);
   }
 
+  preprocess(groups) {
+    groups.forEach((group) => {
+    });
+    return groups;
+  }
+
   grouping(entries) {
     let ret = {};
     entries.forEach((entry) => {
@@ -36,18 +42,37 @@ class NordnetImport extends Import {
     if (types.includes('OSINKO')) {
       return 'divident';
     }
-    throw new Error('Cannot recognize entry of type ' + type + ': ' + JSON.stringify(txo));
+    if (types.includes('VALUUTAN OSTO')) {
+      return 'fx';
+    }
+    if (types.includes('MYYNTI')) {
+      return 'sell';
+    }
+    if (types.includes('OSTO')) {
+      return 'buy';
+    }
+    if (types.includes('LAINAKORKO')) {
+      return 'interest';
+    }
+    throw new Error('Cannot recognize entry with types ' + types.join(', ') + ': ' + JSON.stringify(txo));
   }
 
   currency(txo) {
-    switch (txo.src[0].Valuutta) {
+    let acc = this._received(txo);
+    if (!acc) {
+      acc = this._given(txo);
+    }
+    switch (acc.Valuutta) {
       case 'USD':
-        return 'usd';
       case 'EUR':
-        return 'euro';
+        return acc.Valuutta;
       default:
        throw new Error('Cannot figure out currency from ' + JSON.stringify(txo));
     }
+  }
+
+  rate(txo) {
+    return parseFloat(txo.src[0].Valuuttakurssi.replace(',', '.'));
   }
 
   total(txo) {
@@ -72,12 +97,36 @@ class NordnetImport extends Import {
     return Math.round(100 * sum) / 100;
   }
 
+  tax(txo) {
+    if (txo.type === 'divident')
+    console.log(txo);
+    return null;
+  }
+
+  getAccountForTarget(txo) {
+    return this.getAccount('shares');
+  }
+
   target(txo) {
     const ticker = txo.src[0].Arvopaperi;
     if (!ticker) {
+      const given = this._given(txo);
+      if (given && given.Valuutta) {
+        return given.Valuutta;
+      }
       throw new Error('Cannot recognize target from ' + JSON.stringify(txo));
     }
     return ticker;
+  }
+
+  // Helper to find entry giving out money.
+  _given(txo) {
+    return txo.src.filter((tx) => parseFloat(tx.Summa.replace(',', '.')) < 0)[0];
+  }
+
+  // Helper to find entry receiving in money.
+  _received(txo) {
+    return txo.src.filter((tx) => parseFloat(tx.Summa.replace(',', '.')) > 0)[0];
   }
 
   amount(txo) {

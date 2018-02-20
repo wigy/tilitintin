@@ -7,12 +7,14 @@ cli.opt('noprofit', false, 'Turn off profit and losses calculations (to be calcu
 cli.opt('service', null, 'Name of the service tag if any.');
 cli.opt('fund', null, 'Additional fund tag if any.');
 cli.opt('bank', 1910, 'Number of an account for banking.');
-cli.opt('euro', 1960, 'Number of an account for storing EUR in the service.');
+cli.opt('eur', 1960, 'Number of an account for storing EUR in the service.');
 cli.opt('usd', null, 'Number of an account for storing USD in the service.');
+cli.opt('shares', 1543, 'Number of an account for storing stock shares.');
 cli.opt('crypto', 1549, 'Number of an account for storing crypto currencies.');
 cli.opt('eth', null, 'Number of an account for storing ETH.');
 cli.opt('btc', null, 'Number of an account for storing BTC.');
 cli.opt('fees', 9690, 'Number of an account for trading fees.');
+cli.opt('interest', 9550, 'Number of an account for interest payments.');
 cli.opt('rounding', 8570, 'Number of an account for rounding errors.');
 cli.opt('losses', 9750, 'Number of an account for recording losses.');
 cli.opt('profits', 3490, 'Number of an account for recoring profit.');
@@ -27,12 +29,14 @@ importer.configure({
   noProfit: cli.options.noprofit,
   accounts: {
     bank: cli.options.bank,
-    euro: cli.options.euro,
+    eur: cli.options.eur,
     usd: cli.options.usd,
     crypto: cli.options.crypto,
+    shares: cli.options.shares,
     eth: cli.options.eth,
     btc: cli.options.btc,
     fees: cli.options.fees,
+    interest: cli.options.interest,
     rounding: cli.options.rounding,
     losses: cli.options.losses,
     profits: cli.options.profits

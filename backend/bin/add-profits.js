@@ -10,7 +10,6 @@ const num = require('../src/lib/num');
 const data = require('../src/lib/data');
 
 cli.opt('debug', false, 'To turn dry-run on.');
-cli.opt('euro', 1960, 'Number of an account for storing euros in service.');
 cli.opt('target', 1549, 'Number of an account for storing target amount changes.');
 cli.opt('losses', 9750, 'Number of an account for recording losses.');
 cli.opt('profits', 3490, 'Number of an account for recoring profit.');

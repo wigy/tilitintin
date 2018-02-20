@@ -58,7 +58,11 @@ class CoinmotionImport extends Import {
   }
 
   currency(txo) {
-    return 'euro';
+    return 'EUR';
+  }
+
+  rate(txo) {
+    return 1.0;
   }
 
   total(txo) {
@@ -82,6 +86,10 @@ class CoinmotionImport extends Import {
       }
     });
     return noRounding ? total : Math.round(total * 100) / 100;
+  }
+
+  tax(txo) {
+    return null;
   }
 
   target(txo) {

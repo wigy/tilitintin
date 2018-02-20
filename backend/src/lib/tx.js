@@ -52,7 +52,11 @@ function addDocument(db, date) {
           period_id: periodId,
           date: seconds
         })
-        .then((ids) => ids[0]);
+        .then((ids) => {
+          // TODO: Use neat-dump.
+          console.log('TX add:', db, date, '#' + number);
+          return ids[0];
+        });
       });
     });
 }
@@ -68,6 +72,7 @@ function addDocument(db, date) {
  * @param {string} desc
  * @param {number} row Order number of the entry 1..n.
  * @param {number} flags
+ * @return {Promise<Array>} A list of IDs added.
  */
 function addEntry(db, accountId, documentId, debit, amount, desc, row, flags) {
   return knex.db(db)('entry')
@@ -79,6 +84,12 @@ function addEntry(db, accountId, documentId, debit, amount, desc, row, flags) {
       description: desc,
       row_number: row,
       flags: flags,
+    })
+    .then((res) => {
+      // TODO: Use neat-dump.
+      // TODO: Get account numbers somehow and use it.
+      console.log('       ', '#' + accountId, (debit ? '+' : '-') + amount + '€', desc);
+      return res;
     });
 }
 

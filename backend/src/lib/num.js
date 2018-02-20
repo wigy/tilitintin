@@ -49,7 +49,13 @@ module.exports = {
       ret = ret.substr(0, ret.length - 6) + ',' + ret.substr(ret.length - 6);
     }
     if (unit) {
-      ret += ' ' + unit;
+      if (unit === 'USD') {
+        ret = '$' + ret;
+      } else {
+        unit = unit.replace('USD', '$');
+        unit = unit.replace('EUR', '€');
+        ret += ' ' + unit;
+      }
     }
     return ret;
   }

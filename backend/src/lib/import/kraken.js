@@ -11,7 +11,11 @@ class KrakenImport extends Import {
   }
 
   currency(txo) {
-    return 'euro';
+    return 'EUR';
+  }
+
+  rate(txo) {
+    return 1.0;
   }
 
   date(entry) {
@@ -78,6 +82,10 @@ class KrakenImport extends Import {
       }
     });
     return Math.round(total * 100) / 100;
+  }
+
+  tax(txo) {
+    return null;
   }
 
   target(txo) {
