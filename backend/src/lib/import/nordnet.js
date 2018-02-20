@@ -76,13 +76,21 @@ class NordnetImport extends Import {
 
   total(txo) {
     let sum = 0;
-    txo.src.forEach((tx) => {
-      const value = Math.abs(parseFloat(tx.Summa.replace(',', '.')));
-      const fees = Math.abs(parseFloat(tx.Maksut.replace(',', '.')));
-      const rate = Math.abs(parseFloat(tx.Valuuttakurssi.replace(',', '.')));
-      sum += value * rate;
-      sum += fees * rate;
-    });
+    if (txo.type === 'fx') {
+      txo.src.forEach((tx) => {
+        if (tx.Valuutta === 'EUR') {
+          sum += Math.abs(parseFloat(tx.Summa.replace(',', '.')));
+        }
+      });
+    } else {
+      txo.src.forEach((tx) => {
+        const value = Math.abs(parseFloat(tx.Summa.replace(',', '.')));
+        const fees = Math.abs(parseFloat(tx.Maksut.replace(',', '.')));
+        const rate = Math.abs(parseFloat(tx.Valuuttakurssi.replace(',', '.')));
+        sum += value * rate;
+        sum += fees * rate;
+      });
+    }
     return Math.round(100 * sum) / 100;
   }
 
