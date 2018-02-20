@@ -18,6 +18,7 @@ cli.opt('interest', 9550, 'Number of an account for interest payments.');
 cli.opt('rounding', 8570, 'Number of an account for rounding errors.');
 cli.opt('losses', 9750, 'Number of an account for recording losses.');
 cli.opt('profits', 3490, 'Number of an account for recoring profit.');
+cli.opt('dividents', 3470, 'Number of an account for recoring dividents.');
 cli.arg_('format', ['kraken', 'coinmotion', 'nordnet']);
 cli.arg_('db', knex.dbs());
 cli.arg('csv-file', 'transaction log as CSV file');
@@ -39,7 +40,8 @@ importer.configure({
     interest: cli.options.interest,
     rounding: cli.options.rounding,
     losses: cli.options.losses,
-    profits: cli.options.profits
+    profits: cli.options.profits,
+    dividents: cli.options.dividents
   }
 });
 

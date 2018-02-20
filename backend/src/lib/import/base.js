@@ -257,6 +257,7 @@ class Import {
     const acc = this.getAccount(txo.currency);
     let ret = [
       {number: this.getAccount(txo.currency), amount: txo.total},
+      {number: this.getAccount('dividents'), amount: Math.round(-100 * txo.total) / 100},
     ];
     if (txo.tax) {
       console.log('TODO: tax', txo.tax);
