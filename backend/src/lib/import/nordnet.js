@@ -10,18 +10,17 @@ class NordnetImport extends Import {
     return this.loadCSV(file, {delimiter: ';'});
   }
 
+  trimItem(obj) {
+    obj.Tapahtumatyyppi = obj.Tapahtumatyyppi.replace(/\W/g, '_');
+    return obj;
+  }
+
   date(entry) {
     return entry.Kirjausp_iv_;
   }
 
   time(entry) {
     return parseInt(entry.Id);
-  }
-
-  preprocess(groups) {
-    groups.forEach((group) => {
-    });
-    return groups;
   }
 
   grouping(entries) {
@@ -42,7 +41,7 @@ class NordnetImport extends Import {
     if (types.includes('OSINKO')) {
       return 'divident';
     }
-    if (types.includes('VALUUTAN OSTO')) {
+    if (types.includes('VALUUTAN_OSTO')) {
       return 'fx';
     }
     if (types.includes('MYYNTI')) {
@@ -98,8 +97,8 @@ class NordnetImport extends Import {
   }
 
   tax(txo) {
-    if (txo.type === 'divident')
-    console.log(txo);
+//    if (txo.type === 'divident')
+//    console.log(txo);
     return null;
   }
 

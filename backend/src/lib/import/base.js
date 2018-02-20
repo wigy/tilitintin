@@ -15,6 +15,7 @@ const data = require('../data');
  * 2. File is loaded first with `load(path)`.
  * 3. An array of data is received and is then grouped to arrays forming transactions with `grouping(data)`.
  * 4. Each group is preprosessed with `preprocess(group)`.
+ *    a) By default every item in the group is processed with `trimItem(obj)`.
  * 5. Each group is converted to the transaction objects in `process(group)`.
  *    a) Date is resolved with `date(txobject)`.
  *    b) Each group is classified to transaction type using `recognize(txobject)`.
@@ -408,7 +409,19 @@ class Import {
    * @param {<Array<Object>} list A list of objects read from the file.
    */
   preprocess(list) {
+    for (let i=0; i < list.length; i++) {
+      for (let j=0; j < list[i].length; j++) {
+        list[i][j] = this.trimItem(list[i][j]);
+      }
+    }
     return list;
+  }
+
+  /**
+   * Pre-process imported data object.
+   */
+  trimItem(obj) {
+    return obj;
   }
 
   /**
@@ -441,7 +454,7 @@ class Import {
    *   * `src` - original entry data
    *   * `type` - A classification of the transaction (see recognize()).
    *   * `total` - Total amount of the transaction, i.e. abs of debit/credit.
-   *   * `target` - Name of the target in the trade (like 'ETH' or 'BTC').
+   *   * `target` - Name of the target in the trade (like 'ETH', 'BTC' or 'GOOG').
    *   * `currency` - Name of the currency used in the transaction (like 'EUR' or 'USD')
    *   * `rate` - Conversion rate to € for currency.
    *   * `amount` - Amount of the target to trade or shares owned for divident.
