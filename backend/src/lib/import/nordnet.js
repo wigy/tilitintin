@@ -137,7 +137,11 @@ class NordnetImport extends Import {
   }
 
   amount(txo) {
-    const sum = txo.src.map((tx) => parseInt(tx.M__r_)).reduce((sum, cur) => sum + cur);
+    let tx = txo.src.filter((tx) => parseInt(tx.M__r_));
+    if (!tx.length) {
+      return null;
+    }
+    let sum = parseInt(tx[0].M__r_);
     return txo.type === 'sell' ? -sum : sum;
   }
 }

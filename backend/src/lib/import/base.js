@@ -634,7 +634,7 @@ class Import {
         if (dryRun) {
           txobjects.forEach((txo) => {
             console.log('\u001b[33;1m', txo.tx.date, txo.tx.description, '\u001b[0m');
-            console.log('           ', txo.type, txo.amount, 'x', txo.target, 'owned', txo.targetTotal, 'avg.', txo.targetAverage, '(', txo.currency, txo.rate + '€', 'tax', txo.tax, 'fee', txo.fee, ')');
+            console.log('           ', txo.type, txo.amount, 'x', txo.target + ',', 'owned:', txo.targetTotal, 'avg.', txo.targetAverage, '(', txo.currency, txo.rate + '€', 'tax', txo.tax, 'fee', txo.fee, ')');
             txo.tx.entries.forEach((entry) => {
               console.log('           \u001b[33m', entry.number, '\u001b[0m', entry.amount);
             });
