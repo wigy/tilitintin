@@ -229,7 +229,7 @@ class Import {
     ];
 
     const avgPrice = this.averages[txo.target] || 0;
-    const buyPrice = Math.round(100 * (-txo.tradeAmount) * avgPrice) / 100;
+    const buyPrice = Math.round(100 * (-txo.amount) * avgPrice) / 100;
 
     if (this.config.noProfit) {
       // In case of not calculating profits yet, put in only buy price.
@@ -307,15 +307,15 @@ class Import {
         if (!this.config.noProfit) {
           parenthesis.push('k.h. nyt ' + num.currency(txo.targetAverage, '€/'  + txo.target));
         }
-        return 'Osto ' + num.trim(txo.tradeAmount, txo.target) + ' (' + parenthesis.join(', ')  + ')';
+        return 'Osto ' + num.trim(txo.amount, txo.target) + ' (' + parenthesis.join(', ')  + ')';
       case 'sell':
         if (!this.config.noProfit) {
           parenthesis.push('k.h. ' + num.currency(txo.targetAverage, '€/'  + txo.target));
         }
         parenthesis.push('jälj. ' + num.trim(txo.targetTotal, txo.target));
-        return 'Myynti ' + num.trim(txo.tradeAmount, txo.target) + ' (' + parenthesis.join(', ') + ')';
+        return 'Myynti ' + num.trim(txo.amount, txo.target) + ' (' + parenthesis.join(', ') + ')';
       case 'divident':
-        parenthesis.push(txo.tradeAmount + ' x ' + num.currency(txo.total / txo.tradeAmount / txo.rate, txo.currency, 5) + ' = ' + num.currency(txo.total / txo.rate, txo.currency));
+        parenthesis.push(txo.amount + ' x ' + num.currency(txo.total / txo.amount / txo.rate, txo.currency, 5) + ' = ' + num.currency(txo.total / txo.rate, txo.currency));
         if (txo.tax) {
           parenthesis.push('vero ' + num.currency(txo.tax / txo.rate, txo.currency) + ' = ' + num.currency(txo.tax, '€'));
         }
@@ -444,7 +444,7 @@ class Import {
    *   * `target` - Name of the target in the trade (like 'ETH' or 'BTC').
    *   * `currency` - Name of the currency used in the transaction (like 'EUR' or 'USD')
    *   * `rate` - Conversion rate to € for currency.
-   *   * `tradeAmount` - Amount of the target to trade or shares owned for divident.
+   *   * `amount` - Amount of the target to trade or shares owned for divident.
    *   * `targetAverage` - Average price of the target after the transaction.
    *   * `targetTotal` - Number of targets owned after the transaction.
    *   * `fee` - Service fee in euros.
@@ -462,7 +462,7 @@ class Import {
       target: null,
       currency: null,
       rate: null,
-      tradeAmount: null,
+      amount: null,
       targetAverage: null,
       targetTotal: null,
       fee: null,
@@ -496,17 +496,17 @@ class Import {
 
     // Calculate amounts and entries.
     if (ret.type !== 'withdrawal' && ret.type !== 'deposit' && ret.type !== 'fx') {
-      ret.tradeAmount = this.amount(ret);
+      ret.amount = this.amount(ret);
     }
     ret.tx.entries = this.entries(ret);
 
     // Update cumulative amounts.
-    if (ret.tradeAmount !== null && ['buy', 'sell'].includes(ret.type)) {
+    if (ret.amount !== null && ['buy', 'sell'].includes(ret.type)) {
       const oldTotal = this.amounts[ret.target];
       const oldAverage = this.averages[ret.target];
       const oldPrice = oldTotal * oldAverage;
       const newPrice = ret.total - ret.fee;
-      this.amounts[ret.target] += ret.tradeAmount;
+      this.amounts[ret.target] += ret.amount;
       const newTotal = this.amounts[ret.target];
       if (ret.type === 'buy') {
         this.averages[ret.target] = (oldPrice + newPrice) / newTotal;
@@ -617,7 +617,7 @@ class Import {
         if (dryRun) {
           txobjects.forEach((txo) => {
             console.log('\u001b[33;1m', txo.tx.date, txo.tx.description, '\u001b[0m');
-            console.log('           ', txo.type, txo.tradeAmount, 'x', txo.target, 'owned', txo.targetTotal, 'avg.', txo.targetAverage, '(', txo.currency, txo.rate + '€', 'tax', txo.tax, 'fee', txo.fee, ')');
+            console.log('           ', txo.type, txo.amount, 'x', txo.target, 'owned', txo.targetTotal, 'avg.', txo.targetAverage, '(', txo.currency, txo.rate + '€', 'tax', txo.tax, 'fee', txo.fee, ')');
             txo.tx.entries.forEach((entry) => {
               console.log('           \u001b[33m', entry.number, '\u001b[0m', entry.amount);
             });
