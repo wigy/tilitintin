@@ -1,5 +1,8 @@
 const Import = require('./base');
 
+// TODO: Superluotto handling.
+// TODO: Initial amounts.
+
 class NordnetImport extends Import {
 
   constructor() {
