@@ -97,8 +97,16 @@ class NordnetImport extends Import {
   }
 
   tax(txo) {
-//    if (txo.type === 'divident')
-//    console.log(txo);
+    if (txo.type === 'divident') {
+      const tax = txo.src.filter((tx) => tx.Tapahtumatyyppi === 'ENNAKKOPID_TYS');
+      if (tax.length) {
+        let ret = -parseFloat(tax[0].Summa.replace(',', '.'));
+        if (txo.rate) {
+          ret *= txo.rate;
+        }
+        return ret;
+      }
+    }
     return null;
   }
 

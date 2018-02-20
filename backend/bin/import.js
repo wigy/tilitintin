@@ -14,6 +14,8 @@ cli.opt('crypto', 1549, 'Number of an account for storing crypto currencies.');
 cli.opt('eth', null, 'Number of an account for storing ETH.');
 cli.opt('btc', null, 'Number of an account for storing BTC.');
 cli.opt('fees', 9690, 'Number of an account for trading fees.');
+cli.opt('tax', 9900, 'Number of an account for taxes.');
+cli.opt('srctax', 9930, 'Number of an account for foreign taxes.');
 cli.opt('interest', 9550, 'Number of an account for interest payments.');
 cli.opt('rounding', 8570, 'Number of an account for rounding errors.');
 cli.opt('losses', 9750, 'Number of an account for recording losses.');
@@ -37,6 +39,8 @@ importer.configure({
     eth: cli.options.eth,
     btc: cli.options.btc,
     fees: cli.options.fees,
+    tax: cli.options.tax,
+    srctax: cli.options.srctax,
     interest: cli.options.interest,
     rounding: cli.options.rounding,
     losses: cli.options.losses,

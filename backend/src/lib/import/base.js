@@ -259,11 +259,15 @@ class Import {
   dividentEntries(txo) {
     const acc = this.getAccount(txo.currency);
     let ret = [
-      {number: this.getAccount(txo.currency), amount: txo.total},
       {number: this.getAccount('dividents'), amount: Math.round(-100 * txo.total) / 100},
     ];
     if (txo.tax) {
-      console.log('TODO: tax', txo.tax);
+      const tax = Math.round(txo.tax * 100) / 100;
+      const acc = txo.currency === 'EUR' ? this.getAccount('tax') : this.getAccount('srctax');
+      ret.push({number: this.getAccount(txo.currency), amount: Math.round(100 * (txo.total - tax)) / 100});
+      ret.push({number: acc, amount: tax});
+    } else {
+      ret.push({number: this.getAccount(txo.currency), amount: txo.total});
     }
     return ret;
   }
