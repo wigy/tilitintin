@@ -230,7 +230,7 @@ class Import {
     ];
 
     const avgPrice = this.averages[txo.target] || 0;
-    const buyPrice = Math.round(100 * (-txo.amount) * avgPrice) / 100;
+    const buyPrice = avgPrice ? Math.round(100 * (-txo.amount) * avgPrice) / 100 : txo.total;
 
     if (this.config.noProfit) {
       // In case of not calculating profits yet, put in only buy price.
