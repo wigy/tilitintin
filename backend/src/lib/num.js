@@ -43,11 +43,12 @@ module.exports = {
   /**
    * Convert a mumber to currency with unit.
    */
-  currency: function(num, unit) {
-    let ret = sprintf('%.2f', num);
-    if (ret.length > 6) {
-      ret = ret.substr(0, ret.length - 6) + ',' + ret.substr(ret.length - 6);
+  currency: function(num, unit, digits=2) {
+    let [body, decimals] = sprintf('%.' + digits + 'f', num).split('.');
+    if (body.length > 3) {
+      body = body.substr(0, body.length - 3) + ',' + body.substr(body.length - 3);
     }
+    let ret = body + '.' + decimals;
     if (unit) {
       if (unit === 'USD') {
         ret = '$' + ret;

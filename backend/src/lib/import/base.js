@@ -245,6 +245,8 @@ class Import {
         // In profits, add to credit side into profits
         ret.push({number: this.getAccount('profits'), amount: diff});
         ret.push({number: this.getAccountForTarget(txo), amount: -buyPrice});
+      } else {
+        ret.push({number: this.getAccountForTarget(txo), amount: -txo.total});
       }
     }
     return ret;
@@ -313,7 +315,7 @@ class Import {
         parenthesis.push('jälj. ' + num.trim(txo.targetTotal, txo.target));
         return 'Myynti ' + num.trim(txo.tradeAmount, txo.target) + ' (' + parenthesis.join(', ') + ')';
       case 'divident':
-        parenthesis.push(txo.tradeAmount + ' x ' + num.currency(txo.total / txo.tradeAmount / txo.rate, txo.currency) + ' = ' + num.currency(txo.total / txo.rate, txo.currency));
+        parenthesis.push(txo.tradeAmount + ' x ' + num.currency(txo.total / txo.tradeAmount / txo.rate, txo.currency, 5) + ' = ' + num.currency(txo.total / txo.rate, txo.currency));
         if (txo.tax) {
           parenthesis.push('vero ' + num.currency(txo.tax / txo.rate, txo.currency) + ' = ' + num.currency(txo.tax, '€'));
         }
@@ -442,7 +444,7 @@ class Import {
    *   * `target` - Name of the target in the trade (like 'ETH' or 'BTC').
    *   * `currency` - Name of the currency used in the transaction (like 'EUR' or 'USD')
    *   * `rate` - Conversion rate to € for currency.
-   *   * `tradeAmount` - Amount of the target to trade as stringified decimal number.
+   *   * `tradeAmount` - Amount of the target to trade or shares owned for divident.
    *   * `targetAverage` - Average price of the target after the transaction.
    *   * `targetTotal` - Number of targets owned after the transaction.
    *   * `fee` - Service fee in euros.
@@ -493,13 +495,13 @@ class Import {
     }
 
     // Calculate amounts and entries.
-    if (ret.type !== 'withdrawal' && ret.type !== 'deposit') {
+    if (ret.type !== 'withdrawal' && ret.type !== 'deposit' && ret.type !== 'fx') {
       ret.tradeAmount = this.amount(ret);
     }
     ret.tx.entries = this.entries(ret);
 
     // Update cumulative amounts.
-    if (ret.tradeAmount !== null) {
+    if (ret.tradeAmount !== null && ['buy', 'sell'].includes(ret.type)) {
       const oldTotal = this.amounts[ret.target];
       const oldAverage = this.averages[ret.target];
       const oldPrice = oldTotal * oldAverage;
@@ -615,7 +617,7 @@ class Import {
         if (dryRun) {
           txobjects.forEach((txo) => {
             console.log('\u001b[33;1m', txo.tx.date, txo.tx.description, '\u001b[0m');
-            console.log('           ', txo.type, txo.tradeAmount, txo.target, 'owned', txo.targetTotal, 'avg.', txo.targetAverage);
+            console.log('           ', txo.type, txo.tradeAmount, 'x', txo.target, 'owned', txo.targetTotal, 'avg.', txo.targetAverage, '(', txo.currency, txo.rate + '€', 'tax', txo.tax, 'fee', txo.fee, ')');
             txo.tx.entries.forEach((entry) => {
               console.log('           \u001b[33m', entry.number, '\u001b[0m', entry.amount);
             });
