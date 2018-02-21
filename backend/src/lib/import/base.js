@@ -41,12 +41,18 @@ class Import {
     this.serviceName = serviceName;
     // Name of the database currently in use.
     this.db = null;
+    // Knex instance for accessing DB.
+    this.knex = null;
     // Configuration variables.
     this.config = {};
     // Running totals of each trade target owned.
     this.amounts = {};
     // Tunning totals of the average cost of each trade target in euros.
     this.averages = {};
+    // Running balances of accounts using a loan.
+    this.balances = {};
+    // Mapping from account numbers to account IDs.
+    this.accountByNumber = {};
   }
 
   /**
@@ -55,12 +61,35 @@ class Import {
   init() {
     this.amounts = {};
     this.averages = {};
-    return Promise.resolve();
+    this.balances = {};
+
+    // Fill in account numbers.
+    return this.knex.select('id', 'number')
+      .from('account')
+      .then((data) => {
+        data.forEach((account) => this.accountByNumber[account.number] = account.id);
+      })
+      .then(() => {
+        // Get the balances of accounts targeted with loans.
+        if (this.config.loans) {
+          return Promise.all(Object.keys(this.config.loans).map((name) => {
+            const number = this.getAccount(name);
+            return this.knex.select(this.knex.raw('SUM(debit * amount) + SUM((debit - 1) * amount) AS total'))
+              .from('entry')
+              .where({account_id: this.accountByNumber[number]})
+              .then((data) => {
+                console.log('Using balance', num.currency(data[0].total, '€'), 'for account', number);
+                this.balances[number] = data[0].total;
+              });
+          }));
+        }
+      });
   }
 
   /**
    * Resolve account number based on its purpose.
    * @param {string} name Account purpose (see `configure()`).
+   * @return {string} Number of the account.
    */
   getAccount(name) {
     name = name.toLowerCase();
@@ -490,14 +519,6 @@ class Import {
   process(txo) {
     let ret = txo;
 
-    // Initialize new targets. TODO: Move elsewhere.
-    if (ret.target !== null && this.amounts[ret.target] === undefined) {
-      this.amounts[ret.target] = 0.0;
-    }
-    if (ret.target !== null && this.averages[ret.target] === undefined) {
-      this.averages[ret.target] = 0.0;
-    }
-
     // Calculate amounts and entries.
     if (ret.type !== 'withdrawal' && ret.type !== 'deposit' && ret.type !== 'fx') {
       ret.amount = this.amount(ret);
@@ -624,7 +645,7 @@ class Import {
         }
         return txobjects;
       });
-}
+  }
 
   /**
    * Handler for importing.

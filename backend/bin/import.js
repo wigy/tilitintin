@@ -34,7 +34,7 @@ importer.configure({
   fund: cli.options.fund,
   noProfit: cli.options.noprofit,
   loans: {
-    eur: null,
+    eur: cli.options['eur-loan'],
   },
   accounts: {
     bank: cli.options.bank,
