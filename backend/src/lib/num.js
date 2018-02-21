@@ -28,9 +28,8 @@ module.exports = {
       ret = '+' + ret;
     }
 
-    ret = ret.replace(/0+$/,'');
+    ret = ret.replace(/(.+)\.(.*)(0+)$/,'$1.$2');
     ret = ret.replace(/\.$/,'');
-
     ret = ret === '+' ? '+0' : ret;
 
     if (unit !== null) {

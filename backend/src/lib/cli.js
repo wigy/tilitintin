@@ -38,7 +38,7 @@ class Cli {
   parseOptions() {
     while (this.__remaining[2] && this.__remaining[2].substr(0, 2) === '--') {
       const opt = this.__remaining[2].substr(2, this.__remaining[2].length);
-      const match = /^(\w+)=(.*)/.exec(opt);
+      const match = /^([-a-z0-9]+)=(.*)/.exec(opt);
       if (this.__options[opt] && !match) {
         this.options[opt] = true;
       } else {
