@@ -5,6 +5,7 @@ const csv = require('csvtojson');
 const num = require('../num');
 const tx = require('../tx');
 const data = require('../data');
+const text = require('../text');
 
 /**
  * A base class for importing data files and converting them to the transactions.
@@ -16,7 +17,8 @@ const data = require('../data');
  * 3. An array of data is received and is then grouped to arrays forming transactions with `grouping(data)`.
  * 4. Each group is preprosessed with `preprocess(group)`.
  *    a) By default every item in the group is processed with `trimItem(obj)`.
- * 5. Each group is converted to the transaction objects in `process(group)`.
+ * 5. Every source object is transformed to tx-object with `prepare(obj)`.
+ * 6. Each group is converted to the transaction objects in `process(group)`.
  *    a) Date is resolved with `date(txobject)`.
  *    b) Each group is classified to transaction type using `recognize(txobject)`.
  *    c) Main currency of the transaction is found out with `currency(txobject)`.
@@ -29,8 +31,8 @@ const data = require('../data');
  *    j) Construct entries for transaction with `entries(txobject)`.
  *       - Based on the type, the function `<type>Entries(txobject)` is called.
  *    k) The description is constructed with `describe(txobject)`.
- * 6. All transactions are checked and rounding errors are fixed using fixRoundingErrors(list).
- * 7. The list of transaction objects is post-processed in `postprocess(list)`.
+ * 7. All transactions are checked and rounding errors are fixed using fixRoundingErrors(list).
+ * 8. The list of transaction objects is post-processed in `postprocess(list)`.
  */
 class Import {
 
@@ -53,30 +55,7 @@ class Import {
   init() {
     this.amounts = {};
     this.averages = {};
-    // Make sanity check.
-    return this.knex.max('id AS max').from('period')
-      .then((data) => {
-        if (!data || !data.length) {
-          throw new Error('Cannot find any periods from the database.');
-        }
-        return (this.knex.select('description')
-          .from('entry')
-          .where('description', 'LIKE', '%[' + this.config.service  + ']%k.h.%')
-          .leftJoin('document', 'entry.document_id', 'document.id').orderBy('date', 'desc'));
-      })
-      .then((data) => {
-        data.forEach((desc) => {
-          const regex = /\bk\.h\. (nyt )?([0-9,]+\.\d\d) €\/([A-Z]+)\b/.exec(desc.description);
-          if (regex) {
-            const price = parseFloat(regex[2].replace(/,/g, ''));
-            const target = regex[3];
-            if (!this.averages[target]) {
-              this.averages[target] = price;
-              console.log('Using average', num.currency(price, '€/' + target));
-            }
-          }
-        });
-      });
+    return Promise.resolve();
   }
 
   /**
@@ -469,9 +448,13 @@ class Import {
    *   * `tx.date`- a transaction date
    *   * `tx.description` - a transaction description
    *   * `tx.entries` - a list of transaction entries
+   *
+   * Two functions are used. Prepare is called first. It converts original data objects to
+   * transaction objects, that contains some of the fields.
    */
-  process(group) {
+  prepare(group) {
 
+    // Initial template for txo.
     let ret = {
       src: group,
       type: null,
@@ -490,7 +473,6 @@ class Import {
         entries: []
       }
     };
-
     // Get basics.
     ret.tx.date = this.date(group[0]);
     ret.type = this.recognize(ret);
@@ -503,7 +485,12 @@ class Import {
       ret.target = this.target(ret);
     }
 
-    // Initialize new targgets.
+    return ret;
+  }
+  process(txo) {
+    let ret = txo;
+
+    // Initialize new targets. TODO: Move elsewhere.
     if (ret.target !== null && this.amounts[ret.target] === undefined) {
       this.amounts[ret.target] = 0.0;
     }
@@ -606,6 +593,40 @@ class Import {
   }
 
   /**
+   * Collect targets and find out their historical data, i.e. amounts owned and average prices.
+   */
+  collectHistory(txobjects) {
+    if (this.config.noProfit) {
+      return txobjects;
+    }
+    let targets = {};
+    txobjects.forEach((txo) => {if (['buy', 'sell', 'divident'].includes(txo.type)) targets[txo.target]=true;});
+
+    return this.knex.select('description')
+      .from('entry')
+      .where('description', 'LIKE', '%[' + this.config.service  + ']%k.h.%')
+      .leftJoin('document', 'entry.document_id', 'document.id').orderBy('date', 'desc')
+      .then((data) => {
+        for (let i=0; i < data.length; i++) {
+          const desc = text.parse(data[i].description);
+          if (desc.target && targets[desc.target]) {
+            if (!this.averages[desc.target] && desc.avg) {
+              this.averages[desc.target] = desc.avg;
+              this.amounts[desc.target] = desc.amount;
+              console.log('Using average', num.currency(desc.avg, '€'), 'for', desc.amount, 'x', desc.target);
+
+              delete targets[desc.target];
+              if (!Object.keys(targets).length) {
+                return txobjects;
+              }
+            }
+          }
+        }
+        return txobjects;
+      });
+}
+
+  /**
    * Handler for importing.
    *
    * @param {string} db Name of the database.
@@ -627,7 +648,9 @@ class Import {
       .then((data) => this.grouping(data))
       .then(data => data.sort(sorter))
       .then((groups) => this.preprocess(groups))
-      .then((groups) => groups.map((group => this.process(group))))
+      .then((groups) => groups.map((group => this.prepare(group))))
+      .then((txobjects) => this.collectHistory(txobjects))
+      .then((txobjects) => txobjects.map((txo => this.process(txo))))
       .then((txobjects) => this.fixRoudingErrors(txobjects))
       .then((txobjects) => this.postprocess(txobjects))
       .then((txobjects) => {

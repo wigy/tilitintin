@@ -59,7 +59,8 @@ class Description {
    * @param {String} text
    * @return {Description}
    */
-  static parse(text) {
+  static parse(text0) {
+    let text = text0;
     let ret = new Description();
 
     // Extract tags.
@@ -82,7 +83,7 @@ class Description {
     // Extract numbers and target.
     const match = /^(Myynti|Osto) ([-+][0-9.]+) ([A-Z0-9]+)\b(.*)/.exec(text);
     if (!match) {
-      throw new Error('Unable to analyze ' + JSON.stringify(text));
+      throw new Error('Unable to analyze ' + JSON.stringify(text0));
     }
     ret.type = match[1] === 'Myynti' ? 'sell' : 'buy';
     ret.target = match[3];
@@ -92,17 +93,17 @@ class Description {
 
     // Analyse notes.
     ret.notes.forEach((note, idx) => {
-      let match = /^(yht\.|jälj\.) ([-+0-9.]+) (\w+)$/.exec(note);
+      let match = /^(yht\.|jälj\.) ([-+0-9.]+)(.*)$/.exec(note);
       if (match) {
         ret.total = parseFloat(match[2]);
-        ret.notes[idx] = match[1] + ' +# ' + match[3];
+        ret.notes[idx] = match[1] + ' +#' + match[3];
       } else {
         match = /^(k\.h\.)( nyt)? ([0-9.,]+) (€\/\w+)$/.exec(note);
         if (match) {
           ret.avg = parseFloat(match[3].replace(/,/g, ''));
           ret.notes[idx] = match[1] + (match[2] || '') + ' +$/### ' + match[4];
         } else {
-          throw new Error('Unable to parse ' + JSON.stringify(note));
+          throw new Error('Unable to parse note ' + JSON.stringify(note));
         }
       }
     });
