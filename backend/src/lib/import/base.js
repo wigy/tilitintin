@@ -39,7 +39,7 @@ class Import {
   constructor(serviceName) {
     // Name of the service.
     this.serviceName = serviceName;
-    // Name of the database currently in use.
+    // Name of the database currenctly in use.
     this.db = null;
     // Knex instance for accessing DB.
     this.knex = null;
@@ -70,16 +70,20 @@ class Import {
         data.forEach((account) => this.accountByNumber[account.number] = account.id);
       })
       .then(() => {
-        // Get the balances of accounts targeted with loans.
+        // Get the balances of accounts targeted with loans and loan accounts.
         if (this.config.loans) {
-          return Promise.all(Object.keys(this.config.loans).map((name) => {
-            const number = this.getAccount(name);
+          // Need loan accounts.
+          let needed = Object.values(this.config.loans);
+          // And their counterparts.
+          needed = needed.concat(Object.keys(this.config.loans).map((name) => this.getAccount(name)));
+          return Promise.all(needed.map((number) => {
             return this.knex.select(this.knex.raw('SUM(debit * amount) + SUM((debit - 1) * amount) AS total'))
               .from('entry')
               .where({account_id: this.accountByNumber[number]})
+              .andWhere('description', '<>', 'Alkusaldo')
               .then((data) => {
                 console.log('Using balance', num.currency(data[0].total, '€'), 'for account', number);
-                this.balances[number] = data[0].total;
+                this.balances[number] = data ? data[0].total : 0;
               });
           }));
         }
@@ -110,7 +114,7 @@ class Import {
    * Configuration variables are:
    *   * `accounts.bank` - account number for bank deposits and withdraws
    *   * `accounts.euro` - account number for storing € in the service
-   *   * `accounts.crypto` - account number for storing crypto currencies by default
+   *   * `accounts.crypto` - account number for storing crypto currenccies by default
    *   * `accounts.eth` - account number for storing ETH
    *   * `accounts.btc` - account number for  storing BTC
    *   * `accounts.rounding` - account number for trimming transaction rounding errors
@@ -157,6 +161,18 @@ class Import {
   }
 
   /**
+   * Update the running balance for the account if it is maintained for loan purposes.
+   * @param {String} number
+   * @param {Number} amount
+   */
+  updateBalance(number, amount) {
+    if (number in this.balances) {
+      this.balances[number] += amount;
+      console.log('Updating balance of', number, 'by', num.currency(amount, '€'), 'to', num.currency(this.balances[number], '€'));
+    }
+  }
+
+  /**
    * Construct entries for the transaction.
    *
    * @param {Object} txo An transaction object.
@@ -178,15 +194,20 @@ class Import {
    * Create deposit entries.
    */
   depositEntries(txo) {
+    // Fees
     if (txo.fee) {
+      const amount = Math.round((txo.total - txo.fee) * 100) / 100;
+      this.updateBalance(this.getAccount(txo.currency), amount);
       return [
-        {number: this.getAccount(txo.curreny), amount: Math.round((txo.total - txo.fee) * 100) / 100},
+        {number: this.getAccount(txo.currency), amount: amount},
         {number: this.getAccount('fees'), amount: txo.fee},
         {number: this.getAccount('bank'), amount: -txo.total},
       ];
     }
+    // No fees
+    this.updateBalance(this.getAccount(txo.currency), txo.total);
     return [
-      {number: this.getAccount(txo.curreny), amount: txo.total},
+      {number: this.getAccount(txo.currency), amount: txo.total},
       {number: this.getAccount('bank'), amount: -txo.total},
     ];
   }
@@ -195,16 +216,17 @@ class Import {
    * Create withdrawal entries.
    */
   withdrawalEntries(txo) {
+    this.updateBalance(this.getAccount(txo.currency), -txo.total);
     if (txo.fee) {
       return [
         {number: this.getAccount('bank'), amount: Math.round((txo.total - txo.fee) * 100) / 100},
         {number: this.getAccount('fees'), amount: txo.fee},
-        {number: this.getAccount(txo.curreny), amount: -txo.total},
+        {number: this.getAccount(txo.currency), amount: -txo.total},
       ];
     }
     return [
       {number: this.getAccount('bank'), amount: txo.total},
-      {number: this.getAccount(txo.curreny), amount: -txo.total},
+      {number: this.getAccount(txo.currency), amount: -txo.total},
     ];
   }
 
@@ -217,7 +239,7 @@ class Import {
       {number: this.getAccount('fees'), amount: txo.fee},
       {number: this.getAccount(txo.currency), amount: -txo.total},
     ];
-
+    this.updateBalance(this.getAccount(txo.currency), -txo.total);
     return ret;
   }
 
@@ -232,10 +254,13 @@ class Import {
    * Create selling entries.
    */
   sellEntries(txo) {
+    const amount = Math.round((txo.total - txo.fee) * 100) / 100;
     let ret = [
-      {number: this.getAccount(txo.currency), amount: Math.round((txo.total - txo.fee) * 100) / 100},
+      {number: this.getAccount(txo.currency), amount: amount},
       {number: this.getAccount('fees'), amount: txo.fee},
     ];
+    // TODO: Handle loan repayments.
+    this.updateBalance(this.getAccount(txo.currency), amount);
 
     const avgPrice = this.averages[txo.target] || 0;
     const buyPrice = avgPrice ? Math.round(100 * (-txo.amount) * avgPrice) / 100 : txo.total;
@@ -272,9 +297,12 @@ class Import {
     if (txo.tax) {
       const tax = Math.round(txo.tax * 100) / 100;
       const acc = txo.currency === 'EUR' ? this.getAccount('tax') : this.getAccount('srctax');
-      ret.push({number: this.getAccount(txo.currency), amount: Math.round(100 * (txo.total - tax)) / 100});
+      const amount = Math.round(100 * (txo.total - tax)) / 100;
+      this.updateBalance(this.getAccount(txo.currency), txo.total);
+      ret.push({number: this.getAccount(txo.currency), amount: amount});
       ret.push({number: acc, amount: tax});
     } else {
+      this.updateBalance(this.getAccount(txo.currency), txo.total);
       ret.push({number: this.getAccount(txo.currency), amount: txo.total});
     }
     return ret;
@@ -284,10 +312,13 @@ class Import {
    * Create foreign exchange entries.
    */
   fxEntries(txo) {
+    let neg = Math.round(-100 * txo.total) / 100;
     let ret = [
       {number: this.getAccount(txo.currency), amount: txo.total},
-      {number: this.getAccount(txo.target), amount: Math.round(-100 * txo.total) / 100},
+      {number: this.getAccount(txo.target), amount: neg},
     ];
+    this.updateBalance(this.getAccount(txo.currency), txo.total);
+    this.updateBalance(this.getAccount(txo.target), neg);
     return ret;
   }
 
@@ -295,10 +326,12 @@ class Import {
    * Create interest payment entries.
    */
   interestEntries(txo) {
+    const amount = Math.round(-100 * txo.total) / 100;
     let ret = [
-      {number: this.getAccount(txo.currency), amount: Math.round(-100 * txo.total) / 100},
+      {number: this.getAccount(txo.currency), amount: amount},
       {number: this.getAccount('interest'), amount: txo.total},
     ];
+    this.updateBalance(this.getAccount(txo.currency), amount);
     return ret;
   }
 
@@ -667,6 +700,7 @@ class Import {
     return this.init()
       .then(() => this.load(file))
       .then((data) => this.grouping(data))
+      // TODO: At this point, construct identifiers for entries and remove those marked in DB as imported.
       .then(data => data.sort(sorter))
       .then((groups) => this.preprocess(groups))
       .then((groups) => groups.map((group => this.prepare(group))))
