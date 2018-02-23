@@ -174,6 +174,15 @@ class Import {
   }
 
   /**
+   * Update all balances and update loans for those accounts having loan-counterpart account.
+   * @param {Array} entries
+   */
+  checkLoans(entries) {
+    entries.forEach((entry) => this.updateBalance(entry.number, entry.amount));
+    return entries;
+  }
+
+  /**
    * Construct entries for the transaction.
    *
    * @param {Object} txo An transaction object.
@@ -198,7 +207,6 @@ class Import {
     // Fees
     if (txo.fee) {
       const amount = Math.round((txo.total - txo.fee) * 100) / 100;
-      this.updateBalance(this.getAccount(txo.currency), amount);
       return [
         {number: this.getAccount(txo.currency), amount: amount},
         {number: this.getAccount('fees'), amount: txo.fee},
@@ -206,7 +214,6 @@ class Import {
       ];
     }
     // No fees
-    this.updateBalance(this.getAccount(txo.currency), txo.total);
     return [
       {number: this.getAccount(txo.currency), amount: txo.total},
       {number: this.getAccount('bank'), amount: -txo.total},
@@ -217,7 +224,6 @@ class Import {
    * Create withdrawal entries.
    */
   withdrawalEntries(txo) {
-    this.updateBalance(this.getAccount(txo.currency), -txo.total);
     if (txo.fee) {
       return [
         {number: this.getAccount('bank'), amount: Math.round((txo.total - txo.fee) * 100) / 100},
@@ -240,7 +246,6 @@ class Import {
       {number: this.getAccount('fees'), amount: txo.fee},
       {number: this.getAccount(txo.currency), amount: -txo.total},
     ];
-    this.updateBalance(this.getAccount(txo.currency), -txo.total);
     return ret;
   }
 
@@ -260,8 +265,6 @@ class Import {
       {number: this.getAccount(txo.currency), amount: amount},
       {number: this.getAccount('fees'), amount: txo.fee},
     ];
-    // TODO: Handle loan repayments.
-    this.updateBalance(this.getAccount(txo.currency), amount);
 
     const avgPrice = this.averages[txo.target] || 0;
     const buyPrice = avgPrice ? Math.round(100 * (-txo.amount) * avgPrice) / 100 : txo.total;
@@ -299,11 +302,9 @@ class Import {
       const tax = Math.round(txo.tax * 100) / 100;
       const acc = txo.currency === 'EUR' ? this.getAccount('tax') : this.getAccount('srctax');
       const amount = Math.round(100 * (txo.total - tax)) / 100;
-      this.updateBalance(this.getAccount(txo.currency), txo.total);
       ret.push({number: this.getAccount(txo.currency), amount: amount});
       ret.push({number: acc, amount: tax});
     } else {
-      this.updateBalance(this.getAccount(txo.currency), txo.total);
       ret.push({number: this.getAccount(txo.currency), amount: txo.total});
     }
     return ret;
@@ -318,8 +319,6 @@ class Import {
       {number: this.getAccount(txo.currency), amount: txo.total},
       {number: this.getAccount(txo.target), amount: neg},
     ];
-    this.updateBalance(this.getAccount(txo.currency), txo.total);
-    this.updateBalance(this.getAccount(txo.target), neg);
     return ret;
   }
 
@@ -332,7 +331,6 @@ class Import {
       {number: this.getAccount(txo.currency), amount: amount},
       {number: this.getAccount('interest'), amount: txo.total},
     ];
-    this.updateBalance(this.getAccount(txo.currency), amount);
     return ret;
   }
 
@@ -568,6 +566,9 @@ class Import {
       ret.amount = this.amount(ret);
     }
     ret.tx.entries = this.entries(ret);
+
+    // Update balances and add loan entries, if needed.
+    ret.tx.entries = this.checkLoans(ret.tx.entries);
 
     // Update cumulative amounts.
     if (ret.amount !== null && ['buy', 'sell'].includes(ret.type)) {
