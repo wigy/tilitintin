@@ -82,8 +82,9 @@ class Import {
               .where({account_id: this.accountByNumber[number]})
               .andWhere('description', '<>', 'Alkusaldo')
               .then((data) => {
-                console.log('Using balance', num.currency(data[0].total, '€'), 'for account', number);
-                this.balances[number] = data ? data[0].total : 0;
+                const total = data[0].total || 0;
+                console.log('Using balance', num.currency(total, '€'), 'for account', number);
+                this.balances[number] = total;
               });
           }));
         }
@@ -547,8 +548,18 @@ class Import {
       ret.target = this.target(ret);
     }
 
+    // Initialize new targgets.
+    if (ret.target !== null && this.amounts[ret.target] === undefined) {
+      this.amounts[ret.target] = 0.0;
+    }
+    if (ret.target !== null && this.averages[ret.target] === undefined) {
+      this.averages[ret.target] = 0.0;
+    }
+
     return ret;
   }
+
+  // Part 2 of processing.
   process(txo) {
     let ret = txo;
 
@@ -712,7 +723,7 @@ class Import {
         if (dryRun) {
           txobjects.forEach((txo) => {
             console.log('\u001b[33;1m', txo.tx.date, txo.tx.description, '\u001b[0m');
-            console.log('           ', txo.type, txo.amount, 'x', txo.target + ',', 'owned:', txo.targetTotal, 'avg.', txo.targetAverage, '(', txo.currency, txo.rate + '€', 'tax', txo.tax, 'fee', txo.fee, ')');
+            console.log('           ', txo.type, txo.amount, 'x', txo.target + ',', 'owned:', txo.targetTotal, 'avg.', txo.targetAverage, '(', txo.currency, txo.rate + '€', 'tax', txo.tax, 'fee', txo.fee, 'rate', txo.rate, ')');
             txo.tx.entries.forEach((entry) => {
               console.log('           \u001b[33m', entry.number, '\u001b[0m', entry.amount);
             });

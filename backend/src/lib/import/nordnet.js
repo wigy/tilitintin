@@ -11,7 +11,7 @@ class NordnetImport extends Import {
 
   // Helper to convert string amount to parseable string.
   num(str) {
-    return str.replace(',', '.').replace(/ /g, '');
+    return parseFloat(str.replace(',', '.').replace(/ /g, ''));
   }
 
   load(file) {
@@ -61,6 +61,9 @@ class NordnetImport extends Import {
     if (types.includes('LAINAKORKO')) {
       return 'interest';
     }
+    if (types.includes('TALLETUS')) {
+      return 'deposit';
+    }
     throw new Error('Cannot recognize entry with types ' + types.join(', ') + ': ' + JSON.stringify(txo));
   }
 
@@ -79,7 +82,14 @@ class NordnetImport extends Import {
   }
 
   rate(txo) {
-    return parseFloat(this.num(txo.src[0].Valuuttakurssi));
+    let ret = 1.0;
+    txo.src.forEach((tx) => {
+      if (tx.Valuutta !== 'EUR') {
+        ret = this.num(tx.Valuuttakurssi);
+      }
+    });
+
+    return ret;
   }
 
   total(txo) {
@@ -87,16 +97,14 @@ class NordnetImport extends Import {
     if (txo.type === 'fx') {
       txo.src.forEach((tx) => {
         if (tx.Valuutta === 'EUR') {
-          sum += Math.abs(parseFloat(this.num(tx.Summa)));
+          sum += Math.abs(this.num(tx.Summa));
         }
       });
     } else {
       txo.src.forEach((tx) => {
-        const value = Math.abs(parseFloat(this.num(tx.Summa)));
-        const fees = Math.abs(parseFloat(this.num(tx.Maksut)));
-        const rate = Math.abs(parseFloat(this.num(tx.Valuuttakurssi)));
+        const value = Math.abs(this.num(tx.Summa));
+        const rate = Math.abs(this.num(tx.Valuuttakurssi));
         sum += value * rate;
-        sum += fees * rate;
       });
     }
     return Math.round(100 * sum) / 100;
@@ -105,8 +113,8 @@ class NordnetImport extends Import {
   fee(txo) {
     let sum = 0;
     txo.src.forEach((tx) => {
-      const fees = Math.abs(parseFloat(this.num(tx.Maksut)));
-      const rate = Math.abs(parseFloat(this.num(tx.Valuuttakurssi)));
+      const fees = Math.abs(this.num(tx.Maksut));
+      const rate = Math.abs(this.num(tx.Valuuttakurssi));
       sum += fees * rate;
     });
     return Math.round(100 * sum) / 100;
@@ -116,7 +124,7 @@ class NordnetImport extends Import {
     if (txo.type === 'divident') {
       const tax = txo.src.filter((tx) => tx.Tapahtumatyyppi === 'ENNAKKOPID_TYS');
       if (tax.length) {
-        let ret = -parseFloat(this.num(tax[0].Summa));
+        let ret = -(this.num(tax[0].Summa));
         if (txo.rate) {
           ret *= txo.rate;
         }
@@ -144,12 +152,12 @@ class NordnetImport extends Import {
 
   // Helper to find entry giving out money.
   _given(txo) {
-    return txo.src.filter((tx) => parseFloat(this.num(tx.Summa)) < 0)[0];
+    return txo.src.filter((tx) => this.num(tx.Summa) < 0)[0];
   }
 
   // Helper to find entry receiving in money.
   _received(txo) {
-    return txo.src.filter((tx) => parseFloat(this.num(tx.Summa)) > 0)[0];
+    return txo.src.filter((tx) => this.num(tx.Summa) > 0)[0];
   }
 
   amount(txo) {
