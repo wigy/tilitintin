@@ -696,10 +696,9 @@ class Import {
    *
    * @param {string} db Name of the database.
    * @param {string} file A path to the file to be imported.
-   * @param {boolean} dryRun If set, do not store but show on console instead.
    * @return {Promise} Promise resolving to the number of entries created.
    */
-  import(db, file, dryRun) {
+  import(db, file) {
     this.db = db;
     this.knex = knex.db(db);
 
@@ -720,7 +719,7 @@ class Import {
       .then((txobjects) => this.fixRoudingErrors(txobjects))
       .then((txobjects) => this.postprocess(txobjects))
       .then((txobjects) => {
-        if (dryRun) {
+        if (this.config.debug) {
           txobjects.forEach((txo) => {
             console.log('\u001b[33;1m', txo.tx.date, txo.tx.description, '\u001b[0m');
             console.log('           ', txo.type, txo.amount, 'x', txo.target + ',', 'owned:', txo.targetTotal, 'avg.', txo.targetAverage, '(', txo.currency, txo.rate + '€', 'tax', txo.tax, 'fee', txo.fee, 'rate', txo.rate, ')');
@@ -732,7 +731,7 @@ class Import {
         return txobjects;
       })
       .then((txobjects) => {
-        if (!dryRun) {
+        if (!this.config.dryRun) {
           const creators = txobjects.map((txo) => () => tx.add(db, txo.tx.date, txo.tx.description, txo.tx.entries));
           console.log('Saving', creators.length, 'entries.');
           return promiseSeq(creators);

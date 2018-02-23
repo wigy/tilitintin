@@ -4,7 +4,8 @@ const knex = require('../src/lib/knex');
 
 // TODO: Need to create table `imports` to store imported lines from generated unique line IDs.
 
-cli.opt('debug', false, 'To turn dry-run on.');
+cli.opt('dry-run', false, 'To turn dry-run on.');
+cli.opt('debug', false, 'To turn dry-run on and display entries.');
 cli.opt('noprofit', false, 'Turn off profit and losses calculations (to be calculated later).');
 cli.opt('service', null, 'Name of the service tag if any.');
 cli.opt('fund', null, 'Additional fund tag if any.');
@@ -33,6 +34,8 @@ importer.configure({
   service: cli.options.service,
   fund: cli.options.fund,
   noProfit: cli.options.noprofit,
+  dryRun: cli.options['dry-run'] || cli.options.debug,
+  debug: cli.options.debug,
   loans: {
     eur: cli.options['eur-loan'],
   },
