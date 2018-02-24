@@ -17,7 +17,7 @@ const text = require('../text');
  * 3. An array of data is received and is then grouped to arrays forming transactions with `grouping(data)`.
  * 4. Each group is preprosessed with `preprocess(group)`.
  *    a) By default every item in the group is processed with `trimItem(obj)`.
- * 5. Every source object is transformed to tx-object with `prepare(obj)`.
+ * 5. Every source object is transformed to transaction-object, i.e. `txo` with `prepare(obj)`.
  * 6. Each group is converted to the transaction objects in `process(group)`.
  *    a) Date is resolved with `date(txobject)`.
  *    b) Each group is classified to transaction type using `recognize(txobject)`.
@@ -30,6 +30,7 @@ const text = require('../text');
  *    i) Find the amonunt of the target in the trade if any `amount(txobject)`.
  *    j) Construct entries for transaction with `entries(txobject)`.
  *       - Based on the type, the function `<type>Entries(txobject)` is called.
+ *    k) Transaction entries are passed through `checkLoans(entries)` to process automatic loans.
  *    k) The description is constructed with `describe(txobject)`.
  * 7. All transactions are checked and rounding errors are fixed using fixRoundingErrors(list).
  * 8. The list of transaction objects is post-processed in `postprocess(list)`.
