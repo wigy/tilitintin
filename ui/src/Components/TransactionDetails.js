@@ -16,7 +16,7 @@ const TransactionDetails = (props) => {
     case 'description':
       text = (entry) => {
         const desc = entry.description.replace(/^(\[[A-Z-a-z0-9]+\])+\s*/, '');
-        const url = '/' + props.tx.db + '/period/' + props.tx.period_id + '/' + entry.account_id;
+        const url = '/' + props.tx.db + '/txs/' + props.tx.period_id + '/' + entry.account_id;
         return (
           <Link to={url}>
             {entry.number + ' ' + entry.name + (desc && props.tx.description !== desc ? ' - (' + desc  + ')': '')}

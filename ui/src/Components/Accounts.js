@@ -19,12 +19,12 @@ export default inject('store')(observer(class Accounts extends Component {
     if (!this.props.store.token) {
       return '';
     }
-
+    const {periodId} = this.props.store;
     // TODO: Headings from coa_heading table.
     return (
       <div className="Accounts">
         <h1>Tilit</h1>
-        {this.state.accounts.map(account => (<div key={account.id}><AccountLink key={account.id} account={account}/></div>))}
+        {this.state.accounts.map(account => (<div key={account.id}><AccountLink key={account.id} period={periodId} account={account}/></div>))}
       </div>
     );
   }

@@ -17,27 +17,27 @@ export default (class App extends Component {
         <div className="TopPanel Panel">
           <Route exact path="/" component={Menu}/>
           <Route exact path="/:db" component={Menu}/>
-          <Route exact path="/:db/period/:periodId" component={Menu}/>
-          <Route exact path="/:db/period/:periodId/:accountId" component={Menu}/>
-          <Route exact path="/:db/account" component={Menu}/>
-          <Route exact path="/:db/account/:accountId2" component={Menu}/>
-          <Route exact path="/:db/report" component={Menu}/>
+          <Route exact path="/:db/txs/:periodId" component={Menu}/>
+          <Route exact path="/:db/txs/:periodId/:accountId" component={Menu}/>
+          <Route exact path="/:db/account/:periodId" component={Menu}/>
+          <Route exact path="/:db/account/:periodId/:accountId" component={Menu}/>
+          <Route exact path="/:db/report/:periodId" component={Menu}/>
         </div>
         <div className="SidePanel Panel">
           <div className="Frame">
-            <Route path="/:db/period/:periodId" component={Balances}/>
-            <Route path="/:db/account" component={Accounts}/>
-            <Route path="/:db/report" component={Reports}/>
+            <Route path="/:db/txs/:periodId" component={Balances}/>
+            <Route path="/:db/account/:periodId" component={Accounts}/>
+            <Route path="/:db/report/:periodId" component={Reports}/>
           </div>
         </div>
         <div className="MainTopPanel Panel">
           <div className="Frame">
-            <Route path="/:db/period/:periodId/:accountId" component={ToolPanel}/>
+            <Route path="/:db/txs/:periodId/:accountId" component={ToolPanel}/>
           </div>
         </div>
         <div className="MainPanel Panel">
           <div className="Frame">
-            <Route path="/:db/period/:periodId/:accountId" component={AccountTransactions}/>
+            <Route path="/:db/txs/:periodId/:accountId" component={AccountTransactions}/>
             <Login />
           </div>
         </div>

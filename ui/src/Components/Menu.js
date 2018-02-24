@@ -54,7 +54,7 @@ export default inject('store')(observer(class Menu extends Component {
           <Nav bsStyle="tabs" activeKey="2" onSelect={k => this.handleSelect(k)}>
             <NavDropdown eventKey="2" title={periodId ? 'Jakso ' + periodId : 'Valitse jakso'} id="nav-dropdown" disabled={!db || notLoggedIn}>
               {this.props.store.periods.map(period => (
-                <MenuItem key={period.id} eventKey={'/' + db + '/period/' + period.id}>
+                <MenuItem key={period.id} eventKey={'/' + db + '/txs/' + period.id}>
                   <YYYYMMDD date={period.start_date} /> &mdash; <YYYYMMDD date={period.end_date} />
                 </MenuItem>
               ))}
@@ -67,14 +67,19 @@ export default inject('store')(observer(class Menu extends Component {
             </NavItem>
           </Nav>
 
-          <Nav bsStyle="tabs" pullRight activeKey="3" onSelect={() => this.handleSelect('/' + db + '/account/')}>
-            <NavItem eventKey="3" disabled={!db || notLoggedIn}>
+          <Nav bsStyle="tabs" pullRight activeKey="4" onSelect={() => this.handleSelect('/' + db + '/account/' + periodId)}>
+            <NavItem eventKey="4" disabled={!db || !periodId || notLoggedIn}>
               Tilit
             </NavItem>
           </Nav>
-          <Nav bsStyle="tabs" pullRight activeKey="4" onSelect={() => this.handleSelect('/' + db + '/report/')}>
-            <NavItem eventKey="4" disabled={!db || notLoggedIn}>
+          <Nav bsStyle="tabs" pullRight activeKey="5" onSelect={() => this.handleSelect('/' + db + '/report/' + periodId)}>
+            <NavItem eventKey="5" disabled={!db || !periodId || notLoggedIn}>
               Raportit
+            </NavItem>
+          </Nav>
+          <Nav bsStyle="tabs" pullRight activeKey="6" onSelect={() => this.handleSelect('/' + db + '/txs/' + periodId)} activeHref="/:db/account">
+            <NavItem eventKey="6" disabled={!db || !periodId || notLoggedIn}>
+              Tapahtumat
             </NavItem>
           </Nav>
 

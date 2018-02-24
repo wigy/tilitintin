@@ -4,7 +4,7 @@ import Money from './Money';
 import './BalanceLine.css';
 
 const BalanceLine = (props) => {
-  const dst = '/' + props.db + '/period/' + props.periodId + '/' + props.line.id;
+  const dst = '/' + props.db + '/txs/' + props.periodId + '/' + props.line.id;
   return (
     <tr className="BalanceLine">
       <td className="number"><Link to={dst}>{props.line.number}</Link></td>
