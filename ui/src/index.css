@@ -26,6 +26,7 @@ body a:hover {
 
 table {
   font-family: Times;
+  width: 100%;
 }
 
 td {
