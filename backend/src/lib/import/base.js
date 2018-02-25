@@ -109,6 +109,28 @@ class Import {
   }
 
   /**
+   * Get the account option name for an account number. Loan accounts are prefixed with `loan-`.
+   * @param {String} number
+   */
+  getName(number) {
+    let ret = null;
+    Object.keys(this.config.accounts).forEach((name) => {
+      if (this.config.accounts[name] === number) {
+        ret = name;
+      }
+    });
+    if (ret) {
+      return ret;
+    }
+    Object.keys(this.config.loans).forEach((name) => {
+      if (this.config.loans[name] === number) {
+        ret = 'loan-' + name;
+      }
+    });
+    return ret;
+  }
+
+  /**
    * Set the configuration for the importer.
    *
    * @param {Object} config
@@ -170,6 +192,8 @@ class Import {
   updateBalance(number, amount) {
     if (number in this.balances) {
       this.balances[number] += amount;
+      // Avoid cumulating rounding error.
+      this.balances[number] = Math.round(this.balances[number] * 100) / 100;
       console.log('Updating balance of', number, 'by', num.currency(amount, '€'), 'to', num.currency(this.balances[number], '€'));
     }
   }
@@ -179,8 +203,53 @@ class Import {
    * @param {Array} entries
    */
   checkLoans(entries) {
-    entries.forEach((entry) => this.updateBalance(entry.number, entry.amount));
-    return entries;
+    let loanUpdate = [];
+
+    entries.forEach((entry) => {
+      // Update balance.
+      this.updateBalance(entry.number, entry.amount);
+      // Check the loan accounts.
+      const name = this.getName(entry.number);
+      if (this.config.loans[name]) {
+        // If balance negative, make it a loan.
+        if (this.balances[entry.number] < 0) {
+            // TODO: Use separate loan name config.
+            const desc = '[' + this.config.service + ']' + '[' + this.config.fund + '] ' + this.config.service + '-palvelun laina';
+          loanUpdate.push({
+            number: entry.number,
+            amount: Math.round(-100 * this.balances[entry.number]) / 100,
+            description: desc
+          });
+          loanUpdate.push({
+            number: this.config.loans[name],
+            amount: this.balances[entry.number],
+            description: desc
+          });
+        } else if (this.balances[entry.number] > 0) {
+          const loan = -this.balances[this.config.loans[name]];
+          const payment = Math.round(100 * Math.min(loan, entry.amount)) / 100;
+          if (payment > 0) {
+            // TODO: Use separate loan name config.
+            const desc = '[' + this.config.service + ']' + '[' + this.config.fund + '] ' + this.config.service + '-palvelun lainan lyhennys';
+            loanUpdate.push({
+              number: entry.number,
+              amount: Math.round(-100 * payment) / 100,
+              description: desc
+            });
+            loanUpdate.push({
+              number: this.config.loans[name],
+              amount: payment,
+              description: desc
+            });
+          }
+        }
+      }
+    });
+
+    // Update accounts affected by loan entries.
+    loanUpdate.forEach((entry) => this.updateBalance(entry.number, entry.amount));
+
+    return entries.concat(loanUpdate);
   }
 
   /**
@@ -726,7 +795,7 @@ class Import {
             console.log('\u001b[33;1m', txo.tx.date, txo.tx.description, '\u001b[0m');
             console.log('           ', txo.type, txo.amount, 'x', txo.target + ',', 'owned:', txo.targetTotal, 'avg.', txo.targetAverage, '(', txo.currency, txo.rate + '€', 'tax', txo.tax, 'fee', txo.fee, 'rate', txo.rate, ')');
             txo.tx.entries.forEach((entry) => {
-              console.log('           \u001b[33m', entry.number, '\u001b[0m', entry.amount);
+              console.log('           \u001b[33m', entry.number, '\u001b[0m', entry.amount, '\t', entry.description || '');
             });
           });
         }
