@@ -77,10 +77,14 @@ class Import {
       .then(() => {
         // Get the balances of accounts targeted with loans and loan accounts.
         if (this.config.loans) {
-          // Need loan accounts.
-          let needed = Object.values(this.config.loans);
-          // And their counterparts.
-          needed = needed.concat(Object.keys(this.config.loans).map((name) => this.getAccount(name)));
+          let needed = [];
+          Object.keys(this.config.loans).forEach((name) => {
+            if (!this.config.loans[name]) {
+              return;
+            }
+            needed.push(this.config.loans[name]);
+            needed.push(this.getAccount(name));
+          });
           return Promise.all(needed.map((number) => {
             return this.knex.select(this.knex.raw('SUM(debit * amount) + SUM((debit - 1) * amount) AS total'))
               .from('entry')
