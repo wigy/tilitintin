@@ -45,5 +45,6 @@ function db(name) {
 module.exports = {
   dbs: dbs,
   isdb: isdb,
-  db: db
+  db: db,
+  knex: knex
 };
