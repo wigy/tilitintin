@@ -1,5 +1,5 @@
 const sprintf = require('sprintf');
-const Import = require('./base');
+const Import = require('../import');
 
 class CoinmotionImport extends Import {
 

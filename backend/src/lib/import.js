@@ -1,11 +1,11 @@
 const fs = require('fs');
 const promiseSeq = require('promise-sequential');
-const knex = require('../knex');
 const csv = require('csvtojson');
-const num = require('../num');
-const tx = require('../tx');
-const data = require('../data');
-const text = require('../text');
+const knex = require('./knex');
+const num = require('./num');
+const tx = require('./tx');
+const data = require('./data');
+const text = require('./text');
 
 /**
  * A base class for importing data files and converting them to the transactions.

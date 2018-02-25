@@ -36,6 +36,10 @@ function ensure(db) {
     });
 }
 
+/**
+ * Get all tags.
+ * @param {string} db The database name without `.sqlite`.
+ */
 function getAll(db) {
   return ensure(db)
     .then(() => {

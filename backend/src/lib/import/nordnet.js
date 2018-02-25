@@ -1,4 +1,4 @@
-const Import = require('./base');
+const Import = require('../import');
 
 // TODO: Superluotto handling.
 // TODO: Initial amounts.
