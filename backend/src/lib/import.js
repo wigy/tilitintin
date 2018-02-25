@@ -1,6 +1,7 @@
 const fs = require('fs');
 const promiseSeq = require('promise-sequential');
 const csv = require('csvtojson');
+const path = require('path');
 const knex = require('./knex');
 const num = require('./num');
 const tx = require('./tx');
@@ -46,6 +47,8 @@ class Import {
     this.serviceName = serviceName;
     // Name of the database currenctly in use.
     this.db = null;
+    // Latest file imported.
+    this.file = null;
     // Knex instance for accessing DB.
     this.knex = null;
     // Configuration variables.
@@ -198,8 +201,17 @@ class Import {
    * @param {Array<Object>} group
    */
   id(group) {
-    console.log(group);
     throw new Error('Importer does not implement id().');
+  }
+
+  /**
+   * Fallback ID if nothing better available for identifying transactions.
+   */
+  fileAndLineId(group) {
+    let id = path.basename(this.file);
+    id += ':';
+    id += group.map((group) => group.__lineNumber).sort((a, b) => a-b).join(',');
+    return id;
   }
 
   /**
@@ -745,6 +757,7 @@ class Import {
    * Special option `headers` can be given as an explicit list of headers.
    */
   loadCSV(file, opts = {}) {
+    this.file = file;
     return new Promise((resolve, reject) => {
 
       let headers = null;
@@ -769,6 +782,7 @@ class Import {
               for (let i = 0; i < row.length; i++) {
                 line[headers[i]] = row[i];
               }
+              line.__lineNumber = lines.length + 1;
               lines.push(line);
             }
           })
@@ -854,6 +868,7 @@ class Import {
       .then((txobjects) => {
         if (!this.config.dryRun) {
           const creators = txobjects.map((txo) => () => {
+            // TODO: Use force insert here, since import is already checked and tx can be identical (see CoinM).
             return tx.add(db, txo.tx.date, txo.tx.description, txo.tx.entries)
               .then((docId) => meta.imports.add(this.db, this.config.service, txo.src.id, docId));
           });

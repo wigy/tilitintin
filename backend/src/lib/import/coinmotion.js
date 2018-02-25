@@ -11,6 +11,10 @@ class CoinmotionImport extends Import {
     return this.loadCSV(file);
   }
 
+  id(group) {
+    return this.fileAndLineId(group);
+  }
+
   date(entry) {
     const [_, d, m, y] = /^(\d+)\.(\d+)\.(\d+)/.exec(entry.Date);
     return sprintf('%04d-%02d-%02d', parseInt(y), parseInt(m), parseInt(d));

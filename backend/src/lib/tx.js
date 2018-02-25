@@ -44,7 +44,7 @@ function addDocument(db, date) {
       return knex.db(db)
       .select(knex.db(db).raw('MAX(number) + 1 as number'))
       .from('document')
-      .then((nums) => nums ? nums[0].number : 1)
+      .then((nums) => nums ? nums[0].number || 0 : 1)
       .then((number) => {
         return knex.db(db)('document')
         .insert({

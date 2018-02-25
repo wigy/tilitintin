@@ -43,7 +43,7 @@ function ensureImport(db) {
  */
 function addImport(db, serviceTag, txId, docId) {
   if (!docId) {
-    throw new Error('No document ID given, when marking imported transaction ' + txId + ' for ' +  serviceTag);
+    throw new Error('No document ID given, when marking imported transaction ' + txId + ' for ' +  serviceTag + ' (tx exists?)');
   }
   return ensureImport(db)
     .then(() => {
