@@ -36,6 +36,10 @@ class KrakenImport extends Import {
     return Object.values(ret);
   }
 
+  id(group) {
+    return group[0].refid;
+  }
+
   recognize(txo) {
 
     if (txo.src.length === 1) {

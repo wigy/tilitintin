@@ -198,6 +198,7 @@ class Import {
    * @param {Array<Object>} group
    */
   id(group) {
+    console.log(group);
     throw new Error('Importer does not implement id().');
   }
 
