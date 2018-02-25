@@ -1,6 +1,10 @@
 import { extendObservable, runInAction } from 'mobx';
 
-const URL = document.location.protocol + '//' + document.location.hostname + ':3001';
+// TODO: Make this configurable.
+const hostParts = document.location.hostname.split('.');
+const URL = (document.location.hostname === 'localhost' ?
+  document.location.protocol + '//' + document.location.hostname + ':3001' :
+  document.location.protocol + '//' + hostParts[0]+'-api.' + hostParts.slice(1).join('.'));
 
 /**
  * The store structure is the following:
