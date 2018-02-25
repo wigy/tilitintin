@@ -213,8 +213,7 @@ class Import {
       if (this.config.loans[name]) {
         // If balance negative, make it a loan.
         if (this.balances[entry.number] < 0) {
-            // TODO: Use separate loan name config.
-            const desc = this.tags() + this.config.service + '-palvelun laina';
+            const desc = this.tags() + this.serviceName + '-palvelun laina';
           loanUpdate.push({
             number: entry.number,
             amount: Math.round(-100 * this.balances[entry.number]) / 100,
@@ -229,8 +228,7 @@ class Import {
           const loan = -this.balances[this.config.loans[name]];
           const payment = Math.round(100 * Math.min(loan, entry.amount)) / 100;
           if (payment > 0) {
-            // TODO: Use separate loan name config.
-            const desc = this.tags() + this.config.service + '-palvelun lainan lyhennys';
+            const desc = this.tags() + this.serviceName + '-palvelun lainan lyhennys';
             loanUpdate.push({
               number: entry.number,
               amount: Math.round(-100 * payment) / 100,
