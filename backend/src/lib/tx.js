@@ -179,7 +179,7 @@ function _checkTxs(db, date, txs) {
  * @param {string} date A date in YYYY-MM-DD format.
  * @param {string} description A text to be added to each entry.
  * @param {array} txs List of transactions.
- * @return {array} The document ID created.
+ * @return {array} The document ID created or null if already exists.
  *
  * The transaction is an array of entries like
  *   [
@@ -267,7 +267,7 @@ function add(db, date, description, txs) {
     })
     .then((hasAlready) => {
       if (hasAlready) {
-        return [];
+        return null;
       }
       return addDocument(db, date)
         .then((documentId) => {
