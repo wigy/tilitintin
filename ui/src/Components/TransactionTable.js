@@ -30,6 +30,7 @@ export default inject('store')(observer(class TransactionTable extends Component
     };
 
     let sum = 0;
+    let seen = {};
     return (<table className="TransactionTable">
       <thead>
         <tr className="Transaction heading">
@@ -44,7 +45,9 @@ export default inject('store')(observer(class TransactionTable extends Component
       </thead>
       <tbody>{
         filter(this.props.txs).map((tx, idx) => {
-          return <Transaction key={idx} tx={tx} total={sum+=(tx.debit ? tx.amount : -tx.amount)}/>;
+          const duplicate = seen[tx.number];
+          seen[tx.number] = true;
+          return <Transaction key={idx} duplicate={duplicate} tx={tx} total={sum+=(tx.debit ? tx.amount : -tx.amount)}/>;
         })}
       </tbody>
     </table>

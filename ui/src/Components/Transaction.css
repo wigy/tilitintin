@@ -3,6 +3,11 @@
   width: 5%;
 }
 
+.Transaction.duplicate .number {
+  font-style: italic;
+  color: rgba(0,0,0,0.5);
+}
+
 .Transaction .date {
   text-align: center;
   width: 10%;
