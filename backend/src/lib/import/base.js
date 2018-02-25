@@ -214,7 +214,7 @@ class Import {
         // If balance negative, make it a loan.
         if (this.balances[entry.number] < 0) {
             // TODO: Use separate loan name config.
-            const desc = '[' + this.config.service + ']' + '[' + this.config.fund + '] ' + this.config.service + '-palvelun laina';
+            const desc = this.tags() + this.config.service + '-palvelun laina';
           loanUpdate.push({
             number: entry.number,
             amount: Math.round(-100 * this.balances[entry.number]) / 100,
@@ -230,7 +230,7 @@ class Import {
           const payment = Math.round(100 * Math.min(loan, entry.amount)) / 100;
           if (payment > 0) {
             // TODO: Use separate loan name config.
-            const desc = '[' + this.config.service + ']' + '[' + this.config.fund + '] ' + this.config.service + '-palvelun lainan lyhennys';
+            const desc = this.tags() + this.config.service + '-palvelun lainan lyhennys';
             loanUpdate.push({
               number: entry.number,
               amount: Math.round(-100 * payment) / 100,
@@ -655,16 +655,23 @@ class Import {
       ret.targetTotal = newTotal;
     }
 
-    let tags = '';
-    if (this.config.service) {
-      tags += '[' + this.config.service + ']';
-    }
-    if (this.config.fund) {
-      tags += '[' + this.config.fund + ']';
-    }
-    ret.tx.description = (tags ? tags + ' ' : '') + this.describe(ret);
+    ret.tx.description = this.tags() + this.describe(ret);
 
     return ret;
+  }
+
+  /**
+   * Construct tags prefix for the description if any.
+   */
+  tags() {
+    let ret = '';
+    if (this.config.service) {
+      ret += '[' + this.config.service + ']';
+    }
+    if (this.config.fund) {
+      ret += '[' + this.config.fund + ']';
+    }
+    return ret === '' ? '' : ret + ' ';
   }
 
   /**
