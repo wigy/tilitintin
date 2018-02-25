@@ -4,7 +4,7 @@ const config = require('../config');
 const glob = require('glob');
 
 if (!fs.existsSync(config.DBPATH)) {
-  throw new Error('Configured DBDBPATH ' + config.DBDBPATH + ' does not exist. Please set environment DBDBPATH.');
+  throw new Error('Configured DBPATH ' + config.DBPATH + ' does not exist. Please set environment DBPATH.');
 }
 
 /**

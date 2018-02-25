@@ -308,6 +308,8 @@ class Import {
     return entries.concat(loanUpdate);
   }
 
+  // TODO: This file is getting big. Collect all these txo-functions and create new class TransactionObject.
+
   /**
    * Construct entries for the transaction.
    *
