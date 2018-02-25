@@ -88,7 +88,7 @@ function addEntry(db, accountId, documentId, debit, amount, desc, row, flags) {
     .then((res) => {
       // TODO: Use neat-dump.
       // TODO: Get account numbers somehow and use it.
-      console.log('       ', '#' + accountId, (debit ? '+' : '-') + amount + '€', desc);
+      console.log('  ', '#' + accountId, (debit ? '+' : '-') + amount + '€', desc);
       return res;
     });
 }

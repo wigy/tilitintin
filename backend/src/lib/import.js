@@ -849,7 +849,7 @@ class Import {
       .then((txobjects) => {
         if (!this.config.dryRun) {
           const creators = txobjects.map((txo) => () => {
-            tx.add(db, txo.tx.date, txo.tx.description, txo.tx.entries)
+            return tx.add(db, txo.tx.date, txo.tx.description, txo.tx.entries)
               .then((docId) => meta.imports.add(this.db, this.config.service, txo.src.id, docId));
           });
           console.log('Saving', creators.length, 'entries.');
