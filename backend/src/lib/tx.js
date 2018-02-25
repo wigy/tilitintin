@@ -179,7 +179,7 @@ function _checkTxs(db, date, txs) {
  * @param {string} date A date in YYYY-MM-DD format.
  * @param {string} description A text to be added to each entry.
  * @param {array} txs List of transactions.
- * @return {array} A list on entry IDs created.
+ * @return {array} The document ID created.
  *
  * The transaction is an array of entries like
  *   [
@@ -272,7 +272,8 @@ function add(db, date, description, txs) {
       return addDocument(db, date)
         .then((documentId) => {
           const creators = txs.map((tx) => () => addEntry(db, tx.accountId, documentId, tx.debit, tx.amount, tx.description, tx.row, tx.flags));
-          return promiseSeq(creators);
+          return promiseSeq(creators)
+            .then(() => documentId);
         });
     });
 }

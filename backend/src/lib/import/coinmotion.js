@@ -29,8 +29,7 @@ class CoinmotionImport extends Import {
       ret[name] = ret[name] || [];
       ret[name].push(entry);
     });
-    ret = Object.values(ret);
-    return Promise.resolve(ret);
+    return Object.values(ret);
   }
 
   recognize(txo) {

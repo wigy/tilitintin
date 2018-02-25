@@ -33,7 +33,7 @@ class KrakenImport extends Import {
       ret[entry.refid].push(entry);
     });
 
-    return Promise.resolve(Object.values(ret));
+    return Object.values(ret);
   }
 
   recognize(txo) {

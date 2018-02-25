@@ -41,7 +41,11 @@ class NordnetImport extends Import {
       ret[entry.Vahvistusnumero_Laskelma].push(entry);
     });
 
-    return Promise.resolve(Object.values(ret));
+    return Object.values(ret);
+  }
+
+  id(group) {
+    return group[0].Vahvistusnumero_Laskelma;
   }
 
   recognize(txo) {

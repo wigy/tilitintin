@@ -42,6 +42,9 @@ function ensureImport(db) {
  * @return {Promise}
  */
 function addImport(db, serviceTag, txId, docId) {
+  if (!docId) {
+    throw new Error('No document ID given, when marking imported transaction ' + txId + ' for ' +  serviceTag);
+  }
   return ensureImport(db)
     .then(() => {
       return knex.db(db)('imports').insert({
@@ -60,14 +63,17 @@ function addImport(db, serviceTag, txId, docId) {
  * @return {Promise<Boolean>}
  */
 function hasImport(db, serviceTag, txId) {
-  return ensureImport(db)
-    .then(() => {
-      return knex.db(db)('imports').where({
-        service_tag : serviceTag,
-        tx_id: txId
-      });
+  return isImportReady(db)
+    .then((yes) => {
+      if (yes) {
+        return knex.db(db)('imports').where({
+          service_tag : serviceTag,
+          tx_id: txId
+        });
+      }
+      return false;
     })
-    .then((matches) => matches.length > 0);
+    .then((matches) => matches && matches.length > 0);
 }
 
 module.exports = {
