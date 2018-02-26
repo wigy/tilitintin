@@ -1,0 +1,49 @@
+.AccountTable .title {
+  font-weight: bold;
+}
+
+.AccountTable .account {
+  padding-left: 1em;
+}
+
+.AccountTable .title.level0 {
+  font-size: 150%;
+}
+
+.AccountTable .title.level1 {
+  font-size: 140%;
+}
+
+.AccountTable .title.level2 {
+  font-size: 130%;
+}
+.AccountTable .title.level3 {
+  font-size: 120%;
+}
+.AccountTable .title.level4 {
+  font-size: 110%;
+}
+
+.AccountTable .level0 {
+  margin-left: 0rem;
+}
+
+.AccountTable .level1 {
+  margin-left: 2rem;
+}
+
+.AccountTable .level2 {
+  margin-left: 4rem;
+}
+
+.AccountTable .level3 {
+  margin-left: 6rem;
+}
+
+.AccountTable .level4 {
+  margin-left: 8rem;
+}
+
+.AccountTable .level5 {
+  margin-left: 10rem;
+}

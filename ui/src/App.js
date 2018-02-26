@@ -25,9 +25,8 @@ export default (class App extends Component {
         </div>
         <div className="SidePanel Panel">
           <div className="Frame">
-            <Route path="/:db/txs/:periodId" component={Balances}/>
-            <Route path="/:db/account/:periodId" component={Accounts}/>
-            <Route path="/:db/report/:periodId" component={Reports}/>
+          <Route path="/:db/txs/:periodId" component={Balances}/>
+          <Route path="/:db/report/:periodId" component={Reports}/>
           </div>
         </div>
         <div className="MainTopPanel Panel">
@@ -38,6 +37,7 @@ export default (class App extends Component {
         <div className="MainPanel Panel">
           <div className="Frame">
             <Route path="/:db/txs/:periodId/:accountId" component={AccountTransactions}/>
+            <Route path="/:db/account/:periodId" component={Accounts}/>
             <Login />
           </div>
         </div>

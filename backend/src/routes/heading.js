@@ -3,7 +3,7 @@ const router = express.Router();
 const data = require('../lib/data');
 
 router.get('/', (req, res) => {
-  data.listAll(req.db, 'coa_heading', null, ['id'])
+  data.listAll(req.db, 'coa_heading', null, ['number', 'level'])
     .then(data => res.send(data));
 });
 

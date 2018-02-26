@@ -51,6 +51,12 @@ const URL = (document.location.hostname === 'localhost' ?
  *       ]
  *     }, ...
  *   ],
+ *   headings: {
+ *     "1001": [{
+ *       "text": "Vastaavaa",
+ *       "level": 0
+ *     },...]
+ *   },
  *   account: {
  *     id: 12,
  *     number: 1234,
@@ -97,6 +103,7 @@ class Store {
       periodId: null,
       periods: [],
       balances: [],
+      headings: {},
       accounts: [],
       title: '',
       transactions: [],
@@ -148,13 +155,15 @@ class Store {
     }
     this.db = db;
     this.periods = [];
+    this.accounts = [];
+    this.headings = {};
     this.tags = {};
     this.setPeriod(null);
     if (db) {
       this.getPeriods()
-        .then(() => {
-          this.getTags();
-        });
+        .then(() => this.getTags())
+        .then(() => this.getHeadings())
+        .then(() => this.getAccounts());
     }
     return false;
   }
@@ -171,7 +180,6 @@ class Store {
     }
     this.periodId = periodId;
     this.balances = [];
-    this.accounts = [];
     this.setAccount(null);
     if (periodId) {
       this.getBalances();
@@ -265,9 +273,35 @@ class Store {
       });
   }
 
-  getAccounts(db) {
-    this.accounts = [];
-    return this.fetch('/db/' + db + '/account');
+  /**
+   * Collect all accounts.
+   */
+  getAccounts() {
+    return this.fetch('/db/' + this.db + '/account')
+      .then((accounts) => {
+        runInAction(() => {
+          this.accounts = [];
+          accounts.forEach((account) => {
+            this.accounts.push(account);
+          });
+        });
+      });
+  }
+
+  /**
+   * Collect all account headings.
+   */
+  getHeadings(db) {
+    return this.fetch('/db/' + this.db + '/heading')
+      .then((headings) => {
+        runInAction(() => {
+          this.headings = {};
+          headings.forEach((heading) => {
+            this.headings[heading.number] = this.headings[heading.number] || [];
+            this.headings[heading.number].push(heading);
+          });
+        });
+      });
   }
 
   /**

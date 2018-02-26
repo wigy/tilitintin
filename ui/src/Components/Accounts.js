@@ -1,30 +1,18 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import AccountLink from '../Components/AccountLink';
+import AccountTable from '../Components/AccountTable';
 
 export default inject('store')(observer(class Accounts extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {accounts: []};
-  }
-
-  componentDidMount() {
-    // TODO: Combine this to the current approach in the store.
-    this.props.store.getAccounts(this.props.match.params.db)
-      .then(accounts => this.setState({accounts: accounts}));
-  }
-
+  // TODO: i18n
   render() {
     if (!this.props.store.token) {
       return '';
     }
-    const {periodId} = this.props.store;
-    // TODO: Headings from coa_heading table.
     return (
       <div className="Accounts">
-        <h1>Tilit</h1>
-        {this.state.accounts.map(account => (<div key={account.id}><AccountLink key={account.id} period={periodId} account={account}/></div>))}
+        <h1>Tilikartta</h1>
+        <AccountTable accounts={this.props.store.accounts} headings={this.props.store.headings} />
       </div>
     );
   }
