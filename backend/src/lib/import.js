@@ -8,6 +8,7 @@ const tx = require('./tx');
 const data = require('./data');
 const text = require('./text');
 const meta = require('./meta');
+const {TransactionObject} = require('./txo');
 
 /**
  * A base class for importing data files and converting them to the transactions.
@@ -169,6 +170,54 @@ class Import {
   }
 
   /**
+   * A loader for CSV file.
+   *
+   * @param {string} file A path to the file.
+   * @param {Object} opts Options for CSV-reader.
+   * @return {Promise<Array<Object>>}
+   *
+   * The first row is assumed to have headers and they are used to construct
+   * an array of objects containing each row as members defined by the first header row.
+   * Special option `headers` can be given as an explicit list of headers.
+   */
+  loadCSV(file, opts = {}) {
+    this.file = file;
+    return new Promise((resolve, reject) => {
+
+      let headers = null;
+      opts.noheader = true;
+
+      fs.readFile(file, (err, data) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        data = data.toString();
+        let lines = [];
+
+        csv(opts)
+          .fromString(data)
+          .on('csv',(row) => {
+            if (headers === null) {
+              headers = opts.headers || row.map(r => r.replace(/\W/g, '_'));
+            } else {
+              let line = {};
+              for (let i = 0; i < row.length; i++) {
+                line[headers[i]] = row[i];
+              }
+              line.__lineNumber = lines.length + 1;
+              lines.push(line);
+            }
+          })
+          .on('done',()=>{
+            resolve(lines);
+          });
+      });
+    });
+  }
+
+  /**
    * Get the date from the original entry.
    * @param {Object} entry Original data entry.
    * @return {string} the date in YYYY-MM-DD format.
@@ -308,202 +357,11 @@ class Import {
     return entries.concat(loanUpdate);
   }
 
-  // TODO: This file is getting big. Collect all these txo-functions and create new class TransactionObject.
-
-  /**
-   * Construct entries for the transaction.
-   *
-   * @param {Object} txo An transaction object.
-   * @return {Array<Object>}
-   */
-  entries(txo) {
-    const fn = txo.type + 'Entries';
-    if (!this[fn]) {
-      throw new Error('Importer does not implement ' + fn + '().');
-    }
-    let ret = this[fn](txo);
-    if (!(ret instanceof Array)) {
-      throw new Error('The function ' + fn + '() did not return an array for ' + JSON.stringify(txo));
-    }
-    return ret;
-  }
-
-  /**
-   * Create deposit entries.
-   */
-  depositEntries(txo) {
-    // Fees
-    if (txo.fee) {
-      const amount = Math.round((txo.total - txo.fee) * 100) / 100;
-      return [
-        {number: this.getAccount(txo.currency), amount: amount},
-        {number: this.getAccount('fees'), amount: txo.fee},
-        {number: this.getAccount('bank'), amount: -txo.total},
-      ];
-    }
-    // No fees
-    return [
-      {number: this.getAccount(txo.currency), amount: txo.total},
-      {number: this.getAccount('bank'), amount: -txo.total},
-    ];
-  }
-
-  /**
-   * Create withdrawal entries.
-   */
-  withdrawalEntries(txo) {
-    if (txo.fee) {
-      return [
-        {number: this.getAccount('bank'), amount: Math.round((txo.total - txo.fee) * 100) / 100},
-        {number: this.getAccount('fees'), amount: txo.fee},
-        {number: this.getAccount(txo.currency), amount: -txo.total},
-      ];
-    }
-    return [
-      {number: this.getAccount('bank'), amount: txo.total},
-      {number: this.getAccount(txo.currency), amount: -txo.total},
-    ];
-  }
-
-  /**
-   * Create buying entries.
-   */
-  buyEntries(txo) {
-    let ret = [
-      {number: this.getAccountForTarget(txo), amount: Math.round((txo.total - txo.fee) * 100) / 100},
-      {number: this.getAccount('fees'), amount: txo.fee},
-      {number: this.getAccount(txo.currency), amount: -txo.total},
-    ];
-    return ret;
-  }
-
   /**
    * Find the account number for upkeeping the amount of target owned in euros.
    */
   getAccountForTarget(txo) {
     return this.getAccount(txo.target);
-  }
-
-  /**
-   * Create selling entries.
-   */
-  sellEntries(txo) {
-    const amount = Math.round((txo.total - txo.fee) * 100) / 100;
-    let ret = [
-      {number: this.getAccount(txo.currency), amount: amount},
-      {number: this.getAccount('fees'), amount: txo.fee},
-    ];
-
-    const avgPrice = this.averages[txo.target] || 0;
-    const buyPrice = avgPrice ? Math.round(100 * (-txo.amount) * avgPrice) / 100 : txo.total;
-
-    if (this.config.noProfit) {
-      // In case of not calculating profits yet, put in only buy price.
-      ret.push({number: this.getAccountForTarget(txo), amount: -txo.total});
-    } else {
-      // Otherwise calculate losses or profits from the average price.
-      const diff = Math.round((buyPrice - txo.total) * 100) / 100;
-      if (diff > 0) {
-        // In losses, add to debit side into losses.
-        ret.push({number: this.getAccount('losses'), amount: diff});
-        ret.push({number: this.getAccountForTarget(txo), amount: -buyPrice});
-      } else if (diff < 0) {
-        // In profits, add to credit side into profits
-        ret.push({number: this.getAccount('profits'), amount: diff});
-        ret.push({number: this.getAccountForTarget(txo), amount: -buyPrice});
-      } else {
-        ret.push({number: this.getAccountForTarget(txo), amount: -txo.total});
-      }
-    }
-    return ret;
-  }
-
-  /**
-   * Create divident entries.
-   */
-  dividentEntries(txo) {
-    const acc = this.getAccount(txo.currency);
-    let ret = [
-      {number: this.getAccount('dividents'), amount: Math.round(-100 * txo.total) / 100},
-    ];
-    if (txo.tax) {
-      const tax = Math.round(txo.tax * 100) / 100;
-      const acc = txo.currency === 'EUR' ? this.getAccount('tax') : this.getAccount('srctax');
-      const amount = Math.round(100 * (txo.total - tax)) / 100;
-      ret.push({number: this.getAccount(txo.currency), amount: amount});
-      ret.push({number: acc, amount: tax});
-    } else {
-      ret.push({number: this.getAccount(txo.currency), amount: txo.total});
-    }
-    return ret;
-  }
-
-  /**
-   * Create foreign exchange entries.
-   */
-  fxEntries(txo) {
-    let neg = Math.round(-100 * txo.total) / 100;
-    let ret = [
-      {number: this.getAccount(txo.currency), amount: txo.total},
-      {number: this.getAccount(txo.target), amount: neg},
-    ];
-    return ret;
-  }
-
-  /**
-   * Create interest payment entries.
-   */
-  interestEntries(txo) {
-    const amount = Math.round(-100 * txo.total) / 100;
-    let ret = [
-      {number: this.getAccount(txo.currency), amount: amount},
-      {number: this.getAccount('interest'), amount: txo.total},
-    ];
-    return ret;
-  }
-
-  /**
-   * Construct the description for the transaction.
-   *
-   * @param {Object} txo An transaction object.
-   * @return {string}
-   */
-  describe(txo) {
-    let parenthesis = [];
-    switch(txo.type) {
-      case 'deposit':
-        return 'Talletus ' + this.serviceName + '-palveluun';
-      case 'withdrawal':
-        return 'Nosto ' + this.serviceName + '-palvelusta';
-      case 'buy':
-        parenthesis = ['yht. ' + num.trim(txo.targetTotal, txo.target)];
-        if (!this.config.noProfit) {
-          parenthesis.push('k.h. nyt ' + num.currency(txo.targetAverage, '€/'  + txo.target));
-        }
-        return 'Osto ' + num.trim(txo.amount, txo.target) + ' (' + parenthesis.join(', ')  + ')';
-      case 'sell':
-        if (!this.config.noProfit) {
-          parenthesis.push('k.h. ' + num.currency(txo.targetAverage, '€/'  + txo.target));
-        }
-        parenthesis.push('jälj. ' + num.trim(txo.targetTotal, txo.target));
-        return 'Myynti ' + num.trim(txo.amount, txo.target) + ' (' + parenthesis.join(', ') + ')';
-      case 'divident':
-        parenthesis.push(txo.amount + ' x ' + num.currency(txo.total / txo.amount / txo.rate, txo.currency, 5) + ' = ' + num.currency(txo.total / txo.rate, txo.currency));
-        if (txo.tax) {
-          parenthesis.push('vero ' + num.currency(txo.tax / txo.rate, txo.currency) + ' = ' + num.currency(txo.tax, '€'));
-        }
-        if (txo.currency !== 'EUR') {
-          parenthesis.push('kurssi ' + num.currency(txo.rate, txo.currency + '/€'));
-        }
-        return 'Osinko ' + txo.target + ' (' + parenthesis.join(', ') + ')';
-      case 'fx':
-        parenthesis.push('kurssi ' + num.currency(txo.rate, txo.currency + '/' + txo.target));
-        return 'Valuutanvaihto ' + txo.target + ' -> ' + txo.currency + ' (' + parenthesis.join(', ') + ')';
-      case 'interest':
-        return this.serviceName + ' lainakorko';
-      default:
-        throw new Error('Cannot describe transaction of type ' + txo.type);
-    }
   }
 
   /**
@@ -639,7 +497,8 @@ class Import {
    *   * `tx.entries` - a list of transaction entries
    *
    * Two functions are used. Prepare is called first. It converts original data objects to
-   * transaction objects, that contains some of the fields.
+   * transaction objects, that contains some of the fields. The second function completes
+   * the processing.
    */
   prepare(group) {
 
@@ -682,7 +541,7 @@ class Import {
       this.averages[ret.target] = 0.0;
     }
 
-    return ret;
+    return new TransactionObject(this, ret);
   }
 
   // Part 2 of processing.
@@ -693,7 +552,7 @@ class Import {
     if (ret.type !== 'withdrawal' && ret.type !== 'deposit' && ret.type !== 'fx') {
       ret.amount = this.amount(ret);
     }
-    ret.tx.entries = this.entries(ret);
+    ret.tx.entries = txo.entries();
 
     // Update balances and add loan entries, if needed.
     ret.tx.entries = this.checkLoans(ret.tx.entries);
@@ -713,7 +572,7 @@ class Import {
       ret.targetTotal = newTotal;
     }
 
-    ret.tx.description = this.tags() + this.describe(ret);
+    ret.tx.description = this.tags() + txo.describe(ret);
 
     return ret;
   }
@@ -747,53 +606,6 @@ class Import {
     return list;
   }
 
-  /**
-   * A loader for CSV file.
-   *
-   * @param {string} file A path to the file.
-   * @param {Object} opts Options for CSV-reader.
-   * @return {Promise<Array<Object>>}
-   *
-   * The first row is assumed to have headers and they are used to construct
-   * an array of objects containing each row as members defined by the first header row.
-   * Special option `headers` can be given as an explicit list of headers.
-   */
-  loadCSV(file, opts = {}) {
-    this.file = file;
-    return new Promise((resolve, reject) => {
-
-      let headers = null;
-      opts.noheader = true;
-
-      fs.readFile(file, (err, data) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        data = data.toString();
-        let lines = [];
-
-        csv(opts)
-          .fromString(data)
-          .on('csv',(row) => {
-            if (headers === null) {
-              headers = opts.headers || row.map(r => r.replace(/\W/g, '_'));
-            } else {
-              let line = {};
-              for (let i = 0; i < row.length; i++) {
-                line[headers[i]] = row[i];
-              }
-              line.__lineNumber = lines.length + 1;
-              lines.push(line);
-            }
-          })
-          .on('done',()=>{
-            resolve(lines);
-          });
-      });
-    });
-  }
 
   /**
    * Collect targets and find out their historical data, i.e. amounts owned and average prices.
