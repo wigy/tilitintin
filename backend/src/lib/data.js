@@ -305,6 +305,60 @@ function getAccountId(db, number) {
     .then(account => (account.length ? {number: number, id: account[0].id} : null));
 }
 
+/**
+ * Get full mapping from account IDs to their numbers.
+ * @param {*} db
+ */
+let accountsById = null;
+function getAccountsById(db) {
+  if (accountsById) {
+    return Prmomise.resolve(accountsById);
+  }
+  return knex.db(db).select('id', 'number')
+  .from('account')
+  .then((data) => {
+    accountsById = {};
+    data.forEach((account) => accountsById[account.id] = account.number);
+    return accountsById;
+  });
+}
+
+/**
+ * Get full mapping from account numbers to their IDs.
+ * @param {*} db
+ */
+let accountsByNumber = null;
+function getAccountsByNumber(db) {
+  if (accountsByNumber) {
+    return Prmomise.resolve(accountsByNumber);
+  }
+  return knex.db(db).select('id', 'number')
+  .from('account')
+  .then((data) => {
+    accountsByNumber = {};
+    data.forEach((account) => accountsByNumber[account.number] = account.id);
+    return accountsByNumber;
+  });
+}
+
+/**
+ * Get full mapping from account numbers to their names.
+ * @param {*} db
+ */
+let accountNamesByNumber = null;
+function getAccountNamesByNumber(db) {
+  if (accountNamesByNumber) {
+    return Prmomise.resolve(accountNamesByNumber);
+  }
+  return knex.db(db).select('name', 'number')
+  .from('account')
+  .then((data) => {
+    accountNamesByNumber = {};
+    data.forEach((account) => accountNamesByNumber[account.number] = account.name);
+    return accountNamesByNumber;
+  });
+}
+
 module.exports = {
   fillEntries: fillEntries,
   listAll: listAll,
@@ -312,6 +366,9 @@ module.exports = {
   getPeriodAccounts: getPeriodAccounts,
   getPeriodBalances: getPeriodBalances,
   getAccountId: getAccountId,
+  getAccountsById: getAccountsById,
+  getAccountsByNumber: getAccountsByNumber,
+  getAccountNamesByNumber: getAccountNamesByNumber,
   getAccountTransactions: getAccountTransactions,
   getAccountTransactionsWithEntries: getAccountTransactionsWithEntries,
   getAccountTransactionsByNumber: getAccountTransactionsByNumber,

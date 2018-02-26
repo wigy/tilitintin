@@ -2,8 +2,6 @@
 const cli = require('../src/lib/cli');
 const knex = require('../src/lib/knex');
 
-// TODO: Need to create table `imports` to store imported lines from generated unique line IDs.
-
 cli.opt('dry-run', false, 'To turn dry-run on.');
 cli.opt('debug', false, 'To turn dry-run on and display entries.');
 cli.opt('noprofit', false, 'Turn off profit and losses calculations (to be calculated later).');

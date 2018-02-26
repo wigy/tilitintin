@@ -73,10 +73,9 @@ class Import {
     this.balances = {};
 
     // Fill in account numbers.
-    return this.knex.select('id', 'number')
-      .from('account')
-      .then((data) => {
-        data.forEach((account) => this.accountByNumber[account.number] = account.id);
+    return data.getAccountsByNumber(this.db)
+      .then((map) => {
+        this.accountByNumber = map;
       })
       .then(() => {
         // Get the balances of accounts targeted with loans and loan accounts.

@@ -75,20 +75,25 @@ function addDocument(db, date) {
  * @return {Promise<Array>} A list of IDs added.
  */
 function addEntry(db, accountId, documentId, debit, amount, desc, row, flags) {
-  return knex.db(db)('entry')
-    .insert({
-      document_id: documentId,
-      account_id: accountId,
-      debit: debit,
-      amount: amount,
-      description: desc,
-      row_number: row,
-      flags: flags,
-    })
+  let account;
+  return knex.db(db)('account')
+    .select('number', 'name')
+    .where({id: accountId})
+    .then((acc) => (account = acc[0]))
+    .then(() => knex.db(db)('entry')
+      .insert({
+        document_id: documentId,
+        account_id: accountId,
+        debit: debit,
+        amount: amount,
+        description: desc,
+        row_number: row,
+        flags: flags,
+      })
+    )
     .then((res) => {
       // TODO: Use neat-dump.
-      // TODO: Get account numbers somehow and use it.
-      console.log('  ', '#' + accountId, (debit ? '+' : '-') + amount + '€', desc);
+      console.log('  ', account.number + ' ' + account.name + ':', (debit ? '+' : '-') + amount + '€', desc);
       return res;
     });
 }
