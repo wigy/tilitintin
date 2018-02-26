@@ -2,6 +2,7 @@
  * A collection of data fetching functions.
  */
 const moment = require('moment');
+const d = require('neat-dump');
 const config = require('../config');
 const knex = require('./knex');
 
@@ -92,7 +93,7 @@ function fillEntries (db, entries, className, joinClass) {
       Object.keys(fields[joinClass]).forEach(key => {
         delete e[key];
         if (fields[className][key]) {
-          console.error('Overriding field', key, 'from class', className, 'when joining class', joinClass);
+          d.error('Overriding field', key, 'from class', className, 'when joining class', joinClass);
         }
       });
       if (e[joinClass + '_id']) {

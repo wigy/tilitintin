@@ -2,6 +2,7 @@ const fs = require('fs');
 const promiseSeq = require('promise-sequential');
 const csv = require('csvtojson');
 const path = require('path');
+const d = require('neat-dump');
 const knex = require('./knex');
 const num = require('./num');
 const tx = require('./tx');
@@ -95,7 +96,7 @@ class Import {
               .andWhere('description', '<>', 'Alkusaldo')
               .then((data) => {
                 const total = data[0].total || 0;
-                console.log('Using balance', num.currency(total, '€'), 'for account', number);
+                d.info('Using balance', num.currency(total, '€'), 'for account', number);
                 this.balances[number] = total;
               });
           }));
@@ -300,7 +301,7 @@ class Import {
       this.balances[number] += amount;
       // Avoid cumulating rounding error.
       this.balances[number] = Math.round(this.balances[number] * 100) / 100;
-      console.log('Updating balance of', number, 'by', num.currency(amount, '€'), 'to', num.currency(this.balances[number], '€'));
+      d.info('Updating balance of', number, 'by', num.currency(amount, '€'), 'to', num.currency(this.balances[number], '€'));
     }
   }
 
@@ -627,7 +628,7 @@ class Import {
             if (!this.averages[desc.target] && desc.avg) {
               this.averages[desc.target] = desc.avg;
               this.amounts[desc.target] = desc.amount;
-              console.log('Using average', num.currency(desc.avg, '€'), 'for', desc.amount, 'x', desc.target);
+              d.info('Using average', num.currency(desc.avg, '€'), 'for', desc.amount, 'x', desc.target);
 
               delete targets[desc.target];
               if (!Object.keys(targets).length) {
@@ -684,11 +685,11 @@ class Import {
             return tx.add(db, txo.tx.date, txo.tx.description, txo.tx.entries, {force: true})
               .then((docId) => meta.imports.add(this.db, this.config.service, txo.src.id, docId))
               .catch((err) => {
-                console.error(txo.tx);
-                console.error(err);
+                d.error(txo.tx);
+                d.error(err);
               });
           });
-          console.log('Saving', creators.length, 'entries.');
+          d.info('Saving', creators.length, 'entries.');
           return promiseSeq(creators);
         } else {
           return 0;

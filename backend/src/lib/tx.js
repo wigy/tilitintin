@@ -2,6 +2,7 @@
  * A library for creating transactions.
  */
 const promiseSeq = require('promise-sequential');
+const d = require('neat-dump');
 const moment = require('moment');
 const knex = require('./knex');
 const data = require('./data');
@@ -53,8 +54,7 @@ function addDocument(db, date) {
           date: seconds
         })
         .then((ids) => {
-          // TODO: Use neat-dump.
-          console.log('TX add:', db, date, '#' + number);
+          d.info('TX add:', db, date, '#' + number);
           return ids[0];
         });
       });
@@ -92,8 +92,7 @@ function addEntry(db, accountId, documentId, debit, amount, desc, row, flags) {
       })
     )
     .then((res) => {
-      // TODO: Use neat-dump.
-      console.log('  ', account.number + ' ' + account.name + ':', (debit ? '+' : '-') + amount + '€', desc);
+      d.info('  ', account.number + ' ' + account.name + ':', (debit ? '+' : '-') + amount + '€', desc);
       return res;
     });
 }
@@ -277,7 +276,7 @@ function add(db, date, description, txs, options={}) {
     .then((hasAlready) => {
       if (hasAlready) {
         if (options.force) {
-          console.log('Forcing another copy of', description, 'to', db);
+          d.warning('Forcing another copy of', description, 'to', db);
         } else {
           return null;
         }
