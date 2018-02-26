@@ -682,9 +682,12 @@ class Import {
       .then((txobjects) => {
         if (!this.config.dryRun) {
           const creators = txobjects.map((txo) => () => {
-            // TODO: Use force insert here, since import is already checked and tx can be identical (see CoinM).
-            return tx.add(db, txo.tx.date, txo.tx.description, txo.tx.entries)
-              .then((docId) => meta.imports.add(this.db, this.config.service, txo.src.id, docId));
+            return tx.add(db, txo.tx.date, txo.tx.description, txo.tx.entries, {force: true})
+              .then((docId) => meta.imports.add(this.db, this.config.service, txo.src.id, docId))
+              .catch((err) => {
+                console.error(txo.tx);
+                console.error(err);
+              });
           });
           console.log('Saving', creators.length, 'entries.');
           return promiseSeq(creators);

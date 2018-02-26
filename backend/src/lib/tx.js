@@ -179,6 +179,8 @@ function _checkTxs(db, date, txs) {
  * @param {string} date A date in YYYY-MM-DD format.
  * @param {string} description A text to be added to each entry.
  * @param {array} txs List of transactions.
+ * @param {Object} options Additional options for processing.
+ *
  * @return {array} The document ID created or null if already exists.
  *
  * The transaction is an array of entries like
@@ -188,8 +190,10 @@ function _checkTxs(db, date, txs) {
  *   ]
  * Missing pieces are filled in as necessary. Account can be given as a `number` or
  * an `accountId`.
+ *
+ * If option `force` is set, the existing transactions are not checked for duplicates.
  */
-function add(db, date, description, txs) {
+function add(db, date, description, txs, options={}) {
 
   // Unknown accounts to resolve.
   let accountNumberToId = {};
@@ -267,7 +271,11 @@ function add(db, date, description, txs) {
     })
     .then((hasAlready) => {
       if (hasAlready) {
-        return null;
+        if (options.force) {
+          console.log('Forcing another copy of', description, 'to', db);
+        } else {
+          return null;
+        }
       }
       return addDocument(db, date)
         .then((documentId) => {
