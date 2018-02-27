@@ -1,5 +1,6 @@
 .ToolPanel .toggle-button {
   float: left;
+  position: relative;
   border-top: 1px solid var(--border-color-light);
   border-left: 1px solid var(--border-color-light);
   border-right: 1px solid var(--border-color-dark);
@@ -12,6 +13,7 @@
   user-select: none;
   background-color: white;
   margin-right: 3px;
+  margin-top: 5px;
   cursor: pointer;
 }
 
@@ -20,7 +22,7 @@
 }
 
 .ToolPanel .toggle-button .fa-icon {
-  margin-top: 6px;
+  margin-top: 3px;
 }
 
 .ToolPanel .toggle-button .Tag {
@@ -28,6 +30,12 @@
   margin-left: 1px;
   border: none;
   cursor: pointer;
+}
+
+.ToolPanel .toggle-button img {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .ToolPanel .toggle-button.off img {
