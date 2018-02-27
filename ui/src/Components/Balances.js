@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { translate, Trans } from 'react-i18next';
 import BalanceTable from '../Components/BalanceTable';
 
-export default inject('store')(observer(class Balances extends Component {
+export default translate('translations')(inject('store')(observer(class Balances extends Component {
 
-  // TODO: i18n
   render() {
     if (!this.props.store.token) {
       return '';
@@ -14,9 +14,9 @@ export default inject('store')(observer(class Balances extends Component {
     let balances = this.props.store.balances;
     return (
       <div className="Period">
-        <h1>Tilien saldot</h1>
+        <h1><Trans>Account Balances</Trans></h1>
         <BalanceTable db={db} periodId={periodId} balances={balances}/>
       </div>
     );
   }
-}));
+})));

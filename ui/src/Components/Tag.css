@@ -28,13 +28,10 @@
 }
 
 .Tags {
-  position: relative;
   height: 2.5ex;
   margin-top: 3px;
 }
 
 .Tags .Tag {
-  position: absolute;
-  bottom: 0;
   border: none;
 }

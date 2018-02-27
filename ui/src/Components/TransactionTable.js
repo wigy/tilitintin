@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { translate, Trans } from 'react-i18next';
 import Transaction from './Transaction';
 import './TransactionTable.css';
 
-export default inject('store')(observer(class TransactionTable extends Component {
+export default translate('translations')(inject('store')(observer(class TransactionTable extends Component {
 
   render() {
 
@@ -35,12 +36,12 @@ export default inject('store')(observer(class TransactionTable extends Component
       <thead>
         <tr className="Transaction heading">
           <th className="number">#</th>
-          <th className="date">Päiväys</th>
+          <th className="date"><Trans>Date</Trans></th>
           <th className="tags"></th>
-          <th className="description">Kuvaus</th>
-          <th className="debit">Debet</th>
-          <th className="credit">Kredit</th>
-          <th className="total">Yhteensä</th>
+          <th className="description"><Trans>Description</Trans></th>
+          <th className="debit"><Trans>Debit</Trans></th>
+          <th className="credit"><Trans>Credit</Trans></th>
+          <th className="total"><Trans>Total</Trans></th>
         </tr>
       </thead>
       <tbody>{
@@ -53,4 +54,4 @@ export default inject('store')(observer(class TransactionTable extends Component
     </table>
     );
   }
-}));
+})));

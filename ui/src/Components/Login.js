@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { translate, Trans } from 'react-i18next';
 import { Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 
-// TODO: i18n
-
-export default inject('store')(observer(class Login extends Component {
+export default translate('translations')(inject('store')(observer(class Login extends Component {
 
   render() {
     let user = '';
@@ -18,16 +17,16 @@ export default inject('store')(observer(class Login extends Component {
       return (
         <form className="Login">
           <FormGroup>
-            <ControlLabel>Käyttäjätunnus</ControlLabel>
+            <ControlLabel><Trans>Username</Trans></ControlLabel>
             <FormControl type="text" onChange={(event) => user=event.target.value}/>
-            <ControlLabel>Salasana</ControlLabel>
+            <ControlLabel><Trans>Password</Trans></ControlLabel>
             <FormControl type="password" onChange={(event) => password=event.target.value}/>
             <br/>
-            <Button onClick={login}>Kirjaudu</Button>
+            <Button onClick={login}><Trans>Login</Trans></Button>
           </FormGroup>
         </form>
       );
     }
     return '';
   }
-}));
+})));
