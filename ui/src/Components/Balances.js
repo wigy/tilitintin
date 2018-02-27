@@ -11,11 +11,11 @@ export default translate('translations')(inject('store')(observer(class Balances
     }
 
     const {db, periodId} = this.props.match.params;
-    let balances = this.props.store.balances;
+
     return (
       <div className="Period">
         <h1><Trans>Account Balances</Trans></h1>
-        <BalanceTable db={db} periodId={periodId} balances={balances}/>
+        <BalanceTable db={db} periodId={periodId} balances={this.props.store.balances}/>
       </div>
     );
   }

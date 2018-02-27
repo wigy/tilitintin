@@ -5,7 +5,6 @@ import { Navbar, Nav, NavDropdown, NavItem, MenuItem } from 'react-bootstrap';
 import YYYYMMDD from './YYYYMMDD';
 import './Menu.css';
 
-// TODO: Keep account if changing period.
 export default translate('translations')(inject('store')(observer(class Menu extends Component {
 
   update({db, periodId, accountId}) {
@@ -22,11 +21,26 @@ export default translate('translations')(inject('store')(observer(class Menu ext
     this.update(props.match.params);
   }
 
-  handleSelect(key) {
-    if (key === 'logout') {
-      this.props.store.logout();
-    } else {
-      this.props.history.push(key);
+  handleSelect(key, ...args) {
+    const {db, periodId, accountId} = this.props.match.params;
+    switch (key) {
+      case 'logout':
+        this.props.store.logout();
+        break;
+      case 'db':
+        this.props.history.push('/' + args[0]);
+      break;
+      case 'period':
+        this.props.history.push('/' + db + '/txs/' + args[0]);
+      break;
+      case 'txs':
+      case 'account':
+      case 'report':
+        let url = '/' + db + '/' + key + '/' + periodId;
+        this.props.history.push(url);
+        break;
+      default:
+        console.log('No idea how to handle', key, args);
     }
   }
 
@@ -44,18 +58,18 @@ export default translate('translations')(inject('store')(observer(class Menu ext
             </Navbar.Brand>
           </Navbar.Header>
 
-          <Nav bsStyle="tabs" activeKey="1" onSelect={k => this.handleSelect(k)}>
+          <Nav bsStyle="tabs" activeKey="1" onSelect={k => this.handleSelect('db', k)}>
             <NavDropdown eventKey="1" title={db || t('Select database')} id="nav-dropdown" disabled={notLoggedIn}>
               {this.props.store.dbs.map(db => (
-                <MenuItem key={db} eventKey={'/' + db}>{db}</MenuItem>
+                <MenuItem key={db} eventKey={db}>{db}</MenuItem>
               ))}
             </NavDropdown>
           </Nav>
 
-          <Nav bsStyle="tabs" activeKey="2" onSelect={k => this.handleSelect(k)}>
+          <Nav bsStyle="tabs" activeKey="2" onSelect={k => this.handleSelect('period', k)}>
             <NavDropdown eventKey="2" title={periodId ? t('period {{period}}', {period: periodId}) : t('Select period')} id="nav-dropdown" disabled={!db || notLoggedIn}>
               {this.props.store.periods.map(period => (
-                <MenuItem key={period.id} eventKey={'/' + db + '/txs/' + period.id}>
+                <MenuItem key={period.id} eventKey={period.id}>
                   <YYYYMMDD date={period.start_date} /> &mdash; <YYYYMMDD date={period.end_date} />
                 </MenuItem>
               ))}
@@ -68,17 +82,17 @@ export default translate('translations')(inject('store')(observer(class Menu ext
             </NavItem>
           </Nav>
 
-          <Nav bsStyle="tabs" pullRight activeKey="4" onSelect={() => this.handleSelect('/' + db + '/account/' + periodId)}>
+          <Nav bsStyle="tabs" pullRight activeKey="4" onSelect={() => this.handleSelect('account')}>
             <NavItem eventKey="4" disabled={!db || !periodId || notLoggedIn}>
               <Trans>Accounts</Trans>
             </NavItem>
           </Nav>
-          <Nav bsStyle="tabs" pullRight activeKey="5" onSelect={() => this.handleSelect('/' + db + '/report/' + periodId)}>
+          <Nav bsStyle="tabs" pullRight activeKey="5" onSelect={() => this.handleSelect('report')}>
             <NavItem eventKey="5" disabled={!db || !periodId || notLoggedIn}>
               <Trans>Reports</Trans>
             </NavItem>
           </Nav>
-          <Nav bsStyle="tabs" pullRight activeKey="6" onSelect={() => this.handleSelect('/' + db + '/txs/' + periodId)} activeHref="/:db/account">
+          <Nav bsStyle="tabs" pullRight activeKey="6" onSelect={() => this.handleSelect('txs')}>
             <NavItem eventKey="6" disabled={!db || !periodId || notLoggedIn}>
               <Trans>Transactions</Trans>
             </NavItem>
