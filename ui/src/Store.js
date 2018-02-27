@@ -229,10 +229,11 @@ class Store {
     return this.fetch('/db')
       .then(dbs => {
         runInAction(() => {
-          dbs = dbs.map(db => db.name);
-          this.dbs = dbs;
+          this.dbs = [];
+          if (dbs) {
+            this.dbs = dbs.map(db => db.name);
+          }
         });
-        return dbs;
       });
   }
 
