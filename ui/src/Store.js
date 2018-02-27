@@ -1,10 +1,5 @@
 import { extendObservable, runInAction } from 'mobx';
-
-// TODO: Make this configurable.
-const hostParts = document.location.hostname.split('.');
-const URL = (document.location.hostname === 'localhost' ?
-  document.location.protocol + '//' + document.location.hostname + ':3001' :
-  document.location.protocol + '//' + hostParts[0]+'-api.' + hostParts.slice(1).join('.'));
+import config from './Configuration';
 
 /**
  * The store structure is the following:
@@ -131,7 +126,7 @@ class Store {
     if (data !== null) {
       options.body =  JSON.stringify(data);
     }
-    return fetch(URL + path, options)
+    return fetch(config.API_URL + path, options)
       .then(res => {
         if ([200].includes(res.status)) {
           return res.json();
