@@ -22,7 +22,9 @@ export default translate('translations')(inject('store')(observer(class Menu ext
   }
 
   handleSelect(key, ...args) {
+    let url;
     const {db, periodId, accountId} = this.props.match.params;
+
     switch (key) {
       case 'logout':
         this.props.store.logout();
@@ -31,12 +33,19 @@ export default translate('translations')(inject('store')(observer(class Menu ext
         this.props.history.push('/' + args[0]);
       break;
       case 'period':
-        this.props.history.push('/' + db + '/txs/' + args[0]);
+        url = '/' + db + '/txs/' + args[0];
+        if (accountId) {
+          url += '/' + accountId;
+        }
+        this.props.history.push(url);
       break;
       case 'txs':
       case 'account':
       case 'report':
-        let url = '/' + db + '/' + key + '/' + periodId;
+        url = '/' + db + '/' + key + '/' + periodId;
+        if (accountId) {
+          url += '/' + accountId;
+        }
         this.props.history.push(url);
         break;
       default:

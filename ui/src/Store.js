@@ -32,7 +32,7 @@ const URL = (document.location.hostname === 'localhost' ?
  *     }, ...
  *   ],
  *   balances: [
- *       accountID: {
+ *       {
  *         id: 94,
  *         number: "1543",
  *         name: "Arvopaperit",
