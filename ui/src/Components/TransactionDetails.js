@@ -32,7 +32,7 @@ const TransactionDetails = (props) => {
     <div className="TransactionDetails">
       {props.tx.entries.map((entry) => {
         return (<div key={entry.id} className={'line' + (props.current === entry.account_id ? ' current' : '')}>
-          {text(entry)}
+          {text(entry)}&nbsp;
         </div>);
       })}
     </div>
