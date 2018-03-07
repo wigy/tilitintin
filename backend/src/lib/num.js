@@ -12,7 +12,7 @@ module.exports = {
   /**
    * Trim a number with optional unit to the constant amount of decimals.
    */
-  trim: function(num, unit=null) {
+  trimSigned: function(num, unit=null) {
     let ret;
 
     if (Math.abs(num) < 1 / DIGITS) {
@@ -37,6 +37,13 @@ module.exports = {
     }
 
     return ret;
+  },
+
+  /**
+   * Trim a number with optional unit to the constant amount of decimals without '+'.
+   */
+  trim: function(num, unit=null) {
+    return module.exports.trimSigned.replace(/^+/, '');
   },
 
   /**

@@ -171,13 +171,13 @@ class TransactionObject {
         if (!this.importer.config.noProfit) {
           parenthesis.push('k.h. nyt ' + num.currency(this.targetAverage, '€/'  + this.target));
         }
-        return 'Osto ' + num.trim(this.amount, this.target) + ' (' + parenthesis.join(', ')  + ')';
+        return 'Osto ' + num.trimSigned(this.amount, this.target) + ' (' + parenthesis.join(', ')  + ')';
       case 'sell':
         if (!this.importer.config.noProfit) {
           parenthesis.push('k.h. ' + num.currency(this.targetAverage, '€/'  + this.target));
         }
         parenthesis.push('jälj. ' + num.trim(this.targetTotal, this.target));
-        return 'Myynti ' + num.trim(this.amount, this.target) + ' (' + parenthesis.join(', ') + ')';
+        return 'Myynti ' + num.trimSigned(this.amount, this.target) + ' (' + parenthesis.join(', ') + ')';
       case 'divident':
         parenthesis.push(this.amount + ' x ' + num.currency(this.total / this.amount / this.rate, this.currency, 5) + ' = ' + num.currency(this.total / this.rate, this.currency));
         if (this.tax) {

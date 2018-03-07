@@ -8,7 +8,7 @@ class Description {
   constructor() {
     // A list of tags in the entry.
     this.tags = [];
-    // A text that has replaced notes with `()`, amount with `+$`, target with `###`,
+    // A text that has replaced notes with `()`, change amount with `+$`, target with `###`,
     // total owned with `+#` and average price with `+$/###`.
     this.text = null;
     // Notes extracted as text.
@@ -35,7 +35,7 @@ class Description {
     );
     let text = this.text.replace('()', '(' + notes.join(', ') + ')');
     if (this.amount !== null) {
-      text = text.replace('+$ ###', num.trim(this.amount, this.target));
+      text = text.replace('+$ ###', num.trimSigned(this.amount, this.target));
     }
     return (tags.length ? tags.join('') + ' ' : '') + text;
   }
@@ -93,7 +93,7 @@ class Description {
 
     // Analyse notes.
     ret.notes.forEach((note, idx) => {
-      let match = /^(yht\.|jälj\.) ([-+0-9.]+)(.*)$/.exec(note);
+      let match = /^(yht\.|jälj\.) ([-0-9.]+)(.*)$/.exec(note);
       if (match) {
         ret.total = parseFloat(match[2]);
         ret.notes[idx] = match[1] + ' +#' + match[3];
