@@ -43,7 +43,7 @@ module.exports = {
    * Trim a number with optional unit to the constant amount of decimals without '+'.
    */
   trim: function(num, unit=null) {
-    return module.exports.trimSigned.replace(/^+/, '');
+    return module.exports.trimSigned(num, unit).replace(/^\+/, '');
   },
 
   /**
