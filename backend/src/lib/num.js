@@ -47,7 +47,7 @@ module.exports = {
   },
 
   /**
-   * Convert a mumber to currency with unit.
+   * Convert a number to currency with unit.
    */
   currency: function(num, unit, digits=2) {
     let [body, decimals] = sprintf('%.' + digits + 'f', num).split('.');
@@ -56,13 +56,9 @@ module.exports = {
     }
     let ret = body + '.' + decimals;
     if (unit) {
-      if (unit === 'USD') {
-        ret = '$' + ret;
-      } else {
-        unit = unit.replace('USD', '$');
-        unit = unit.replace('EUR', '€');
-        ret += ' ' + unit;
-      }
+      unit = unit.replace('USD', '$');
+      unit = unit.replace('EUR', '€');
+      ret += ' ' + unit;
     }
     return ret;
   }

@@ -208,6 +208,7 @@ class TransactionObject {
         return 'Osinko ' + this.target + ' (' + parenthesis.join(', ') + ')';
       case 'fx':
         parenthesis.push('kurssi ' + num.currency(this.rate, this.currency + '/' + this.target, 4));
+        parenthesis.push('yht. ' + num.trim(this.targetTotal, this.currency))
         return 'Valuutanvaihto ' + this.target + ' -> ' + this.currency + ' (' + parenthesis.join(', ') + ')';
       case 'interest':
         return this.importer.serviceName + ' lainakorko';

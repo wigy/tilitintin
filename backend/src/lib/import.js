@@ -297,6 +297,7 @@ class Import {
    * @param {Number} amount
    */
   updateBalance(number, amount) {
+    // TODO: Update also foreign currencies.
     if (number in this.balances) {
       this.balances[number] += amount;
       // Avoid cumulating rounding error.
@@ -563,40 +564,40 @@ class Import {
     // Update balances and add loan entries, if needed.
     ret.tx.entries = this.checkLoans(ret.tx.entries);
 
-    if(ret.type === 'fx') {
-      if (ret.target === 'EUR') {
-        // Buy currency.
-        console.log(txo + '');
-        const oldTotal = this.amounts[ret.currency];
-        const oldAverage = this.averages[ret.currency];
-        const oldPrice = oldTotal * oldAverage;
-        const newPrice = ret.total - ret.fee;
-        this.amounts[ret.currency] += ret.total / ret.rate;
-        const newTotal = this.amounts[ret.currency];
-        this.averages[ret.currency] = (oldPrice + newPrice) / newTotal;
-        console.log('Amount', this.amounts);
-        console.log('Avg', this.averages);
-        ret.targetAverage = this.averages[ret.currency];
-        ret.targetTotal = newTotal;
-      } else {
-        throw new Error('Selling currency not implemented.');
+    /**
+     * Helper to maintain averages and totals.
+     * @param {String} target
+     * @param {Number} newPrice
+     * @param {Number} amount
+     * @param {Boolean} isBuy
+     */
+    const updateAvg = (target, newPrice, amount, isBuy) => {
+      const oldTotal = this.amounts[target];
+      const oldAverage = this.averages[target];
+      const oldPrice = oldTotal * oldAverage;
+      const newTotal = this.amounts[target] + amount;
+      if (isBuy) {
+        this.averages[target] = (oldPrice + newPrice) / newTotal;
       }
-    }
+
+      ret.targetAverage = this.averages[target];
+      ret.targetTotal = newTotal;
+    };
 
     // Update cumulative amounts for trades.
     if (ret.amount !== null && ['buy', 'sell'].includes(ret.type)) {
-      // TODO: Code duplication from above.
-      const oldTotal = this.amounts[ret.target];
-      const oldAverage = this.averages[ret.target];
-      const oldPrice = oldTotal * oldAverage;
-      const newPrice = ret.total - ret.fee;
-      this.amounts[ret.target] += ret.amount;
-      const newTotal = this.amounts[ret.target];
-      if (ret.type === 'buy') {
-        this.averages[ret.target] = (oldPrice + newPrice) / newTotal;
+      updateAvg(ret.target, ret.total - ret.fee, ret.amount, ret.type === 'buy')
+      this.amounts[ret.target] += ret.total - ret.fee;
+    }
+
+    // Update cumulative amounts for currency exchanges.
+    if(ret.type === 'fx') {
+      if (ret.target === 'EUR') {
+        // Buy currency.
+        updateAvg(ret.currency, ret.total - ret.fee, ret.total / ret.rate, true);
+      } else {
+        throw new Error('Selling currency not implemented.');
       }
-      ret.targetAverage = this.averages[ret.target];
-      ret.targetTotal = newTotal;
     }
 
     // Construct the text.
