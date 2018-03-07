@@ -10,7 +10,26 @@ class TransactionObject {
     Object.assign(this, data);
   }
 
-    /**
+  /**
+   * Helper to show most important data.
+   */
+  toString() {
+    return JSON.stringify({
+      type: this.type,
+      total: this.total,
+      target: this.target,
+      currency: this.currency,
+      rate: this.rate,
+      amount: this.amount,
+      targetAverage: this.targetAverage,
+      targetTotal: this.targetTotal,
+      fee: this.fee,
+      tax: this.tax,
+      tx: this.tx,
+    });
+  }
+
+  /**
    * Construct entries for the transaction.
    *
    * @return {Array<Object>}
