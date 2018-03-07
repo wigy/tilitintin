@@ -533,12 +533,18 @@ class Import {
       ret.target = this.target(ret);
     }
 
-    // Initialize new targgets.
+    // Initialize new targets.
     if (ret.target !== null && this.amounts[ret.target] === undefined) {
       this.amounts[ret.target] = 0.0;
     }
+    if (ret.currency !== null && this.amounts[ret.currency] === undefined) {
+      this.amounts[ret.currency] = 0.0;
+    }
     if (ret.target !== null && this.averages[ret.target] === undefined) {
       this.averages[ret.target] = 0.0;
+    }
+    if (ret.currency !== null && this.averages[ret.currency] === undefined) {
+      this.averages[ret.currency] = 0.0;
     }
 
     return new TransactionObject(this, ret);
@@ -557,8 +563,29 @@ class Import {
     // Update balances and add loan entries, if needed.
     ret.tx.entries = this.checkLoans(ret.tx.entries);
 
-    // Update cumulative amounts.
+    if(ret.type === 'fx') {
+      if (ret.target === 'EUR') {
+        // Buy currency.
+        console.log(txo + '');
+        const oldTotal = this.amounts[ret.currency];
+        const oldAverage = this.averages[ret.currency];
+        const oldPrice = oldTotal * oldAverage;
+        const newPrice = ret.total - ret.fee;
+        this.amounts[ret.currency] += ret.total / ret.rate;
+        const newTotal = this.amounts[ret.currency];
+        this.averages[ret.currency] = (oldPrice + newPrice) / newTotal;
+        console.log('Amount', this.amounts);
+        console.log('Avg', this.averages);
+        ret.targetAverage = this.averages[ret.currency];
+        ret.targetTotal = newTotal;
+      } else {
+        throw new Error('Selling currency not implemented.');
+      }
+    }
+
+    // Update cumulative amounts for trades.
     if (ret.amount !== null && ['buy', 'sell'].includes(ret.type)) {
+      // TODO: Code duplication from above.
       const oldTotal = this.amounts[ret.target];
       const oldAverage = this.averages[ret.target];
       const oldPrice = oldTotal * oldAverage;
@@ -572,6 +599,7 @@ class Import {
       ret.targetTotal = newTotal;
     }
 
+    // Construct the text.
     ret.tx.description = this.tags() + txo.describe(ret);
 
     return ret;
