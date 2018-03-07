@@ -203,11 +203,11 @@ class TransactionObject {
           parenthesis.push('vero ' + num.currency(this.tax / this.rate, this.currency) + ' = ' + num.currency(this.tax, '€'));
         }
         if (this.currency !== 'EUR') {
-          parenthesis.push('kurssi ' + num.currency(this.rate, this.currency + '/€'));
+          parenthesis.push('kurssi ' + num.currency(this.rate, this.currency + '/€', 4));
         }
         return 'Osinko ' + this.target + ' (' + parenthesis.join(', ') + ')';
       case 'fx':
-        parenthesis.push('kurssi ' + num.currency(this.rate, this.currency + '/' + this.target));
+        parenthesis.push('kurssi ' + num.currency(this.rate, this.currency + '/' + this.target, 4));
         return 'Valuutanvaihto ' + this.target + ' -> ' + this.currency + ' (' + parenthesis.join(', ') + ')';
       case 'interest':
         return this.importer.serviceName + ' lainakorko';
