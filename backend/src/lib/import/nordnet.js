@@ -84,6 +84,18 @@ class NordnetImport extends Import {
 
   rate(txo) {
     let ret = 1.0;
+    if (txo.type === 'fx') {
+      let a, b;
+      txo.src.forEach((tx) => {
+        if (tx.Valuutta === 'EUR') {
+          a = this.num(tx.Summa);
+        } else {
+          b = this.num(tx.Summa);
+        }
+      });
+      return Math.abs(a/b);
+    }
+
     txo.src.forEach((tx) => {
       if (tx.Valuutta !== 'EUR') {
         ret = this.num(tx.Valuuttakurssi);
