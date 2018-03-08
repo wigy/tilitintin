@@ -47,6 +47,15 @@ module.exports = {
   },
 
   /**
+   * Convert commonly known currencies from acronym to symbol.
+   */
+  unit: function(unit) {
+    unit = unit.replace(/\bUSD\b/, '$');
+    unit = unit.replace(/\bEUR\b/, '€');
+    return unit;
+  },
+
+  /**
    * Convert a number to currency with unit.
    */
   currency: function(num, unit, digits=2) {
@@ -56,9 +65,7 @@ module.exports = {
     }
     let ret = body + '.' + decimals;
     if (unit) {
-      unit = unit.replace('USD', '$');
-      unit = unit.replace('EUR', '€');
-      ret += ' ' + unit;
+      ret += ' ' + module.exports.unit(unit);
     }
     return ret;
   }

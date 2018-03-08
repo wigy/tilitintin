@@ -63,6 +63,8 @@ class Import {
     this.balances = {};
     // Mapping from account numbers to account IDs.
     this.accountByNumber = {};
+    // Mapping from account numbers to currency .
+    this.accountCurrency = {};
   }
 
   /**
@@ -84,6 +86,7 @@ class Import {
         // Get the balances of currency accounts.
         if (this.config.currencies) {
           Object.keys(this.config.currencies).forEach((name) => {
+            this.accountCurrency[this.config.currencies[name]] = name;
             if (!this.config.currencies[name]) {
               return;
             }
@@ -310,12 +313,17 @@ class Import {
    * @param {Number} amount
    */
   updateBalance(number, amount) {
-    // TODO: Update also foreign currencies.
     if (number in this.balances) {
       this.balances[number] += amount;
       // Avoid cumulating rounding error.
       this.balances[number] = Math.round(this.balances[number] * 100) / 100;
       d.info('Updating balance of', number, 'by', num.currency(amount, '€'), 'to', num.currency(this.balances[number], '€'));
+      // Check and update currencies.
+      let cur = this.accountCurrency[number];
+      if (cur) {
+        cur = cur.toUpperCase();
+        this.amounts[cur] += amount / this.averages[cur];
+      }
     }
   }
 
@@ -574,11 +582,8 @@ class Import {
     }
     ret.tx.entries = txo.entries();
 
-    // Update balances and add loan entries, if needed.
-    ret.tx.entries = this.checkLoans(ret.tx.entries);
-
     /**
-     * Helper to maintain averages and totals.
+     * Helper to maintain averages and totals of trade targets and currencies.
      * @param {String} target
      * @param {Number} newPrice
      * @param {Number} amount
@@ -612,6 +617,9 @@ class Import {
         throw new Error('Selling currency not implemented.');
       }
     }
+
+    // Update balances and add loan entries, if needed.
+    ret.tx.entries = this.checkLoans(ret.tx.entries);
 
     // Construct the text.
     ret.tx.description = this.tags() + txo.describe(ret);
