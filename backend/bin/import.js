@@ -37,6 +37,9 @@ importer.configure({
   loans: {
     eur: cli.options['eur-loan'],
   },
+  currencies: {
+    usd: cli.options.usd,
+  },
   accounts: {
     bank: cli.options.bank,
     eur: cli.options.eur,

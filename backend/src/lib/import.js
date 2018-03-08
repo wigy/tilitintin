@@ -79,9 +79,20 @@ class Import {
         this.accountByNumber = map;
       })
       .then(() => {
+        let needed = [];
+
+        // Get the balances of currency accounts.
+        if (this.config.currencies) {
+          Object.keys(this.config.currencies).forEach((name) => {
+            if (!this.config.currencies[name]) {
+              return;
+            }
+            needed.push(this.config.currencies[name]);
+          });
+        }
+
         // Get the balances of accounts targeted with loans and loan accounts.
         if (this.config.loans) {
-          let needed = [];
           Object.keys(this.config.loans).forEach((name) => {
             if (!this.config.loans[name]) {
               return;
@@ -89,18 +100,20 @@ class Import {
             needed.push(this.config.loans[name]);
             needed.push(this.getAccount(name));
           });
-          return Promise.all(needed.map((number) => {
-            return this.knex.select(this.knex.raw('SUM(debit * amount) + SUM((debit - 1) * amount) AS total'))
-              .from('entry')
-              .where({account_id: this.accountByNumber[number]})
-              .andWhere('description', '<>', 'Alkusaldo')
-              .then((data) => {
-                const total = data[0].total || 0;
-                d.info('Using balance', num.currency(total, '€'), 'for account', number);
-                this.balances[number] = total;
-              });
-          }));
         }
+
+        // Collect the totals.
+        return Promise.all(needed.map((number) => {
+          return this.knex.select(this.knex.raw('SUM(debit * amount) + SUM((debit - 1) * amount) AS total'))
+            .from('entry')
+            .where({account_id: this.accountByNumber[number]})
+            .andWhere('description', '<>', 'Alkusaldo')
+            .then((data) => {
+              const total = data[0].total || 0;
+              d.info('Using balance', num.currency(total, '€'), 'for account', number);
+              this.balances[number] = total;
+            });
+        }));
       })
       .then(() => meta.imports.ensure(this.db));
   }
