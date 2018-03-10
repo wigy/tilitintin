@@ -37,7 +37,7 @@ const {TransactionObject} = require('./txo');
  *    i) Find the amonunt of the target in the trade if any `amount(txobject)`.
  *    j) Construct entries for transaction with `entries(txobject)`.
  *       - Based on the type, the function `<type>Entries(txobject)` is called.
- *    k) Transaction entries are passed through `checkLoans(entries)` to process automatic loans.
+ *    k) Transaction entries are passed through `checkLoansAndCurrencies(entries)` to process automatic loans.
  *    k) The description is constructed with `describe(txobject)`.
  * 7. All transactions are checked and rounding errors are fixed using fixRoundingErrors(list).
  * 8. The list of transaction objects is post-processed in `postprocess(list)`.
@@ -331,7 +331,7 @@ class Import {
    * Update all balances and update loans for those accounts having loan-counterpart account.
    * @param {Array} entries
    */
-  checkLoans(entries) {
+  checkLoansAndCurrencies(entries) {
     let loanUpdate = [];
 
     entries.forEach((entry) => {
@@ -603,7 +603,7 @@ class Import {
     };
 
     // Update cumulative amounts for trades.
-    if (ret.amount !== null && ['buy', 'sell'].includes(ret.type)) {
+    if (['buy', 'sell'].includes(ret.type)) {
       updateAvg(ret.target, ret.total - ret.fee, ret.amount, ret.type === 'buy')
       this.amounts[ret.target] += ret.total - ret.fee;
     }
@@ -619,7 +619,7 @@ class Import {
     }
 
     // Update balances and add loan entries, if needed.
-    ret.tx.entries = this.checkLoans(ret.tx.entries);
+    ret.tx.entries = this.checkLoansAndCurrencies(ret.tx.entries);
 
     // Construct the text.
     ret.tx.description = this.tags() + txo.describe(ret);

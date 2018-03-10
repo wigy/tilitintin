@@ -20,7 +20,7 @@ knex.db(cli.db)
   .where('account.number', '=', cli.account)
   .where('document.period_id', '=', cli.period)
   .then((data) => {
-    console.log('Dropping documents', data.map((d) => d.number).join(', '));
+    console.log('Dropping documents period', cli.period, 'account', cli.account, data.map((d) => d.number).join(', '));
     killEntries = data.map((d) => () => knex.db(cli.db)('entry').where({document_id: d.id}).delete());
     killDocs = data.map((d) => () => knex.db(cli.db)('document').where({id: d.id}).delete());
     return [killEntries, killDocs];
