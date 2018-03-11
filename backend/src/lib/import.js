@@ -186,6 +186,15 @@ class Import {
   }
 
   /**
+   * Load a list of files.
+   * @param {Array<String>} files
+   */
+  loadFiles(files) {
+    return Promise.all(files.map((file) => this.load(file)))
+      .then((data) => data.reduce((prev, cur) => prev.concat(cur), []));
+  }
+
+  /**
    * A loader for CSV file.
    *
    * @param {string} file A path to the file.
@@ -708,7 +717,7 @@ class Import {
     };
 
     return this.init()
-      .then(() => this.load(files))
+      .then(() => this.loadFiles(files))
       .then((data) => this.makeGrouping(data))
       .then(data => data.sort(sorter))
       .then((groups) => this.preprocess(groups))

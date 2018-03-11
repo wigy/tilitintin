@@ -7,8 +7,8 @@ class CoinmotionImport extends Import {
     super('Coinmotion');
   }
 
-  load(files) {
-    return this.loadCSV(files[0]);
+  load(file) {
+    return this.loadCSV(file);
   }
 
   id(group) {

@@ -6,9 +6,8 @@ class GDAXImport extends Import {
     super('GDAX');
   }
 
-  load(files) {
-    return Promise.all(files.map((file) => this.loadCSV(file)))
-      .then((data) => data.reduce((prev, cur) => prev.concat(cur), []));
+  load(file) {
+    return this.loadCSV(file);
   }
 }
 
