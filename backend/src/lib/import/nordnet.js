@@ -11,8 +11,8 @@ class NordnetImport extends Import {
     return parseFloat(str.replace(',', '.').replace(/ /g, ''));
   }
 
-  load(file) {
-    return this.loadCSV(file, {delimiter: ';'});
+  load(files) {
+    return this.loadCSV(file[0], {delimiter: ';'});
   }
 
   trimItem(obj) {

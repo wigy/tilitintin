@@ -25,7 +25,7 @@ cli.opt('profits', 3490, 'Number of an account for recoring profit.');
 cli.opt('dividents', 3470, 'Number of an account for recoring dividents.');
 cli.arg_('format', ['kraken', 'coinmotion', 'nordnet']);
 cli.arg_('db', knex.dbs());
-cli.arg('csv-file', 'transaction log as CSV file');
+cli.args('csv-files', 'transaction log as CSV file(s)');
 
 const importer = require('../src/lib/import/' + cli.format);
 importer.configure({
@@ -59,5 +59,5 @@ importer.configure({
   }
 });
 
-importer.import(cli.db, cli['csv-file'], cli.options.debug)
+importer.import(cli.db, cli['csv-files'], cli.options.debug)
   .catch((err) => console.error(err));

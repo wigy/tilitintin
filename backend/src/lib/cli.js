@@ -141,6 +141,21 @@ class Cli {
     this.arg(name, options, check);
     delete this.__no_exit;
   }
+
+  /**
+   * Catch all, i.e. collect all the remaining arguments.
+   */
+  args(name, options, check) {
+    this.arg(name, options, check);
+    this[name] = [this[name]];
+    let n = this.__args.length + 2;
+    while (n < this.__remaining.length) {
+      console.log(n, this.__remaining[n]);
+      this[name].push(this.__remaining[n]);
+      this.__args.push(this.__remaining[n]);
+      n++;
+    }
+  }
 }
 
 module.exports = new Cli();

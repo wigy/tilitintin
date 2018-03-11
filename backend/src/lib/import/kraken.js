@@ -6,8 +6,8 @@ class KrakenImport extends Import {
     super('Kraken');
   }
 
-  load(file) {
-    return this.loadCSV(file);
+  load(files) {
+    return this.loadCSV(files[0]);
   }
 
   currency(txo) {

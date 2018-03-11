@@ -695,10 +695,10 @@ class Import {
    * Handler for importing.
    *
    * @param {string} db Name of the database.
-   * @param {string} file A path to the file to be imported.
+   * @param {Array<String>} files A path to the files to be imported.
    * @return {Promise} Promise resolving to the number of entries created.
    */
-  import(db, file) {
+  import(db, files) {
     this.db = db;
     this.knex = knex.db(db);
 
@@ -708,7 +708,7 @@ class Import {
     };
 
     return this.init()
-      .then(() => this.load(file))
+      .then(() => this.load(files))
       .then((data) => this.makeGrouping(data))
       .then(data => data.sort(sorter))
       .then((groups) => this.preprocess(groups))
