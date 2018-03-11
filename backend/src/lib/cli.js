@@ -150,7 +150,6 @@ class Cli {
     this[name] = [this[name]];
     let n = this.__args.length + 2;
     while (n < this.__remaining.length) {
-      console.log(n, this.__remaining[n]);
       this[name].push(this.__remaining[n]);
       this.__args.push(this.__remaining[n]);
       n++;

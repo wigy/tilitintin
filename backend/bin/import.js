@@ -23,7 +23,7 @@ cli.opt('rounding', 8570, 'Number of an account for rounding errors.');
 cli.opt('losses', 9750, 'Number of an account for recording losses.');
 cli.opt('profits', 3490, 'Number of an account for recoring profit.');
 cli.opt('dividents', 3470, 'Number of an account for recoring dividents.');
-cli.arg_('format', ['kraken', 'coinmotion', 'nordnet']);
+cli.arg_('format', ['kraken', 'coinmotion', 'nordnet', 'gdax']);
 cli.arg_('db', knex.dbs());
 cli.args('csv-files', 'transaction log as CSV file(s)');
 
