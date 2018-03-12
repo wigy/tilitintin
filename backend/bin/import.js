@@ -9,7 +9,7 @@ cli.opt('service', null, 'Name of the service tag if any.');
 cli.opt('fund', null, 'Additional fund tag if any.');
 cli.opt('bank', 1910, 'Number of an account for banking.');
 cli.opt('eur', 1960, 'Number of an account for storing EUR in the service.');
-cli.opt('eur-loan', null, 'Number of an account for recording negatie EUR account balance as a loan.');
+cli.opt('eur-loan', null, 'Number of an account for recording negative EUR account balance as a loan.');
 cli.opt('usd', null, 'Number of an account for storing USD in the service.');
 cli.opt('shares', 1543, 'Number of an account for storing stock shares.');
 cli.opt('crypto', 1549, 'Number of an account for storing crypto currencies.');
@@ -21,8 +21,8 @@ cli.opt('srctax', 9930, 'Number of an account for foreign taxes.');
 cli.opt('interest', 9550, 'Number of an account for interest payments.');
 cli.opt('rounding', 8570, 'Number of an account for rounding errors.');
 cli.opt('losses', 9750, 'Number of an account for recording losses.');
-cli.opt('profits', 3490, 'Number of an account for recoring profit.');
-cli.opt('dividents', 3470, 'Number of an account for recoring dividents.');
+cli.opt('profits', 3490, 'Number of an account for recording profit.');
+cli.opt('dividends', 3470, 'Number of an account for recording dividends.');
 cli.arg_('format', ['kraken', 'coinmotion', 'nordnet', 'gdax']);
 cli.arg_('db', knex.dbs());
 cli.args('csv-files', 'transaction log as CSV file(s)');
@@ -55,7 +55,7 @@ importer.configure({
     rounding: cli.options.rounding,
     losses: cli.options.losses,
     profits: cli.options.profits,
-    dividents: cli.options.dividents
+    dividends: cli.options.dividends
   }
 });
 

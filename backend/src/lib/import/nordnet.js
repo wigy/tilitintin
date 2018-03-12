@@ -48,7 +48,7 @@ class NordnetImport extends Import {
   recognize(txo) {
     const types = txo.src.map((tx) => tx.Tapahtumatyyppi);
     if (types.includes('OSINKO')) {
-      return 'divident';
+      return 'dividend';
     }
     if (types.includes('VALUUTAN_OSTO')) {
       return 'fx';
@@ -134,7 +134,7 @@ class NordnetImport extends Import {
   }
 
   tax(txo) {
-    if (txo.type === 'divident') {
+    if (txo.type === 'dividend') {
       const tax = txo.src.filter((tx) => tx.Tapahtumatyyppi === 'ENNAKKOPID_TYS');
       if (tax.length) {
         let ret = -(this.num(tax[0].Summa));

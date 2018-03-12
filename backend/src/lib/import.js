@@ -498,7 +498,7 @@ class Import {
    * Recognize the type of the transaction.
    *
    * @param {Object} txo An transaction object.
-   * @return {string} One of the 'deposit', 'withdrawal', 'sell', 'buy', 'divident', 'fx', 'interest', 'in', 'out'.
+   * @return {string} One of the 'deposit', 'withdrawal', 'sell', 'buy', 'dividend', 'fx', 'interest', 'in', 'out'.
    *
    * Currency exchange type is 'fx' and `currency` is currency received while `target` is currency given.
    * Transfer of target is either 'in' or 'out'.
@@ -520,7 +520,7 @@ class Import {
    *   * `target` - Name of the target in the trade (like 'ETH', 'BTC' or 'GOOG').
    *   * `currency` - Name of the currency used in the transaction (like 'EUR' or 'USD')
    *   * `rate` - Conversion rate to € for currency.
-   *   * `amount` - Amount of the target to trade or shares owned for divident.
+   *   * `amount` - Amount of the target to trade or shares owned for dividend.
    *   * `targetAverage` - Average price of the target after the transaction.
    *   * `targetTotal` - Number of targets owned after the transaction.
    *   * `fee` - Service fee in euros.
@@ -691,7 +691,7 @@ class Import {
       return txobjects;
     }
     let targets = {};
-    txobjects.forEach((txo) => {if (['buy', 'sell', 'divident'].includes(txo.type)) targets[txo.target]=true;});
+    txobjects.forEach((txo) => {if (['buy', 'sell', 'dividend'].includes(txo.type)) targets[txo.target]=true;});
 
     return this.knex.select('description')
       .from('entry')

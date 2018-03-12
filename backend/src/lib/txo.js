@@ -130,12 +130,12 @@ class TransactionObject {
   }
 
   /**
-   * Create divident entries.
+   * Create dividend entries.
    */
-  dividentEntries() {
+  dividendEntries() {
     const acc = this.importer.getAccount(this.currency);
     let ret = [
-      {number: this.importer.getAccount('dividents'), amount: Math.round(-100 * this.total) / 100},
+      {number: this.importer.getAccount('dividends'), amount: Math.round(-100 * this.total) / 100},
     ];
     if (this.tax) {
       const tax = Math.round(this.tax * 100) / 100;
@@ -217,7 +217,7 @@ class TransactionObject {
         }
         parenthesis.push('jälj. ' + num.trim(this.targetTotal, this.target));
         return 'Myynti ' + num.trimSigned(this.amount, this.target) + ' (' + parenthesis.join(', ') + ')';
-      case 'divident':
+      case 'dividend':
         parenthesis.push(this.amount + ' x ' + num.currency(this.total / this.amount / this.rate, this.currency, 5) + ' = ' + num.currency(this.total / this.rate, this.currency));
         if (this.tax) {
           parenthesis.push('vero ' + num.currency(this.tax / this.rate, this.currency) + ' = ' + num.currency(this.tax, '€'));
