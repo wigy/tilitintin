@@ -1,4 +1,4 @@
-const num = require('./num');
+const { num } = require('libfyffe').util;
 
 /**
  * A class able to parse descriptions from the transactions.

@@ -1,4 +1,4 @@
-const num = require('./num');
+const { num } = require('libfyffe').util;
 
 /**
  * A class storing piece of imported data and the transaction deducted from it.
