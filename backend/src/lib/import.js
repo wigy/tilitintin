@@ -47,7 +47,7 @@ class Import {
   constructor(serviceName) {
     // Name of the service.
     this.serviceName = serviceName;
-    // Name of the database currenctly in use.
+    // Name of the database currently in use.
     this.db = null;
     // Latest file imported.
     this.file = null;
