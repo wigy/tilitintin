@@ -174,6 +174,26 @@ class TransactionObject {
   }
 
   /**
+   * Create (partial) entries for incoming transfers.
+   */
+  inEntries() {
+    let ret = [
+      {number: this.importer.getAccount(this.target), amount: 0},
+    ];
+    return ret;
+  }
+
+  /**
+   * Create (partial) entries for outgoing transfers.
+   */
+  outEntries() {
+    let ret = [
+      {number: this.importer.getAccount(this.target), amount: 0},
+    ];
+    return ret;
+  }
+
+  /**
    * Construct the description for the transaction.
    *
    * @return {string}
@@ -212,6 +232,10 @@ class TransactionObject {
         return 'Valuutanvaihto ' + this.target + ' -> ' + this.currency + ' (' + parenthesis.join(', ') + ')';
       case 'interest':
         return this.importer.serviceName + ' lainakorko';
+      case 'in':
+        return 'Siirto ' + this.importer.serviceName + '-palveluun ' + num.trimSigned(this.amount, this.target);
+      case 'out':
+        return 'Siirto ' + this.importer.serviceName + '-palvelusta ' + num.trimSigned(this.amount, this.target);
       default:
         throw new Error('Cannot describe transaction of type ' + this.type);
     }

@@ -166,7 +166,8 @@ class Import {
    *
    * Configuration variables are:
    *   * `accounts.bank` - account number for bank deposits and withdraws
-   *   * `accounts.euro` - account number for storing € in the service
+   *   * `accounts.eur` - account number for storing € in the service
+   *   * `accounts.usd` - account number for storing $ in the service
    *   * `accounts.crypto` - account number for storing crypto currenccies by default
    *   * `accounts.eth` - account number for storing ETH
    *   * `accounts.btc` - account number for  storing BTC
@@ -497,9 +498,10 @@ class Import {
    * Recognize the type of the transaction.
    *
    * @param {Object} txo An transaction object.
-   * @return {string} One of the 'deposit', 'withdrawal', 'sell', 'buy', 'divident', 'fx', 'interest'.
+   * @return {string} One of the 'deposit', 'withdrawal', 'sell', 'buy', 'divident', 'fx', 'interest', 'in', 'out'.
    *
    * Currency exchange type is 'fx' and `currency` is currency received while `target` is currency given.
+   * Transfer of target is either 'in' or 'out'.
    */
   recognize(txo) {
     throw new Error('Importer does not implement recognize().');
@@ -564,6 +566,14 @@ class Import {
       ret.target = this.target(ret);
     }
 
+    // Sanity checks.
+    if (typeof(ret.fee) !== 'number' || isNaN(ret.fee)) {
+      throw new Error('Function fee() returned invalid response ' + JSON.stringify(ret.fee) + ' for ' + JSON.stringify(ret.src));
+    }
+    if (ret.type !== 'in' && ret.type !=='out' && (typeof(ret.total) !== 'number' || isNaN(ret.total))) {
+      throw new Error('Function total() returned invalid response ' + JSON.stringify(ret.total) + ' for ' + JSON.stringify(ret.src));
+    }
+
     // Initialize new targets.
     if (ret.target !== null && this.amounts[ret.target] === undefined) {
       this.amounts[ret.target] = 0.0;
@@ -588,6 +598,9 @@ class Import {
     // Calculate amounts and entries.
     if (ret.type !== 'withdrawal' && ret.type !== 'deposit' && ret.type !== 'fx') {
       ret.amount = this.amount(ret);
+      if (typeof(ret.amount) !== 'number' || isNaN(ret.amount)) {
+        throw new Error('Function amount() returned invalid response ' + JSON.stringify(ret.amount) + ' for ' + JSON.stringify(txo.src));
+      }
     }
     ret.tx.entries = txo.entries();
 
@@ -615,6 +628,10 @@ class Import {
     if (['buy', 'sell'].includes(ret.type)) {
       updateAvg(ret.target, ret.total - ret.fee, ret.amount, ret.type === 'buy')
       this.amounts[ret.target] += ret.total - ret.fee;
+    }
+    else if (['in', 'out'].includes(ret.type)) {
+      updateAvg(ret.target, 0, ret.amount, false);
+      this.amounts[ret.target] += ret.amount;
     }
 
     // Update cumulative amounts for currency exchanges.
