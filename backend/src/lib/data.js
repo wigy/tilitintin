@@ -313,7 +313,7 @@ function getAccountId(db, number) {
 let accountsById = null;
 function getAccountsById(db) {
   if (accountsById) {
-    return Prmomise.resolve(accountsById);
+    return Promise.resolve(accountsById);
   }
   return knex.db(db).select('id', 'number')
   .from('account')
@@ -331,7 +331,7 @@ function getAccountsById(db) {
 let accountsByNumber = null;
 function getAccountsByNumber(db) {
   if (accountsByNumber) {
-    return Prmomise.resolve(accountsByNumber);
+    return Promise.resolve(accountsByNumber);
   }
   return knex.db(db).select('id', 'number')
   .from('account')
@@ -349,7 +349,7 @@ function getAccountsByNumber(db) {
 let accountNamesByNumber = null;
 function getAccountNamesByNumber(db) {
   if (accountNamesByNumber) {
-    return Prmomise.resolve(accountNamesByNumber);
+    return Promise.resolve(accountNamesByNumber);
   }
   return knex.db(db).select('name', 'number')
   .from('account')
