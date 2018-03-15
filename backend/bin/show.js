@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const knex = require('../src/lib/knex');
 const data = require('../src/lib/data');
-const cli = require('../src/lib/cli');
+const { util: { cli} } = require('libfyffe');
 
 cli.arg('db', knex.dbs());
 

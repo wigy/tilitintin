@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const cli = require('../src/lib/cli');
+const { util: { cli} } = require('libfyffe');
 const knex = require('../src/lib/knex');
 
 cli.opt('dry-run', false, 'To turn dry-run on.');

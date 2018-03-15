@@ -4,7 +4,7 @@
  */
 const promiseSeq = require('promise-sequential');
 const knex = require('../src/lib/knex');
-const cli = require('../src/lib/cli');
+const { util: { cli} } = require('libfyffe');
 
 cli.arg_('db', knex.dbs());
 cli.arg_('period', 'period ID');

@@ -2,7 +2,7 @@
 const promiseSeq = require('promise-sequential');
 const knex = require('../src/lib/knex');
 const tags = require('../src/lib/tags');
-const cli = require('../src/lib/cli');
+const { util: { cli} } = require('libfyffe');
 
 cli.arg_('db', knex.dbs());
 cli.arg('operation', ['ls', 'add', 'remove-all']);

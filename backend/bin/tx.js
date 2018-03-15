@@ -3,8 +3,8 @@
  * This script adds transaction.
  */
 const knex = require('../src/lib/knex');
-const cli = require('../src/lib/cli');
 const tx = require('../src/lib/tx');
+const { util: { cli} } = require('libfyffe');
 
 cli.arg_('db', knex.dbs());
 cli.arg_('date', 'date as YYYY-MM-DD');

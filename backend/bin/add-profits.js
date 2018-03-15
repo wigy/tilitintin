@@ -3,8 +3,7 @@
  * This script scans for trading transactions and adds profits and losses where missing.
  */
 const promiseSeq = require('promise-sequential');
-const { num } = require('libfyffe').util;
-const cli = require('../src/lib/cli');
+const { util: {num, cli} } = require('libfyffe');
 const knex = require('../src/lib/knex');
 const text = require('../src/lib/text');
 const data = require('../src/lib/data');
