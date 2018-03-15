@@ -9,7 +9,7 @@ data.listAll(cli.db, 'period', null, ['id'])
   .then((periods) => periods.map(period => period.id))
   .then((ids) => {
     cli.arg('period', ids);
-    if (cli.args() === 2) {
+    if (cli.argc() === 2) {
       data.getPeriodBalances(cli.db, cli.period)
       .then((data) => {
         data.balances.forEach((line) => {

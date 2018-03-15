@@ -168,7 +168,7 @@ class Import {
    *   * `accounts.bank` - account number for bank deposits and withdraws
    *   * `accounts.eur` - account number for storing € in the service
    *   * `accounts.usd` - account number for storing $ in the service
-   *   * `accounts.crypto` - account number for storing crypto currenccies by default
+   *   * `accounts.crypto` - account number for storing crypto currencies by default
    *   * `accounts.eth` - account number for storing ETH
    *   * `accounts.btc` - account number for  storing BTC
    *   * `accounts.rounding` - account number for trimming transaction rounding errors
