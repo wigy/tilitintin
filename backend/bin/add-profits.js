@@ -11,7 +11,7 @@ const data = require('../src/lib/data');
 cli.opt('debug', false, 'To turn dry-run on.');
 cli.opt('target', 1549, 'Number of an account for storing target amount changes.');
 cli.opt('losses', 9750, 'Number of an account for recording losses.');
-cli.opt('profits', 3490, 'Number of an account for recoring profit.');
+cli.opt('profits', 3490, 'Number of an account for recording profit.');
 cli.opt('fees', 9690, 'Number of an account for trading fees.');
 cli.arg_('db', knex.dbs());
 cli.arg('target', 'Trading code of the target like ETH or BTC.');

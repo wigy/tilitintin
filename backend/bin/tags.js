@@ -11,8 +11,8 @@ switch(cli.operation) {
 
   case 'add':
     cli.arg_('tag', 'a tag text');
-    cli.arg_('name', 'a descrition text of the tag');
-    cli.arg_('picture', 'an url for the picuture');
+    cli.arg_('name', 'a description text of the tag');
+    cli.arg_('picture', 'an url for the picture');
     cli.arg_('type', 'a category of the tag');
     cli.arg('order', 'an order number of the tag', parseInt);
     tags.add(cli.db, cli.tag, cli.name, cli.picture, cli.type, cli.order);
