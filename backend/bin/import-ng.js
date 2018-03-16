@@ -63,7 +63,11 @@ config.set({
 
 async function main() {
   fyffe.setDb('tilitintin', knex.db(cli.db))
+  await fyffe.loadAccounts('tilitintin');
   await fyffe.loadBalances('tilitintin');
+  if (cli.options.debug) {
+    fyffe.accounts.showBalances('Initial balances:');
+  }
   await fyffe.import(cli.format, cli['csv-files']);
 }
 
