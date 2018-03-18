@@ -61,6 +61,7 @@ config.set({
   }
 });
 
+// TODO: Reading default configs from some kind of .env-file.
 async function main() {
   fyffe.setDb('tilitintin', knex.db(cli.db))
   await fyffe.loadAccounts('tilitintin');
@@ -68,7 +69,7 @@ async function main() {
   if (cli.options.debug) {
     fyffe.accounts.showBalances('Initial balances:');
   }
-  await fyffe.import(cli.format, cli['csv-files']);
+  await fyffe.import('tilitintin', cli.format, cli['csv-files']);
 }
 
 main().catch((err) => console.error(err));

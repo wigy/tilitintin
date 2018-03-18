@@ -19,7 +19,7 @@
     "knex": "^0.14.0",
     "libfyffe": "0.0.4",
     "moment": "^2.19.1",
-    "neat-dump": "^1.0.14",
+    "neat-dump": "^1.0.16",
     "nodemon": "^1.14.12",
     "promise-sequential": "^1.1.1",
     "sprintf": "^0.1.5",
