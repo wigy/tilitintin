@@ -672,7 +672,7 @@ class Import {
    *
    * @param {Array<Object>} list All transaction objects.
    */
-  fixRoudingErrors(list) {
+  fixRoundingErrors(list) {
     list.forEach((item, i) => {
       let err = Math.round(100 * list[i].tx.entries.reduce((sum, entry) => sum + entry.amount, 0)) / 100;
       if (err !== 0) {
@@ -741,7 +741,7 @@ class Import {
       .then((groups) => groups.map((group => this.prepare(group))))
       .then((txobjects) => this.collectHistory(txobjects))
       .then((txobjects) => txobjects.map((txo => this.process(txo))))
-      .then((txobjects) => this.fixRoudingErrors(txobjects))
+      .then((txobjects) => this.fixRoundingErrors(txobjects))
       .then((txobjects) => this.postprocess(txobjects))
       .then((txobjects) => {
         if (this.config.debug) {
