@@ -5,6 +5,7 @@ const { config, util: {cli}, core: {fyffe} } = require('libfyffe');
 cli.opt('dry-run', false, 'To turn dry-run on.');
 cli.opt('debug', false, 'To turn dry-run on and display entries.');
 cli.opt('no-profit', false, 'Turn off profit and losses calculations (to be calculated later).');
+cli.opt('force', false, 'Import even if the entries are found already.');
 cli.opt('service', null, 'Name of the service tag if any.');
 cli.opt('fund', null, 'Additional fund tag if any.');
 cli.opt('bank', 1910, 'Number of an account for banking.');
@@ -33,6 +34,7 @@ config.set({
     noProfit: cli.options['no-profit'],
     dryRun: cli.options['dry-run'] || cli.options.debug,
     debug: cli.options.debug,
+    force: cli.options.force
   },
   accounts: {
     bank: cli.options.bank,
