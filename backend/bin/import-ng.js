@@ -24,20 +24,9 @@ config.set({
   }
 });
 
-// TODO: Reading default configs from some kind of .env-file.
 async function main() {
   fyffe.setDb('tilitintin', knex.db(cli.db))
-  await fyffe.loadAccounts('tilitintin');
-  // TODO: Should load only needed balances and just before the given date in the import data.
-  await fyffe.loadBalances('tilitintin');
-  if (cli.options.debug) {
-    fyffe.ledger.accounts.showBalances('Initial balances:');
-  }
   await fyffe.import('tilitintin', cli.format, cli['csv-files']);
-  if (cli.options.debug) {
-    fyffe.ledger.showTransactions('Transactions:')
-    fyffe.ledger.accounts.showBalances('Final balances:');
-  }
 }
 
 main().catch((err) => console.error(err));
