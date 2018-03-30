@@ -26,7 +26,8 @@ config.set({
 
 async function main() {
   fyffe.setDb('tilitintin', knex.db(cli.db))
-  await fyffe.import('tilitintin', cli.format, cli['csv-files']);
+  await fyffe.import(cli.format, cli['csv-files'], {dbName: 'tilitintin'});
+  await fyffe.export('tilitintin', {dbName: 'tilitintin'});
 }
 
 main().catch((err) => console.error(err));
