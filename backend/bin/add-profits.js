@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 /**
  * This script scans for trading transactions and adds profits and losses where missing.
- *
- * TODO: Re-write so that it uses libfyffe only.
  */
 const promiseSeq = require('promise-sequential');
 const { util: {num, cli} } = require('libfyffe');

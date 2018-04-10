@@ -2,18 +2,14 @@
 const knex = require('../src/lib/knex');
 const { config, util: {cli}, core: {fyffe} } = require('libfyffe');
 
-cli.opt('conf', 'default', 'Name of the section to use from the config file.');
 cli.opt('dry-run', null, 'To turn dry-run on.');
 cli.opt('debug', null, 'To turn dry-run on and display entries.');
 cli.opt('no-profit', null, 'Turn off profit and losses calculations (to be calculated later).');
 cli.opt('force', null, 'Import even if the entries are found already.');
-cli.arg_('format', ['kraken', 'coinmotion', 'nordnet', 'gdax']);
 cli.arg_('db', knex.dbs());
 cli.args('csv-files', 'transaction log as CSV file(s)');
 
-if (cli.options.conf) {
-  config.use(cli.options.conf);
-}
+config.loadIni();
 
 config.set({
   flags: {
@@ -26,7 +22,7 @@ config.set({
 
 async function main() {
   fyffe.setDb('tilitintin', knex.db(cli.db))
-  await fyffe.import(cli.format, cli['csv-files'], {dbName: 'tilitintin'});
+  await fyffe.import(cli['csv-files'], {dbName: 'tilitintin'});
   await fyffe.export('tilitintin', {dbName: 'tilitintin'});
 }
 
