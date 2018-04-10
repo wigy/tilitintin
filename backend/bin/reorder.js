@@ -34,7 +34,6 @@ knex.db(cli.db)
     return pairs;
   })
   .then((pairs) => {
-    // TODO: Update import document numbers.
     return pairs.map(pair => () => knex.db(cli.db)('document').where({id: pair[0]}).update({number: pair[1]}));
   })
   .then((txs) => promiseSeq(txs));
