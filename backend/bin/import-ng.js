@@ -5,6 +5,7 @@ const { config, util: {cli}, core: {fyffe} } = require('libfyffe');
 cli.opt('dry-run', null, 'To turn dry-run on.');
 cli.opt('debug', null, 'To turn dry-run on and display entries.');
 cli.opt('no-profit', null, 'Turn off profit and losses calculations (to be calculated later).');
+cli.opt('zero-moves', null, 'Do not add to the stock commodities moved in.');
 cli.opt('force', null, 'Import even if the entries are found already.');
 cli.arg_('db', knex.dbs());
 cli.args('csv-files', 'transaction log as CSV file(s)');
@@ -14,6 +15,7 @@ config.loadIni();
 config.set({
   flags: {
     noProfit: cli.options['no-profit'],
+    zeroMoves: cli.options['zero-moves'],
     dryRun: cli.options['dry-run'] || cli.options.debug,
     debug: cli.options.debug,
     force: cli.options.force
