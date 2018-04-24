@@ -11,3 +11,8 @@
 .TransactionDetails .filler {
   color: transparent;
 }
+
+.TransactionDetails .extras {
+  font-size: 80%;
+  font-style: italic;
+}

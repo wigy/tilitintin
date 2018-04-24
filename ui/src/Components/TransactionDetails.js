@@ -17,11 +17,12 @@ const TransactionDetails = (props) => {
       text = (entry) => {
         const desc = entry.description.replace(/^(\[[A-Z-a-z0-9]+\])+\s*/, '');
         const url = '/' + props.tx.db + '/txs/' + props.tx.period_id + '/' + entry.account_id;
-        return (
-          <Link to={url}>
-            {entry.number + ' ' + entry.name + (desc && props.tx.description !== desc ? ' - (' + desc  + ')': '')}
-          </Link>
-        );
+        let text = entry.number + ' ' + entry.name;
+        let extras = '';
+        if (desc && props.tx.description !== desc) {
+          extras = ' ' + desc;
+        }
+        return <Link to={url}>{text}<span className="extras">{extras}</span></Link>;
       }
       break;
     default:
