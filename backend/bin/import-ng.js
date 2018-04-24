@@ -8,6 +8,7 @@ cli.opt('no-profit', null, 'Turn off profit and losses calculations (to be calcu
 cli.opt('zero-moves', null, 'Do not add to the stock commodities moved in.');
 cli.opt('force', null, 'Import even if the entries are found already.');
 cli.opt('avg', null, 'Set explicit averages `SERVICE1:ETH=123,SERVICE2:ETH=122`.');
+cli.opt('stock', null, 'Set explicit stocks `SERVICE1:ETH=0.12,SERVICE2:ETH=1.22`.');
 cli.arg_('db', knex.dbs());
 cli.args('csv-files', 'transaction log as CSV file(s)');
 
@@ -24,6 +25,7 @@ config.set({
 });
 
 let avg={};
+let stock={};
 
 if (cli.options.avg) {
   cli.options.avg.split(',').forEach((str) => {
@@ -32,10 +34,18 @@ if (cli.options.avg) {
     avg[eq[0]] = parseFloat(eq[1]);
   })
 }
+if (cli.options.stock) {
+  cli.options.stock.split(',').forEach((str) => {
+    const eq = str.split('=');
+    stock = stock || {};
+    stock[eq[0]] = parseFloat(eq[1]);
+  })
+}
 
 async function main() {
   fyffe.setDb('tilitintin', knex.db(cli.db))
   fyffe.setAverages(avg);
+  fyffe.setStock(stock);
   await fyffe.import(cli['csv-files'], {dbName: 'tilitintin'});
   await fyffe.export('tilitintin', {dbName: 'tilitintin'});
 }
