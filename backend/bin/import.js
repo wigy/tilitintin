@@ -9,6 +9,7 @@ cli.opt('zero-moves', null, 'Do not add to the stock commodities moved in.');
 cli.opt('force', null, 'Import even if the entries are found already.');
 cli.opt('avg', null, 'Set explicit averages `SERVICE1:ETH=123,SERVICE2:ETH=122`.');
 cli.opt('stock', null, 'Set explicit stocks `SERVICE1:ETH=0.12,SERVICE2:ETH=1.22`.');
+cli.opt('service', null, 'Set explicit name for the service instead of the automatic recognition.');
 cli.arg_('db', knex.dbs());
 cli.args('csv-files', 'transaction log as CSV file(s)');
 
@@ -46,7 +47,7 @@ async function main() {
   fyffe.setDb('tilitintin', knex.db(cli.db))
   fyffe.setAverages(avg);
   fyffe.setStock(stock);
-  await fyffe.import(cli['csv-files'], {dbName: 'tilitintin'});
+  await fyffe.import(cli['csv-files'], {dbName: 'tilitintin', service: cli.options.service});
   await fyffe.export('tilitintin', {dbName: 'tilitintin'});
 }
 
