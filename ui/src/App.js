@@ -11,6 +11,7 @@ import Menu from './Components/Menu';
 import ToolPanel from './Components/ToolPanel';
 import Login from './Components/Login';
 
+// TODO: Inject this to elsewhere and see if full redraw is still needed.
 export default keydown(inject('store')(class App extends Component {
 
   componentWillReceiveProps( nextProps ) {
