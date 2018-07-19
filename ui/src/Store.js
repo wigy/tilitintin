@@ -107,6 +107,10 @@ class Store {
       tools: {
         tagDisabled: {
         }
+      },
+      navi: {
+        component: null,
+        index: null
       }
     });
     this.getDatabases();
@@ -368,6 +372,17 @@ class Store {
   logout() {
     this.token = null;
     localStorage.removeItem('token');
+  }
+
+  /**
+   * Handle navigation.
+   * @param {String} key
+   * @return {Boolean} True, if should prevent default handling.
+   */
+  pressKey(key) {
+    runInAction(() => {
+      // TODO: Update here navigation structure.
+    });
   }
 }
 

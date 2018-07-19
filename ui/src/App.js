@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
+import { inject } from 'mobx-react';
+import keydown from 'react-keydown';
 import './App.css';
 import Balances from './Components/Balances';
 import AccountTransactions from './Components/AccountTransactions';
@@ -9,7 +11,16 @@ import Menu from './Components/Menu';
 import ToolPanel from './Components/ToolPanel';
 import Login from './Components/Login';
 
-export default (class App extends Component {
+export default keydown(inject('store')(class App extends Component {
+
+  componentWillReceiveProps( nextProps ) {
+    const { keydown: { event } } = nextProps;
+    if ( event ) {
+      if (this.props.store.pressKey(event.key)) {
+        event.preventDefault();
+      }
+    }
+  }
 
   render() {
     return (
@@ -45,4 +56,4 @@ export default (class App extends Component {
       </div>
     );
   }
-});
+}));
