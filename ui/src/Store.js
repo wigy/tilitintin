@@ -1,5 +1,6 @@
 import { extendObservable, runInAction } from 'mobx';
 import config from './Configuration';
+import Navigator from './Navigator';
 
 /**
  * The store structure is the following:
@@ -91,6 +92,7 @@ import config from './Configuration';
 class Store {
 
   constructor() {
+    this.navigator = new Navigator(this);
     extendObservable(this, {
       changed: false,
       token: localStorage.getItem('token'),
@@ -110,8 +112,8 @@ class Store {
         tagDisabled: {
         }
       },
-      navi: {
-        component: null,
+      selected: {
+        component: 'AccountTransactions',
         index: null
       }
     });
@@ -389,10 +391,11 @@ class Store {
    * @return {Boolean} True, if should prevent default handling.
    */
   pressKey(key) {
+    let ret;
     runInAction(() => {
-      // TODO: Update here navigation structure.
-      console.log('=>', key);
+      ret = this.navigator.handle(key);
     });
+    return ret;
   }
 
   /**
