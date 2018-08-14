@@ -11,16 +11,27 @@ import Menu from './Components/Menu';
 import ToolPanel from './Components/ToolPanel';
 import Login from './Components/Login';
 
-// TODO: Inject this to elsewhere and see if full redraw is still needed.
 export default keydown(inject('store')(class App extends Component {
 
   componentWillReceiveProps( nextProps ) {
     const { keydown: { event } } = nextProps;
     if ( event ) {
-      if (this.props.store.pressKey(event.key)) {
+      let keyName = (
+        (event.key.length > 1 && event.shiftKey ? 'Shift+' : '')
+        + (event.ctrlKey ? 'Ctrl+' : '')
+        + (event.altlKey ? 'Alt+' : '')
+        + event.key);
+      if (this.props.store.pressKey(keyName)) {
         event.preventDefault();
       }
     }
+  }
+
+  shouldComponentUpdate(nextProps) {
+    if (nextProps.keydown.event) {
+      return this.props.store.hasChanged();
+    }
+    return true;
   }
 
   render() {

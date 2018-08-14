@@ -92,10 +92,12 @@ class Store {
 
   constructor() {
     extendObservable(this, {
+      changed: false,
       token: localStorage.getItem('token'),
       dbs: [],
       db: null,
       periodId: null,
+      accountId: null,
       periods: [],
       balances: [],
       headings: {},
@@ -132,6 +134,7 @@ class Store {
     }
     return fetch(config.API_URL + path, options)
       .then(res => {
+        this.changed = true;
         if ([200].includes(res.status)) {
           return res.json();
         } else {
@@ -139,6 +142,7 @@ class Store {
         }
       })
       .catch(err => {
+        this.changed = true;
         console.error(err);
       });
   }
@@ -152,6 +156,7 @@ class Store {
     if (db && this.db === db) {
       return true;
     }
+    this.changed = true;
     this.db = db;
     this.periods = [];
     this.accounts = [];
@@ -177,6 +182,7 @@ class Store {
     if (periodId && this.setDb(db) && this.periodId === periodId) {
       return true;
     }
+    this.changed = true;
     this.periodId = periodId;
     this.balances = [];
     this.setAccount(null);
@@ -196,6 +202,8 @@ class Store {
     if (accountId && this.setPeriod(db, periodId) && this.accountId === accountId) {
       return true;
     }
+    this.changed = true;
+    this.accountId = accountId;
     this.title = '';
     this.transactions = [];
     this.account = {};
@@ -371,6 +379,7 @@ class Store {
    */
   logout() {
     this.token = null;
+    this.changed = true;
     localStorage.removeItem('token');
   }
 
@@ -382,7 +391,17 @@ class Store {
   pressKey(key) {
     runInAction(() => {
       // TODO: Update here navigation structure.
+      console.log('=>', key);
     });
+  }
+
+  /**
+   * Check if there are changes and reset the flag.
+   */
+  hasChanged() {
+    const ret = this.changed;
+    this.changed = false;
+    return ret;
   }
 }
 
