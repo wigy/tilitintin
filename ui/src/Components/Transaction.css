@@ -1,3 +1,9 @@
+.Transaction.selected {
+  background-color: white;
+  border-top: 1px solid darkblue;
+  border-bottom: 1px solid darkblue;
+}
+
 .Transaction .number {
   padding-left: 0.5em;
   width: 5%;

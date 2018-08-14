@@ -113,7 +113,8 @@ class Store {
         }
       },
       selected: {
-        component: 'AccountTransactions',
+        // TODO: Temporary test data.
+        component: 'TransactionTable',
         index: null
       }
     });

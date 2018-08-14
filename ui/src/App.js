@@ -21,7 +21,9 @@ export default keydown(inject('store')(class App extends Component {
         + (event.ctrlKey ? 'Ctrl+' : '')
         + (event.altlKey ? 'Alt+' : '')
         + event.key);
+
       if (this.props.store.pressKey(keyName)) {
+        this.props.store.changed = true;
         event.preventDefault();
       }
     }

@@ -13,11 +13,12 @@ class Navigator {
    */
   handle(key) {
     const { component, index } = this.store.selected;
+    // TODO: Use Escape to reset navigation.
     const fn = 'handle' + component + key;
     if (this[fn]) {
       const update = this[fn](index);
       if (update) {
-        console.log(update);
+        // console.log(update);
         Object.assign(this.store.selected, update);
         return true;
       }
@@ -34,14 +35,14 @@ class Navigator {
   indexUpdate(index, N, delta) {
     if (N) {
       if (index === null) {
-        index = 0;
+        index = delta < 0 ? N - 1 : 0;
       } else {
         index += delta;
         if (index < 0) {
-          index = N - 1;
+          index = null;
         }
-        if (index >= N) {
-          index = 0;
+        else if (index >= N) {
+          index = null;
         }
       }
       return {index};
@@ -49,10 +50,11 @@ class Navigator {
   }
 
   // Transaction listing for an account.
-  handleAccountTransactionsArrowUp(index) {
+  handleTransactionTableArrowUp(index) {
+    // TODO: Navigate filtered transactions once implemented in store.
     return this.indexUpdate(index, this.store.transactions.length, -1);
   }
-  handleAccountTransactionsArrowDown(index) {
+  handleTransactionTableArrowDown(index) {
     return this.indexUpdate(index, this.store.transactions.length, +1);
   }
 }

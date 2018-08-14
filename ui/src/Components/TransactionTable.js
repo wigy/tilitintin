@@ -12,6 +12,7 @@ export default translate('translations')(inject('store')(observer(class Transact
       return;
     }
 
+    // TODO: Filtering must be moved to the store and use filtered results from there.
     const visible = (tx) => {
       const allEnabled = Object.values(this.props.store.tools.tagDisabled).filter((v) => v).length === 0;
       if (!tx.tags || !tx.tags.length) {
@@ -46,9 +47,10 @@ export default translate('translations')(inject('store')(observer(class Transact
       </thead>
       <tbody>{
         filter(this.props.txs).map((tx, idx) => {
+          const { component, index } = this.props.store.selected;
           const duplicate = seen[tx.number];
           seen[tx.number] = true;
-          return <Transaction key={idx} duplicate={duplicate} tx={tx} total={sum+=(tx.debit ? tx.amount : -tx.amount)}/>;
+          return <Transaction key={idx} selected={component === 'TransactionTable' && index === idx} duplicate={duplicate} tx={tx} total={sum+=(tx.debit ? tx.amount : -tx.amount)}/>;
         })}
       </tbody>
     </table>
