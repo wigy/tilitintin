@@ -114,7 +114,7 @@ class Store {
       },
       selected: {
         // TODO: Temporary test data.
-        component: 'TransactionTable',
+        component: 'BalanceTable',
         index: null
       }
     });

@@ -57,6 +57,14 @@ class Navigator {
   handleTransactionTableArrowDown(index) {
     return this.indexUpdate(index, this.store.transactions.length, +1);
   }
+
+  // Account balance listing.
+  handleBalanceTableArrowUp(index) {
+    return this.indexUpdate(index, this.store.balances.length, -1);
+  }
+  handleBalanceTableArrowDown(index) {
+    return this.indexUpdate(index, this.store.balances.length, +1);
+  }
 }
 
 export default Navigator;
