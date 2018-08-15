@@ -5,6 +5,7 @@ class Navigator {
 
   constructor(store) {
     this.store = store;
+    this.old = {};
   }
 
   /**
@@ -12,18 +13,29 @@ class Navigator {
    * @param {String} key
    */
   handle(key) {
-    const { component, index } = this.store.selected;
-    // TODO: Use Escape to reset navigation.
-    const fn = 'handle' + component + key;
+    const {component} = this.store.selected;
+    let update;
+
+    let fn = 'handle' + component + key;
     if (this[fn]) {
-      const update = this[fn](index);
-      if (update) {
-        // console.log(update);
-        Object.assign(this.store.selected, update);
-        return true;
+      update = this[fn](this.store.selected);
+    }
+
+    if (!update) {
+      fn = 'handle' + key;
+      if (this[fn]) {
+        update = this[fn](this.store.selected);
       }
     }
+
+    if (update) {
+      // console.log(update);
+      Object.assign(this.store.selected, update);
+      return true;
+    }
+
     // console.log(key);
+    return false;
   }
 
   /**
@@ -35,35 +47,75 @@ class Navigator {
   indexUpdate(index, N, delta) {
     if (N) {
       if (index === null) {
-        index = delta < 0 ? N - 1 : 0;
+        index = this.old[this.store.selected.component];
+        if (index === undefined || index === null) {
+          index = delta < 0 ? N - 1 : 0;
+        }
       } else {
         index += delta;
         if (index < 0) {
-          index = null;
+          index = N - 1;
         }
         else if (index >= N) {
-          index = null;
+          index = 0;
         }
       }
       return {index};
     }
   }
 
+  /**
+   * Construct component update.
+   * @param {String} component
+   */
+  componentUpdate(component, N) {
+    this.save();
+    let index = this.old[component] || 0;
+    if (!N) {
+      index = null;
+    }
+    else if (index >= N) {
+      index = N - 1;
+    }
+    return {component, index};
+  }
+
+  /**
+   * Save the current position.
+   */
+  save() {
+    if (this.store.selected.index !== null) {
+      this.old[this.store.selected.component] = this.store.selected.index;
+    }
+  }
+
+  // Generic.
+  handleEscape() {
+    this.save();
+    return {index: null};
+  }
+
   // Transaction listing for an account.
-  handleTransactionTableArrowUp(index) {
+  handleTransactionTableArrowUp({index}) {
     // TODO: Navigate filtered transactions once implemented in store.
     return this.indexUpdate(index, this.store.transactions.length, -1);
   }
-  handleTransactionTableArrowDown(index) {
+  handleTransactionTableArrowDown({index}) {
     return this.indexUpdate(index, this.store.transactions.length, +1);
+  }
+  handleTransactionTableArrowLeft() {
+    return this.componentUpdate('BalanceTable', this.store.balances.length);
   }
 
   // Account balance listing.
-  handleBalanceTableArrowUp(index) {
+  handleBalanceTableArrowUp({index}) {
     return this.indexUpdate(index, this.store.balances.length, -1);
   }
-  handleBalanceTableArrowDown(index) {
+  handleBalanceTableArrowDown({index}) {
     return this.indexUpdate(index, this.store.balances.length, +1);
+  }
+  handleBalanceTableArrowRight() {
+    return this.componentUpdate('TransactionTable', this.store.transactions.length);
   }
 }
 
