@@ -2,6 +2,8 @@
   --bg-color: #d3d3d3;
   --fg-color: rgb(0,0,93);
   --fg-color-light: rgba(0,0,93,0.7);
+  --marking-bg-color: white;
+  --marking-fg-color: rgb(0,0,93);
   --border-color-light: #eee;
   --border-color-dark: #a0a0a0;
   --even-color: rgba(255,255,255,0.2);
