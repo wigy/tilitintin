@@ -105,6 +105,9 @@ class Navigator {
   handleTransactionTableArrowLeft() {
     return this.componentUpdate('BalanceTable', this.store.balances.length);
   }
+  handleTransactionTableEnter({index}) {
+    this.store.filteredTransactions[index].open = !this.store.filteredTransactions[index].open;
+  }
 
   // Account balance listing.
   handleBalanceTableArrowUp({index}) {
