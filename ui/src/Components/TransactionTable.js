@@ -8,8 +8,8 @@ export default translate('translations')(inject('store')(observer(class Transact
 
   render() {
 
-    if (!this.props.txs) {
-      return;
+    if (!this.props.store.transactions) {
+      return '';
     }
 
     // TODO: Filtering must be moved to the store and use filtered results from there.
@@ -46,7 +46,7 @@ export default translate('translations')(inject('store')(observer(class Transact
         </tr>
       </thead>
       <tbody>{
-        filter(this.props.txs).map((tx, idx) => {
+        filter(this.props.store.filteredTransactions).map((tx, idx) => {
           const { component, index } = this.props.store.selected;
           const duplicate = seen[tx.number];
           seen[tx.number] = true;

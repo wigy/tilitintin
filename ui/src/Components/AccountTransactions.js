@@ -10,7 +10,7 @@ export default inject('store')(observer(class AccountTransactions extends Compon
     }
     return (
       <div className="AccountTransactions">
-        <TransactionTable txs={this.props.store.transactions} />
+        <TransactionTable/>
       </div>
     );
   }

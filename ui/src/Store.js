@@ -1,4 +1,4 @@
-import { extendObservable, runInAction } from 'mobx';
+import { extendObservable, runInAction, computed, decorate } from 'mobx';
 import config from './Configuration';
 import Navigator from './Navigator';
 
@@ -113,7 +113,6 @@ class Store {
         }
       },
       selected: {
-        // TODO: Temporary test data.
         component: 'BalanceTable',
         index: null
       }
@@ -407,6 +406,13 @@ class Store {
     this.changed = false;
     return ret;
   }
+
+  get filteredTransactions() {
+    return this.transactions;
+  }
 }
 
+decorate(Store, {
+  filteredTransactions: computed
+});
 export default Store;
