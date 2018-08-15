@@ -97,11 +97,10 @@ class Navigator {
 
   // Transaction listing for an account.
   handleTransactionTableArrowUp({index}) {
-    // TODO: Navigate filtered transactions once implemented in store.
-    return this.indexUpdate(index, this.store.transactions.length, -1);
+    return this.indexUpdate(index, this.store.filteredTransactions.length, -1);
   }
   handleTransactionTableArrowDown({index}) {
-    return this.indexUpdate(index, this.store.transactions.length, +1);
+    return this.indexUpdate(index, this.store.filteredTransactions.length, +1);
   }
   handleTransactionTableArrowLeft() {
     return this.componentUpdate('BalanceTable', this.store.balances.length);
@@ -115,7 +114,7 @@ class Navigator {
     return this.indexUpdate(index, this.store.balances.length, +1);
   }
   handleBalanceTableArrowRight() {
-    return this.componentUpdate('TransactionTable', this.store.transactions.length);
+    return this.componentUpdate('TransactionTable', this.store.filteredTransactions.length);
   }
 }
 

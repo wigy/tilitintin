@@ -407,8 +407,29 @@ class Store {
     return ret;
   }
 
+  /**
+   * Computed property to collect only transactions matching the current filter.
+   */
   get filteredTransactions() {
-    return this.transactions;
+    const visible = (tx) => {
+      const allEnabled = Object.values(this.tools.tagDisabled).filter((v) => v).length === 0;
+      if (!tx.tags || !tx.tags.length) {
+        return allEnabled;
+      }
+      let disabled = true;
+      tx.tags.forEach((tag) => {
+        if (!this.tools.tagDisabled[tag]) {
+          disabled = false;
+        }
+      });
+      return !disabled;
+    };
+
+    const filter = (txs) => {
+      return txs.filter((tx) => visible(tx));
+    };
+
+    return filter(this.transactions);
   }
 }
 
