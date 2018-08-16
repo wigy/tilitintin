@@ -95,6 +95,8 @@ class Navigator {
     return {index: null};
   }
 
+  // TODO: Would be nice to get rid of direct DOM-manipulation.
+
   // Transaction listing for an account.
   handleTransactionTableArrowUp({index}) {
     const ret = this.indexUpdate(index, this.store.filteredTransactions.length, -1);
@@ -113,6 +115,7 @@ class Navigator {
   }
   handleTransactionTableEnter({index}) {
     this.store.filteredTransactions[index].open = !this.store.filteredTransactions[index].open;
+    return {};
   }
 
   // Account balance listing.
@@ -130,6 +133,11 @@ class Navigator {
   }
   handleBalanceTableArrowRight() {
     return this.componentUpdate('TransactionTable', this.store.filteredTransactions.length);
+  }
+  handleBalanceTableEnter({index}) {
+    const el = document.getElementById('Balance' + this.store.balances[index].id);
+    el.children[0].children[0].click();
+    return {};
   }
 }
 
