@@ -6,7 +6,7 @@ import './BalanceLine.css';
 const BalanceLine = (props) => {
   const dst = '/' + props.db + '/txs/' + props.periodId + '/' + props.line.id;
   return (
-    <tr className={props.selected ? 'BalanceLine selected' : 'BalanceLine'}>
+    <tr id={'Balance' + props.line.id} className={props.selected ? 'BalanceLine selected' : 'BalanceLine'}>
       <td className="number"><Link to={dst}>{props.line.number}</Link></td>
       <td className="name"><Link to={dst}>{props.line.name}</Link></td>
       <td className="balance"><Link to={dst}><Money cents={props.line.total} currency="EUR"/></Link></td>

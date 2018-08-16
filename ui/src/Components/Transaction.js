@@ -17,7 +17,7 @@ export default inject('store')(observer(class Transaction extends Component {
     };
 
     return (
-      <tr className={'Transaction' + (this.props.selected ? ' selected' : '') + (this.props.tx.open ? ' open' : '') + (this.props.duplicate ? ' duplicate' : '')} onClick={onClick}>
+      <tr id={'Transaction' + this.props.tx.id} className={'Transaction' + (this.props.selected ? ' selected' : '') + (this.props.tx.open ? ' open' : '') + (this.props.duplicate ? ' duplicate' : '')} onClick={onClick}>
         <td className="number">{this.props.tx.number}</td>
         <td className="date"><YYYYMMDD date={this.props.tx.date}/></td>
         <td className="tags" style={{width: (this.props.tx.tags.length) * 2.6 + 'ex'}}><Tags tags={this.props.tx.tags}/></td>

@@ -97,10 +97,16 @@ class Navigator {
 
   // Transaction listing for an account.
   handleTransactionTableArrowUp({index}) {
-    return this.indexUpdate(index, this.store.filteredTransactions.length, -1);
+    const ret = this.indexUpdate(index, this.store.filteredTransactions.length, -1);
+    const el = document.getElementById('Transaction' + this.store.filteredTransactions[ret.index].id);
+    el.scrollIntoView({block: "center", inline: "center"})
+    return ret;
   }
   handleTransactionTableArrowDown({index}) {
-    return this.indexUpdate(index, this.store.filteredTransactions.length, +1);
+    const ret = this.indexUpdate(index, this.store.filteredTransactions.length, +1);
+    const el = document.getElementById('Transaction' + this.store.filteredTransactions[ret.index].id);
+    el.scrollIntoView({block: "center", inline: "center"})
+    return ret;
   }
   handleTransactionTableArrowLeft() {
     return this.componentUpdate('BalanceTable', this.store.balances.length);
@@ -111,10 +117,16 @@ class Navigator {
 
   // Account balance listing.
   handleBalanceTableArrowUp({index}) {
-    return this.indexUpdate(index, this.store.balances.length, -1);
+    const ret = this.indexUpdate(index, this.store.balances.length, -1);
+    const el = document.getElementById('Balance' + this.store.balances[ret.index].id);
+    el.scrollIntoView({block: "center", inline: "center"})
+    return ret;
   }
   handleBalanceTableArrowDown({index}) {
-    return this.indexUpdate(index, this.store.balances.length, +1);
+    const ret = this.indexUpdate(index, this.store.balances.length, +1);
+    const el = document.getElementById('Balance' + this.store.balances[ret.index].id);
+    el.scrollIntoView({block: "center", inline: "center"})
+    return ret;
   }
   handleBalanceTableArrowRight() {
     return this.componentUpdate('TransactionTable', this.store.filteredTransactions.length);
