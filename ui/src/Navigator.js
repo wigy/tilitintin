@@ -14,6 +14,10 @@ class Navigator {
    */
   handle(key) {
     const {component} = this.store.selected;
+    if (component === null) {
+      return false;
+    }
+
     let update;
 
     let fn = 'handle' + component + key;

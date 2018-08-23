@@ -87,6 +87,15 @@ import Navigator from './Navigator';
  *       Tag2: false
  *     }
  *   }
+ *   // Keyboard navigation
+ *   selected: {
+ *     page: 'Balances',
+ *     component: 'BalanceTable',
+ *     index: 2
+ *   },
+ *   oldSelected: {
+ *     Reports: { ... }
+ *   }
  * }
  */
 class Store {
@@ -113,8 +122,11 @@ class Store {
         }
       },
       selected: {
-        component: 'BalanceTable',
+        page: 'App',
+        component: null,
         index: null
+      },
+      oldSelected: {
       }
     });
     this.getDatabases();
@@ -396,6 +408,47 @@ class Store {
       ret = this.navigator.handle(key);
     });
     return ret;
+  }
+
+  /**
+   * Select the current navigation target.
+   * @param {String} page
+   */
+  selectPage(page) {
+
+    if (this.selected.page === page) {
+      return;
+    }
+
+    let component = 'Nothing', index = null;
+
+    if (this.oldSelected[page]) {
+      component = this.oldSelected[page].component;
+      index = this.oldSelected[page].index;
+    } else {
+      switch (page) {
+        case 'Balances':
+          component = 'BalanceTable';
+          break;
+        case 'Reports':
+          component = 'Nothing';
+          break;
+        case 'Accounts':
+          component = 'Nothing';
+          break;
+        default:
+          console.error('No default components for page', page);
+      }
+    }
+
+    this.oldSelected[this.selected.page] = {
+      component: this.selected.component,
+      index: this.selected.index
+    };
+
+    this.selected.page = page;
+    this.selected.component = component;
+    this.selected.index = index;
   }
 
   /**

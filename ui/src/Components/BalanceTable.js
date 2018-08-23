@@ -3,6 +3,11 @@ import BalanceLine from './BalanceLine';
 import { inject, observer } from 'mobx-react';
 
 export default inject('store')(observer(class BalanceTable extends Component {
+
+  componentDidMount() {
+    this.props.store.selectPage('Balances');
+  }
+
   render() {
 
     const { component, index } = this.props.store.selected;

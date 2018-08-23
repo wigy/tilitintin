@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, withRouter } from 'react-router-dom';
 import { inject } from 'mobx-react';
 import keydown from 'react-keydown';
 import './App.css';
@@ -11,7 +11,7 @@ import Menu from './Components/Menu';
 import ToolPanel from './Components/ToolPanel';
 import Login from './Components/Login';
 
-export default keydown(inject('store')(class App extends Component {
+export default withRouter(keydown(inject('store')(class App extends Component {
 
   componentWillReceiveProps( nextProps ) {
     const { keydown: { event } } = nextProps;
@@ -70,4 +70,4 @@ export default keydown(inject('store')(class App extends Component {
       </div>
     );
   }
-}));
+})));

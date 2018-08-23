@@ -5,6 +5,10 @@ import AccountTable from '../Components/AccountTable';
 
 export default translate('translations')(inject('store')(observer(class Accounts extends Component {
 
+  componentDidMount() {
+    this.props.store.selectPage('Accounts');
+  }
+
   render() {
     if (!this.props.store.token) {
       return '';
