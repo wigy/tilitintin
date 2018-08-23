@@ -4,6 +4,18 @@
   margin-top: 5px;
 }
 
+.TransactionDetails .line.selected {
+  color: black !important;
+  background-color: white !important;
+  border: none;
+  border-top: 1px black dotted !important;
+  border-bottom: 1px black dotted !important;
+}
+
+.TransactionDetails .line.selected  a {
+  color: black !important;
+}
+
 .TransactionDetails .current {
   font-weight: bold;
 }

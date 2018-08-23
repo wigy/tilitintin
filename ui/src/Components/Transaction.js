@@ -16,6 +16,10 @@ export default inject('store')(observer(class Transaction extends Component {
       this.props.tx.open = !this.props.tx.open;
     };
 
+    const {selectedColumn, selectedRow} = this.props;
+
+    // TODO: Redesign this layout so that we have separate rows for TransactionDetails.
+    // TODO: Move account name to own column in opened format and add description always.
     return (
       <tr id={'Transaction' + this.props.tx.id} className={'Transaction' + (this.props.selected ? ' selected' : '') + (this.props.tx.open ? ' open' : '') + (this.props.duplicate ? ' duplicate' : '')} onClick={onClick}>
         <td className="number">{this.props.tx.number}</td>
@@ -24,19 +28,19 @@ export default inject('store')(observer(class Transaction extends Component {
         <td className="description">
           <span className="summary">{this.props.tx.description}&nbsp;</span>
           {this.props.tx.open ? (
-            <TransactionDetails type="description" current={this.props.tx.account_id} tx={this.props.tx} />
+            <TransactionDetails selectedRow={selectedColumn==='description' ? selectedRow : null} type="description" current={this.props.tx.account_id} tx={this.props.tx} />
           ) : ''}
         </td>
         <td className="debit">
           <span className="summary">&nbsp;{this.props.tx.debit ? money : ''}</span>
           {this.props.tx.open ? (
-            <TransactionDetails type="debit" current={this.props.tx.account_id} tx={this.props.tx} />
+            <TransactionDetails selectedRow={selectedColumn==='debit' ? selectedRow : null} type="debit" current={this.props.tx.account_id} tx={this.props.tx} />
           ) : ''}
         </td>
         <td className="credit">
           <span className="summary">&nbsp;{this.props.tx.debit ? '' : money}</span>
           {this.props.tx.open ? (
-            <TransactionDetails type="credit" current={this.props.tx.account_id} tx={this.props.tx} />
+            <TransactionDetails selectedRow={selectedColumn==='credit' ? selectedRow : null} type="credit" current={this.props.tx.account_id} tx={this.props.tx} />
           ) : ''}
         </td>
         <td className="total">{total}</td>

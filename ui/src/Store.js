@@ -91,7 +91,9 @@ import Navigator from './Navigator';
  *   selected: {
  *     page: 'Balances',
  *     component: 'BalanceTable',
- *     index: 2
+ *     index: 2,
+ *     column: null,
+ *     row: null
  *   },
  *   oldSelected: {
  *     Reports: { ... }
@@ -124,7 +126,9 @@ class Store {
       selected: {
         page: 'App',
         component: null,
-        index: null
+        index: null,
+        column: null,
+        row: null
       },
       oldSelected: {
       }
@@ -420,11 +424,13 @@ class Store {
       return;
     }
 
-    let component = 'Nothing', index = null;
+    let component = 'Nothing', index = null, column = null, row = null;
 
     if (this.oldSelected[page]) {
       component = this.oldSelected[page].component;
       index = this.oldSelected[page].index;
+      column = this.oldSelected[page].column;
+      row = this.oldSelected[page].row;
     } else {
       switch (page) {
         case 'Balances':
@@ -443,12 +449,16 @@ class Store {
 
     this.oldSelected[this.selected.page] = {
       component: this.selected.component,
-      index: this.selected.index
+      index: this.selected.index,
+      column: this.selected.column,
+      row: this.selected.row
     };
 
     this.selected.page = page;
     this.selected.component = component;
     this.selected.index = index;
+    this.selected.column = column;
+    this.selected.row = row;
   }
 
   /**
