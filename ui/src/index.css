@@ -50,3 +50,8 @@ table tr:nth-child(even) td {
 table tr:nth-child(odd) td {
   border-right: 2px solid var(--even-color);
 }
+
+.selected {
+  background-color: var(--marking-bg-color) !important;
+  outline: 1px solid var(--marking-fg-color) !important;
+}
