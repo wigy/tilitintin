@@ -1,10 +1,23 @@
 .TransactionDetails {
   color: var(--fg-color-light);
-  border-top: 1px solid rgba(0,0,0,0.1);
-  margin-top: 5px;
+  white-space: nowrap;
 }
 
-.TransactionDetails .line.selected {
+.TransactionDetails.current {
+  font-weight: bold;
+}
+
+.TransactionDetails.accountName {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.TransactionDetails .filler {
+  color: transparent;
+}
+/*
+
+.TransactionDetails.line.selected {
   color: black !important;
   background-color: white !important;
   border: none;
@@ -12,19 +25,7 @@
   border-bottom: 1px black dotted !important;
 }
 
-.TransactionDetails .line.selected  a {
+.TransactionDetails.line.selected  a {
   color: black !important;
 }
-
-.TransactionDetails .current {
-  font-weight: bold;
-}
-
-.TransactionDetails .filler {
-  color: transparent;
-}
-
-.TransactionDetails .extras {
-  font-size: 80%;
-  font-style: italic;
-}
+*/

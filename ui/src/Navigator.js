@@ -165,7 +165,6 @@ class Navigator {
       const ret = this.boxUpdate(column, row, 3, this.store.filteredTransactions[index].entries.length, +1, 0);
       return ret;
     }
-    return this.componentUpdate('BalanceTable', this.store.balances.length);
   }
   handleTransactionTableEnter({index}) {
     if (index !== null) {

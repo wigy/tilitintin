@@ -33,7 +33,7 @@ export default translate('translations')(inject('store')(observer(class Transact
           seen[tx.number] = true;
           return <Transaction
             key={idx}
-            selected={component === 'TransactionTable' && index === idx && column === null}
+            selected={component === 'TransactionTable' && index === idx}
             selectedColumn={column !== null ? ['description', 'debit', 'credit'][column] : null}
             selectedRow={row}
             duplicate={duplicate}

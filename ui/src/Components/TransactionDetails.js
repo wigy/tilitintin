@@ -5,39 +5,34 @@ import './TransactionDetails.css';
 
 const TransactionDetails = (props) => {
   let text;
+  let url;
 
   switch(props.type) {
     case 'debit':
-      text = (entry) => entry.debit ? (<Money cents={entry.amount} currency="EUR" />) : (<span className="filler">-</span>);
+      text = props.entry.debit ? (<Money cents={props.entry.amount} currency="EUR" />) : <span className="filler">-</span>;
       break;
     case 'credit':
-      text = (entry) => !entry.debit ? (<Money cents={entry.amount} currency="EUR" />) : (<span className="filler">-</span>);
+      text = !props.entry.debit ? (<Money cents={props.entry.amount} currency="EUR" />) : <span className="filler">-</span>;
+      break;
+    case 'accountNumber':
+      url = '/' + props.tx.db + '/txs/' + props.tx.period_id + '/' + props.entry.account_id;
+      text = <Link to={url} title={props.entry.name}>{props.entry.number}</Link>;
+      break;
+    case 'accountName':
+      url = '/' + props.tx.db + '/txs/' + props.tx.period_id + '/' + props.entry.account_id;
+      text = <Link to={url} title={props.entry.name}>{props.entry.name}</Link>;
       break;
     case 'description':
-      text = (entry, selected) => {
-        const desc = entry.description.replace(/^(\[[A-Z-a-z0-9]+\])+\s*/, '');
-        const url = '/' + props.tx.db + '/txs/' + props.tx.period_id + '/' + entry.account_id;
-        let text = entry.number + ' ' + entry.name;
-        let extras = '';
-        if (desc && props.tx.description !== desc) {
-          extras = ' ' + desc;
-        }
-        return <Link to={url}>{text}<span className="extras">{extras}</span></Link>;
-      }
+      text = props.entry.description.replace(/^(\[[A-Z-a-z0-9]+\])+\s*/, '');
       break;
     default:
-      text = () => {};
+      text = '';
   }
 
+  const className = 'TransactionDetails ' + (props.current ? ' current' : '') + (props.selected ? ' selected' : '');
   return (
-    <div className={'TransactionDetails'}>
-      {props.tx.entries.map((entry, idx) => {
-        const className = 'line' + (props.current === entry.account_id ? ' current' : '')
-          + (props.selectedRow === idx ? ' selected' : '');
-        return (<div key={entry.id} className={className}>
-          {text(entry, props.selectedRow === idx)}&nbsp;
-        </div>);
-      })}
+    <div className={className}>
+      {text}
     </div>
   );
 };
