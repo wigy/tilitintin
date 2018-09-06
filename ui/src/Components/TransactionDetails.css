@@ -15,17 +15,13 @@
 .TransactionDetails .filler {
   color: transparent;
 }
-/*
 
-.TransactionDetails.line.selected {
+.TransactionDetails.selected {
   color: black !important;
   background-color: white !important;
-  border: none;
-  border-top: 1px black dotted !important;
-  border-bottom: 1px black dotted !important;
+  outline: 1px black dotted !important;
 }
 
-.TransactionDetails.line.selected  a {
+.TransactionDetails.selected  a {
   color: black !important;
 }
-*/
