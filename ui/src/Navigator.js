@@ -19,14 +19,15 @@ class Navigator {
     }
 
     let update;
+    const keyName = (key === ' ' ? 'Space' : key);
+    let fn = 'handle' + component + keyName;
 
-    let fn = 'handle' + component + key;
     if (this[fn]) {
       update = this[fn](this.store.selected);
     }
 
     if (!update) {
-      fn = 'handle' + key;
+      fn = 'handle' + keyName;
       if (this[fn]) {
         update = this[fn](this.store.selected);
       }
@@ -128,12 +129,9 @@ class Navigator {
     return {index: null, column: null, row: null};
   }
 
-  // TODO: Would be nice to get rid of direct DOM-manipulation.
 
-  // PAGE: Balances
-  // --------------
-
-  // Transaction listing for an account.
+  // Transaction listing for an account
+  // ----------------------------------
   handleTransactionTableArrowUp({index, column, row}) {
     if (index !== null && row !== null && this.store.filteredTransactions[index].open) {
       const ret = this.boxUpdate(column, row, 5, this.store.filteredTransactions[index].entries.length, 0, -1);
@@ -167,11 +165,14 @@ class Navigator {
       return ret;
     }
   }
-  handleTransactionTableEnter({index}) {
-    if (index !== null) {
+  handleTransactionTableEnter({index, row}) {
+    if (index !== null && row === null) {
       this.store.filteredTransactions[index].open = !this.store.filteredTransactions[index].open;
     }
     return {row: null, column: null};
+  }
+  handleTransactionTableSpace({index, row}) {
+    return this.handleTransactionTableEnter({index, row});
   }
   handleTransactionTableEscape({index}) {
     if (index !== null) {
@@ -180,9 +181,11 @@ class Navigator {
     return this.handleEscape();
   }
 
-  // Account balance listing.
+  // Account balance listing
+  // -----------------------
   handleBalanceTableArrowUp({index}) {
     const ret = this.indexUpdate(index, this.store.balances.length, -1);
+    // TODO: Would be nice to get rid of direct DOM-manipulation.
     const el = document.getElementById('Balance' + this.store.balances[ret.index].id);
     el.scrollIntoView({block: "center", inline: "center"})
     return ret;
