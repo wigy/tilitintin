@@ -19,17 +19,17 @@ class Navigator {
     }
 
     let update;
-    const keyName = (key === ' ' ? 'Space' : key);
+    const keyName = (key.length === 1 ? 'Text' : key);
     let fn = 'handle' + component + keyName;
 
     if (this[fn]) {
-      update = this[fn](this.store.selected);
+      update = this[fn](this.store.selected, key);
     }
 
     if (!update) {
       fn = 'handle' + keyName;
       if (this[fn]) {
-        update = this[fn](this.store.selected);
+        update = this[fn](this.store.selected, key);
       }
     }
 
@@ -171,14 +171,16 @@ class Navigator {
     }
     return {row: null, column: null};
   }
-  handleTransactionTableSpace({index, row}) {
-    return this.handleTransactionTableEnter({index, row});
-  }
   handleTransactionTableEscape({index}) {
     if (index !== null) {
       this.store.filteredTransactions[index].open = false;
     }
     return this.handleEscape();
+  }
+  handleTransactionTableText({index, row, editor}, key) {
+    if (index !== null && row !== null) {
+      return {editor: true};
+    }
   }
 
   // Account balance listing

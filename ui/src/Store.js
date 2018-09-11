@@ -93,7 +93,8 @@ import Navigator from './Navigator';
  *     component: 'BalanceTable',
  *     index: 2,
  *     column: null,
- *     row: null
+ *     row: null,
+ *     editor: 'abc'
  *   },
  *   oldSelected: {
  *     Reports: { ... }

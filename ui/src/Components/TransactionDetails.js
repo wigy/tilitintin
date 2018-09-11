@@ -1,40 +1,48 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import Money from './Money';
+import TextEdit from './TextEdit';
 import './TransactionDetails.css';
 
-const TransactionDetails = (props) => {
-  let text;
-  let url;
+export default inject('store')(observer(class TransactionDetails extends Component {
 
-  switch(props.type) {
-    case 'debit':
-      text = props.entry.debit ? (<Money cents={props.entry.amount} currency="EUR" />) : <span className="filler">-</span>;
-      break;
-    case 'credit':
-      text = !props.entry.debit ? (<Money cents={props.entry.amount} currency="EUR" />) : <span className="filler">-</span>;
-      break;
-    case 'accountNumber':
-      url = '/' + props.tx.db + '/txs/' + props.tx.period_id + '/' + props.entry.account_id;
-      text = <Link to={url} title={props.entry.name}>{props.entry.number}</Link>;
-      break;
-    case 'accountName':
-      url = '/' + props.tx.db + '/txs/' + props.tx.period_id + '/' + props.entry.account_id;
-      text = <Link to={url} title={props.entry.name}>{props.entry.name}</Link>;
-      break;
-    case 'description':
-      text = props.entry.description.replace(/^(\[[A-Z-a-z0-9]+\])+\s*/, '');
-      break;
-    default:
-      text = '';
-  }
+  render() {
+    let text;
+    let url;
 
-  const className = 'TransactionDetails ' + (props.current ? ' current' : '') + (props.selected ? ' selected' : '');
-  return (
-    <div className={className}>
-      {text}
-    </div>
-  );
-};
+    switch(this.props.type) {
+      case 'debit':
+        text = this.props.entry.debit ? (<Money cents={this.props.entry.amount} currency="EUR" />) : <span className="filler">-</span>;
+        break;
+      case 'credit':
+        text = !this.props.entry.debit ? (<Money cents={this.props.entry.amount} currency="EUR" />) : <span className="filler">-</span>;
+        break;
+      case 'accountNumber':
+        url = '/' + this.props.tx.db + '/txs/' + this.props.tx.period_id + '/' + this.props.entry.account_id;
+        text = <Link to={url} title={this.props.entry.name}>{this.props.entry.number}</Link>;
+        break;
+      case 'accountName':
+        url = '/' + this.props.tx.db + '/txs/' + this.props.tx.period_id + '/' + this.props.entry.account_id;
+        text = <Link to={url} title={this.props.entry.name}>{this.props.entry.name}</Link>;
+        break;
+      case 'description':
+        text = this.props.entry.description.replace(/^(\[[A-Z-a-z0-9]+\])+\s*/, '');
+        break;
+      default:
+        text = '';
+    }
 
-export default TransactionDetails;
+    // Show editor instead, if it is turned on.
+    if (this.props.selected && this.props.store.selected.editor) {
+      return (<TextEdit value={text} onComplete={value => console.log(value)}></TextEdit>)
+    }
+
+    const className = 'TransactionDetails ' + (this.props.current ? ' current' : '') + (this.props.selected ? ' selected' : '');
+    return (
+      <div className={className}>
+        {text}
+      </div>
+    );
+  };
+}));

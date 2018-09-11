@@ -28,14 +28,16 @@ export default translate('translations')(inject('store')(observer(class Transact
       </thead>
       <tbody>{
         this.props.store.filteredTransactions.map((tx, idx) => {
-          const { component, index, row, column } = this.props.store.selected;
+          const { component, index, row, column, editor } = this.props.store.selected;
           const duplicate = seen[tx.number];
           seen[tx.number] = true;
+
           return <Transaction
             key={idx}
             selected={component === 'TransactionTable' && index === idx}
             selectedColumn={column !== null ? ['accountNumber', 'accountName', 'description', 'debit', 'credit'][column] : null}
             selectedRow={row}
+            editor={editor}
             duplicate={duplicate}
             tx={tx}
             total={sum+=(tx.debit ? tx.amount : -tx.amount)}
