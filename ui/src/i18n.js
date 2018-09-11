@@ -20,7 +20,9 @@ i18n.init({
           "Description": "Kuvaus",
           "Debit": "Debet",
           "Credit": "Kredit",
-          "Total": "Yhteensä"
+          "Total": "Yhteensä",
+
+          "This field is required.": "Tämä kenttä ei voi olla tyhjä."
         }
       }
     },

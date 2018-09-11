@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
+import { translate, Trans } from 'react-i18next';
 import Money from './Money';
 import TextEdit from './TextEdit';
 import './TransactionDetails.css';
 
-export default inject('store')(observer(class TransactionDetails extends Component {
+export default translate('translations')(inject('store')(observer(class TransactionDetails extends Component {
 
   render() {
     let text;
@@ -35,14 +36,16 @@ export default inject('store')(observer(class TransactionDetails extends Compone
 
     // Show editor instead, if it is turned on.
     if (this.props.selected && this.props.store.selected.editor) {
-      return (<TextEdit value={text} onComplete={value => console.log(value)}></TextEdit>)
+      return (<TextEdit
+        value={text}
+        validate={(text) => !text ? <Trans>This field is required.</Trans> : null}
+        onComplete={value => console.log(value)}
+        />);
     }
 
     const className = 'TransactionDetails ' + (this.props.current ? ' current' : '') + (this.props.selected ? ' selected' : '');
     return (
-      <div className={className}>
-        {text}
-      </div>
+      <div className={className}>{text}</div>
     );
   };
-}));
+})));

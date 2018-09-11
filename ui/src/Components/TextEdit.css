@@ -1,4 +1,9 @@
-.TextEdit {
+.TextEdit input {
   color: black;
   font-weight: normal;
+  width: 100%;
+}
+
+.TextEdit .error {
+  color: red;
 }
