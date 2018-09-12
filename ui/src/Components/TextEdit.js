@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { translate, Trans } from 'react-i18next';
 import './TextEdit.css';
 
 export default class TextEdit extends Component {
@@ -22,7 +23,14 @@ export default class TextEdit extends Component {
       if (error) {
         this.setState({error});
       } else {
-        this.props.onComplete(this.state.value);
+        const complete = this.props.onComplete(this.state.value);
+        if (complete.then) {
+          complete.then(() => {})
+            .catch(err => {
+              console.error(err);
+              this.setState({error: <Trans>Saving failed.</Trans>});
+            });
+        }
       }
     }
   }

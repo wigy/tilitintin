@@ -22,6 +22,7 @@ i18n.init({
           "Credit": "Kredit",
           "Total": "Yhteensä",
 
+          "Saving failed.": "Tallennus epäonnistui.",
           "This field is required.": "Tämä kenttä ei voi olla tyhjä."
         }
       }

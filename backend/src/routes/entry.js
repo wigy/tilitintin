@@ -12,4 +12,8 @@ router.get('/:id', (req, res) => {
     .then(entry => res.send(entry));
 });
 
+router.patch('/:id', (req, res) => {
+  res.send('{"TODO":999}')
+});
+
 module.exports = router;

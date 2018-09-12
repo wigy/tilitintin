@@ -36,6 +36,9 @@ export default translate('translations')(inject('store')(observer(class Transact
 
     // A function called after editing is finished.
     const onComplete = (value) => {
+
+      let entry = {id: this.props.entry.id};
+
       switch(this.props.type) {
         case 'debit':
           break;
@@ -51,10 +54,15 @@ export default translate('translations')(inject('store')(observer(class Transact
             tags += ' ';
           }
           this.props.entry.description = tags + value;
+          entry.description = this.props.entry.description;
           break;
         default:
       }
-      console.log(this.props.entry.id, this.props.entry.description);
+
+      return this.props.store.saveEntry(entry)
+        .then((res) => {
+          this.props.store.selected.editor = null;
+        });
     }
 
     // Show editor instead, if it is turned on.

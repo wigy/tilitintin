@@ -409,6 +409,16 @@ class Store {
   }
 
   /**
+   * Change entry content.
+   * @param {Object} entry
+   */
+  saveEntry(entry) {
+    const path = '/db/' + this.db + '/entry/' + entry.id;
+    delete entry.id;
+    return this.request(path, 'PATCH', entry)
+  }
+
+  /**
    * Handle navigation.
    * @param {String} key
    * @return {Boolean} True, if should prevent default handling.
