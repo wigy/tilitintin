@@ -172,8 +172,9 @@ class Navigator {
     return {row: null, column: null};
   }
   handleTransactionTableEscape({index}) {
-    if (index !== null) {
+    if (index !== null && this.store.filteredTransactions[index].open) {
       this.store.filteredTransactions[index].open = false;
+      return {index};
     }
     return this.handleEscape();
   }
