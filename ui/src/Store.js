@@ -137,7 +137,13 @@ class Store {
     this.getDatabases();
   }
 
-  fetch(path, method='GET', data=null) {
+  /**
+   * Make a HTTP request to the back-end.
+   * @param {String} path
+   * @param {String} method
+   * @param {Object} data
+   */
+  request(path, method='GET', data=null) {
     let options = {
       method: method,
       headers: {
@@ -240,7 +246,7 @@ class Store {
    * Get the tag definitions from the current database.
    */
   getTags() {
-    return this.fetch('/db/' + this.db + '/tags')
+    return this.request('/db/' + this.db + '/tags')
       .then((tags) => {
         runInAction(() => {
           this.tags = {};
@@ -257,7 +263,7 @@ class Store {
     if (this.dbs.length) {
       return Promise.resolve(this.dbs);
     }
-    return this.fetch('/db')
+    return this.request('/db')
       .then(dbs => {
         runInAction(() => {
           this.dbs = [];
@@ -272,7 +278,7 @@ class Store {
    * Get the list of periods available for the current DB.
    */
   getPeriods() {
-    return this.fetch('/db/' + this.db + '/period')
+    return this.request('/db/' + this.db + '/period')
       .then((periods) => {
         runInAction(() => {
           this.periods = [];
@@ -288,7 +294,7 @@ class Store {
    * Get the summary of balances for all accounts in the current period.
    */
   getBalances() {
-    return this.fetch('/db/' + this.db + '/period/' + this.periodId)
+    return this.request('/db/' + this.db + '/period/' + this.periodId)
       .then((balances) => {
         runInAction(() => {
           this.balances = [];
@@ -304,7 +310,7 @@ class Store {
    * Collect all accounts.
    */
   getAccounts() {
-    return this.fetch('/db/' + this.db + '/account')
+    return this.request('/db/' + this.db + '/account')
       .then((accounts) => {
         runInAction(() => {
           this.accounts = [];
@@ -319,7 +325,7 @@ class Store {
    * Collect all account headings.
    */
   getHeadings(db) {
-    return this.fetch('/db/' + this.db + '/heading')
+    return this.request('/db/' + this.db + '/heading')
       .then((headings) => {
         runInAction(() => {
           this.headings = {};
@@ -338,7 +344,7 @@ class Store {
    * @param {*} accountId
    */
   getAccountPeriod(db, periodId, accountId) {
-    return this.fetch('/db/' + db + '/account/' + accountId + '/' + periodId)
+    return this.request('/db/' + db + '/account/' + accountId + '/' + periodId)
       .then((account) => {
         runInAction(() => {
           this.account = account;
@@ -381,7 +387,7 @@ class Store {
    */
   login(user, password) {
     this.token = null;
-    return this.fetch('/auth', 'POST', {user: user, password: password})
+    return this.request('/auth', 'POST', {user: user, password: password})
     .then((resp) => {
       if (resp && resp.token) {
         runInAction(() => {
