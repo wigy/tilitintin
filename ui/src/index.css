@@ -52,7 +52,7 @@ table tr:nth-child(odd) td {
 }
 
 .selected {
-  background-color: var(--marking-bg-color) !important;
+  background-color: none !important;
   outline: 1px solid var(--marking-fg-color) !important;
   outline-offset: -1px;
 }

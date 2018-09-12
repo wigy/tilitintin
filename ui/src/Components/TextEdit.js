@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { translate, Trans } from 'react-i18next';
 import './TextEdit.css';
 
-export default class TextEdit extends Component {
+export default translate('translations')(class TextEdit extends Component {
 
   constructor(props) {
     super(props);
@@ -24,9 +24,8 @@ export default class TextEdit extends Component {
         this.setState({error});
       } else {
         const complete = this.props.onComplete(this.state.value);
-        if (complete.then) {
-          complete.then(() => {})
-            .catch(err => {
+        if (complete.catch) {
+          complete.catch(err => {
               console.error(err);
               this.setState({error: <Trans>Saving failed.</Trans>});
             });
@@ -47,4 +46,4 @@ export default class TextEdit extends Component {
         />
       </div>);
   }
-}
+});

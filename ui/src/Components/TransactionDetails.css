@@ -17,11 +17,10 @@
 }
 
 .TransactionDetails.selected {
-  color: black !important;
-  background-color: white !important;
   outline: 1px black dotted !important;
+  outline-offset: -1px;
 }
 
 .TransactionDetails.selected  a {
-  color: black !important;
+  color: none !important;
 }
