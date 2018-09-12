@@ -41,7 +41,7 @@ export default inject('store')(observer(class Transaction extends Component {
       const isSelected = (type) => this.props.selected && selectedColumn === type && idx === selectedRow;
       const current = this.props.tx.account_id === entry.account_id;
       ret.push(
-      <tr key={idx} className={'TransactionEntry' + (this.props.tx.open ? ' open' : '') + (this.props.duplicate ? ' duplicate' : '')} onClick={onClick}>
+      <tr key={idx} className={'alt TransactionEntry' + (this.props.tx.open ? ' open' : '') + (this.props.duplicate ? ' duplicate' : '')} onClick={onClick}>
         <td className="accountNumber">
           <TransactionDetails selected={isSelected('accountNumber')} current={current} type="accountNumber" tx={this.props.tx} entry={entry}/>
         </td>

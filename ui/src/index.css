@@ -8,6 +8,8 @@
   --border-color-dark: #a0a0a0;
   --even-color: rgba(255,255,255,0.2);
   --odd-color: rgba(255,255,255,0.5);
+  --even-alt-color: rgba(58, 117, 101,0.2);
+  --odd-alt-color: rgba(58, 117, 101,0.1);
 }
 
 body {
@@ -49,6 +51,14 @@ table tr:nth-child(even) td {
 
 table tr:nth-child(odd) td {
   border-right: 2px solid var(--even-color);
+}
+
+table tr.alt:nth-child(even) {
+  background-color: var(--even-alt-color);
+}
+
+table tr.alt:nth-child(odd) {
+  background-color: var(--odd-alt-color);
 }
 
 .selected {
