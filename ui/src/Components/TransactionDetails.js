@@ -34,13 +34,36 @@ export default translate('translations')(inject('store')(observer(class Transact
         text = '';
     }
 
+    // A function called after editing is finished.
+    const onComplete = (value) => {
+      switch(this.props.type) {
+        case 'debit':
+          break;
+        case 'credit':
+          break;
+        case 'accountNumber':
+          break;
+        case 'accountName':
+          break;
+        case 'description':
+          let tags = this.props.store.sortTags(this.props.tx.tags).map(tag => '[' + tag.tag + ']').join('');
+          if (tags) {
+            tags += ' ';
+          }
+          this.props.entry.description = tags + value;
+          break;
+        default:
+      }
+      console.log(this.props.entry.id, this.props.entry.description);
+    }
+
     // Show editor instead, if it is turned on.
     if (this.props.selected && this.props.store.selected.editor) {
       return (<TextEdit
         value={text}
         validate={(text) => !text ? <Trans>This field is required.</Trans> : null}
-        onComplete={value => console.log(value)}
-        />);
+        onComplete={value => onComplete(value)}
+      />);
     }
 
     const className = 'TransactionDetails ' + (this.props.current ? ' current' : '') + (this.props.selected ? ' selected' : '');

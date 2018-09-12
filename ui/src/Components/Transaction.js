@@ -36,6 +36,7 @@ export default inject('store')(observer(class Transaction extends Component {
       </tr>
     ];
 
+    // TODO: Combine account number and name fields.
     this.props.tx.entries.forEach((entry, idx) => {
       const isSelected = (type) => this.props.selected && selectedColumn === type && idx === selectedRow;
       const current = this.props.tx.account_id === entry.account_id;

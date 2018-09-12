@@ -75,7 +75,7 @@ import Navigator from './Navigator';
  *        period_id": 1,
  *        date: "2017-07-31T21:00:00.000Z",
  *        entries: [
- *          { all entries linked to the same document_id in the same format as above transaction }
+ *          { all entries linked to the same document_id are in the same format as above transaction }
  *        ],
  *        open: false, // If UI has opened entries.
  *        tags: [], // Tags extracted from description.
