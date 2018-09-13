@@ -134,7 +134,7 @@ class Navigator {
   // ----------------------------------
   handleTransactionTableArrowUp({index, column, row}) {
     if (index !== null && row !== null && this.store.filteredTransactions[index].open) {
-      const ret = this.boxUpdate(column, row, 5, this.store.filteredTransactions[index].entries.length, 0, -1);
+      const ret = this.boxUpdate(column, row, 4, this.store.filteredTransactions[index].entries.length, 0, -1);
       return ret;
     }
     const ret = this.indexUpdate(index, this.store.filteredTransactions.length, -1);
@@ -144,7 +144,7 @@ class Navigator {
   }
   handleTransactionTableArrowDown({index, column, row}) {
     if (index !== null && this.store.filteredTransactions[index].open) {
-      const ret = this.boxUpdate(column, row, 5, this.store.filteredTransactions[index].entries.length, 0, +1, 2);
+      const ret = this.boxUpdate(column, row, 4, this.store.filteredTransactions[index].entries.length, 0, +1, 1);
       return ret;
     }
     const ret = this.indexUpdate(index, this.store.filteredTransactions.length, +1);
@@ -154,14 +154,14 @@ class Navigator {
   }
   handleTransactionTableArrowLeft({index, column, row}) {
     if (index !== null && this.store.filteredTransactions[index].open) {
-      const ret = this.boxUpdate(column, row, 5, this.store.filteredTransactions[index].entries.length, -1, 0);
+      const ret = this.boxUpdate(column, row, 4, this.store.filteredTransactions[index].entries.length, -1, 0);
       return ret;
     }
     return this.componentUpdate('BalanceTable', this.store.balances.length);
   }
   handleTransactionTableArrowRight({index, column, row}) {
     if (index !== null && this.store.filteredTransactions[index].open) {
-      const ret = this.boxUpdate(column, row, 5, this.store.filteredTransactions[index].entries.length, +1, 0);
+      const ret = this.boxUpdate(column, row, 4, this.store.filteredTransactions[index].entries.length, +1, 0);
       return ret;
     }
   }

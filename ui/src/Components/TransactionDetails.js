@@ -19,19 +19,15 @@ export default translate('translations')(inject('store')(observer(class Transact
       case 'credit':
         text = !this.props.entry.debit ? (<Money cents={this.props.entry.amount} currency="EUR" />) : <span className="filler">-</span>;
         break;
-      case 'accountNumber':
+      case 'account':
         url = '/' + this.props.tx.db + '/txs/' + this.props.tx.period_id + '/' + this.props.entry.account_id;
-        text = <Link to={url} title={this.props.entry.name}>{this.props.entry.number}</Link>;
-        break;
-      case 'accountName':
-        url = '/' + this.props.tx.db + '/txs/' + this.props.tx.period_id + '/' + this.props.entry.account_id;
-        text = <Link to={url} title={this.props.entry.name}>{this.props.entry.name}</Link>;
+        text = <Link to={url}>{this.props.entry.number} {this.props.entry.name}</Link>;
         break;
       case 'description':
         text = this.props.entry.description.replace(/^(\[[A-Z-a-z0-9]+\])+\s*/, '');
         break;
       default:
-        text = '';
+        text = ' ';
     }
 
     // A function called after editing is finished.
@@ -44,9 +40,7 @@ export default translate('translations')(inject('store')(observer(class Transact
           break;
         case 'credit':
           break;
-        case 'accountNumber':
-          break;
-        case 'accountName':
+        case 'account':
           break;
         case 'description':
           let tags = this.props.store.sortTags(this.props.tx.tags).map(tag => '[' + tag.tag + ']').join('');
