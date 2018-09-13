@@ -75,10 +75,10 @@ const transformer = {
 
 /**
  * Fill in some additional information for the entries already fetched from the database.
- * @param {string} db
- * @param {array} entries
- * @param {string} className
- * @param {string} [joinClass]
+ * @param {String} db
+ * @param {Array} entries
+ * @param {String} className
+ * @param {String} [joinClass]
  */
 function fillEntries (db, entries, className, joinClass) {
   return entries.map(e => {
@@ -111,10 +111,10 @@ function fillEntries (db, entries, className, joinClass) {
 
 /**
  * General purpose query for fetching all entries from a table.
- * @param {string} db
- * @param {string} className
+ * @param {String} db
+ * @param {String} className
  * @param {object} where
- * @param {array} order
+ * @param {Array} order
  */
 function listAll(db, className, where, order) {
   if (!fields[className]) {
@@ -151,8 +151,8 @@ function getOne(db, className, id, joinClass=null, joinClassOrder=null) {
 
 /**
  * Get all accounts having activities on the period.
- * @param {*} db
- * @param {*} periodId
+ * @param {String} db
+ * @param {Number} periodId
  */
 function getPeriodAccounts(db, periodId) {
   return knex.db(db).select('account.id', 'account.number', 'account.name').from('entry')
@@ -185,8 +185,8 @@ function getPeriodDebits(db, periodId) {
 
 /**
  * Get all balances for accounts having entries on the given period.
- * @param {*} db
- * @param {*} periodId
+ * @param {String} db
+ * @param {Number} periodId
  */
 function getPeriodBalances(db, periodId) {
   return getOne(db, 'period', periodId)
@@ -238,9 +238,9 @@ function getPeriodBalances(db, periodId) {
 
 /**
  * Get all transactions for an account during the given period.
- * @param {*} db
- * @param {*} periodId
- * @param {*} accountId
+ * @param {String} db
+ * @param {Number} periodId
+ * @param {Number} accountId
  */
 function getAccountTransactions(db, periodId, accountId) {
   return knex.db(db).select('*', knex.db(db).raw('entry.amount * 100 as amount')).from('entry')
@@ -253,9 +253,9 @@ function getAccountTransactions(db, periodId, accountId) {
 
 /**
  * Get all transactions for an account during the given period including all entries for each transaction.
- * @param {*} db
- * @param {*} periodId
- * @param {*} accountId
+ * @param {String} db
+ * @param {Number} periodId
+ * @param {Number} accountId
  */
 function getAccountTransactionsWithEntries(db, periodId, accountId) {
   return getAccountTransactions(db, periodId, accountId)
@@ -283,9 +283,9 @@ function getAccountTransactionsWithEntries(db, periodId, accountId) {
 
 /**
  * Get all transactions for an account (specified by account number) during the given period.
- * @param {*} db
- * @param {*} periodId
- * @param {*} accountNumber
+ * @param {String} db
+ * @param {Number} periodId
+ * @param {Number} accountId
  */
 function getAccountTransactionsByNumber(db, periodId, accountNumber) {
   return getAccountId(db, accountNumber)
@@ -296,8 +296,8 @@ function getAccountTransactionsByNumber(db, periodId, accountNumber) {
 
 /**
  * Convert account number to ID.
- * @param {*} db
- * @param {number} number Account number.
+ * @param {String} db
+ * @param {Number} number Account number.
  * @return An object {id: <id>, number: <number>} or null if not found.
  */
 function getAccountId(db, number) {
@@ -308,7 +308,7 @@ function getAccountId(db, number) {
 
 /**
  * Get full mapping from account IDs to their numbers.
- * @param {*} db
+ * @param {String} db
  */
 let accountsById = null;
 function getAccountsById(db) {
@@ -326,7 +326,7 @@ function getAccountsById(db) {
 
 /**
  * Get full mapping from account numbers to their IDs.
- * @param {*} db
+ * @param {String} db
  */
 let accountsByNumber = null;
 function getAccountsByNumber(db) {
@@ -344,7 +344,7 @@ function getAccountsByNumber(db) {
 
 /**
  * Get full mapping from account numbers to their names.
- * @param {*} db
+ * @param {String} db
  */
 let accountNamesByNumber = null;
 function getAccountNamesByNumber(db) {
