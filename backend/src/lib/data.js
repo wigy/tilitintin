@@ -118,7 +118,7 @@ function fillEntries (db, entries, className, joinClass) {
  */
 function listAll(db, className, where, order) {
   if (!fields[className]) {
-    throw new Error('No definition for enries for ' + className);
+    throw new Error('No definition for entries for ' + className);
   }
   let ret = knex.db(db).select('*').from(className);
   if (where) {
@@ -184,7 +184,7 @@ function getPeriodDebits(db, periodId) {
 }
 
 /**
- * Get all balannces for accounts having entries on the given period.
+ * Get all balances for accounts having entries on the given period.
  * @param {*} db
  * @param {*} periodId
  */
