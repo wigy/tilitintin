@@ -39,12 +39,14 @@ import Navigator from './Navigator';
  *     ]
  *   },
  *   accounts: [
- *     accountID: {
- *       ...
- *       transactions: [
- *         ...,
- *         ...
- *       ]
+ *     {
+ *       name: "Muiden vapaaehtoisten varausten muutos"
+ *       number: "9890"
+ *       type: "EXPENSE"
+ *       vat_account1_id: null
+ *       vat_account2_id: null
+ *       vat_code: 0
+ *       vat_percentage: 0
  *     }, ...
  *   ],
  *   headings: {
@@ -406,12 +408,13 @@ class Store {
 
   /**
    * Change entry content.
+   * @param {Object} tx
    * @param {Object} entry
+   * @param {Object} data
    */
-  saveEntry(entry) {
+  saveEntry(tx, entry, data) {
     const path = '/db/' + this.db + '/entry/' + entry.id;
-    delete entry.id;
-    return this.request(path, 'PATCH', entry);
+    return this.request(path, 'PATCH', data);
   }
 
   /**

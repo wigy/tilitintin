@@ -16,11 +16,11 @@ export default translate('translations')(inject('store')(observer(class Transact
     switch(this.props.type) {
       case 'debit':
         text = this.props.entry.debit ? (<Money cents={this.props.entry.amount} currency="EUR" />) : <span className="filler">-</span>;
-        edit = text;
+        edit = this.props.entry.debit ? this.props.entry.amount / 100 : '';
         break;
       case 'credit':
         text = !this.props.entry.debit ? (<Money cents={this.props.entry.amount} currency="EUR" />) : <span className="filler">-</span>;
-        edit = text;
+        edit = !this.props.entry.debit ? this.props.entry.amount / 100 : '';
         break;
       case 'account':
         url = '/' + this.props.tx.db + '/txs/' + this.props.tx.period_id + '/' + this.props.entry.account_id;
@@ -39,14 +39,18 @@ export default translate('translations')(inject('store')(observer(class Transact
     // A function called after editing is finished.
     const onComplete = (value) => {
 
-      let entry = {id: this.props.entry.id};
+      let data = {};
 
+      // TODO: Handle debit/credit change.
+      // TODO: Add imbalance, when not in balance.
       switch(this.props.type) {
         case 'debit':
           break;
         case 'credit':
           break;
         case 'account':
+          const account = this.props.store.accounts.filter(a => a.number === value);
+          data.account_id = account[0].id;
           break;
         case 'description':
           let tags = this.props.store.sortTags(this.props.tx.tags).map(tag => '[' + tag.tag + ']').join('');
@@ -54,12 +58,13 @@ export default translate('translations')(inject('store')(observer(class Transact
             tags += ' ';
           }
           this.props.entry.description = tags + value;
-          entry.description = this.props.entry.description;
+          data.description = this.props.entry.description;
           break;
         default:
       }
 
-      return this.props.store.saveEntry(entry)
+      // TODO: Update related structures in the store as well (e.g. tx description).
+      return this.props.store.saveEntry(this.props.tx, this.props.entry, data)
         .then((res) => {
           this.props.store.selected.editor = null;
         });
@@ -68,11 +73,15 @@ export default translate('translations')(inject('store')(observer(class Transact
     // Validator of the value.
     const validate = (value) => {
       const REQUIRED = <Trans>This field is required.</Trans>;
+      const INVALID_ACCOUNT = <Trans>No such account found.</Trans>;
+
       switch(this.props.type) {
+        case 'account':
+          return this.props.store.accounts.filter(a => a.number === value).length ? null : INVALID_ACCOUNT;
         case 'description':
           return value ? null : REQUIRED;
         default:
-          return null;
+          return 'TODO';
       }
     };
 

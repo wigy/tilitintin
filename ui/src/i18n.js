@@ -23,7 +23,8 @@ i18n.init({
           "Total": "Yhteensä",
 
           "Saving failed.": "Tallennus epäonnistui.",
-          "This field is required.": "Tämä kenttä ei voi olla tyhjä."
+          "This field is required.": "Tämä kenttä ei voi olla tyhjä.",
+          "No such account found.": "Tiliä ei ole olemassa."
         }
       }
     },
