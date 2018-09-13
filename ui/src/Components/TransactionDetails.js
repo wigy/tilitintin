@@ -10,24 +10,30 @@ export default translate('translations')(inject('store')(observer(class Transact
 
   render() {
     let text;
+    let edit;
     let url;
 
     switch(this.props.type) {
       case 'debit':
         text = this.props.entry.debit ? (<Money cents={this.props.entry.amount} currency="EUR" />) : <span className="filler">-</span>;
+        edit = text;
         break;
       case 'credit':
         text = !this.props.entry.debit ? (<Money cents={this.props.entry.amount} currency="EUR" />) : <span className="filler">-</span>;
+        edit = text;
         break;
       case 'account':
         url = '/' + this.props.tx.db + '/txs/' + this.props.tx.period_id + '/' + this.props.entry.account_id;
         text = <Link to={url}>{this.props.entry.number} {this.props.entry.name}</Link>;
+        edit = this.props.entry.number;
         break;
       case 'description':
         text = this.props.entry.description.replace(/^(\[[A-Z-a-z0-9]+\])+\s*/, '');
+        edit = text;
         break;
       default:
-        text = ' ';
+        text = '';
+        edit = '';
     }
 
     // A function called after editing is finished.
@@ -59,11 +65,22 @@ export default translate('translations')(inject('store')(observer(class Transact
         });
     }
 
+    // Validator of the value.
+    const validate = (value) => {
+      const REQUIRED = <Trans>This field is required.</Trans>;
+      switch(this.props.type) {
+        case 'description':
+          return value ? null : REQUIRED;
+        default:
+          return null;
+      }
+    };
+
     // Show editor instead, if it is turned on.
     if (this.props.selected && this.props.store.selected.editor) {
       return (<TextEdit
-        value={text}
-        validate={(text) => !text ? <Trans>This field is required.</Trans> : null}
+        value={edit}
+        validate={validate}
         onComplete={value => onComplete(value)}
       />);
     }
