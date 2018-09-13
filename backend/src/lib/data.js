@@ -130,6 +130,14 @@ function listAll(db, className, where, order) {
   return ret.then(entries => fillEntries(db, entries, className));
 }
 
+/**
+ * Get one entry.
+ * @param {String} db
+ * @param {String} className
+ * @param {Number} id
+ * @param {String} joinClass
+ * @param {String[]} joinClassOrder
+ */
 function getOne(db, className, id, joinClass=null, joinClassOrder=null) {
   let ret = null;
   return knex.db(db).select('*').from(className).where({'id': id})
@@ -147,6 +155,17 @@ function getOne(db, className, id, joinClass=null, joinClassOrder=null) {
         return ret;
       }
     });
+}
+
+/**
+ * Update an entry in the table.
+ * @param {String} db
+ * @param {String} className
+ * @param {Number} id
+ * @param {Object} data
+ */
+function updateOne(db, className, id, data) {
+  return knex.db(db)(className).where({'id': id}).update(data);
 }
 
 /**
@@ -373,4 +392,5 @@ module.exports = {
   getAccountTransactions: getAccountTransactions,
   getAccountTransactionsWithEntries: getAccountTransactionsWithEntries,
   getAccountTransactionsByNumber: getAccountTransactionsByNumber,
+  updateOne: updateOne,
 };

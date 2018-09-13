@@ -13,7 +13,10 @@ router.get('/:id', (req, res) => {
 });
 
 router.patch('/:id', (req, res) => {
-  res.send('{"TODO":999}')
+  data.updateOne(req.db, 'entry', req.params.id, req.body)
+    .then(() => {
+      res.status(204).send();
+    });
 });
 
 module.exports = router;
