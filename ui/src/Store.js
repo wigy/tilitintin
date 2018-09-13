@@ -160,15 +160,11 @@ class Store {
     return fetch(config.API_URL + path, options)
       .then(res => {
         this.changed = true;
-        if ([200].includes(res.status)) {
-          return res.json();
+        if ([200, 201, 202, 204].includes(res.status)) {
+          return res.status === 200 ? res.json() : null;
         } else {
-          return null;
+          throw new Error(res.status + ' ' + res.statusText);
         }
-      })
-      .catch(err => {
-        this.changed = true;
-        console.error(err);
       });
   }
 
@@ -415,7 +411,7 @@ class Store {
   saveEntry(entry) {
     const path = '/db/' + this.db + '/entry/' + entry.id;
     delete entry.id;
-    return this.request(path, 'PATCH', entry)
+    return this.request(path, 'PATCH', entry);
   }
 
   /**

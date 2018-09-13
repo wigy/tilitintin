@@ -14,9 +14,7 @@ router.get('/:id', (req, res) => {
 
 router.patch('/:id', (req, res) => {
   data.updateOne(req.db, 'entry', req.params.id, req.body)
-    .then(() => {
-      res.status(204).send();
-    });
+    .then((code) => res.status(code).send());
 });
 
 module.exports = router;

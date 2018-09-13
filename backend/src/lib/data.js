@@ -165,7 +165,12 @@ function getOne(db, className, id, joinClass=null, joinClassOrder=null) {
  * @param {Object} data
  */
 function updateOne(db, className, id, data) {
-  return knex.db(db)(className).where({'id': id}).update(data);
+  return knex.db(db)(className).where({'id': id}).update(data)
+    .then(() => 204)
+    .catch((err) => {
+      d.error(err);
+      return 400;
+    })
 }
 
 /**
