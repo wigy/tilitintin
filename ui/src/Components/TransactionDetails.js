@@ -28,7 +28,7 @@ export default translate('translations')(inject('store')(observer(class Transact
         edit = this.props.entry.number;
         break;
       case 'description':
-        text = this.props.entry.description.replace(/^(\[[A-Z-a-z0-9]+\])+\s*/, '');
+        text = this.props.entry.description;
         edit = text;
         break;
       default:
@@ -53,18 +53,13 @@ export default translate('translations')(inject('store')(observer(class Transact
           data.account_id = account[0].id;
           break;
         case 'description':
-          let tags = this.props.store.sortTags(this.props.tx.tags).map(tag => '[' + tag.tag + ']').join('');
-          if (tags) {
-            tags += ' ';
-          }
-          this.props.entry.description = tags + value;
-          data.description = this.props.entry.description;
+          data.description = value;
           break;
         default:
       }
 
       // TODO: Update related structures in the store as well (e.g. tx description).
-      return this.props.store.saveEntry(this.props.tx, this.props.entry, data)
+      return this.props.store.saveEntry(this.props.entry, data)
         .then((res) => {
           this.props.store.selected.editor = null;
         });

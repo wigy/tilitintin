@@ -267,7 +267,7 @@ function getPeriodBalances(db, periodId) {
  * @param {Number} accountId
  */
 function getAccountTransactions(db, periodId, accountId) {
-  return knex.db(db).select('*', knex.db(db).raw('entry.amount * 100 as amount')).from('entry')
+  return knex.db(db).select('*', 'entry.id AS entry_id', knex.db(db).raw('entry.amount * 100 as amount')).from('entry')
     .leftJoin('document', 'document.id', 'entry.document_id')
     .where({'document.period_id': periodId})
     .where({'entry.account_id': accountId})

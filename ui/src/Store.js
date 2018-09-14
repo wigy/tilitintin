@@ -62,19 +62,20 @@ import Navigator from './Navigator';
  *     type: "ASSET/LIABILITY/EQUITY/REVENUE/EXPENSE/PROFIT_PREV/PROFIT",
  *     tags: ["Tag1", "Tag2"],
  *   },
- *   transactions: [
+ *   transactions: [ // This is a selected collection of entries, usually for single account on single period.
  *      {
- *        id: 1,
- *        account_id:
- *        document_id":158,
- *        account_id":886,
- *        debit":1,
+ *        id: 158, // Same as document_id.
+ *        account_id: 123,
+ *        document_id:158,
+ *        account_id:886,
+ *        entry_id:123,
+ *        debit:1,
  *        amount:120000,
  *        description: "Text description",
- *        row_number": 1,
- *        flags":0,
+ *        row_number: 1,
+ *        flags:0,
  *        number:5,
- *        period_id": 1,
+ *        period_id: 1,
  *        date: "2017-07-31T21:00:00.000Z",
  *        entries: [
  *          { all entries linked to the same document_id are in the same format as above transaction }
@@ -337,11 +338,23 @@ class Store {
 
   /**
    * Fetch the account data for the given period and store it to this store as current account.
-   * @param {*} db
-   * @param {*} periodId
-   * @param {*} accountId
+   * @param {String} db
+   * @param {Number} periodId
+   * @param {Number} accountId
    */
   getAccountPeriod(db, periodId, accountId) {
+
+    // Helper to convert description to stripped description and tag flags object.
+    const desc2tags = (desc) => {
+      let ret = [desc, []];
+      const regex = /^((\[[a-zA-Z0-9]+\])*)\s*(.*)/.exec(desc);
+      if (regex[1]) {
+        ret[0] = regex[3];
+        ret[1] = regex[1].substr(1, regex[1].length - 2).split('][');
+      }
+      return ret;
+    };
+
     return this.request('/db/' + db + '/account/' + accountId + '/' + periodId)
       .then((account) => {
         runInAction(() => {
@@ -350,15 +363,16 @@ class Store {
           this.title = account.number + ' ' + account.name;
           let tags = {};
           this.transactions.forEach((tx) => {
-            const regex = /^((\[[a-zA-Z0-9]+\])*)\s*(.*)/.exec(tx.description);
-            if (regex[1]) {
-              tx.description = regex[3];
-              tx.tags = regex[1].substr(1, regex[1].length - 2).split('][');
-              tx.tags.forEach((tag) => tags[tag] = true);
-            } else {
-              tx.tags = [];
-            }
+            const [txDesc, txTags] = desc2tags(tx.description);
+            tx.description = txDesc;
+            tx.tags = txTags;
+            tx.tags.forEach((tag) => tags[tag] = true);
             tx.open = false;
+            tx.entries.forEach((entry) => {
+              const [entryDesc, entryTags] = desc2tags(entry.description);
+              entry.description = entryDesc;
+              entry.tags = entryTags;
+            });
           });
           this.account.tags = Object.keys(tags);
         });
@@ -408,13 +422,23 @@ class Store {
 
   /**
    * Change entry content.
-   * @param {Object} tx
    * @param {Object} entry
    * @param {Object} data
    */
-  saveEntry(tx, entry, data) {
+  saveEntry(entry, data) {
     const path = '/db/' + this.db + '/entry/' + entry.id;
-    return this.request(path, 'PATCH', data);
+    return this.request(path, 'PATCH', data)
+      .then(() => {
+        runInAction(() => {
+          Object.assign(entry, data);
+          // Fix data for copies of entries in transactions-table.
+          this.transactions.forEach((tx, idx) => {
+            if (entry.id === tx.entry_id) {
+              Object.assign(this.transactions[idx], data);
+            }
+          });
+        });
+      });
   }
 
   /**
