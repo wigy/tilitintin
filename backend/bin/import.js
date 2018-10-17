@@ -49,6 +49,7 @@ async function main() {
   fyffe.setStock(stock);
   await fyffe.import(cli['csv-files'], {dbName: 'tilitintin', service: cli.options.service});
   await fyffe.export('tilitintin', {dbName: 'tilitintin'});
+  process.exit();
 }
 
 main().catch((err) => console.error(err));
