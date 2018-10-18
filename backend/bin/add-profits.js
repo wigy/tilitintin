@@ -163,7 +163,8 @@ knex.db(cli.db)
       }
     });
   })))
-  .then((txs) => promiseSeq(txs));
+  .then((txs) => promiseSeq(txs))
+  .then(() => process.exit())
 });
 
 
