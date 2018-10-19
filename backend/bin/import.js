@@ -4,12 +4,14 @@ const { config, util: {cli}, core: {fyffe} } = require('libfyffe');
 
 cli.opt('avg', null, 'Set explicit averages `SERVICE1:ETH=123,SERVICE2:ETH=122`.');
 cli.opt('debug', null, 'To turn dry-run on and display entries.');
+cli.opt('debug-stock', null, 'Display stock and averagfe changes in detail.');
 cli.opt('dry-run', null, 'To turn dry-run on.');
 cli.opt('force', null, 'Import even if the entries are found already.');
 cli.opt('no-profit', null, 'Turn off profit and losses calculations (to be calculated later).');
 cli.opt('service', null, 'Set explicit name for the service instead of the automatic recognition.');
 cli.opt('show-stock', null, 'Display stock before and after.');
 cli.opt('show-balances', null, 'Display account balances before and after.');
+cli.opt('skip-errors', null, 'If import fails, just print and skip the failed transaction.');
 cli.opt('stock', null, 'Set explicit stocks `SERVICE1:ETH=0.12,SERVICE2:ETH=1.22`.');
 cli.opt('zero-moves', null, 'Do not add to the stock commodities moved in.');
 cli.arg_('db', knex.dbs());
@@ -19,13 +21,15 @@ config.loadIni();
 
 config.set({
   flags: {
-    noProfit: cli.options['no-profit'],
-    zeroMoves: cli.options['zero-moves'],
-    dryRun: cli.options['dry-run'] || cli.options.debug,
     debug: cli.options.debug,
+    debugStock: cli.options['debug-stock'],
+    dryRun: cli.options['dry-run'] || cli.options.debug,
     force: cli.options.force,
-    showStock: cli.options['show-stock'],
+    noProfit: cli.options['no-profit'],
     showBalances: cli.options['show-balances'],
+    showStock: cli.options['show-stock'],
+    skipErrors: cli.options['skip-errors'],
+    zeroMoves: cli.options['zero-moves'],
   }
 });
 
