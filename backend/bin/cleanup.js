@@ -24,4 +24,5 @@ knex.db(cli.db)
     console.log('Dropping documents', data.map((d) => d.number).join(', '));
     return data.map((d) => () => knex.db(cli.db)('document').where({id: d.id}).delete());
   })
-  .then((txs) => promiseSeq(txs));
+  .then((txs) => promiseSeq(txs))
+  .then(() => process.exit());
