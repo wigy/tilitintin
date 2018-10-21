@@ -36,4 +36,5 @@ knex.db(cli.db)
   .then((pairs) => {
     return pairs.map(pair => () => knex.db(cli.db)('document').where({id: pair[0]}).update({number: pair[1]}));
   })
-  .then((txs) => promiseSeq(txs));
+  .then((txs) => promiseSeq(txs))
+  .then(() => process.exit());
