@@ -40,7 +40,6 @@ export default translate('translations')(inject('store')(observer(class Transact
     const onComplete = (value) => {
 
       let data = {};
-
       // TODO: Handle debit/credit change.
       // TODO: Add imbalance, when not in balance.
       switch(this.props.type) {
@@ -54,11 +53,11 @@ export default translate('translations')(inject('store')(observer(class Transact
           break;
         case 'description':
           data.description = value;
+          data.tags = Object.values(this.props.entry.tags);
           break;
         default:
       }
 
-      // TODO: Update related structures in the store as well (e.g. tx description).
       return this.props.store.saveEntry(this.props.entry, data)
         .then((res) => {
           this.props.store.selected.editor = null;

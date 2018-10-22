@@ -81,7 +81,7 @@ import Navigator from './Navigator';
  *          { all entries linked to the same document_id are in the same format as above transaction }
  *        ],
  *        open: false, // If UI has opened entries.
- *        tags: [], // Tags extracted from description.
+ *        tags: [], // Tags extracted from description as strings.
  *      }
  *   ],
  *   tools: {
@@ -425,9 +425,17 @@ class Store {
    * @param {Object} entry
    * @param {Object} data
    */
-  saveEntry(entry, data) {
+  async saveEntry(entry, data) {
     const path = '/db/' + this.db + '/entry/' + entry.id;
-    return this.request(path, 'PATCH', data)
+
+    // Compile fields to DB format.
+    let write = Object.assign({}, data);
+    if ('description' in data && 'tags' in data) {
+      write.description = '[' + data.tags.join('][') + '] ' + data.description;
+      delete write.tags;
+    }
+
+    return this.request(path, 'PATCH', write)
       .then(() => {
         runInAction(() => {
           Object.assign(entry, data);
