@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { translate, Trans } from 'react-i18next';
 import Money from './Money';
 import TextEdit from './TextEdit';
+import { sprintf } from 'sprintf-js';
+
 import './TransactionDetails.css';
 
 export default translate('translations')(inject('store')(observer(class TransactionDetails extends Component {
@@ -16,11 +18,11 @@ export default translate('translations')(inject('store')(observer(class Transact
     switch(this.props.type) {
       case 'debit':
         text = this.props.entry.debit ? (<Money cents={this.props.entry.amount} currency="EUR" />) : <span className="filler">-</span>;
-        edit = this.props.entry.debit ? this.props.entry.amount / 100 : '';
+        edit = this.props.entry.debit ? sprintf('%.2f', this.props.entry.amount / 100) : '';
         break;
       case 'credit':
         text = !this.props.entry.debit ? (<Money cents={this.props.entry.amount} currency="EUR" />) : <span className="filler">-</span>;
-        edit = !this.props.entry.debit ? this.props.entry.amount / 100 : '';
+        edit = !this.props.entry.debit ? sprintf('%.2f', this.props.entry.amount / 100) : '';
         break;
       case 'account':
         url = '/' + this.props.tx.db + '/txs/' + this.props.tx.period_id + '/' + this.props.entry.account_id;
