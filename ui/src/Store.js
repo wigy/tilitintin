@@ -431,7 +431,11 @@ class Store {
     // Compile fields to DB format.
     let write = Object.assign({}, data);
     if ('description' in data && 'tags' in data) {
-      write.description = '[' + data.tags.join('][') + '] ' + data.description;
+      if (data.tags.length) {
+        write.description = '[' + data.tags.join('][') + '] ' + data.description;
+      } else {
+        write.description = data.description;
+      }
       delete write.tags;
     }
 
