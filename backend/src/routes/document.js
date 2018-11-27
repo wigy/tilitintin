@@ -9,7 +9,12 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
   data.getOne(req.db, 'document', req.params.id, 'entry', ['row_number'])
-    .then(document => res.send(document));
+    .then(document => {
+      document.entries.forEach((e) => {
+        e.amount = Math.round(e.amount * 100);
+      });
+      res.send(document);
+    });
 });
 
 module.exports = router;
