@@ -6,6 +6,11 @@
   display: table-row;
 }
 
+.TransactionEntry.imbalance, .Transaction.imbalance, .Transaction.open.imbalance .credit .summary, .Transaction.open.imbalance .debit .summary {
+  color: red;
+  font-weight: inherit;
+}
+
 .Transaction .number {
   padding: 0em 0.5em;
   width: 5%;

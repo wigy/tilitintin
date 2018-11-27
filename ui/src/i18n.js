@@ -26,7 +26,8 @@ i18n.init({
           "This field is required.": "Tämä kenttä ei voi olla tyhjä.",
           "No such account found.": "Tiliä ei ole olemassa.",
           "Numeric value incorrect.": "Virheellinen numeroarvo.",
-          "Cannot be negative.": "Ei voi olla negatiivinen."
+          "Cannot be negative.": "Ei voi olla negatiivinen.",
+          "Debit and credit do not match": "Debet ja kredit ei täsmää"
         }
       }
     },
