@@ -8,6 +8,15 @@ import { sprintf } from 'sprintf-js';
 
 import './TransactionDetails.css';
 
+// Helper to convert string value to number.
+const str2num = (str) => {
+  try {
+    return parseFloat(str.replace(',', '.').replace(/ /g, ''));
+  } catch(err) {
+    return NaN;
+  }
+}
+
 export default translate('translations')(inject('store')(observer(class TransactionDetails extends Component {
 
   render() {
@@ -46,8 +55,12 @@ export default translate('translations')(inject('store')(observer(class Transact
       // TODO: Add imbalance, when not in balance.
       switch(this.props.type) {
         case 'debit':
+          data.debit = 1;
+          data.amount = Math.round(str2num(value) * 100);
           break;
         case 'credit':
+          data.debit = 0;
+          data.amount = Math.round(str2num(value) * 100);
           break;
         case 'account':
           const account = this.props.store.accounts.filter(a => a.number === value);
@@ -68,8 +81,10 @@ export default translate('translations')(inject('store')(observer(class Transact
 
     // Validator of the value.
     const validate = (value) => {
+
       const REQUIRED = <Trans>This field is required.</Trans>;
       const INVALID_ACCOUNT = <Trans>No such account found.</Trans>;
+      const INVALID_NUMBER = <Trans>Numeric value incorrect.</Trans>;
 
       switch(this.props.type) {
         case 'account':
@@ -77,7 +92,7 @@ export default translate('translations')(inject('store')(observer(class Transact
         case 'description':
           return value ? null : REQUIRED;
         default:
-          return 'TODO';
+          return isNaN(str2num(value)) && INVALID_NUMBER;
       }
     };
 

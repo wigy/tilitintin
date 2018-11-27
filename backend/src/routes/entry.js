@@ -13,7 +13,11 @@ router.get('/:id', (req, res) => {
 });
 
 router.patch('/:id', (req, res) => {
-  data.updateOne(req.db, 'entry', req.params.id, req.body)
+  let obj = req.body;
+  if ('amount' in obj) {
+    obj.amount /= 100;
+  }
+  data.updateOne(req.db, 'entry', req.params.id, obj)
     .then((code) => res.status(code).send());
 });
 
