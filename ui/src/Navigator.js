@@ -169,6 +169,9 @@ class Navigator {
     if (index !== null && row === null) {
       this.store.filteredTransactions[index].open = !this.store.filteredTransactions[index].open;
     }
+    if (index !== null && row !== null) {
+      return {editor: true};
+    }
     return {row: null, column: null};
   }
   handleTransactionTableEscape({index}) {
