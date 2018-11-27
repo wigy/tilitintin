@@ -10,8 +10,12 @@ import './TransactionDetails.css';
 
 // Helper to convert string value to number.
 const str2num = (str) => {
+  str = str.replace(',', '.').replace(/ /g, '');
+  if (str === '') {
+    return 0;
+  }
   try {
-    return parseFloat(str.replace(',', '.').replace(/ /g, ''));
+    return parseFloat(str);
   } catch(err) {
     return NaN;
   }
@@ -51,7 +55,6 @@ export default translate('translations')(inject('store')(observer(class Transact
     const onComplete = (value) => {
 
       let data = {};
-      // TODO: Handle debit/credit change.
       // TODO: Add imbalance, when not in balance.
       switch(this.props.type) {
         case 'debit':
@@ -85,14 +88,25 @@ export default translate('translations')(inject('store')(observer(class Transact
       const REQUIRED = <Trans>This field is required.</Trans>;
       const INVALID_ACCOUNT = <Trans>No such account found.</Trans>;
       const INVALID_NUMBER = <Trans>Numeric value incorrect.</Trans>;
+      const NO_NEGATIVE = <Trans>Cannot be negative.</Trans>
 
       switch(this.props.type) {
         case 'account':
           return this.props.store.accounts.filter(a => a.number === value).length ? null : INVALID_ACCOUNT;
         case 'description':
           return value ? null : REQUIRED;
+        case 'credit':
+        case 'debit':
+          const num = str2num(value);
+          if (isNaN(num)) {
+            return INVALID_NUMBER;
+          }
+          if (num < 0) {
+            return NO_NEGATIVE;
+          }
+          return null;
         default:
-          return isNaN(str2num(value)) && INVALID_NUMBER;
+          return 'TODO';
       }
     };
 

@@ -25,7 +25,8 @@ i18n.init({
           "Saving failed.": "Tallennus epäonnistui.",
           "This field is required.": "Tämä kenttä ei voi olla tyhjä.",
           "No such account found.": "Tiliä ei ole olemassa.",
-          "Numeric value incorrect.": "Virheellinen numeroarvo."
+          "Numeric value incorrect.": "Virheellinen numeroarvo.",
+          "Cannot be negative.": "Ei voi olla negatiivinen."
         }
       }
     },
