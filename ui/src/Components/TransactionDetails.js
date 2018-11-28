@@ -11,9 +11,6 @@ import './TransactionDetails.css';
 // Helper to convert string value to number.
 const str2num = (str) => {
   str = str.replace(',', '.').replace(/ /g, '');
-  if (str === '') {
-    return 0;
-  }
   try {
     return parseFloat(str);
   } catch(err) {
@@ -58,12 +55,16 @@ export default translate('translations')(inject('store')(observer(class Transact
 
       switch(this.props.type) {
         case 'debit':
-          data.debit = 1;
-          data.amount = Math.round(str2num(value) * 100);
+          if (value !== '') {
+            data.debit = 1;
+            data.amount = Math.round(str2num(value) * 100);
+          }
           break;
         case 'credit':
-          data.debit = 0;
-          data.amount = Math.round(str2num(value) * 100);
+          if (value !== '') {
+            data.debit = 0;
+            data.amount = Math.round(str2num(value) * 100);
+          }
           break;
         case 'account':
           const account = this.props.store.accounts.filter(a => a.number === value);
@@ -74,6 +75,11 @@ export default translate('translations')(inject('store')(observer(class Transact
           data.tags = Object.values(this.props.entry.tags);
           break;
         default:
+      }
+
+      if (Object.keys(data).length === 0) {
+        this.props.store.selected.editor = null;
+        return Promise.resolve();
       }
 
       return this.props.store.saveEntry(this.props.entry, data)
@@ -97,6 +103,9 @@ export default translate('translations')(inject('store')(observer(class Transact
           return value ? null : REQUIRED;
         case 'credit':
         case 'debit':
+          if (value === '') {
+            return null;
+          }
           const num = str2num(value);
           if (isNaN(num)) {
             return INVALID_NUMBER;
