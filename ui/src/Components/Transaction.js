@@ -77,7 +77,7 @@ export default translate('translations')(inject('store')(observer(class Transact
         <td className="credit">
           <TransactionDetails selected={isSelected('credit')} current={current} type="credit" tx={this.props.tx} entry={entry}/>
         </td>
-        <td className="total">
+        <td className="empty">
         </td>
       </tr>);
     });
@@ -96,7 +96,7 @@ export default translate('translations')(inject('store')(observer(class Transact
         <td className="credit">
           {debit ? <Money cents={debit} currency="€"/> : ''}
         </td>
-        <td className="total"></td>
+        <td className="empty"></td>
       </tr>);
     }
 
