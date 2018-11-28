@@ -1,3 +1,5 @@
+const KEY_DEBUG = true;
+
 /**
  * A keyboard handler for the application.
  *
@@ -33,12 +35,18 @@ class Navigator {
 
     if (this[fn]) {
       update = this[fn](this.store.selected, key);
+      if (update && KEY_DEBUG) {
+        console.log(fn, ':', update);
+      }
     }
 
     if (!update) {
       fn = 'handle' + keyName;
       if (this[fn]) {
         update = this[fn](this.store.selected, key);
+        if (update && KEY_DEBUG) {
+          console.log(fn, ':', update);
+        }
       }
     }
 
@@ -48,18 +56,21 @@ class Navigator {
         delete update.dontPreventDefault;
         ret.preventDefault = false;
       }
+
       Object.assign(this.store.selected, update);
 
-      if (1) {
+      if (KEY_DEBUG) {
         const {component, index, column, row, editor} = this.store.selected;
-        console.log(update);
         console.log('=>', {component, index, column, row, editor});
       }
 
       return ret;
     }
 
-    // console.log(key);
+    if (KEY_DEBUG) {
+      console.log(`No hanler for key '${key}'.`);
+    }
+
     return null;
   }
 
@@ -197,7 +208,7 @@ class Navigator {
   handleTransactionTableEscape({index}) {
     if (index !== null && this.store.filteredTransactions[index].open) {
       this.store.filteredTransactions[index].open = false;
-      return {index};
+      return {index, row: null, column: null};
     }
     return this.handleEscape();
   }
