@@ -1,4 +1,4 @@
-const KEY_DEBUG = true;
+const KEY_DEBUG = false;
 
 /**
  * A keyboard handler for the application.
