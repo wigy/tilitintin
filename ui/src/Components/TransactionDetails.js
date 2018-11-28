@@ -55,7 +55,7 @@ export default translate('translations')(inject('store')(observer(class Transact
     const onComplete = (value) => {
 
       let data = {};
-      // TODO: Add imbalance, when not in balance.
+
       switch(this.props.type) {
         case 'debit':
           data.debit = 1;

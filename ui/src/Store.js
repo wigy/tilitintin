@@ -132,7 +132,8 @@ class Store {
         component: null,
         index: null,
         column: null,
-        row: null
+        row: null,
+        editor: false
       },
       oldSelected: {
       }

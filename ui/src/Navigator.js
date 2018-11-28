@@ -1,5 +1,13 @@
 /**
  * A keyboard handler for the application.
+ *
+ * The store has `selected` component containing
+ *   page - current page
+ *   component - current component
+ *   index - index number of the item inside the component
+ *   column - column index if in matrix area or null
+ *   row - row index if in matrix area or null
+ *   editor - if set, editing is in progress
  */
 class Navigator {
 
@@ -11,11 +19,12 @@ class Navigator {
   /**
    * Update navigation structures in the store based on the key.
    * @param {String} key
+   * @return {Object}
    */
   handle(key) {
     const {component} = this.store.selected;
     if (component === null) {
-      return false;
+      return null;
     }
 
     let update;
@@ -34,13 +43,24 @@ class Navigator {
     }
 
     if (update) {
-      // console.log(update);
+      let ret = {preventDefault: true};
+      if (update.dontPreventDefault) {
+        delete update.dontPreventDefault;
+        ret.preventDefault = false;
+      }
       Object.assign(this.store.selected, update);
-      return true;
+
+      if (1) {
+        const {component, index, column, row, editor} = this.store.selected;
+        console.log(update);
+        console.log('=>', {component, index, column, row, editor});
+      }
+
+      return ret;
     }
 
     // console.log(key);
-    return false;
+    return null;
   }
 
   /**
@@ -183,7 +203,7 @@ class Navigator {
   }
   handleTransactionTableText({index, row, editor}, key) {
     if (index !== null && row !== null) {
-      return {editor: true};
+      return {editor: true, dontPreventDefault: true};
     }
   }
 

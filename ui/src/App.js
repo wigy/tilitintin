@@ -22,9 +22,12 @@ export default withRouter(keydown(inject('store')(class App extends Component {
         + (event.altlKey ? 'Alt+' : '')
         + event.key);
 
-      if (this.props.store.pressKey(keyName)) {
+      const keyResult = this.props.store.pressKey(keyName);
+      if (keyResult) {
         this.props.store.changed = true;
-        event.preventDefault();
+        if (keyResult.preventDefault) {
+          event.preventDefault();
+        }
       }
     }
   }
