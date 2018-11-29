@@ -178,7 +178,25 @@ function updateOne(db, className, id, data) {
     .catch((err) => {
       d.error(err);
       return 400;
+    });
+}
+
+/**
+ * Create an entry in the table.
+ * @param {String} db
+ * @param {String} className
+ * @param {Object} data
+ */
+function createOne(db, className, data) {
+  return knex.db(db)(className).insert(data).returning('*')
+    .then((data) => {
+      console.log(data);
+      return 200;
     })
+    .catch((err) => {
+      d.error(err);
+      return 400;
+    });
 }
 
 /**
@@ -405,5 +423,6 @@ module.exports = {
   getAccountTransactions: getAccountTransactions,
   getAccountTransactionsWithEntries: getAccountTransactionsWithEntries,
   getAccountTransactionsByNumber: getAccountTransactionsByNumber,
+  createOne: createOne,
   updateOne: updateOne,
 };

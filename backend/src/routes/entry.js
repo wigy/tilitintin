@@ -7,6 +7,11 @@ router.get('/', (req, res) => {
     .then(entries => res.send(entries));
 });
 
+router.post('/', (req, res) => {
+  data.createOne(req.db, 'entry', req.body)
+    .then(entry => res.send(entry));
+});
+
 router.get('/:id', (req, res) => {
   data.getOne(req.db, 'entry', req.params.id)
     .then(entry => res.send(entry));

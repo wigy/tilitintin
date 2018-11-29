@@ -1,4 +1,4 @@
-import { extendObservable, runInAction, computed, decorate } from 'mobx';
+import { extendObservable, runInAction, computed, decorate, toJS } from 'mobx';
 import config from './Configuration';
 import Navigator from './Navigator';
 
@@ -443,20 +443,29 @@ class Store {
    * @param {Object} data
    */
   async saveEntry(entry, data) {
-    const path = '/db/' + this.db + '/entry/' + entry.id;
+    const path = '/db/' + this.db + '/entry/' + (entry.id || '');
 
     // Compile fields to DB format.
-    let write = Object.assign({}, data);
-    if ('description' in data && 'tags' in data) {
+    let write = {};
+    // Create new entry, if no ID.
+    if (!entry.id) {
+      Object.assign(write, toJS(entry));
+    }
+    Object.assign(write, data);
+
+    if ('tags' in data) {
       if (data.tags.length) {
         write.description = '[' + data.tags.join('][') + '] ' + data.description;
       } else {
-        write.description = data.description;
+        write.description = data.description || '';
       }
       delete write.tags;
     }
+    // Clean up trash.
+    delete write.name;
+    delete write.number;
 
-    return this.request(path, 'PATCH', write)
+    return this.request(path, entry.id ? 'PATCH' : 'POST', write)
       .then(() => {
         runInAction(() => {
           Object.assign(entry, data);

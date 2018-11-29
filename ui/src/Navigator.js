@@ -231,7 +231,7 @@ class Navigator {
         flags: 0, // TODO: What is this?
 
         account_id: null,
-        number: null,
+        number: '',
         name: null
       };
 
