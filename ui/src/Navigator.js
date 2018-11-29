@@ -225,8 +225,8 @@ class Navigator {
 
         document_id: sample.document_id,
         debit: 1,
-        amount: null,
-        description: null,
+        amount: '',
+        description: '',
         row_number: this.store.transactions[index].entries.reduce((prev, cur) => Math.max(prev, cur.row_number), 0) + 1,
         flags: 0, // TODO: What is this?
 
