@@ -55,30 +55,34 @@ import Navigator from './Navigator';
  *       "level": 0
  *     },...]
  *   },
- *   account: {
+ *   account: { // Currently selected account.
  *     id: 12,
  *     number: 1234,
  *     name: "Account Name",
  *     type: "ASSET/LIABILITY/EQUITY/REVENUE/EXPENSE/PROFIT_PREV/PROFIT",
  *     tags: ["Tag1", "Tag2"],
  *   },
- *   transactions: [ // This is a selected collection of entries, usually for single account on single period.
+ *   transactions: [ // This is a selected collection of primary entries, usually for single account on single period.
  *      {
- *        id: 158, // Same as document_id.
+ *        id: 158,             // Same as document_id.
  *        account_id: 123,
  *        document_id:158,
  *        account_id:886,
- *        entry_id:123,
+ *        entry_id:123,        // ID of the entry this main entry describes.
  *        debit:1,
  *        amount:120000,
  *        description: "Text description",
  *        row_number: 1,
- *        flags:0,
- *        number:5,
+ *        flags: 0,
+ *        number: 5,           // Account number.
+ *        name: 'My Account',  // Account name.
  *        period_id: 1,
  *        date: "2017-07-31T21:00:00.000Z",
  *        entries: [
- *          { all entries that are linked to the same document_id are in the same format as above transaction }
+ *          {
+ *            All entries that are linked to the same document_id are in the same format as above transaction.
+ *            One of the entries is the transaction itself. Entries has their `id` instead of `entry_id`.
+ *          }
  *        ],
  *        open: false, // If UI has opened entries.
  *        tags: [], // Tags extracted from description as strings.

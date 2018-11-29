@@ -1,5 +1,16 @@
+IDEAS
+=====
+
+[ ] Use decorators.
+[ ] Add more classes to store actual data in Store.
+
+FEATURES
+========
+
+[ ] Reports.
+
 BUGS
 ====
 
 [ ] Move around with arrows then change DB and keep moving: crash.
-
+[ ] Entries has unused fields from account like type, vat_code, vat_percentage, vat_account1_id, vat_account2_id

@@ -129,8 +129,9 @@ export default translate('translations')(inject('store')(observer(class Transact
     }
 
     const className = 'TransactionDetails ' + (this.props.current ? ' current' : '') + (this.props.selected ? ' selected' : '');
+
     return (
-      <div className={className}>{text}</div>
+      <div className={className}>{text}&nbsp;</div>
     );
   };
 })));

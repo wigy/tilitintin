@@ -160,6 +160,7 @@ class Navigator {
     return {index: null, column: null, row: null};
   }
 
+  // TODO: How to move these inside appropriate component in easy and readable manner?
 
   // Transaction listing for an account
   // ----------------------------------
@@ -211,6 +212,31 @@ class Navigator {
       return {index, row: null, column: null};
     }
     return this.handleEscape();
+  }
+  handleTransactionTableInsert({index, row}) {
+    // const account = this.store.account;
+    if (row === null) {
+      console.log('TODO: Adding new transactions.');
+      // TODO: Insert transaction tied to current account, open it and select first row & column.
+    } else {
+      const sample = this.store.transactions[index].entries[row];
+      const entry = {
+        id: null,
+
+        document_id: sample.document_id,
+        debit: 1,
+        amount: null,
+        description: null,
+        row_number: this.store.transactions[index].entries.reduce((prev, cur) => Math.max(prev, cur.row_number), 0) + 1,
+        flags: 0, // TODO: What is this?
+
+        account_id: null,
+        number: null,
+        name: null
+      };
+
+      this.store.transactions[index].entries.push(entry);
+    }
   }
   handleTransactionTableText({index, row, editor}, key) {
     if (index !== null && row !== null) {
