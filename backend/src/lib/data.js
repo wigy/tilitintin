@@ -414,6 +414,8 @@ module.exports = {
   fillEntries: fillEntries,
   listAll: listAll,
   getOne: getOne,
+  createOne: createOne,
+  updateOne: updateOne,
   getPeriodAccounts: getPeriodAccounts,
   getPeriodBalances: getPeriodBalances,
   getAccountId: getAccountId,
@@ -423,6 +425,4 @@ module.exports = {
   getAccountTransactions: getAccountTransactions,
   getAccountTransactionsWithEntries: getAccountTransactionsWithEntries,
   getAccountTransactionsByNumber: getAccountTransactionsByNumber,
-  createOne: createOne,
-  updateOne: updateOne,
 };
