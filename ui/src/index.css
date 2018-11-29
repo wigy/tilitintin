@@ -6,6 +6,7 @@
   --marking-fg-color: rgb(0,0,93);
   --border-color-light: #eee;
   --border-color-dark: #a0a0a0;
+  --selected-bg-color: yellow;
   --even-color: rgba(255,255,255,0.2);
   --odd-color: rgba(255,255,255,0.5);
   --even-alt-color: rgba(58, 117, 101,0.2);
@@ -62,7 +63,7 @@ table tr.alt:nth-child(odd) {
 }
 
 .selected {
-  background-color: none !important;
+  background-color: var(--selected-bg-color) !important;
   outline: 1px solid var(--marking-fg-color) !important;
   outline-offset: -1px;
 }

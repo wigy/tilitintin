@@ -63,6 +63,7 @@ export default translate('translations')(inject('store')(observer(class Transact
     this.props.tx.entries.forEach((entry, idx) => {
       const isSelected = (type) => this.props.selected && selectedColumn === type && idx === selectedRow;
       const current = this.props.tx.account_id === entry.account_id;
+      // TODO: Onclick should actually activate editing for the clicked target.
       ret.push(
       <tr key={idx} className={'alt TransactionEntry' + (this.props.tx.open ? ' open' : '') + (this.props.duplicate ? ' duplicate' : '')} onClick={onClick}>
         <td className="account" colSpan={3}>
