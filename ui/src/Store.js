@@ -142,6 +142,16 @@ class Store {
   }
 
   /**
+   * Reset selections.
+   */
+  resetSelected() {
+    this.selected.index = null;
+    this.selected.column = null;
+    this.selected.row = null;
+    this.selected.editor = false;
+  }
+
+  /**
    * Make a HTTP request to the back-end.
    * @param {String} path
    * @param {String} method
@@ -181,6 +191,7 @@ class Store {
     if (db && this.db === db) {
       return true;
     }
+    this.resetSelected();
     this.changed = true;
     this.db = db;
     this.periods = [];
@@ -207,6 +218,7 @@ class Store {
     if (periodId && this.setDb(db) && this.periodId === periodId) {
       return true;
     }
+    this.resetSelected();
     this.changed = true;
     this.periodId = periodId;
     this.balances = [];
