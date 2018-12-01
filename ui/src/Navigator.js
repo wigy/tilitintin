@@ -161,6 +161,7 @@ class Navigator {
   }
 
   // TODO: How to move these inside appropriate component in easy and readable manner?
+  // TODO: Add support for page up and page down.
 
   // Transaction listing for an account
   // ----------------------------------
