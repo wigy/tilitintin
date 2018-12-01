@@ -49,6 +49,11 @@ import Navigator from './Navigator';
  *       vat_percentage: 0
  *     }, ...
  *   ],
+ *   accountsById: {
+ *     1011: {
+ *       // References to the accounts array.
+ *     }
+ *   },
  *   headings: {
  *     "1001": [{
  *       "text": "Vastaavaa",
@@ -123,6 +128,7 @@ class Store {
       balances: [],
       headings: {},
       accounts: [],
+      accountsById: {},
       title: '',
       transactions: [],
       tags: {},
@@ -200,6 +206,7 @@ class Store {
     this.db = db;
     this.periods = [];
     this.accounts = [];
+    this.accountsById = {};
     this.headings = {};
     this.tags = {};
     this.setPeriod(null);
@@ -330,8 +337,10 @@ class Store {
       .then((accounts) => {
         runInAction(() => {
           this.accounts = [];
+          this.accountsById = {};
           accounts.forEach((account) => {
             this.accounts.push(account);
+            this.accountsById[account.id] = account;
           });
         });
       });
@@ -459,11 +468,11 @@ class Store {
       } else {
         write.description = data.description || '';
       }
-      delete write.tags;
     }
     // Clean up trash.
     delete write.name;
     delete write.number;
+    delete write.tags;
 
     return this.request(path, entry.id ? 'PATCH' : 'POST', write)
       .then((res) => {
@@ -472,6 +481,9 @@ class Store {
             entry.id = res.id;
           }
           Object.assign(entry, data);
+          // Fix account number and name if missing or changed.
+          entry.number = this.accountsById[entry.account_id].number;
+          entry.name = this.accountsById[entry.account_id].name;
           // Fix data for copies of entries in transactions-table.
           this.transactions.forEach((tx, idx) => {
             if (entry.id === tx.entry_id) {
