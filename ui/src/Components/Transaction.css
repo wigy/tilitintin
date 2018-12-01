@@ -6,9 +6,13 @@
   display: table-row;
 }
 
-.TransactionEntry.imbalance, .Transaction.imbalance, .Transaction.open.imbalance .credit .summary, .Transaction.open.imbalance .debit .summary {
+.TransactionEntry.error, .Transaction.error, .Transaction.open.error .credit .summary, .Transaction.open.error .debit .summary {
   color: red;
   font-weight: inherit;
+}
+
+.TransactionEntry.error, .Transaction.error {
+  background-color: rgba(255,0,0,0.1) !important;
 }
 
 .Transaction .number {

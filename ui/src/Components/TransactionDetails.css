@@ -24,3 +24,8 @@
 .TransactionDetails.selected  a {
   color: none !important;
 }
+
+.TransactionDetails.error {
+  color: red;
+  background-color: rgba(255,0,0,0.1) !important;
+}

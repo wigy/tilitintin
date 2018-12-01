@@ -11,20 +11,25 @@ export default translate('translations')(inject('store')(observer(class Transact
 
   render() {
 
-    // Calculate imbalance
+    // Calculate imbalance and missing accounts.
     let debit = 0;
     let credit = 0;
+    let missingAccount = false;
     this.props.tx.entries.forEach((entry, idx) => {
       if (entry.debit) {
         debit += entry.amount;
       } else {
         credit += entry.amount;
       }
+      if (!entry.account_id) {
+        missingAccount = true;
+      }
     });
     const smaller = Math.min(debit, credit);
     debit -= smaller;
     credit -= smaller;
     const imbalance = (credit !== debit);
+    const error = imbalance || missingAccount;
 
     // Render top row.
     const money = (<Money cents={this.props.tx.amount} currency="EUR" />);
@@ -38,7 +43,7 @@ export default translate('translations')(inject('store')(observer(class Transact
     const classes = 'Transaction'
       + (this.props.selected ? ' selected' : '')
       + (this.props.tx.open ? ' open' : '')
-      + (imbalance ? ' imbalance' : '')
+      + (error ? ' error' : '')
       + (this.props.duplicate ? ' duplicate' : '');
 
     let ret = [
@@ -63,11 +68,15 @@ export default translate('translations')(inject('store')(observer(class Transact
     this.props.tx.entries.forEach((entry, idx) => {
       const isSelected = (type) => this.props.selected && selectedColumn === type && idx === selectedRow;
       const current = this.props.tx.account_id === entry.account_id;
+      const classes = 'alt TransactionEntry'
+        + (this.props.tx.open ? ' open' : '')
+        + (this.props.duplicate ? ' duplicate' : '');
+
       // TODO: Onclick should actually activate editing for the clicked target.
       ret.push(
-      <tr key={idx} className={'alt TransactionEntry' + (this.props.tx.open ? ' open' : '') + (this.props.duplicate ? ' duplicate' : '')} onClick={onClick}>
+      <tr key={idx} className={classes} onClick={onClick}>
         <td className="account" colSpan={3}>
-          <TransactionDetails selected={isSelected('account')} current={current} type="account" tx={this.props.tx} entry={entry}/>
+          <TransactionDetails error={!entry.account_id} selected={isSelected('account')} current={current} type="account" tx={this.props.tx} entry={entry}/>
         </td>
         <td className="description">
           <TransactionDetails selected={isSelected('description')} current={current} type="description" tx={this.props.tx} entry={entry}/>
@@ -86,7 +95,7 @@ export default translate('translations')(inject('store')(observer(class Transact
     // Render imbalance
     if (imbalance) {
       ret.push(
-        <tr key="imbalance" className={'alt imbalance TransactionEntry' + (this.props.tx.open ? ' open' : '')} onClick={onClick}>
+        <tr key="imbalance" className={'alt error TransactionEntry' + (this.props.tx.open ? ' open' : '')} onClick={onClick}>
         <td className="account" colSpan={3}></td>
         <td className="description">
           <Trans>Debit and credit do not match</Trans>
