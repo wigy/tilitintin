@@ -191,7 +191,7 @@ function updateOne(db, className, id, data) {
 function createOne(db, className, data) {
   return knex.db(db)(className).insert(data)
     .then((data) => {
-      return knex.db(db)(className).where({id: data[0]});
+      return knex.db(db)(className).where({id: data[0]}).first();
     })
     .catch((err) => {
       d.error(err);

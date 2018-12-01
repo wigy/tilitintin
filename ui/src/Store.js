@@ -466,8 +466,11 @@ class Store {
     delete write.number;
 
     return this.request(path, entry.id ? 'PATCH' : 'POST', write)
-      .then(() => {
+      .then((res) => {
         runInAction(() => {
+          if (!entry.id) {
+            entry.id = res.id;
+          }
           Object.assign(entry, data);
           // Fix data for copies of entries in transactions-table.
           this.transactions.forEach((tx, idx) => {
