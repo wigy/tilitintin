@@ -230,7 +230,7 @@ class Navigator {
         row_number: this.store.transactions[index].entries.reduce((prev, cur) => Math.max(prev, cur.row_number), 0) + 1,
         flags: 0, // TODO: What is this?
 
-        account_id: null,
+        account_id: 0,
         number: '',
         name: null
       };

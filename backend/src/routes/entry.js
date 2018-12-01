@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
   data.createOne(req.db, 'entry', req.body)
-    .then(entry => res.send(entry));
+    .then(entry => entry ? res.send(entry) : res.sendStatus(400));
 });
 
 router.get('/:id', (req, res) => {
