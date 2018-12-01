@@ -8,7 +8,11 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  data.createOne(req.db, 'entry', req.body)
+  let obj = req.body;
+  if ('amount' in obj) {
+    obj.amount /= 100;
+  }
+  data.createOne(req.db, 'entry', obj)
     .then(entry => entry ? res.send(entry) : res.sendStatus(400));
 });
 
