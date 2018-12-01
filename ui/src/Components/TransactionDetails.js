@@ -119,6 +119,8 @@ export default translate('translations')(inject('store')(observer(class Transact
       }
     };
 
+    // TODO: Must prevent editing of the entry's account number, when it is the same as transaction's.
+
     // Show editor instead, if it is turned on.
     if (this.props.selected && this.props.store.selected.editor) {
       return (<TextEdit
