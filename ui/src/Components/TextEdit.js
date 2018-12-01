@@ -34,6 +34,14 @@ export default translate('translations')(class TextEdit extends Component {
     }
   }
 
+  onKeyUp(key) {
+    if (key === 'Escape') {
+      if (this.props.onCancel) {
+        this.props.onCancel();
+      }
+    }
+  }
+
   render() {
     return (
       <div className="TextEdit">
@@ -43,6 +51,7 @@ export default translate('translations')(class TextEdit extends Component {
           ref={(input) => { this.inputRef = input }}
           onChange={event => this.setState({value: event.target.value, error: null})}
           onKeyPress={event => this.onKeyPress(event.key)}
+          onKeyUp={event => this.onKeyUp(event.key)}
         />
       </div>);
   }

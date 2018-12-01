@@ -88,6 +88,11 @@ export default translate('translations')(inject('store')(observer(class Transact
         });
     }
 
+    // Cancel editing.
+    const onCancel = () => {
+      this.props.store.selected.editor = null;
+    };
+
     // Validator of the value.
     const validate = (value) => {
 
@@ -127,6 +132,7 @@ export default translate('translations')(inject('store')(observer(class Transact
         value={edit}
         validate={validate}
         onComplete={value => onComplete(value)}
+        onCancel={() => onCancel()}
       />);
     }
 
