@@ -1,4 +1,4 @@
-import { extendObservable, runInAction, computed, toJS } from 'mobx';
+import { runInAction, computed, toJS, observable } from 'mobx';
 import config from './Configuration';
 import Navigator from './Navigator';
 
@@ -115,39 +115,34 @@ import Navigator from './Navigator';
  */
 class Store {
 
+  @observable transactions = [];
+  @observable changed = false;
+  @observable token = localStorage.getItem('token');
+  @observable dbs = [];
+  @observable db = null;
+  @observable periodId = null;
+  @observable accountId = null;
+  @observable periods = [];
+  @observable balances = [];
+  @observable headings = {};
+  @observable accounts = [];
+  @observable accountsById = {};
+  @observable title = '';
+  @observable tags = {};
+  @observable account = {};
+  @observable tools = { tagDisabled: {} };
+  @observable selected = {
+    page: 'App',
+    component: null,
+    index: null,
+    column: null,
+    row: null,
+    editor: false
+  };
+
   constructor() {
     this.navigator = new Navigator(this);
-    extendObservable(this, {
-      changed: false,
-      token: localStorage.getItem('token'),
-      dbs: [],
-      db: null,
-      periodId: null,
-      accountId: null,
-      periods: [],
-      balances: [],
-      headings: {},
-      accounts: [],
-      accountsById: {},
-      title: '',
-      transactions: [],
-      tags: {},
-      account: {},
-      tools: {
-        tagDisabled: {
-        }
-      },
-      selected: {
-        page: 'App',
-        component: null,
-        index: null,
-        column: null,
-        row: null,
-        editor: false
-      },
-      oldSelected: {
-      }
-    });
+    this.oldSelected = {};
     this.getDatabases();
   }
 
