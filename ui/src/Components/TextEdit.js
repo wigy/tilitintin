@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { translate, Trans } from 'react-i18next';
 import './TextEdit.css';
 
-export default translate('translations')(class TextEdit extends Component {
+@translate('translations')
+class TextEdit extends Component {
 
   constructor(props) {
     super(props);
@@ -55,4 +56,6 @@ export default translate('translations')(class TextEdit extends Component {
         />
       </div>);
   }
-});
+}
+
+export default TextEdit;

@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import BalanceLine from './BalanceLine';
 import { inject, observer } from 'mobx-react';
 
-export default inject('store')(observer(class BalanceTable extends Component {
+@inject('store')
+@observer
+class BalanceTable extends Component {
 
   componentDidMount() {
     this.props.store.selectPage('Balances');
@@ -22,4 +24,6 @@ export default inject('store')(observer(class BalanceTable extends Component {
       </table>
     );
   }
-}));
+}
+
+export default BalanceTable;

@@ -3,7 +3,10 @@ import { inject, observer } from 'mobx-react';
 import { translate, Trans } from 'react-i18next';
 import AccountTable from '../Components/AccountTable';
 
-export default translate('translations')(inject('store')(observer(class Accounts extends Component {
+@translate('translations')
+@inject('store')
+@observer
+class Accounts extends Component {
 
   componentDidMount() {
     this.props.store.selectPage('Accounts');
@@ -20,5 +23,6 @@ export default translate('translations')(inject('store')(observer(class Accounts
       </div>
     );
   }
-})));
+}
 
+export default Accounts;

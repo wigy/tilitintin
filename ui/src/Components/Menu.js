@@ -5,7 +5,10 @@ import { Navbar, Nav, NavDropdown, NavItem, MenuItem } from 'react-bootstrap';
 import YYYYMMDD from './YYYYMMDD';
 import './Menu.css';
 
-export default translate('translations')(inject('store')(observer(class Menu extends Component {
+@translate('translations')
+@inject('store')
+@observer
+class Menu extends Component {
 
   update({db, periodId, accountId}) {
     this.props.store.setDb(db);
@@ -111,4 +114,6 @@ export default translate('translations')(inject('store')(observer(class Menu ext
       </div>
     );
   }
-})));
+}
+
+export default Menu;

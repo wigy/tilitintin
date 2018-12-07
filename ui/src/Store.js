@@ -1,4 +1,4 @@
-import { extendObservable, runInAction, computed, decorate, toJS } from 'mobx';
+import { extendObservable, runInAction, computed, toJS } from 'mobx';
 import config from './Configuration';
 import Navigator from './Navigator';
 
@@ -566,6 +566,7 @@ class Store {
   /**
    * Computed property to collect only transactions matching the current filter.
    */
+  @computed
   get filteredTransactions() {
     const visible = (tx) => {
       const allEnabled = Object.values(this.tools.tagDisabled).filter((v) => v).length === 0;
@@ -589,7 +590,4 @@ class Store {
   }
 }
 
-decorate(Store, {
-  filteredTransactions: computed
-});
 export default Store;

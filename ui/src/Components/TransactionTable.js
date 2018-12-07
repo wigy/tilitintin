@@ -4,7 +4,10 @@ import { translate, Trans } from 'react-i18next';
 import Transaction from './Transaction';
 import './TransactionTable.css';
 
-export default translate('translations')(inject('store')(observer(class TransactionTable extends Component {
+@translate('translations')
+@inject('store')
+@observer
+class TransactionTable extends Component {
 
   render() {
 
@@ -47,4 +50,6 @@ export default translate('translations')(inject('store')(observer(class Transact
     </table>
     );
   }
-})));
+}
+
+export default TransactionTable;

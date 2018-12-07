@@ -11,7 +11,10 @@ import Menu from './Components/Menu';
 import ToolPanel from './Components/ToolPanel';
 import Login from './Components/Login';
 
-export default withRouter(keydown(inject('store')(class App extends Component {
+@withRouter
+@keydown
+@inject('store')
+class App extends Component {
 
   componentWillReceiveProps( nextProps ) {
     const { keydown: { event } } = nextProps;
@@ -73,4 +76,6 @@ export default withRouter(keydown(inject('store')(class App extends Component {
       </div>
     );
   }
-})));
+}
+
+export default App;

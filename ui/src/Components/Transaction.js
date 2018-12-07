@@ -7,7 +7,10 @@ import Tags from './Tags';
 import TransactionDetails from './TransactionDetails';
 import './Transaction.css';
 
-export default translate('translations')(inject('store')(observer(class Transaction extends Component {
+@translate('translations')
+@inject('store')
+@observer
+class Transaction extends Component {
 
   render() {
 
@@ -112,4 +115,6 @@ export default translate('translations')(inject('store')(observer(class Transact
 
     return ret;
   }
-})));
+}
+
+export default Transaction;

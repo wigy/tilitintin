@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Tag from './Tag';
 
-export default inject('store')(observer(class Tags extends Component {
+@inject('store')
+@observer
+class Tags extends Component {
 
   render() {
     return (
@@ -11,4 +13,6 @@ export default inject('store')(observer(class Tags extends Component {
       </div>
     );
   }
-}));
+}
+
+export default Tags;

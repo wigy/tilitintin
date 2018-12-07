@@ -18,7 +18,10 @@ const str2num = (str) => {
   }
 }
 
-export default translate('translations')(inject('store')(observer(class TransactionDetails extends Component {
+@translate('translations')
+@inject('store')
+@observer
+class TransactionDetails extends Component {
 
   render() {
     let text;
@@ -145,4 +148,6 @@ export default translate('translations')(inject('store')(observer(class Transact
       <div className={className}>{text}&nbsp;</div>
     );
   };
-})));
+}
+
+export default TransactionDetails;

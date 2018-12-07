@@ -3,7 +3,10 @@ import { inject, observer } from 'mobx-react';
 import { translate, Trans } from 'react-i18next';
 import { Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 
-export default translate('translations')(inject('store')(observer(class Login extends Component {
+@translate('translations')
+@inject('store')
+@observer
+class Login extends Component {
 
   render() {
     let user = '';
@@ -29,4 +32,6 @@ export default translate('translations')(inject('store')(observer(class Login ex
     }
     return '';
   }
-})));
+}
+
+export default Login;

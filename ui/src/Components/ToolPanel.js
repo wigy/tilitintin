@@ -3,7 +3,9 @@ import { inject, observer } from 'mobx-react';
 import Tag from './Tag';
 import './ToolPanel.css';
 
-export default inject('store')(observer(class ToolPanel extends Component {
+@inject('store')
+@observer
+class ToolPanel extends Component {
 
   constructor(props) {
     super(props);
@@ -70,4 +72,6 @@ export default inject('store')(observer(class ToolPanel extends Component {
       </div>
     );
   }
-}));
+}
+
+export default ToolPanel;

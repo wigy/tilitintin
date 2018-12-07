@@ -3,7 +3,9 @@ import { inject, observer } from 'mobx-react';
 import AccountLink from '../Components/AccountLink';
 import './AccountTable.css';
 
-export default inject('store')(observer(class AccountTable extends Component {
+@inject('store')
+@observer
+class AccountTable extends Component {
 
   render() {
     const {accounts, headings} = this.props;
@@ -27,4 +29,6 @@ export default inject('store')(observer(class AccountTable extends Component {
       </div>
     );
   }
-}));
+}
+
+export default AccountTable;

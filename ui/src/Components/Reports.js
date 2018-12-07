@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 
-export default inject('store')(observer(class Reports extends Component {
+@inject('store')
+@observer
+class Reports extends Component {
 
   componentDidMount() {
     this.props.store.selectPage('Reports');
@@ -19,4 +21,6 @@ export default inject('store')(observer(class Reports extends Component {
       </div>
     );
   }
-}));
+}
+
+export default Reports;
