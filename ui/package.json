@@ -110,7 +110,8 @@
   },
   "babel": {
     "presets": [
-      "react-app"
+      "react-app",
+      "mobx"
     ]
   },
   "eslintConfig": {
@@ -121,5 +122,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "babel-preset-mobx": "^2.0.0"
+  }
 }

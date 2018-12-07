@@ -3,7 +3,10 @@ import { inject, observer } from 'mobx-react';
 import { translate, Trans } from 'react-i18next';
 import BalanceTable from '../Components/BalanceTable';
 
-export default translate('translations')(inject('store')(observer(class Balances extends Component {
+@translate('translations')
+@inject('store')
+@observer
+class Balances extends Component {
 
   render() {
     if (!this.props.store.token) {
@@ -19,4 +22,6 @@ export default translate('translations')(inject('store')(observer(class Balances
       </div>
     );
   }
-})));
+}
+
+export default Balances;
