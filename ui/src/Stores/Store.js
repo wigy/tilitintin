@@ -165,7 +165,6 @@ class Store {
     if (db && this.db === db) {
       return true;
     }
-    this.cursor.resetSelected();
     this.changed = true;
     this.db = db;
     this.periods = [];
@@ -193,7 +192,6 @@ class Store {
     if (periodId && this.setDb(db) && this.periodId === periodId) {
       return true;
     }
-    this.cursor.resetSelected();
     this.changed = true;
     this.periodId = periodId;
     this.balances = [];

@@ -11,9 +11,12 @@ import './Menu.css';
 class Menu extends Component {
 
   update({db, periodId, accountId}) {
-    this.props.store.setDb(db);
-    this.props.store.setPeriod(db, periodId);
+    const kept1 = this.props.store.setDb(db);
+    const kept2 = this.props.store.setPeriod(db, periodId);
     this.props.store.setAccount(db, periodId, accountId);
+    if (!kept1 || !kept2) {
+      this.props.store.cursor.resetSelected();
+    }
   }
 
   componentDidMount() {
