@@ -118,6 +118,7 @@ class Store {
   @observable tags = {};
   @observable account = {};
   @observable tools = { tagDisabled: {} };
+
   @observable cursor = new Cursor();
 
   constructor() {

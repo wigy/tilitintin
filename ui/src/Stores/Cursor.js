@@ -14,6 +14,10 @@ import { observable, action } from 'mobx';
  *   oldSelected: {
  *     Reports: { component, index, column, row },
  *     ...
+ *   },
+ *   oldIndex: {
+ *     TransactionTable: 2,
+ *     ...
  *   }
  * }
 */
@@ -25,6 +29,7 @@ class Cursor {
   @observable row = null;
   @observable editor = false;
   oldSelected = {};
+  oldIndex = {};
 
   /**
    * Reset selections.
@@ -83,6 +88,85 @@ class Cursor {
     this.index = index;
     this.column = column;
     this.row = row;
+  }
+
+  /**
+   * Helper to change index counter and wrap it around boundaries.
+   * @param {Number} index
+   * @param {Number} N
+   * @param {Number} delta
+   */
+  indexUpdate(index, N, delta) {
+    if (N) {
+      if (index === null) {
+        if (index === undefined || index === null) {
+          index = delta < 0 ? N - 1 : 0;
+        }
+      } else {
+        index += delta;
+        if (index < 0) {
+          index = N - 1;
+        }
+        else if (index >= N) {
+          index = 0;
+        }
+      }
+      return {index};
+    }
+  }
+
+  /**
+   * Helper to navigate inside rectangular area.
+   * @param {Number} column
+   * @param {Number} row
+   * @param {Number} N
+   * @param {Number} M
+   * @param {Number} dx
+   * @param {Number} dy
+   */
+  boxUpdate(column, row, N, M, dx, dy, entryColumn = 0) {
+    if (N && M) {
+      column = (column + N + dx) % N;
+      if (row === null) {
+        row = 0;
+        column = entryColumn;
+      } else {
+        row += dy;
+        if (row < 0) {
+          row = null;
+          column = null;
+        }
+        if (row >= M) {
+          row = M - 1;
+        }
+      }
+      return {column, row}
+    }
+  }
+
+  /**
+   * Change the current component.
+   * @param {String} component
+   */
+  componentUpdate(component, N) {
+    this.save();
+    let index = this.oldIndex[component] || 0;
+    if (!N) {
+      index = null;
+    }
+    else if (index >= N) {
+      index = N - 1;
+    }
+    return {component, index};
+  }
+
+  /**
+   * Save the current position.
+   */
+  save() {
+    if (this.index !== null) {
+      this.oldIndex[this.component] = this.index;
+    }
   }
 }
 
