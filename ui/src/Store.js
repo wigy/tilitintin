@@ -2,6 +2,90 @@ import { runInAction, computed, toJS, observable } from 'mobx';
 import config from './Configuration';
 
 /**
+ * Keyboard navigation data.
+ * {
+ *   selected: {
+ *     page: 'Balances',
+ *     component: 'BalanceTable',
+ *     index: 2,
+ *     column: null,
+ *     row: null,
+ *     editor: 'abc'
+ *   },
+ *   oldSelected: {
+ *     Reports: { component, index, column, row },
+ *     ...
+ *   }
+ * }
+*/
+class Cursor {
+  @observable page = 'App';
+  @observable component = null;
+  @observable index = null;
+  @observable column = null;
+  @observable row = null;
+  @observable editor = false;
+  oldSelected = {};
+
+  /**
+   * Reset selections.
+   */
+  resetSelected() {
+    this.index = null;
+    this.column = null;
+    this.row = null;
+    this.editor = false;
+  }
+
+  /**
+   * Select the current navigation target.
+   * @param {String} page
+   */
+  selectPage(page) {
+
+    if (this.page === page) {
+      return;
+    }
+
+    let component = 'Nothing', index = null, column = null, row = null;
+
+    if (this.oldSelected[page]) {
+      component = this.oldSelected[page].component;
+      index = this.oldSelected[page].index;
+      column = this.oldSelected[page].column;
+      row = this.oldSelected[page].row;
+    } else {
+      switch (page) {
+        case 'Balances':
+          component = 'BalanceTable';
+          break;
+        case 'Reports':
+          component = 'Nothing';
+          break;
+        case 'Accounts':
+          component = 'Nothing';
+          break;
+        default:
+          console.error('No default components for page', page);
+      }
+    }
+
+    this.oldSelected[this.page] = {
+      component: this.component,
+      index: this.index,
+      column: this.column,
+      row: this.row
+    };
+
+    this.page = page;
+    this.component = component;
+    this.index = index;
+    this.column = column;
+    this.row = row;
+  }
+}
+
+/**
  * The store structure is the following:
  * {
  *   token: null
@@ -98,19 +182,6 @@ import config from './Configuration';
  *       Tag2: false
  *     }
  *   }
- *   // Keyboard navigation
- *   selected: {
- *     page: 'Balances',
- *     component: 'BalanceTable',
- *     index: 2,
- *     column: null,
- *     row: null,
- *     editor: 'abc'
- *   },
- *   oldSelected: {
- *     Reports: { ... }
- *   }
- * }
  */
 class Store {
 
@@ -130,28 +201,10 @@ class Store {
   @observable tags = {};
   @observable account = {};
   @observable tools = { tagDisabled: {} };
-  @observable selected = {
-    page: 'App',
-    component: null,
-    index: null,
-    column: null,
-    row: null,
-    editor: false
-  };
+  @observable selected = new Cursor();
 
   constructor() {
-    this.oldSelected = {};
     this.getDatabases();
-  }
-
-  /**
-   * Reset selections.
-   */
-  resetSelected() {
-    this.selected.index = null;
-    this.selected.column = null;
-    this.selected.row = null;
-    this.selected.editor = false;
   }
 
   /**
@@ -194,7 +247,7 @@ class Store {
     if (db && this.db === db) {
       return true;
     }
-    this.resetSelected();
+    this.selected.resetSelected();
     this.changed = true;
     this.db = db;
     this.periods = [];
@@ -222,7 +275,7 @@ class Store {
     if (periodId && this.setDb(db) && this.periodId === periodId) {
       return true;
     }
-    this.resetSelected();
+    this.selected.resetSelected();
     this.changed = true;
     this.periodId = periodId;
     this.balances = [];
@@ -485,53 +538,6 @@ class Store {
           });
         });
       });
-  }
-
-  /**
-   * Select the current navigation target.
-   * @param {String} page
-   */
-  selectPage(page) {
-
-    if (this.selected.page === page) {
-      return;
-    }
-
-    let component = 'Nothing', index = null, column = null, row = null;
-
-    if (this.oldSelected[page]) {
-      component = this.oldSelected[page].component;
-      index = this.oldSelected[page].index;
-      column = this.oldSelected[page].column;
-      row = this.oldSelected[page].row;
-    } else {
-      switch (page) {
-        case 'Balances':
-          component = 'BalanceTable';
-          break;
-        case 'Reports':
-          component = 'Nothing';
-          break;
-        case 'Accounts':
-          component = 'Nothing';
-          break;
-        default:
-          console.error('No default components for page', page);
-      }
-    }
-
-    this.oldSelected[this.selected.page] = {
-      component: this.selected.component,
-      index: this.selected.index,
-      column: this.selected.column,
-      row: this.selected.row
-    };
-
-    this.selected.page = page;
-    this.selected.component = component;
-    this.selected.index = index;
-    this.selected.column = column;
-    this.selected.row = row;
   }
 
   /**

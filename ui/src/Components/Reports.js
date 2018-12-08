@@ -6,7 +6,7 @@ import { inject, observer } from 'mobx-react';
 class Reports extends Component {
 
   componentDidMount() {
-    this.props.store.selectPage('Reports');
+    this.props.store.selected.selectPage('Reports');
   }
 
   render() {
