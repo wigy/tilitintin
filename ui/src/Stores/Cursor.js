@@ -1,4 +1,4 @@
-import { observable } from 'mobx';
+import { observable, action } from 'mobx';
 
 /**
  * Keyboard navigation data.
@@ -29,6 +29,7 @@ class Cursor {
   /**
    * Reset selections.
    */
+  @action.bound
   resetSelected() {
     this.index = null;
     this.column = null;
@@ -40,6 +41,7 @@ class Cursor {
    * Select the current navigation target.
    * @param {String} page
    */
+  @action.bound
   selectPage(page) {
 
     if (this.page === page) {

@@ -2,7 +2,6 @@ import { runInAction, computed, toJS, observable } from 'mobx';
 import config from '../Configuration';
 import Cursor from './Cursor';
 
-
 /**
  * The store structure is the following:
  * {

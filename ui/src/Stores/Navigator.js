@@ -25,7 +25,7 @@ class Navigator {
    * @param {String} key
    * @return {Object}
    */
-  @action
+  @action.bound
   handle(key) {
     const {component} = this.store.cursor;
     if (component === null) {
@@ -71,7 +71,7 @@ class Navigator {
     }
 
     if (KEY_DEBUG) {
-      console.log(`No hanler for key '${key}'.`);
+      console.log(`No handler for key '${key}'.`);
     }
 
     return null;
