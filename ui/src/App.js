@@ -22,7 +22,7 @@ class App extends Component {
       let keyName = (
         (event.key.length > 1 && event.shiftKey ? 'Shift+' : '')
         + (event.ctrlKey ? 'Ctrl+' : '')
-        + (event.altlKey ? 'Alt+' : '')
+        + (event.altKey ? 'Alt+' : '')
         + event.key);
 
       const keyResult = this.props.store.pressKey(keyName);
