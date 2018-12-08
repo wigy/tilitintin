@@ -27,7 +27,7 @@ class Navigator {
    */
   @action
   handle(key) {
-    const {component} = this.store.selected;
+    const {component} = this.store.cursor;
     if (component === null) {
       return null;
     }
@@ -37,7 +37,7 @@ class Navigator {
     let fn = 'handle' + component + keyName;
 
     if (this[fn]) {
-      update = this[fn](this.store.selected, key);
+      update = this[fn](this.store.cursor, key);
       if (update && KEY_DEBUG) {
         console.log(fn, ':', update);
       }
@@ -46,7 +46,7 @@ class Navigator {
     if (!update) {
       fn = 'handle' + keyName;
       if (this[fn]) {
-        update = this[fn](this.store.selected, key);
+        update = this[fn](this.store.cursor, key);
         if (update && KEY_DEBUG) {
           console.log(fn, ':', update);
         }
@@ -60,10 +60,10 @@ class Navigator {
         ret.preventDefault = false;
       }
 
-      Object.assign(this.store.selected, update);
+      Object.assign(this.store.cursor, update);
 
       if (KEY_DEBUG) {
-        const {component, index, column, row, editor} = this.store.selected;
+        const {component, index, column, row, editor} = this.store.cursor;
         console.log('=>', {component, index, column, row, editor});
       }
 
@@ -86,7 +86,7 @@ class Navigator {
   indexUpdate(index, N, delta) {
     if (N) {
       if (index === null) {
-        index = this.old[this.store.selected.component];
+        index = this.old[this.store.cursor.component];
         if (index === undefined || index === null) {
           index = delta < 0 ? N - 1 : 0;
         }
@@ -152,8 +152,8 @@ class Navigator {
    * Save the current position.
    */
   save() {
-    if (this.store.selected.index !== null) {
-      this.old[this.store.selected.component] = this.store.selected.index;
+    if (this.store.cursor.index !== null) {
+      this.old[this.store.cursor.component] = this.store.cursor.index;
     }
   }
 

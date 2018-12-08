@@ -15,7 +15,7 @@ class TransactionTable extends Component {
       return '';
     }
 
-    const { component, index, row, column, editor } = this.props.store.selected;
+    const { component, index, row, column, editor } = this.props.store.cursor;
 
     let sum = 0;
     let seen = {};

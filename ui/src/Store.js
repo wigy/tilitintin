@@ -201,7 +201,7 @@ class Store {
   @observable tags = {};
   @observable account = {};
   @observable tools = { tagDisabled: {} };
-  @observable selected = new Cursor();
+  @observable cursor = new Cursor();
 
   constructor() {
     this.getDatabases();
@@ -247,7 +247,7 @@ class Store {
     if (db && this.db === db) {
       return true;
     }
-    this.selected.resetSelected();
+    this.cursor.resetSelected();
     this.changed = true;
     this.db = db;
     this.periods = [];
@@ -275,7 +275,7 @@ class Store {
     if (periodId && this.setDb(db) && this.periodId === periodId) {
       return true;
     }
-    this.selected.resetSelected();
+    this.cursor.resetSelected();
     this.changed = true;
     this.periodId = periodId;
     this.balances = [];

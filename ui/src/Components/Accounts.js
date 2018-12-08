@@ -9,7 +9,7 @@ import AccountTable from '../Components/AccountTable';
 class Accounts extends Component {
 
   componentDidMount() {
-    this.props.store.selected.selectPage('Accounts');
+    this.props.store.cursor.selectPage('Accounts');
   }
 
   render() {

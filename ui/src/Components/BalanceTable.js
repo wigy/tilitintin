@@ -7,12 +7,12 @@ import { inject, observer } from 'mobx-react';
 class BalanceTable extends Component {
 
   componentDidMount() {
-    this.props.store.selected.selectPage('Balances');
+    this.props.store.cursor.selectPage('Balances');
   }
 
   render() {
 
-    const { component, index } = this.props.store.selected;
+    const { component, index } = this.props.store.cursor;
 
     return (
       <table className="BalanceTable">
