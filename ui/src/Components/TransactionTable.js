@@ -15,6 +15,8 @@ class TransactionTable extends Component {
       return '';
     }
 
+    const { component, index, row, column, editor } = this.props.store.selected;
+
     let sum = 0;
     let seen = {};
     return (<table className="TransactionTable">
@@ -31,7 +33,6 @@ class TransactionTable extends Component {
       </thead>
       <tbody>{
         this.props.store.filteredTransactions.map((tx, idx) => {
-          const { component, index, row, column, editor } = this.props.store.selected;
           const duplicate = seen[tx.number];
           seen[tx.number] = true;
 
