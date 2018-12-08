@@ -247,8 +247,10 @@ class Store {
    * Get the list of available databases.
    */
   getDatabases() {
+    if (!this.token) {
+      return Promise.resolve([]);
+    }
     if (this.dbs.length) {
-      return Promise.resolve(this.dbs);
     }
     return this.request('/db')
       .then(dbs => {
@@ -405,9 +407,13 @@ class Store {
    * Log out the current user.
    */
   logout() {
-    this.token = null;
-    this.changed = true;
     localStorage.removeItem('token');
+    this.token = null;
+    this.dbs = [];
+    this.db = null;
+    this.periods = [];
+    this.periodId = null;
+    this.changed = true;
   }
 
   /**
