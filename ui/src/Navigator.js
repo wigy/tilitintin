@@ -1,3 +1,5 @@
+import { action } from 'mobx';
+
 const KEY_DEBUG = false;
 
 /**
@@ -23,6 +25,7 @@ class Navigator {
    * @param {String} key
    * @return {Object}
    */
+  @action
   handle(key) {
     const {component} = this.store.selected;
     if (component === null) {
