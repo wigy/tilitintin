@@ -15,6 +15,7 @@ import Login from './Components/Login';
 @withRouter
 @keydown
 @inject('store')
+@inject('navigator')
 class App extends Component {
 
   componentWillReceiveProps( nextProps ) {
@@ -28,7 +29,7 @@ class App extends Component {
 
       let keyResult;
       runInAction(() => {
-        keyResult = this.props.store.navigator.handle(keyName);
+        keyResult = this.props.navigator.handle(keyName);
       });
 
       if (keyResult) {

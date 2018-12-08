@@ -6,12 +6,16 @@ import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import registerServiceWorker from './registerServiceWorker';
 import Store from './Store';
+import Navigator from './Navigator';
 import i18n from './i18n';
 import './index.css';
 
+let store = new Store();
+let navigator = new Navigator(store);
+
 ReactDOM.render(
   <I18nextProvider i18n={ i18n }>
-    <Provider store={new Store()}>
+    <Provider store={store} navigator={navigator}>
       <BrowserRouter>
         <App />
       </BrowserRouter>

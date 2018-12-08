@@ -1,6 +1,5 @@
 import { runInAction, computed, toJS, observable } from 'mobx';
 import config from './Configuration';
-import Navigator from './Navigator';
 
 /**
  * The store structure is the following:
@@ -141,7 +140,6 @@ class Store {
   };
 
   constructor() {
-    this.navigator = new Navigator(this);
     this.oldSelected = {};
     this.getDatabases();
   }
