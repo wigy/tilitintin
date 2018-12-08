@@ -3,16 +3,17 @@ import BalanceLine from './BalanceLine';
 import { inject, observer } from 'mobx-react';
 
 @inject('store')
+@inject('cursor')
 @observer
 class BalanceTable extends Component {
 
   componentDidMount() {
-    this.props.store.cursor.selectPage('Balances');
+    this.props.cursor.selectPage('Balances');
   }
 
   render() {
 
-    const { component, index } = this.props.store.cursor;
+    const { component, index } = this.props.cursor;
 
     return (
       <table className="BalanceTable">

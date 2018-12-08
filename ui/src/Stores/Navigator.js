@@ -7,7 +7,8 @@ const KEY_DEBUG = false;
  */
 class Navigator {
 
-  constructor(store) {
+  constructor(cursor, store) {
+    this.cursor = cursor;
     this.store = store;
   }
 
@@ -18,7 +19,7 @@ class Navigator {
    */
   @action.bound
   handle(key) {
-    const {component} = this.store.cursor;
+    const {component} = this.cursor;
     if (component === null) {
       return null;
     }
@@ -28,7 +29,7 @@ class Navigator {
     let fn = 'handle' + component + keyName;
 
     if (this[fn]) {
-      update = this[fn](this.store.cursor, key);
+      update = this[fn](this.cursor, key);
       if (update && KEY_DEBUG) {
         console.log(fn, ':', update);
       }
@@ -37,7 +38,7 @@ class Navigator {
     if (!update) {
       fn = 'handle' + keyName;
       if (this[fn]) {
-        update = this[fn](this.store.cursor, key);
+        update = this[fn](this.cursor, key);
         if (update && KEY_DEBUG) {
           console.log(fn, ':', update);
         }
@@ -51,10 +52,10 @@ class Navigator {
         ret.preventDefault = false;
       }
 
-      Object.assign(this.store.cursor, update);
+      Object.assign(this.cursor, update);
 
       if (KEY_DEBUG) {
-        const {component, index, column, row, editor} = this.store.cursor;
+        const {component, index, column, row, editor} = this.cursor;
         console.log('=>', {component, index, column, row, editor});
       }
 
@@ -70,7 +71,7 @@ class Navigator {
 
   // Generic.
   handleEscape() {
-    this.store.cursor.save();
+    this.cursor.save();
     return {index: null, column: null, row: null};
   }
 
@@ -81,34 +82,34 @@ class Navigator {
   // ----------------------------------
   handleTransactionTableArrowUp({index, column, row}) {
     if (index !== null && row !== null && this.store.filteredTransactions[index].open) {
-      const ret = this.store.cursor.boxUpdate(column, row, 4, this.store.filteredTransactions[index].entries.length, 0, -1);
+      const ret = this.cursor.boxUpdate(column, row, 4, this.store.filteredTransactions[index].entries.length, 0, -1);
       return ret;
     }
-    const ret = this.store.cursor.indexUpdate(index, this.store.filteredTransactions.length, -1);
+    const ret = this.cursor.indexUpdate(index, this.store.filteredTransactions.length, -1);
     const el = document.getElementById('Transaction' + this.store.filteredTransactions[ret.index].id);
     el.scrollIntoView({block: "center", inline: "center"})
     return ret;
   }
   handleTransactionTableArrowDown({index, column, row}) {
     if (index !== null && this.store.filteredTransactions[index].open) {
-      const ret = this.store.cursor.boxUpdate(column, row, 4, this.store.filteredTransactions[index].entries.length, 0, +1, 1);
+      const ret = this.cursor.boxUpdate(column, row, 4, this.store.filteredTransactions[index].entries.length, 0, +1, 1);
       return ret;
     }
-    const ret = this.store.cursor.indexUpdate(index, this.store.filteredTransactions.length, +1);
+    const ret = this.cursor.indexUpdate(index, this.store.filteredTransactions.length, +1);
     const el = document.getElementById('Transaction' + this.store.filteredTransactions[ret.index].id);
     el.scrollIntoView({block: "center", inline: "center"})
     return ret;
   }
   handleTransactionTableArrowLeft({index, column, row}) {
     if (index !== null && this.store.filteredTransactions[index].open) {
-      const ret = this.store.cursor.boxUpdate(column, row, 4, this.store.filteredTransactions[index].entries.length, -1, 0);
+      const ret = this.cursor.boxUpdate(column, row, 4, this.store.filteredTransactions[index].entries.length, -1, 0);
       return ret;
     }
-    return this.store.cursor.componentUpdate('BalanceTable', this.store.balances.length);
+    return this.cursor.componentUpdate('BalanceTable', this.store.balances.length);
   }
   handleTransactionTableArrowRight({index, column, row}) {
     if (index !== null && this.store.filteredTransactions[index].open) {
-      const ret = this.store.cursor.boxUpdate(column, row, 4, this.store.filteredTransactions[index].entries.length, +1, 0);
+      const ret = this.cursor.boxUpdate(column, row, 4, this.store.filteredTransactions[index].entries.length, +1, 0);
       return ret;
     }
   }
@@ -164,20 +165,20 @@ class Navigator {
   // Account balance listing
   // -----------------------
   handleBalanceTableArrowUp({index}) {
-    const ret = this.store.cursor.indexUpdate(index, this.store.balances.length, -1);
+    const ret = this.cursor.indexUpdate(index, this.store.balances.length, -1);
     // TODO: Would be nice to get rid of direct DOM-manipulation.
     const el = document.getElementById('Balance' + this.store.balances[ret.index].id);
     el.scrollIntoView({block: "center", inline: "center"})
     return ret;
   }
   handleBalanceTableArrowDown({index}) {
-    const ret = this.store.cursor.indexUpdate(index, this.store.balances.length, +1);
+    const ret = this.cursor.indexUpdate(index, this.store.balances.length, +1);
     const el = document.getElementById('Balance' + this.store.balances[ret.index].id);
     el.scrollIntoView({block: "center", inline: "center"})
     return ret;
   }
   handleBalanceTableArrowRight() {
-    return this.store.cursor.componentUpdate('TransactionTable', this.store.filteredTransactions.length);
+    return this.cursor.componentUpdate('TransactionTable', this.store.filteredTransactions.length);
   }
   handleBalanceTableEnter({index}) {
     const el = document.getElementById('Balance' + this.store.balances[index].id);

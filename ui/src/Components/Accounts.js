@@ -5,11 +5,12 @@ import AccountTable from '../Components/AccountTable';
 
 @translate('translations')
 @inject('store')
+@inject('cursor')
 @observer
 class Accounts extends Component {
 
   componentDidMount() {
-    this.props.store.cursor.selectPage('Accounts');
+    this.props.cursor.selectPage('Accounts');
   }
 
   render() {

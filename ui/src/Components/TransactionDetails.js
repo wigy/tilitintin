@@ -20,6 +20,7 @@ const str2num = (str) => {
 
 @translate('translations')
 @inject('store')
+@inject('cursor')
 @observer
 class TransactionDetails extends Component {
 
@@ -81,19 +82,19 @@ class TransactionDetails extends Component {
       }
 
       if (Object.keys(data).length === 0) {
-        this.props.store.cursor.editor = null;
+        this.props.cursor.editor = null;
         return Promise.resolve();
       }
 
       return this.props.store.saveEntry(this.props.entry, data)
         .then((res) => {
-          this.props.store.cursor.editor = null;
+          this.props.cursor.editor = null;
         });
     }
 
     // Cancel editing.
     const onCancel = () => {
-      this.props.store.cursor.editor = null;
+      this.props.cursor.editor = null;
     };
 
     // Validator of the value.
@@ -130,7 +131,7 @@ class TransactionDetails extends Component {
     // TODO: Must prevent editing of the entry's account number, when it is the same as transaction's.
 
     // Show editor instead, if it is turned on.
-    if (this.props.selected && this.props.store.cursor.editor) {
+    if (this.props.selected && this.props.cursor.editor) {
       return (<TextEdit
         value={edit}
         validate={validate}

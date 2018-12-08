@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 
 @inject('store')
+@inject('cursor')
 @observer
 class Reports extends Component {
 
   componentDidMount() {
-    this.props.store.cursor.selectPage('Reports');
+    this.props.cursor.selectPage('Reports');
   }
 
   render() {

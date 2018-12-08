@@ -1,6 +1,5 @@
 import { runInAction, computed, toJS, observable } from 'mobx';
 import config from '../Configuration';
-import Cursor from './Cursor';
 
 /**
  * The store structure is the following:
@@ -118,8 +117,6 @@ class Store {
   @observable tags = {};
   @observable account = {};
   @observable tools = { tagDisabled: {} };
-
-  @observable cursor = new Cursor();
 
   constructor() {
     this.getDatabases();

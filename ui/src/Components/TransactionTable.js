@@ -6,6 +6,7 @@ import './TransactionTable.css';
 
 @translate('translations')
 @inject('store')
+@inject('cursor')
 @observer
 class TransactionTable extends Component {
 
@@ -15,7 +16,7 @@ class TransactionTable extends Component {
       return '';
     }
 
-    const { component, index, row, column, editor } = this.props.store.cursor;
+    const { component, index, row, column, editor } = this.props.cursor;
 
     let sum = 0;
     let seen = {};

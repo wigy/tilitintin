@@ -7,6 +7,7 @@ import './Menu.css';
 
 @translate('translations')
 @inject('store')
+@inject('cursor')
 @observer
 class Menu extends Component {
 
@@ -15,7 +16,7 @@ class Menu extends Component {
     const kept2 = this.props.store.setPeriod(db, periodId);
     this.props.store.setAccount(db, periodId, accountId);
     if (!kept1 || !kept2) {
-      this.props.store.cursor.resetSelected();
+      this.props.cursor.resetSelected();
     }
   }
 
