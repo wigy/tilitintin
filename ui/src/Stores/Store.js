@@ -1,5 +1,5 @@
 import { runInAction, computed, toJS, observable } from 'mobx';
-import config from './Configuration';
+import config from '../Configuration';
 
 /**
  * Keyboard navigation data.

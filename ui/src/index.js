@@ -5,8 +5,8 @@ import { Provider } from 'mobx-react';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import registerServiceWorker from './registerServiceWorker';
-import Store from './Store';
-import Navigator from './Navigator';
+import Store from './Stores/Store';
+import Navigator from './Stores/Navigator';
 import i18n from './i18n';
 import './index.css';
 
