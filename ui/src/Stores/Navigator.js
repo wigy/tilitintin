@@ -9,7 +9,6 @@ class Navigator {
 
   constructor(store) {
     this.store = store;
-    this.old = {};
   }
 
   /**
