@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Route, withRouter } from 'react-router-dom';
 import { inject } from 'mobx-react';
+import { runInAction } from 'mobx';
 import keydown from 'react-keydown';
 import './App.css';
 import Balances from './Components/Balances';
@@ -25,7 +26,11 @@ class App extends Component {
         + (event.altKey ? 'Alt+' : '')
         + event.key);
 
-      const keyResult = this.props.store.pressKey(keyName);
+      let keyResult;
+      runInAction(() => {
+        keyResult = this.props.store.navigator.handle(keyName);
+      });
+
       if (keyResult) {
         this.props.store.changed = true;
         if (keyResult.preventDefault) {

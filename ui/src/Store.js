@@ -490,19 +490,6 @@ class Store {
   }
 
   /**
-   * Handle navigation.
-   * @param {String} key
-   * @return {Boolean} True, if should prevent default handling.
-   */
-  pressKey(key) {
-    let ret;
-    runInAction(() => {
-      ret = this.navigator.handle(key);
-    });
-    return ret;
-  }
-
-  /**
    * Select the current navigation target.
    * @param {String} page
    */
