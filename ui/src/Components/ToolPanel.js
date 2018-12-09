@@ -4,6 +4,7 @@ import Tag from './Tag';
 import './ToolPanel.css';
 
 @inject('store')
+@inject('cursor')
 @observer
 class ToolPanel extends Component {
 
@@ -19,6 +20,7 @@ class ToolPanel extends Component {
     }
 
     const toggle = (tag) => {
+      this.props.cursor.resetSelected();
       let state = this.state.disabled;
       state[tag] = !state[tag];
       this.setState({disabled: state});
@@ -26,6 +28,7 @@ class ToolPanel extends Component {
     };
 
     const disableAll = () => {
+      this.props.cursor.resetSelected();
       let state = {};
       this.props.store.sortTags().forEach((tag) => state[tag.tag]=true);
       this.setState({disabled: state});
@@ -33,6 +36,7 @@ class ToolPanel extends Component {
     };
 
     const enableAll = () => {
+      this.props.cursor.resetSelected();
       let state = {};
       this.setState({disabled: state});
       this.props.store.tools.tagDisabled = state;
