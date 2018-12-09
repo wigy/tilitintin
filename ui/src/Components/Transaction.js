@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { action } from 'mobx';
 import { translate, Trans } from 'react-i18next';
 import Dialog from './Dialog';
 import Money from './Money';
@@ -13,6 +14,16 @@ import './Transaction.css';
 @observer
 class Transaction extends Component {
 
+  // Store for entry and its index waiting for deletion confirmation.
+  entryToDelete = null;
+  entryIndexToDelete = null;
+
+  @action.bound
+  deleteEntry() {
+    console.log('DELETE', this.entryIndexToDelete);
+    // this.props.tx.entries.splice(this.entryIndexToDelete, 1);
+  }
+
   render() {
 
     // Calculate imbalance, missing accounts and look for deletion request.
@@ -22,6 +33,7 @@ class Transaction extends Component {
     this.props.tx.entries.forEach((entry, idx) => {
       if (entry.askDelete) {
         this.entryToDelete = entry;
+        this.entryIndexToDelete = idx;
       }
       if (entry.debit) {
         debit += entry.amount;
@@ -99,17 +111,19 @@ class Transaction extends Component {
       </tr>);
     });
 
-    // Render delete dialo.
+    // Render delete dialog in the dummy row.
     if (this.entryToDelete) {
       ret.push(
         <tr key="delete">
           <td colSpan={7}>
             <Dialog
-              title="TODO: Translate delete title"
+              title={<Trans>Delete this transaction?</Trans>}
               isVisible={this.entryToDelete.askDelete}
               onClose={() => (this.entryToDelete.askDelete = false)}
-              onConfirm={() => {console.log('TODO: Delete'); this.entryToDelete.askDelete = false}}>
-                Delete this transaction? TODO: Implement
+              onConfirm={() => this.deleteEntry()}>
+                <i>{this.entryToDelete.number} {this.entryToDelete.name}</i><br/>
+                {this.entryToDelete.description}<br/>
+                <b>{this.entryToDelete.debit ? '+' : '-'}<Money currency="EUR" cents={this.entryToDelete.amount}></Money></b>
             </Dialog>
           </td>
         </tr>

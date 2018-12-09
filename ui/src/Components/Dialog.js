@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { inject } from 'mobx-react';
 import { Modal, Button } from 'react-bootstrap';
+import { translate, Trans } from 'react-i18next';
 
 /**
  * Dialog content implementation.
  */
 @inject('cursor')
+@translate('translations')
 class DialogContent extends Component {
 
   componentDidMount = () => {
@@ -28,12 +30,11 @@ class DialogContent extends Component {
   };
 
   onConfirm = () => {
+    this.props.onConfirm();
     this.props.onClose(true);
   };
 
   render() {
-
-    // TODO: Translate buttons.
 
     return (
       <Modal.Dialog>
@@ -44,8 +45,8 @@ class DialogContent extends Component {
         <Modal.Body>{this.props.children}</Modal.Body>
 
         <Modal.Footer>
-          <Button onClick={this.onCancel}>Cancel</Button>
-          <Button onClick={this.onConfirm} bsStyle="primary">Confirm</Button>
+          <Button onClick={this.onCancel}><Trans>Cancel</Trans></Button>
+          <Button onClick={this.onConfirm} bsStyle="primary"><Trans>Confirm</Trans></Button>
         </Modal.Footer>
       </Modal.Dialog>
     );
