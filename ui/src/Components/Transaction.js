@@ -104,8 +104,12 @@ class Transaction extends Component {
       ret.push(
         <tr key="delete">
           <td colSpan={7}>
-            <Dialog title="TODO: Translate delete title" onClose={() => (this.entryToDelete.askDelete = false)}>
-              Delete this transaction? TODO: Implement
+            <Dialog
+              title="TODO: Translate delete title"
+              isVisible={this.entryToDelete.askDelete}
+              onClose={() => (this.entryToDelete.askDelete = false)}
+              onConfirm={() => {console.log('TODO: Delete'); this.entryToDelete.askDelete = false}}>
+                Delete this transaction? TODO: Implement
             </Dialog>
           </td>
         </tr>

@@ -2,25 +2,8 @@ import { observable, action } from 'mobx';
 
 /**
  * Keyboard navigation data.
- * {
- *   selected: {
- *     page: 'Balances',
- *     component: 'BalanceTable',
- *     index: 2,
- *     column: null,
- *     row: null,
- *     editor: 'abc'
- *   },
- *   oldSelected: {
- *     Reports: { component, index, column, row },
- *     ...
- *   },
- *   oldIndex: {
- *     TransactionTable: 2,
- *     ...
- *   }
- * }
-*/
+ *
+ */
 class Cursor {
   @observable page = 'App';
   @observable component = null;
@@ -28,6 +11,10 @@ class Cursor {
   @observable column = null;
   @observable row = null;
   @observable editor = false;
+
+  // When a modal is active, this is an object with two members: onCancel and onConfirm.
+  @observable activeModal = null;
+
   oldSelected = {};
   oldIndex = {};
 

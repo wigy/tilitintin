@@ -2,21 +2,38 @@ import React, { Component } from 'react';
 import { inject } from 'mobx-react';
 import { Modal, Button } from 'react-bootstrap';
 
+/**
+ * Dialog content implementation.
+ */
 @inject('cursor')
-class Dialog extends Component {
+class DialogContent extends Component {
 
-  componentDidMount() {
-    console.log('mount');
+  componentDidMount = () => {
+    this.props.cursor.activeModal = {
+      onCancel: () => {
+        this.onCancel();
+      },
+      onConfirm: () => {
+        this.onConfirm();
+      }
+    };
   }
 
-  componentWillUnmount() {
-    console.log('unmount');
+  componentWillUnmount = () => {
+    this.props.cursor.activeModal = null;
   }
+
+  onCancel = () => {
+    this.props.onClose(false);
+  };
+
+  onConfirm = () => {
+    this.props.onClose(true);
+  };
 
   render() {
-    const onCancel = () => {
-      this.props.onClose(false);
-    };
+
+    // TODO: Translate buttons.
 
     return (
       <Modal.Dialog>
@@ -27,10 +44,27 @@ class Dialog extends Component {
         <Modal.Body>{this.props.children}</Modal.Body>
 
         <Modal.Footer>
-          <Button onClick={onCancel}>Cancel</Button>
-          <Button bsStyle="primary">Yes</Button>
+          <Button onClick={this.onCancel}>Cancel</Button>
+          <Button onClick={this.onConfirm} bsStyle="primary">Confirm</Button>
         </Modal.Footer>
       </Modal.Dialog>
+    );
+  }
+}
+
+/**
+ * Top level wrapper for dialog.
+ */
+class Dialog extends Component {
+
+  render() {
+
+    if (!this.props.isVisible) {
+      return '';
+    }
+
+    return (
+      <DialogContent title={this.props.title} onClose={this.props.onClose} onConfirm={this.props.onConfirm}>{this.props.children}</DialogContent>
     );
   }
 }

@@ -27,6 +27,20 @@ class Navigator {
     let update;
     const keyName = (key.length === 1 ? 'Text' : key);
 
+    // Handle keys for modal.
+    if (this.cursor.activeModal) {
+      switch(keyName) {
+        case 'Escape':
+          this.cursor.activeModal.onCancel();
+          return null;
+        case 'Enter':
+          this.cursor.activeModal.onConfirm();
+          return null;
+        default:
+          return null;
+      }
+    }
+
     // Try component specific handler.
     let fn = 'handle' + component + keyName;
     if (this[fn]) {
