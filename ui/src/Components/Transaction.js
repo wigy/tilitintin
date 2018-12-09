@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { translate, Trans } from 'react-i18next';
+import Dialog from './Dialog';
 import Money from './Money';
 import YYYYMMDD from './YYYYMMDD';
 import Tags from './Tags';
@@ -14,11 +15,14 @@ class Transaction extends Component {
 
   render() {
 
-    // Calculate imbalance and missing accounts.
+    // Calculate imbalance, missing accounts and look for deletion request.
     let debit = 0;
     let credit = 0;
     let missingAccount = false;
     this.props.tx.entries.forEach((entry, idx) => {
+      if (entry.askDelete) {
+        this.entryToDelete = entry;
+      }
       if (entry.debit) {
         debit += entry.amount;
       } else {
@@ -94,6 +98,19 @@ class Transaction extends Component {
         </td>
       </tr>);
     });
+
+    // Render delete dialo.
+    if (this.entryToDelete) {
+      ret.push(
+        <tr key="delete">
+          <td colSpan={7}>
+            <Dialog title="TODO: Translate delete title" onClose={() => (this.entryToDelete.askDelete = false)}>
+              Delete this transaction? TODO: Implement
+            </Dialog>
+          </td>
+        </tr>
+      );
+    }
 
     // Render imbalance
     if (imbalance) {

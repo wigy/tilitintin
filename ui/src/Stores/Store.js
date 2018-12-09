@@ -84,8 +84,10 @@ import config from '../Configuration';
  *        date: "2017-07-31T21:00:00.000Z",
  *        entries: [
  *          {
- *            All entries that are linked to the same document_id are in the same format as above transaction.
- *            One of the entries is the transaction itself. Entries has their `id` instead of `entry_id`.
+ *            // All entries that are linked to the same document_id are in the same format as above transaction.
+ *            // One of the entries is the transaction itself. Entries has their `id` instead of `entry_id`.
+ *            // In addition:
+ *            askDelete: true, // Set if delete key was pressed on this entry
  *          }
  *        ],
  *        open: false, // If UI has opened entries.
