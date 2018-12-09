@@ -18,4 +18,4 @@ BUGS
 
 [X] Move around with arrows then change DB and keep moving: crash.
 [X] Move to transaction list, press Disable All icon. Move: crash.
-[ ] Entries has unused fields from account like type, vat_code, vat_percentage, vat_account1_id, vat_account2_id
+[X] Entries has unused fields from account like type, vat_code, vat_percentage, vat_account1_id, vat_account2_id

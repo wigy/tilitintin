@@ -317,7 +317,7 @@ function getAccountTransactionsWithEntries(db, periodId, accountId) {
         tx.entries = [];
         return tx.document_id;
       });
-      return knex.db(db).select('*', 'entry.id AS entry_id').from('entry').whereIn('document_id', docIds).orderBy(['document_id', 'row_number'])
+      return knex.db(db).select('entry.*', 'entry.id AS entry_id').from('entry').whereIn('document_id', docIds).orderBy(['document_id', 'row_number'])
         .leftJoin('account', 'account.id', 'entry.account_id')
         .then((entries) => {
           entries.forEach((entry) => {
