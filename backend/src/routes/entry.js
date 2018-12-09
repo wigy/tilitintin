@@ -30,4 +30,9 @@ router.patch('/:id', (req, res) => {
     .then((code) => res.status(code).send());
 });
 
+router.delete('/:id', (req, res) => {
+  data.deleteOne(req.db, 'entry', req.params.id)
+    .then((code) => res.status(code).send());
+});
+
 module.exports = router;

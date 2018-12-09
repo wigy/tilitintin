@@ -462,6 +462,27 @@ class Store {
   }
 
   /**
+   * Remove an entry.
+   * @param {Object} entry
+   */
+  deleteEntry(entry) {
+    const path = '/db/' + this.db + '/entry/' + entry.id;
+    return this.request(path, 'DELETE')
+      .then(() => {
+        runInAction(() => {
+          this.transactions.forEach((tx, idx) => {
+            for (let i = 0; i < tx.entries.length; i++) {
+              if (tx.entries[i].id === entry.id) {
+                tx.entries.splice(i, 1);
+                i--;
+              }
+            }
+          });
+        });
+      })
+  }
+
+  /**
    * Check if there are changes and reset the flag.
    */
   hasChanged() {

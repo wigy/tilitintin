@@ -182,6 +182,21 @@ function updateOne(db, className, id, data) {
 }
 
 /**
+ * Update an entry in the table.
+ * @param {String} db
+ * @param {String} className
+ * @param {Number} id
+ */
+function deleteOne(db, className, id) {
+  return knex.db(db)(className).where({'id': id}).delete()
+    .then(() => 204)
+    .catch((err) => {
+      d.error(err);
+      return 400;
+    });
+}
+
+/**
  * Create an entry in the table.
  * @param {String} db
  * @param {String} className
@@ -414,6 +429,7 @@ module.exports = {
   fillEntries: fillEntries,
   listAll: listAll,
   getOne: getOne,
+  deleteOne: deleteOne,
   createOne: createOne,
   updateOne: updateOne,
   getPeriodAccounts: getPeriodAccounts,

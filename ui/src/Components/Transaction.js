@@ -16,12 +16,10 @@ class Transaction extends Component {
 
   // Store for entry and its index waiting for deletion confirmation.
   entryToDelete = null;
-  entryIndexToDelete = null;
 
   @action.bound
   deleteEntry() {
-    console.log('DELETE', this.entryIndexToDelete);
-    // this.props.tx.entries.splice(this.entryIndexToDelete, 1);
+    this.props.store.deleteEntry(this.entryToDelete)
   }
 
   render() {
@@ -33,7 +31,6 @@ class Transaction extends Component {
     this.props.tx.entries.forEach((entry, idx) => {
       if (entry.askDelete) {
         this.entryToDelete = entry;
-        this.entryIndexToDelete = idx;
       }
       if (entry.debit) {
         debit += entry.amount;
