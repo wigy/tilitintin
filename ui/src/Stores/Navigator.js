@@ -26,8 +26,9 @@ class Navigator {
 
     let update;
     const keyName = (key.length === 1 ? 'Text' : key);
-    let fn = 'handle' + component + keyName;
 
+    // Try component specific handler.
+    let fn = 'handle' + component + keyName;
     if (this[fn]) {
       update = this[fn](this.cursor, key);
       if (update && KEY_DEBUG) {
@@ -35,6 +36,7 @@ class Navigator {
       }
     }
 
+    // Try generic handler.
     if (!update) {
       fn = 'handle' + keyName;
       if (this[fn]) {
@@ -86,8 +88,10 @@ class Navigator {
       return ret;
     }
     const ret = this.cursor.indexUpdate(index, this.store.filteredTransactions.length, -1);
-    const el = document.getElementById('Transaction' + this.store.filteredTransactions[ret.index].id);
-    el.scrollIntoView({block: "center", inline: "center"})
+    if (ret) {
+      const el = document.getElementById('Transaction' + this.store.filteredTransactions[ret.index].id);
+      el.scrollIntoView({block: "center", inline: "center"})
+    }
     return ret;
   }
   handleTransactionTableArrowDown({index, column, row}) {
@@ -96,8 +100,10 @@ class Navigator {
       return ret;
     }
     const ret = this.cursor.indexUpdate(index, this.store.filteredTransactions.length, +1);
-    const el = document.getElementById('Transaction' + this.store.filteredTransactions[ret.index].id);
-    el.scrollIntoView({block: "center", inline: "center"})
+    if (ret) {
+      const el = document.getElementById('Transaction' + this.store.filteredTransactions[ret.index].id);
+      el.scrollIntoView({block: "center", inline: "center"})
+    }
     return ret;
   }
   handleTransactionTableArrowLeft({index, column, row}) {
@@ -167,23 +173,29 @@ class Navigator {
   handleBalanceTableArrowUp({index}) {
     const ret = this.cursor.indexUpdate(index, this.store.balances.length, -1);
     // TODO: Would be nice to get rid of direct DOM-manipulation.
-    const el = document.getElementById('Balance' + this.store.balances[ret.index].id);
-    el.scrollIntoView({block: "center", inline: "center"})
+    if (ret) {
+      const el = document.getElementById('Balance' + this.store.balances[ret.index].id);
+      el.scrollIntoView({block: "center", inline: "center"})
+    }
     return ret;
   }
   handleBalanceTableArrowDown({index}) {
     const ret = this.cursor.indexUpdate(index, this.store.balances.length, +1);
-    const el = document.getElementById('Balance' + this.store.balances[ret.index].id);
-    el.scrollIntoView({block: "center", inline: "center"})
+    if (ret) {
+      const el = document.getElementById('Balance' + this.store.balances[ret.index].id);
+      el.scrollIntoView({block: "center", inline: "center"})
+    }
     return ret;
   }
   handleBalanceTableArrowRight() {
     return this.cursor.componentUpdate('TransactionTable', this.store.filteredTransactions.length);
   }
   handleBalanceTableEnter({index}) {
-    const el = document.getElementById('Balance' + this.store.balances[index].id);
-    el.children[0].children[0].click();
-    return {};
+    if (this.store.balances[index]) {
+      const el = document.getElementById('Balance' + this.store.balances[index].id);
+      el.children[0].children[0].click();
+      return {};
+    }
   }
 }
 
