@@ -14,6 +14,7 @@ FEATURES
 [ ] Reports.
 [ ] Enter expressions like 23.23 - 1.22
 [ ] Enter simple space (or ?) to fulfill transaction imbalance.
+[ ] Filtering account list: Assets, Income, Expense, Other
 
 BUGS
 ====
