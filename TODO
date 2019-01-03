@@ -12,6 +12,8 @@ FEATURES
 [ ] Delete transaction.
 [ ] Page up/page down.
 [ ] Reports.
+[ ] Enter expressions like 23.23 - 1.22
+[ ] Enter simple space (or ?) to fulfill transaction imbalance.
 
 BUGS
 ====
