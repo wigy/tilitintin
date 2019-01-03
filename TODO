@@ -1,5 +1,5 @@
-IDEAS
-=====
+IMPROVEMENTS
+============
 
 [X] Use decorators.
 [ ] Add more classes to store actual data in Store.
@@ -8,7 +8,7 @@ FEATURES
 ========
 
 [ ] Create new transaction.
-[ ] Delete entry.
+[X] Delete entry.
 [ ] Delete transaction.
 [ ] Page up/page down.
 [ ] Reports.
