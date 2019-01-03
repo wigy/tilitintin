@@ -19,4 +19,6 @@ async function main() {
   fyffe.stock.showStock('Stock:');
 }
 
-main().catch((err) => console.error(err));
+main()
+  .then(() =>   process.exit())
+  .catch((err) => {console.error(err); process.exit()});

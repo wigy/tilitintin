@@ -25,4 +25,5 @@ knex.db(cli.db)
     return data.map((d) => () => knex.db(cli.db)('document').where({id: d.id}).delete());
   })
   .then((txs) => promiseSeq(txs))
-  .then(() => process.exit());
+  .then(() => process.exit())
+  .catch((err) => {console.error(err); process.exit()});

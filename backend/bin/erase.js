@@ -26,4 +26,5 @@ knex.db(cli.db)
     return [killEntries, killDocs];
   })
   .then(() => promiseSeq(killEntries))
-  .then(() => promiseSeq(killDocs));
+  .then(() => promiseSeq(killDocs))
+  .catch((err) => {console.error(err); process.exit()});
