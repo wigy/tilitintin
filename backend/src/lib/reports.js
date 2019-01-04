@@ -1,7 +1,8 @@
 const knex = require('./knex');
 
-
-const balanceSheet = `HB0;1000;2000;VASTAAVAA
+// Report formats. TODO: Take these from the DB.
+const balanceSheet = `
+HB0;1000;2000;VASTAAVAA
 HB1;1000;1500;PYSYVÄT VASTAAVAT
 GP2;1000;1100;Aineettomat hyödykkeet
 TP3;1020;1030;Kehittämismenot
@@ -93,15 +94,100 @@ TP2;2720;2750;2920;2950;Muut velat
 TP2;2750;2800;2950;3000;Siirtovelat
 TB1;2600;3000;Vieras pääoma yhteensä
 SB0;2000;9999;Vastattavaa yhteensä
+`;
 
+incomeStatement = `
+SB0;3000;3600;LIIKEVAIHTO
+TP0;3600;3630;Valmiiden ja keskeneräisten tuotteiden varastojen muutos
+TP0;3630;3650;Valmistus omaan käyttöön
+TP0;3650;4000;Liiketoiminnan muut tuotot
+GP0;4000;5000;Materiaalit ja palvelut
+GP1;4000;4450;Aineet, tarvikkeet ja tavarat
+TP2;4000;4400;Ostot tilikauden aikana
+TP2;4400;4450;Varastojen muutos
+TP1;4450;5000;Ulkopuoliset palvelut
+TP0;4000;5000;Materiaalit ja palvelut yhteensä
+GP0;5000;6800;Henkilöstökulut
+TP1;5000;6000;Palkat ja palkkiot
+GP1;6000;6800;Henkilösivukulut
+TP2;6000;6300;Eläkekulut
+TP2;6300;6800;Muut henkilösivukulut
+TP0;5000;6800;Henkilöstökulut yhteensä
+GP0;6800;7000;Poistot ja arvonalentumiset
+TP1;6800;6900;Suunnitelman mukaiset poistot
+TP1;6900;6990;Arvonalentumiset pysyvien vastaavien hyödykkeistä
+TP1;6990;7000;Vaihtuvien vastaavien poikkeukselliset arvonalentumiset
+TP0;6800;7000;Poistot ja arvonalentumiset yhteensä
+TP0;7000;8990;Liiketoiminnan muut kulut
+SB0;3000;9000;LIIKEVOITTO (-TAPPIO)
+GP0;9000;9700;Rahoitustuotot ja -kulut
+TP1;9000;9040;Tuotot osuuksista saman konsernin yrityksissä
+TP1;9040;9070;Tuotot osuuksista omistusyhteysyrityksissä
+TP1;9080;9150;Tuotot muista pysyvien vastaavien sijoituksista
+TP1;9150;9300;Muut korko- ja rahoitustuotot
+TP1;9300;9370;Arvonalentumiset pysyvien vastaavien sijoituksista
+TP1;9370;9420;Arvonalentumiset vaihtuvien vastaavien rahoitusarvopapereista
+TP1;9420;9700;Korkokulut ja muut rahoituskulut
+TP0;9000;9700;Rahoitustuotot ja -kulut yhteensä
+SB0;3000;9700;VOITTO (TAPPIO) ENNEN SATUNNAISIA ERIÄ
+GP0;9700;9800;Satunnaiset erät
+TP1;9700;9740;Satunnaiset tuotot
+TP1;9740;9780;Satunnaiset kulut
+TP0;9700;9800;Satunnaiset erät yhteensä
+SB0;3000;9800;VOITTO (TAPPIO) ENNEN TILINPÄÄTÖSSIIRTOJA JA VEROJA
+TP0;9800;9900;Tilinpäätössiirrot
+TP1;9800;9840;Poistoeron muutos
+TP1;9840;9900;Vapaaehtoisten varausten muutos
+TP0;9900;9980;Tuloverot
+TP0;9980;9990;Muut välittömät verot
+SB0;3000;9999;TILIKAUDEN VOITTO (TAPPIO)
 `;
 
 /**
  * Supported formats.
  */
 const formats = {
-  'balance-sheet': balanceSheet
+  'balance-sheet': balanceSheet,
+  'income-statement': incomeStatement
 };
+
+/**
+ * Construct rendering information object based on the code.
+ * @param {String} code
+ */
+function code2item(code) {
+  let ret = {
+    column: parseInt(code[2])
+  };
+
+  switch(code[0]) {
+    case 'D':
+      break;
+    case 'H':
+      ret.required = true;
+      ret.hideTotal = true;
+      break;
+    case 'G':
+      ret.hideTotal = true;
+      break;
+    case 'S':
+      ret.required = true;
+      break;
+    case 'T':
+      break;
+  }
+
+  switch(code[1]) {
+    case 'B':
+      ret.bold = true;
+      break;
+    case 'I':
+      ret.italic = true;
+      break;
+  }
+
+  return ret;
+}
 
 /**
  * Process data entries in to the report format described as in Tilitin reports.
@@ -115,12 +201,16 @@ function processEntries(entries, format) {
   if (!format) {
     return [];
   }
+
+  // Summarize all totals from the entries.
   const totals = {'all': new Map()};
   entries.forEach((entry) => {
     totals.all[entry.number] = totals.all[entry.number] || 0;
     totals.all[entry.number] += entry.amount;
+    // TODO: Calculate also by tags.
   });
-  // TODO: Calculate also by tags.
+
+  // Parse report and construct format.
   const allAccounts = Object.keys(totals['all']);
   let ret = [];
   format.split("\n").forEach((line) => {
@@ -137,6 +227,9 @@ function processEntries(entries, format) {
     let amounts = {all: 0};
     let unused = true;
     let hits = [];
+    let item = code2item(code);
+
+    // Collect all totals inside any of the account number ranges.
     for (let i = 0; i < parts.length; i+=2) {
       const from = parts[i];
       const to = parts[i+1];
@@ -150,11 +243,15 @@ function processEntries(entries, format) {
         }
       });
     }
+
+    // If debugging, just print all info.
     if (DEBUG_PROCESSOR) {
-      ret.push({code, name, amounts, unused, parts, hits})
+      ret.push({item, code, name, amounts, unused, parts, hits})
     } else {
-      if (!unused) {
-        ret.push({code, name, amounts});
+      if (item.required || !unused) {
+        item.name = name;
+        item.amounts = amounts;
+        ret.push(item);
       }
     }
   });
