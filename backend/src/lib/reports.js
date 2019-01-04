@@ -136,6 +136,17 @@ function processEntries(entries, format) {
  * @param {String} db
  * @param {Number} period
  * @param {String} format
+ *
+ * Resulting entries is an array of objects containing:
+ * * `column` Zero originating column number.
+ * * `required` If true, this is always shown.
+ * * `hideTotal` if true, do not show total.
+ * * `bold` if true, show in bold.
+ * * `italic` if true, show in italic.
+ * * `accountDetails` if true, after this are summarized accounts under this entry.
+ * * `isAccount` if true, this is an account entry.
+ * * `name` Title of the entry.
+ * * `amounts` An object with entry `all` for full total and [Tags] indexing the tag specific totals.
  */
 async function create(db, period, format) {
   return knex.db(db).select(
