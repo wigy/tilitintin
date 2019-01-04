@@ -26,7 +26,8 @@ router.get('/:format', (req, res) => {
 
 router.get('/:format/:period', (req, res) => {
   const {format, period} = req.params;
-  res.send(reports.create(req.db, parseInt(period), format));
+  reports.create(req.db, parseInt(period), format)
+    .then((report) => res.send(report));
 });
 
 module.exports = router;

@@ -1,3 +1,6 @@
+const knex = require('./knex');
+
+
 const balanceSheet = `HB0;1000;2000;VASTAAVAA
 HB1;1000;1500;PYSYVÄT VASTAAVAT
 GP2;1000;1100;Aineettomat hyödykkeet
@@ -93,13 +96,86 @@ SB0;2000;9999;Vastattavaa yhteensä
 
 `;
 
-function create(db, period, format) {
-  return {db, period, format}
+/**
+ * Supported formats.
+ */
+const formats = {
+  'balance-sheet': balanceSheet
+};
+
+/**
+ * Process data entries in to the report format described as in Tilitin reports.
+ * @param {Object[]} entries
+ * @param {String} format
+ */
+function processEntries(entries, format) {
+
+  const DEBUG_PROCESSOR = false;
+
+  if (!format) {
+    return [];
+  }
+  const totals = {'all': new Map()};
+  entries.forEach((entry) => {
+    totals.all[entry.number] = totals.all[entry.number] || 0;
+    totals.all[entry.number] += entry.amount;
+  });
+  // TODO: Calculate also by tags.
+  const allAccounts = Object.keys(totals['all']);
+  let ret = [];
+  format.split("\n").forEach((line) => {
+    line = line.trim();
+    if (line === '') {
+      return;
+    }
+    if (line === '--') {
+      ret.push({pageBreak: true});
+      return;
+    }
+    const [code, ...parts] = line.split(';');
+    const name = parts.pop();
+    let amounts = {all: 0};
+    let unused = true;
+    let hits = [];
+    for (let i = 0; i < parts.length; i+=2) {
+      const from = parts[i];
+      const to = parts[i+1];
+      allAccounts.forEach((number) => {
+        if (number >= from && number < to) {
+          unused = false;
+          amounts.all += totals.all[number];
+          if (DEBUG_PROCESSOR) {
+            hits.push(number);
+          }
+        }
+      });
+    }
+    if (DEBUG_PROCESSOR) {
+      ret.push({code, name, amounts, unused, parts, hits})
+    } else {
+      if (!unused) {
+        ret.push({code, name, amounts});
+      }
+    }
+  });
+
+  return ret;
+}
+
+async function create(db, period, format) {
+  return knex.db(db).select(
+      'account.number',
+      knex.db(db).raw('ROUND(((entry.debit == 1) * 2 - 1) * entry.amount * 100) as amount'),
+      'entry.description'
+    )
+    .from('entry')
+    .leftJoin('account', 'account.id', 'entry.account_id')
+    .leftJoin('document', 'document.id', 'entry.document_id')
+    .where({'document.period_id': period})
+    .then((entries) => processEntries(entries, formats[format]));
 }
 
 module.exports = {
-  formats: {
-    'balance-sheet': balanceSheet
-  },
+  formats,
   create
 };
