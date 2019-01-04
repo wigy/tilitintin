@@ -54,9 +54,11 @@ function processEntries(entries, format) {
 
   // Summarize all totals from the entries.
   const totals = {'all': new Map()};
+  const accountNames = new Map();
   entries.forEach((entry) => {
     totals.all[entry.number] = totals.all[entry.number] || 0;
     totals.all[entry.number] += entry.amount;
+    accountNames[entry.number] = entry.name;
     // TODO: Calculate also by tags.
   });
 
@@ -105,7 +107,25 @@ function processEntries(entries, format) {
       }
     }
 
-    // TODO: Implement `accountDetails` flag.
+    // Fill in account details for the entries wanting it.
+    if (item.accountDetails) {
+      for (let i = 0; i < parts.length; i+=2) {
+        const from = parts[i];
+        const to = parts[i+1];
+        allAccounts.forEach((number) => {
+          if (number >= from && number < to) {
+            let item = code2item(code);
+            item.isAccount = true;
+            delete item.accountDetails;
+            item.name = accountNames[number];
+            item.amounts = {
+              all: totals.all[number]
+            };
+            ret.push(item);
+          }
+        });
+      }
+    }
   });
 
   return ret;
@@ -119,6 +139,7 @@ function processEntries(entries, format) {
  */
 async function create(db, period, format) {
   return knex.db(db).select(
+      'account.name',
       'account.number',
       knex.db(db).raw('ROUND(((entry.debit == 1) * 2 - 1) * entry.amount * 100) as amount'),
       'entry.description'
