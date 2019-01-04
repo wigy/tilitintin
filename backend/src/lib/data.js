@@ -13,6 +13,7 @@ const dateFields = {
   entry: [],
   period: ['start_date', 'end_date'],
   coa_heading: [],
+  report_structure: [],
 };
 
 const plural = {
@@ -64,6 +65,10 @@ const fields = {
     "text": true,
     "level": true,
   },
+  "report_structure": {
+    "id": true,
+    "data": true,
+  }
 };
 
 const transformer = {
