@@ -69,6 +69,7 @@ router.get('/db/:db', checkToken, checkDb, (req, res) => {
       entries: config.BASEURL + '/db/' + db + '/entry',
       headings: config.BASEURL + '/db/' + db + '/heading',
       tags: config.BASEURL + '/db/' + db + '/tags',
+      report: config.BASEURL + '/db/' + db + '/report',
     }});
 });
 
@@ -78,5 +79,6 @@ router.use('/db/:db/document', checkToken, checkDb, require('./document'));
 router.use('/db/:db/entry', checkToken, checkDb, require('./entry'));
 router.use('/db/:db/heading', checkToken, checkDb, require('./heading'));
 router.use('/db/:db/tags', checkToken, checkDb, require('./tags'));
+router.use('/db/:db/report', checkToken, checkDb, require('./report'));
 
 module.exports = router;
