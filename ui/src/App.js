@@ -8,11 +8,12 @@ import Balances from './Components/Balances';
 import AccountTransactions from './Components/AccountTransactions';
 import Accounts from './Components/Accounts';
 import Reports from './Components/Reports';
+import Report from './Components/Report';
 import Menu from './Components/Menu';
 import ToolPanel from './Components/ToolPanel';
 import Login from './Components/Login';
-import Navigator from './stores/Navigator';
-import Store from './stores/Store';
+import Navigator from './Stores/Navigator';
+import Store from './Stores/Store';
 
 @withRouter
 @keydown
@@ -59,6 +60,7 @@ class App extends Component {
           <Route exact path="/:db/account/:periodId/:accountId" component={Menu}/>
           <Route exact path="/:db/report/:periodId" component={Menu}/>
           <Route exact path="/:db/report/:periodId/:accountId" component={Menu}/>
+          <Route exact path="/:db/report/:periodId/:accountId/:format" component={Menu}/>
         </div>
         <div className="SidePanel Panel">
           <div className="Frame">
@@ -75,6 +77,7 @@ class App extends Component {
           <div className="Frame">
             <Route path="/:db/txs/:periodId/:accountId" component={AccountTransactions}/>
             <Route path="/:db/account/:periodId" component={Accounts}/>
+            <Route path="/:db/report/:periodId/:accountId/:format" component={Report}/>
             <Login />
           </div>
         </div>

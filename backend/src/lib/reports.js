@@ -42,9 +42,10 @@ function code2item(code) {
 /**
  * Process data entries in to the report format described as in Tilitin reports.
  * @param {Object[]} entries
+ * @param {String} formatName
  * @param {String} format
  */
-function processEntries(entries, format) {
+function processEntries(entries, formatName, format) {
 
   const DEBUG_PROCESSOR = false;
 
@@ -128,13 +129,17 @@ function processEntries(entries, format) {
     }
   });
 
-  return ret;
+  return {
+    format: formatName,
+    data: ret
+  };
 }
 
 /**
  * Construct a report data structure for the given Tilitin format.
  * @param {String} db
  * @param {Number} period
+ * @param {String} formatName
  * @param {String} format
  *
  * Resulting entries is an array of objects containing:
@@ -148,7 +153,7 @@ function processEntries(entries, format) {
  * * `name` Title of the entry.
  * * `amounts` An object with entry `all` for full total and [Tags] indexing the tag specific totals.
  */
-async function create(db, period, format) {
+async function create(db, period, formatName, format) {
   return knex.db(db).select(
     'account.name',
     'account.number',
@@ -159,7 +164,7 @@ async function create(db, period, format) {
     .leftJoin('account', 'account.id', 'entry.account_id')
     .leftJoin('document', 'document.id', 'entry.document_id')
     .where({'document.period_id': period})
-    .then((entries) => processEntries(entries, format));
+    .then((entries) => processEntries(entries, formatName, format));
 }
 
 module.exports = {

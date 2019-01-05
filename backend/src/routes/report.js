@@ -30,7 +30,7 @@ router.get('/:format', (req, res) => {
 router.get('/:format/:period', (req, res) => {
   const {format, period} = req.params;
   data.getOne(req.db, 'report_structure', format)
-    .then((reportStructure) => reports.create(req.db, parseInt(period), reportStructure.data))
+    .then((reportStructure) => reports.create(req.db, parseInt(period), format, reportStructure.data))
     .then((report) => res.send(report));
 });
 

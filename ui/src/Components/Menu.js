@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import ReactRouterPropTypes from 'react-router-prop-types';
 import { inject, observer } from 'mobx-react';
 import { translate, Trans } from 'react-i18next';
 import { Navbar, Nav, NavDropdown, NavItem, MenuItem } from 'react-bootstrap';
+import Store from '../Stores/Store';
+import Cursor from '../Stores/Cursor';
 import YYYYMMDD from './YYYYMMDD';
 import './Menu.css';
 
@@ -11,10 +15,13 @@ import './Menu.css';
 @observer
 class Menu extends Component {
 
-  update({db, periodId, accountId}) {
+  update({db, periodId, accountId, format}) {
     const kept1 = this.props.store.setDb(db);
     const kept2 = this.props.store.setPeriod(db, periodId);
     this.props.store.setAccount(db, periodId, accountId);
+    if (db && periodId && format) {
+      this.props.store.getReport(format);
+    }
     if (!kept1 || !kept2) {
       this.props.cursor.resetSelected();
     }
@@ -119,5 +126,13 @@ class Menu extends Component {
     );
   }
 }
+
+Menu.propTypes = {
+  store: PropTypes.instanceOf(Store),
+  cursor: PropTypes.instanceOf(Cursor),
+  match: PropTypes.object,
+  history: ReactRouterPropTypes.history.isRequired,
+  t: PropTypes.any
+};
 
 export default Menu;

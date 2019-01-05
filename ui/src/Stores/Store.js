@@ -101,7 +101,10 @@ import config from '../Configuration';
  *     }
  *   },
  *   reports: [...], // Available report identifiers.
- *   report: [{...}, ...] // Current report.
+ *   report: {
+ *     format: 'income-statement',
+ *     data: []
+ *   } // Current report.
  * }
  */
 class Store {
@@ -123,7 +126,7 @@ class Store {
   @observable account = {};
   @observable tools = { tagDisabled: {} };
   @observable reports = [];
-  @observable report = [];
+  @observable report = null;
 
   constructor() {
     this.getDatabases();
@@ -294,6 +297,19 @@ class Store {
         runInAction(() => {
           this.reports = Object.keys(reports.links);
           return this.reports;
+        });
+      });
+  }
+
+  /**
+   * Get the list of report formats available for the current DB.
+   */
+  getReport(format) {
+    return this.request('/db/' + this.db + '/report/' + format + '/' + this.periodId)
+      .then((report) => {
+        runInAction(() => {
+          this.report = report;
+          return this.report;
         });
       });
   }
