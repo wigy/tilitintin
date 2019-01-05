@@ -1,0 +1,16 @@
+{
+  "extends": ["semistandard"],
+  "env": {
+    "node": true,
+    "mocha": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2017,
+    "sourceType": "module",
+    "es6": true
+  },
+  "rules": {
+    "space-before-function-paren": "off",
+    "padded-blocks": "off"
+  }
+}
