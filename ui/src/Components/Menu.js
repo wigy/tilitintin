@@ -38,14 +38,14 @@ class Menu extends Component {
         break;
       case 'db':
         this.props.history.push('/' + args[0]);
-      break;
+        break;
       case 'period':
         url = '/' + db + '/txs/' + args[0];
         if (accountId) {
           url += '/' + accountId;
         }
         this.props.history.push(url);
-      break;
+        break;
       case 'txs':
       case 'account':
       case 'report':
@@ -61,7 +61,7 @@ class Menu extends Component {
   }
 
   render() {
-    const {db,periodId} = this.props.store;
+    const {db, periodId} = this.props.store;
     const notLoggedIn = !this.props.store.token;
     const {t} = this.props;
 

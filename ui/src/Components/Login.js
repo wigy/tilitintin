@@ -21,9 +21,9 @@ class Login extends Component {
         <form className="Login">
           <FormGroup>
             <ControlLabel><Trans>Username</Trans></ControlLabel>
-            <FormControl type="text" onChange={(event) => user=event.target.value}/>
+            <FormControl type="text" onChange={(event) => user = event.target.value}/>
             <ControlLabel><Trans>Password</Trans></ControlLabel>
-            <FormControl type="password" onChange={(event) => password=event.target.value}/>
+            <FormControl type="password" onChange={(event) => password = event.target.value}/>
             <br/>
             <Button onClick={login}><Trans>Login</Trans></Button>
           </FormGroup>

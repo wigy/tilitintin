@@ -13,10 +13,10 @@ const str2num = (str) => {
   str = str.replace(',', '.').replace(/ /g, '');
   try {
     return parseFloat(str);
-  } catch(err) {
+  } catch (err) {
     return NaN;
   }
-}
+};
 
 @translate('translations')
 @inject('store')
@@ -29,7 +29,7 @@ class TransactionDetails extends Component {
     let edit;
     let url;
 
-    switch(this.props.type) {
+    switch (this.props.type) {
       case 'debit':
         text = this.props.entry.debit ? (<Money cents={this.props.entry.amount} currency="EUR" />) : <span className="filler">-</span>;
         edit = this.props.entry.debit ? sprintf('%.2f', this.props.entry.amount / 100) : '';
@@ -57,7 +57,7 @@ class TransactionDetails extends Component {
 
       let data = {};
 
-      switch(this.props.type) {
+      switch (this.props.type) {
         case 'debit':
           if (value !== '') {
             data.debit = 1;
@@ -90,7 +90,7 @@ class TransactionDetails extends Component {
         .then((res) => {
           this.props.cursor.editor = null;
         });
-    }
+    };
 
     // Cancel editing.
     const onCancel = () => {
@@ -103,9 +103,9 @@ class TransactionDetails extends Component {
       const REQUIRED = <Trans>This field is required.</Trans>;
       const INVALID_ACCOUNT = <Trans>No such account found.</Trans>;
       const INVALID_NUMBER = <Trans>Numeric value incorrect.</Trans>;
-      const NO_NEGATIVE = <Trans>Cannot be negative.</Trans>
+      const NO_NEGATIVE = <Trans>Cannot be negative.</Trans>;
 
-      switch(this.props.type) {
+      switch (this.props.type) {
         case 'account':
           return this.props.store.accounts.filter(a => a.number === value).length ? null : INVALID_ACCOUNT;
         case 'description':
@@ -140,15 +140,15 @@ class TransactionDetails extends Component {
       />);
     }
 
-    const className = 'TransactionDetails '
-      + (this.props.current ? ' current' : '')
-      + (this.props.selected ? ' selected' : '')
-      + (this.props.error ? ' error' : '');
+    const className = 'TransactionDetails ' +
+      (this.props.current ? ' current' : '') +
+      (this.props.selected ? ' selected' : '') +
+      (this.props.error ? ' error' : '');
 
     return (
       <div className={className}>{text}&nbsp;</div>
     );
-  };
+  }
 }
 
 export default TransactionDetails;

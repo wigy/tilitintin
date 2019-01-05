@@ -30,7 +30,7 @@ class ToolPanel extends Component {
     const disableAll = () => {
       this.props.cursor.resetSelected();
       let state = {};
-      this.props.store.sortTags().forEach((tag) => state[tag.tag]=true);
+      this.props.store.sortTags().forEach((tag) => state[tag.tag] = true);
       this.setState({disabled: state});
       this.props.store.tools.tagDisabled = state;
     };
@@ -58,20 +58,20 @@ class ToolPanel extends Component {
         </div>
 
         {this.props.store.sortTags().map((tag) => {
-            const spacer = (tag.type !== last);
-            const className = (this.state.disabled[tag.tag] ? 'toggle-button off' : 'toggle-button');
-            last = tag.type;
-            return (
-              <div key={tag.tag}>
-                {spacer ?
-                  (<span style={{float: 'left'}}>&nbsp;&nbsp;&nbsp;</span>) :
-                  (<span></span>)
-                }
-                <div className={className} onClick={() => toggle(tag.tag)}>
-                  <Tag size="x2" tag={tag}/>
-                </div>
-              </div>)
-          })}
+          const spacer = (tag.type !== last);
+          const className = (this.state.disabled[tag.tag] ? 'toggle-button off' : 'toggle-button');
+          last = tag.type;
+          return (
+            <div key={tag.tag}>
+              {spacer
+                ? (<span style={{float: 'left'}}>&nbsp;&nbsp;&nbsp;</span>)
+                : (<span></span>)
+              }
+              <div className={className} onClick={() => toggle(tag.tag)}>
+                <Tag size="x2" tag={tag}/>
+              </div>
+            </div>);
+        })}
         <div style={{clear: 'both'}}></div>
       </div>
     );

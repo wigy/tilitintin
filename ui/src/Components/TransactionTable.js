@@ -45,7 +45,7 @@ class TransactionTable extends Component {
             editor={editor}
             duplicate={duplicate}
             tx={tx}
-            total={sum+=(tx.debit ? tx.amount : -tx.amount)}
+            total={sum += (tx.debit ? tx.amount : -tx.amount)}
           />;
         })}
       </tbody>

@@ -27,9 +27,9 @@ class TextEdit extends Component {
         const complete = this.props.onComplete(this.state.value);
         if (complete.catch) {
           complete.catch(err => {
-              console.error(err);
-              this.setState({error: <Trans>Saving failed.</Trans>});
-            });
+            console.error(err);
+            this.setState({error: <Trans>Saving failed.</Trans>});
+          });
         }
       }
     }
@@ -49,7 +49,7 @@ class TextEdit extends Component {
         <div className="error">{this.state.error}</div>
         <input
           value={this.state.value}
-          ref={(input) => { this.inputRef = input }}
+          ref={(input) => { this.inputRef = input; }}
           onChange={event => this.setState({value: event.target.value, error: null})}
           onKeyPress={event => this.onKeyPress(event.key)}
           onKeyUp={event => this.onKeyUp(event.key)}

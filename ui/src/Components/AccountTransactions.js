@@ -4,18 +4,18 @@ import TransactionTable from '../Components/TransactionTable';
 
  @inject('store')
  @observer
- class AccountTransactions extends Component {
+class AccountTransactions extends Component {
 
-  render() {
-    if (!this.props.store.token) {
-      return '';
-    }
-    return (
-      <div className="AccountTransactions">
-        <TransactionTable/>
-      </div>
-    );
-  }
-}
+   render() {
+     if (!this.props.store.token) {
+       return '';
+     }
+     return (
+       <div className="AccountTransactions">
+         <TransactionTable/>
+       </div>
+     );
+   }
+ }
 
 export default AccountTransactions;

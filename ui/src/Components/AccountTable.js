@@ -10,7 +10,7 @@ class AccountTable extends Component {
   render() {
     const {accounts, headings} = this.props;
     const {periodId} = this.props.store;
-    let level = 0, titles;
+    let level = 0; let titles;
     return (
       <div className="AccountTable">
         {accounts.map(account => {

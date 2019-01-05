@@ -29,7 +29,7 @@ class Navigator {
 
     // Handle keys for modal.
     if (this.cursor.activeModal) {
-      switch(keyName) {
+      switch (keyName) {
         case 'Escape':
           this.cursor.activeModal.onCancel();
           return null;
@@ -104,7 +104,7 @@ class Navigator {
     const ret = this.cursor.indexUpdate(index, this.store.filteredTransactions.length, -1);
     if (ret) {
       const el = document.getElementById('Transaction' + this.store.filteredTransactions[ret.index].id);
-      el.scrollIntoView({block: "center", inline: "center"})
+      el.scrollIntoView({block: 'center', inline: 'center'});
     }
     return ret;
   }
@@ -116,7 +116,7 @@ class Navigator {
     const ret = this.cursor.indexUpdate(index, this.store.filteredTransactions.length, +1);
     if (ret) {
       const el = document.getElementById('Transaction' + this.store.filteredTransactions[ret.index].id);
-      el.scrollIntoView({block: "center", inline: "center"})
+      el.scrollIntoView({block: 'center', inline: 'center'});
     }
     return ret;
   }
@@ -194,7 +194,7 @@ class Navigator {
     // TODO: Would be nice to get rid of direct DOM-manipulation.
     if (ret) {
       const el = document.getElementById('Balance' + this.store.balances[ret.index].id);
-      el.scrollIntoView({block: "center", inline: "center"})
+      el.scrollIntoView({block: 'center', inline: 'center'});
     }
     return ret;
   }
@@ -202,7 +202,7 @@ class Navigator {
     const ret = this.cursor.indexUpdate(index, this.store.balances.length, +1);
     if (ret) {
       const el = document.getElementById('Balance' + this.store.balances[ret.index].id);
-      el.scrollIntoView({block: "center", inline: "center"})
+      el.scrollIntoView({block: 'center', inline: 'center'});
     }
     return ret;
   }

@@ -3,9 +3,9 @@ import './Tag.css';
 
 const Tag = (props) => {
   let ret;
-  let classes = "Tag";
+  let classes = 'Tag';
   if (props.size) {
-    classes += " " + props.size;
+    classes += ' ' + props.size;
   }
   if (props.tag.picture) {
     ret = (

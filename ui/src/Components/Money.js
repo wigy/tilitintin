@@ -2,14 +2,14 @@ import React from 'react';
 
 const Money = (props) => {
   let str;
-  switch(props.currency) {
+  switch (props.currency) {
     case 'EUR':
       str = '%s€';
       break;
     default:
       str = '%s ' + props.currency;
   }
-  let nums = (Number(props.cents / 100).toFixed(2)).split('.');  nums[0] = nums[0].replace(/(\d+)(\d{9})$/, '$1 $2');
+  let nums = (Number(props.cents / 100).toFixed(2)).split('.'); nums[0] = nums[0].replace(/(\d+)(\d{9})$/, '$1 $2');
   nums[0] = nums[0].replace(/(\d+)(\d{6})$/, '$1 $2');
   nums[0] = nums[0].replace(/(\d+)(\d{3})$/, '$1 $2');
   let num = nums.join(',');

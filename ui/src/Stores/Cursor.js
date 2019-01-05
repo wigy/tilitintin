@@ -40,7 +40,7 @@ class Cursor {
       return;
     }
 
-    let component = 'Nothing', index = null, column = null, row = null;
+    let component = 'Nothing'; let index = null; let column = null; let row = null;
 
     if (this.oldSelected[page]) {
       component = this.oldSelected[page].component;
@@ -93,8 +93,7 @@ class Cursor {
         index += delta;
         if (index < 0) {
           index = N - 1;
-        }
-        else if (index >= N) {
+        } else if (index >= N) {
           index = 0;
         }
       }
@@ -127,7 +126,7 @@ class Cursor {
           row = M - 1;
         }
       }
-      return {column, row}
+      return {column, row};
     }
   }
 
@@ -140,8 +139,7 @@ class Cursor {
     let index = this.oldIndex[component] || 0;
     if (!N) {
       index = null;
-    }
-    else if (index >= N) {
+    } else if (index >= N) {
       index = N - 1;
     }
     return {component, index};

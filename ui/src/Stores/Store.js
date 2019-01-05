@@ -130,19 +130,19 @@ class Store {
    * @param {String} method
    * @param {Object} data
    */
-  request(path, method='GET', data=null) {
+  request(path, method = 'GET', data = null) {
     let options = {
       method: method,
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
+        'Content-Type': 'application/json'
+      }
     };
     if (this.token) {
       options.headers.Authorization = 'Bearer ' + this.token;
     }
     if (data !== null) {
-      options.body =  JSON.stringify(data);
+      options.body = JSON.stringify(data);
     }
     return fetch(config.API_URL + path, options)
       .then(res => {
@@ -373,7 +373,7 @@ class Store {
    * Sort the given list (or current account's) of tags to their official order.
    * @param {Array<Object>|null} tags
    */
-  sortTags(tags=null) {
+  sortTags(tags = null) {
     if (tags === null) {
       tags = this.account.tags || [];
     }
@@ -389,15 +389,15 @@ class Store {
   login(user, password) {
     this.token = null;
     return this.request('/auth', 'POST', {user: user, password: password})
-    .then((resp) => {
-      if (resp && resp.token) {
-        runInAction(() => {
-          this.token = resp.token;
-          localStorage.setItem('token', resp.token);
-          this.getDatabases();
-        });
-      }
-    });
+      .then((resp) => {
+        if (resp && resp.token) {
+          runInAction(() => {
+            this.token = resp.token;
+            localStorage.setItem('token', resp.token);
+            this.getDatabases();
+          });
+        }
+      });
   }
 
   /**
@@ -479,7 +479,7 @@ class Store {
             }
           });
         });
-      })
+      });
   }
 
   /**

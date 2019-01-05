@@ -17,14 +17,14 @@ import Login from './Components/Login';
 @inject('navigator')
 class App extends Component {
 
-  componentWillReceiveProps( nextProps ) {
+  componentWillReceiveProps(nextProps) {
     const { keydown: { event } } = nextProps;
-    if ( event ) {
+    if (event) {
       let keyName = (
-        (event.key.length > 1 && event.shiftKey ? 'Shift+' : '')
-        + (event.ctrlKey ? 'Ctrl+' : '')
-        + (event.altKey ? 'Alt+' : '')
-        + event.key);
+        (event.key.length > 1 && event.shiftKey ? 'Shift+' : '') +
+        (event.ctrlKey ? 'Ctrl+' : '') +
+        (event.altKey ? 'Alt+' : '') +
+        event.key);
 
       let keyResult = this.props.navigator.handle(keyName);
 
@@ -59,8 +59,8 @@ class App extends Component {
         </div>
         <div className="SidePanel Panel">
           <div className="Frame">
-          <Route path="/:db/txs/:periodId" component={Balances}/>
-          <Route path="/:db/report/:periodId" component={Reports}/>
+            <Route path="/:db/txs/:periodId" component={Balances}/>
+            <Route path="/:db/report/:periodId" component={Reports}/>
           </div>
         </div>
         <div className="MainTopPanel Panel">
