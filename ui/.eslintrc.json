@@ -1,0 +1,27 @@
+{
+  "extends": [
+    "semistandard",
+    "plugin:react/recommended",
+    "react-app"
+  ],
+  "env": {
+    "browser": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2017,
+    "sourceType": "module",
+    "es6": true
+  },
+  "rules": {
+    "space-before-function-paren": "off",
+    "padded-blocks": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "16.3"
+    }
+  },
+  "plugins": [
+      "react"
+  ]
+}
