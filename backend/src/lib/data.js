@@ -2,7 +2,7 @@
  * A collection of data fetching functions.
  */
 const moment = require('moment');
-const d = require('neat-dump');
+const dump = require('neat-dump');
 const config = require('../config');
 const knex = require('./knex');
 
@@ -13,66 +13,66 @@ const dateFields = {
   entry: [],
   period: ['start_date', 'end_date'],
   coa_heading: [],
-  report_structure: [],
+  report_structure: []
 };
 
 const plural = {
   account: 'accounts',
   document: 'documents',
   entry: 'entries',
-  period: 'periods',
+  period: 'periods'
 };
 
 const fields = {
-  "tags": {
-    "tag": true,
-    "name": true,
-    "picture": true,
-    "type": true,
-    "order": true,
+  'tags': {
+    'tag': true,
+    'name': true,
+    'picture': true,
+    'type': true,
+    'order': true
   },
-  "period": {
-    "end_date": true,
-    "locked": true,
-    "start_date": true,
+  'period': {
+    'end_date': true,
+    'locked': true,
+    'start_date': true
   },
-  "document": {
-    "period_id": true,
-    "number": true,
-    "date": true,
+  'document': {
+    'period_id': true,
+    'number': true,
+    'date': true
   },
-  "entry": {
-    "document_id": true,
-    "account_id": true,
-    "amount": true,
-    "debit": true,
-    "description": true,
-    "flags": true,
-    "row_number": true,
+  'entry': {
+    'document_id': true,
+    'account_id': true,
+    'amount': true,
+    'debit': true,
+    'description': true,
+    'flags': true,
+    'row_number': true
   },
-  "account": {
-    "vat_account1_id": true,
-    "vat_account2_id": true,
-    "flags": true,
-    "name": true,
-    "number": true,
-    "type": true,
-    "vat_code": true,
-    "vat_percentage": true,
+  'account': {
+    'vat_account1_id': true,
+    'vat_account2_id': true,
+    'flags': true,
+    'name': true,
+    'number': true,
+    'type': true,
+    'vat_code': true,
+    'vat_percentage': true
   },
-  "coa_heading": {
-    "number": true,
-    "text": true,
-    "level": true,
+  'coa_heading': {
+    'number': true,
+    'text': true,
+    'level': true
   },
-  "report_structure": {
-    "id": true,
-    "data": true,
+  'report_structure': {
+    'id': true,
+    'data': true
   }
 };
 
 const transformer = {
-  "account": (acc) => {
+  'account': (acc) => {
     acc.type = ['ASSET', 'LIABILITY', 'EQUITY', 'REVENUE', 'EXPENSE', 'PROFIT_PREV', 'PROFIT'][acc.type];
     return acc;
   }
@@ -87,7 +87,7 @@ const transformer = {
  */
 function fillEntries (db, entries, className, joinClass) {
   return entries.map(e => {
-    dateFields[className].forEach(d => e[d] = moment(e[d]));
+    dateFields[className].forEach(d => (e[d] = moment(e[d])));
     e.class = className;
     e.db = db;
     if (e.id) {
@@ -98,7 +98,7 @@ function fillEntries (db, entries, className, joinClass) {
       Object.keys(fields[joinClass]).forEach(key => {
         delete e[key];
         if (fields[className][key]) {
-          d.error('Overriding field', key, 'from class', className, 'when joining class', joinClass);
+          dump.error('Overriding field', key, 'from class', className, 'when joining class', joinClass);
         }
       });
       if (e[joinClass + '_id']) {
@@ -143,7 +143,7 @@ function listAll(db, className, where, order) {
  * @param {String} joinClass
  * @param {String[]} joinClassOrder
  */
-function getOne(db, className, id, joinClass=null, joinClassOrder=null) {
+function getOne(db, className, id, joinClass = null, joinClassOrder = null) {
   let ret = null;
   return knex.db(db).select('*').from(className).where({'id': id})
     .then(entries => {
@@ -172,7 +172,7 @@ function getOne(db, className, id, joinClass=null, joinClassOrder=null) {
 function updateOne(db, className, id, data) {
   try {
     id = parseInt(id);
-  } catch {
+  } catch (err) {
     id = 0;
   }
   if (!id) {
@@ -181,7 +181,7 @@ function updateOne(db, className, id, data) {
   return knex.db(db)(className).where({'id': id}).update(data)
     .then(() => 204)
     .catch((err) => {
-      d.error(err);
+      dump.error(err);
       return 400;
     });
 }
@@ -196,7 +196,7 @@ function deleteOne(db, className, id) {
   return knex.db(db)(className).where({'id': id}).delete()
     .then(() => 204)
     .catch((err) => {
-      d.error(err);
+      dump.error(err);
       return 400;
     });
 }
@@ -214,7 +214,7 @@ function createOne(db, className, data) {
       return knex.db(db)(className).where({id: data[0]}).first();
     })
     .catch((err) => {
-      d.error(err);
+      dump.error(err);
       return null;
     });
 }
@@ -386,12 +386,12 @@ function getAccountsById(db) {
     return Promise.resolve(accountsById);
   }
   return knex.db(db).select('id', 'number')
-  .from('account')
-  .then((data) => {
-    accountsById = {};
-    data.forEach((account) => accountsById[account.id] = account.number);
-    return accountsById;
-  });
+    .from('account')
+    .then((data) => {
+      accountsById = {};
+      data.forEach((account) => (accountsById[account.id] = account.number));
+      return accountsById;
+    });
 }
 
 /**
@@ -404,12 +404,12 @@ function getAccountsByNumber(db) {
     return Promise.resolve(accountsByNumber);
   }
   return knex.db(db).select('id', 'number')
-  .from('account')
-  .then((data) => {
-    accountsByNumber = {};
-    data.forEach((account) => accountsByNumber[account.number] = account.id);
-    return accountsByNumber;
-  });
+    .from('account')
+    .then((data) => {
+      accountsByNumber = {};
+      data.forEach((account) => (accountsByNumber[account.number] = account.id));
+      return accountsByNumber;
+    });
 }
 
 /**
@@ -422,12 +422,12 @@ function getAccountNamesByNumber(db) {
     return Promise.resolve(accountNamesByNumber);
   }
   return knex.db(db).select('name', 'number')
-  .from('account')
-  .then((data) => {
-    accountNamesByNumber = {};
-    data.forEach((account) => accountNamesByNumber[account.number] = account.name);
-    return accountNamesByNumber;
-  });
+    .from('account')
+    .then((data) => {
+      accountNamesByNumber = {};
+      data.forEach((account) => (accountNamesByNumber[account.number] = account.name));
+      return accountNamesByNumber;
+    });
 }
 
 module.exports = {
@@ -445,5 +445,5 @@ module.exports = {
   getAccountNamesByNumber: getAccountNamesByNumber,
   getAccountTransactions: getAccountTransactions,
   getAccountTransactionsWithEntries: getAccountTransactionsWithEntries,
-  getAccountTransactionsByNumber: getAccountTransactionsByNumber,
+  getAccountTransactionsByNumber: getAccountTransactionsByNumber
 };

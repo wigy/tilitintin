@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
         return res.send([]);
       }
       return data.listAll(req.db, 'tags')
-      .then(data => res.send(data));
+        .then(data => res.send(data));
     });
 });
 
@@ -21,10 +21,10 @@ router.get('/:id', (req, res) => {
         return res.send({});
       }
       data.getOne(req.db, 'tags', req.params.id)
-      .then(tag => {
-        res.send(tag);
+        .then(tag => {
+          res.send(tag);
+        });
     });
-  });
 });
 
 module.exports = router;

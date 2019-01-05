@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "nodemon src/server.js"
+    "dev": "nodemon src/server.js",
+    "lint": "eslint src",
+    "lint-fix": "eslint --fix src"
   },
   "author": "",
   "license": "GPL-3.0",
@@ -24,5 +26,15 @@
     "promise-sequential": "^1.1.1",
     "sprintf": "^0.1.5",
     "sqlite3": "^4.0.4"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-semistandard": "^12.0.1",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-mocha": "^4.12.1",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.7.0",
+    "eslint-plugin-standard": "^3.0.1"
   }
 }

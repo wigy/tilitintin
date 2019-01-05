@@ -9,20 +9,20 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
   data.getOne(req.db, 'account', req.params.id)
-  .then(account => {
-    res.send(account);
-  });
+    .then(account => {
+      res.send(account);
+    });
 });
 
 router.get('/:id/:period', (req, res) => {
   data.getOne(req.db, 'account', req.params.id)
-  .then(account => {
-    data.getAccountTransactionsWithEntries(req.db, req.params.period, req.params.id)
-      .then(txs => {
-        account.transactions = txs;
-        res.send(account);
-      });
-  });
+    .then(account => {
+      data.getAccountTransactionsWithEntries(req.db, req.params.period, req.params.id)
+        .then(txs => {
+          account.transactions = txs;
+          res.send(account);
+        });
+    });
 });
 
 module.exports = router;

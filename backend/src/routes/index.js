@@ -22,7 +22,7 @@ function checkToken(req, res, next) {
   const auth = req.headers.authorization;
   if (auth) {
     if (auth.substr(0, 7) === 'Bearer ') {
-      token = auth.substr(7, auth.length - 7);
+      let token = auth.substr(7, auth.length - 7);
       jwt.verify(token, config.SECRET, (err, decoded) => {
         if (err || decoded.service !== 'Tilitintin') {
           res.status(403).send('Unauthorized.');
@@ -40,7 +40,7 @@ router.get('/', checkToken, (req, res) => {
   res.send({
     links: {
       databases: config.BASEURL + '/db'
-  }});
+    }});
 });
 
 router.get('/db/', checkToken, (req, res) => {
@@ -69,7 +69,7 @@ router.get('/db/:db', checkToken, checkDb, (req, res) => {
       entries: config.BASEURL + '/db/' + db + '/entry',
       headings: config.BASEURL + '/db/' + db + '/heading',
       tags: config.BASEURL + '/db/' + db + '/tags',
-      report: config.BASEURL + '/db/' + db + '/report',
+      report: config.BASEURL + '/db/' + db + '/report'
     }});
 });
 

@@ -15,7 +15,7 @@ const data = require('./data');
  * @param {Boolean} If set, raise error on missing period.
  * @return {number} Period ID or null if not found.
  */
-function periodOf(db, date, failOnError=false) {
+function periodOf(db, date, failOnError = false) {
   const seconds = moment(date + ' 00:00:00').format('x');
   return knex.db(db)
     .select('id')
@@ -43,21 +43,21 @@ function addDocument(db, date) {
   return periodOf(db, date, true)
     .then((periodId) => {
       return knex.db(db)
-      .select(knex.db(db).raw('MAX(number) + 1 as number'))
-      .from('document')
-      .then((nums) => nums ? nums[0].number || 0 : 1)
-      .then((number) => {
-        return knex.db(db)('document')
-        .insert({
-          number: number,
-          period_id: periodId,
-          date: seconds
-        })
-        .then((ids) => {
-          d.info('TX add:', db, date, '#' + number);
-          return ids[0];
+        .select(knex.db(db).raw('MAX(number) + 1 as number'))
+        .from('document')
+        .then((nums) => nums ? nums[0].number || 0 : 1)
+        .then((number) => {
+          return knex.db(db)('document')
+            .insert({
+              number: number,
+              period_id: periodId,
+              date: seconds
+            })
+            .then((ids) => {
+              d.info('TX add:', db, date, '#' + number);
+              return ids[0];
+            });
         });
-      });
     });
 }
 
@@ -88,7 +88,7 @@ function addEntry(db, accountId, documentId, debit, amount, desc, row, flags) {
         amount: amount,
         description: desc,
         row_number: row,
-        flags: flags,
+        flags: flags
       })
     )
     .then((res) => {
@@ -114,7 +114,7 @@ function _compareEntries(e1, e2) {
     accountDebits[e.accountId] = parseInt(e.debit);
   });
   // Verify that no account amount or debit flag differs.
-  for (let i=0; i < e2.length; i++) {
+  for (let i = 0; i < e2.length; i++) {
     const accountId = e2[i].accountId;
     const amount = Math.round(100 * parseFloat(e2[i].amount));
     const debit = parseInt(e2[i].debit);
@@ -165,7 +165,7 @@ function _checkTxs(db, date, txs) {
 
               // Compare each entry group if they are equal to the TXs to add.
               const oldEntries = Object.values(docsById);
-              for (let i=0; i < oldEntries.length; i++) {
+              for (let i = 0; i < oldEntries.length; i++) {
                 if (_compareEntries(oldEntries[i], txs)) {
                   return true;
                 }
@@ -197,7 +197,7 @@ function _checkTxs(db, date, txs) {
  *
  * If option `force` is set, the existing transactions are not checked for duplicates.
  */
-function add(db, date, description, txs, options={}) {
+function add(db, date, description, txs, options = {}) {
 
   // Unknown accounts to resolve.
   let accountNumberToId = {};
@@ -241,7 +241,7 @@ function add(db, date, description, txs, options={}) {
   txs = txs.map((tx) => prepare(tx));
 
   // Check the total.
-  total = Math.round(100*total) / 100;
+  total = Math.round(100 * total) / 100;
   if (total) {
     throw new Error('Invalid total ' + total + ' for TXs ' + JSON.stringify(txs));
   }
@@ -291,5 +291,5 @@ function add(db, date, description, txs, options={}) {
 }
 
 module.exports = {
-  add: add,
+  add: add
 };

@@ -36,7 +36,7 @@ function db(name) {
   return knex({
     client: 'sqlite3',
     connection: {
-        filename: config.DBPATH + '/' + name + '.sqlite'
+      filename: config.DBPATH + '/' + name + '.sqlite'
     },
     useNullAsDefault: true
   });

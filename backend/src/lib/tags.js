@@ -32,7 +32,7 @@ function ensure(db) {
         table.index('type');
         table.index('order');
       })
-      .then(() => true);
+        .then(() => true);
     });
 }
 
@@ -61,11 +61,11 @@ function add(db, tag, name, picture, type, order) {
   return ensure(db)
     .then(() => {
       return knex.db(db)('tags').insert({
-        tag : tag,
-        name : name,
-        picture : picture,
-        type : type,
-        order : order,
+        tag: tag,
+        name: name,
+        picture: picture,
+        type: type,
+        order: order
       });
     });
 }

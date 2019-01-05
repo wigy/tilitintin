@@ -9,7 +9,7 @@ function code2item(code) {
     column: parseInt(code[2])
   };
 
-  switch(code[0]) {
+  switch (code[0]) {
     case 'D':
       ret.accountDetails = true;
       break;
@@ -27,7 +27,7 @@ function code2item(code) {
       break;
   }
 
-  switch(code[1]) {
+  switch (code[1]) {
     case 'B':
       ret.bold = true;
       break;
@@ -65,7 +65,7 @@ function processEntries(entries, format) {
   // Parse report and construct format.
   const allAccounts = Object.keys(totals['all']);
   let ret = [];
-  format.split("\n").forEach((line) => {
+  format.split('\n').forEach((line) => {
     line = line.trim();
     if (line === '') {
       return;
@@ -82,9 +82,9 @@ function processEntries(entries, format) {
     let item = code2item(code);
 
     // Collect all totals inside any of the account number ranges.
-    for (let i = 0; i < parts.length; i+=2) {
+    for (let i = 0; i < parts.length; i += 2) {
       const from = parts[i];
-      const to = parts[i+1];
+      const to = parts[i + 1];
       allAccounts.forEach((number) => {
         if (number >= from && number < to) {
           unused = false;
@@ -98,7 +98,7 @@ function processEntries(entries, format) {
 
     // If debugging, just give out all info.
     if (DEBUG_PROCESSOR) {
-      ret.push({item, code, name, amounts, unused, parts, hits})
+      ret.push({item, code, name, amounts, unused, parts, hits});
     } else {
       if (item.required || !unused) {
         item.name = name;
@@ -109,9 +109,9 @@ function processEntries(entries, format) {
 
     // Fill in account details for the entries wanting it.
     if (item.accountDetails) {
-      for (let i = 0; i < parts.length; i+=2) {
+      for (let i = 0; i < parts.length; i += 2) {
         const from = parts[i];
-        const to = parts[i+1];
+        const to = parts[i + 1];
         allAccounts.forEach((number) => {
           if (number >= from && number < to) {
             let item = code2item(code);
@@ -150,11 +150,11 @@ function processEntries(entries, format) {
  */
 async function create(db, period, format) {
   return knex.db(db).select(
-      'account.name',
-      'account.number',
-      knex.db(db).raw('ROUND(((entry.debit == 1) * 2 - 1) * entry.amount * 100) as amount'),
-      'entry.description'
-    )
+    'account.name',
+    'account.number',
+    knex.db(db).raw('ROUND(((entry.debit == 1) * 2 - 1) * entry.amount * 100) as amount'),
+    'entry.description'
+  )
     .from('entry')
     .leftJoin('account', 'account.id', 'entry.account_id')
     .leftJoin('document', 'document.id', 'entry.document_id')

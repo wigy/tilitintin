@@ -25,7 +25,7 @@ class TransactionObject {
       targetTotal: this.targetTotal,
       fee: this.fee,
       tax: this.tax,
-      tx: this.tx,
+      tx: this.tx
     });
   }
 
@@ -56,13 +56,13 @@ class TransactionObject {
       return [
         {number: this.importer.getAccount(this.currency), amount: amount},
         {number: this.importer.getAccount('fees'), amount: this.fee},
-        {number: this.importer.getAccount('bank'), amount: -this.total},
+        {number: this.importer.getAccount('bank'), amount: -this.total}
       ];
     }
     // No fees
     return [
       {number: this.importer.getAccount(this.currency), amount: this.total},
-      {number: this.importer.getAccount('bank'), amount: -this.total},
+      {number: this.importer.getAccount('bank'), amount: -this.total}
     ];
   }
 
@@ -74,12 +74,12 @@ class TransactionObject {
       return [
         {number: this.importer.getAccount('bank'), amount: Math.round((this.total - this.fee) * 100) / 100},
         {number: this.importer.getAccount('fees'), amount: this.fee},
-        {number: this.importer.getAccount(this.currency), amount: -this.total},
+        {number: this.importer.getAccount(this.currency), amount: -this.total}
       ];
     }
     return [
       {number: this.importer.getAccount('bank'), amount: this.total},
-      {number: this.importer.getAccount(this.currency), amount: -this.total},
+      {number: this.importer.getAccount(this.currency), amount: -this.total}
     ];
   }
 
@@ -90,7 +90,7 @@ class TransactionObject {
     let ret = [
       {number: this.importer.getAccountForTarget(this), amount: Math.round((this.total - this.fee) * 100) / 100},
       {number: this.importer.getAccount('fees'), amount: this.fee},
-      {number: this.importer.getAccount(this.currency), amount: -this.total},
+      {number: this.importer.getAccount(this.currency), amount: -this.total}
     ];
     return ret;
   }
@@ -102,7 +102,7 @@ class TransactionObject {
     const amount = Math.round((this.total - this.fee) * 100) / 100;
     let ret = [
       {number: this.importer.getAccount(this.currency), amount: amount},
-      {number: this.importer.getAccount('fees'), amount: this.fee},
+      {number: this.importer.getAccount('fees'), amount: this.fee}
     ];
 
     const avgPrice = this.importer.averages[this.target] || 0;
@@ -133,9 +133,8 @@ class TransactionObject {
    * Create dividend entries.
    */
   dividendEntries() {
-    const acc = this.importer.getAccount(this.currency);
     let ret = [
-      {number: this.importer.getAccount('dividends'), amount: Math.round(-100 * this.total) / 100},
+      {number: this.importer.getAccount('dividends'), amount: Math.round(-100 * this.total) / 100}
     ];
     if (this.tax) {
       const tax = Math.round(this.tax * 100) / 100;
@@ -156,7 +155,7 @@ class TransactionObject {
     let neg = Math.round(-100 * this.total) / 100;
     let ret = [
       {number: this.importer.getAccount(this.currency), amount: this.total},
-      {number: this.importer.getAccount(this.target), amount: neg},
+      {number: this.importer.getAccount(this.target), amount: neg}
     ];
     return ret;
   }
@@ -168,7 +167,7 @@ class TransactionObject {
     const amount = Math.round(-100 * this.total) / 100;
     let ret = [
       {number: this.importer.getAccount(this.currency), amount: amount},
-      {number: this.importer.getAccount('interest'), amount: this.total},
+      {number: this.importer.getAccount('interest'), amount: this.total}
     ];
     return ret;
   }
@@ -178,7 +177,7 @@ class TransactionObject {
    */
   inEntries() {
     let ret = [
-      {number: this.importer.getAccount(this.target), amount: 0},
+      {number: this.importer.getAccount(this.target), amount: 0}
     ];
     return ret;
   }
@@ -188,7 +187,7 @@ class TransactionObject {
    */
   outEntries() {
     let ret = [
-      {number: this.importer.getAccount(this.target), amount: 0},
+      {number: this.importer.getAccount(this.target), amount: 0}
     ];
     return ret;
   }
@@ -200,7 +199,7 @@ class TransactionObject {
    */
   describe() {
     let parenthesis = [];
-    switch(this.type) {
+    switch (this.type) {
       case 'deposit':
         return 'Talletus ' + this.importer.serviceName + '-palveluun';
       case 'withdrawal':
@@ -208,12 +207,12 @@ class TransactionObject {
       case 'buy':
         parenthesis = ['yht. ' + num.trim(this.targetTotal, this.target)];
         if (!this.importer.config.noProfit) {
-          parenthesis.push('k.h. nyt ' + num.currency(this.targetAverage, '€/'  + this.target));
+          parenthesis.push('k.h. nyt ' + num.currency(this.targetAverage, '€/' + this.target));
         }
-        return 'Osto ' + num.trimSigned(this.amount, this.target) + ' (' + parenthesis.join(', ')  + ')';
+        return 'Osto ' + num.trimSigned(this.amount, this.target) + ' (' + parenthesis.join(', ') + ')';
       case 'sell':
         if (!this.importer.config.noProfit) {
-          parenthesis.push('k.h. ' + num.currency(this.targetAverage, '€/'  + this.target));
+          parenthesis.push('k.h. ' + num.currency(this.targetAverage, '€/' + this.target));
         }
         parenthesis.push('jälj. ' + num.trim(this.targetTotal, this.target));
         return 'Myynti ' + num.trimSigned(this.amount, this.target) + ' (' + parenthesis.join(', ') + ')';
@@ -228,7 +227,7 @@ class TransactionObject {
         return 'Osinko ' + this.target + ' (' + parenthesis.join(', ') + ')';
       case 'fx':
         parenthesis.push('kurssi ' + num.currency(this.rate, this.currency + '/' + this.target, 6));
-        parenthesis.push('yht. ' + num.trim(this.targetTotal, this.currency))
+        parenthesis.push('yht. ' + num.trim(this.targetTotal, this.currency));
         return 'Valuutanvaihto ' + this.target + ' -> ' + this.currency + ' (' + parenthesis.join(', ') + ')';
       case 'interest':
         return this.importer.serviceName + ' lainakorko';

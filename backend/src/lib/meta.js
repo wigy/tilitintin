@@ -29,7 +29,7 @@ function ensureImport(db) {
         table.unique(['service_tag', 'tx_id']);
         table.index('document_id');
       })
-      .then(() => true);
+        .then(() => true);
     });
 }
 
@@ -43,14 +43,14 @@ function ensureImport(db) {
  */
 function addImport(db, serviceTag, txId, docId) {
   if (!docId) {
-    throw new Error('No document ID given, when marking imported transaction ' + txId + ' for ' +  serviceTag + ' (tx exists?)');
+    throw new Error('No document ID given, when marking imported transaction ' + txId + ' for ' + serviceTag + ' (tx exists?)');
   }
   return ensureImport(db)
     .then(() => {
       return knex.db(db)('imports').insert({
-        service_tag : serviceTag,
+        service_tag: serviceTag,
         tx_id: txId,
-        document_id : docId
+        document_id: docId
       });
     });
 }
@@ -67,7 +67,7 @@ function hasImport(db, serviceTag, txId) {
     .then((yes) => {
       if (yes) {
         return knex.db(db)('imports').where({
-          service_tag : serviceTag,
+          service_tag: serviceTag,
           tx_id: txId
         });
       }
