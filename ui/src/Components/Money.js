@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const Money = (props) => {
   let str;
@@ -15,6 +16,11 @@ const Money = (props) => {
   let num = nums.join(',');
   str = str.replace('%s', num);
   return (<span className="Money">{str}</span>);
+};
+
+Money.propTypes = {
+  currency: PropTypes.string.isRequired,
+  cents: PropTypes.number.isRequired
 };
 
 export default Money;

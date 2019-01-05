@@ -1,0 +1,15 @@
+table.ReportDisplay tr {
+  background-color: transparent !important;
+}
+
+table.ReportDisplay tr td {
+  border: none !important;
+}
+
+table.ReportDisplay tr td:first-child {
+  text-align: left;
+}
+
+table.ReportDisplay tr td {
+  text-align: right;
+}
