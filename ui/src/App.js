@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Route, withRouter } from 'react-router-dom';
 import { inject } from 'mobx-react';
 import keydown from 'react-keydown';
@@ -10,6 +11,8 @@ import Reports from './Components/Reports';
 import Menu from './Components/Menu';
 import ToolPanel from './Components/ToolPanel';
 import Login from './Components/Login';
+import Navigator from './stores/Navigator';
+import Store from './stores/Store';
 
 @withRouter
 @keydown
@@ -79,5 +82,11 @@ class App extends Component {
     );
   }
 }
+
+App.propTypes = {
+  navigator: PropTypes.instanceOf(Navigator),
+  store: PropTypes.instanceOf(Store),
+  keydown: PropTypes.any
+};
 
 export default App;
