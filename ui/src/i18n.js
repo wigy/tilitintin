@@ -30,7 +30,12 @@ i18n.init({
         'No such account found.': 'Tiliä ei ole olemassa.',
         'Numeric value incorrect.': 'Virheellinen numeroarvo.',
         'Saving failed.': 'Tallennus epäonnistui.',
-        'This field is required.': 'Tämä kenttä ei voi olla tyhjä.'
+        'This field is required.': 'Tämä kenttä ei voi olla tyhjä.',
+
+        'balance-sheet': 'Tase',
+        'balance-sheet-detailed': 'Tase erittelyin',
+        'income-statement': 'Tuloslaskelma',
+        'income-statement-detailed': 'Tuloslaskelma erittelyin'
       }
     }
   },

@@ -99,7 +99,10 @@ import config from '../Configuration';
  *       Tag1: true,
  *       Tag2: false
  *     }
- *   }
+ *   },
+ *   reports: [...], // Available report identifiers.
+ *   report: [{...}, ...] // Current report.
+ * }
  */
 class Store {
 
@@ -119,6 +122,8 @@ class Store {
   @observable tags = {};
   @observable account = {};
   @observable tools = { tagDisabled: {} };
+  @observable reports = [];
+  @observable report = [];
 
   constructor() {
     this.getDatabases();
@@ -171,9 +176,12 @@ class Store {
     this.accountsById = {};
     this.headings = {};
     this.tags = {};
+    this.reports = [];
+    this.report = [];
     this.setPeriod(null);
     if (db) {
       this.getPeriods()
+        .then(() => this.getReports())
         .then(() => this.getTags())
         .then(() => this.getHeadings())
         .then(() => this.getAccounts());
@@ -188,6 +196,7 @@ class Store {
    * @return {Boolean} True if no changes needed.
    */
   setPeriod(db, periodId) {
+    periodId = parseInt(periodId);
     if (periodId && this.setDb(db) && this.periodId === periodId) {
       return true;
     }
@@ -234,7 +243,7 @@ class Store {
       .then((tags) => {
         runInAction(() => {
           this.tags = {};
-          tags.forEach((tag) => this.tags[tag.tag] = tag);
+          tags.forEach((tag) => (this.tags[tag.tag] = tag));
         });
         return this.tags;
       });
@@ -272,6 +281,19 @@ class Store {
             this.periods.push(period);
           });
           return this.periods;
+        });
+      });
+  }
+
+  /**
+   * Get the list of report formats available for the current DB.
+   */
+  getReports() {
+    return this.request('/db/' + this.db + '/report')
+      .then((reports) => {
+        runInAction(() => {
+          this.reports = Object.keys(reports.links);
+          return this.reports;
         });
       });
   }
@@ -355,7 +377,7 @@ class Store {
             const [txDesc, txTags] = desc2tags(tx.description);
             tx.description = txDesc;
             tx.tags = txTags;
-            tx.tags.forEach((tag) => tags[tag] = true);
+            tx.tags.forEach((tag) => (tags[tag] = true));
             tx.open = false;
             tx.entries.forEach((entry) => {
               const [entryDesc, entryTags] = desc2tags(entry.description);
