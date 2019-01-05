@@ -180,7 +180,7 @@ class Store {
     this.headings = {};
     this.tags = {};
     this.reports = [];
-    this.report = [];
+    this.report = null;
     this.setPeriod(null);
     if (db) {
       this.getPeriods()

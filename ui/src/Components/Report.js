@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
-import { translate, Trans } from 'react-i18next';
 import Store from '../Stores/Store';
+import ReportDisplay from './ReportDisplay';
 
-@translate('translations')
 @inject('store')
 @observer
 class Report extends Component {
@@ -19,8 +18,7 @@ class Report extends Component {
 
     return (
       <div className="Report">
-        <h1><Trans>{this.props.store.report.format}</Trans></h1>
-        {JSON.stringify(this.props.store.report.data)}
+        <ReportDisplay report={this.props.store.report}></ReportDisplay>
       </div>
     );
   }
