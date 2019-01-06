@@ -79,7 +79,7 @@ function processEntries(entries, period, formatName, format) {
     start: period.start_date,
     end: period.end_date
   });
-  const columnNames = ['period' + period.id];
+  const columnNames = columns.map((col) => col.name);
 
   // Summarize all totals from the entries.
   const totals = {};
