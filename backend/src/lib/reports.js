@@ -79,21 +79,24 @@ function processEntries(entries, period, formatName, format) {
     start: period.start_date,
     end: period.end_date
   });
-  const mainColumn = 'period' + period.id;
+  const columnNames = ['period' + period.id];
 
   // Summarize all totals from the entries.
-  const totals = {[mainColumn]: new Map()};
+  const totals = {};
+  columnNames.forEach((column) => (totals[column] = new Map()));
   const accountNames = new Map();
+  const accountNumbers = new Set();
   entries.forEach((entry) => {
     const column = 'period' + entry.periodId;
     totals[column][entry.number] = totals[column][entry.number] || 0;
     totals[column][entry.number] += entry.amount;
     accountNames[entry.number] = entry.name;
+    accountNumbers.add(entry.number);
     // TODO: Calculate also by tags.
   });
 
   // Parse report and construct format.
-  const allAccounts = Object.keys(totals[mainColumn]).sort();
+  const allAccounts = [...accountNumbers].sort();
   let ret = [];
   format.split('\n').forEach((line) => {
     line = line.trim();
@@ -106,7 +109,8 @@ function processEntries(entries, period, formatName, format) {
     }
     const [code, ...parts] = line.split(';');
     const name = parts.pop();
-    let amounts = {[mainColumn]: 0};
+    let amounts = {};
+    columnNames.forEach((column) => (amounts[column] = 0));
     let unused = true;
     let hits = [];
     let item = code2item(code);
@@ -115,14 +119,16 @@ function processEntries(entries, period, formatName, format) {
     for (let i = 0; i < parts.length; i += 2) {
       const from = parts[i];
       const to = parts[i + 1];
-      allAccounts.forEach((number) => {
-        if (number >= from && number < to) {
-          unused = false;
-          amounts[mainColumn] += totals[mainColumn][number];
-          if (DEBUG_PROCESSOR) {
-            hits.push(number);
+      columnNames.forEach((column) => {
+        allAccounts.forEach((number) => {
+          if (number >= from && number < to) {
+            unused = false;
+            amounts[column] += totals[column][number];
+            if (DEBUG_PROCESSOR) {
+              hits.push(number);
+            }
           }
-        }
+        });
       });
     }
 
@@ -152,9 +158,10 @@ function processEntries(entries, period, formatName, format) {
             delete item.accountDetails;
             item.name = accountNames[number];
             item.number = number;
-            item.amounts = {
-              [mainColumn]: totals[mainColumn][number] + 0
-            };
+            item.amounts = {};
+            columnNames.forEach((column) => {
+              item.amounts[column] = totals[column][number] + 0;
+            });
             ret.push(item);
           }
         });
