@@ -71,6 +71,7 @@ function processEntries(entries, period, formatName, format) {
   }
 
   // Construct meta data for columns.
+  // TODO: Handle two periods.
   let columns = [];
   columns.push({
     name: 'period' + period.id,
@@ -84,11 +85,11 @@ function processEntries(entries, period, formatName, format) {
   const totals = {[mainColumn]: new Map()};
   const accountNames = new Map();
   entries.forEach((entry) => {
-    totals[mainColumn][entry.number] = totals[mainColumn][entry.number] || 0;
-    totals[mainColumn][entry.number] += entry.amount;
+    const column = 'period' + entry.periodId;
+    totals[column][entry.number] = totals[column][entry.number] || 0;
+    totals[column][entry.number] += entry.amount;
     accountNames[entry.number] = entry.name;
     // TODO: Calculate also by tags.
-    // TODO: Handle two periods.
   });
 
   // Parse report and construct format.
@@ -152,7 +153,7 @@ function processEntries(entries, period, formatName, format) {
             item.name = accountNames[number];
             item.number = number;
             item.amounts = {
-              [mainColumn]: totals[mainColumn][number]
+              [mainColumn]: totals[mainColumn][number] + 0
             };
             ret.push(item);
           }
@@ -161,11 +162,17 @@ function processEntries(entries, period, formatName, format) {
     }
   });
 
-  return {
+  let report = {
     format: formatName,
     columns,
     data: ret
   };
+
+  if (DEBUG_PROCESSOR) {
+    report.entries = entries;
+  }
+
+  return report;
 }
 
 /**
@@ -191,6 +198,7 @@ async function create(db, periodId, formatName, format) {
   return knex.db(db).select('*').from('period').where({'period.id': periodId}).first()
     .then((period) => {
       return knex.db(db).select(
+        knex.db(db).raw('document.period_id AS periodId'),
         'account.name',
         'account.type',
         'account.number',
