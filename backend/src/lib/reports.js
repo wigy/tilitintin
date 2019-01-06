@@ -64,7 +64,7 @@ function processEntries(entries, formatName, format) {
   });
 
   // Parse report and construct format.
-  const allAccounts = Object.keys(totals['all']);
+  const allAccounts = Object.keys(totals['all']).sort();
   let ret = [];
   format.split('\n').forEach((line) => {
     line = line.trim();
@@ -101,10 +101,13 @@ function processEntries(entries, formatName, format) {
     if (DEBUG_PROCESSOR) {
       ret.push({item, code, name, amounts, unused, parts, hits});
     } else {
-      if (item.required || !unused) {
-        item.name = name;
-        item.amounts = amounts;
-        ret.push(item);
+      // If we actually show details we can skip this entry and fill details below.
+      if (!item.accountDetails) {
+        if (item.required || !unused) {
+          item.name = name;
+          item.amounts = amounts;
+          ret.push(item);
+        }
       }
     }
 
@@ -119,6 +122,7 @@ function processEntries(entries, formatName, format) {
             item.isAccount = true;
             delete item.accountDetails;
             item.name = accountNames[number];
+            item.number = number;
             item.amounts = {
               all: totals.all[number]
             };
@@ -151,19 +155,22 @@ function processEntries(entries, formatName, format) {
  * * `accountDetails` if true, after this are summarized accounts under this entry.
  * * `isAccount` if true, this is an account entry.
  * * `name` Title of the entry.
+ * * `number` Account number if the entry is an account.
  * * `amounts` An object with entry `all` for full total and [Tags] indexing the tag specific totals.
  */
 async function create(db, period, formatName, format) {
   return knex.db(db).select(
     'account.name',
+    'account.type',
     'account.number',
-    knex.db(db).raw('ROUND(((entry.debit == 1) * 2 - 1) * entry.amount * 100) as amount'),
+    knex.db(db).raw('ROUND((1 - (entry.debit == 0) * 2) * (1 - ((account.type IN (1, 2, 3, 4, 5)) * 2)) * entry.amount * 100) AS amount'),
     'entry.description'
   )
     .from('entry')
     .leftJoin('account', 'account.id', 'entry.account_id')
     .leftJoin('document', 'document.id', 'entry.document_id')
     .where({'document.period_id': period})
+    .orderBy('account.number')
     .then((entries) => processEntries(entries, formatName, format));
 }
 

@@ -1,3 +1,7 @@
+table.ReportDisplay {
+ max-width: 8in;
+}
+
 table.ReportDisplay tr {
   background-color: transparent !important;
 }
