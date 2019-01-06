@@ -8,7 +8,6 @@ import './ReportLine.css';
 class ReportLine extends Component {
 
   render() {
-    // TODO: Render correctly according to instructions.
     let { name, number, amounts, bold, italic, hideTotal, column, pageBreak, isAccount } = this.props.line;
     if (isAccount) {
       name = `${number} ${name}`;
@@ -26,13 +25,16 @@ class ReportLine extends Component {
     return (
       <tr className={'ReportLine' + (pageBreak ? ' pageBreak' : '')}>
         <td className={'name column' + column}>{name}</td>
-        <td className="amount">{amounts && <Money currency="EUR" cents={amounts.all}></Money>}</td>
+        {this.props.columns.map((column) => <td key={column.name}>
+          {amounts && amounts[column.name] && <Money currency="EUR" cents={amounts[column.name]}></Money>}
+        </td>)}
       </tr>
     );
   }
 }
 
 ReportLine.propTypes = {
+  columns: PropTypes.array,
   line: PropTypes.object.isRequired
 };
 

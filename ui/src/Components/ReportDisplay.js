@@ -7,13 +7,12 @@ import './ReportDisplay.css';
 class ReportDisplay extends Component {
 
   render() {
-
     return (
       <div className="ReportDisplay">
         <h1><Trans>{this.props.report.format}</Trans></h1>
         <table className="ReportDisplay">
           <tbody>
-            {this.props.report.data.map((line, idx) => <ReportLine key={idx} line={line}></ReportLine>)}
+            {this.props.report.data.map((line, idx) => <ReportLine key={idx} line={line} columns={this.props.report.columns}></ReportLine>)}
           </tbody>
         </table>
       </div>

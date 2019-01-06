@@ -1,3 +1,4 @@
+const moment = require('moment');
 const knex = require('./knex');
 
 /**
@@ -40,12 +41,28 @@ function code2item(code) {
 }
 
 /**
+ * Construct column title.
+ * @param {String} formatName
+ * @param {Object} period
+ */
+function columnTitle(formatName, period) {
+  switch (formatName) {
+    case 'balance-sheet':
+    case 'balance-sheet-detailed':
+      return moment(period.end_date).format('YYYY-MM-DD');
+    default:
+      return moment(period.start_date).format('YYYY-MM-DD') + ' - ' + moment(period.end_date).format('YYYY-MM-DD');
+  }
+}
+
+/**
  * Process data entries in to the report format described as in Tilitin reports.
  * @param {Object[]} entries
+ * @param {Object} period
  * @param {String} formatName
  * @param {String} format
  */
-function processEntries(entries, formatName, format) {
+function processEntries(entries, period, formatName, format) {
 
   const DEBUG_PROCESSOR = false;
 
@@ -53,18 +70,29 @@ function processEntries(entries, formatName, format) {
     return [];
   }
 
+  // Construct meta data for columns.
+  let columns = [];
+  columns.push({
+    name: 'period' + period.id,
+    title: columnTitle(formatName, period),
+    start: period.start_date,
+    end: period.end_date
+  });
+  const mainColumn = 'period' + period.id;
+
   // Summarize all totals from the entries.
-  const totals = {'all': new Map()};
+  const totals = {[mainColumn]: new Map()};
   const accountNames = new Map();
   entries.forEach((entry) => {
-    totals.all[entry.number] = totals.all[entry.number] || 0;
-    totals.all[entry.number] += entry.amount;
+    totals[mainColumn][entry.number] = totals[mainColumn][entry.number] || 0;
+    totals[mainColumn][entry.number] += entry.amount;
     accountNames[entry.number] = entry.name;
     // TODO: Calculate also by tags.
+    // TODO: Handle two periods.
   });
 
   // Parse report and construct format.
-  const allAccounts = Object.keys(totals['all']).sort();
+  const allAccounts = Object.keys(totals[mainColumn]).sort();
   let ret = [];
   format.split('\n').forEach((line) => {
     line = line.trim();
@@ -77,7 +105,7 @@ function processEntries(entries, formatName, format) {
     }
     const [code, ...parts] = line.split(';');
     const name = parts.pop();
-    let amounts = {all: 0};
+    let amounts = {[mainColumn]: 0};
     let unused = true;
     let hits = [];
     let item = code2item(code);
@@ -89,7 +117,7 @@ function processEntries(entries, formatName, format) {
       allAccounts.forEach((number) => {
         if (number >= from && number < to) {
           unused = false;
-          amounts.all += totals.all[number];
+          amounts[mainColumn] += totals[mainColumn][number];
           if (DEBUG_PROCESSOR) {
             hits.push(number);
           }
@@ -124,7 +152,7 @@ function processEntries(entries, formatName, format) {
             item.name = accountNames[number];
             item.number = number;
             item.amounts = {
-              all: totals.all[number]
+              [mainColumn]: totals[mainColumn][number]
             };
             ret.push(item);
           }
@@ -135,6 +163,7 @@ function processEntries(entries, formatName, format) {
 
   return {
     format: formatName,
+    columns,
     data: ret
   };
 }
@@ -142,7 +171,7 @@ function processEntries(entries, formatName, format) {
 /**
  * Construct a report data structure for the given Tilitin format.
  * @param {String} db
- * @param {Number} period
+ * @param {Number} periodId
  * @param {String} formatName
  * @param {String} format
  *
@@ -158,20 +187,23 @@ function processEntries(entries, formatName, format) {
  * * `number` Account number if the entry is an account.
  * * `amounts` An object with entry `all` for full total and [Tags] indexing the tag specific totals.
  */
-async function create(db, period, formatName, format) {
-  return knex.db(db).select(
-    'account.name',
-    'account.type',
-    'account.number',
-    knex.db(db).raw('ROUND((1 - (entry.debit == 0) * 2) * (1 - ((account.type IN (1, 2, 3, 4, 5)) * 2)) * entry.amount * 100) AS amount'),
-    'entry.description'
-  )
-    .from('entry')
-    .leftJoin('account', 'account.id', 'entry.account_id')
-    .leftJoin('document', 'document.id', 'entry.document_id')
-    .where({'document.period_id': period})
-    .orderBy('account.number')
-    .then((entries) => processEntries(entries, formatName, format));
+async function create(db, periodId, formatName, format) {
+  return knex.db(db).select('*').from('period').where({'period.id': periodId}).first()
+    .then((period) => {
+      return knex.db(db).select(
+        'account.name',
+        'account.type',
+        'account.number',
+        knex.db(db).raw('ROUND((1 - (entry.debit == 0) * 2) * (1 - ((account.type IN (1, 2, 3, 4, 5)) * 2)) * entry.amount * 100) AS amount'),
+        'entry.description'
+      )
+        .from('entry')
+        .leftJoin('account', 'account.id', 'entry.account_id')
+        .leftJoin('document', 'document.id', 'entry.document_id')
+        .where({'document.period_id': periodId})
+        .orderBy('account.number')
+        .then((entries) => processEntries(entries, period, formatName, format));
+    });
 }
 
 module.exports = {
