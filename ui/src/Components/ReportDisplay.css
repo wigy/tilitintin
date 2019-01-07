@@ -17,3 +17,12 @@ table.ReportDisplay tr td:first-child, table.ReportDisplay tr th:first-child {
 table.ReportDisplay tr td, table.ReportDisplay tr th {
   text-align: right;
 }
+
+table.ReportDisplay tr.columns {
+  height: 2.2em;
+  border-top: 4px solid var(--fg-color);
+}
+
+table.ReportDisplay .report-title {
+  font-size: 140%;
+}
