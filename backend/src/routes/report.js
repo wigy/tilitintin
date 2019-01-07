@@ -3,6 +3,7 @@ const moment = require('moment');
 const router = express.Router();
 const reports = require('../lib/reports');
 const data = require('../lib/data');
+const knex = require('../lib/knex');
 const config = require('../config');
 
 router.get('/', (req, res) => {
@@ -29,13 +30,18 @@ router.get('/:format', (req, res) => {
 
 router.get('/:format/:period', (req, res) => {
   const {format, period} = req.params;
-  let periods = [parseInt(period)]; // TODO: Resolve correctness and only for certain reports if previous exists.
-  if (parseInt(period)) {
-    periods.push(parseInt(period) - 1);
-  }
-  data.getOne(req.db, 'report_structure', format)
-    .then((reportStructure) => reports.create(req.db, periods, format, reportStructure.data))
-    .then((report) => res.send(report));
+  const periodId = parseInt(period);
+  let periods = [periodId];
+
+  knex.db(req.db).select('*').from('period').where('id', '<', periodId).orderBy('end_date', 'desc').first()
+    .then(prev => {
+      if (prev) {
+        periods.push(prev.id);
+      }
+      data.getOne(req.db, 'report_structure', format)
+        .then((reportStructure) => reports.create(req.db, periods, format, reportStructure.data))
+        .then((report) => res.send(report));
+    });
 });
 
 module.exports = router;
