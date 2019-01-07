@@ -18,15 +18,12 @@ class ReportLine extends Component {
     if (italic) {
       name = <i>{name}</i>;
     }
-    if (hideTotal) {
-      amounts = null;
-    }
 
     return (
       <tr className={'ReportLine' + (pageBreak ? ' pageBreak' : '')}>
         <td className={'name column' + column}>{name}</td>
         {this.props.columns.map((column) => <td key={column.name}>
-          {amounts && amounts[column.name] && <Money currency="EUR" cents={amounts[column.name]}></Money>}
+          {amounts && !hideTotal ? <Money currency="EUR" cents={amounts[column.name]}></Money> : ''}
         </td>)}
       </tr>
     );

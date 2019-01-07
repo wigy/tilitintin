@@ -103,6 +103,7 @@ import config from '../Configuration';
  *   reports: [...], // Available report identifiers.
  *   report: {
  *     format: 'income-statement',
+ *     columns: [{name, title, ...}, ...],
  *     data: []
  *   } // Current report.
  * }

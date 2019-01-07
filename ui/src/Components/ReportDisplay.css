@@ -10,10 +10,10 @@ table.ReportDisplay tr td {
   border: none !important;
 }
 
-table.ReportDisplay tr td:first-child {
+table.ReportDisplay tr td:first-child, table.ReportDisplay tr th:first-child {
   text-align: left;
 }
 
-table.ReportDisplay tr td {
+table.ReportDisplay tr td, table.ReportDisplay tr th {
   text-align: right;
 }

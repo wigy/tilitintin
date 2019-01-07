@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import Tag from './Tag';
 import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
-import './ToolPanel.css';
+import './TransactionToolPanel.css';
 
 @inject('store')
 @inject('cursor')

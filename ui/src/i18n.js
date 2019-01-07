@@ -58,4 +58,6 @@ i18n.init({
   }
 });
 
+i18n.changeLanguage('fi');
+
 export default i18n;
