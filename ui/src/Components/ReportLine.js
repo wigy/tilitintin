@@ -23,7 +23,9 @@ class ReportLine extends Component {
       <tr className={'ReportLine' + (pageBreak ? ' pageBreak' : '')}>
         <td className={'name column' + column}>{name}</td>
         {this.props.columns.map((column) => <td key={column.name}>
-          {amounts && !hideTotal ? <Money currency="EUR" cents={amounts[column.name]}></Money> : ''}
+          {amounts && !hideTotal ? (
+            amounts[column.name] === null ? '–' : <Money currency="EUR" cents={amounts[column.name]}></Money>
+          ) : ''}
         </td>)}
       </tr>
     );

@@ -58,12 +58,12 @@ function columnTitle(formatName, period) {
 /**
  * Process data entries in to the report format described as in Tilitin reports.
  * @param {Object[]} entries
- * @param {Object} period
+ * @param {Object[]} periods
  * @param {String} formatName
  * @param {String} format
  * @param {Object} settings
  */
-function processEntries(entries, period, formatName, format, settings) {
+function processEntries(entries, periods, formatName, format, settings) {
 
   const DEBUG_PROCESSOR = false;
 
@@ -72,14 +72,14 @@ function processEntries(entries, period, formatName, format, settings) {
   }
 
   // Construct meta data for columns.
-  // TODO: Handle two periods.
-  let columns = [];
-  columns.push({
-    name: 'period' + period.id,
-    title: columnTitle(formatName, period),
-    start: period.start_date,
-    end: period.end_date
-  });
+  let columns = periods.map((period) => {
+    return {
+      name: 'period' + period.id,
+      title: columnTitle(formatName, period),
+      start: period.start_date,
+      end: period.end_date
+    };
+  }).reverse();
   const columnNames = columns.map((col) => col.name);
 
   // Summarize all totals from the entries.
@@ -108,10 +108,12 @@ function processEntries(entries, period, formatName, format, settings) {
       ret.push({pageBreak: true});
       return;
     }
+
+    // Split the line and reset variables.
     const [code, ...parts] = line.split(';');
     const name = parts.pop();
     let amounts = {};
-    columnNames.forEach((column) => (amounts[column] = 0));
+    columnNames.forEach((column) => (amounts[column] = null));
     let unused = true;
     let hits = [];
     let item = code2item(code);
@@ -124,9 +126,11 @@ function processEntries(entries, period, formatName, format, settings) {
         allAccounts.forEach((number) => {
           if (number >= from && number < to) {
             unused = false;
-            amounts[column] += totals[column][number];
+            if (totals[column][number] !== undefined) {
+              amounts[column] += totals[column][number];
+            }
             if (DEBUG_PROCESSOR) {
-              hits.push(number);
+              hits.push(number + ' ' + column);
             }
           }
         });
@@ -181,6 +185,7 @@ function processEntries(entries, period, formatName, format, settings) {
   };
 
   if (DEBUG_PROCESSOR) {
+    report.totals = totals;
     report.entries = entries;
   }
 
@@ -190,7 +195,7 @@ function processEntries(entries, period, formatName, format, settings) {
 /**
  * Construct a report data structure for the given Tilitin format.
  * @param {String} db
- * @param {Number} periodId
+ * @param {Number[]} periodIds
  * @param {String} formatName
  * @param {String} format
  *
@@ -206,11 +211,11 @@ function processEntries(entries, period, formatName, format, settings) {
  * * `number` Account number if the entry is an account.
  * * `amounts` An object with entry `all` for full total and [Tags] indexing the tag specific totals.
  */
-async function create(db, periodId, formatName, format) {
+async function create(db, periodIds, formatName, format) {
   return knex.db(db).select('*').from('settings').first()
     .then((settings) => {
-      return knex.db(db).select('*').from('period').where({'period.id': periodId}).first()
-        .then((period) => {
+      return knex.db(db).select('*').from('period').whereIn('period.id', periodIds)
+        .then((periods) => {
           return knex.db(db).select(
             knex.db(db).raw('document.period_id AS periodId'),
             'account.name',
@@ -222,9 +227,9 @@ async function create(db, periodId, formatName, format) {
             .from('entry')
             .leftJoin('account', 'account.id', 'entry.account_id')
             .leftJoin('document', 'document.id', 'entry.document_id')
-            .where({'document.period_id': periodId})
+            .whereIn('document.period_id', periodIds)
             .orderBy('account.number')
-            .then((entries) => processEntries(entries, period, formatName, format, settings));
+            .then((entries) => processEntries(entries, periods, formatName, format, settings));
         });
     });
 }

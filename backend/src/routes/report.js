@@ -29,8 +29,12 @@ router.get('/:format', (req, res) => {
 
 router.get('/:format/:period', (req, res) => {
   const {format, period} = req.params;
+  let periods = [parseInt(period)]; // TODO: Resolve correctness and only for certain reports if previous exists.
+  if (parseInt(period)) {
+    periods.push(parseInt(period) - 1);
+  }
   data.getOne(req.db, 'report_structure', format)
-    .then((reportStructure) => reports.create(req.db, parseInt(period), format, reportStructure.data))
+    .then((reportStructure) => reports.create(req.db, periods, format, reportStructure.data))
     .then((report) => res.send(report));
 });
 
