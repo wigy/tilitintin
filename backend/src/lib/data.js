@@ -431,6 +431,14 @@ function getAccountNamesByNumber(db) {
     });
 }
 
+/**
+ * Get the latest settings from the database.
+ * @param {String} db
+ */
+function getSettings(db) {
+  return knex.db(db).select('*').from('settings').first();
+}
+
 module.exports = {
   fillEntries: fillEntries,
   listAll: listAll,
@@ -446,5 +454,6 @@ module.exports = {
   getAccountNamesByNumber: getAccountNamesByNumber,
   getAccountTransactions: getAccountTransactions,
   getAccountTransactionsWithEntries: getAccountTransactionsWithEntries,
-  getAccountTransactionsByNumber: getAccountTransactionsByNumber
+  getAccountTransactionsByNumber: getAccountTransactionsByNumber,
+  getSettings: getSettings
 };

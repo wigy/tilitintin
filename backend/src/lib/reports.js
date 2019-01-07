@@ -61,8 +61,9 @@ function columnTitle(formatName, period) {
  * @param {Object} period
  * @param {String} formatName
  * @param {String} format
+ * @param {Object} settings
  */
-function processEntries(entries, period, formatName, format) {
+function processEntries(entries, period, formatName, format, settings) {
 
   const DEBUG_PROCESSOR = false;
 
@@ -172,6 +173,10 @@ function processEntries(entries, period, formatName, format) {
   let report = {
     format: formatName,
     columns,
+    meta: {
+      businessName: settings.name,
+      businessId: settings.business_id
+    },
     data: ret
   };
 
@@ -202,22 +207,25 @@ function processEntries(entries, period, formatName, format) {
  * * `amounts` An object with entry `all` for full total and [Tags] indexing the tag specific totals.
  */
 async function create(db, periodId, formatName, format) {
-  return knex.db(db).select('*').from('period').where({'period.id': periodId}).first()
-    .then((period) => {
-      return knex.db(db).select(
-        knex.db(db).raw('document.period_id AS periodId'),
-        'account.name',
-        'account.type',
-        'account.number',
-        knex.db(db).raw('ROUND((1 - (entry.debit == 0) * 2) * (1 - ((account.type IN (1, 2, 3, 4, 5)) * 2)) * entry.amount * 100) AS amount'),
-        'entry.description'
-      )
-        .from('entry')
-        .leftJoin('account', 'account.id', 'entry.account_id')
-        .leftJoin('document', 'document.id', 'entry.document_id')
-        .where({'document.period_id': periodId})
-        .orderBy('account.number')
-        .then((entries) => processEntries(entries, period, formatName, format));
+  return knex.db(db).select('*').from('settings').first()
+    .then((settings) => {
+      return knex.db(db).select('*').from('period').where({'period.id': periodId}).first()
+        .then((period) => {
+          return knex.db(db).select(
+            knex.db(db).raw('document.period_id AS periodId'),
+            'account.name',
+            'account.type',
+            'account.number',
+            knex.db(db).raw('ROUND((1 - (entry.debit == 0) * 2) * (1 - ((account.type IN (1, 2, 3, 4, 5)) * 2)) * entry.amount * 100) AS amount'),
+            'entry.description'
+          )
+            .from('entry')
+            .leftJoin('account', 'account.id', 'entry.account_id')
+            .leftJoin('document', 'document.id', 'entry.document_id')
+            .where({'document.period_id': periodId})
+            .orderBy('account.number')
+            .then((entries) => processEntries(entries, period, formatName, format, settings));
+        });
     });
 }
 

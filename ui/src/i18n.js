@@ -33,9 +33,9 @@ i18n.init({
         'This field is required.': 'Tämä kenttä ei voi olla tyhjä.',
 
         'balance-sheet': 'Tase',
-        'balance-sheet-detailed': 'Tase erittelyin',
+        'balance-sheet-detailed': 'Tase tilierittelyin',
         'income-statement': 'Tuloslaskelma',
-        'income-statement-detailed': 'Tuloslaskelma erittelyin'
+        'income-statement-detailed': 'Tuloslaskelma tilierittelyin'
       }
     }
   },

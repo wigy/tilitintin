@@ -103,6 +103,10 @@ import config from '../Configuration';
  *   reports: [...], // Available report identifiers.
  *   report: {
  *     format: 'income-statement',
+ *     meta: {
+ *       businessName: "Name of the business",
+ *       businessId: "12121212-3"
+ *     }
  *     columns: [{name, title, ...}, ...],
  *     data: []
  *   } // Current report.

@@ -8,8 +8,9 @@ import './ReportDisplay.css';
 class ReportHeader extends Component {
 
   render() {
+    const { report } = this.props;
     const lang = this.props.i18n.language;
-    const columns = this.props.report.columns.length + 1;
+    const columns = report.columns.length + 1;
 
     const localize = (title) => {
       let match = /\b(\d\d\d\d-\d\d-\d\d)\b/g.exec(title);
@@ -25,20 +26,20 @@ class ReportHeader extends Component {
 
     return [
       <tr key="1" className="heading1">
-        <th colSpan={columns} style={{textAlign: 'center'}}>
-          <span style={{float: 'left'}}>{'Company Oy'}</span>
-          <span className="report-title">{<Trans>{this.props.report.format}</Trans>}</span>
+        <th colSpan={columns}>
+          <span className="report-title">{<Trans>{report.format}</Trans>}</span>
+          <span style={{float: 'right'}}>{report.meta.businessName}</span>
         </th>
       </tr>,
       <tr key="2" className="heading2">
         <th colSpan={columns}>
-          <span>{'Y-TUNNUS'}</span>
-          <span style={{float: 'right'}}>{new Date().toLocaleDateString(lang)}</span>
+          <span>{new Date().toLocaleDateString(lang)}</span>
+          <span style={{float: 'right'}}>{report.meta.businessId}</span>
         </th>
       </tr>,
       <tr key="3" className="columns">
         <th></th>
-        {this.props.report.columns.map((column) => <th key={column.name}>
+        {report.columns.map((column) => <th key={column.name}>
           {localize(column.title)}
         </th>)}
       </tr>
@@ -54,12 +55,14 @@ ReportHeader.propTypes = {
 class ReportDisplay extends Component {
 
   render() {
+    const { report } = this.props;
+
     return (
       <div className="ReportDisplay">
         <table className="ReportDisplay">
           <tbody>
             <ReportHeader report={this.props.report}></ReportHeader>
-            {this.props.report.data.map((line, idx) => <ReportLine key={idx} line={line} columns={this.props.report.columns}></ReportLine>)}
+            {report.data.map((line, idx) => <ReportLine key={idx} line={line} columns={report.columns}></ReportLine>)}
           </tbody>
         </table>
       </div>
