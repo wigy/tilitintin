@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import Tag from './Tag';
+import Store from '../Stores/Store';
+import Cursor from '../Stores/Cursor';
 import './ToolPanel.css';
 
 @inject('store')
@@ -30,7 +33,7 @@ class ToolPanel extends Component {
     const disableAll = () => {
       this.props.cursor.resetSelected();
       let state = {};
-      this.props.store.sortTags().forEach((tag) => state[tag.tag] = true);
+      this.props.store.sortTags().forEach((tag) => (state[tag.tag] = true));
       this.setState({disabled: state});
       this.props.store.tools.tagDisabled = state;
     };
@@ -77,5 +80,10 @@ class ToolPanel extends Component {
     );
   }
 }
+
+ToolPanel.propTypes = {
+  cursor: PropTypes.instanceOf(Cursor),
+  store: PropTypes.instanceOf(Store)
+};
 
 export default ToolPanel;

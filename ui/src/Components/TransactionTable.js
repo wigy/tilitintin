@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import { translate, Trans } from 'react-i18next';
 import Transaction from './Transaction';
+import Store from '../Stores/Store';
+import Cursor from '../Stores/Cursor';
 import './TransactionTable.css';
 
 @translate('translations')
@@ -36,8 +39,8 @@ class TransactionTable extends Component {
         this.props.store.filteredTransactions.map((tx, idx) => {
           const duplicate = seen[tx.number];
           seen[tx.number] = true;
-
-          return <Transaction
+          sum += tx.debit ? tx.amount : -tx.amount;
+          return (<Transaction
             key={idx}
             selected={component === 'TransactionTable' && index === idx}
             selectedColumn={column !== null ? ['account', 'description', 'debit', 'credit'][column] : null}
@@ -45,13 +48,18 @@ class TransactionTable extends Component {
             editor={editor}
             duplicate={duplicate}
             tx={tx}
-            total={sum += (tx.debit ? tx.amount : -tx.amount)}
-          />;
+            total={sum}
+          />);
         })}
       </tbody>
     </table>
     );
   }
 }
+
+TransactionTable.propTypes = {
+  cursor: PropTypes.instanceOf(Cursor),
+  store: PropTypes.instanceOf(Store)
+};
 
 export default TransactionTable;
