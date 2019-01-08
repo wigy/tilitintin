@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import { translate, Trans } from 'react-i18next';
 import { Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
+import Store from '../Stores/Store';
 
 @translate('translations')
 @inject('store')
@@ -21,9 +23,9 @@ class Login extends Component {
         <form className="Login">
           <FormGroup>
             <ControlLabel><Trans>Username</Trans></ControlLabel>
-            <FormControl type="text" onChange={(event) => user = event.target.value}/>
+            <FormControl type="text" onChange={(event) => (user = event.target.value)}/>
             <ControlLabel><Trans>Password</Trans></ControlLabel>
-            <FormControl type="password" onChange={(event) => password = event.target.value}/>
+            <FormControl type="password" onChange={(event) => (password = event.target.value)}/>
             <br/>
             <Button onClick={login}><Trans>Login</Trans></Button>
           </FormGroup>
@@ -33,5 +35,9 @@ class Login extends Component {
     return '';
   }
 }
+
+Login.propTypes = {
+  store: PropTypes.instanceOf(Store)
+};
 
 export default Login;

@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { Modal, Button } from 'react-bootstrap';
 import { translate, Trans } from 'react-i18next';
+import Cursor from '../Stores/Cursor';
 
 /**
  * Dialog content implementation.
@@ -53,6 +55,14 @@ class DialogContent extends Component {
   }
 }
 
+DialogContent.propTypes = {
+  cursor: PropTypes.instanceOf(Cursor),
+  title: PropTypes.string,
+  onClose: PropTypes.function,
+  onConfirm: PropTypes.function,
+  children: PropTypes.array
+};
+
 /**
  * Top level wrapper for dialog.
  */
@@ -69,5 +79,13 @@ class Dialog extends Component {
     );
   }
 }
+
+Dialog.propTypes = {
+  isVisible: PropTypes.bool,
+  title: PropTypes.string,
+  onClose: PropTypes.function,
+  onConfirm: PropTypes.function,
+  children: PropTypes.array
+};
 
 export default Dialog;

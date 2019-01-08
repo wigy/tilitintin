@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { translate, Trans } from 'react-i18next';
 import './TextEdit.css';
 
@@ -57,5 +58,13 @@ class TextEdit extends Component {
       </div>);
   }
 }
+
+TextEdit.propTypes = {
+  periodId: PropTypes.any,
+  onCancel: PropTypes.function,
+  onComplete: PropTypes.function,
+  validate: PropTypes.function,
+  value: PropTypes.any
+};
 
 export default TextEdit;

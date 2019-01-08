@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import AccountLink from '../Components/AccountLink';
+import Store from '../Stores/Store';
 import './AccountTable.css';
 
 @inject('store')
@@ -30,5 +32,11 @@ class AccountTable extends Component {
     );
   }
 }
+
+AccountTable.propTypes = {
+  store: PropTypes.instanceOf(Store),
+  accounts: PropTypes.arrayOf(Object),
+  headings: PropTypes.object
+};
 
 export default AccountTable;

@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import { translate, Trans } from 'react-i18next';
 import AccountTable from '../Components/AccountTable';
+import Store from '../Stores/Store';
+import Cursor from '../Stores/Cursor';
 
 @translate('translations')
 @inject('store')
@@ -25,5 +28,10 @@ class Accounts extends Component {
     );
   }
 }
+
+Accounts.propTypes = {
+  store: PropTypes.instanceOf(Store),
+  cursor: PropTypes.instanceOf(Cursor)
+};
 
 export default Accounts;

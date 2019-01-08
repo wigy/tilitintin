@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
+import PropTypes, { object } from 'prop-types';
 import BalanceLine from './BalanceLine';
 import { inject, observer } from 'mobx-react';
+import Store from '../Stores/Store';
+import Cursor from '../Stores/Cursor';
 
 @inject('store')
 @inject('cursor')
@@ -26,5 +29,13 @@ class BalanceTable extends Component {
     );
   }
 }
+
+BalanceTable.propTypes = {
+  store: PropTypes.instanceOf(Store),
+  cursor: PropTypes.instanceOf(Cursor),
+  db: PropTypes.string,
+  balances: PropTypes.arrayOf(object),
+  periodId: PropTypes.number
+};
 
 export default BalanceTable;
