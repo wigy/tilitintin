@@ -15,7 +15,8 @@ const Money = (props) => {
   nums[0] = nums[0].replace(/(\d+)(\d{3})$/, '$1 $2');
   let num = nums.join(',');
   str = str.replace('%s', num);
-  return (<span className="Money">{str}</span>);
+  str = str.replace(/\s/g, '&nbsp;');
+  return (<span className="Money" dangerouslySetInnerHTML={{__html: str}}></span>);
 };
 
 Money.propTypes = {
