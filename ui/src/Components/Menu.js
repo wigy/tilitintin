@@ -37,7 +37,7 @@ class Menu extends Component {
 
   handleSelect(key, ...args) {
     let url;
-    const {db, periodId, accountId} = this.props.match.params;
+    const [, db, page, periodId, accountId, param1] = this.props.history.location.pathname.split('/');
 
     switch (key) {
       case 'logout':
@@ -47,9 +47,15 @@ class Menu extends Component {
         this.props.history.push('/' + args[0]);
         break;
       case 'period':
-        url = '/' + db + '/txs/' + args[0];
+        url = '/' + db + '/' + (page || 'txs') + '/' + args[0];
         if (accountId) {
           url += '/' + accountId;
+        }
+        if (param1) {
+          if (!accountId) {
+            url += '/';
+          }
+          url += '/' + param1;
         }
         this.props.history.push(url);
         break;

@@ -244,6 +244,9 @@ class Store {
    * @return {Boolean} True if no changes needed.
    */
   setAccount(db, periodId, accountId) {
+    if (accountId === 'none') {
+      return true;
+    }
     if (accountId && this.setPeriod(db, periodId) && this.accountId === accountId) {
       return true;
     }
