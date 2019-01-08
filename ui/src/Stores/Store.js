@@ -134,6 +134,7 @@ class Store {
   @observable report = null;
 
   constructor() {
+    this.pending = {};
     this.getDatabases();
   }
 
@@ -157,7 +158,14 @@ class Store {
     if (data !== null) {
       options.body = JSON.stringify(data);
     }
-    return fetch(config.API_URL + path, options)
+
+    let promise;
+
+    if (method === 'GET' && this.pending[path]) {
+      return this.pending[path];
+    }
+
+    promise = fetch(config.API_URL + path, options)
       .then(res => {
         this.changed = true;
         if ([200, 201, 202, 204].includes(res.status)) {
@@ -165,7 +173,18 @@ class Store {
         } else {
           throw new Error(res.status + ' ' + res.statusText);
         }
+      })
+      .finally(() => {
+        if (method === 'GET') {
+          delete this.pending[path];
+        }
       });
+
+    if (method === 'GET') {
+      this.pending[path] = promise;
+    }
+
+    return promise;
   }
 
   /**

@@ -22,6 +22,6 @@ BUGS
 [X] Move around with arrows then change DB and keep moving: crash.
 [X] Move to transaction list, press Disable All icon. Move: crash.
 [X] Entries has unused fields from account like type, vat_code, vat_percentage, vat_account1_id, vat_account2_id
-[ ] Report 'balance-sheet' is fetched 3 times (maybe combine requests).
+[X] Report 'balance-sheet' is fetched 3 times (maybe combine requests).
 [ ] Change DB, select period, go directly to Reports, select report: error in back-end.
 [ ] If you change period on reports page, you jump back to transaction list.
