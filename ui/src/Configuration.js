@@ -1,7 +1,8 @@
 
-///////////////////////////////////////////////
-/// AUTOMATICALLY GENERATED - DO NOT CHANGE ///
-///////////////////////////////////////////////
+//
+// AUTOMATICALLY GENERATED - DO NOT CHANGE ///
+//
+/* eslint quotes: off, comma-dangle: off */
 const config = {
   API_URL: "http://localhost:3001",
 };

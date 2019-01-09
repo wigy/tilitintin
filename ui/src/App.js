@@ -22,7 +22,8 @@ import Store from './Stores/Store';
 @inject('navigator')
 class App extends Component {
 
-  componentWillReceiveProps(nextProps) {
+  /* eslint camelcase: off */
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { keydown: { event } } = nextProps;
     if (event) {
       let keyName = (

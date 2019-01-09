@@ -153,7 +153,12 @@ class Transaction extends Component {
 
 Transaction.propTypes = {
   store: PropTypes.instanceOf(Store),
-  tx: PropTypes.object
+  tx: PropTypes.object,
+  selectedColumn: PropTypes.string,
+  selectedRow: PropTypes.number,
+  selected: PropTypes.bool,
+  duplicate: PropTypes.bool,
+  total: PropTypes.number
 };
 
 export default Transaction;

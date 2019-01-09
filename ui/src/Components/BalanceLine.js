@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Money from './Money';
 import './BalanceLine.css';
@@ -12,6 +13,13 @@ const BalanceLine = (props) => {
       <td className="balance"><Link to={dst}><Money cents={props.line.total} currency="EUR"/></Link></td>
     </tr>
   );
+};
+
+BalanceLine.propTypes = {
+  db: PropTypes.string,
+  periodId: PropTypes.number,
+  line: PropTypes.object,
+  selected: PropTypes.bool
 };
 
 export default BalanceLine;

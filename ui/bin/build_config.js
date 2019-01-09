@@ -4,13 +4,14 @@ const fs = require('fs');
 const SRC = '../src/config.js';
 const DST = './src/Configuration.js';
 
-console.log("Building configuration from `" + SRC + "` to `" + DST + "`.");
+console.log('Building configuration from `' + SRC + '` to `' + DST + '`.');
 const src = require(SRC);
 
 let file = `
-///////////////////////////////////////////////
-/// AUTOMATICALLY GENERATED - DO NOT CHANGE ///
-///////////////////////////////////////////////
+//
+// AUTOMATICALLY GENERATED - DO NOT CHANGE ///
+//
+/* eslint quotes: off, comma-dangle: off */
 const config = {
 `;
 Object.keys(src).forEach(key => {

@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { translate, Trans } from 'react-i18next';
 import Money from './Money';
 import TextEdit from './TextEdit';
+import Store from '../Stores/Store';
+import Cursor from '../Stores/Cursor';
 import { sprintf } from 'sprintf-js';
 
 import './TransactionDetails.css';
@@ -150,5 +153,16 @@ class TransactionDetails extends Component {
     );
   }
 }
+
+TransactionDetails.propTypes = {
+  entry: PropTypes.object,
+  type: PropTypes.string,
+  tx: PropTypes.object,
+  current: PropTypes.bool,
+  selected: PropTypes.bool,
+  error: PropTypes.bool,
+  store: PropTypes.instanceOf(Store),
+  cursor: PropTypes.instanceOf(Cursor)
+};
 
 export default TransactionDetails;
