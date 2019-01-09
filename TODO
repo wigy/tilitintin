@@ -13,8 +13,11 @@ FEATURES
 [ ] Page up/page down.
 [ ] Reports.
 [ ] Enter expressions like 23.23 - 1.22
-[ ] Enter simple space (or ?) to fulfill transaction imbalance.
+[ ] Enter simple space to fulfill transaction imbalance (show in gray if space pressed).
 [ ] Filtering account list: Assets, Income, Expense, Other
+[ ] Report: Päiväkirja
+[ ] Report: Pääkirja
+[ ] Printing of report
 
 BUGS
 ====
@@ -24,4 +27,4 @@ BUGS
 [X] Entries has unused fields from account like type, vat_code, vat_percentage, vat_account1_id, vat_account2_id
 [X] Report 'balance-sheet' is fetched 3 times (maybe combine requests).
 [ ] Change DB, select period, go directly to Reports, select report: error in back-end.
-[ ] If you change period on reports page, you jump back to transaction list.
+[X] If you change period on reports page, you jump back to transaction list.
