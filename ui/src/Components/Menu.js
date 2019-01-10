@@ -27,8 +27,7 @@ class Menu extends Component {
     this.update(this.props.match.params);
   }
 
-  /* eslint camelcase: off */
-  UNSAFE_componentWillReceiveProps(props) {
+  componentDidUpdate(props) {
     this.update(props.match.params);
   }
 
