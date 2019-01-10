@@ -1,3 +1,45 @@
+@media print {
+  .TopPanel {
+    display: none;
+  }
+  .SidePanel {
+    display: none;
+  }
+  .MainTopPanel {
+    display: none;
+  }
+  .MainPanel {
+    position: initial;
+    top: initial;
+    left: initial;
+    right: initial;
+    bottom: initial;
+    overflow-y: initial;
+  }
+  .Panel {
+    background-color: white;
+    border-top: none;
+    border-left: none;
+    border-bottom: none;
+    border-right: none;
+  }
+  .Frame {
+    position: initial;
+    top: initial;
+    left: initial;
+    right: initial;
+    bottom: initial;
+    overflow-y: auto;
+    padding: initial;
+    border-radius: initial;
+    border-top: initial;
+    border-left: initial;
+    border-bottom: initial;
+    border-right: initial;
+    background-color: white;
+  }
+}
+
 .Panel {
   background-color: var(--bg-color);
   border-top: 1px solid var(--border-color-light);
