@@ -8,6 +8,16 @@ import Store from '../Stores/Store';
 @observer
 class AccountTransactions extends Component {
 
+  componentDidMount() {
+    const {db, periodId, accountId} = this.props.match.params;
+    this.props.store.setAccount(db, periodId, accountId);
+  }
+
+  componentDidUpdate() {
+    const {db, periodId, accountId} = this.props.match.params;
+    this.props.store.setAccount(db, periodId, accountId);
+  }
+
   render() {
     if (!this.props.store.token) {
       return '';

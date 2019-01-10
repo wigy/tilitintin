@@ -15,10 +15,9 @@ import './Menu.css';
 @observer
 class Menu extends Component {
 
-  update({db, periodId, accountId, format}) {
+  update({db, periodId}) {
     const kept1 = this.props.store.setDb(db);
     const kept2 = this.props.store.setPeriod(db, periodId);
-    this.props.store.setAccount(db, periodId, accountId);
     if (!kept1 || !kept2) {
       this.props.cursor.resetSelected();
     }
@@ -60,7 +59,10 @@ class Menu extends Component {
       case 'txs':
       case 'account':
       case 'report':
-        url = '/' + db + '/' + key + '/' + periodId;
+        url = '/' + db + '/' + key;
+        if (periodId) {
+          url += '/' + periodId;
+        }
         if (accountId) {
           url += '/' + accountId;
         }
