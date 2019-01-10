@@ -19,9 +19,6 @@ class Menu extends Component {
     const kept1 = this.props.store.setDb(db);
     const kept2 = this.props.store.setPeriod(db, periodId);
     this.props.store.setAccount(db, periodId, accountId);
-    if (db && periodId && format) {
-      this.props.store.getReport(format);
-    }
     if (!kept1 || !kept2) {
       this.props.cursor.resetSelected();
     }

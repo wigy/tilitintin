@@ -331,10 +331,16 @@ class Store {
   /**
    * Get the list of report formats available for the current DB.
    */
-  getReport(format) {
-    return this.request('/db/' + this.db + '/report/' + format + '/' + this.periodId)
+  getReport(db, periodId, format) {
+    if (this.report && this.report.db === db && this.report.periodId === periodId && this.report.format === format) {
+      return;
+    }
+    this.setPeriod(db, periodId);
+    return this.request('/db/' + db + '/report/' + format + '/' + periodId)
       .then((report) => {
         runInAction(() => {
+          report.db = db;
+          report.periodId = periodId;
           this.report = report;
           return this.report;
         });
