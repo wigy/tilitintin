@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ReactRouterPropTypes from 'react-router-prop-types';
 import { Route, withRouter } from 'react-router-dom';
 import { inject } from 'mobx-react';
 import keydown from 'react-keydown';
@@ -51,6 +52,15 @@ class App extends Component {
   }
 
   render() {
+    const [,, page] = this.props.history.location.pathname.split('/');
+    if (page === 'print') {
+      return (
+        <div className="App print">
+          <Route path="/:db/print/:periodId/:accountId/:format" component={Report}/>
+        </div>
+      );
+    }
+
     return (
       <div className="App">
         <div className="TopPanel Panel">
@@ -92,7 +102,8 @@ class App extends Component {
 App.propTypes = {
   navigator: PropTypes.instanceOf(Navigator),
   store: PropTypes.instanceOf(Store),
-  keydown: PropTypes.any
+  keydown: PropTypes.any,
+  history: ReactRouterPropTypes.history
 };
 
 export default App;

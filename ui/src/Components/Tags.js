@@ -19,7 +19,7 @@ class Tags extends Component {
 
 Tags.propTypes = {
   store: PropTypes.instanceOf(Store),
-  tags: PropTypes.object
+  tags: PropTypes.arrayOf(PropTypes.string)
 };
 
 export default Tags;

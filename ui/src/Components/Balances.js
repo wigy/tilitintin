@@ -20,7 +20,7 @@ class Balances extends Component {
     return (
       <div className="Period">
         <h1><Trans>Account Balances</Trans></h1>
-        <BalanceTable db={db} periodId={periodId} balances={this.props.store.balances}/>
+        <BalanceTable db={db} periodId={parseInt(periodId)} balances={this.props.store.balances}/>
       </div>
     );
   }
