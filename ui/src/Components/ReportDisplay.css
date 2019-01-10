@@ -1,3 +1,8 @@
+.print table.ReportDisplay {
+  color: black;
+  margin: 0.2in;
+}
+
 table.ReportDisplay {
  max-width: 8in;
  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -22,6 +27,10 @@ table.ReportDisplay tr td, table.ReportDisplay tr th {
 table.ReportDisplay tr.columns {
   height: 2.2em;
   border-top: 4px solid var(--fg-color);
+}
+
+.print table.ReportDisplay tr.columns {
+  border-color: black;
 }
 
 table.ReportDisplay .report-title {
