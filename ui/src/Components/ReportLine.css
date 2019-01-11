@@ -6,6 +6,12 @@
   width: 1in;
 }
 
+@media print {
+  .ReportLine.pageBreak {
+    page-break-before: always;
+  }
+}
+
 .ReportLine.pageBreak td {
   height: 1.5em;
 }
