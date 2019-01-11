@@ -16,19 +16,13 @@ import './Menu.css';
 class Menu extends Component {
 
   update({db, periodId}) {
-    const kept1 = this.props.store.setDb(db);
-    const kept2 = this.props.store.setPeriod(db, periodId);
-    if (!kept1 || !kept2) {
+    if (!this.props.store.setPeriod(db, periodId)) {
       this.props.cursor.resetSelected();
     }
   }
 
   componentDidMount() {
     this.update(this.props.match.params);
-  }
-
-  componentDidUpdate(props) {
-    this.update(props.match.params);
   }
 
   handleSelect(key, ...args) {
@@ -40,6 +34,7 @@ class Menu extends Component {
         this.props.store.logout();
         break;
       case 'db':
+        this.update({db: args[0]});
         this.props.history.push('/' + args[0]);
         break;
       case 'period':
@@ -53,6 +48,7 @@ class Menu extends Component {
           }
           url += '/' + param1;
         }
+        this.update({db, periodId: args[0]});
         this.props.history.push(url);
         break;
       case 'txs':

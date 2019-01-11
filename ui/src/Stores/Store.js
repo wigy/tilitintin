@@ -193,19 +193,12 @@ class Store {
    * @return {Boolean} True if no changes needed.
    */
   setDb(db) {
-    if (db && this.db === db) {
+    db = db || null;
+    if (this.db === db) {
       return true;
     }
-    this.changed = true;
+    this.clearDb();
     this.db = db;
-    this.periods = [];
-    this.accounts = [];
-    this.accountsById = {};
-    this.headings = {};
-    this.tags = {};
-    this.reports = [];
-    this.report = null;
-    this.setPeriod(null);
     if (db) {
       this.getPeriods()
         .then(() => this.getReports())
@@ -217,24 +210,50 @@ class Store {
   }
 
   /**
+   * Clear DB data.
+   */
+  clearDb() {
+    this.changed = true;
+
+    this.db = null;
+    this.periods = [];
+    this.accounts = [];
+    this.accountsById = {};
+    this.headings = {};
+    this.tags = {};
+    this.reports = [];
+    this.report = null;
+    this.clearPeriod();
+  }
+
+  /**
    * Set the current period.
    * @param {String} db
    * @param {Number} periodId
    * @return {Boolean} True if no changes needed.
    */
   setPeriod(db, periodId) {
-    periodId = parseInt(periodId);
-    if (periodId && this.setDb(db) && this.periodId === periodId) {
+    periodId = parseInt(periodId) || null;
+    if (this.setDb(db) && this.periodId === periodId) {
       return true;
     }
-    this.changed = true;
+    this.clearPeriod();
     this.periodId = periodId;
-    this.balances = [];
-    this.setAccount(null);
     if (periodId) {
       this.getBalances();
     }
     return false;
+  }
+
+  /**
+   * Clear period data.
+   */
+  clearPeriod() {
+    this.changed = true;
+
+    this.periodId = null;
+    this.balances = [];
+    this.clearAccount();
   }
 
   /**
@@ -247,11 +266,25 @@ class Store {
     if (accountId === 'none') {
       return true;
     }
-    if (accountId && this.setPeriod(db, periodId) && this.accountId === accountId) {
+    accountId = accountId || null;
+    if (this.setPeriod(db, periodId) && this.accountId === accountId) {
       return true;
     }
-    this.changed = true;
+    this.clearAccount();
     this.accountId = accountId;
+    if (accountId) {
+      this.getAccountPeriod(db, periodId, accountId);
+    }
+    return false;
+  }
+
+  /**
+   * Clear period data.
+   */
+  clearAccount() {
+    this.changed = true;
+
+    this.accountId = null;
     this.title = '';
     this.transactions = [];
     this.account = {};
@@ -259,10 +292,6 @@ class Store {
       tagDisabled: {
       }
     };
-    if (accountId) {
-      this.getAccountPeriod(db, periodId, accountId);
-    }
-    return false;
   }
 
   /**
