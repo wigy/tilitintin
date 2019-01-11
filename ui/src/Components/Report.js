@@ -37,7 +37,7 @@ class Report extends Component {
 }
 
 Report.propTypes = {
+  match: PropTypes.object,
   store: PropTypes.instanceOf(Store)
 };
-
 export default Report;

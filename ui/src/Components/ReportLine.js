@@ -9,22 +9,27 @@ class ReportLine extends Component {
 
   render() {
     let { name, number, amounts, bold, italic, hideTotal, column, pageBreak, isAccount } = this.props.line;
+
     if (isAccount) {
       name = `${number} ${name}`;
     }
-    if (bold) {
-      name = <b>{name}</b>;
-    }
-    if (italic) {
-      name = <i>{name}</i>;
-    }
+
+    const decor = text => {
+      if (bold) {
+        text = <b>{text}</b>;
+      }
+      if (italic) {
+        text = <i>{text}</i>;
+      }
+      return text;
+    };
 
     return (
       <tr className={'ReportLine' + (pageBreak ? ' pageBreak' : '')}>
-        <td className={'name column' + column}>{name}</td>
+        <td className={'name column' + column}>{decor(name)}</td>
         {this.props.columns.map((column) => <td key={column.name}>
           {amounts && !hideTotal ? (
-            amounts[column.name] === null ? '–' : <Money currency="EUR" cents={amounts[column.name]}></Money>
+            decor(amounts[column.name] === null ? '–' : <Money currency="EUR" cents={amounts[column.name]}></Money>)
           ) : ''}
         </td>)}
       </tr>

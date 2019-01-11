@@ -9,35 +9,39 @@
     display: none;
   }
   .MainPanel {
-    position: initial;
-    top: initial;
-    left: initial;
-    right: initial;
-    bottom: initial;
-    overflow-y: initial;
+    position: initial !important;
+    top: initial !important;
+    left: initial !important;
+    right: initial !important;
+    bottom: initial !important;
+    overflow-y: initial !important;
   }
   .Panel {
     background-color: white;
-    border-top: none;
-    border-left: none;
-    border-bottom: none;
-    border-right: none;
+    border-top: none !important;
+    border-left: none !important;
+    border-bottom: none !important;
+    border-right: none !important;
   }
   .Frame {
-    position: initial;
-    top: initial;
-    left: initial;
-    right: initial;
-    bottom: initial;
-    overflow-y: auto;
-    padding: initial;
-    border-radius: initial;
-    border-top: initial;
-    border-left: initial;
-    border-bottom: initial;
-    border-right: initial;
+    position: initial !important;
+    top: initial !important;
+    left: initial !important;
+    right: initial !important;
+    bottom: initial !important;
+    overflow-y: auto !important;
+    padding: initial !important;
+    border-radius: initial !important;
+    border-top: initial !important;
+    border-left: initial !important;
+    border-bottom: initial !important;
+    border-right: initial !important;
     background-color: white;
   }
+}
+
+@page {
+  margin: 2cm;
 }
 
 .Panel {
