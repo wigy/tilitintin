@@ -28,5 +28,5 @@ BUGS
 [X] Report 'balance-sheet' is fetched 3 times (maybe combine requests).
 [X] Change DB, select period, go directly to Reports, select report: error in back-end.
 [X] If you change period on reports page, you jump back to transaction list.
-[ ] Databases and periods are not updated initially on Menu until key is pressed.
+[X] Databases and periods are not updated initially on Menu until key is pressed.
 [X] Print does not set correct layout.

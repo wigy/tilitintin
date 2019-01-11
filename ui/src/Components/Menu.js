@@ -16,7 +16,7 @@ import './Menu.css';
 class Menu extends Component {
 
   update({db, periodId}) {
-    if (!this.props.store.setPeriod(db, periodId)) {
+    if (!this.props.store.setPeriod(db, parseInt(periodId))) {
       this.props.cursor.resetSelected();
     }
   }
