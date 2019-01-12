@@ -67,7 +67,56 @@ processEntries.GeneralJournal = (entries, periods, formatName, format, settings)
     name: 'credit',
     title: 'column-credit'
   }];
+
+  // Pre-process entries by their document number.
+  const docs = new Map();
+  entries.forEach((entry) => {
+    let data;
+    if (docs.has(entry.documentId)) {
+      data = docs.get(entry.documentId);
+    } else {
+      data = [];
+    }
+    data.push({
+      name: `${entry.number} ${entry.name}`,
+      description: entry.description,
+      date: entry.date,
+      amounts: {
+        debit: entry.amount >= 0 ? entry.amount : null,
+        credit: entry.amount < 0 ? -entry.amount : null
+      }
+    });
+    docs.set(entry.documentId, data);
+  });
+
+  // Construct lines for each document.
+  // TODO: Localize dates with special notation.
+  // TODO: Full width column support for texts.
+  // TODO: Separate texts for each entry, if they differ.
+  // TODO: Consider separate column for document number (with fully generalized columns definition)
+  // TODO: Column title localization.
+  const docIds = [...docs.keys()].sort((a, b) => parseInt(a) - parseInt(b));
   let data = [];
+  docIds.forEach((docId) => {
+    const lines = docs.get(docId);
+    data.push({
+      tab: 0,
+      bold: true,
+      name: `#${docId}\t${moment(lines[0].date).format('YYYY-MM-DD')}`
+    });
+    data.push({
+      tab: 1,
+      name: `${lines[0].description}`,
+      italic: true
+    });
+    lines.forEach((line) => {
+      data.push({
+        tab: 1,
+        name: `${line.name}`,
+        amounts: line.amounts
+      });
+    });
+  });
 
   return { columns, data };
 };
@@ -235,7 +284,7 @@ async function create(db, periodIds, formatName, format) {
         .then((periods) => {
           return knex.db(db).select(
             knex.db(db).raw('document.period_id AS periodId'),
-            'document.id AS documentId',
+            'document.number AS documentId',
             'document.date',
             'account.name',
             'account.type',
@@ -249,6 +298,7 @@ async function create(db, periodIds, formatName, format) {
             .whereIn('document.period_id', periodIds)
             .orderBy('document.date')
             .orderBy('document.id')
+            .orderBy('entry.row_number')
             .then((entries) => processEntries(entries, periods, formatName, format, settings));
         });
     });

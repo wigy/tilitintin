@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Trans, translate, I18n } from 'react-i18next';
+import { translate, I18n } from 'react-i18next';
 import ReportLine from './ReportLine';
 import './ReportDisplay.css';
 
@@ -27,7 +27,7 @@ class ReportHeader extends Component {
     return [
       <tr key="1" className="heading1">
         <th colSpan={columns}>
-          <span className="report-title">{<Trans>{report.format}</Trans>}</span>
+          <span className="report-title">{this.props.t('report-' + report.format)}</span>
           <span style={{float: 'right'}}>{report.meta.businessName}</span>
         </th>
       </tr>,

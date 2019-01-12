@@ -19,6 +19,7 @@ FEATURES
 [ ] Report: Pääkirja
 [X] Printing of report
 [X] Rename `column` as `tab` in report data.
+[ ] Use some notation like ${2018-01-01} to specify dates and localize them everywhere.
 
 BUGS
 ====

@@ -36,11 +36,12 @@ router.get('/:format/:period', (req, res) => {
 
   knex.db(req.db).select('*').from('period').where('id', '<', periodId).orderBy('end_date', 'desc').first()
     .then(prev => {
-      if (prev) {
+      const special = reports.customReports().filter((report) => report.id === format);
+
+      if (prev && !special.length) {
         periods.push(prev.id);
       }
 
-      const special = reports.customReports().filter((report) => report.id === format);
       if (special.length) {
         reports.create(req.db, periods, format, special[0].data)
           .then((report) => res.send(report));

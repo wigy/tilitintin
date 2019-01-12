@@ -32,6 +32,8 @@ i18n.init({
         'Saving failed.': 'Tallennus epäonnistui.',
         'This field is required.': 'Tämä kenttä ei voi olla tyhjä.',
 
+        'report-general-journal': 'Päiväkirja',
+        'report-general-ledger': 'Pääkirja',
         'report-balance-sheet': 'Tase',
         'report-balance-sheet-detailed': 'Tase tilierittelyin',
         'report-income-statement': 'Tuloslaskelma',
@@ -39,7 +41,10 @@ i18n.init({
 
         'icon-print': 'Tulosta',
         'icon-reset': 'Näytä kaikki',
-        'icon-disable-all': 'Piilota kaikki'
+        'icon-disable-all': 'Piilota kaikki',
+
+        'column-debit': 'Debet',
+        'column-credit': 'Kredit'
       }
     }
   },
