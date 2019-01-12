@@ -61,6 +61,10 @@ function columnTitle(formatName, period) {
 processEntries.GeneralJournal = (entries, periods, formatName, format, settings) => {
 
   let columns = [{
+    name: 'id',
+    title: 'column-document-number',
+    type: 'id'
+  }, {
     name: 'title',
     title: '',
     type: 'name'
@@ -97,7 +101,7 @@ processEntries.GeneralJournal = (entries, periods, formatName, format, settings)
 
   // Construct lines for each document.
   // TODO: Separate texts for each entry, if they differ.
-  // TODO: Consider separate column for document number.
+
   const docIds = [...docs.keys()].sort((a, b) => parseInt(a) - parseInt(b));
   let data = [];
   docIds.forEach((docId) => {
@@ -105,12 +109,13 @@ processEntries.GeneralJournal = (entries, periods, formatName, format, settings)
     data.push({
       tab: 0,
       bold: true,
-      name: `#${docId}\t${moment(lines[0].date).format('YYYY-MM-DD')}`
+      id: `#${docId}`,
+      name: `${moment(lines[0].date).format('YYYY-MM-DD')}`
     });
     data.push({
-      tab: 1,
+      tab: 2,
       name: `${lines[0].description}`,
-      fullWidth: 0,
+      fullWidth: 1,
       italic: true
     });
     lines.forEach((line) => {

@@ -43,6 +43,7 @@ i18n.init({
         'icon-reset': 'Näytä kaikki',
         'icon-disable-all': 'Piilota kaikki',
 
+        'column-document-number': 'Nro',
         'column-debit': 'Debet',
         'column-credit': 'Kredit'
       }

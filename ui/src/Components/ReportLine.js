@@ -8,7 +8,7 @@ import './ReportLine.css';
 class ReportLine extends Component {
 
   render() {
-    let { name, number, amounts, bold, italic, hideTotal, tab, pageBreak, isAccount, fullWidth } = this.props.line;
+    let { id, name, number, amounts, bold, italic, hideTotal, tab, pageBreak, isAccount, fullWidth } = this.props.line;
     const columns = this.props.columns;
     if (isAccount) {
       name = `${number} ${name}`;
@@ -33,6 +33,8 @@ class ReportLine extends Component {
 
     // Rendering functions per type.
     const render = {
+      // ID of the entry.
+      id: (column) => td(column, decor(id)),
       // Name of the entry.
       name: (column) => td(column, decor(name), {className: 'tab' + (tab || 0)}),
       // Render currency value.
