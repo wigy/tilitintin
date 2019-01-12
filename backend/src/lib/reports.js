@@ -133,7 +133,8 @@ processEntries.GeneralJournal = (entries, periods, formatName, format, settings)
       tab: 0,
       bold: true,
       id: `#${docId}`,
-      name: `${moment(lines[0].date).format('YYYY-MM-DD')}`
+      needLocalization: true,
+      name: `{${moment(lines[0].date).format('YYYY-MM-DD')}}`
     });
     descriptions(lines).forEach((text) => {
       data.push({
@@ -312,6 +313,7 @@ function processEntries(entries, periods, formatName, format, settings) {
  * * `fullWidth` if set, the content in column index defined here is expanded to cover all columns.
  * * `accountDetails` if true, after this are summarized accounts under this entry.
  * * `isAccount` if true, this is an account entry.
+ * * `needLocalization` if set, value is localized, i.e. translated via Localization component.
  * * `name` Title of the entry.
  * * `number` Account number if the entry is an account.
  * * `amounts` An object with entry `all` for full total and [Tags] indexing the tag specific totals.

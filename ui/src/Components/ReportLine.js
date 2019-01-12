@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { observer } from 'mobx-react';
 import Money from './Money';
+import Localize from './Localize';
 import './ReportLine.css';
 
 @observer
 class ReportLine extends Component {
 
   render() {
-    let { id, name, number, amounts, bold, italic, hideTotal, tab, pageBreak, isAccount, fullWidth } = this.props.line;
+    let { id, name, number, amounts, bold, italic, hideTotal, tab, pageBreak,
+      isAccount, fullWidth, needLocalization } = this.props.line;
     const columns = this.props.columns;
     if (isAccount) {
       name = `${number} ${name}`;
@@ -36,7 +38,7 @@ class ReportLine extends Component {
       // ID of the entry.
       id: (column) => td(column, decor(id)),
       // Name of the entry.
-      name: (column) => td(column, decor(name), {className: 'tab' + (tab || 0)}),
+      name: (column) => td(column, decor(needLocalization ? <Localize>{name}</Localize> : name), {className: 'tab' + (tab || 0)}),
       // Render currency value.
       numeric: (column) => td(column,
         amounts && !hideTotal ? (

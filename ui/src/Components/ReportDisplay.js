@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { translate, I18n } from 'react-i18next';
 import ReportLine from './ReportLine';
+import Localize from './Localize';
 import './ReportDisplay.css';
 
 @translate('translations')
@@ -11,19 +12,6 @@ class ReportHeader extends Component {
     const { report } = this.props;
     const lang = this.props.i18n.language;
     const columns = report.columns.length;
-
-    // Scan for dates and localize. Also translate symbolic names.
-    const localize = (title) => {
-      let match;
-      do {
-        match = /(\{(\d\d\d\d-\d\d-\d\d)\})/g.exec(title);
-        if (match) {
-          title = title.replace(match[1], new Date(match[2]).toLocaleDateString(lang));
-        }
-      } while (match);
-
-      return this.props.t(title);
-    };
 
     return [
       <tr key="1" className="heading1">
@@ -40,7 +28,7 @@ class ReportHeader extends Component {
       </tr>,
       <tr key="3" className="columns">
         {report.columns.map((column) => <th key={column.name} className={column.type}>
-          {localize(column.title)}
+          <Localize>{column.title}</Localize>
         </th>)}
       </tr>
     ];
