@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import { Trans } from 'react-i18next';
 import Store from '../Stores/Store';
+import IconButton from './IconButton';
 import './ToolPanel.css';
 
 @inject('store')
@@ -21,11 +22,7 @@ class ToolPanel extends Component {
     return (
       <div className="ToolPanel">
         <h1><Trans>{this.props.store.report.format}</Trans></h1>
-        <div className="toggle-button" title="Print" onClick={onPrint}>
-          <div className="fa-icon">
-            <i className="fas fa-print fa-2x"></i>
-          </div>
-        </div>
+        <IconButton onClick={onPrint} title="Print" icon="fa-print"></IconButton>
       </div>
     );
   }

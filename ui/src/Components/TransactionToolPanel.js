@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import Tag from './Tag';
+import IconButton from './IconButton';
 import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
 import './ToolPanel.css';
@@ -49,20 +50,13 @@ class ToolPanel extends Component {
     return (
       <div className="ToolPanel">
         <h1>{this.props.store.title}</h1>
-        <div className="toggle-button" title="Reset" onClick={enableAll}>
-          <div className="fa-icon">
-            <i className="fas fa-home fa-2x"></i>
-          </div>
-        </div>
-        <div className="toggle-button" title="Disable All" onClick={disableAll}>
-          <div className="fa-icon">
-            <i className="fas fa-trash-alt fa-2x"></i>
-          </div>
-        </div>
+
+        <IconButton onClick={enableAll} title="Reset" icon="fa-home"></IconButton>
+        <IconButton onClick={disableAll} title="Disable All" icon="fa-trash-alt"></IconButton>
 
         {this.props.store.sortTags().map((tag) => {
           const spacer = (tag.type !== last);
-          const className = (this.state.disabled[tag.tag] ? 'toggle-button off' : 'toggle-button');
+          const className = (this.state.disabled[tag.tag] ? 'IconButton off' : 'IconButton');
           last = tag.type;
           return (
             <div key={tag.tag}>
