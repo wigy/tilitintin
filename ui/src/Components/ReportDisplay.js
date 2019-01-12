@@ -49,6 +49,7 @@ class ReportHeader extends Component {
 
 ReportHeader.propTypes = {
   report: PropTypes.object.isRequired,
+  t: PropTypes.func,
   i18n: PropTypes.instanceOf(I18n)
 };
 
@@ -56,12 +57,12 @@ class ReportDisplay extends Component {
 
   render() {
     const { report } = this.props;
+    //    <ReportHeader report={this.props.report}></ReportHeader>
 
     return (
       <div className="ReportDisplay">
         <table className="ReportDisplay">
           <tbody>
-            <ReportHeader report={this.props.report}></ReportHeader>
             {report.data.map((line, idx) => <ReportLine key={idx} line={line} columns={report.columns}></ReportLine>)}
           </tbody>
         </table>

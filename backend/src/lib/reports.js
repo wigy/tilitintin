@@ -129,6 +129,7 @@ processEntries.Default = (entries, periods, formatName, format, settings) => {
   // Construct meta data for columns.
   let columns = periods.map((period) => {
     return {
+      type: 'numeric',
       name: 'period' + period.id,
       title: columnTitle(formatName, period),
       start: period.start_date,
@@ -136,6 +137,7 @@ processEntries.Default = (entries, periods, formatName, format, settings) => {
     };
   }).reverse();
   const columnNames = columns.map((col) => col.name);
+  columns.unshift({name: 'title', type: 'name'});
 
   // Summarize all totals from the entries.
   const totals = {};

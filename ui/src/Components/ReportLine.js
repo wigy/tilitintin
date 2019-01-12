@@ -14,7 +14,8 @@ class ReportLine extends Component {
       name = `${number} ${name}`;
     }
 
-    const decor = text => {
+    // Decorate text based on instructions.
+    const decor = (text) => {
       if (bold) {
         text = <b>{text}</b>;
       }
@@ -24,14 +25,21 @@ class ReportLine extends Component {
       return text;
     };
 
+    // Rendering functions per type.
+    const render = {
+      // Name of the entry.
+      name: (column) => <td key={column.name} className={'name tab' + tab}>{decor(name)}</td>,
+      // Render currency value.
+      numeric: (column) => <td key={column.name}>{
+        amounts && !hideTotal ? (
+          decor(amounts[column.name] === null ? '–' : <Money currency="EUR" cents={amounts[column.name]}></Money>)
+        ) : ''
+      }</td>
+    };
+
     return (
       <tr className={'ReportLine' + (pageBreak ? ' pageBreak' : '')}>
-        <td className={'name tab' + tab}>{decor(name)}</td>
-        {this.props.columns.map((column) => <td key={column.name}>
-          {amounts && !hideTotal ? (
-            decor(amounts[column.name] === null ? '–' : <Money currency="EUR" cents={amounts[column.name]}></Money>)
-          ) : ''}
-        </td>)}
+        {this.props.columns.map((column) => column.type && render[column.type] && render[column.type](column))}
       </tr>
     );
   }
