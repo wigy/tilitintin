@@ -7,7 +7,7 @@ const knex = require('./knex');
  */
 function code2item(code) {
   let ret = {
-    column: parseInt(code[2])
+    tab: parseInt(code[2])
   };
 
   switch (code[0]) {
@@ -217,7 +217,7 @@ function processEntries(entries, periods, formatName, format, settings) {
  * @param {String} format
  *
  * Resulting entries is an array of objects containing:
- * * `column` Zero originating column number.
+ * * `tab` Zero originating indentation number.
  * * `required` If true, this is always shown.
  * * `hideTotal` if true, do not show total.
  * * `bold` if true, show in bold.

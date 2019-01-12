@@ -8,7 +8,7 @@ import './ReportLine.css';
 class ReportLine extends Component {
 
   render() {
-    let { name, number, amounts, bold, italic, hideTotal, column, pageBreak, isAccount } = this.props.line;
+    let { name, number, amounts, bold, italic, hideTotal, tab, pageBreak, isAccount } = this.props.line;
 
     if (isAccount) {
       name = `${number} ${name}`;
@@ -26,7 +26,7 @@ class ReportLine extends Component {
 
     return (
       <tr className={'ReportLine' + (pageBreak ? ' pageBreak' : '')}>
-        <td className={'name column' + column}>{decor(name)}</td>
+        <td className={'name tab' + tab}>{decor(name)}</td>
         {this.props.columns.map((column) => <td key={column.name}>
           {amounts && !hideTotal ? (
             decor(amounts[column.name] === null ? '–' : <Money currency="EUR" cents={amounts[column.name]}></Money>)

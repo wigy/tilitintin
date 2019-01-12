@@ -16,38 +16,38 @@
   height: 1.5em;
 }
 
-.ReportLine .name.column0 {
+.ReportLine .name.tab0 {
   padding-left: 0em;
 }
 
-.ReportLine .name.column1 {
+.ReportLine .name.tab1 {
   padding-left: 2em;
 }
 
-.ReportLine .name.column2 {
+.ReportLine .name.tab2 {
   padding-left: 4em;
 }
 
-.ReportLine .name.column3 {
+.ReportLine .name.tab3 {
   padding-left: 6em;
 }
 
-.ReportLine .name.column4 {
+.ReportLine .name.tab4 {
   padding-left: 8em;
 }
 
-.ReportLine .name.column5 {
+.ReportLine .name.tab5 {
   padding-left: 10em;
 }
 
-.ReportLine .name.column6 {
+.ReportLine .name.tab6 {
   padding-left: 12em;
 }
 
-.ReportLine .name.column7 {
+.ReportLine .name.tab7 {
   padding-left: 14em;
 }
 
-.ReportLine .name.column8 {
+.ReportLine .name.tab8 {
   padding-left: 16em;
 }
