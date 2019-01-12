@@ -99,9 +99,19 @@ processEntries.GeneralJournal = (entries, periods, formatName, format, settings)
     docs.set(entry.documentId, data);
   });
 
-  // Construct lines for each document.
-  // TODO: Separate texts for each entry, if they differ.
+  // Helper to construct a list of descriptions.
+  const descriptions = (lines) => {
+    let ret = new Set();
+    lines.forEach((line) => {
+      const text = line.description.replace(/^\[\S+\]\s*/, '');
+      if (text !== '' && !ret.has(text)) {
+        ret.add(text);
+      }
+    });
+    return [...ret];
+  };
 
+  // Construct lines for each document.
   const docIds = [...docs.keys()].sort((a, b) => parseInt(a) - parseInt(b));
   let data = [];
   docIds.forEach((docId) => {
@@ -112,11 +122,13 @@ processEntries.GeneralJournal = (entries, periods, formatName, format, settings)
       id: `#${docId}`,
       name: `${moment(lines[0].date).format('YYYY-MM-DD')}`
     });
-    data.push({
-      tab: 2,
-      name: `${lines[0].description}`,
-      fullWidth: 1,
-      italic: true
+    descriptions(lines).forEach((text) => {
+      data.push({
+        tab: 2,
+        name: text,
+        fullWidth: 1,
+        italic: true
+      });
     });
     lines.forEach((line) => {
       data.push({
