@@ -61,13 +61,13 @@ function columnTitle(formatName, period) {
 processEntries.GeneralJournal = (entries, periods, formatName, format, settings) => {
 
   let columns = [{
+    type: 'id',
     name: 'id',
-    title: 'column-document-number',
-    type: 'id'
+    title: 'column-document-number'
   }, {
+    type: 'name',
     name: 'title',
-    title: '',
-    type: 'name'
+    title: 'column-date-and-accounts'
   }, {
     type: 'numeric',
     name: 'debit',
