@@ -97,6 +97,7 @@ processEntries.GeneralJournal = (entries, periods, formatName, format, settings)
         credit: entry.amount < 0 ? -entry.amount : null
       }
     });
+
     docs.set(entry.documentId, data);
   });
 
@@ -319,6 +320,9 @@ function processEntries(entries, periods, formatName, format, settings) {
  * * `amounts` An object with entry `all` for full total and [Tags] indexing the tag specific totals.
  */
 async function create(db, periodIds, formatName, format) {
+  const negateSomeEntries = (formatName !== 'general-journal' && formatName !== 'general-ledger');
+  const negateSql = '(1 - (entry.debit == 0) * 2)' + (negateSomeEntries ? ' * (1 - ((account.type IN (1, 2, 3, 4, 5)) * 2))' : '');
+
   return knex.db(db).select('*').from('settings').first()
     .then((settings) => {
       return knex.db(db).select('*').from('period').whereIn('period.id', periodIds)
@@ -330,7 +334,7 @@ async function create(db, periodIds, formatName, format) {
             'account.name',
             'account.type',
             'account.number',
-            knex.db(db).raw('ROUND((1 - (entry.debit == 0) * 2) * (1 - ((account.type IN (1, 2, 3, 4, 5)) * 2)) * entry.amount * 100) AS amount'),
+            knex.db(db).raw(`ROUND(${negateSql} * entry.amount * 100) AS amount`),
             'entry.description'
           )
             .from('entry')
