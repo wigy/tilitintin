@@ -10,7 +10,7 @@ class ReportHeader extends Component {
   render() {
     const { report } = this.props;
     const lang = this.props.i18n.language;
-    const columns = report.columns.length + 1;
+    const columns = report.columns.length;
 
     const localize = (title) => {
       let match = /\b(\d\d\d\d-\d\d-\d\d)\b/g.exec(title);
@@ -38,7 +38,6 @@ class ReportHeader extends Component {
         </th>
       </tr>,
       <tr key="3" className="columns">
-        <th></th>
         {report.columns.map((column) => <th key={column.name}>
           {localize(column.title)}
         </th>)}
@@ -57,12 +56,12 @@ class ReportDisplay extends Component {
 
   render() {
     const { report } = this.props;
-    //    <ReportHeader report={this.props.report}></ReportHeader>
 
     return (
       <div className="ReportDisplay">
         <table className="ReportDisplay">
           <tbody>
+            <ReportHeader report={this.props.report}></ReportHeader>
             {report.data.map((line, idx) => <ReportLine key={idx} line={line} columns={report.columns}></ReportLine>)}
           </tbody>
         </table>

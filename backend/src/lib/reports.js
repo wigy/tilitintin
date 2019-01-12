@@ -131,13 +131,11 @@ processEntries.Default = (entries, periods, formatName, format, settings) => {
     return {
       type: 'numeric',
       name: 'period' + period.id,
-      title: columnTitle(formatName, period),
-      start: period.start_date,
-      end: period.end_date
+      title: columnTitle(formatName, period)
     };
   }).reverse();
   const columnNames = columns.map((col) => col.name);
-  columns.unshift({name: 'title', type: 'name'});
+  columns.unshift({name: 'title', title: '', type: 'name'});
 
   // Summarize all totals from the entries.
   const totals = {};
