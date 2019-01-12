@@ -88,7 +88,8 @@ processEntries.GeneralJournal = (entries, periods, formatName, format, settings)
       data = [];
     }
     data.push({
-      name: `${entry.number} ${entry.name}`,
+      name: entry.name,
+      number: entry.number,
       description: entry.description,
       date: entry.date,
       amounts: {
@@ -101,14 +102,26 @@ processEntries.GeneralJournal = (entries, periods, formatName, format, settings)
 
   // Helper to construct a list of descriptions.
   const descriptions = (lines) => {
-    let ret = new Set();
+    let texts = new Set();
+    let accountNumbers = new Map();
+
     lines.forEach((line) => {
       const text = line.description.replace(/^\[\S+\]\s*/, '');
-      if (text !== '' && !ret.has(text)) {
-        ret.add(text);
+      if (text !== '') {
+        texts.add(text);
+        if (!accountNumbers.has(text)) {
+          accountNumbers.set(text, new Set());
+        }
+        accountNumbers.get(text).add(line.number);
       }
     });
-    return [...ret];
+
+    texts = [...texts];
+    if (texts.length === 1) {
+      return texts;
+    }
+
+    return texts.map((text) => text + ' [' + [...accountNumbers.get(text)].join(', ') + ']');
   };
 
   // Construct lines for each document.
@@ -133,7 +146,7 @@ processEntries.GeneralJournal = (entries, periods, formatName, format, settings)
     lines.forEach((line) => {
       data.push({
         tab: 2,
-        name: `${line.name}`,
+        name: `${line.number} ${line.name}`,
         amounts: line.amounts
       });
     });
