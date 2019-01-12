@@ -56,6 +56,14 @@ function columnTitle(formatName, period) {
 }
 
 /**
+ * Report generator for general journal.
+ */
+processEntries.GeneralJournal = (entries, periods, settings) => {
+
+  return entries;
+};
+
+/**
  * Process data entries in to the report format described as in Tilitin reports.
  * @param {Object[]} entries
  * @param {Object[]} periods
@@ -64,6 +72,12 @@ function columnTitle(formatName, period) {
  * @param {Object} settings
  */
 function processEntries(entries, periods, formatName, format, settings) {
+
+  const camelCaseName = formatName.split('-').map((s) => s[0].toUpperCase() + s.substr(1)).join('');
+
+  if (processEntries[camelCaseName]) {
+    return processEntries[camelCaseName](entries, periods, settings);
+  }
 
   const DEBUG_PROCESSOR = false;
 
@@ -218,6 +232,8 @@ async function create(db, periodIds, formatName, format) {
         .then((periods) => {
           return knex.db(db).select(
             knex.db(db).raw('document.period_id AS periodId'),
+            'document.id AS documentId',
+            'document.date',
             'account.name',
             'account.type',
             'account.number',
@@ -228,12 +244,27 @@ async function create(db, periodIds, formatName, format) {
             .leftJoin('account', 'account.id', 'entry.account_id')
             .leftJoin('document', 'document.id', 'entry.document_id')
             .whereIn('document.period_id', periodIds)
-            .orderBy('account.number')
+            .orderBy('document.date')
+            .orderBy('document.id')
             .then((entries) => processEntries(entries, periods, formatName, format, settings));
         });
     });
 }
 
+/**
+ * Get the list of custom report formats.
+ */
+function customReports() {
+  return [{
+    id: 'general-journal',
+    data: ''
+  }, {
+    id: 'general-ledger',
+    data: ''
+  }];
+}
+
 module.exports = {
-  create
+  create,
+  customReports
 };

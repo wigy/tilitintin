@@ -9,8 +9,9 @@ const config = require('../config');
 router.get('/', (req, res) => {
   let links = {};
   data.listAll(req.db, 'report_structure', null, ['id'])
-    .then((reports) => {
-      reports.forEach((report) => (links[report.id] = config.BASEURL + '/db/' + req.db + '/report/' + report.id));
+    .then((results) => {
+      results = reports.customReports().concat(results);
+      results.forEach((report) => (links[report.id] = config.BASEURL + '/db/' + req.db + '/report/' + report.id));
       res.send({links});
     });
 });
@@ -38,6 +39,14 @@ router.get('/:format/:period', (req, res) => {
       if (prev) {
         periods.push(prev.id);
       }
+
+      const special = reports.customReports().filter((report) => report.id === format);
+      if (special.length) {
+        reports.create(req.db, periods, format, special[0].data)
+          .then((report) => res.send(report));
+        return;
+      }
+
       data.getOne(req.db, 'report_structure', format)
         .then((reportStructure) => reports.create(req.db, periods, format, reportStructure.data))
         .then((report) => res.send(report));
