@@ -12,16 +12,17 @@ class ReportHeader extends Component {
     const lang = this.props.i18n.language;
     const columns = report.columns.length;
 
+    // Scan for dates and localize. Also translate symbolic names.
     const localize = (title) => {
-      let match = /\b(\d\d\d\d-\d\d-\d\d)\b/g.exec(title);
-      if (match) {
-        title = title.replace(match[1], new Date(match[1]).toLocaleDateString(lang));
-      }
-      match = /\b(\d\d\d\d-\d\d-\d\d)\b/g.exec(title);
-      if (match) {
-        title = title.replace(match[1], new Date(match[1]).toLocaleDateString(lang));
-      }
-      return title;
+      let match;
+      do {
+        match = /(\{(\d\d\d\d-\d\d-\d\d)\})/g.exec(title);
+        if (match) {
+          title = title.replace(match[1], new Date(match[2]).toLocaleDateString(lang));
+        }
+      } while (match);
+
+      return this.props.t(title);
     };
 
     return [

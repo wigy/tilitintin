@@ -49,9 +49,9 @@ function columnTitle(formatName, period) {
   switch (formatName) {
     case 'balance-sheet':
     case 'balance-sheet-detailed':
-      return moment(period.end_date).format('YYYY-MM-DD');
+      return '{' + moment(period.end_date).format('YYYY-MM-DD') + '}';
     default:
-      return moment(period.start_date).format('YYYY-MM-DD') + ' - ' + moment(period.end_date).format('YYYY-MM-DD');
+      return '{' + moment(period.start_date).format('YYYY-MM-DD') + '} - {' + moment(period.end_date).format('YYYY-MM-DD') + '}';
   }
 }
 
@@ -61,9 +61,11 @@ function columnTitle(formatName, period) {
 processEntries.GeneralJournal = (entries, periods, formatName, format, settings) => {
 
   let columns = [{
+    type: 'numeric',
     name: 'debit',
     title: 'column-debit'
   }, {
+    type: 'numeric',
     name: 'credit',
     title: 'column-credit'
   }];
