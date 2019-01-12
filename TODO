@@ -18,6 +18,7 @@ FEATURES
 [ ] Report: Päiväkirja
 [ ] Report: Pääkirja
 [X] Printing of report
+[ ] Rename `column` as `tab` in report data.
 
 BUGS
 ====

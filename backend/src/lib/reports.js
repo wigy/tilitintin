@@ -60,28 +60,22 @@ function columnTitle(formatName, period) {
  */
 processEntries.GeneralJournal = (entries, periods, formatName, format, settings) => {
 
-  return entries;
+  let columns = [{
+    name: 'debit',
+    title: 'column-debit'
+  }, {
+    name: 'credit',
+    title: 'column-credit'
+  }];
+  let data = [];
+
+  return { columns, data };
 };
 
 /**
- * Process data entries in to the report format described as in Tilitin reports.
- * @param {Object[]} entries
- * @param {Object[]} periods
- * @param {String} formatName
- * @param {String} format
- * @param {Object} settings
+ * General purpose processor.
  */
-function processEntries(entries, periods, formatName, format, settings) {
-
-  const camelCaseName = formatName.split('-').map((s) => s[0].toUpperCase() + s.substr(1)).join('');
-
-  if (processEntries[camelCaseName]) {
-    return processEntries[camelCaseName](entries, periods, formatName, format, settings);
-  }
-
-  if (!format) {
-    return [];
-  }
+processEntries.Default = (entries, periods, formatName, format, settings) => {
 
   // Construct meta data for columns.
   let columns = periods.map((period) => {
@@ -127,7 +121,6 @@ function processEntries(entries, periods, formatName, format, settings) {
     let amounts = {};
     columnNames.forEach((column) => (amounts[column] = null));
     let unused = true;
-    let hits = [];
     let item = code2item(code);
 
     // Collect all totals inside any of the account number ranges.
@@ -178,17 +171,42 @@ function processEntries(entries, periods, formatName, format, settings) {
     }
   });
 
-  let report = {
+  return { columns, data: ret };
+};
+
+/**
+ * Process data entries in to the report format described as in Tilitin reports.
+ * @param {Object[]} entries
+ * @param {Object[]} periods
+ * @param {String} formatName
+ * @param {String} format
+ * @param {Object} settings
+ */
+function processEntries(entries, periods, formatName, format, settings) {
+
+  if (!format && format !== null) {
+    return [];
+  }
+
+  // Select data conversion function and run it.
+  const camelCaseName = formatName.split('-').map((s) => s[0].toUpperCase() + s.substr(1)).join('');
+  let results;
+  if (processEntries[camelCaseName]) {
+    results = processEntries[camelCaseName](entries, periods, formatName, format, settings);
+  } else {
+    results = processEntries.Default(entries, periods, formatName, format, settings);
+  }
+
+  // Construct the report.
+  return {
     format: formatName,
-    columns,
+    columns: results.columns,
     meta: {
       businessName: settings.name,
       businessId: settings.business_id
     },
-    data: ret
+    data: results.data
   };
-
-  return report;
 }
 
 /**
@@ -242,10 +260,10 @@ async function create(db, periodIds, formatName, format) {
 function customReports() {
   return [{
     id: 'general-journal',
-    data: ''
+    data: null
   }, {
     id: 'general-ledger',
-    data: ''
+    data: null
   }];
 }
 
