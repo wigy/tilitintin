@@ -11,14 +11,6 @@ table.ReportDisplay tr td {
   border: none !important;
 }
 
-table.ReportDisplay tr td:first-child, table.ReportDisplay tr th:first-child {
-  text-align: left;
-}
-
-table.ReportDisplay tr td, table.ReportDisplay tr th {
-  text-align: right;
-}
-
 table.ReportDisplay tr.columns {
   height: 2.2em;
   border-top: 4px solid var(--fg-color);
@@ -30,4 +22,14 @@ table.ReportDisplay tr.columns {
 
 table.ReportDisplay .report-title {
   font-size: 140%;
+}
+
+table.ReportDisplay .name {
+  max-width: 5in;
+  text-align: left;
+}
+
+table.ReportDisplay .numeric {
+  width: 1in;
+  text-align: right;
 }

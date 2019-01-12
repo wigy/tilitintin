@@ -1,11 +1,3 @@
-.ReportLine .name {
-  max-width: 5in;
-}
-
-.ReportLine .amount {
-  width: 1in;
-}
-
 @media print {
   .ReportLine.pageBreak {
     page-break-before: always;

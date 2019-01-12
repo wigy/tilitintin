@@ -39,7 +39,7 @@ class ReportHeader extends Component {
         </th>
       </tr>,
       <tr key="3" className="columns">
-        {report.columns.map((column) => <th key={column.name}>
+        {report.columns.map((column) => <th key={column.name} className={column.type}>
           {localize(column.title)}
         </th>)}
       </tr>

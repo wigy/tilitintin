@@ -61,6 +61,10 @@ function columnTitle(formatName, period) {
 processEntries.GeneralJournal = (entries, periods, formatName, format, settings) => {
 
   let columns = [{
+    name: 'title',
+    title: '',
+    type: 'name'
+  }, {
     type: 'numeric',
     name: 'debit',
     title: 'column-debit'
@@ -92,11 +96,8 @@ processEntries.GeneralJournal = (entries, periods, formatName, format, settings)
   });
 
   // Construct lines for each document.
-  // TODO: Localize dates with special notation.
-  // TODO: Full width column support for texts.
   // TODO: Separate texts for each entry, if they differ.
-  // TODO: Consider separate column for document number (with fully generalized columns definition)
-  // TODO: Column title localization.
+  // TODO: Consider separate column for document number.
   const docIds = [...docs.keys()].sort((a, b) => parseInt(a) - parseInt(b));
   let data = [];
   docIds.forEach((docId) => {
@@ -109,11 +110,12 @@ processEntries.GeneralJournal = (entries, periods, formatName, format, settings)
     data.push({
       tab: 1,
       name: `${lines[0].description}`,
+      fullWidth: 0,
       italic: true
     });
     lines.forEach((line) => {
       data.push({
-        tab: 1,
+        tab: 2,
         name: `${line.name}`,
         amounts: line.amounts
       });
@@ -137,7 +139,11 @@ processEntries.Default = (entries, periods, formatName, format, settings) => {
     };
   }).reverse();
   const columnNames = columns.map((col) => col.name);
-  columns.unshift({name: 'title', title: '', type: 'name'});
+  columns.unshift({
+    name: 'title',
+    title: '',
+    type: 'name'
+  });
 
   // Summarize all totals from the entries.
   const totals = {};
@@ -273,6 +279,7 @@ function processEntries(entries, periods, formatName, format, settings) {
  * * `hideTotal` if true, do not show total.
  * * `bold` if true, show in bold.
  * * `italic` if true, show in italic.
+ * * `fullWidth` if set, the content in column index defined here is expanded to cover all columns.
  * * `accountDetails` if true, after this are summarized accounts under this entry.
  * * `isAccount` if true, this is an account entry.
  * * `name` Title of the entry.

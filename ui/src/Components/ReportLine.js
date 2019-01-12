@@ -8,8 +8,8 @@ import './ReportLine.css';
 class ReportLine extends Component {
 
   render() {
-    let { name, number, amounts, bold, italic, hideTotal, tab, pageBreak, isAccount } = this.props.line;
-
+    let { name, number, amounts, bold, italic, hideTotal, tab, pageBreak, isAccount, fullWidth } = this.props.line;
+    const columns = this.props.columns;
     if (isAccount) {
       name = `${number} ${name}`;
     }
@@ -25,21 +25,30 @@ class ReportLine extends Component {
       return text;
     };
 
+    // Construct table cell.
+    const td = (column, content, extras = {}) => <td
+      key={column.name}
+      colSpan={fullWidth === undefined ? 1 : columns.length}
+      className={column.type + (extras.className ? ' ' + extras.className : '') }>{content}</td>;
+
     // Rendering functions per type.
     const render = {
       // Name of the entry.
-      name: (column) => <td key={column.name} className={'name tab' + tab}>{decor(name)}</td>,
+      name: (column) => td(column, decor(name), {className: 'tab' + (tab || 0)}),
       // Render currency value.
-      numeric: (column) => <td key={column.name}>{
+      numeric: (column) => td(column,
         amounts && !hideTotal ? (
           decor(amounts[column.name] === null ? '–' : <Money currency="EUR" cents={amounts[column.name]}></Money>)
         ) : ''
-      }</td>
+      )
     };
 
-    return (
-      <tr className={'ReportLine' + (pageBreak ? ' pageBreak' : '')}>
-        {this.props.columns.map((column) => column.type && render[column.type] && render[column.type](column))}
+    return (fullWidth !== undefined
+      ? <tr className={'ReportLine' + (pageBreak ? ' pageBreak' : '')}>
+        {columns[fullWidth].type && render[columns[fullWidth].type] && render[columns[fullWidth].type](columns[fullWidth])}
+      </tr>
+      : <tr className={'ReportLine' + (pageBreak ? ' pageBreak' : '')}>
+        {columns.map((column) => column.type && render[column.type] && render[column.type](column))}
       </tr>
     );
   }
