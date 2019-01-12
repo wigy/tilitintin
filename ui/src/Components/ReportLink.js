@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { Trans } from 'react-i18next';
+import { translate } from 'react-i18next';
 
-const ReportLink = (props) => {
-  const dst = '/' + props.db + '/report/' + props.periodId + '/' + (props.accountId || 'none') + '/' + props.format;
-  return (<Link to={dst}>
-    <Trans>{props.format}</Trans>
-  </Link>);
-};
+@translate('translations')
+class ReportLink extends Component {
+  render() {
+    const { t } = this.props;
+    const dst = '/' + this.props.db + '/report/' + this.props.periodId + '/' + (this.props.accountId || 'none') + '/' + this.props.format;
+    return (<Link to={dst}>
+      {t('report-' + this.props.format)}
+    </Link>);
+  }
+}
 
 ReportLink.propTypes = {
   db: PropTypes.string,

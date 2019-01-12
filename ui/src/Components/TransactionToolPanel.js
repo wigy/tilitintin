@@ -51,8 +51,8 @@ class ToolPanel extends Component {
       <div className="ToolPanel">
         <h1>{this.props.store.title}</h1>
 
-        <IconButton onClick={enableAll} title="Reset" icon="fa-home"></IconButton>
-        <IconButton onClick={disableAll} title="Disable All" icon="fa-trash-alt"></IconButton>
+        <IconButton onClick={enableAll} title="reset" icon="fa-home"></IconButton>
+        <IconButton onClick={disableAll} title="disable-all" icon="fa-trash-alt"></IconButton>
 
         {this.props.store.sortTags().map((tag) => {
           const spacer = (tag.type !== last);

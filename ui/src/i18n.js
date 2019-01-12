@@ -32,10 +32,14 @@ i18n.init({
         'Saving failed.': 'Tallennus epäonnistui.',
         'This field is required.': 'Tämä kenttä ei voi olla tyhjä.',
 
-        'balance-sheet': 'Tase',
-        'balance-sheet-detailed': 'Tase tilierittelyin',
-        'income-statement': 'Tuloslaskelma',
-        'income-statement-detailed': 'Tuloslaskelma tilierittelyin'
+        'report-balance-sheet': 'Tase',
+        'report-balance-sheet-detailed': 'Tase tilierittelyin',
+        'report-income-statement': 'Tuloslaskelma',
+        'report-income-statement-detailed': 'Tuloslaskelma tilierittelyin',
+
+        'icon-print': 'Tulosta',
+        'icon-reset': 'Näytä kaikki',
+        'icon-disable-all': 'Piilota kaikki'
       }
     }
   },

@@ -22,7 +22,7 @@ class ToolPanel extends Component {
     return (
       <div className="ToolPanel">
         <h1><Trans>{this.props.store.report.format}</Trans></h1>
-        <IconButton onClick={onPrint} title="Print" icon="fa-print"></IconButton>
+        <IconButton onClick={onPrint} title="print" icon="fa-print"></IconButton>
       </div>
     );
   }
