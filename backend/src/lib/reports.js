@@ -58,7 +58,7 @@ function columnTitle(formatName, period) {
 /**
  * Report generator for general journal.
  */
-processEntries.GeneralJournal = (entries, periods, settings) => {
+processEntries.GeneralJournal = (entries, periods, formatName, format, settings) => {
 
   return entries;
 };
@@ -76,10 +76,8 @@ function processEntries(entries, periods, formatName, format, settings) {
   const camelCaseName = formatName.split('-').map((s) => s[0].toUpperCase() + s.substr(1)).join('');
 
   if (processEntries[camelCaseName]) {
-    return processEntries[camelCaseName](entries, periods, settings);
+    return processEntries[camelCaseName](entries, periods, formatName, format, settings);
   }
-
-  const DEBUG_PROCESSOR = false;
 
   if (!format) {
     return [];
@@ -143,25 +141,17 @@ function processEntries(entries, periods, formatName, format, settings) {
             if (totals[column][number] !== undefined) {
               amounts[column] += totals[column][number];
             }
-            if (DEBUG_PROCESSOR) {
-              hits.push(number + ' ' + column);
-            }
           }
         });
       });
     }
 
-    // If debugging, just give out all info.
-    if (DEBUG_PROCESSOR) {
-      ret.push({item, code, name, amounts, unused, parts, hits});
-    } else {
-      // If we actually show details we can skip this entry and fill details below.
-      if (!item.accountDetails) {
-        if (item.required || !unused) {
-          item.name = name;
-          item.amounts = amounts;
-          ret.push(item);
-        }
+    // If we actually show details we can skip this entry and fill details below.
+    if (!item.accountDetails) {
+      if (item.required || !unused) {
+        item.name = name;
+        item.amounts = amounts;
+        ret.push(item);
       }
     }
 
@@ -197,11 +187,6 @@ function processEntries(entries, periods, formatName, format, settings) {
     },
     data: ret
   };
-
-  if (DEBUG_PROCESSOR) {
-    report.totals = totals;
-    report.entries = entries;
-  }
 
   return report;
 }
