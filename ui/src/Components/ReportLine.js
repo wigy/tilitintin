@@ -10,7 +10,8 @@ class ReportLine extends Component {
 
   render() {
     let { id, name, number, amounts, bold, italic, hideTotal, tab, pageBreak,
-      isAccount, fullWidth, needLocalization } = this.props.line;
+      isAccount, fullWidth, needLocalization, useRemainingColumns } = this.props.line;
+
     const columns = this.props.columns;
     if (isAccount) {
       name = `${number} ${name}`;
@@ -30,31 +31,42 @@ class ReportLine extends Component {
     // Construct table cell.
     const td = (column, content, extras = {}) => <td
       key={column.name}
-      colSpan={fullWidth === undefined ? 1 : columns.length}
+      colSpan={extras.colSpan !== undefined ? extras.colSpan : (fullWidth === undefined ? 1 : columns.length)}
       className={column.type + (extras.className ? ' ' + extras.className : '') }>{content}</td>;
 
     // Rendering functions per type.
     const render = {
       // ID of the entry.
-      id: (column) => td(column, decor(id)),
+      id: (column, extras = {}) => td(column, decor(id)),
       // Name of the entry.
-      name: (column) => td(column, decor(needLocalization ? <Localize>{name}</Localize> : name), {className: 'tab' + (tab || 0)}),
+      name: (column, extras = {}) => td(column, decor(needLocalization ? <Localize>{name}</Localize> : name), {...extras, className: 'tab' + (tab || 0)}),
       // Render currency value.
-      numeric: (column) => td(column,
+      numeric: (column, extras = {}) => td(column,
         amounts && !hideTotal ? (
           decor(amounts[column.name] === null ? '–' : <Money currency="EUR" cents={amounts[column.name]}></Money>)
         ) : ''
       )
     };
 
-    return (fullWidth !== undefined
-      ? <tr className={'ReportLine' + (pageBreak ? ' pageBreak' : '')}>
+    if (fullWidth !== undefined) {
+      return <tr className={'ReportLine' + (pageBreak ? ' pageBreak' : '')}>
         {columns[fullWidth].type && render[columns[fullWidth].type] && render[columns[fullWidth].type](columns[fullWidth])}
-      </tr>
-      : <tr className={'ReportLine' + (pageBreak ? ' pageBreak' : '')}>
-        {columns.map((column) => column.type && render[column.type] && render[column.type](column))}
-      </tr>
-    );
+      </tr>;
+    }
+
+    if (useRemainingColumns !== undefined) {
+      let ret = [];
+      for (let i = 0; i <= useRemainingColumns; i++) {
+        ret.push(columns[i].type && render[columns[i].type] && render[columns[i].type](columns[i], {
+          colSpan: i === useRemainingColumns ? columns.length - useRemainingColumns : 1
+        }));
+      }
+      return <tr className={'ReportLine' + (pageBreak ? ' pageBreak' : '')}>{ret}</tr>;
+    }
+
+    return <tr className={'ReportLine' + (pageBreak ? ' pageBreak' : '')}>
+      {columns.map((column) => column.type && render[column.type] && render[column.type](column))}
+    </tr>;
   }
 }
 

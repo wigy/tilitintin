@@ -26,13 +26,14 @@ class Localize extends Component {
     if (typeof what === 'string') {
       return this.localize(what);
     }
-    console.log(what);
     return 'TODO: Localize ' + typeof what;
   }
 }
 
 Localize.propTypes = {
+  t: PropTypes.func,
   text: PropTypes.string,
+  children: PropTypes.any,
   i18n: PropTypes.instanceOf(I18n)
 };
 

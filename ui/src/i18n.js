@@ -44,9 +44,12 @@ i18n.init({
         'icon-disable-all': 'Piilota kaikki',
 
         'column-document-number': 'Nro',
+        'column-account-number': 'Nro',
+        'column-name-or-date': 'Tili / Päiväys',
         'column-date-and-accounts': 'Päiväys ja tilit',
         'column-debit': 'Debet',
-        'column-credit': 'Kredit'
+        'column-credit': 'Kredit',
+        'column-balance': 'Saldo'
       }
     }
   },

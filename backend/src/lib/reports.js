@@ -107,7 +107,7 @@ processEntries.GeneralJournal = (entries, periods, formatName, format, settings)
     let accountNumbers = new Map();
 
     lines.forEach((line) => {
-      const text = line.description.replace(/^\[\S+\]\s*/, '');
+      const text = line.description.replace(/^(\[.+?\])+\s*/, '');
       if (text !== '') {
         texts.add(text);
         if (!accountNumbers.has(text)) {
@@ -154,6 +154,92 @@ processEntries.GeneralJournal = (entries, periods, formatName, format, settings)
     });
   });
 
+  return { columns, data };
+};
+
+/**
+ * Report generator for general ledger.
+ */
+processEntries.GeneralLedger = (entries, periods, formatName, format, settings) => {
+
+  let columns = [{
+    type: 'id',
+    name: 'account',
+    title: 'column-account-number'
+  }, {
+    type: 'name',
+    name: 'name',
+    title: 'column-name-or-date'
+  }, {
+    type: 'numeric',
+    name: 'debit',
+    title: 'column-debit'
+  }, {
+    type: 'numeric',
+    name: 'credit',
+    title: 'column-credit'
+  }, {
+    type: 'numeric',
+    name: 'balance',
+    title: 'column-balance'
+  }];
+
+  // Pre-process entries by their account number.
+  const accounts = new Map();
+  const accountNames = new Map();
+  entries.forEach((entry) => {
+    let data;
+    if (accounts.has(entry.number)) {
+      data = accounts.get(entry.number);
+    } else {
+      data = [];
+    }
+    data.push({
+      name: entry.name,
+      number: entry.number,
+      documentId: entry.documentId,
+      description: entry.description,
+      date: entry.date,
+      amounts: {
+        debit: entry.amount >= 0 ? entry.amount : null,
+        credit: entry.amount < 0 ? -entry.amount : null,
+        balance: null
+      }
+    });
+
+    accounts.set(entry.number, data);
+    accountNames.set(entry.number, entry.name);
+  });
+
+  const accountNumbers = [...accounts.keys()].sort();
+  let data = [];
+  accountNumbers.forEach((number) => {
+    const lines = accounts.get(number);
+    data.push({
+      tab: 0,
+      bold: true,
+      id: number,
+      name: accountNames.get(number)
+    });
+    let total = 0;
+    lines.forEach((line) => {
+      data.push({
+        tab: 0,
+        italic: true,
+        useRemainingColumns: 1,
+        name: line.description.replace(/^(\[.+?\])+\s*/g, '')
+      });
+      total += line.amounts.debit;
+      total -= line.amounts.credit;
+      line.amounts.balance = total;
+      data.push({
+        tab: 0,
+        needLocalization: true,
+        name: `#${line.documentId} {${moment(line.date).format('YYYY-MM-DD')}}`,
+        amounts: line.amounts
+      });
+    });
+  });
   return { columns, data };
 };
 
@@ -312,6 +398,7 @@ function processEntries(entries, periods, formatName, format, settings) {
  * * `bold` if true, show in bold.
  * * `italic` if true, show in italic.
  * * `fullWidth` if set, the content in column index defined here is expanded to cover all columns.
+ * * `useRemainingColumns` if set, extend this column index to use all the rest columns in the row.
  * * `accountDetails` if true, after this are summarized accounts under this entry.
  * * `isAccount` if true, this is an account entry.
  * * `needLocalization` if set, value is localized, i.e. translated via Localization component.
