@@ -10,7 +10,7 @@ class ReportLine extends Component {
 
   render() {
     let { id, name, number, amounts, bold, italic, hideTotal, tab, pageBreak,
-      isAccount, fullWidth, needLocalization, useRemainingColumns } = this.props.line;
+      isAccount, fullWidth, needLocalization, useRemainingColumns, bigger } = this.props.line;
 
     const columns = this.props.columns;
     if (isAccount) {
@@ -52,7 +52,7 @@ class ReportLine extends Component {
       )
     };
 
-    const classNames = 'ReportLine' + (pageBreak ? ' pageBreak' : '');
+    const classNames = 'ReportLine' + (pageBreak ? ' pageBreak' : '') + (bigger ? ' bigger' : '');
 
     if (fullWidth !== undefined) {
       return <tr className={classNames}>

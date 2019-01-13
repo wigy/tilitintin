@@ -4,6 +4,12 @@
   }
 }
 
+.ReportLine.bigger td {
+  padding-top: 1em;
+  padding-bottom: 0.4em;
+  font-size: 110%;
+}
+
 .ReportLine.pageBreak td {
   height: 1.5em;
 }

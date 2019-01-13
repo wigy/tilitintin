@@ -226,10 +226,14 @@ processEntries.GeneralLedger = (entries, periods, formatName, format, settings) 
       data.push({
         tab: 0,
         needLocalization: true,
+        id: `#${line.documentId}`,
+        name: `{${moment(line.date).format('YYYY-MM-DD')}}`
+      });
+      data.push({
+        tab: 0,
         useRemainingColumns: 1,
         italic: true,
-        id: `#${line.documentId}`,
-        name: `{${moment(line.date).format('YYYY-MM-DD')}} ${line.description.replace(/^(\[.+?\])+\s*/g, '')}`
+        name: `${line.description.replace(/^(\[.+?\])+\s*/g, '')}`
       });
       total += line.amounts.debit;
       total -= line.amounts.credit;
@@ -244,13 +248,15 @@ processEntries.GeneralLedger = (entries, periods, formatName, format, settings) 
       tab: 0,
       name: '',
       bold: true,
+      bigger: true,
       amounts: {
         debit: '',
         credit: '',
         balance: total
       }
     });
-});
+  });
+
   return { columns, data };
 };
 
@@ -408,6 +414,7 @@ function processEntries(entries, periods, formatName, format, settings) {
  * * `hideTotal` if true, do not show total.
  * * `bold` if true, show in bold.
  * * `italic` if true, show in italic.
+ * * `bigger` if true, show in bigger font.
  * * `fullWidth` if set, the content in column index defined here is expanded to cover all columns.
  * * `useRemainingColumns` if set, extend this column index to use all the rest columns in the row.
  * * `accountDetails` if true, after this are summarized accounts under this entry.
