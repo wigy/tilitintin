@@ -29,10 +29,14 @@ class ReportLine extends Component {
     };
 
     // Construct table cell.
-    const td = (column, content, extras = {}) => <td
-      key={column.name}
-      colSpan={extras.colSpan !== undefined ? extras.colSpan : (fullWidth === undefined ? 1 : columns.length)}
-      className={column.type + (extras.className ? ' ' + extras.className : '') }>{content}</td>;
+    const td = (column, content, extras = {}) => {
+      const classNames = column.type + (extras.className ? ' ' + extras.className : '');
+
+      return <td
+        key={column.name}
+        colSpan={extras.colSpan !== undefined ? extras.colSpan : (fullWidth === undefined ? 1 : columns.length)}
+        className={classNames}>{content}</td>;
+    };
 
     // Rendering functions per type.
     const render = {
@@ -42,14 +46,16 @@ class ReportLine extends Component {
       name: (column, extras = {}) => td(column, decor(needLocalization ? <Localize>{name}</Localize> : name), {...extras, className: 'tab' + (tab || 0)}),
       // Render currency value.
       numeric: (column, extras = {}) => td(column,
-        amounts && !hideTotal ? (
+        amounts && !hideTotal && amounts[column.name] !== '' ? (
           decor(amounts[column.name] === null ? '–' : <Money currency="EUR" cents={amounts[column.name]}></Money>)
         ) : ''
       )
     };
 
+    const classNames = 'ReportLine' + (pageBreak ? ' pageBreak' : '');
+
     if (fullWidth !== undefined) {
-      return <tr className={'ReportLine' + (pageBreak ? ' pageBreak' : '')}>
+      return <tr className={classNames}>
         {columns[fullWidth].type && render[columns[fullWidth].type] && render[columns[fullWidth].type](columns[fullWidth])}
       </tr>;
     }
@@ -61,10 +67,10 @@ class ReportLine extends Component {
           colSpan: i === useRemainingColumns ? columns.length - useRemainingColumns : 1
         }));
       }
-      return <tr className={'ReportLine' + (pageBreak ? ' pageBreak' : '')}>{ret}</tr>;
+      return <tr className={classNames}>{ret}</tr>;
     }
 
-    return <tr className={'ReportLine' + (pageBreak ? ' pageBreak' : '')}>
+    return <tr className={classNames}>
       {columns.map((column) => column.type && render[column.type] && render[column.type](column))}
     </tr>;
   }

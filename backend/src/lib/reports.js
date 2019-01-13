@@ -225,21 +225,32 @@ processEntries.GeneralLedger = (entries, periods, formatName, format, settings) 
     lines.forEach((line) => {
       data.push({
         tab: 0,
-        italic: true,
+        needLocalization: true,
         useRemainingColumns: 1,
-        name: line.description.replace(/^(\[.+?\])+\s*/g, '')
+        italic: true,
+        id: `#${line.documentId}`,
+        name: `{${moment(line.date).format('YYYY-MM-DD')}} ${line.description.replace(/^(\[.+?\])+\s*/g, '')}`
       });
       total += line.amounts.debit;
       total -= line.amounts.credit;
       line.amounts.balance = total;
       data.push({
         tab: 0,
-        needLocalization: true,
-        name: `#${line.documentId} {${moment(line.date).format('YYYY-MM-DD')}}`,
+        name: '',
         amounts: line.amounts
       });
     });
-  });
+    data.push({
+      tab: 0,
+      name: '',
+      bold: true,
+      amounts: {
+        debit: '',
+        credit: '',
+        balance: total
+      }
+    });
+});
   return { columns, data };
 };
 
