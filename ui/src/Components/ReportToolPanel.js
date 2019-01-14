@@ -25,7 +25,6 @@ class ToolPanel extends Component {
 
     const onDownload = () => {
       const url = `${Configuration.API_URL}/db/${store.db}/report/${store.report.format}/${store.periodId}?csv`;
-      // window.open(url);
       const hiddenElement = document.createElement('a');
       hiddenElement.href = url;
       hiddenElement.target = '_blank';
@@ -44,6 +43,7 @@ class ToolPanel extends Component {
 }
 
 ToolPanel.propTypes = {
+  t: PropTypes.func,
   store: PropTypes.instanceOf(Store)
 };
 
