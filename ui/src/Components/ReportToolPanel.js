@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { translate } from 'react-i18next';
 import Store from '../Stores/Store';
 import IconButton from './IconButton';
+import Configuration from '../Configuration';
 import './ToolPanel.css';
 
 @translate('translations')
@@ -12,7 +13,9 @@ import './ToolPanel.css';
 class ToolPanel extends Component {
 
   render() {
-    if (!this.props.store.token || !this.props.store.report) {
+    const store = this.props.store;
+
+    if (!store.token || !store.report) {
       return '';
     }
 
@@ -20,10 +23,21 @@ class ToolPanel extends Component {
       window.print();
     };
 
+    const onDownload = () => {
+      const url = `${Configuration.API_URL}/db/${store.db}/report/${store.report.format}/${store.periodId}?csv`;
+      // window.open(url);
+      const hiddenElement = document.createElement('a');
+      hiddenElement.href = url;
+      hiddenElement.target = '_blank';
+      hiddenElement.download = 'report.csv';
+      hiddenElement.click();
+    };
+
     return (
       <div className="ToolPanel">
-        <h1>{this.props.t('report-' + this.props.store.report.format)}</h1>
+        <h1>{this.props.t('report-' + store.report.format)}</h1>
         <IconButton onClick={onPrint} title="print" icon="fa-print"></IconButton>
+        <IconButton onClick={onDownload} title="download-csv" icon="fa-download"></IconButton>
       </div>
     );
   }

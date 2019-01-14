@@ -36,10 +36,10 @@ router.get('/:format/:period', (req, res) => {
   let periods = [periodId];
 
   let convert = conversions.identical;
-  let contentType = 'application/json';
   if ('csv' in req.query) {
     convert = conversions.csv;
-    contentType = 'text/csv';
+    res.setHeader('Content-Disposition', `attachment; filename=${format}.csv`);
+    res.setHeader('Content-Type', 'application/csv');
   }
 
   knex.db(req.db).select('*').from('period').where('id', '<', periodId).orderBy('end_date', 'desc').first()
@@ -52,14 +52,15 @@ router.get('/:format/:period', (req, res) => {
 
       if (special.length) {
         reports.create(req.db, periods, format, special[0].data)
-          .then((report) => res.send(report));
+          .then((report) => {
+            res.send(convert(report));
+          });
         return;
       }
 
       data.getOne(req.db, 'report_structure', format)
         .then((reportStructure) => reports.create(req.db, periods, format, reportStructure.data))
         .then((report) => {
-          res.setHeader('Content-Type', contentType);
           res.send(convert(report));
         });
     });

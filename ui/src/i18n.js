@@ -40,6 +40,7 @@ i18n.init({
         'report-income-statement-detailed': 'Tuloslaskelma tilierittelyin',
 
         'icon-print': 'Tulosta',
+        'icon-download-csv': 'Lataa CSV-tiedostona',
         'icon-reset': 'Näytä kaikki',
         'icon-disable-all': 'Piilota kaikki',
 
