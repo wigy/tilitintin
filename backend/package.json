@@ -17,6 +17,7 @@
     "cors": "^2.8.4",
     "express": "^4.16.2",
     "glob": "^7.1.2",
+    "json2csv": "^4.3.3",
     "jsonwebtoken": "^8.1.1",
     "knex": "^0.15.2",
     "libfyffe": "0.0.5",

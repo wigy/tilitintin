@@ -3,6 +3,7 @@ const moment = require('moment');
 const router = express.Router();
 const reports = require('../lib/reports');
 const data = require('../lib/data');
+const conversions = require('../lib/conversions');
 const knex = require('../lib/knex');
 const config = require('../config');
 
@@ -34,6 +35,13 @@ router.get('/:format/:period', (req, res) => {
   const periodId = parseInt(period);
   let periods = [periodId];
 
+  let convert = conversions.identical;
+  let contentType = 'application/json';
+  if ('csv' in req.query) {
+    convert = conversions.csv;
+    contentType = 'text/csv';
+  }
+
   knex.db(req.db).select('*').from('period').where('id', '<', periodId).orderBy('end_date', 'desc').first()
     .then(prev => {
       const special = reports.customReports().filter((report) => report.id === format);
@@ -50,7 +58,10 @@ router.get('/:format/:period', (req, res) => {
 
       data.getOne(req.db, 'report_structure', format)
         .then((reportStructure) => reports.create(req.db, periods, format, reportStructure.data))
-        .then((report) => res.send(report));
+        .then((report) => {
+          res.setHeader('Content-Type', contentType);
+          res.send(convert(report));
+        });
     });
 });
 
