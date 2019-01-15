@@ -3,10 +3,6 @@ table.TransactionTable {
   table-layout: auto;
 }
 
-table.TransactionTable tr:hover {
-  background-color: rgba(0,0,0,0.1);
-}
-
-table.TransactionTable tr.heading:hover {
-  background-color: var(--odd-color);
+table.TransactionTable tr {
+  cursor: pointer;
 }

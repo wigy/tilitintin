@@ -3,6 +3,10 @@
   white-space: nowrap;
 }
 
+.TransactionEntry.open .TransactionDetails {
+  background-color: white;
+}
+
 .TransactionDetails.current {
   font-weight: bold;
 }
