@@ -11,15 +11,16 @@ FEATURES
 [X] Delete entry.
 [ ] Delete transaction.
 [ ] Page up/page down.
-[ ] Reports.
+[X] Reports.
 [ ] Enter expressions like 23.23 - 1.22
 [ ] Enter simple space to fulfill transaction imbalance (show in gray if space pressed).
 [ ] Filtering account list: Assets, Income, Expense, Other
-[ ] Report: Päiväkirja
-[ ] Report: Pääkirja
+[X] Report: Päiväkirja
+[X] Report: Pääkirja
 [X] Printing of report
 [X] Rename `column` as `tab` in report data.
-[ ] Use some notation like ${2018-01-01} to specify dates and localize them everywhere.
+[X] Use some notation like ${2018-01-01} to specify dates and localize them everywhere.
+[ ] When clicked a row, update cursor selector.
 
 BUGS
 ====
