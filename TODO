@@ -4,8 +4,8 @@ IMPROVEMENTS
 [X] Use decorators.
 [ ] Add more classes to store actual data in Store.
 
-FEATURES
-========
+NEXT FEATURES
+=============
 
 [ ] Create new transaction.
 [X] Delete entry.
@@ -14,13 +14,22 @@ FEATURES
 [X] Reports.
 [ ] Enter expressions like 23.23 - 1.22
 [ ] Enter simple space to fulfill transaction imbalance (show in gray if space pressed).
-[ ] Filtering account list: Assets, Income, Expense, Other
+[ ] Filtering tool for account list: Assets, Income, Expense, Other
 [X] Report: Päiväkirja
 [X] Report: Pääkirja
 [X] Printing of report
 [X] Rename `column` as `tab` in report data.
 [X] Use some notation like ${2018-01-01} to specify dates and localize them everywhere.
 [ ] When clicked a row, update cursor selector.
+[ ] Allow cursor movement past the last opened entry in transaction list.
+[ ] Support for tag parameter for reports to provide different columns per tag (skip 2nd period).
+[ ] Localize CSV export.
+
+FUTURE FEATURES
+===============
+
+[ ] Create new period.
+[ ] VAT handling.
 
 BUGS
 ====

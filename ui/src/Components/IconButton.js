@@ -20,6 +20,7 @@ class ToolPanel extends Component {
 
 ToolPanel.propTypes = {
   onClick: PropTypes.func,
+  t: PropTypes.func,
   icon: PropTypes.string,
   title: PropTypes.string
 };
