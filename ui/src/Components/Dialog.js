@@ -57,9 +57,9 @@ class DialogContent extends Component {
 
 DialogContent.propTypes = {
   cursor: PropTypes.instanceOf(Cursor),
-  title: PropTypes.string,
-  onClose: PropTypes.function,
-  onConfirm: PropTypes.function,
+  title: PropTypes.any,
+  onClose: PropTypes.func,
+  onConfirm: PropTypes.func,
   children: PropTypes.array
 };
 
@@ -82,9 +82,9 @@ class Dialog extends Component {
 
 Dialog.propTypes = {
   isVisible: PropTypes.bool,
-  title: PropTypes.string,
-  onClose: PropTypes.function,
-  onConfirm: PropTypes.function,
+  title: PropTypes.any,
+  onClose: PropTypes.func,
+  onConfirm: PropTypes.func,
   children: PropTypes.array
 };
 
