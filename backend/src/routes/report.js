@@ -34,6 +34,9 @@ router.get('/:format/:period', (req, res) => {
   const {format, period} = req.params;
   const periodId = parseInt(period);
   let periods = [periodId];
+  const options = {
+    lang: req.query.lang || 'en'
+  };
 
   let convert = conversions.identical;
   if ('csv' in req.query) {
@@ -61,7 +64,7 @@ router.get('/:format/:period', (req, res) => {
       data.getOne(req.db, 'report_structure', format)
         .then((reportStructure) => reports.create(req.db, periods, format, reportStructure.data))
         .then((report) => {
-          res.send(convert(report));
+          res.send(convert(report, options));
         });
     });
 });

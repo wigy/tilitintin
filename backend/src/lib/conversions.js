@@ -1,19 +1,24 @@
 const json2csv = require('json2csv').parse;
+const locale = require('./locale');
 
 /**
  * No conversion.
  * @param {Object} report
+ * @param {Object} options
  */
-function identical(report) {
+function identical(report, options = {}) {
   return report;
 }
 
 /**
  * Convert report to CSV format.
  * @param {Object} report
+ * @param {Object} options
+ * @param {String} options.lang Localize number using this language.
  */
-function csv(report) {
+function csv(report, options = {}) {
   let csv = [];
+
   const render = {
     id: (column, entry) => entry.id,
     name: (column, entry) => `${entry.isAccount ? entry.number + ' ' : ''}${entry.name}`,
@@ -23,7 +28,7 @@ function csv(report) {
       entry.amounts[column.name] !== null &&
       !isNaN(entry.amounts[column.name]) &&
       entry.amounts[column.name] !== undefined)
-      ? (entry.amounts[column.name] / 100) : ''
+      ? locale.num(entry.amounts[column.name] / 100, options.lang) : ''
   };
 
   const { data, columns } = report;

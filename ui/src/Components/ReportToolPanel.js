@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
-import { translate } from 'react-i18next';
+import { translate, I18n } from 'react-i18next';
 import Store from '../Stores/Store';
 import IconButton from './IconButton';
 import Configuration from '../Configuration';
@@ -14,6 +14,7 @@ class ToolPanel extends Component {
 
   render() {
     const store = this.props.store;
+    const lang = this.props.i18n.language;
 
     if (!store.token || !store.report) {
       return '';
@@ -24,7 +25,7 @@ class ToolPanel extends Component {
     };
 
     const onDownload = () => {
-      const url = `${Configuration.API_URL}/db/${store.db}/report/${store.report.format}/${store.periodId}?csv`;
+      const url = `${Configuration.API_URL}/db/${store.db}/report/${store.report.format}/${store.periodId}?csv&lang=${lang}`;
       const hiddenElement = document.createElement('a');
       hiddenElement.href = url;
       hiddenElement.target = '_blank';
@@ -44,6 +45,7 @@ class ToolPanel extends Component {
 
 ToolPanel.propTypes = {
   t: PropTypes.func,
+  i18n: PropTypes.instanceOf(I18n),
   store: PropTypes.instanceOf(Store)
 };
 

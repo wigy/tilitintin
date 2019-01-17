@@ -23,7 +23,7 @@ NEXT FEATURES
 [ ] When clicked a row, update cursor selector.
 [ ] Allow cursor movement past the last opened entry in transaction list.
 [ ] Support for tag parameter for reports to provide different columns per tag (skip 2nd period).
-[ ] Localize CSV export.
+[X] Localize CSV export.
 
 FUTURE FEATURES
 ===============
