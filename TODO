@@ -20,7 +20,8 @@ NEXT FEATURES
 [X] Printing of report
 [X] Rename `column` as `tab` in report data.
 [X] Use some notation like ${2018-01-01} to specify dates and localize them everywhere.
-[ ] When clicked a row, update cursor selector.
+[X] When clicked a row, update cursor selector.
+[ ] Onclick should actually activate editing for the clicked transaction detail target.
 [X] Allow cursor movement past the last opened entry in transaction list.
 [ ] Support for tag parameter for reports to provide different columns per tag (skip 2nd period).
 [X] Localize CSV export.

@@ -78,6 +78,18 @@ class Cursor {
   }
 
   /**
+   * Move directly to the given index of the given component.
+   */
+  @action.bound
+  selectIndex(component, index) {
+    this.save();
+    this.component = component;
+    this.index = index;
+    this.column = null;
+    this.row = null;
+  }
+
+  /**
    * Helper to change index counter and wrap it around boundaries.
    * @param {Number} index
    * @param {Number} N

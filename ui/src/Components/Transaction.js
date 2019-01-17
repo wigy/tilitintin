@@ -9,10 +9,12 @@ import YYYYMMDD from './YYYYMMDD';
 import Tags from './Tags';
 import TransactionDetails from './TransactionDetails';
 import Store from '../Stores/Store';
+import Cursor from '../Stores/Cursor';
 import './Transaction.css';
 
 @translate('translations')
 @inject('store')
+@inject('cursor')
 @observer
 class Transaction extends Component {
 
@@ -25,7 +27,6 @@ class Transaction extends Component {
   }
 
   render() {
-
     // Calculate imbalance, missing accounts and look for deletion request.
     let debit = 0;
     let credit = 0;
@@ -53,7 +54,9 @@ class Transaction extends Component {
     const money = (<Money cents={this.props.tx.amount} currency="EUR" />);
     const total = (<Money cents={this.props.total} currency="EUR" />);
 
+    // Handle transaction toggle.
     const onClick = () => {
+      this.props.cursor.selectIndex('TransactionTable', this.props.index);
       this.props.tx.open = !this.props.tx.open;
     };
 
@@ -153,7 +156,9 @@ class Transaction extends Component {
 
 Transaction.propTypes = {
   store: PropTypes.instanceOf(Store),
+  cursor: PropTypes.instanceOf(Cursor),
   tx: PropTypes.object,
+  index: PropTypes.number,
   selectedColumn: PropTypes.string,
   selectedRow: PropTypes.number,
   selected: PropTypes.bool,

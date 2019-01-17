@@ -42,6 +42,7 @@ class TransactionTable extends Component {
           sum += tx.debit ? tx.amount : -tx.amount;
           return (<Transaction
             key={idx}
+            index={idx}
             selected={component === 'TransactionTable' && index === idx}
             selectedColumn={column !== null ? ['account', 'description', 'debit', 'credit'][column] : null}
             selectedRow={row}

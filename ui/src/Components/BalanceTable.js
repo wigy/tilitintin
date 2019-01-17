@@ -22,7 +22,7 @@ class BalanceTable extends Component {
       <table className="BalanceTable">
         <tbody>
           {this.props.balances.map((balance, idx) => {
-            return (<BalanceLine selected={component === 'BalanceTable' && index === idx} key={balance.id} db={this.props.db} periodId={this.props.periodId} line={balance} />);
+            return (<BalanceLine selected={component === 'BalanceTable' && index === idx} key={balance.id} index={idx} db={this.props.db} periodId={this.props.periodId} line={balance} />);
           })}
         </tbody>
       </table>

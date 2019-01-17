@@ -42,8 +42,9 @@ class TransactionDetails extends Component {
         edit = !this.props.entry.debit ? sprintf('%.2f', this.props.entry.amount / 100) : '';
         break;
       case 'account':
+        const onClick = () => this.props.cursor.setIndex('TransactionTable', null);
         url = '/' + this.props.tx.db + '/txs/' + this.props.tx.period_id + '/' + this.props.entry.account_id;
-        text = <Link to={url}>{this.props.entry.number} {this.props.entry.name}</Link>;
+        text = <Link onClick={onClick} to={url}>{this.props.entry.number} {this.props.entry.name}</Link>;
         edit = this.props.entry.number;
         break;
       case 'description':
