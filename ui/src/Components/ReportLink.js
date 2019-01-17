@@ -16,6 +16,7 @@ class ReportLink extends Component {
 
 ReportLink.propTypes = {
   db: PropTypes.string,
+  t: PropTypes.func,
   periodId: PropTypes.number,
   accountId: PropTypes.number,
   format: PropTypes.string

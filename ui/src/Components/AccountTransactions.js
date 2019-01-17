@@ -31,6 +31,7 @@ class AccountTransactions extends Component {
 }
 
 AccountTransactions.propTypes = {
+  match: PropTypes.object,
   store: PropTypes.instanceOf(Store)
 };
 
