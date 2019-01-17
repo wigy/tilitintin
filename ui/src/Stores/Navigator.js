@@ -110,6 +110,12 @@ class Navigator {
   }
   handleTransactionTableArrowDown({index, column, row}) {
     if (index !== null && this.store.filteredTransactions[index].open) {
+      if (row === this.store.filteredTransactions[index].entries.length - 1) {
+        const ret = this.cursor.indexUpdate(index, this.store.filteredTransactions.length, +1);
+        ret.column = null;
+        ret.row = null;
+        return ret;
+      }
       const ret = this.cursor.boxUpdate(column, row, 4, this.store.filteredTransactions[index].entries.length, 0, +1, 1);
       return ret;
     }
