@@ -90,6 +90,15 @@ class Cursor {
   }
 
   /**
+   * Move directly to the given (column, row) location.
+   */
+  @action.bound
+  selectCell(column, row) {
+    this.column = column;
+    this.row = row;
+  }
+
+  /**
    * Helper to change index counter and wrap it around boundaries.
    * @param {Number} index
    * @param {Number} N

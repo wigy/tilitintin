@@ -60,6 +60,12 @@ class Transaction extends Component {
       this.props.tx.open = !this.props.tx.open;
     };
 
+    // Handle editing, when clicked.
+    const onClickDetail = (column, row) => {
+      this.props.cursor.selectCell(column, row);
+    };
+
+    // Set up variables needed.
     const {selectedColumn, selectedRow} = this.props;
     const classes = 'Transaction' +
       (this.props.selected ? ' selected' : '') +
@@ -67,6 +73,7 @@ class Transaction extends Component {
       (error ? ' error' : '') +
       (this.props.duplicate ? ' duplicate' : '');
 
+    // Render main transaction.
     let ret = [
       <tr id={'Transaction' + this.props.tx.id} key="title" className={classes} onClick={onClick}>
         <td className="number">{this.props.tx.number}</td>
@@ -85,33 +92,33 @@ class Transaction extends Component {
       </tr>
     ];
 
-    // Render entries.
-    this.props.tx.entries.forEach((entry, idx) => {
-      const isSelected = (type) => this.props.selected && selectedColumn === type && idx === selectedRow;
-      const current = this.props.tx.account_id === entry.account_id;
-      const classes = 'alt TransactionEntry' +
-        (this.props.tx.open ? ' open' : '') +
-        (this.props.duplicate ? ' duplicate' : '');
+    // Render entries, if opened.
+    if (this.props.tx.open) {
+      this.props.tx.entries.forEach((entry, idx) => {
+        const isSelected = (type) => this.props.selected && selectedColumn === type && idx === selectedRow;
+        const current = this.props.tx.account_id === entry.account_id;
+        const classes = 'TransactionEntry alt open' +
+          (this.props.duplicate ? ' duplicate' : '');
 
-      // TODO: Onclick should actually activate editing for the clicked target.
-      ret.push(
-        <tr key={idx} className={classes} onClick={onClick}>
-          <td className="account" colSpan={3}>
-            <TransactionDetails error={!entry.account_id} selected={isSelected('account')} current={current} type="account" tx={this.props.tx} entry={entry}/>
-          </td>
-          <td className="description">
-            <TransactionDetails selected={isSelected('description')} current={current} type="description" tx={this.props.tx} entry={entry}/>
-          </td>
-          <td className="debit">
-            <TransactionDetails selected={isSelected('debit')} current={current} type="debit" tx={this.props.tx} entry={entry}/>
-          </td>
-          <td className="credit">
-            <TransactionDetails selected={isSelected('credit')} current={current} type="credit" tx={this.props.tx} entry={entry}/>
-          </td>
-          <td className="empty">
-          </td>
-        </tr>);
-    });
+        ret.push(
+          <tr key={idx} className={classes}>
+            <td className="account" colSpan={3} onClick={() => onClickDetail(0, idx)}>
+              <TransactionDetails error={!entry.account_id} selected={isSelected('account')} current={current} type="account" tx={this.props.tx} entry={entry}/>
+            </td>
+            <td className="description" onClick={() => onClickDetail(1, idx)}>
+              <TransactionDetails selected={isSelected('description')} current={current} type="description" tx={this.props.tx} entry={entry} onClick={() => onClickDetail()}/>
+            </td>
+            <td className="debit" onClick={() => onClickDetail(2, idx)}>
+              <TransactionDetails selected={isSelected('debit')} current={current} type="debit" tx={this.props.tx} entry={entry} onClick={() => onClickDetail()}/>
+            </td>
+            <td className="credit" onClick={() => onClickDetail(3, idx)}>
+              <TransactionDetails selected={isSelected('credit')} current={current} type="credit" tx={this.props.tx} entry={entry} onClick={() => onClickDetail()}/>
+            </td>
+            <td className="empty">
+            </td>
+          </tr>);
+      });
+    }
 
     // Render delete dialog in the dummy row.
     if (this.entryToDelete) {
