@@ -71,14 +71,13 @@ import config from '../Configuration';
  *        id: 158,             // Same as document_id.
  *        account_id: 123,
  *        document_id:158,
+ *        number: 5,           // Document number.
  *        entry_id:123,        // ID of the entry this main entry describes.
  *        debit:1,
  *        amount:120000,
  *        description: "Text description",
  *        row_number: 1,
  *        flags: 0,
- *        number: 5,           // Account number.
- *        name: 'My Account',  // Account name.
  *        period_id: 1,
  *        date: "2017-07-31T21:00:00.000Z",
  *        entries: [
@@ -86,6 +85,8 @@ import config from '../Configuration';
  *            // All entries that are linked to the same document_id are in the same format as above transaction.
  *            // One of the entries is the transaction itself. Entries has their `id` instead of `entry_id`.
  *            // In addition:
+ *            number: 1234,           // Account number.
+ *            name: 'My Account',  // Account name.
  *            askDelete: true, // Set if delete key was pressed on this entry
  *          }
  *        ],

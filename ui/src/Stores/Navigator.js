@@ -1,4 +1,5 @@
 import { action } from 'mobx';
+import moment from 'moment';
 
 const KEY_DEBUG = false;
 
@@ -184,12 +185,11 @@ class Navigator {
         flags: 0, // TODO: What is this?
 
         description: 'Hoo',
-        date: '2018-01-01Z21:00:00', // TODO: Fix date.
+        date: moment().format('YYYY-MM-DD'),
         tags: [],
         entries: [entry],
         account_id: account.id,
-        number: account.number,
-        name: account.name,
+        number: null,
         open: true
 
       };
