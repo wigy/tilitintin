@@ -93,6 +93,11 @@ class TransactionDetails extends Component {
         return Promise.resolve();
       }
 
+      // Check that new entry has an account. If not, move cursor there.
+      if (!this.props.entry.account_id && !data.account_id) {
+        this.props.cursor.column = 0;
+      }
+
       return this.props.store.saveEntry(this.props.entry, data)
         .then((res) => {
           this.props.cursor.editor = null;

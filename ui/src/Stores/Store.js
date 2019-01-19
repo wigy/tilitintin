@@ -548,9 +548,11 @@ class Store {
             entry.id = res.id;
           }
           Object.assign(entry, data);
-          // Fix account number and name if missing or changed.
-          entry.number = this.accountsById[entry.account_id].number;
-          entry.name = this.accountsById[entry.account_id].name;
+          // Fix account number and name if missing or changed and we have account.
+          if (entry.account_id) {
+            entry.number = this.accountsById[entry.account_id].number;
+            entry.name = this.accountsById[entry.account_id].name;
+          }
           // Fix data for copies of entries in transactions-table.
           this.transactions.forEach((tx, idx) => {
             if (entry.id === tx.entry_id) {
