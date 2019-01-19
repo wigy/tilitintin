@@ -13,7 +13,7 @@ NEXT FEATURES
 [ ] Page up/page down.
 [X] Reports.
 [X] Enter expressions like 23.23 - 1.22
-[ ] Enter simple space to fulfill transaction imbalance (show in gray if space pressed).
+[X] Enter simple space to fulfill transaction imbalance (show in gray if space pressed).
 [ ] Filtering tool for account list: Assets, Income, Expense, Other
 [X] Report: Päiväkirja
 [X] Report: Pääkirja
