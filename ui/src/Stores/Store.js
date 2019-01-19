@@ -85,7 +85,7 @@ import config from '../Configuration';
  *            // All entries that are linked to the same document_id are in the same format as above transaction.
  *            // One of the entries is the transaction itself. Entries has their `id` instead of `entry_id`.
  *            // In addition:
- *            number: 1234,           // Account number.
+ *            number: 1234,        // Account number.
  *            name: 'My Account',  // Account name.
  *            askDelete: true, // Set if delete key was pressed on this entry
  *          }
