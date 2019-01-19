@@ -8,6 +8,7 @@ import TextEdit from './TextEdit';
 import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
 import { sprintf } from 'sprintf-js';
+// import safeEval from 'safer-eval';
 
 import './TransactionDetails.css';
 
@@ -15,7 +16,9 @@ import './TransactionDetails.css';
 const str2num = (str) => {
   str = str.replace(',', '.').replace(/ /g, '');
   try {
-    return parseFloat(str);
+    //  TODO: This crashes for some reason: safeEval(str, {navigator: window.navigator});
+    /* eslint no-eval: off */
+    return eval(str);
   } catch (err) {
     return NaN;
   }
