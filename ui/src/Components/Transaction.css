@@ -6,6 +6,10 @@
   display: table-row;
 }
 
+.TransactionEntry.open td {
+  background-color: white;
+}
+
 .TransactionEntry.error, .Transaction.error, .Transaction.open.error .credit .summary, .Transaction.open.error .debit .summary {
   color: red;
   font-weight: inherit;
