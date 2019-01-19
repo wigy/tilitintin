@@ -142,6 +142,7 @@ class TransactionDetails extends Component {
       return (<TextEdit
         value={edit}
         validate={validate}
+        proposal={this.props.proposal}
         onComplete={value => onComplete(value)}
         onCancel={() => onCancel()}
       />);
@@ -161,6 +162,7 @@ class TransactionDetails extends Component {
 TransactionDetails.propTypes = {
   entry: PropTypes.object,
   type: PropTypes.string,
+  proposal: PropTypes.string,
   tx: PropTypes.object,
   current: PropTypes.bool,
   selected: PropTypes.bool,

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import { action } from 'mobx';
 import { translate, Trans } from 'react-i18next';
+import { sprintf } from 'sprintf-js';
 import Dialog from './Dialog';
 import Money from './Money';
 import YYYYMMDD from './YYYYMMDD';
@@ -100,6 +101,16 @@ class Transaction extends Component {
         const classes = 'TransactionEntry alt open' +
           (this.props.duplicate ? ' duplicate' : '');
 
+        // Calculate correction to fix total assuming that this entry is the one changed.
+        let diff = debit - credit;
+        if (entry.debit) {
+          diff -= entry.amount;
+        } else {
+          diff += entry.amount;
+        }
+        const proposalDebit = diff < 0 ? sprintf('%.2f', -diff / 100) + '' : null;
+        const proposalCredit = diff > 0 ? sprintf('%.2f', diff / 100) + '' : null;
+
         ret.push(
           <tr key={idx} className={classes}>
             <td className="account" colSpan={3} onClick={() => onClickDetail(0, idx)}>
@@ -109,10 +120,10 @@ class Transaction extends Component {
               <TransactionDetails selected={isSelected('description')} current={current} type="description" tx={this.props.tx} entry={entry} onClick={() => onClickDetail()}/>
             </td>
             <td className="debit" onClick={() => onClickDetail(2, idx)}>
-              <TransactionDetails selected={isSelected('debit')} current={current} type="debit" tx={this.props.tx} entry={entry} onClick={() => onClickDetail()}/>
+              <TransactionDetails selected={isSelected('debit')} current={current} type="debit" tx={this.props.tx} entry={entry} onClick={() => onClickDetail()} proposal={proposalDebit}/>
             </td>
             <td className="credit" onClick={() => onClickDetail(3, idx)}>
-              <TransactionDetails selected={isSelected('credit')} current={current} type="credit" tx={this.props.tx} entry={entry} onClick={() => onClickDetail()}/>
+              <TransactionDetails selected={isSelected('credit')} current={current} type="credit" tx={this.props.tx} entry={entry} onClick={() => onClickDetail()} proposal={proposalCredit}/>
             </td>
             <td className="empty">
             </td>

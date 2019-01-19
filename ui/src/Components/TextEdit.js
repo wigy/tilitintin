@@ -10,6 +10,7 @@ class TextEdit extends Component {
     super(props);
     this.state = {
       value: props.value,
+      proposal: 19.2,
       error: null
     };
   }
@@ -21,11 +22,12 @@ class TextEdit extends Component {
 
   onKeyPress(key) {
     if (key === 'Enter') {
-      const error = this.props.validate && this.props.validate(this.state.value);
+      const value = this.state.proposal !== null ? this.state.proposal : this.state.value;
+      const error = this.props.validate && this.props.validate(value);
       if (error) {
         this.setState({error});
       } else {
-        const complete = this.props.onComplete(this.state.value);
+        const complete = this.props.onComplete(value);
         if (complete.catch) {
           complete.catch(err => {
             console.error(err);
@@ -44,6 +46,11 @@ class TextEdit extends Component {
     }
   }
 
+  onChange(event) {
+    const proposal = event.target.value === ' ' && this.props.proposal ? this.props.proposal + '' : null;
+    this.setState({value: event.target.value, proposal, error: null});
+  }
+
   render() {
     return (
       <div className="TextEdit">
@@ -51,10 +58,11 @@ class TextEdit extends Component {
         <input
           value={this.state.value}
           ref={(input) => { this.inputRef = input; }}
-          onChange={event => this.setState({value: event.target.value, error: null})}
+          onChange={event => this.onChange(event)}
           onKeyPress={event => this.onKeyPress(event.key)}
           onKeyUp={event => this.onKeyUp(event.key)}
         />
+        <div className="proposal">{this.state.proposal}</div>
       </div>);
   }
 }
@@ -64,7 +72,8 @@ TextEdit.propTypes = {
   onCancel: PropTypes.func,
   onComplete: PropTypes.func,
   validate: PropTypes.func,
-  value: PropTypes.any
+  value: PropTypes.any,
+  proposal: PropTypes.string
 };
 
 export default TextEdit;
