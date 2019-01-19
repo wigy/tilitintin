@@ -10,7 +10,7 @@ class TextEdit extends Component {
     super(props);
     this.state = {
       value: props.value,
-      proposal: 19.2,
+      proposal: props.proposal,
       error: null
     };
   }

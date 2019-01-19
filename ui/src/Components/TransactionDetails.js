@@ -37,11 +37,11 @@ class TransactionDetails extends Component {
 
     switch (this.props.type) {
       case 'debit':
-        text = this.props.entry.debit ? (<Money cents={this.props.entry.amount} currency="EUR" />) : <span className="filler">-</span>;
+        text = this.props.entry.debit && this.props.entry.amount !== '' ? (<Money cents={this.props.entry.amount} currency="EUR" />) : <span className="filler">-</span>;
         edit = this.props.entry.debit ? sprintf('%.2f', this.props.entry.amount / 100) : '';
         break;
       case 'credit':
-        text = !this.props.entry.debit ? (<Money cents={this.props.entry.amount} currency="EUR" />) : <span className="filler">-</span>;
+        text = !this.props.entry.debit && this.props.entry.amount !== '' ? (<Money cents={this.props.entry.amount} currency="EUR" />) : <span className="filler">-</span>;
         edit = !this.props.entry.debit ? sprintf('%.2f', this.props.entry.amount / 100) : '';
         break;
       case 'account':
@@ -135,7 +135,7 @@ class TransactionDetails extends Component {
       }
     };
 
-    // TODO: Must prevent editing of the entry's account number, when it is the same as transaction's.
+    // TODO: Must handle editing of the entry's account number, when it is the same as transaction's.
 
     // Show editor instead, if it is turned on.
     if (this.props.selected && this.props.cursor.editor) {

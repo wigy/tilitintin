@@ -2,7 +2,7 @@ IMPROVEMENTS
 ============
 
 [X] Use decorators.
-[ ] Add more classes to store actual data in Store.
+[ ] Add more model classes for storing actual data in Store.
 
 NEXT FEATURES
 =============
@@ -30,6 +30,9 @@ NEXT FEATURES
 FUTURE FEATURES
 ===============
 
+[ ] Editing tags (handle also entering tags manually).
+[ ] Proposals for accounts, when typing partial name of it.
+[ ] Create database.
 [ ] Create new period.
 [ ] VAT handling.
 

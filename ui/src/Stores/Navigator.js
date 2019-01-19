@@ -158,8 +158,23 @@ class Navigator {
   handleTransactionTableInsert({index, row}) {
     // const account = this.store.account;
     if (row === null) {
-      console.log('TODO: Adding new transactions.');
-      // TODO: Insert transaction tied to current account, open it and select first row & column.
+      const entry = {
+        id: null,
+
+        document_id: null,
+        debit: 1,
+        amount: '',
+        row_number: 1,
+        flags: 0, // TODO: What is this?
+
+        description: 'Hoo',
+        tags: [],
+
+        account_id: 0,
+        number: '',
+        name: null
+      };
+      console.log(entry);
     } else {
       const sample = this.store.transactions[index].entries[row];
       const entry = {
