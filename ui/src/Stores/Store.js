@@ -71,7 +71,6 @@ import config from '../Configuration';
  *        id: 158,             // Same as document_id.
  *        account_id: 123,
  *        document_id:158,
- *        account_id:886,
  *        entry_id:123,        // ID of the entry this main entry describes.
  *        debit:1,
  *        amount:120000,

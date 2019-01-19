@@ -156,8 +156,8 @@ class Navigator {
     return this.handleEscape();
   }
   handleTransactionTableInsert({index, row}) {
-    // const account = this.store.account;
     if (row === null) {
+      const account = this.store.account;
       const entry = {
         id: null,
 
@@ -170,11 +170,32 @@ class Navigator {
         description: 'Hoo',
         tags: [],
 
-        account_id: 0,
-        number: '',
-        name: null
+        account_id: account.id,
+        number: account.number,
+        name: account.name
       };
-      console.log(entry);
+      const tx = {
+        id: null,
+
+        document_id: null,
+        debit: 1,
+        amount: 0,
+        row_number: 1,
+        flags: 0, // TODO: What is this?
+
+        description: 'Hoo',
+        date: '2018-01-01Z21:00:00', // TODO: Fix date.
+        tags: [],
+        entries: [entry],
+        account_id: account.id,
+        number: account.number,
+        name: account.name,
+        open: true
+
+      };
+      this.store.transactions.push(tx);
+      this.cursor.selectIndex('TransactionTable', this.store.transactions.length - 1);
+      this.cursor.selectCell(1, 0);
     } else {
       const sample = this.store.transactions[index].entries[row];
       const entry = {
@@ -182,7 +203,7 @@ class Navigator {
 
         document_id: sample.document_id,
         debit: 1,
-        amount: '',
+        amount: 0,
         row_number: this.store.transactions[index].entries.reduce((prev, cur) => Math.max(prev, cur.row_number), 0) + 1,
         flags: 0, // TODO: What is this?
 
