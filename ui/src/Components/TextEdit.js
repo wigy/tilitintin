@@ -22,7 +22,7 @@ class TextEdit extends Component {
 
   onKeyPress(key) {
     if (key === 'Enter') {
-      const value = this.state.proposal !== null ? this.state.proposal : this.state.value;
+      const value = this.state.proposal !== null && this.state.proposal !== undefined ? this.state.proposal : this.state.value;
       const error = this.props.validate && this.props.validate(value);
       if (error) {
         this.setState({error});
