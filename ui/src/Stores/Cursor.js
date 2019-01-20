@@ -99,6 +99,14 @@ class Cursor {
   }
 
   /**
+   * Turn editor on.
+   * @param {Boolean} state
+   */
+  selectEditing(state = true) {
+    this.editor = state;
+  }
+
+  /**
    * Helper to change index counter and wrap it around boundaries.
    * @param {Number} index
    * @param {Number} N

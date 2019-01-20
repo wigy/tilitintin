@@ -195,7 +195,7 @@ class Navigator {
       };
       this.store.transactions.push(tx);
       this.cursor.selectIndex('TransactionTable', this.store.transactions.length - 1);
-      this.cursor.selectCell(1, 0);
+      this.cursor.selectEditing();
     } else {
       const sample = this.store.transactions[index].entries[row];
       const entry = {
