@@ -517,8 +517,9 @@ class Store {
    * Change entry content.
    * @param {Object} entry
    * @param {Object} data
+   * @param {Object} tx
    */
-  async saveEntry(entry, data) {
+  async saveEntry(entry, data, tx) {
     const path = '/db/' + this.db + '/entry/' + (entry.id || '');
 
     // Compile fields to DB format.
@@ -540,6 +541,25 @@ class Store {
     delete write.name;
     delete write.number;
     delete write.tags;
+
+    // Create new document if this has no document ID yet.
+    if (!entry.document_id && !write.document_id) {
+      const path = '/db/' + this.db + '/document/';
+      const doc = {
+        period_id: this.periodId,
+        date: tx.date
+      };
+
+      await this.request(path, 'POST', doc)
+        .then((res) => {
+          runInAction(() => {
+            Object.assign(tx, res);
+            tx.document_id = res.id;
+            tx.description = write.description;
+            write.document_id = res.id;
+          });
+        });
+    }
 
     return this.request(path, entry.id ? 'PATCH' : 'POST', write)
       .then((res) => {

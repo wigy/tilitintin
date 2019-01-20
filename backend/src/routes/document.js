@@ -17,4 +17,10 @@ router.get('/:id', (req, res) => {
     });
 });
 
+router.post('/', async (req, res) => {
+  const number = await data.getNextDocument(req.db, req.body.period_id);
+  return data.createOne(req.db, 'document', {...req.body, number})
+    .then((data) => res.send(data));
+});
+
 module.exports = router;

@@ -98,7 +98,7 @@ class TransactionDetails extends Component {
         this.props.cursor.column = 0;
       }
 
-      return this.props.store.saveEntry(this.props.entry, data)
+      return this.props.store.saveEntry(this.props.entry, data, this.props.tx)
         .then((res) => {
           this.props.cursor.editor = null;
         });

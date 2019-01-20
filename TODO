@@ -26,12 +26,13 @@ NEXT FEATURES
 [ ] Support for tag parameter for reports to provide different columns per tag (skip 2nd period).
 [X] Localize CSV export.
 [ ] Handle smoothly editing of the entry's account number of the account currently listed.
+[ ] Localize date on UI.
 
 FUTURE FEATURES
 ===============
 
-[ ] Editing tags (handle also entering tags manually).
-[ ] Editing dates.
+[ ] Editing tags (maybe add them to text editor).
+[ ] Editing dates (just start typing when the top line is selected, and date turns editor).
 [ ] Proposals for accounts, when typing partial name of it.
 [ ] Create database.
 [ ] Create new period.

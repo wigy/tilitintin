@@ -314,7 +314,7 @@ function getPeriodBalances(db, periodId) {
  * @param {Number} accountId
  */
 function getAccountTransactions(db, periodId, accountId) {
-  return knex.db(db).select('*', 'entry.id AS entry_id', knex.db(db).raw('entry.amount * 100 as amount')).from('entry')
+  return knex.db(db).select('*', 'entry.id AS entry_id', knex.db(db).raw('entry.amount * 100 AS amount')).from('entry')
     .leftJoin('document', 'document.id', 'entry.document_id')
     .where({'document.period_id': periodId})
     .where({'entry.account_id': accountId})
@@ -439,6 +439,23 @@ function getSettings(db) {
   return knex.db(db).select('*').from('settings').first();
 }
 
+/**
+ * Find the next free document number.
+ * @param {String} db
+ * @param {Number} periodId
+ */
+function getNextDocument(db, periodId) {
+  return knex.db(db)
+    .select(knex.db(db).raw('MAX(number) AS number'))
+    .from('document')
+    .where({period_id: periodId})
+    .pluck('number')
+    .first()
+    .then((res) => {
+      return res.number ? res.number + 1 : 1;
+    });
+}
+
 module.exports = {
   fillEntries: fillEntries,
   listAll: listAll,
@@ -455,5 +472,6 @@ module.exports = {
   getAccountTransactions: getAccountTransactions,
   getAccountTransactionsWithEntries: getAccountTransactionsWithEntries,
   getAccountTransactionsByNumber: getAccountTransactionsByNumber,
-  getSettings: getSettings
+  getSettings: getSettings,
+  getNextDocument: getNextDocument
 };

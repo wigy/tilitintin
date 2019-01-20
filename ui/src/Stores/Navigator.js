@@ -168,7 +168,7 @@ class Navigator {
         row_number: 1,
         flags: 0, // TODO: What is this?
 
-        description: 'Hoo',
+        description: '',
         tags: [],
 
         account_id: account.id,
@@ -184,8 +184,8 @@ class Navigator {
         row_number: 1,
         flags: 0, // TODO: What is this?
 
-        description: 'Hoo',
-        date: moment().format('YYYY-MM-DD'),
+        description: '',
+        date: moment().format('YYYY-MM-DD'), // TODO: Store the latest date added and use it.
         tags: [],
         entries: [entry],
         account_id: account.id,
