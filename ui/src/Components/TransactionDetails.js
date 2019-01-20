@@ -8,6 +8,8 @@ import TextEdit from './TextEdit';
 import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
 import { sprintf } from 'sprintf-js';
+import moment from 'moment';
+
 // import safeEval from 'safer-eval';
 
 import './TransactionDetails.css';
@@ -54,8 +56,13 @@ class TransactionDetails extends Component {
         text = this.props.entry.description;
         edit = text;
         break;
+      case 'date':
+        // TODO: Local awareness.
+        text = moment(this.props.tx.date).format('DD.MM.YYYY');
+        edit = text;
+        break;
       default:
-        text = '';
+        text = 'TODO';
         edit = '';
     }
 

@@ -30,10 +30,10 @@ NEXT FEATURES
 [X] When clicked a row, update cursor selector.
 [X] Click should actually activate transaction detail target.
 [X] Allow cursor movement past the last opened entry in transaction list.
-[ ] Support for tag parameter for reports to provide different columns per tag (skip 2nd period).
 [X] Localize CSV export.
 [ ] Handle smoothly editing of the entry's account number of the account currently listed.
 [ ] Localize date on UI.
+[ ] Pressing enter in entry editor should move to next cell.
 [ ] Release v1.0
 
 FUTURE FEATURES
@@ -45,6 +45,7 @@ FUTURE FEATURES
 [ ] Create database.
 [ ] Create new period.
 [ ] VAT handling.
+[ ] Support for tag parameter for reports to provide different columns per tag (skip 2nd period).
 
 BUGS
 ====

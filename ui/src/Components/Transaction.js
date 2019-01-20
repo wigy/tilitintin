@@ -6,7 +6,6 @@ import { translate, Trans } from 'react-i18next';
 import { sprintf } from 'sprintf-js';
 import Dialog from './Dialog';
 import Money from './Money';
-import YYYYMMDD from './YYYYMMDD';
 import Tags from './Tags';
 import TransactionDetails from './TransactionDetails';
 import Store from '../Stores/Store';
@@ -78,7 +77,9 @@ class Transaction extends Component {
     let ret = [
       <tr id={'Transaction' + this.props.tx.id} key="title" className={classes} onClick={onClick}>
         <td className="number">{this.props.tx.number}</td>
-        <td className="date"><YYYYMMDD date={this.props.tx.date}/></td>
+        <td className="date">
+          <TransactionDetails selected={false} current={false} type="date" tx={this.props.tx} entry={null}/>
+        </td>
         <td className="tags" style={{width: (this.props.tx.tags.length) * 2.6 + 'ex'}}><Tags tags={this.props.tx.tags}/></td>
         <td className="description">
           <span className="summary">{this.props.tx.description}&nbsp;</span>

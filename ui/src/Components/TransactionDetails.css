@@ -1,5 +1,5 @@
 .TransactionDetails {
-  color: var(--fg-color-light);
+  color: var(--fg-color);
   white-space: nowrap;
 }
 
