@@ -3,6 +3,13 @@ IMPROVEMENTS
 
 [X] Use decorators.
 [ ] Add more model classes for storing actual data in Store.
+    [ ] New folder for models.
+    [ ] Base classes Model and NavigationTargetModel.
+    [ ] Model for Entry.
+    [ ] Model for Transaction.
+    [ ] Change editing so that model has a flags about editing state.
+    [ ] Model for Account.
+    [ ] Model for Balance.
 
 NEXT FEATURES
 =============
@@ -15,8 +22,8 @@ NEXT FEATURES
 [X] Enter expressions like 23.23 - 1.22
 [X] Enter simple space to fulfill transaction imbalance (show in gray if space pressed).
 [ ] Filtering tool for account list: Assets, Income, Expense, Other
-[X] Report: Päiväkirja
-[X] Report: Pääkirja
+[X] Report: Journal.
+[X] Report: Ledger.
 [X] Printing of report
 [X] Rename `column` as `tab` in report data.
 [X] Use some notation like ${2018-01-01} to specify dates and localize them everywhere.
@@ -27,6 +34,7 @@ NEXT FEATURES
 [X] Localize CSV export.
 [ ] Handle smoothly editing of the entry's account number of the account currently listed.
 [ ] Localize date on UI.
+[ ] Release v1.0
 
 FUTURE FEATURES
 ===============
