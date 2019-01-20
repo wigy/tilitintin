@@ -26,6 +26,22 @@ const str2num = (str) => {
   }
 };
 
+// Helper to convert string to date.
+const str2date = (str) => {
+  // TODO: Localization support.
+  if (/^\d{1,2}(\.\d{1,2})?(\.\d{2,4})?$/.test(str)) {
+    let [day, month, year] = str.split('.');
+    day = parseInt(day);
+    month = parseInt(month) || (new Date().getMonth() + 1);
+    year = parseInt(year) || new Date().getFullYear();
+    if (year < 100) {
+      year += 2000;
+    }
+    const date = moment(sprintf('%04d-%02d-%02d', year, month, day));
+    return date.isValid() ? date.format('YYYY-MM-DD') : undefined;
+  }
+};
+
 @translate('translations')
 @inject('store')
 @inject('cursor')
@@ -57,7 +73,7 @@ class TransactionDetails extends Component {
         edit = text;
         break;
       case 'date':
-        // TODO: Local awareness.
+        // TODO: Locale awareness.
         text = moment(this.props.tx.date).format('DD.MM.YYYY');
         edit = text;
         break;
@@ -92,6 +108,10 @@ class TransactionDetails extends Component {
           data.description = value;
           data.tags = Object.values(this.props.entry.tags);
           break;
+        case 'date':
+          // TODO: Saving the date.
+          console.log(str2date(value));
+          break;
         default:
       }
 
@@ -123,6 +143,7 @@ class TransactionDetails extends Component {
       const INVALID_ACCOUNT = <Trans>No such account found.</Trans>;
       const INVALID_NUMBER = <Trans>Numeric value incorrect.</Trans>;
       const NO_NEGATIVE = <Trans>Cannot be negative.</Trans>;
+      const INVALID_DATE = <Trans>Date is incorrect.</Trans>;
 
       switch (this.props.type) {
         case 'account':
@@ -142,6 +163,8 @@ class TransactionDetails extends Component {
             return NO_NEGATIVE;
           }
           return null;
+        case 'date':
+          return str2date(value) ? null : INVALID_DATE;
         default:
           return 'TODO';
       }

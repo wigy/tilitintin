@@ -31,6 +31,7 @@ i18n.init({
         'Numeric value incorrect.': 'Virheellinen numeroarvo.',
         'Saving failed.': 'Tallennus epäonnistui.',
         'This field is required.': 'Tämä kenttä ei voi olla tyhjä.',
+        'Date is incorrect.': 'Virheellinen päivämäärä.',
 
         'report-general-journal': 'Päiväkirja',
         'report-general-ledger': 'Pääkirja',

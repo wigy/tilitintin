@@ -224,6 +224,11 @@ class Navigator {
     }
   }
   handleTransactionTableText({index, row, editor}, key) {
+    // Date cell.
+    if (index !== null && row === null) {
+      return {editor: true};
+    }
+    // Other cells.
     if (index !== null && row !== null) {
       return {editor: true, dontPreventDefault: true};
     }
