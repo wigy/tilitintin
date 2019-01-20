@@ -46,6 +46,7 @@ FUTURE FEATURES
 [ ] Create new period.
 [ ] VAT handling.
 [ ] Support for tag parameter for reports to provide different columns per tag (skip 2nd period).
+[ ] Renumber documents in increasing order by date.
 
 BUGS
 ====

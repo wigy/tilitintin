@@ -520,7 +520,18 @@ class Store {
    * @param {Object} tx
    */
   async saveEntry(entry, data, tx) {
-    const path = '/db/' + this.db + '/entry/' + (entry.id || '');
+
+    // Update actually the document, if we have a `date` update.
+    if (data.date) {
+      return this.request('/db/' + this.db + '/document/' + tx.id, 'PATCH', {date: data.date})
+        .then((res) => {
+          runInAction(() => {
+            tx.date = data.date;
+            const sorted = this.transactions.slice().sort((a, b) => (a.date < b.date ? -1 : (a.date > b.date ? 1 : 0)));
+            this.transactions.replace(sorted);
+          });
+        });
+    }
 
     // Compile fields to DB format.
     let write = {};
@@ -544,13 +555,12 @@ class Store {
 
     // Create new document if this has no document ID yet.
     if (!entry.document_id && !write.document_id) {
-      const path = '/db/' + this.db + '/document/';
       const doc = {
         period_id: this.periodId,
         date: tx.date
       };
 
-      await this.request(path, 'POST', doc)
+      await this.request('/db/' + this.db + '/document/', 'POST', doc)
         .then((res) => {
           runInAction(() => {
             Object.assign(tx, res);
@@ -561,7 +571,7 @@ class Store {
         });
     }
 
-    return this.request(path, entry.id ? 'PATCH' : 'POST', write)
+    return this.request('/db/' + this.db + '/entry/' + (entry.id || ''), entry.id ? 'PATCH' : 'POST', write)
       .then((res) => {
         runInAction(() => {
           if (!entry.id) {

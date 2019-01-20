@@ -78,7 +78,12 @@ class Transaction extends Component {
       <tr id={'Transaction' + this.props.tx.id} key="title" className={classes} onClick={onClick}>
         <td className="number">{this.props.tx.number}</td>
         <td className="date">
-          <TransactionDetails selected={this.props.tx.open && selected && selectedRow === null} type="date" tx={this.props.tx} entry={null}/>
+          <TransactionDetails
+            selected={this.props.tx.open && selected && selectedRow === null}
+            type="date"
+            tx={this.props.tx}
+            entry={null}
+          />
         </td>
         <td className="tags" style={{width: (this.props.tx.tags.length) * 2.6 + 'ex'}}><Tags tags={this.props.tx.tags}/></td>
         <td className="description">

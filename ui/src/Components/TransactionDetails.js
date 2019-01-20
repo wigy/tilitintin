@@ -83,7 +83,7 @@ class TransactionDetails extends Component {
     }
 
     // A function called after editing is finished.
-    const onComplete = (value) => {
+    const onComplete = async (value) => {
 
       let data = {};
 
@@ -109,8 +109,7 @@ class TransactionDetails extends Component {
           data.tags = Object.values(this.props.entry.tags);
           break;
         case 'date':
-          // TODO: Saving the date.
-          console.log(str2date(value));
+          data.date = str2date(value) + 'T12:00:00.000Z';
           break;
         default:
       }
@@ -121,7 +120,7 @@ class TransactionDetails extends Component {
       }
 
       // Check that new entry has an account. If not, move cursor there.
-      if (!this.props.entry.account_id && !data.account_id) {
+      if (this.props.entry && !this.props.entry.account_id && !data.account_id) {
         this.props.cursor.column = 0;
       }
 
