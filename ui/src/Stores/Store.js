@@ -512,6 +512,35 @@ class Store {
     this.periodId = null;
     this.changed = true;
   }
+  /**
+   * Change transaction content.
+   * @param {Object} tx
+   * @param {Object} data
+   */
+  async saveDocument(tx, data) {
+    let write = {
+      period_id: tx.period_id || this.periodId
+    };
+    if (data.date) {
+      write.date = data.date;
+    }
+
+    return this.request('/db/' + this.db + '/document/' + (tx.id ? tx.id : ''), tx.id ? 'PATCH' : 'POST', write)
+      .then((res) => {
+        runInAction(() => {
+          if (res) {
+            Object.assign(tx, res);
+          } else if (data.date) {
+            tx.date = data.date;
+          }
+          // TODO: This should be done but UI is not tracking correctly the sudden order change.
+          //       Maybe enable this once the proper class structure is established and cursor selection
+          //       is carried around in the model itself.
+          // const sorted = this.transactions.slice().sort((a, b) => (a.date < b.date ? -1 : (a.date > b.date ? 1 : 0)));
+          // this.transactions.replace(sorted);
+        });
+      });
+  }
 
   /**
    * Change entry content.
@@ -520,18 +549,6 @@ class Store {
    * @param {Object} tx
    */
   async saveEntry(entry, data, tx) {
-
-    // Update actually the document, if we have a `date` update.
-    if (data.date) {
-      return this.request('/db/' + this.db + '/document/' + tx.id, 'PATCH', {date: data.date})
-        .then((res) => {
-          runInAction(() => {
-            tx.date = data.date;
-            const sorted = this.transactions.slice().sort((a, b) => (a.date < b.date ? -1 : (a.date > b.date ? 1 : 0)));
-            this.transactions.replace(sorted);
-          });
-        });
-    }
 
     // Compile fields to DB format.
     let write = {};
@@ -553,29 +570,12 @@ class Store {
     delete write.number;
     delete write.tags;
 
-    // Create new document if this has no document ID yet.
-    if (!entry.document_id && !write.document_id) {
-      const doc = {
-        period_id: this.periodId,
-        date: tx.date
-      };
-
-      await this.request('/db/' + this.db + '/document/', 'POST', doc)
-        .then((res) => {
-          runInAction(() => {
-            Object.assign(tx, res);
-            tx.document_id = res.id;
-            tx.description = write.description;
-            write.document_id = res.id;
-          });
-        });
-    }
-
     return this.request('/db/' + this.db + '/entry/' + (entry.id || ''), entry.id ? 'PATCH' : 'POST', write)
       .then((res) => {
         runInAction(() => {
           if (!entry.id) {
             entry.id = res.id;
+            tx.entry_id = res.id;
           }
           Object.assign(entry, data);
           // Fix account number and name if missing or changed and we have account.

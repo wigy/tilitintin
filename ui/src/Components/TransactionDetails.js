@@ -29,7 +29,7 @@ const str2num = (str) => {
 // Helper to convert string to date.
 const str2date = (str) => {
   // TODO: Localization support.
-  if (/^\d{1,2}(\.\d{1,2})?(\.\d{2,4})?$/.test(str)) {
+  if (/^\d{1,2}(\.\d{1,2})?(\.\d{2,4})?\.?$/.test(str)) {
     let [day, month, year] = str.split('.');
     day = parseInt(day);
     month = parseInt(month) || (new Date().getMonth() + 1);
@@ -109,7 +109,7 @@ class TransactionDetails extends Component {
           data.tags = Object.values(this.props.entry.tags);
           break;
         case 'date':
-          data.date = str2date(value) + 'T12:00:00.000Z';
+          data.date = str2date(value);
           break;
         default:
       }
@@ -119,14 +119,20 @@ class TransactionDetails extends Component {
         return Promise.resolve();
       }
 
-      // Check that new entry has an account. If not, move cursor there.
-      if (this.props.entry && !this.props.entry.account_id && !data.account_id) {
-        this.props.cursor.column = 0;
+      // Update or create transaction first.
+      if (data.date || !this.props.entry.document_id) {
+        await this.props.store.saveDocument(this.props.tx, data);
+        if (this.props.entry) {
+          this.props.entry.document_id = this.props.tx.id;
+        } else {
+          this.props.cursor.selectCell(1, 0);
+          return Promise.resolve();
+        }
       }
 
       return this.props.store.saveEntry(this.props.entry, data, this.props.tx)
         .then((res) => {
-          this.props.cursor.editor = null;
+          this.props.cursor.selectEditing(false);
         });
     };
 

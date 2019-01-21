@@ -88,7 +88,7 @@ const transformer = {
  */
 function fillEntries (db, entries, className, joinClass) {
   return entries.map(e => {
-    dateFields[className].forEach(d => (e[d] = moment(e[d])));
+    dateFields[className].forEach(d => (e[d] = moment(e[d]).format('YYYY-MM-DD')));
     e.class = className;
     e.db = db;
     if (e.id) {
@@ -179,6 +179,11 @@ function updateOne(db, className, id, data) {
   if (!id) {
     return Promise.resolve(400);
   }
+  dateFields[className].forEach(d => {
+    if (d in data) {
+      data[d] = new Date(data[d]).getTime();
+    }
+  });
   return knex.db(db)(className).where({'id': id}).update(data)
     .then(() => 204)
     .catch((err) => {
@@ -210,9 +215,18 @@ function deleteOne(db, className, id) {
  * @return {Object}
  */
 function createOne(db, className, data) {
+  dateFields[className].forEach(d => {
+    if (d in data) {
+      data[d] = new Date(data[d]).getTime();
+    }
+  });
   return knex.db(db)(className).insert(data)
     .then((data) => {
-      return knex.db(db)(className).where({id: data[0]}).first();
+      return knex.db(db)(className).where({id: data[0]}).first()
+        .then((res) => {
+          dateFields[className].forEach(d => (res[d] = moment(res[d]).format('YYYY-MM-DD')));
+          return res;
+        });
     })
     .catch((err) => {
       dump.error(err);

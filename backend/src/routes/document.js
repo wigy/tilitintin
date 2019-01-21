@@ -24,8 +24,7 @@ router.post('/', async (req, res) => {
 });
 
 router.patch('/:id', (req, res) => {
-  const date = new Date(req.body.date).getTime();
-  return data.updateOne(req.db, 'document', req.params.id, {date})
+  return data.updateOne(req.db, 'document', req.params.id, req.body)
     .then((status) => res.sendStatus(status));
 });
 

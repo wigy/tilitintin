@@ -32,8 +32,9 @@ NEXT FEATURES
 [X] Allow cursor movement past the last opened entry in transaction list.
 [X] Localize CSV export.
 [ ] Handle smoothly editing of the entry's account number of the account currently listed.
-[ ] Localize date on UI.
+[X] Localize date on UI.
 [ ] Pressing enter in entry editor should move to next cell.
+[ ] Delete transaction.
 [ ] Release v1.0
 
 FUTURE FEATURES
