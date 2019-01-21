@@ -14,10 +14,10 @@ IMPROVEMENTS
 NEXT FEATURES
 =============
 
-[ ] Create new transaction.
+[X] Create new transaction.
 [X] Delete entry.
 [ ] Delete transaction.
-[ ] Page up/page down.
+[ ] Page up/down.
 [X] Reports.
 [X] Enter expressions like 23.23 - 1.22
 [X] Enter simple space to fulfill transaction imbalance (show in gray if space pressed).
@@ -61,5 +61,6 @@ BUGS
 [X] Databases and periods are not updated initially on Menu until key is pressed.
 [X] Print does not set correct layout.
 [ ] After entering new entry, debit and credit may not be correct on transaction table.
+[ ] After entering new entry, incorrect lines are bold until refresh.
 [ ] Balances not updated when adding new transactions.
 [ ] Balances not updated when editing old transaction entries.
