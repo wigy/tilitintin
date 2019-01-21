@@ -65,6 +65,21 @@ class Transaction extends Component {
       this.props.cursor.selectCell(column, row);
     };
 
+    // Handle finalizing editing of a cell.
+    const onComplete = (column, row) => {
+      column++;
+      if (column === 4) {
+        column = 0;
+        row++;
+        // Oops, we are on the last column of last row.
+        if (row >= this.props.tx.entries.length) {
+          column = 3;
+          row--;
+        }
+      }
+      this.props.cursor.selectCell(column, row);
+    };
+
     // Set up variables needed.
     const {selected, selectedColumn, selectedRow} = this.props;
     const classes = 'Transaction' +
@@ -120,16 +135,50 @@ class Transaction extends Component {
         ret.push(
           <tr key={idx} className={classes}>
             <td className="account" colSpan={3} onClick={() => onClickDetail(0, idx)}>
-              <TransactionDetails error={!entry.account_id} selected={isSelected('account')} current={current} type="account" tx={this.props.tx} entry={entry}/>
+              <TransactionDetails
+                error={!entry.account_id}
+                selected={isSelected('account')}
+                current={current}
+                type="account"
+                tx={this.props.tx}
+                entry={entry}
+                onComplete={() => onComplete(0, idx)}
+              />
             </td>
             <td className="description" onClick={() => onClickDetail(1, idx)}>
-              <TransactionDetails selected={isSelected('description')} current={current} type="description" tx={this.props.tx} entry={entry} onClick={() => onClickDetail()}/>
+              <TransactionDetails
+                selected={isSelected('description')}
+                current={current}
+                type="description"
+                tx={this.props.tx}
+                entry={entry}
+                onComplete={() => onComplete(1, idx)}
+                onClick={() => onClickDetail(1, idx)}
+              />
             </td>
             <td className="debit" onClick={() => onClickDetail(2, idx)}>
-              <TransactionDetails selected={isSelected('debit')} current={current} type="debit" tx={this.props.tx} entry={entry} onClick={() => onClickDetail()} proposal={proposalDebit}/>
+              <TransactionDetails
+                selected={isSelected('debit')}
+                current={current}
+                type="debit"
+                tx={this.props.tx}
+                entry={entry}
+                onClick={() => onClickDetail()}
+                onComplete={() => onComplete(2, idx)}
+                proposal={proposalDebit}
+              />
             </td>
             <td className="credit" onClick={() => onClickDetail(3, idx)}>
-              <TransactionDetails selected={isSelected('credit')} current={current} type="credit" tx={this.props.tx} entry={entry} onClick={() => onClickDetail()} proposal={proposalCredit}/>
+              <TransactionDetails
+                selected={isSelected('credit')}
+                current={current}
+                type="credit"
+                tx={this.props.tx}
+                entry={entry}
+                onClick={() => onClickDetail()}
+                onComplete={() => onComplete(3, idx)}
+                proposal={proposalCredit}
+              />
             </td>
             <td className="empty">
             </td>

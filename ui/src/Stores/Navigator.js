@@ -216,6 +216,8 @@ class Navigator {
       };
 
       this.store.transactions[index].entries.push(entry);
+      this.cursor.selectCell(0, this.store.transactions[index].entries.length - 1);
+      this.cursor.selectEditing();
     }
   }
   handleTransactionTableDelete({index, row}) {

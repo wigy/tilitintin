@@ -183,7 +183,9 @@ class TransactionDetails extends Component {
         value={edit}
         validate={validate}
         proposal={this.props.proposal}
-        onComplete={value => onComplete(value)}
+        onComplete={value => onComplete(value).then(() => {
+          this.props.onComplete && this.props.onComplete();
+        })}
         onCancel={() => onCancel()}
       />);
     }
@@ -207,6 +209,7 @@ TransactionDetails.propTypes = {
   current: PropTypes.bool,
   selected: PropTypes.bool,
   error: PropTypes.bool,
+  onComplete: PropTypes.func,
   store: PropTypes.instanceOf(Store),
   cursor: PropTypes.instanceOf(Cursor)
 };

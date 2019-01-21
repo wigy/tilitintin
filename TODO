@@ -21,7 +21,6 @@ NEXT FEATURES
 [X] Reports.
 [X] Enter expressions like 23.23 - 1.22
 [X] Enter simple space to fulfill transaction imbalance (show in gray if space pressed).
-[ ] Filtering tool for account list: Assets, Income, Expense, Other
 [X] Report: Journal.
 [X] Report: Ledger.
 [X] Printing of report
@@ -33,7 +32,7 @@ NEXT FEATURES
 [X] Localize CSV export.
 [ ] Handle smoothly editing of the entry's account number of the account currently listed.
 [X] Localize date on UI.
-[ ] Pressing enter in entry editor should move to next cell.
+[X] Pressing enter in entry editor should move to next cell.
 [ ] Delete transaction.
 [ ] Release v1.0
 
@@ -48,6 +47,7 @@ FUTURE FEATURES
 [ ] VAT handling.
 [ ] Support for tag parameter for reports to provide different columns per tag (skip 2nd period).
 [ ] Renumber documents in increasing order by date.
+[ ] Filtering tool for account list: Assets, Income, Expense, Other
 
 BUGS
 ====
@@ -60,3 +60,6 @@ BUGS
 [X] If you change period on reports page, you jump back to transaction list.
 [X] Databases and periods are not updated initially on Menu until key is pressed.
 [X] Print does not set correct layout.
+[ ] After entering new entry, debit and credit may not be correct on transaction table.
+[ ] Balances not updated when adding new transactions.
+[ ] Balances not updated when editing old transaction entries.

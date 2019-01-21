@@ -99,14 +99,6 @@ class Cursor {
   }
 
   /**
-   * Move to the next column and if in the last, to the first column of the next row.
-   */
-  @action.bound
-  selectNextCell() {
-    // TODO: Implement.
-  }
-
-  /**
    * Turn editor on.
    * @param {Boolean} state
    */
