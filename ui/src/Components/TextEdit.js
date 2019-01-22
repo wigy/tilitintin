@@ -19,8 +19,8 @@ class TextEdit extends Component {
     this.inputRef.select();
   }
 
-  onKeyPress(key) {
-    if (key === 'Enter') {
+  onKeyPress(event) {
+    if (event.key === 'Enter' || event.key === 'Tab') {
       const value = this.props.proposal !== null && this.props.proposal !== '' && this.props.proposal !== undefined ? this.props.proposal : this.state.value;
       const error = this.props.validate && this.props.validate(value);
       if (error) {
@@ -37,8 +37,16 @@ class TextEdit extends Component {
     }
   }
 
-  onKeyUp(key) {
-    if (key === 'Escape') {
+  onKeyDown(event) {
+    if (event.key === 'Tab') {
+      // Has to prevent here or otherwise it is too late and tab also executes normal action.
+      event.preventDefault();
+      this.onKeyPress(event);
+    }
+  }
+
+  onKeyUp(event) {
+    if (event.key === 'Escape') {
       if (this.props.onCancel) {
         this.props.onCancel();
       }
@@ -59,8 +67,9 @@ class TextEdit extends Component {
           value={this.state.value}
           ref={(input) => { this.inputRef = input; }}
           onChange={event => this.onChange(event)}
-          onKeyPress={event => this.onKeyPress(event.key)}
-          onKeyUp={event => this.onKeyUp(event.key)}
+          onKeyPress={event => this.onKeyPress(event)}
+          onKeyUp={event => this.onKeyUp(event)}
+          onKeyDown={event => this.onKeyDown(event)}
         />
         <div className="proposal">{this.props.proposal}</div>
       </div>);

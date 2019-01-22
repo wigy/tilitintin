@@ -149,6 +149,19 @@ class Navigator {
     }
     return {row: null, column: null};
   }
+  handleTransactionTableTab({index, column, row}) {
+    if (index !== null && row !== null) {
+      column++;
+      if (column >= 4) {
+        column = 0;
+        if (row >= this.store.filteredTransactions[index].entries.length - 1) {
+          this.handleTransactionTableInsert({index, row});
+        }
+        row++;
+      }
+      return {column, row};
+    }
+  }
   handleTransactionTableEscape({index}) {
     if (index !== null && this.store.filteredTransactions[index].open) {
       this.store.filteredTransactions[index].open = false;
