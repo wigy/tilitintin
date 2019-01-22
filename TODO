@@ -33,7 +33,7 @@ NEXT FEATURES
 [ ] Handle smoothly editing of the entry's account number of the account currently listed.
 [X] Localize date on UI.
 [X] Pressing enter in entry editor should move to next cell.
-[ ] Release v1.0
+[ ] Release v1.0 (add version number to the screen).
 
 FUTURE FEATURES
 ===============

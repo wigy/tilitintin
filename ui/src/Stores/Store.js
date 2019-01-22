@@ -627,6 +627,29 @@ class Store {
   }
 
   /**
+   * Find a text proposal from earlier entries.
+   * @param {Object} entry
+   * @param {String} value
+   */
+  descriptionProposal(entry, value) {
+    const texts = new Set();
+    this.transactions.forEach((tx, idx) => {
+      for (let i = 0; i < tx.entries.length; i++) {
+        if (tx.entries[i].account_id === entry.account_id && tx.entries[i].id !== entry.id) {
+          texts.add(tx.entries[i].description);
+        }
+      }
+    });
+    const candidates = [...texts].sort();
+    value = value.trim();
+    for (let i = 0; i < candidates.length; i++) {
+      if (candidates[i].startsWith(value)) {
+        return candidates[i];
+      }
+    }
+  }
+
+  /**
    * Computed property to collect only transactions matching the current filter.
    */
   @computed

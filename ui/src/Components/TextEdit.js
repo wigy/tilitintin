@@ -10,7 +10,6 @@ class TextEdit extends Component {
     super(props);
     this.state = {
       value: props.value || '',
-      proposal: props.proposal,
       error: null
     };
   }
@@ -22,7 +21,7 @@ class TextEdit extends Component {
 
   onKeyPress(key) {
     if (key === 'Enter') {
-      const value = this.state.proposal !== null && this.state.proposal !== undefined ? this.state.proposal : this.state.value;
+      const value = this.props.proposal !== null && this.props.proposal !== '' && this.props.proposal !== undefined ? this.props.proposal : this.state.value;
       const error = this.props.validate && this.props.validate(value);
       if (error) {
         this.setState({error});
@@ -47,8 +46,9 @@ class TextEdit extends Component {
   }
 
   onChange(event) {
-    const proposal = event.target.value === ' ' && this.props.proposal ? this.props.proposal + '' : null;
-    this.setState({value: event.target.value, proposal, error: null});
+    const value = event.target.value;
+    this.props.onChange && this.props.onChange(value);
+    this.setState({value, error: null});
   }
 
   render() {
@@ -62,7 +62,7 @@ class TextEdit extends Component {
           onKeyPress={event => this.onKeyPress(event.key)}
           onKeyUp={event => this.onKeyUp(event.key)}
         />
-        <div className="proposal">{this.state.proposal}</div>
+        <div className="proposal">{this.props.proposal}</div>
       </div>);
   }
 }
@@ -71,6 +71,7 @@ TextEdit.propTypes = {
   periodId: PropTypes.any,
   onCancel: PropTypes.func,
   onComplete: PropTypes.func,
+  onChange: PropTypes.func,
   validate: PropTypes.func,
   value: PropTypes.any,
   proposal: PropTypes.string

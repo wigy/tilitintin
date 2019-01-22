@@ -48,6 +48,11 @@ const str2date = (str) => {
 @observer
 class TransactionDetails extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {proposal: props.proposal};
+  }
+
   render() {
     let text;
     let edit;
@@ -141,6 +146,31 @@ class TransactionDetails extends Component {
       this.props.cursor.editor = null;
     };
 
+    // Value changed.
+    const onChange = (value) => {
+      let proposal = null;
+      switch (this.props.type) {
+        case 'account':
+          break;
+        case 'description':
+          if (value.endsWith(' ')) {
+            proposal = this.props.store.descriptionProposal(this.props.entry, value);
+          }
+          break;
+        case 'credit':
+        case 'debit':
+          if (value === ' ') {
+            proposal = this.props.proposal;
+          }
+          break;
+        case 'date':
+          break;
+        default:
+          return 'TODO';
+      }
+      this.setState({proposal});
+    };
+
     // Validator of the value.
     const validate = (value) => {
 
@@ -182,10 +212,11 @@ class TransactionDetails extends Component {
       return (<TextEdit
         value={edit}
         validate={validate}
-        proposal={this.props.proposal}
+        proposal={this.state.proposal}
         onComplete={value => onComplete(value).then(() => {
           this.props.onComplete && this.props.onComplete();
         })}
+        onChange={(value) => onChange(value)}
         onCancel={() => onCancel()}
       />);
     }
