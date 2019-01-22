@@ -575,7 +575,10 @@ class Store {
         runInAction(() => {
           if (!entry.id) {
             entry.id = res.id;
-            tx.entry_id = res.id;
+            // Update also tx, if it is freshly created.
+            if (!tx.entry_id) {
+              tx.entry_id = res.id;
+            }
           }
           Object.assign(entry, data);
           // Fix account number and name if missing or changed and we have account.

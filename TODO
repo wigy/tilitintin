@@ -33,7 +33,6 @@ NEXT FEATURES
 [ ] Handle smoothly editing of the entry's account number of the account currently listed.
 [X] Localize date on UI.
 [X] Pressing enter in entry editor should move to next cell.
-[ ] Delete transaction.
 [ ] Release v1.0
 
 FUTURE FEATURES
@@ -60,7 +59,7 @@ BUGS
 [X] If you change period on reports page, you jump back to transaction list.
 [X] Databases and periods are not updated initially on Menu until key is pressed.
 [X] Print does not set correct layout.
-[ ] After entering new entry, debit and credit may not be correct on transaction table.
-[ ] After entering new entry, incorrect lines are bold until refresh.
+[X] After entering new entry, debit and credit may not be correct on transaction table.
+[X] After entering new entry, incorrect lines are bold until refresh.
 [ ] Balances not updated when adding new transactions.
 [ ] Balances not updated when editing old transaction entries.
