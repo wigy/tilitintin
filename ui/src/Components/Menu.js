@@ -6,6 +6,7 @@ import { translate, Trans } from 'react-i18next';
 import { Navbar, Nav, NavDropdown, NavItem, MenuItem } from 'react-bootstrap';
 import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
+import Configuration from '../Configuration';
 import YYYYMMDD from './YYYYMMDD';
 import './Menu.css';
 
@@ -78,7 +79,7 @@ class Menu extends Component {
         <Navbar fluid>
           <Navbar.Header>
             <Navbar.Brand>
-              <a href="/" className="brand">Tilitintin</a>
+              <a href="/" className="brand">Tilitintin v{Configuration.VERSION}</a>
             </Navbar.Brand>
           </Navbar.Header>
 
