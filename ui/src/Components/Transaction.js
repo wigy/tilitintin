@@ -18,7 +18,7 @@ import './Transaction.css';
 @observer
 class Transaction extends Component {
 
-  // Store for entry and its index waiting for deletion confirmation.
+  // Store for entry waiting for deletion confirmation.
   entryToDelete = null;
 
   @action.bound

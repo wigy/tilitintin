@@ -27,6 +27,7 @@ i18n.init({
         'Cannot be negative.': 'Ei voi olla negatiivinen.',
         'Debit and credit do not match': 'Debet ja kredit ei täsmää',
         'Delete this transaction?': 'Poistetaanko tämä tapahtuma?',
+        'Delete these transactions?': 'Poistetaanko namä tapahtumat?',
         'No such account found.': 'Tiliä ei ole olemassa.',
         'Numeric value incorrect.': 'Virheellinen numeroarvo.',
         'Saving failed.': 'Tallennus epäonnistui.',

@@ -33,20 +33,24 @@ NEXT FEATURES
 [ ] Handle smoothly editing of the entry's account number of the account currently listed.
 [X] Localize date on UI.
 [X] Pressing enter in entry editor should move to next cell.
+[ ] Automatic line added if only one entry and enter pressed in the end.
+[ ] Automatic line added if imbalance and enter pressed in the end.
+[X] Editing dates (just start typing when the top line is selected, and date turns editor).
+[ ] Improve date proposal.
 [ ] Release v1.0 (add version number to the screen).
 
 FUTURE FEATURES
 ===============
 
 [ ] Editing tags (maybe add them to text editor).
-[ ] Editing dates (just start typing when the top line is selected, and date turns editor).
 [ ] Proposals for accounts, when typing partial name of it.
 [ ] Create database.
 [ ] Create new period.
 [ ] VAT handling.
 [ ] Support for tag parameter for reports to provide different columns per tag (skip 2nd period).
-[ ] Renumber documents in increasing order by date.
+[ ] Tools page: renumber documents in increasing order by date.
 [ ] Filtering tool for account list: Assets, Income, Expense, Other
+[ ] Proposals for account number.
 
 BUGS
 ====

@@ -223,6 +223,8 @@ class Navigator {
   handleTransactionTableDelete({index, row}) {
     if (row !== null) {
       this.store.transactions[index].entries[row].askDelete = true;
+    } else if (index !== null) {
+      this.store.transactions[index].askDelete = true;
     }
   }
   handleTransactionTableText({index, row, editor}, key) {
