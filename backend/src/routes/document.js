@@ -28,4 +28,11 @@ router.patch('/:id', (req, res) => {
     .then((status) => res.sendStatus(status));
 });
 
+router.delete('/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  return data.deleteMany(req.db, 'entry', {document_id: id})
+    .then(() => data.deleteOne(req.db, 'document', id))
+    .then((status) => res.sendStatus(status));
+});
+
 module.exports = router;

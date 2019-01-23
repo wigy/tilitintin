@@ -16,7 +16,7 @@ NEXT FEATURES
 
 [X] Create new transaction.
 [X] Delete entry.
-[ ] Delete transaction.
+[X] Delete transaction.
 [ ] Page up/down.
 [X] Reports.
 [X] Enter expressions like 23.23 - 1.22

@@ -35,12 +35,6 @@ npm start
 
 ## Features
 
-### Importing
-
-Various formats are supported for importing transactions from CSV-data files automatically.
-Modules can be found from `backend/src/lib/import/`. Read more about the process of importing
-in the file [base.js](./backend/src/lib/import/base.js).
-
 ### Tags
 
 In the transaction description one can add *tags* to categorize them. One or more tags can

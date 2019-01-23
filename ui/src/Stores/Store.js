@@ -605,7 +605,7 @@ class Store {
    * Remove an entry.
    * @param {Object} entry
    */
-  deleteEntry(entry) {
+  async deleteEntry(entry) {
     const path = '/db/' + this.db + '/entry/' + entry.id;
     return this.request(path, 'DELETE')
       .then(() => {
@@ -618,6 +618,21 @@ class Store {
               }
             }
           });
+        });
+      });
+  }
+
+  /**
+   * Remove a transaction and all of its entries from the system.
+   * @param {Object} tx
+   */
+  async deleteTransaction(tx) {
+    const path = '/db/' + this.db + '/document/' + tx.id;
+    return this.request(path, 'DELETE')
+      .then(() => {
+        runInAction(() => {
+          const remaining = this.transactions.filter((t) => t.id !== tx.id);
+          this.transactions.replace(remaining);
         });
       });
   }

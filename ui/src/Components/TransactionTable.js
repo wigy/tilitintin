@@ -18,6 +18,21 @@ class TransactionTable extends Component {
   // Store for transaction waiting for deletion confirmation.
   txToDelete = null;
 
+  /**
+   * Remove a transaction and all of its entries from the system.
+   * @param {Object} tx
+   */
+  deleteTransaction(tx) {
+    this.props.store.deleteTransaction(tx)
+      .then(() => {
+        let { index } = this.props.cursor;
+        if (index >= this.props.store.transactions.length) {
+          index = this.props.store.transactions.length ? index - 1 : null;
+          this.props.cursor.selectIndex('TransactionTable', index);
+        }
+      });
+  }
+
   render() {
 
     if (!this.props.store.transactions) {
@@ -28,7 +43,7 @@ class TransactionTable extends Component {
       title={<Trans>Delete these transactions?</Trans>}
       isVisible={tx.askDelete}
       onClose={() => { tx.askDelete = false; }}
-      onConfirm={() => this.deleteEntry()}>
+      onConfirm={() => this.deleteTransaction(tx)}>
       <i>#{tx.number}</i><br/>
       {tx.entries.map((entry, idx) =>
         <div key={idx}>

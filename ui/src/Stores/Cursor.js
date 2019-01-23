@@ -82,8 +82,10 @@ class Cursor {
    */
   @action.bound
   selectIndex(component, index) {
-    this.save();
-    this.component = component;
+    if (component !== this.component) {
+      this.save();
+      this.component = component;
+    }
     this.index = index;
     this.column = null;
     this.row = null;
