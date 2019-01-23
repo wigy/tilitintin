@@ -34,7 +34,7 @@ NEXT FEATURES
 [X] Localize date on UI.
 [X] Pressing enter in entry editor should move to next cell.
 [X] Editing dates (just start typing when the top line is selected, and date turns editor).
-[ ] Improve date proposal (save the latest, fill missing parts from that).
+[X] Improve date proposal (save the latest, fill missing parts from that).
 [X] Tab key to navigate in entries and creating new when past end.
 [ ] Release v1.0 (add version number to the screen).
 

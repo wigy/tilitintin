@@ -9,6 +9,7 @@ import config from '../Configuration';
  *   db: 'currentdb',
  *   periodId: 1,
  *   title: "Current Title",
+ *   lastDate: "2018-01-01", // Latest date entered by user.
  *   tags: {
  *     TagCode:
  *       id: 1,
@@ -132,6 +133,7 @@ class Store {
   @observable tools = { tagDisabled: {} };
   @observable reports = [];
   @observable report = null;
+  @observable lastDate = null;
 
   constructor() {
     this.pending = {};
@@ -451,7 +453,9 @@ class Store {
           this.transactions = account.transactions;
           this.title = account.number + ' ' + account.name;
           let tags = {};
+          let lastDate;
           this.transactions.forEach((tx) => {
+            lastDate = tx.date;
             const [txDesc, txTags] = desc2tags(tx.description);
             tx.description = txDesc;
             tx.tags = txTags;
@@ -463,6 +467,7 @@ class Store {
               entry.tags = entryTags;
             });
           });
+          this.lastDate = lastDate;
           this.account.tags = Object.keys(tags);
         });
         return account;

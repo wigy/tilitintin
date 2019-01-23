@@ -14,7 +14,7 @@ import moment from 'moment';
 
 import './TransactionDetails.css';
 
-// Helper to convert string value to number.
+// Helper to evaluate string expression value to number.
 const str2num = (str) => {
   str = str.replace(',', '.').replace(/ /g, '');
   try {
@@ -27,13 +27,14 @@ const str2num = (str) => {
 };
 
 // Helper to convert string to date.
-const str2date = (str) => {
+const str2date = (str, sample) => {
+  sample = sample ? new Date(sample) : new Date();
   // TODO: Localization support.
   if (/^\d{1,2}(\.\d{1,2})?(\.\d{2,4})?\.?$/.test(str)) {
     let [day, month, year] = str.split('.');
     day = parseInt(day);
-    month = parseInt(month) || (new Date().getMonth() + 1);
-    year = parseInt(year) || new Date().getFullYear();
+    month = parseInt(month) || (sample.getMonth() + 1);
+    year = parseInt(year) || sample.getFullYear();
     if (year < 100) {
       year += 2000;
     }
@@ -114,7 +115,8 @@ class TransactionDetails extends Component {
           data.tags = Object.values(this.props.entry.tags);
           break;
         case 'date':
-          data.date = str2date(value);
+          data.date = str2date(value, this.props.store.lastDate);
+          this.props.store.lastDate = data.date;
           break;
         default:
       }
@@ -199,7 +201,7 @@ class TransactionDetails extends Component {
           }
           return null;
         case 'date':
-          return str2date(value) ? null : INVALID_DATE;
+          return str2date(value, this.props.store.lastDate) ? null : INVALID_DATE;
         default:
           return 'TODO';
       }

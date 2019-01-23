@@ -198,7 +198,7 @@ class Navigator {
         flags: 0, // TODO: What is this?
 
         description: '',
-        date: moment().format('YYYY-MM-DD'), // TODO: Store the latest date added and use it.
+        date: this.store.lastDate || moment().format('YYYY-MM-DD'),
         tags: [],
         entries: [entry],
         account_id: account.id,
