@@ -1,4 +1,5 @@
 import { runInAction, computed, toJS, observable } from 'mobx';
+import clone from 'clone';
 import config from '../Configuration';
 
 /**
@@ -102,6 +103,14 @@ import config from '../Configuration';
  *     }
  *   },
  *   reports: [...], // Available report identifiers.
+ *   reportOptionsAvailable: { // Report options available per report identifier.
+ *    'general-ledger': {
+ *      compact: 'boolean'
+ *    }
+ *   },
+ *   reportOptions: { // Report options selected.
+ *     compact: true
+ *   },
  *   report: {
  *     format: 'income-statement',
  *     meta: {
@@ -132,6 +141,8 @@ class Store {
   @observable account = {};
   @observable tools = { tagDisabled: {} };
   @observable reports = [];
+  @observable reportOptionsAvailable = {};
+  @observable reportOptions = {};
   @observable report = null;
   @observable lastDate = null;
 
@@ -354,6 +365,8 @@ class Store {
       .then((reports) => {
         runInAction(() => {
           this.reports = Object.keys(reports.links);
+          this.reportOptionsAvailable = reports.options;
+          this.reportOptions = {};
           return this.reports;
         });
       });
@@ -363,15 +376,19 @@ class Store {
    * Get the list of report formats available for the current DB.
    */
   getReport(db, periodId, format) {
-    if (this.report && this.report.db === db && this.report.periodId === periodId && this.report.format === format) {
+    const options = Object.keys(this.reportOptions).map((key) => `${key}=${encodeURIComponent(JSON.stringify(this.reportOptions[key]))}`);
+    const url = '/db/' + db + '/report/' + format + '/' + periodId + (options.length ? '?' + options.join('&') : '');
+    if (this.report && this.report.url === url) {
       return;
     }
     this.setPeriod(db, periodId);
-    return this.request('/db/' + db + '/report/' + format + '/' + periodId)
+    return this.request(url)
       .then((report) => {
         runInAction(() => {
           report.db = db;
           report.periodId = periodId;
+          report.options = clone(this.reportOptions);
+          report.url = url;
           this.report = report;
           return this.report;
         });

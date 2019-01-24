@@ -4,8 +4,13 @@ import { inject, observer } from 'mobx-react';
 import { translate, I18n } from 'react-i18next';
 import Store from '../Stores/Store';
 import IconButton from './IconButton';
+import IconSpacer from './IconSpacer';
 import Configuration from '../Configuration';
 import './ToolPanel.css';
+
+const ICONS = {
+  'option-compact': 'fa-tasks'
+};
 
 @translate('translations')
 @inject('store')
@@ -33,11 +38,36 @@ class ToolPanel extends Component {
       hiddenElement.click();
     };
 
+    const onToggle = (option) => {
+      store.reportOptions[option] = !store.reportOptions[option];
+      store.getReport(store.db, store.periodId, store.report.format, store.reportOptions);
+    };
+
+    const options = Object.keys({...store.reportOptionsAvailable}[store.report.format] || {});
+
+    let buttons = [
+      <IconButton key="button-print" onClick={onPrint} title="print" icon="fa-print"></IconButton>,
+      <IconButton key="button-download" onClick={onDownload} title="download-csv" icon="fa-download"></IconButton>
+    ];
+
+    if (options.length) {
+      buttons.push(<IconSpacer key="space"/>);
+      options.forEach((option) => {
+        const name = `option-${option}`;
+        buttons.push(<IconButton
+          key={name}
+          toggle={store.reportOptions[option]}
+          onClick={() => onToggle(option)}
+          title={name}
+          icon={ICONS[name] || 'fa-cog'}>
+        </IconButton>);
+      });
+    }
+
     return (
       <div className="ToolPanel">
         <h1>{this.props.t('report-' + store.report.format)}</h1>
-        <IconButton onClick={onPrint} title="print" icon="fa-print"></IconButton>
-        <IconButton onClick={onDownload} title="download-csv" icon="fa-download"></IconButton>
+        {buttons}
       </div>
     );
   }

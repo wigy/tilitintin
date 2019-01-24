@@ -36,6 +36,7 @@ NEXT FEATURES
 [X] Editing dates (just start typing when the top line is selected, and date turns editor).
 [X] Improve date proposal (save the latest, fill missing parts from that).
 [X] Tab key to navigate in entries and creating new when past end.
+[X] Use options to squeeze journal and ledger reports in fewer lines.
 [ ] Release v1.0 (add version number to the screen).
 
 FUTURE FEATURES
@@ -51,7 +52,6 @@ FUTURE FEATURES
 [ ] Filtering tool for account list: Assets, Income, Expense, Other
 [ ] Proposals for account number by looking for account last used with the text given in previous entry.
 [ ] Sort automatically new entries by date, when added.
-[ ] Use some heuristic and squeeze journal and ledger reports in fewer lines, if descriptions are short.
 
 BUGS
 ====

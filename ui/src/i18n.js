@@ -45,6 +45,7 @@ i18n.init({
         'icon-download-csv': 'Lataa CSV-tiedostona',
         'icon-reset': 'Näytä kaikki',
         'icon-disable-all': 'Piilota kaikki',
+        'icon-option-compact': 'Tiivistetympi esitysmuoto',
 
         'column-document-number': 'Nro',
         'column-account-number': 'Nro',

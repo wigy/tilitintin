@@ -31,6 +31,6 @@
   transform: translateY(-50%);
 }
 
-.IconButton.off img {
+.IconButton.off {
   filter: opacity(20%);
 }

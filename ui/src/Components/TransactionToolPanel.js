@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import Tag from './Tag';
 import IconButton from './IconButton';
+import IconSpacer from './IconSpacer';
 import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
 import './ToolPanel.css';
@@ -61,7 +62,7 @@ class ToolPanel extends Component {
           return (
             <div key={tag.tag}>
               {spacer
-                ? (<span style={{float: 'left'}}>&nbsp;&nbsp;&nbsp;</span>)
+                ? <IconSpacer key={`space-${tag.tag}`}/>
                 : (<span></span>)
               }
               <div className={className} onClick={() => toggle(tag.tag)}>

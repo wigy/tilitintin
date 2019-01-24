@@ -137,20 +137,30 @@ processEntries.GeneralJournal = (entries, periods, formatName, format, settings)
       needLocalization: true,
       name: `{${moment(lines[0].date).format('YYYY-MM-DD')}}`
     });
-    descriptions(lines).forEach((text) => {
-      data.push({
-        tab: 2,
-        name: text,
-        fullWidth: 1,
-        italic: true
+    if (!settings.query.compact) {
+      descriptions(lines).forEach((text) => {
+        data.push({
+          tab: 2,
+          name: text,
+          fullWidth: 1,
+          italic: true
+        });
       });
-    });
+    }
     lines.forEach((line) => {
-      data.push({
-        tab: 2,
-        name: `${line.number} ${line.name}`,
-        amounts: line.amounts
-      });
+      if (settings.query.compact) {
+        data.push({
+          tab: 0,
+          name: `${line.number} ${line.name}: ${line.description}`,
+          amounts: line.amounts
+        });
+      } else {
+        data.push({
+          tab: 2,
+          name: `${line.number} ${line.name}`,
+          amounts: line.amounts
+        });
+      }
     });
   });
 
@@ -223,26 +233,36 @@ processEntries.GeneralLedger = (entries, periods, formatName, format, settings) 
     });
     let total = 0;
     lines.forEach((line) => {
-      data.push({
-        tab: 0,
-        needLocalization: true,
-        id: `#${line.documentId}`,
-        name: `{${moment(line.date).format('YYYY-MM-DD')}}`
-      });
-      data.push({
-        tab: 0,
-        useRemainingColumns: 1,
-        italic: true,
-        name: `${line.description.replace(/^(\[.+?\])+\s*/g, '')}`
-      });
       total += line.amounts.debit;
       total -= line.amounts.credit;
       line.amounts.balance = total;
-      data.push({
-        tab: 0,
-        name: '',
-        amounts: line.amounts
-      });
+      if (settings.query.compact) {
+        data.push({
+          tab: 0,
+          needLocalization: true,
+          id: `#${line.documentId}`,
+          name: `{${moment(line.date).format('YYYY-MM-DD')}} ${line.description.replace(/^(\[.+?\])+\s*/g, '')}`,
+          amounts: line.amounts
+        });
+      } else {
+        data.push({
+          tab: 0,
+          needLocalization: true,
+          id: `#${line.documentId}`,
+          name: `{${moment(line.date).format('YYYY-MM-DD')}}`
+        });
+        data.push({
+          tab: 0,
+          useRemainingColumns: 1,
+          italic: true,
+          name: `${line.description.replace(/^(\[.+?\])+\s*/g, '')}`
+        });
+        data.push({
+          tab: 0,
+          name: '',
+          amounts: line.amounts
+        });
+      }
     });
     data.push({
       tab: 0,
@@ -407,6 +427,7 @@ function processEntries(entries, periods, formatName, format, settings) {
  * @param {Number[]} periodIds
  * @param {String} formatName
  * @param {String} format
+ * @param {Object} [query]
  *
  * Resulting entries is an array of objects containing:
  * * `tab` Zero originating indentation number.
@@ -424,12 +445,14 @@ function processEntries(entries, periods, formatName, format, settings) {
  * * `number` Account number if the entry is an account.
  * * `amounts` An object with entry `all` for full total and [Tags] indexing the tag specific totals.
  */
-async function create(db, periodIds, formatName, format) {
+async function create(db, periodIds, formatName, format, query = {}) {
+
   const negateSomeEntries = (formatName !== 'general-journal' && formatName !== 'general-ledger');
   const negateSql = '(1 - (entry.debit == 0) * 2)' + (negateSomeEntries ? ' * (1 - ((account.type IN (1, 2, 3, 4, 5)) * 2))' : '');
 
   return knex.db(db).select('*').from('settings').first()
     .then((settings) => {
+      settings.query = query;
       return knex.db(db).select('*').from('period').whereIn('period.id', periodIds)
         .then((periods) => {
           return knex.db(db).select(
@@ -460,10 +483,16 @@ async function create(db, periodIds, formatName, format) {
 function customReports() {
   return [{
     id: 'general-journal',
-    data: null
+    data: null,
+    options: {
+      'compact': 'boolean'
+    }
   }, {
     id: 'general-ledger',
-    data: null
+    data: null,
+    options: {
+      'compact': 'boolean'
+    }
   }];
 }
 
