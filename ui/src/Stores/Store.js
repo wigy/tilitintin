@@ -352,7 +352,6 @@ class Store {
           periods.forEach((period) => {
             this.periods.push(period);
           });
-          return this.periods;
         });
       });
   }
@@ -367,7 +366,6 @@ class Store {
           this.reports = Object.keys(reports.links);
           this.reportOptionsAvailable = reports.options;
           this.reportOptions = {};
-          return this.reports;
         });
       });
   }
@@ -390,7 +388,6 @@ class Store {
           report.options = clone(this.reportOptions);
           report.url = url;
           this.report = report;
-          return this.report;
         });
       });
   }
@@ -407,7 +404,6 @@ class Store {
             this.balances.push(balance);
           });
         });
-        return balances;
       });
   }
 
@@ -487,7 +483,6 @@ class Store {
           this.lastDate = lastDate;
           this.account.tags = Object.keys(tags);
         });
-        return account;
       });
   }
 
