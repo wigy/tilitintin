@@ -81,7 +81,11 @@ class Cursor {
    * Move directly to the given index of the given component.
    */
   @action.bound
-  selectIndex(component, index) {
+  selectIndex(component, index = null) {
+    if (arguments.length === 1) {
+      index = component;
+      component = this.component;
+    }
     if (component !== this.component) {
       this.save();
       this.component = component;
@@ -116,6 +120,7 @@ class Cursor {
    * @param {Number} delta
    */
   indexUpdate(index, N, delta) {
+    const oldIndex = index;
     if (N) {
       if (index === null) {
         if (index === undefined || index === null) {
@@ -124,9 +129,17 @@ class Cursor {
       } else {
         index += delta;
         if (index < 0) {
-          index = N - 1;
+          if (oldIndex === 0) {
+            index = N - 1;
+          } else {
+            index = 0;
+          }
         } else if (index >= N) {
-          index = 0;
+          if (oldIndex === N - 1) {
+            index = 0;
+          } else {
+            index = N - 1;
+          }
         }
       }
       return {index};

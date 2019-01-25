@@ -17,7 +17,7 @@ NEXT FEATURES
 [X] Create new transaction.
 [X] Delete entry.
 [X] Delete transaction.
-[ ] Page up/down.
+[X] Page up/down.
 [X] Reports.
 [X] Enter expressions like 23.23 - 1.22
 [X] Enter simple space to fulfill transaction imbalance (show in gray if space pressed).

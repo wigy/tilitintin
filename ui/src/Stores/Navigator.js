@@ -45,7 +45,7 @@ class Navigator {
     // Try component specific handler.
     let fn = 'handle' + component + keyName.replace(/\+/g, '');
     if (this[fn]) {
-      update = this[fn](this.cursor, key);
+      update = this[fn](this.cursor);
       if (update && KEY_DEBUG) {
         console.log(fn, ':', update);
       }
@@ -54,7 +54,7 @@ class Navigator {
     if (!update) {
       fn = 'handle' + keyName.replace(/\+/g, '');
       if (this[fn]) {
-        update = this[fn](this.cursor, key);
+        update = this[fn](this.cursor);
         if (update && KEY_DEBUG) {
           console.log(fn, ':', update);
         }
@@ -102,35 +102,58 @@ class Navigator {
 
   // Transaction listing for an account
   // ----------------------------------
-  handleTransactionTableArrowUp({index, column, row}) {
+  handleTransactionTableArrowUp({index, column, row}, amount = -1) {
     if (index !== null && row !== null && this.store.filteredTransactions[index].open) {
-      const ret = this.cursor.boxUpdate(column, row, 4, this.store.filteredTransactions[index].entries.length, 0, -1);
+      const ret = this.cursor.boxUpdate(column, row, 4, this.store.filteredTransactions[index].entries.length, 0, amount);
       return ret;
     }
-    const ret = this.cursor.indexUpdate(index, this.store.filteredTransactions.length, -1);
+    const ret = this.cursor.indexUpdate(index, this.store.filteredTransactions.length, amount);
     if (ret) {
       const el = document.getElementById('Transaction' + this.store.filteredTransactions[ret.index].id);
       el.scrollIntoView({block: 'center', inline: 'center'});
     }
     return ret;
   }
-  handleTransactionTableArrowDown({index, column, row}) {
+  handleTransactionTablePageUp({index, column, row}) {
+    return this.handleTransactionTableArrowUp({index, column, row}, -10);
+  }
+  handleTransactionTableArrowDown({index, column, row}, amount = +1) {
     if (index !== null && this.store.filteredTransactions[index].open) {
       if (row === this.store.filteredTransactions[index].entries.length - 1) {
-        const ret = this.cursor.indexUpdate(index, this.store.filteredTransactions.length, +1);
+        const ret = this.cursor.indexUpdate(index, this.store.filteredTransactions.length, amount);
         ret.column = null;
         ret.row = null;
         return ret;
       }
-      const ret = this.cursor.boxUpdate(column, row, 4, this.store.filteredTransactions[index].entries.length, 0, +1, 1);
+      const ret = this.cursor.boxUpdate(column, row, 4, this.store.filteredTransactions[index].entries.length, 0, amount, 1);
       return ret;
     }
-    const ret = this.cursor.indexUpdate(index, this.store.filteredTransactions.length, +1);
+    const ret = this.cursor.indexUpdate(index, this.store.filteredTransactions.length, amount);
     if (ret) {
       const el = document.getElementById('Transaction' + this.store.filteredTransactions[ret.index].id);
       el.scrollIntoView({block: 'center', inline: 'center'});
     }
     return ret;
+  }
+  handleTransactionTablePageDown({index, column, row}) {
+    return this.handleTransactionTableArrowDown({index, column, row}, 10);
+  }
+  handleTransactionTableHome() {
+    if (this.store.filteredTransactions.length) {
+      // TODO: DRY
+      const el = document.getElementById('Transaction' + this.store.filteredTransactions[0].id);
+      el.scrollIntoView({block: 'center', inline: 'center'});
+      return {index: 0};
+    }
+  }
+  handleTransactionTableEnd() {
+    const N = this.store.filteredTransactions.length;
+    if (N) {
+      // TODO: DRY
+      const el = document.getElementById('Transaction' + this.store.filteredTransactions[N - 1].id);
+      el.scrollIntoView({block: 'center', inline: 'center'});
+      return {index: N - 1};
+    }
   }
   handleTransactionTableArrowLeft({index, column, row}) {
     if (index !== null && this.store.filteredTransactions[index].open) {
@@ -245,7 +268,7 @@ class Navigator {
       this.store.transactions[index].askDelete = true;
     }
   }
-  handleTransactionTableText({index, row, editor}, key) {
+  handleTransactionTableText({index, row, editor}) {
     // Date cell.
     if (index !== null && row === null) {
       return {editor: true};
@@ -258,8 +281,8 @@ class Navigator {
 
   // Account balance listing
   // -----------------------
-  handleBalanceTableArrowUp({index}) {
-    const ret = this.cursor.indexUpdate(index, this.store.balances.length, -1);
+  handleBalanceTableArrowUp({index}, amount = -1) {
+    const ret = this.cursor.indexUpdate(index, this.store.balances.length, amount);
     // TODO: Would be nice to get rid of direct DOM-manipulation.
     if (ret) {
       const el = document.getElementById('Balance' + this.store.balances[ret.index].id);
@@ -267,19 +290,38 @@ class Navigator {
     }
     return ret;
   }
-  handleBalanceTableArrowDown({index}) {
-    const ret = this.cursor.indexUpdate(index, this.store.balances.length, +1);
-    if (ret) {
-      const el = document.getElementById('Balance' + this.store.balances[ret.index].id);
+  handleBalanceTableArrowDown({index}, amount = 1) {
+    return this.handleBalanceTableArrowUp({index}, +1);
+  }
+  handleBalanceTablePageUp({index}) {
+    return this.handleBalanceTableArrowUp({index}, -10);
+  }
+  handleBalanceTablePageDown({index}) {
+    return this.handleBalanceTableArrowUp({index}, 10);
+  }
+  handleBalanceTableHome() {
+    if (this.store.balances.length) {
+      // TODO: DRY
+      const el = document.getElementById('Balance' + this.store.balances[0].id);
       el.scrollIntoView({block: 'center', inline: 'center'});
+      return {index: 0};
     }
-    return ret;
+  }
+  handleBalanceTableEnd() {
+    const N = this.store.balances.length;
+    if (N) {
+      // TODO: DRY
+      const el = document.getElementById('Balance' + this.store.balances[N - 1].id);
+      el.scrollIntoView({block: 'center', inline: 'center'});
+      return {index: N - 1};
+    }
   }
   handleBalanceTableArrowRight() {
     return this.cursor.componentUpdate('TransactionTable', this.store.filteredTransactions.length);
   }
   handleBalanceTableEnter({index}) {
     if (this.store.balances[index]) {
+      // TODO: DRY
       const el = document.getElementById('Balance' + this.store.balances[index].id);
       el.children[0].children[0].click();
       return {};
