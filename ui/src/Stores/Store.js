@@ -609,6 +609,8 @@ class Store {
               Object.assign(this.transactions[idx], data);
             }
           });
+          // TODO: Once we have better class structure, update directly balances collection.
+          this.getBalances();
         });
       });
   }
@@ -630,6 +632,8 @@ class Store {
               }
             }
           });
+          // TODO: Once we have better class structure, update directly balances collection.
+          this.getBalances();
         });
       });
   }
@@ -645,6 +649,8 @@ class Store {
         runInAction(() => {
           const remaining = this.transactions.filter((t) => t.id !== tx.id);
           this.transactions.replace(remaining);
+          // TODO: Once we have better class structure, update directly balances collection.
+          this.getBalances();
         });
       });
   }

@@ -52,6 +52,7 @@ FUTURE FEATURES
 [ ] Filtering tool for account list: Assets, Income, Expense, Other
 [ ] Proposals for account number by looking for account last used with the text given in previous entry.
 [ ] Sort automatically new entries by date, when added.
+[ ] Creating tx when there is not a single account listed.
 
 BUGS
 ====
@@ -66,7 +67,7 @@ BUGS
 [X] Print does not set correct layout.
 [X] After entering new entry, debit and credit may not be correct on transaction table.
 [X] After entering new entry, incorrect lines are bold until refresh.
-[ ] Balances not updated when adding new transactions.
-[ ] Balances not updated when editing old transaction entries.
-[ ] Balances not updated when deleting transactions.
+[X] Balances not updated when adding new transactions.
+[X] Balances not updated when editing old transaction entries.
+[X] Balances not updated when deleting transactions.
 [X] Disable Shift+Tab.
