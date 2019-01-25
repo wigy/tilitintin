@@ -69,4 +69,4 @@ BUGS
 [ ] Balances not updated when adding new transactions.
 [ ] Balances not updated when editing old transaction entries.
 [ ] Balances not updated when deleting transactions.
-[ ] Disable Shift+Tab.
+[X] Disable Shift+Tab.

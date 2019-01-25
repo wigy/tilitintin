@@ -43,17 +43,16 @@ class Navigator {
     }
 
     // Try component specific handler.
-    let fn = 'handle' + component + keyName;
+    let fn = 'handle' + component + keyName.replace(/\+/g, '');
     if (this[fn]) {
       update = this[fn](this.cursor, key);
       if (update && KEY_DEBUG) {
         console.log(fn, ':', update);
       }
     }
-
     // Try generic handler.
     if (!update) {
-      fn = 'handle' + keyName;
+      fn = 'handle' + keyName.replace(/\+/g, '');
       if (this[fn]) {
         update = this[fn](this.cursor, key);
         if (update && KEY_DEBUG) {
@@ -90,6 +89,12 @@ class Navigator {
   handleEscape() {
     this.cursor.save();
     return {index: null, column: null, row: null};
+  }
+  handleTab() {
+    return {dontPreventDefault: false};
+  }
+  handleShiftTab() {
+    return {dontPreventDefault: false};
   }
 
   // TODO: How to move these inside appropriate component in easy and readable manner?
