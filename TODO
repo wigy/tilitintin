@@ -1,15 +1,3 @@
-IMPROVEMENTS
-============
-
-[X] Use decorators.
-[ ] Add more model classes for storing actual data in Store.
-    [ ] New folder for models.
-    [ ] Base classes Model and NavigationTargetModel.
-    [ ] Model for Entry.
-    [ ] Model for Transaction.
-    [ ] Change editing so that model has a flags about editing state.
-    [ ] Model for Account.
-    [ ] Model for Balance.
 
 NEXT FEATURES
 =============
@@ -37,37 +25,45 @@ NEXT FEATURES
 [X] Improve date proposal (save the latest, fill missing parts from that).
 [X] Tab key to navigate in entries and creating new when past end.
 [X] Use options to squeeze journal and ledger reports in fewer lines.
-[ ] Release v1.0 (add version number to the screen).
-
-FUTURE FEATURES
-===============
-
-[ ] Editing tags (maybe add them to text editor).
-[ ] Proposals for accounts, when typing partial name of it.
-[ ] Create database.
-[ ] Create new period.
-[ ] VAT handling.
-[ ] Support for tag parameter for reports to provide different columns per tag (skip 2nd period).
-[ ] Tools page: renumber documents in increasing order by date.
-[ ] Filtering tool for account list: Assets, Income, Expense, Other
-[ ] Proposals for account number by looking for account last used with the text given in previous entry.
-[ ] Sort automatically new entries by date, when added.
-[ ] Creating tx when there is not a single account listed.
+[ ] Release v0.3 (add version number to the screen).
 
 BUGS
 ====
 
-[X] Move around with arrows then change DB and keep moving: crash.
-[X] Move to transaction list, press Disable All icon. Move: crash.
-[X] Entries has unused fields from account like type, vat_code, vat_percentage, vat_account1_id, vat_account2_id
-[X] Report 'balance-sheet' is fetched 3 times (maybe combine requests).
-[X] Change DB, select period, go directly to Reports, select report: error in back-end.
-[X] If you change period on reports page, you jump back to transaction list.
-[X] Databases and periods are not updated initially on Menu until key is pressed.
-[X] Print does not set correct layout.
-[X] After entering new entry, debit and credit may not be correct on transaction table.
-[X] After entering new entry, incorrect lines are bold until refresh.
-[X] Balances not updated when adding new transactions.
-[X] Balances not updated when editing old transaction entries.
-[X] Balances not updated when deleting transactions.
-[X] Disable Shift+Tab.
+FUTURE FEATURES
+===============
+
+0.4
+[ ] Editing tags (maybe add them to text editor).
+[ ] Support for tag parameter for reports to provide different columns per tag (skip 2nd period).
+[ ] Sort automatically new entries by date, when added.
+[ ] Add more model classes for storing actual data in Store.
+    [ ] New folder for models.
+    [ ] Base classes Model and NavigationTargetModel.
+    [ ] Model for Entry.
+    [ ] Model for Transaction.
+    [ ] Change editing so that model has a flags about editing state.
+    [ ] Model for Account.
+    [ ] Model for Balance.
+
+0.6
+[ ] Proposals for account number by looking for account last used with the text given in previous entry.
+[ ] Proposals for accounts, when typing partial name of it.
+
+0.7
+[ ] Tools page: renumber documents in increasing order by date.
+[ ] VAT handling.
+
+0.8
+[ ] Filtering tool for full account list: Assets, Income, Expense, Other
+[ ] Creating tx when there is not a single account listed.
+[ ] Account search.
+
+0.9
+[ ] Create database.
+[ ] Create new period.
+
+1.0
+[ ] User management.
+[ ] Database locking (perhaps create random `24fcdwxsdhoioi324sdads.lock` file which is stored in browser and removed
+    automatically if secret name is known).
