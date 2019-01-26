@@ -67,3 +67,4 @@ FUTURE FEATURES
 [ ] User management.
 [ ] Database locking (perhaps create random `24fcdwxsdhoioi324sdads.lock` file which is stored in browser and removed
     automatically if secret name is known).
+[ ] Replace old menus with self made and integrated to keyboard control.
