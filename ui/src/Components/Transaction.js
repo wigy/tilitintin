@@ -18,7 +18,7 @@ import './Transaction.css';
 @observer
 class Transaction extends Component {
 
-  // Store for entry waiting for deletion confirmation.
+  // Temporary store for entry waiting for deletion confirmation.
   entryToDelete = null;
 
   @action.bound
@@ -27,11 +27,15 @@ class Transaction extends Component {
   }
 
   render() {
-    // Calculate imbalance, missing accounts and look for deletion request.
+    // TODO: Too long function needs refactoring.
+    const tx = this.props.tx;
+
+    // Calculate imbalance, missing accounts, mismatching account, and look for deletion request.
     let debit = 0;
     let credit = 0;
     let missingAccount = false;
-    this.props.tx.entries.forEach((entry, idx) => {
+    let mismatchingAccount = true;
+    tx.entries.forEach((entry, idx) => {
       if (entry.askDelete) {
         this.entryToDelete = entry;
       }
@@ -42,6 +46,11 @@ class Transaction extends Component {
       }
       if (!entry.account_id) {
         missingAccount = true;
+      } else {
+        if (entry.account_id === tx.account_id) {
+          if (tx.open)console.log('hit', entry.number, entry.name, entry.account_id, tx.account_id);
+          mismatchingAccount = false;
+        }
       }
     });
     const smaller = Math.min(debit, credit);
@@ -51,13 +60,13 @@ class Transaction extends Component {
     const error = imbalance || missingAccount;
 
     // Render top row.
-    const money = (<Money cents={this.props.tx.amount} currency="EUR" />);
+    const money = (<Money cents={tx.amount} currency="EUR" />);
     const total = (<Money cents={this.props.total} currency="EUR" />);
 
     // Handle transaction toggle.
     const onClick = () => {
       this.props.cursor.selectIndex('TransactionTable', this.props.index);
-      this.props.tx.open = !this.props.tx.open;
+      tx.open = !tx.open;
     };
 
     // Handle editing, when clicked.
@@ -72,7 +81,7 @@ class Transaction extends Component {
         column = 0;
         row++;
         // Oops, we are on the last column of last row.
-        if (row >= this.props.tx.entries.length) {
+        if (row >= tx.entries.length) {
           column = 3;
           row--;
         }
@@ -84,41 +93,42 @@ class Transaction extends Component {
     const {selected, selectedColumn, selectedRow} = this.props;
     const classes = 'Transaction' +
       (this.props.selected ? ' selected' : '') +
-      (this.props.tx.open ? ' open' : '') +
+      (tx.open ? ' open' : '') +
       (error ? ' error' : '') +
+      (mismatchingAccount ? ' mismatch' : '') +
       (this.props.duplicate ? ' duplicate' : '');
 
     // Render main transaction.
     let ret = [
-      <tr id={'Transaction' + this.props.tx.id} key="title" className={classes} onClick={onClick}>
-        <td className="number">{this.props.tx.number}</td>
+      <tr id={'Transaction' + tx.id} key="title" className={classes} onClick={onClick}>
+        <td className="number">{tx.number}</td>
         <td className="date">
           <TransactionDetails
-            selected={this.props.tx.open && selected && selectedRow === null}
+            selected={tx.open && selected && selectedRow === null}
             type="date"
-            tx={this.props.tx}
+            tx={tx}
             entry={null}
           />
         </td>
-        <td className="tags" style={{width: (this.props.tx.tags.length) * 2.6 + 'ex'}}><Tags tags={this.props.tx.tags}/></td>
+        <td className="tags" style={{width: (tx.tags.length) * 2.6 + 'ex'}}><Tags tags={tx.tags}/></td>
         <td className="description">
-          <span className="summary">{this.props.tx.description}&nbsp;</span>
+          <span className="summary">{tx.description}&nbsp;</span>
         </td>
         <td className="debit">
-          <span className="summary">&nbsp;{this.props.tx.debit ? money : ''}</span>
+          <span className="summary">&nbsp;{tx.debit ? money : ''}</span>
         </td>
         <td className="credit">
-          <span className="summary">&nbsp;{this.props.tx.debit ? '' : money}</span>
+          <span className="summary">&nbsp;{tx.debit ? '' : money}</span>
         </td>
         <td className="total">{total}</td>
       </tr>
     ];
 
     // Render entries, if opened.
-    if (this.props.tx.open) {
-      this.props.tx.entries.forEach((entry, idx) => {
+    if (tx.open) {
+      tx.entries.forEach((entry, idx) => {
         const isSelected = (type) => this.props.selected && selectedColumn === type && idx === selectedRow;
-        const current = this.props.tx.account_id === entry.account_id;
+        const current = tx.account_id === entry.account_id;
         const classes = 'TransactionEntry alt open' +
           (this.props.duplicate ? ' duplicate' : '');
 
@@ -140,7 +150,7 @@ class Transaction extends Component {
                 selected={isSelected('account')}
                 current={current}
                 type="account"
-                tx={this.props.tx}
+                tx={tx}
                 entry={entry}
                 onComplete={() => onComplete(0, idx)}
               />
@@ -150,7 +160,7 @@ class Transaction extends Component {
                 selected={isSelected('description')}
                 current={current}
                 type="description"
-                tx={this.props.tx}
+                tx={tx}
                 entry={entry}
                 onComplete={() => onComplete(1, idx)}
                 onClick={() => onClickDetail(1, idx)}
@@ -161,7 +171,7 @@ class Transaction extends Component {
                 selected={isSelected('debit')}
                 current={current}
                 type="debit"
-                tx={this.props.tx}
+                tx={tx}
                 entry={entry}
                 onClick={() => onClickDetail()}
                 onComplete={() => onComplete(2, idx)}
@@ -173,7 +183,7 @@ class Transaction extends Component {
                 selected={isSelected('credit')}
                 current={current}
                 type="credit"
-                tx={this.props.tx}
+                tx={tx}
                 entry={entry}
                 onClick={() => onClickDetail()}
                 onComplete={() => onComplete(3, idx)}
@@ -208,7 +218,7 @@ class Transaction extends Component {
     // Render imbalance
     if (imbalance) {
       ret.push(
-        <tr key="imbalance" className={'alt error TransactionEntry' + (this.props.tx.open ? ' open' : '')} onClick={onClick}>
+        <tr key="imbalance" className={'alt error TransactionEntry' + (tx.open ? ' open' : '')} onClick={onClick}>
           <td className="account" colSpan={3}></td>
           <td className="description">
             <Trans>Debit and credit do not match</Trans>

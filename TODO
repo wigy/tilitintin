@@ -18,7 +18,7 @@ NEXT FEATURES
 [X] Click should actually activate transaction detail target.
 [X] Allow cursor movement past the last opened entry in transaction list.
 [X] Localize CSV export.
-[ ] Handle smoothly editing of the entry's account number of the account currently listed.
+[X] Handle smoothly editing of the entry's account number of the account currently listed.
 [X] Localize date on UI.
 [X] Pressing enter in entry editor should move to next cell.
 [X] Editing dates (just start typing when the top line is selected, and date turns editor).
@@ -53,6 +53,7 @@ FUTURE FEATURES
 0.7
 [ ] Tools page: renumber documents in increasing order by date.
 [ ] VAT handling.
+[ ] End of period handling.
 
 0.8
 [ ] Filtering tool for full account list: Assets, Income, Expense, Other
@@ -65,6 +66,6 @@ FUTURE FEATURES
 
 1.0
 [ ] User management.
-[ ] Database locking (perhaps create random `24fcdwxsdhoioi324sdads.lock` file which is stored in browser and removed
-    automatically if secret name is known).
+[ ] Database locking (perhaps create random `<32-letter-code>.lock` file which is stored in browser and removed
+    automatically if secret name is known, also removed on logout).
 [ ] Replace old menus with self made and integrated to keyboard control.

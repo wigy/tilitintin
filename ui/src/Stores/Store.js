@@ -605,7 +605,8 @@ class Store {
           }
           // Fix data for copies of entries in transactions-table.
           this.transactions.forEach((tx, idx) => {
-            if (entry.id === tx.entry_id) {
+            // If account ID has changed, leave transaction as it is.
+            if (entry.id === tx.entry_id && entry.account_id === tx.account_id) {
               Object.assign(this.transactions[idx], data);
             }
           });
