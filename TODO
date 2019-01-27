@@ -1,32 +1,4 @@
 
-NEXT FEATURES
-=============
-
-[X] Create new transaction.
-[X] Delete entry.
-[X] Delete transaction.
-[X] Page up/down.
-[X] Reports.
-[X] Enter expressions like 23.23 - 1.22
-[X] Enter simple space to fulfill transaction imbalance (show in gray if space pressed).
-[X] Report: Journal.
-[X] Report: Ledger.
-[X] Printing of report
-[X] Rename `column` as `tab` in report data.
-[X] Use some notation like ${2018-01-01} to specify dates and localize them everywhere.
-[X] When clicked a row, update cursor selector.
-[X] Click should actually activate transaction detail target.
-[X] Allow cursor movement past the last opened entry in transaction list.
-[X] Localize CSV export.
-[X] Handle smoothly editing of the entry's account number of the account currently listed.
-[X] Localize date on UI.
-[X] Pressing enter in entry editor should move to next cell.
-[X] Editing dates (just start typing when the top line is selected, and date turns editor).
-[X] Improve date proposal (save the latest, fill missing parts from that).
-[X] Tab key to navigate in entries and creating new when past end.
-[X] Use options to squeeze journal and ledger reports in fewer lines.
-[ ] Release v0.3 (add version number to the screen).
-
 BUGS
 ====
 
