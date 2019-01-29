@@ -13,9 +13,9 @@ import AccountModel from '../Models/AccountModel';
  *   accountId: 123,
  *   lastDate: "2018-01-01", // Latest date entered by user.
  *   tags: {
- *     TagCode:
+ *     "Tag":
  *       id: 1,
- *       tag: "TagCode",
+ *       tag: "Tag",
  *       name: "Tag description",
  *       picture: "https://site.to.store/picture",
  *       type: "Category",
@@ -46,7 +46,7 @@ import AccountModel from '../Models/AccountModel';
  *       name: "Muiden vapaaehtoisten varausten muutos",
  *       number: "9890",
  *       type: "EXPENSE",
- *       tags: []
+ *       tags: ["Tag1", "Tag2"],
  *     }
  *   },
  *   headings: {
@@ -54,13 +54,6 @@ import AccountModel from '../Models/AccountModel';
  *       "text": "Vastaavaa",
  *       "level": 0
  *     },...]
- *   },
- *   account: { // Currently selected account.
- *     id: 12,
- *     number: 1234,
- *     name: "Account Name",
- *     type: "ASSET/LIABILITY/EQUITY/REVENUE/EXPENSE/PROFIT_PREV/PROFIT",
- *     tags: ["Tag1", "Tag2"],
  *   },
  *   transactions: [ // This is a selected collection of primary entries, usually for single account on single period.
  *      {
@@ -130,7 +123,6 @@ class Store {
   @observable headings = {};
   @observable accountsById = {};
   @observable tags = {};
-  @observable account = {};
   @observable tools = { tagDisabled: {} };
   @observable reports = [];
   @observable reportOptionsAvailable = {};
@@ -291,7 +283,6 @@ class Store {
 
     this.accountId = null;
     this.transactions = [];
-    this.account = {};
     this.tools = {
       tagDisabled: {
       }
@@ -399,10 +390,13 @@ class Store {
    * Collect all accounts.
    */
   async fetchAccounts() {
+    // TODO: Hmm, maybe not good solution for unwanted tag reset but.
     return this.request('/db/' + this.db + '/account')
       .then((accounts) => {
+        if (Object.keys(this.accountsById).length) {
+          return;
+        }
         runInAction(() => {
-          this.accountsById = {};
           accounts.forEach((data) => {
             const account = new AccountModel(data);
             this.accountsById[account.id] = account;
@@ -414,7 +408,7 @@ class Store {
   /**
    * Collect all account headings.
    */
-  async fetchHeadings(db) {
+  async fetchHeadings() {
     return this.request('/db/' + this.db + '/heading')
       .then((headings) => {
         runInAction(() => {
@@ -446,12 +440,15 @@ class Store {
       return ret;
     };
 
+    if (!Object.keys(this.accountsById).length) {
+      await this.fetchAccounts();
+    }
+
     return this.request('/db/' + db + '/account/' + accountId + '/' + periodId)
-      .then((account) => {
+      .then((data) => {
         runInAction(() => {
-          // TODO: Get reference to account model. Note: need to re-organize code so that accounts are available here.
-          this.account = account;
-          this.transactions = account.transactions;
+          const account = this.accountsById[data.id];
+          this.transactions = data.transactions;
           let tags = {};
           let lastDate;
           this.transactions.forEach((tx) => {
@@ -468,7 +465,7 @@ class Store {
             });
           });
           this.lastDate = lastDate;
-          this.account.tags = Object.keys(tags);
+          account.addTags(Object.keys(tags));
         });
       });
   }
@@ -476,6 +473,7 @@ class Store {
   /**
    * Sort the given list (or current account's) of tags to their official order.
    * @param {Array<Object>|null} tags
+   * TODO: Models shouls handle this.
    */
   sortTags(tags = null) {
     if (tags === null) {
@@ -707,6 +705,17 @@ class Store {
   @computed
   get accounts() {
     return Object.values(this.accountsById).sort(AccountModel.sorter());
+  }
+
+  /**
+   * Get the currently selected account if any.
+   */
+  @computed
+  get account() {
+    if (this.accountId) {
+      return this.accountsById[this.accountId] || {};
+    }
+    return {};
   }
 }
 

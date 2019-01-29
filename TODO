@@ -19,6 +19,7 @@ FUTURE FEATURES
     [ ] Model for Account.
     [ ] Model for Balance.
 [X] Rename all get-functions as fetch in Store.
+[ ] Storing tag images on the server.
 
 0.6
 [ ] Proposals for account number by looking for account last used with the text given in previous entry.

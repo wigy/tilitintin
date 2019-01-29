@@ -23,6 +23,18 @@ class AccountModel extends Model {
   getSortKey() {
     return this.number;
   }
+
+  /**
+   * Add tags for this account.
+   * @param {String[]} tags
+   */
+  addTags(tags) {
+    tags.forEach((tag) => {
+      if (this.tags.indexOf(tag) < 0) {
+        this.tags.push(tag);
+      }
+    });
+  }
 }
 
 export default AccountModel;
