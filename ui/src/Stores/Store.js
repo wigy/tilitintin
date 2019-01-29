@@ -10,6 +10,7 @@ import AccountModel from '../Models/AccountModel';
  *   dbs: ['dbname1', 'dbname2'],
  *   db: 'currentdb',
  *   periodId: 1,
+ *   accountId: 123,
  *   lastDate: "2018-01-01", // Latest date entered by user.
  *   tags: {
  *     TagCode:
@@ -39,16 +40,13 @@ import AccountModel from '../Models/AccountModel';
  *       }, ...
  *     ]
  *   },
- *   accounts: [
- *     {
+ *   accountsById: {
+ *     123: {
+ *       id: 123,
  *       name: "Muiden vapaaehtoisten varausten muutos",
  *       number: "9890",
- *       type: "EXPENSE"
- *     }, ...
- *   ],
- *   accountsById: {
- *     "9890": {
- *       // References to the accounts array.
+ *       type: "EXPENSE",
+ *       tags: []
  *     }
  *   },
  *   headings: {
@@ -130,7 +128,6 @@ class Store {
   @observable periods = [];
   @observable balances = [];
   @observable headings = {};
-  @observable accounts = [];
   @observable accountsById = {};
   @observable tags = {};
   @observable account = {};
@@ -225,7 +222,6 @@ class Store {
 
     this.db = null;
     this.periods = [];
-    this.accounts = [];
     this.accountsById = {};
     this.headings = {};
     this.tags = {};
@@ -408,11 +404,9 @@ class Store {
     return this.request('/db/' + this.db + '/account')
       .then((accounts) => {
         runInAction(() => {
-          this.accounts = [];
           this.accountsById = {};
           accounts.forEach((data) => {
             const account = new AccountModel(data);
-            this.accounts.push(account);
             this.accountsById[account.id] = account;
           });
         });
@@ -707,6 +701,14 @@ class Store {
     };
 
     return filter(this.transactions);
+  }
+
+  /**
+   * Get a list of accounts sorted by their number.
+   */
+  @computed
+  get accounts() {
+    return Object.values(this.accountsById).sort(AccountModel.sorter());
   }
 }
 
