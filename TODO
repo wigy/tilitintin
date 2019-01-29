@@ -2,6 +2,7 @@
 BUGS
 ====
 
+[ ] Downloading balance-sheet produces "undefined" in page break.
 
 FUTURE FEATURES
 ===============
