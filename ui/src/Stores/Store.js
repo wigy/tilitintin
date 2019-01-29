@@ -1,6 +1,7 @@
 import { runInAction, computed, toJS, observable } from 'mobx';
 import clone from 'clone';
 import config from '../Configuration';
+import AccountModel from '../Models/AccountModel';
 
 /**
  * The store structure is the following:
@@ -9,7 +10,6 @@ import config from '../Configuration';
  *   dbs: ['dbname1', 'dbname2'],
  *   db: 'currentdb',
  *   periodId: 1,
- *   title: "Current Title",
  *   lastDate: "2018-01-01", // Latest date entered by user.
  *   tags: {
  *     TagCode:
@@ -41,17 +41,13 @@ import config from '../Configuration';
  *   },
  *   accounts: [
  *     {
- *       name: "Muiden vapaaehtoisten varausten muutos"
- *       number: "9890"
+ *       name: "Muiden vapaaehtoisten varausten muutos",
+ *       number: "9890",
  *       type: "EXPENSE"
- *       vat_account1_id: null
- *       vat_account2_id: null
- *       vat_code: 0
- *       vat_percentage: 0
  *     }, ...
  *   ],
  *   accountsById: {
- *     1011: {
+ *     "9890": {
  *       // References to the accounts array.
  *     }
  *   },
@@ -136,7 +132,6 @@ class Store {
   @observable headings = {};
   @observable accounts = [];
   @observable accountsById = {};
-  @observable title = '';
   @observable tags = {};
   @observable account = {};
   @observable tools = { tagDisabled: {} };
@@ -298,7 +293,6 @@ class Store {
     this.changed = true;
 
     this.accountId = null;
-    this.title = '';
     this.transactions = [];
     this.account = {};
     this.tools = {
@@ -416,7 +410,8 @@ class Store {
         runInAction(() => {
           this.accounts = [];
           this.accountsById = {};
-          accounts.forEach((account) => {
+          accounts.forEach((data) => {
+            const account = new AccountModel(data);
             this.accounts.push(account);
             this.accountsById[account.id] = account;
           });
@@ -462,9 +457,9 @@ class Store {
     return this.request('/db/' + db + '/account/' + accountId + '/' + periodId)
       .then((account) => {
         runInAction(() => {
+          // TODO: Get reference to account model. Note: need to re-organize code so that accounts are available here.
           this.account = account;
           this.transactions = account.transactions;
-          this.title = account.number + ' ' + account.name;
           let tags = {};
           let lastDate;
           this.transactions.forEach((tx) => {

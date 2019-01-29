@@ -2,6 +2,7 @@
 BUGS
 ====
 
+
 FUTURE FEATURES
 ===============
 
@@ -10,13 +11,14 @@ FUTURE FEATURES
 [ ] Support for tag parameter for reports to provide different columns per tag (skip 2nd period).
 [ ] Sort automatically new entries by date, when added.
 [ ] Add more model classes for storing actual data in Store.
-    [ ] New folder for models.
-    [ ] Base classes Model and NavigationTargetModel.
+    [X] New folder for models.
+    [X] Base classes Model and NavigationTargetModel.
     [ ] Model for Entry.
     [ ] Model for Transaction.
     [ ] Change editing so that model has a flags about editing state.
     [ ] Model for Account.
     [ ] Model for Balance.
+[ ] Rename all get-functions as fetch in Store.
 
 0.6
 [ ] Proposals for account number by looking for account last used with the text given in previous entry.

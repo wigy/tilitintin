@@ -48,9 +48,10 @@ class ToolPanel extends Component {
     };
 
     let last = null;
+    // TODO: Title below should come from AccountModel.toString().
     return (
       <div className="ToolPanel">
-        <h1>{this.props.store.title}</h1>
+        <h1>{this.props.store.account.number} {this.props.store.account.name}</h1>
 
         <IconButton onClick={enableAll} title="reset" icon="fa-home"></IconButton>
         <IconButton onClick={disableAll} title="disable-all" icon="fa-trash-alt"></IconButton>

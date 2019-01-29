@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import AccountLink from '../Components/AccountLink';
 import Store from '../Stores/Store';
+import AccountModel from '../Models/AccountModel';
 import './AccountTable.css';
 
 @inject('store')
@@ -11,7 +12,7 @@ class AccountTable extends Component {
 
   render() {
     const {accounts, headings} = this.props;
-    const {periodId} = this.props.store;
+    const {db, periodId} = this.props.store;
     let level = 0; let titles;
     return (
       <div className="AccountTable">
@@ -25,7 +26,7 @@ class AccountTable extends Component {
                 level = title.level;
                 return <div key={title.id} className={'title level' + level}>{title.text}</div>;
               })}
-              <div className={'account level' + level}><AccountLink period={periodId} account={account}/></div>
+              <div className={'account level' + level}><AccountLink db={db} period={periodId} account={account}/></div>
             </div>);
         })}
       </div>
@@ -35,7 +36,7 @@ class AccountTable extends Component {
 
 AccountTable.propTypes = {
   store: PropTypes.instanceOf(Store),
-  accounts: PropTypes.arrayOf(Object),
+  accounts: PropTypes.arrayOf(PropTypes.instanceOf(AccountModel)),
   headings: PropTypes.object
 };
 

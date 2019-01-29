@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import AccountModel from '../Models/AccountModel';
 
 const AccountLink = (props) => {
-  const dst = '/' + props.account.db + '/account/' + props.period + '/' + props.account.id;
-  return (<Link to={dst}>
-    {props.account.number} {props.account.name}
-  </Link>);
+  const dst = '/' + props.db + '/account/' + props.period + '/' + props.account.id;
+  return (<Link to={dst}>{props.account.toString()}</Link>);
 };
 
 AccountLink.propTypes = {
-  account: PropTypes.object,
+  account: PropTypes.instanceOf(AccountModel),
+  db: PropTypes.string,
   period: PropTypes.number
 };
 
