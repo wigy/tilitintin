@@ -139,6 +139,7 @@ class Store {
   @observable lastDate = null;
 
   constructor() {
+    // Promises for ongoing GET requests.
     this.pending = {};
     this.fetchDatabases();
   }
@@ -149,7 +150,7 @@ class Store {
    * @param {String} method
    * @param {Object} data
    */
-  request(path, method = 'GET', data = null) {
+  async request(path, method = 'GET', data = null) {
     let options = {
       method: method,
       headers: {
@@ -300,25 +301,22 @@ class Store {
   /**
    * Get the tag definitions from the current database.
    */
-  fetchTags() {
+  async fetchTags() {
     return this.request('/db/' + this.db + '/tags')
       .then((tags) => {
         runInAction(() => {
           this.tags = {};
           tags.forEach((tag) => (this.tags[tag.tag] = tag));
         });
-        return this.tags;
       });
   }
 
   /**
    * Get the list of available databases.
    */
-  fetchDatabases() {
+  async fetchDatabases() {
     if (!this.token) {
       return Promise.resolve([]);
-    }
-    if (this.dbs.length) {
     }
     return this.request('/db')
       .then(dbs => {
@@ -334,7 +332,7 @@ class Store {
   /**
    * Get the list of periods available for the current DB.
    */
-  fetchPeriods() {
+  async fetchPeriods() {
     return this.request('/db/' + this.db + '/period')
       .then((periods) => {
         runInAction(() => {
@@ -349,7 +347,7 @@ class Store {
   /**
    * Get the list of report formats available for the current DB.
    */
-  fetchReports() {
+  async fetchReports() {
     return this.request('/db/' + this.db + '/report')
       .then((reports) => {
         runInAction(() => {
@@ -363,7 +361,7 @@ class Store {
   /**
    * Get the list of report formats available for the current DB.
    */
-  fetchReport(db, periodId, format) {
+  async fetchReport(db, periodId, format) {
     const options = Object.keys(this.reportOptions).map((key) => `${key}=${encodeURIComponent(JSON.stringify(this.reportOptions[key]))}`);
     const url = '/db/' + db + '/report/' + format + '/' + periodId + (options.length ? '?' + options.join('&') : '');
     if (this.report && this.report.url === url) {
@@ -385,7 +383,7 @@ class Store {
   /**
    * Get the summary of balances for all accounts in the current period.
    */
-  fetchBalances() {
+  async fetchBalances() {
     return this.request('/db/' + this.db + '/period/' + this.periodId)
       .then((balances) => {
         runInAction(() => {
@@ -400,7 +398,7 @@ class Store {
   /**
    * Collect all accounts.
    */
-  fetchAccounts() {
+  async fetchAccounts() {
     return this.request('/db/' + this.db + '/account')
       .then((accounts) => {
         runInAction(() => {
@@ -416,7 +414,7 @@ class Store {
   /**
    * Collect all account headings.
    */
-  fetchHeadings(db) {
+  async fetchHeadings(db) {
     return this.request('/db/' + this.db + '/heading')
       .then((headings) => {
         runInAction(() => {
@@ -435,7 +433,7 @@ class Store {
    * @param {Number} periodId
    * @param {Number} accountId
    */
-  fetchAccountPeriod(db, periodId, accountId) {
+  async fetchAccountPeriod(db, periodId, accountId) {
 
     // Helper to convert description to stripped description and tag flags object.
     const desc2tags = (desc) => {
@@ -492,7 +490,7 @@ class Store {
    * @param {String} user
    * @param {String} password
    */
-  login(user, password) {
+  async login(user, password) {
     this.token = null;
     return this.request('/auth', 'POST', {user: user, password: password})
       .then((resp) => {
