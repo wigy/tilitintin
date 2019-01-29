@@ -40,7 +40,7 @@ class ToolPanel extends Component {
 
     const onToggle = (option) => {
       store.reportOptions[option] = !store.reportOptions[option];
-      store.getReport(store.db, store.periodId, store.report.format, store.reportOptions);
+      store.fetchReport(store.db, store.periodId, store.report.format, store.reportOptions);
     };
 
     const options = Object.keys({...store.reportOptionsAvailable}[store.report.format] || {});

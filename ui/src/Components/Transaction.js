@@ -48,7 +48,6 @@ class Transaction extends Component {
         missingAccount = true;
       } else {
         if (entry.account_id === tx.account_id) {
-          if (tx.open)console.log('hit', entry.number, entry.name, entry.account_id, tx.account_id);
           mismatchingAccount = false;
         }
       }

@@ -143,7 +143,7 @@ class Store {
 
   constructor() {
     this.pending = {};
-    this.getDatabases();
+    this.fetchDatabases();
   }
 
   /**
@@ -208,11 +208,11 @@ class Store {
     this.clearDb();
     this.db = db;
     if (db) {
-      this.getPeriods()
-        .then(() => this.getReports())
-        .then(() => this.getTags())
-        .then(() => this.getHeadings())
-        .then(() => this.getAccounts());
+      this.fetchPeriods()
+        .then(() => this.fetchReports())
+        .then(() => this.fetchTags())
+        .then(() => this.fetchHeadings())
+        .then(() => this.fetchAccounts());
     }
     return false;
   }
@@ -248,7 +248,7 @@ class Store {
     this.clearPeriod();
     this.periodId = periodId;
     if (periodId) {
-      this.getBalances();
+      this.fetchBalances();
     }
     return false;
   }
@@ -281,7 +281,7 @@ class Store {
     this.clearAccount();
     this.accountId = accountId;
     if (accountId) {
-      this.getAccountPeriod(db, periodId, accountId);
+      this.fetchAccountPeriod(db, periodId, accountId);
     }
     return false;
   }
@@ -304,7 +304,7 @@ class Store {
   /**
    * Get the tag definitions from the current database.
    */
-  getTags() {
+  fetchTags() {
     return this.request('/db/' + this.db + '/tags')
       .then((tags) => {
         runInAction(() => {
@@ -318,7 +318,7 @@ class Store {
   /**
    * Get the list of available databases.
    */
-  getDatabases() {
+  fetchDatabases() {
     if (!this.token) {
       return Promise.resolve([]);
     }
@@ -338,7 +338,7 @@ class Store {
   /**
    * Get the list of periods available for the current DB.
    */
-  getPeriods() {
+  fetchPeriods() {
     return this.request('/db/' + this.db + '/period')
       .then((periods) => {
         runInAction(() => {
@@ -353,7 +353,7 @@ class Store {
   /**
    * Get the list of report formats available for the current DB.
    */
-  getReports() {
+  fetchReports() {
     return this.request('/db/' + this.db + '/report')
       .then((reports) => {
         runInAction(() => {
@@ -367,7 +367,7 @@ class Store {
   /**
    * Get the list of report formats available for the current DB.
    */
-  getReport(db, periodId, format) {
+  fetchReport(db, periodId, format) {
     const options = Object.keys(this.reportOptions).map((key) => `${key}=${encodeURIComponent(JSON.stringify(this.reportOptions[key]))}`);
     const url = '/db/' + db + '/report/' + format + '/' + periodId + (options.length ? '?' + options.join('&') : '');
     if (this.report && this.report.url === url) {
@@ -389,7 +389,7 @@ class Store {
   /**
    * Get the summary of balances for all accounts in the current period.
    */
-  getBalances() {
+  fetchBalances() {
     return this.request('/db/' + this.db + '/period/' + this.periodId)
       .then((balances) => {
         runInAction(() => {
@@ -404,7 +404,7 @@ class Store {
   /**
    * Collect all accounts.
    */
-  getAccounts() {
+  fetchAccounts() {
     return this.request('/db/' + this.db + '/account')
       .then((accounts) => {
         runInAction(() => {
@@ -422,7 +422,7 @@ class Store {
   /**
    * Collect all account headings.
    */
-  getHeadings(db) {
+  fetchHeadings(db) {
     return this.request('/db/' + this.db + '/heading')
       .then((headings) => {
         runInAction(() => {
@@ -441,7 +441,7 @@ class Store {
    * @param {Number} periodId
    * @param {Number} accountId
    */
-  getAccountPeriod(db, periodId, accountId) {
+  fetchAccountPeriod(db, periodId, accountId) {
 
     // Helper to convert description to stripped description and tag flags object.
     const desc2tags = (desc) => {
@@ -506,7 +506,7 @@ class Store {
           runInAction(() => {
             this.token = resp.token;
             localStorage.setItem('token', resp.token);
-            this.getDatabases();
+            this.fetchDatabases();
           });
         }
       });
@@ -606,7 +606,7 @@ class Store {
             }
           });
           // TODO: Once we have better class structure, update directly balances collection.
-          this.getBalances();
+          this.fetchBalances();
         });
       });
   }
@@ -629,7 +629,7 @@ class Store {
             }
           });
           // TODO: Once we have better class structure, update directly balances collection.
-          this.getBalances();
+          this.fetchBalances();
         });
       });
   }
@@ -646,7 +646,7 @@ class Store {
           const remaining = this.transactions.filter((t) => t.id !== tx.id);
           this.transactions.replace(remaining);
           // TODO: Once we have better class structure, update directly balances collection.
-          this.getBalances();
+          this.fetchBalances();
         });
       });
   }

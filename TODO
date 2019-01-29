@@ -18,7 +18,7 @@ FUTURE FEATURES
     [ ] Change editing so that model has a flags about editing state.
     [ ] Model for Account.
     [ ] Model for Balance.
-[ ] Rename all get-functions as fetch in Store.
+[X] Rename all get-functions as fetch in Store.
 
 0.6
 [ ] Proposals for account number by looking for account last used with the text given in previous entry.

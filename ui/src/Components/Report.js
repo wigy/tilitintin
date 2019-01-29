@@ -10,12 +10,12 @@ class Report extends Component {
 
   componentDidMount() {
     const {db, periodId, format} = this.props.match.params;
-    this.props.store.getReport(db, periodId, format);
+    this.props.store.fetchReport(db, periodId, format);
   }
 
   componentDidUpdate() {
     const {db, periodId, format} = this.props.match.params;
-    this.props.store.getReport(db, periodId, format);
+    this.props.store.fetchReport(db, periodId, format);
   }
 
   render() {
