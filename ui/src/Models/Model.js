@@ -2,7 +2,11 @@ import { extendObservable } from 'mobx';
 
 class Model {
 
-  constructor(variables, init = {}) {
+  constructor(parent, variables, init = {}) {
+    this.parent = parent;
+    if (!parent) {
+      console.warn(`No parent given for ${this.constructor.name}: ${JSON.stringify(variables)}`);
+    }
     extendObservable(this, variables);
     Object.keys(variables).forEach((key) => {
       if (key in init) {
@@ -12,18 +16,19 @@ class Model {
   }
 
   /**
-   * If sortable, get the value to be used for sorting.
+   * If sortable model, get the value to be used for sorting (default: use `id`).
    */
   getSortKey() {
-    return null;
+    return this.id;
   }
 
   /**
-   * Construct a sorting function for model instances.
+   * Construct a sorting function for sorting model instances.
    */
-  static sorter() {
-    return (a, b) => (a.getSortKey() < b.getSortKey() ? -1 : (
-      a.getSortKey() > b.getSortKey() ? 1 : 0
+  static sorter(reverse = false) {
+    const one = reverse ? -1 : 1;
+    return (a, b) => (a.getSortKey() < b.getSortKey() ? -one : (
+      a.getSortKey() > b.getSortKey() ? one : 0
     ));
   }
 }

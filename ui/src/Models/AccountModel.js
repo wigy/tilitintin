@@ -2,8 +2,8 @@ import Model from './Model';
 
 class AccountModel extends Model {
 
-  constructor(init = {}) {
-    super({
+  constructor(parent, init = {}) {
+    super(parent, {
       id: null,
       // Account number as a string.
       number: null,

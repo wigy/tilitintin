@@ -16,13 +16,15 @@ FUTURE FEATURES
     [X] Base classes Model and NavigationTargetModel.
     [ ] Model for Entry.
     [ ] Model for Transaction.
-    [ ] Change editing so that model has a flags about editing state.
     [ ] Model for Account.
     [ ] Model for Balance.
+    [ ] Model for Period.
+    [ ] Model for Tag.
 [X] Rename all get-functions as fetch in Store.
 [ ] Storing tag images on the server.
 
 0.6
+[ ] Change editing so that model has a flags and information about editing state.
 [ ] Proposals for account number by looking for account last used with the text given in previous entry.
 [ ] Proposals for accounts, when typing partial name of it.
 [ ] Dim the screen while running network operation.
@@ -46,3 +48,4 @@ FUTURE FEATURES
 [ ] Database locking (perhaps create random `<32-letter-code>.lock` file which is stored in browser and removed
     automatically if secret name is known, also removed on logout).
 [ ] Replace old menus with self made and integrated to keyboard control.
+[ ] Scan all TODOs and make fix or fix plan.

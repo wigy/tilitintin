@@ -2,6 +2,9 @@ import { runInAction, computed, toJS, observable } from 'mobx';
 import clone from 'clone';
 import config from '../Configuration';
 import AccountModel from '../Models/AccountModel';
+import PeriodModel from '../Models/PeriodModel';
+import DocumentModel from '../Models/DocumentModel';
+import EntryModel from '../Models/EntryModel';
 
 /**
  * The store structure is the following:
@@ -21,14 +24,14 @@ import AccountModel from '../Models/AccountModel';
  *       type: "Category",
  *       order: 102,
  *   },
- *   periods: [
- *     periodId: {
+ *   periodsById: {
+ *     1: {
  *       id: 1,
  *       start_date: "2016-12-31T22:00:00.000Z",
  *       "end_date": "2017-12-30T22:00:00.000Z",
- *       "locked": 0,
- *     }, ...
- *   ],
+ *       "locked": 0
+ *     }
+ *   }
  *   balances: [
  *       {
  *         id: 94,
@@ -54,6 +57,12 @@ import AccountModel from '../Models/AccountModel';
  *       "text": "Vastaavaa",
  *       "level": 0
  *     },...]
+ *   },
+ *   transactionsById: {
+ *     1: {                    // periodId
+ *       123: [                // accountId
+ *       ]
+ *     }
  *   },
  *   transactions: [ // This is a selected collection of primary entries, usually for single account on single period.
  *      {
@@ -111,24 +120,24 @@ import AccountModel from '../Models/AccountModel';
  */
 class Store {
 
-  @observable transactions = [];
-  @observable changed = false;
-  @observable token = localStorage.getItem('token');
-  @observable dbs = [];
-  @observable db = null;
-  @observable periodId = null;
   @observable accountId = null;
-  @observable periods = [];
-  @observable balances = [];
-  @observable headings = {};
   @observable accountsById = {};
-  @observable tags = {};
-  @observable tools = { tagDisabled: {} };
-  @observable reports = [];
-  @observable reportOptionsAvailable = {};
-  @observable reportOptions = {};
-  @observable report = null;
+  @observable balances = [];
+  @observable changed = false;
+  @observable db = null;
+  @observable dbs = [];
+  @observable headings = {};
   @observable lastDate = null;
+  @observable periodId = null;
+  @observable periodsById = {};
+  @observable report = null;
+  @observable reportOptions = {};
+  @observable reportOptionsAvailable = {};
+  @observable reports = [];
+  @observable tags = {};
+  @observable token = localStorage.getItem('token');
+  @observable tools = { tagDisabled: {} };
+  @observable transactions = [];
 
   constructor() {
     // Promises for ongoing GET requests.
@@ -214,8 +223,8 @@ class Store {
     this.changed = true;
 
     this.db = null;
-    this.periods = [];
     this.accountsById = {};
+    this.periodsById = {};
     this.headings = {};
     this.tags = {};
     this.reports = [];
@@ -327,9 +336,10 @@ class Store {
     return this.request('/db/' + this.db + '/period')
       .then((periods) => {
         runInAction(() => {
-          this.periods = [];
-          periods.forEach((period) => {
-            this.periods.push(period);
+          this.periodsById = {};
+          periods.forEach((data) => {
+            const period = new PeriodModel(this, data);
+            this.periodsById[period.id] = period;
           });
         });
       });
@@ -390,15 +400,15 @@ class Store {
    * Collect all accounts.
    */
   async fetchAccounts() {
-    // TODO: Hmm, maybe not good solution for unwanted tag reset but.
     return this.request('/db/' + this.db + '/account')
       .then((accounts) => {
+        // TODO: Hmm, maybe not good solution for unwanted tag reset but.
         if (Object.keys(this.accountsById).length) {
           return;
         }
         runInAction(() => {
           accounts.forEach((data) => {
-            const account = new AccountModel(data);
+            const account = new AccountModel(this, data);
             this.accountsById[account.id] = account;
           });
         });
@@ -452,6 +462,7 @@ class Store {
           let tags = {};
           let lastDate;
           this.transactions.forEach((tx) => {
+            // console.log(new DocumentModel(this.periodsById[tx.period_id], {...tx, id: tx.document_id}));
             lastDate = tx.date;
             const [txDesc, txTags] = desc2tags(tx.description);
             tx.description = txDesc;
@@ -473,7 +484,7 @@ class Store {
   /**
    * Sort the given list (or current account's) of tags to their official order.
    * @param {Array<Object>|null} tags
-   * TODO: Models shouls handle this.
+   * TODO: Models should handle this.
    */
   sortTags(tags = null) {
     if (tags === null) {
@@ -705,6 +716,14 @@ class Store {
   @computed
   get accounts() {
     return Object.values(this.accountsById).sort(AccountModel.sorter());
+  }
+
+  /**
+   * Get a list of periods sorted by their id.
+   */
+  @computed
+  get periods() {
+    return Object.values(this.periodsById).sort(PeriodModel.sorter(true));
   }
 
   /**
