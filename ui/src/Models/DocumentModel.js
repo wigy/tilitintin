@@ -1,4 +1,5 @@
 import Model from './Model';
+import EntryModel from '../Models/EntryModel';
 
 class DocumentModel extends Model {
 
@@ -10,12 +11,24 @@ class DocumentModel extends Model {
       // ID of the period this document belongs to.
       period_id: null,
       // Transaction date as a string "YYYY-MM-DD".
-      date: null
+      date: null,
+      // A list of entries of this document.
+      entries: [],
+      // If set, the entries are listed in UI.
+      open: false
     }, init);
   }
 
   getSortKey() {
     return this.number;
+  }
+
+  /**
+   * Instantiate entries.
+   * @param {Object} data
+   */
+  initialize(data) {
+    return {...data, entries: (data.entries || []).map((e) => new EntryModel(this, e))};
   }
 }
 

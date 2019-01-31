@@ -22,6 +22,7 @@ FUTURE FEATURES
     [ ] Model for Tag.
 [X] Rename all get-functions as fetch in Store.
 [ ] Storing tag images on the server.
+[ ] Drop combining entry data with document data in API http://localhost:3001/db/<name>/account/<accId>/<periodId>
 
 0.6
 [ ] Change editing so that model has a flags and information about editing state.

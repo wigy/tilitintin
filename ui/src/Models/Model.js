@@ -8,6 +8,7 @@ class Model {
       console.warn(`No parent given for ${this.constructor.name}: ${JSON.stringify(variables)}`);
     }
     extendObservable(this, variables);
+    init = this.initialize(init);
     Object.keys(variables).forEach((key) => {
       if (key in init) {
         this[key] = init[key];
@@ -20,6 +21,14 @@ class Model {
    */
   getSortKey() {
     return this.id;
+  }
+
+  /**
+   * Hook to modify initialization arguments.
+   * @param {Object} data
+   */
+  initialize(data) {
+    return data;
   }
 
   /**

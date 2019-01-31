@@ -4,7 +4,6 @@ import config from '../Configuration';
 import AccountModel from '../Models/AccountModel';
 import PeriodModel from '../Models/PeriodModel';
 import DocumentModel from '../Models/DocumentModel';
-import EntryModel from '../Models/EntryModel';
 
 /**
  * The store structure is the following:
@@ -462,7 +461,8 @@ class Store {
           let tags = {};
           let lastDate;
           this.transactions.forEach((tx) => {
-            // console.log(new DocumentModel(this.periodsById[tx.period_id], {...tx, id: tx.document_id}));
+            const doc = new DocumentModel(this.periodsById[tx.period_id], tx);
+            this.periodsById[this.periodId].addDocument(doc);
             lastDate = tx.date;
             const [txDesc, txTags] = desc2tags(tx.description);
             tx.description = txDesc;

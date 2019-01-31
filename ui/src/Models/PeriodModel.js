@@ -10,12 +10,22 @@ class PeriodModel extends Model {
       // Final date of the period as a string "YYYY-MM-DD".
       end_date: null,
       // If set, the period is locked and cannot be changed.
-      locked: false
+      locked: false,
+      // All known documents of the period.
+      documents: {}
     }, init);
   }
 
   getSortKey() {
     return this.start_date;
+  }
+
+  /**
+   * Append new or override old document for this period.
+   * @param {DocumentModel} doc
+   */
+  addDocument(doc) {
+    this.documents[doc.id] = doc;
   }
 }
 
