@@ -60,37 +60,30 @@ import DocumentModel from '../Models/DocumentModel';
  *   transactionsById: {
  *     1: {                    // periodId
  *       123: [                // accountId
+ *         {
+ *           id: 158,
+ *           number: 5,           // Document number.
+ *           period_id: 1,
+ *           date: "2017-07-31",
+ *           open: false, // If UI has opened entries.
+ *           entries: [
+ *             {
+ *               id: 99,
+ *               account_id: 123,
+ *               amount: 30000,
+ *               debit: 1,
+ *               description: "Sell thing",
+ *               document_id: 158,
+ *               flags: 0,
+ *               row_number: 1,
+ *               tags: []
+ *             }
+ *           ],
+ *         },
+ *         ...
  *       ]
  *     }
  *   },
- *   transactions: [ // This is a selected collection of primary entries, usually for single account on single period.
- *      {
- *        id: 158,             // Same as document_id.
- *        account_id: 123,
- *        document_id:158,
- *        number: 5,           // Document number.
- *        entry_id:123,        // ID of the entry this main entry describes.
- *        debit:1,
- *        amount:120000,
- *        description: "Text description",
- *        row_number: 1,
- *        flags: 0,
- *        period_id: 1,
- *        date: "2017-07-31T21:00:00.000Z",
- *        entries: [
- *          {
- *            // All entries that are linked to the same document_id are in the same format as above transaction.
- *            // One of the entries is the transaction itself. Entries has their `id` instead of `entry_id`.
- *            // In addition:
- *            number: 1234,        // Account number.
- *            name: 'My Account',  // Account name.
- *            askDelete: true, // Set if delete key was pressed on this entry
- *          }
- *        ],
- *        open: false, // If UI has opened entries.
- *        tags: [], // Tags extracted from description as strings.
- *      }
- *   ],
  *   tools: {
  *     tagDisabled: {
  *       Tag1: true,
