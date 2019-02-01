@@ -30,6 +30,20 @@ class DocumentModel extends Model {
   initialize(data) {
     return {...data, entries: (data.entries || []).map((e) => new EntryModel(this, e))};
   }
+
+  /**
+   * Get the period this document belongs to.
+   */
+  get period() {
+    return this.parent;
+  }
+
+  /**
+   * Get the database this document belongs to.
+   */
+  get db() {
+    return this.parent.db;
+  }
 }
 
 export default DocumentModel;

@@ -46,6 +46,20 @@ class EntryModel extends Model {
   }
 
   /**
+   * Get the period this entry belongs to.
+   */
+  get period() {
+    return this.parent.period;
+  }
+
+  /**
+   * Get the database this entry belongs to.
+   */
+  get db() {
+    return this.parent.db;
+  }
+
+  /**
    * Get the positive (debit) or negative (credit) value of cents.
    */
   get total() {

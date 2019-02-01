@@ -2,6 +2,7 @@ import { runInAction, computed, toJS, observable } from 'mobx';
 import clone from 'clone';
 import config from '../Configuration';
 import AccountModel from '../Models/AccountModel';
+import DatabaseModel from '../Models/DatabaseModel';
 import PeriodModel from '../Models/PeriodModel';
 import DocumentModel from '../Models/DocumentModel';
 import EntryModel from '../Models/EntryModel';
@@ -10,8 +11,15 @@ import EntryModel from '../Models/EntryModel';
  * The store structure is the following:
  * {
  *   token: null
- *   dbs: ['dbname1', 'dbname2'],
- *   db: 'currentdb',
+ *   dbsByName: {
+ *     foo: {
+ *       name: "foo"
+ *     },
+ *     bar: {
+ *       name: "bar"
+ *     }
+ *   },
+ *   db: 'foo',
  *   periodId: 1,
  *   accountId: 123,
  *   lastDate: "2018-01-01", // Latest date entered by user.
@@ -118,7 +126,7 @@ class Store {
   @observable balances = [];
   @observable changed = false;
   @observable db = null;
-  @observable dbs = [];
+  @observable dbsByName = {};
   @observable headings = {};
   @observable lastDate = null;
   @observable periodId = null;
@@ -310,11 +318,14 @@ class Store {
       return Promise.resolve([]);
     }
     return this.request('/db')
-      .then(dbs => {
+      .then(data => {
         runInAction(() => {
-          this.dbs = [];
-          if (dbs) {
-            this.dbs = dbs.map(db => db.name);
+          this.dbsByName = {};
+          if (data) {
+            data.forEach((db) => {
+              const model = new DatabaseModel(this, db);
+              this.dbsByName[model.name] = model;
+            });
           }
         });
       });
@@ -329,7 +340,7 @@ class Store {
         runInAction(() => {
           this.periodsById = {};
           periods.forEach((data) => {
-            const period = new PeriodModel(this, data);
+            const period = new PeriodModel(this.dbsByName[this.db], data);
             this.periodsById[period.id] = period;
           });
         });
@@ -490,7 +501,7 @@ class Store {
   logout() {
     localStorage.removeItem('token');
     this.token = null;
-    this.dbs = [];
+    this.dbsByName = {};
     this.db = null;
     this.periods = [];
     this.periodId = null;
@@ -712,6 +723,14 @@ class Store {
   @computed
   get periods() {
     return Object.values(this.periodsById).sort(PeriodModel.sorter(true));
+  }
+
+  /**
+   * Get a list of dbs.
+   */
+  @computed
+  get dbs() {
+    return Object.values(this.dbsByName).sort(DatabaseModel.sorter(true));
   }
 
   /**

@@ -53,6 +53,13 @@ class PeriodModel extends Model {
   getAccountDocuments(accountId) {
     return [...(this.documentsByAccountId[accountId] || new Set())].map((id) => this.getDocument(id));
   }
+
+  /**
+   * Get the database this period belongs to.
+   */
+  get db() {
+    return this.parent;
+  }
 }
 
 export default PeriodModel;

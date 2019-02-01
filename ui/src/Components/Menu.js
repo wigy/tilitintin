@@ -86,7 +86,7 @@ class Menu extends Component {
           <Nav bsStyle="tabs" activeKey="1" onSelect={k => this.handleSelect('db', k)}>
             <NavDropdown eventKey="1" title={db || t('Select database')} id="nav-dropdown" disabled={notLoggedIn}>
               {this.props.store.dbs.map(db => (
-                <MenuItem key={db} eventKey={db}>{db}</MenuItem>
+                <MenuItem key={db.name} eventKey={db.name}>{db.name}</MenuItem>
               ))}
             </NavDropdown>
           </Nav>

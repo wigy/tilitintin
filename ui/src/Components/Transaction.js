@@ -84,7 +84,6 @@ class Transaction extends Component {
     const isSelected = (type) => this.props.selected && selectedColumn === type && idx === selectedRow;
     const current = tx.account_id === entry.account_id;
     const classes = 'TransactionEntry alt open' + (duplicate ? ' duplicate' : '');
-
     return (
       <tr key={idx} className={classes}>
         <td className="account" colSpan={3} onClick={() => this.onClickDetail(0, idx)}>
