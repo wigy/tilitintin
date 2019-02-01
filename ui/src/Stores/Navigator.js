@@ -170,7 +170,7 @@ class Navigator {
   }
   handleTransactionTableEnter({index, row}) {
     if (index !== null && row === null) {
-      this.store.filteredTransactions[index].open = !this.store.filteredTransactions[index].open;
+      this.store.filteredTransactions[index].document.open = !this.store.filteredTransactions[index].document.open;
     }
     if (index !== null && row !== null) {
       return {editor: true};

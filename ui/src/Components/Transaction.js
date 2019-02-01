@@ -40,6 +40,22 @@ class Transaction extends Component {
     this.props.cursor.selectCell(column, row);
   }
 
+  // Handle finalizing editing of a cell.
+  @action.bound
+  onComplete(column, row) {
+    column++;
+    if (column === 4) {
+      column = 0;
+      row++;
+      // Oops, we are on the last column of last row.
+      if (row >= this.props.tx.entries.length) {
+        column = 3;
+        row--;
+      }
+    }
+    this.props.cursor.selectCell(column, row);
+  }
+
   // Render the main row of the document, i.e. the entry having the current account and data from document it belongs to.
   renderMainTx(classes) {
     const {tx, selected, selectedRow} = this.props;
@@ -79,11 +95,22 @@ class Transaction extends Component {
   }
 
   // Render an entry for opened document.
-  renderEntry(idx, entry) {
+  renderEntry(idx, entry, diff) {
     const {tx, duplicate, selectedColumn, selectedRow} = this.props;
     const isSelected = (type) => this.props.selected && selectedColumn === type && idx === selectedRow;
     const current = tx.account_id === entry.account_id;
     const classes = 'TransactionEntry alt open' + (duplicate ? ' duplicate' : '');
+
+    // Calculate correction to fix total assuming that this entry is the one changed.
+    if (entry.debit) {
+      diff -= entry.amount;
+    } else {
+      diff += entry.amount;
+    }
+
+    const proposalDebit = diff < 0 ? sprintf('%.2f', -diff / 100) + '' : null;
+    const proposalCredit = diff > 0 ? sprintf('%.2f', diff / 100) + '' : null;
+
     return (
       <tr key={idx} className={classes}>
         <td className="account" colSpan={3} onClick={() => this.onClickDetail(0, idx)}>
@@ -98,10 +125,39 @@ class Transaction extends Component {
           />
         </td>
         <td className="description" onClick={() => this.onClickDetail(1, idx)}>
+          <TransactionDetails
+            selected={isSelected('description')}
+            current={current}
+            type="description"
+            document={entry.document}
+            entry={entry}
+            onComplete={() => this.onComplete(1, idx)}
+            onClick={() => this.onClickDetail(1, idx)}
+          />
         </td>
         <td className="debit" onClick={() => this.onClickDetail(2, idx)}>
+          <TransactionDetails
+            selected={isSelected('debit')}
+            current={current}
+            type="debit"
+            document={entry.document}
+            entry={entry}
+            onClick={() => this.onClickDetail()}
+            onComplete={() => this.onComplete(2, idx)}
+            proposal={proposalDebit}
+          />
         </td>
         <td className="credit" onClick={() => this.onClickDetail(3, idx)}>
+          <TransactionDetails
+            selected={isSelected('credit')}
+            current={current}
+            type="credit"
+            document={entry.document}
+            entry={entry}
+            onClick={() => this.onClickDetail()}
+            onComplete={() => this.onComplete(3, idx)}
+            proposal={proposalCredit}
+          />
         </td>
         <td className="empty">
           &nbsp;
@@ -109,59 +165,6 @@ class Transaction extends Component {
       </tr>
     );
   }
-  /*
-
-        // Calculate correction to fix total assuming that this entry is the one changed.
-        let diff = debit - credit;
-        if (entry.debit) {
-          diff -= entry.amount;
-        } else {
-          diff += entry.amount;
-        }
-        const proposalDebit = diff < 0 ? sprintf('%.2f', -diff / 100) + '' : null;
-        const proposalCredit = diff > 0 ? sprintf('%.2f', diff / 100) + '' : null;
-
-          <tr key={idx} className={classes}>
-            <td className="account" colSpan={3} onClick={() => onClickDetail(0, idx)}>
-            </td>
-            <td className="description" onClick={() => onClickDetail(1, idx)}>
-              <TransactionDetails
-                selected={isSelected('description')}
-                current={current}
-                type="description"
-                document={entry.document}
-                entry={entry}
-                onComplete={() => onComplete(1, idx)}
-                onClick={() => onClickDetail(1, idx)}
-              />
-            </td>
-            <td className="debit" onClick={() => onClickDetail(2, idx)}>
-              <TransactionDetails
-                selected={isSelected('debit')}
-                current={current}
-                type="debit"
-                document={entry.document}
-                entry={entry}
-                onClick={() => onClickDetail()}
-                onComplete={() => onComplete(2, idx)}
-                proposal={proposalDebit}
-              />
-            </td>
-            <td className="credit" onClick={() => onClickDetail(3, idx)}>
-              <TransactionDetails
-                selected={isSelected('credit')}
-                current={current}
-                type="credit"
-                document={entry.document}
-                entry={entry}
-                onClick={() => onClickDetail()}
-                onComplete={() => onComplete(3, idx)}
-                proposal={proposalCredit}
-              />
-            </td>
-          </tr>
-      });
-      */
 
   render() {
     const tx = this.props.tx;
@@ -197,21 +200,6 @@ class Transaction extends Component {
     const imbalance = (credit !== debit);
     const error = imbalance || missingAccount;
 
-    // Handle finalizing editing of a cell.
-    const onComplete = (column, row) => {
-      column++;
-      if (column === 4) {
-        column = 0;
-        row++;
-        // Oops, we are on the last column of last row.
-        if (row >= tx.entries.length) {
-          column = 3;
-          row--;
-        }
-      }
-      this.props.cursor.selectCell(column, row);
-    };
-
     // Set up CSS classes.
     const classes = 'Transaction' +
       (this.props.selected ? ' selected' : '') +
@@ -226,9 +214,9 @@ class Transaction extends Component {
     ];
 
     // Render entries, if opened.
-    if (tx.document.open) {
+    if (tx.document.open && !this.props.duplicate) {
       tx.document.entries.forEach((entry, idx) => {
-        ret.push(this.renderEntry(idx, entry));
+        ret.push(this.renderEntry(idx, entry, debit - credit));
       });
     }
 

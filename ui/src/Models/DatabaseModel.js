@@ -12,6 +12,13 @@ class DatabaseModel extends Model {
   getSortKey() {
     return this.name;
   }
+
+  /**
+   * Get the store.
+   */
+  get store() {
+    return this.parent;
+  }
 }
 
 export default DatabaseModel;

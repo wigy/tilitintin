@@ -15,7 +15,7 @@ class DocumentModel extends Model {
       // A list of entries of this document.
       entries: [],
       // If set, the entries are listed in UI.
-      open: true // false
+      open: false
     }, init);
   }
 
@@ -43,6 +43,13 @@ class DocumentModel extends Model {
    */
   get db() {
     return this.parent.db;
+  }
+
+  /**
+   * Get the store.
+   */
+  get store() {
+    return this.parent.store;
   }
 }
 

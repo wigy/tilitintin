@@ -60,10 +60,24 @@ class EntryModel extends Model {
   }
 
   /**
+   * Get the store.
+   */
+  get store() {
+    return this.parent.store;
+  }
+
+  /**
    * Get the positive (debit) or negative (credit) value of cents.
    */
   get total() {
     return this.debit ? this.amount : -this.amount;
+  }
+
+  /**
+   * Get the account model this entry is for.
+   */
+  get account() {
+    return this.store.accountsById[this.account_id] || null;
   }
 }
 

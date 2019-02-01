@@ -60,6 +60,13 @@ class PeriodModel extends Model {
   get db() {
     return this.parent;
   }
+
+  /**
+   * Get the store.
+   */
+  get store() {
+    return this.parent.store;
+  }
 }
 
 export default PeriodModel;
