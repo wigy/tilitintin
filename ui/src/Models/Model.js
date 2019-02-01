@@ -32,6 +32,13 @@ class Model {
   }
 
   /**
+   * Get the store.
+   */
+  get store() {
+    return this.parent ? this.parent.store : null;
+  }
+
+  /**
    * Construct a sorting function for sorting model instances.
    */
   static sorter(reverse = false) {

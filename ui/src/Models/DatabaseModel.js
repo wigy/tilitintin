@@ -14,6 +14,15 @@ class DatabaseModel extends Model {
   }
 
   /**
+   * Get the account by its ID.
+   * @param {Number} id
+   * @return {null|AccountModel}
+   */
+  getAccount(id) {
+    return this.store.accountsById[id] || null;
+  }
+
+  /**
    * Get the store.
    */
   get store() {

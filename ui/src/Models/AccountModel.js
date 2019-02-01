@@ -24,6 +24,10 @@ class AccountModel extends Model {
     return this.number;
   }
 
+  get store() {
+    return this.parent;
+  }
+
   /**
    * Add tags for this account.
    * @param {String[]} tags

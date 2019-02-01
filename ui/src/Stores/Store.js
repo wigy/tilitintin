@@ -6,6 +6,7 @@ import DatabaseModel from '../Models/DatabaseModel';
 import PeriodModel from '../Models/PeriodModel';
 import DocumentModel from '../Models/DocumentModel';
 import EntryModel from '../Models/EntryModel';
+import BalanceModel from '../Models/BalanceModel';
 
 /**
  * The store structure is the following:
@@ -14,6 +15,15 @@ import EntryModel from '../Models/EntryModel';
  *   dbsByName: {
  *     foo: {
  *       name: "foo"
+ *       accountsById: {
+ *         123: {
+ *           id: 123,
+ *           name: "Muiden vapaaehtoisten varausten muutos",
+ *           number: "9890",
+ *           type: "EXPENSE",
+ *           tags: ["Tag1", "Tag2"],
+ *         }
+ *       },
  *     },
  *     bar: {
  *       name: "bar"
@@ -23,6 +33,7 @@ import EntryModel from '../Models/EntryModel';
  *   periodId: 1,
  *   accountId: 123,
  *   lastDate: "2018-01-01", // Latest date entered by user.
+ *   TODO: Move inside DB model.
  *   tags: {
  *     "Tag":
  *       id: 1,
@@ -32,66 +43,27 @@ import EntryModel from '../Models/EntryModel';
  *       type: "Category",
  *       order: 102,
  *   },
+ *   TODO: Move inside DB model.
  *   periodsById: {
  *     1: {
  *       id: 1,
  *       start_date: "2016-12-31T22:00:00.000Z",
- *       "end_date": "2017-12-30T22:00:00.000Z",
- *       "locked": 0
+ *       end_date: "2017-12-30T22:00:00.000Z",
+ *       locked: 0
+ *       balances: {
+ *         123: {
+ *           account_id: 123,
+ *           total: 3635057,
+ *         }
+ *       }
  *     }
  *   }
- *   balances: [
- *       {
- *         id: 94,
- *         number: "1543",
- *         name: "Arvopaperit",
- *         debit: 3654285,
- *         credit: -19228,
- *         total: 3635057,
- *       }, ...
- *     ]
- *   },
- *   accountsById: {
- *     123: {
- *       id: 123,
- *       name: "Muiden vapaaehtoisten varausten muutos",
- *       number: "9890",
- *       type: "EXPENSE",
- *       tags: ["Tag1", "Tag2"],
- *     }
- *   },
+ *   TODO: Move inside DB model.
  *   headings: {
  *     "1001": [{
  *       "text": "Vastaavaa",
  *       "level": 0
  *     },...]
- *   },
- *   transactionsById: {
- *     1: {                    // periodId
- *       123: [                // accountId
- *         {
- *           id: 158,
- *           number: 5,           // Document number.
- *           period_id: 1,
- *           date: "2017-07-31",
- *           open: false, // If UI has opened entries.
- *           entries: [
- *             {
- *               id: 99,
- *               account_id: 123,
- *               amount: 30000,
- *               debit: 1,
- *               description: "Sell thing",
- *               document_id: 158,
- *               flags: 0,
- *               row_number: 1,
- *               tags: []
- *             }
- *           ],
- *         },
- *         ...
- *       ]
- *     }
  *   },
  *   tools: {
  *     tagDisabled: {
@@ -123,7 +95,6 @@ class Store {
 
   @observable accountId = null;
   @observable accountsById = {};
-  @observable balances = [];
   @observable changed = false;
   @observable db = null;
   @observable dbsByName = {};
@@ -258,7 +229,6 @@ class Store {
     this.changed = true;
 
     this.periodId = null;
-    this.balances = [];
     this.clearAccount();
   }
 
@@ -390,9 +360,10 @@ class Store {
     return this.request('/db/' + this.db + '/period/' + this.periodId)
       .then((balances) => {
         runInAction(() => {
-          this.balances = [];
-          balances.balances.forEach((balance) => {
-            this.balances.push(balance);
+          const period = this.periodsById[this.periodId];
+          period.balances = {};
+          balances.balances.forEach((data) => {
+            period.addBalance(new BalanceModel(period, {account_id: data.id, ...data}));
           });
         });
       });
@@ -731,6 +702,17 @@ class Store {
   @computed
   get dbs() {
     return Object.values(this.dbsByName).sort(DatabaseModel.sorter(true));
+  }
+
+  /**
+   * Get a list of balances for the current period.
+   */
+  @computed
+  get balances() {
+    if (this.periodId && this.periodsById[this.periodId]) {
+      return Object.values(this.periodsById[this.periodId].balances).sort(BalanceModel.sorter());
+    }
+    return [];
   }
 
   /**

@@ -9,27 +9,29 @@ FUTURE FEATURES
 ===============
 
 0.4
-[ ] Editing tags (maybe add them to text editor).
-[ ] Support for tag parameter for reports to provide different columns per tag (skip 2nd period).
 [ ] Sort automatically new entries by date, when added.
 [ ] Add more model classes for storing actual data in Store.
     [X] New folder for models.
     [X] Base classes Model and NavigationTargetModel.
-    [ ] Model for Entry.
-    [ ] Model for Transaction.
-    [ ] Model for Account.
-    [ ] Model for Balance.
-    [ ] Model for Period.
-    [ ] Model for Tag.
+    [X] Model for Entry.
+    [X] Model for Transaction.
+    [X] Model for Account.
+    [X] Model for Balance.
+    [X] Model for Period.
+    [X] Model for Tag.
+    [X] Model for Database.
+    [ ] Improve logical structure of the store.
 [X] Rename all get-functions as fetch in Store.
-[ ] Storing tag images on the server.
+[ ] Change editing so that model has a flags and information about editing state.
 [ ] Drop combining entry data with document data in API http://localhost:3001/db/<name>/account/<accId>/<periodId>
 
 0.6
-[ ] Change editing so that model has a flags and information about editing state.
 [ ] Proposals for account number by looking for account last used with the text given in previous entry.
 [ ] Proposals for accounts, when typing partial name of it.
 [ ] Dim the screen while running network operation.
+[ ] Editing tags (maybe add them to text editor).
+[ ] Support for tag parameter for reports to provide different columns per tag (skip 2nd period).
+[ ] Storing tag images on the server.
 
 0.7
 [ ] Tools page: renumber documents in increasing order by date.

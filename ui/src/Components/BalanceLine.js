@@ -4,23 +4,21 @@ import { inject } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import Money from './Money';
 import Cursor from '../Stores/Cursor';
+import BalanceModel from '../Models/BalanceModel';
+
 import './BalanceLine.css';
 
 @inject('cursor')
 class BalanceLine extends Component {
   render() {
-    const props = this.props;
-    const dst = '/' + props.db + '/txs/' + props.periodId + '/' + props.line.id;
-
-    const onClick = () => {
-      this.props.cursor.selectIndex('BalanceTable', props.index);
-    };
+    const {db, periodId, balance, selected} = this.props;
+    const dst = '/' + db + '/txs/' + periodId + '/' + balance.account_id;
 
     return (
-      <tr id={'Balance' + props.line.id} className={props.selected ? 'BalanceLine selected' : 'BalanceLine'}>
-        <td className="number"><Link onClick={onClick} to={dst}>{props.line.number}</Link></td>
-        <td className="name"><Link onClick={onClick} to={dst}>{props.line.name}</Link></td>
-        <td className="balance"><Link onClick={onClick} to={dst}><Money cents={props.line.total} currency="EUR"/></Link></td>
+      <tr id={'Balance' + balance.account_id} className={selected ? 'BalanceLine selected' : 'BalanceLine'}>
+        <td className="number"><Link to={dst}>{balance.account && balance.account.number}</Link></td>
+        <td className="name"><Link to={dst}>{balance.account && balance.account.name}</Link></td>
+        <td className="balance"><Link to={dst}><Money cents={balance.total} currency="EUR"/></Link></td>
       </tr>
     );
   }
@@ -30,7 +28,8 @@ BalanceLine.propTypes = {
   cursor: PropTypes.instanceOf(Cursor),
   db: PropTypes.string,
   periodId: PropTypes.number,
-  line: PropTypes.object,
+  index: PropTypes.number,
+  balance: PropTypes.instanceOf(BalanceModel),
   selected: PropTypes.bool
 };
 

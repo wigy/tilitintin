@@ -3,8 +3,15 @@ import { observable } from 'mobx';
 
 class PeriodModel extends Model {
 
+  // All documents of this period.
   @observable
   documentsByAccountId = {};
+  // All known account balances of the period.
+  @observable
+  balances = {};
+  // All known documents of the period.
+  @observable
+  documents = {};
 
   constructor(parent, init = {}) {
     super(parent, {
@@ -14,9 +21,7 @@ class PeriodModel extends Model {
       // Final date of the period as a string "YYYY-MM-DD".
       end_date: null,
       // If set, the period is locked and cannot be changed.
-      locked: false,
-      // All known documents of the period.
-      documents: {}
+      locked: false
     }, init);
   }
 
@@ -29,11 +34,21 @@ class PeriodModel extends Model {
    * @param {DocumentModel} doc
    */
   addDocument(doc) {
+    doc.parent = this;
     this.documents[doc.id] = doc;
     doc.entries.forEach((entry) => {
       this.documentsByAccountId[entry.account_id] = this.documentsByAccountId[entry.account_id] || new Set();
       this.documentsByAccountId[entry.account_id].add(doc.id);
     });
+  }
+
+  /**
+   * Add new or override old balance for the given account.
+   * @param {BalanceModel} balance
+   */
+  addBalance(balance) {
+    balance.parent = this;
+    this.balances[balance.account_id] = balance;
   }
 
   /**
@@ -43,6 +58,15 @@ class PeriodModel extends Model {
    */
   getDocument(id) {
     return this.documents[id] || null;
+  }
+
+  /**
+   * Get the account by its ID.
+   * @param {Number} id
+   * @return {null|AccountModel}
+   */
+  getAccount(id) {
+    return this.db.getAccount(id);
   }
 
   /**
@@ -59,13 +83,6 @@ class PeriodModel extends Model {
    */
   get db() {
     return this.parent;
-  }
-
-  /**
-   * Get the store.
-   */
-  get store() {
-    return this.parent.store;
   }
 }
 

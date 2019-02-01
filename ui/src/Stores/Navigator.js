@@ -235,7 +235,7 @@ class Navigator {
 
       };
       this.store.transactions.push(tx);
-      this.cursor.selectIndex('TransactionTable', this.store.transactions.length - 1);
+      this.cursor.selectIndex('TransactionTable', this.store.filteredTransactions.length - 1);
       this.cursor.selectEditing();
     } else {
       const sample = this.store.transactions[index].entries[row];
@@ -285,7 +285,7 @@ class Navigator {
     const ret = this.cursor.indexUpdate(index, this.store.balances.length, amount);
     // TODO: Would be nice to get rid of direct DOM-manipulation.
     if (ret) {
-      const el = document.getElementById('Balance' + this.store.balances[ret.index].id);
+      const el = document.getElementById('Balance' + this.store.balances[ret.index].account_id);
       el.scrollIntoView({block: 'center', inline: 'center'});
     }
     return ret;
@@ -302,7 +302,7 @@ class Navigator {
   handleBalanceTableHome() {
     if (this.store.balances.length) {
       // TODO: DRY
-      const el = document.getElementById('Balance' + this.store.balances[0].id);
+      const el = document.getElementById('Balance' + this.store.balances[0].account_id);
       el.scrollIntoView({block: 'center', inline: 'center'});
       return {index: 0};
     }
@@ -311,7 +311,7 @@ class Navigator {
     const N = this.store.balances.length;
     if (N) {
       // TODO: DRY
-      const el = document.getElementById('Balance' + this.store.balances[N - 1].id);
+      const el = document.getElementById('Balance' + this.store.balances[N - 1].account_id);
       el.scrollIntoView({block: 'center', inline: 'center'});
       return {index: N - 1};
     }
@@ -322,7 +322,7 @@ class Navigator {
   handleBalanceTableEnter({index}) {
     if (this.store.balances[index]) {
       // TODO: DRY
-      const el = document.getElementById('Balance' + this.store.balances[index].id);
+      const el = document.getElementById('Balance' + this.store.balances[index].account_id);
       el.children[0].children[0].click();
       return {};
     }

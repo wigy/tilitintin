@@ -44,13 +44,6 @@ class DocumentModel extends Model {
   get db() {
     return this.parent.db;
   }
-
-  /**
-   * Get the store.
-   */
-  get store() {
-    return this.parent.store;
-  }
 }
 
 export default DocumentModel;
