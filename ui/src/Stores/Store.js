@@ -4,6 +4,7 @@ import config from '../Configuration';
 import AccountModel from '../Models/AccountModel';
 import PeriodModel from '../Models/PeriodModel';
 import DocumentModel from '../Models/DocumentModel';
+import EntryModel from '../Models/EntryModel';
 
 /**
  * The store structure is the following:
@@ -129,7 +130,6 @@ class Store {
   @observable tags = {};
   @observable token = localStorage.getItem('token');
   @observable tools = { tagDisabled: {} };
-  @observable transactions = [];
 
   constructor() {
     // Promises for ongoing GET requests.
@@ -264,7 +264,7 @@ class Store {
     if (accountId === 'none') {
       return true;
     }
-    accountId = accountId || null;
+    accountId = parseInt(accountId) || null;
     if (this.setPeriod(db, periodId) && this.accountId === accountId) {
       return true;
     }
@@ -283,7 +283,6 @@ class Store {
     this.changed = true;
 
     this.accountId = null;
-    this.transactions = [];
     this.tools = {
       tagDisabled: {
       }
@@ -431,17 +430,6 @@ class Store {
    */
   async fetchAccountPeriod(db, periodId, accountId) {
 
-    // Helper to convert description to stripped description and tag flags object.
-    const desc2tags = (desc) => {
-      let ret = [desc, []];
-      const regex = /^((\[[a-zA-Z0-9]+\])*)\s*(.*)/.exec(desc);
-      if (regex[1]) {
-        ret[0] = regex[3];
-        ret[1] = regex[1].substr(1, regex[1].length - 2).split('][');
-      }
-      return ret;
-    };
-
     if (!Object.keys(this.accountsById).length) {
       await this.fetchAccounts();
     }
@@ -450,26 +438,16 @@ class Store {
       .then((data) => {
         runInAction(() => {
           const account = this.accountsById[data.id];
-          this.transactions = data.transactions;
-          let tags = {};
           let lastDate;
-          this.transactions.forEach((tx) => {
+          data.transactions.forEach((tx) => {
             const doc = new DocumentModel(this.periodsById[tx.period_id], tx);
             this.periodsById[this.periodId].addDocument(doc);
             lastDate = tx.date;
-            const [txDesc, txTags] = desc2tags(tx.description);
-            tx.description = txDesc;
-            tx.tags = txTags;
-            tx.tags.forEach((tag) => (tags[tag] = true));
-            tx.open = false;
-            tx.entries.forEach((entry) => {
-              const [entryDesc, entryTags] = desc2tags(entry.description);
-              entry.description = entryDesc;
-              entry.tags = entryTags;
+            doc.entries.forEach((entry) => {
+              account.addTags([...entry.tags]);
             });
           });
           this.lastDate = lastDate;
-          account.addTags(Object.keys(tags));
         });
       });
   }
@@ -701,6 +679,23 @@ class Store {
     };
 
     return filter(this.transactions);
+  }
+
+  /**
+   * Get a list of all entries for the currently selected account of the current period.
+   */
+  @computed
+  get transactions() {
+    if (this.periodId && this.accountId && this.periodsById[this.periodId]) {
+      let ret = [];
+      let docs = this.periodsById[this.periodId].getAccountDocuments(this.accountId);
+      docs = docs.sort(DocumentModel.sorter());
+      docs.forEach((doc) => {
+        ret = ret.concat(doc.entries.filter((e) => e.account_id === this.accountId));
+      });
+      return ret.sort(EntryModel.sorter());
+    }
+    return [];
   }
 
   /**

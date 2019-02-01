@@ -15,7 +15,7 @@ class DocumentModel extends Model {
       // A list of entries of this document.
       entries: [],
       // If set, the entries are listed in UI.
-      open: false
+      open: true // false
     }, init);
   }
 

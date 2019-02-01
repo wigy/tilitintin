@@ -77,9 +77,9 @@ class TransactionTable extends Component {
             if (tx.askDelete) {
               this.txToDelete = tx;
             }
-            const duplicate = seen[tx.number];
-            seen[tx.number] = true;
-            sum += tx.debit ? tx.amount : -tx.amount;
+            const duplicate = seen[tx.document.number];
+            seen[tx.document.number] = true;
+            sum += tx.total;
             return <Transaction
               key={idx}
               index={idx}

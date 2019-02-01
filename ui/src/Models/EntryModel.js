@@ -33,6 +33,24 @@ class EntryModel extends Model {
     const [description, tags] = TagModel.desc2tags(data.description);
     return {...data, description, tags};
   }
+
+  getSortKey() {
+    return this.parent ? [this.parent.number, this.row_number] : this.id;
+  }
+
+  /**
+   * Get the document this entry belongs to.
+   */
+  get document() {
+    return this.parent;
+  }
+
+  /**
+   * Get the positive (debit) or negative (credit) value of cents.
+   */
+  get total() {
+    return this.debit ? this.amount : -this.amount;
+  }
 }
 
 export default EntryModel;

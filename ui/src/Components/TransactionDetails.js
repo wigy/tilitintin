@@ -6,6 +6,8 @@ import { translate, Trans } from 'react-i18next';
 import Money from './Money';
 import TextEdit from './TextEdit';
 import Store from '../Stores/Store';
+import EntryModel from '../Models/EntryModel';
+import DocumentModel from '../Models/DocumentModel';
 import Cursor from '../Stores/Cursor';
 import { sprintf } from 'sprintf-js';
 import moment from 'moment';
@@ -70,7 +72,8 @@ class TransactionDetails extends Component {
         break;
       case 'account':
         const onClick = () => this.props.cursor.setIndex('TransactionTable', null);
-        url = '/' + this.props.tx.db + '/txs/' + this.props.tx.period_id + '/' + this.props.entry.account_id;
+        // TODO: This URL needs improvements in models.
+        url = '/' + this.props.entry.db + '/txs/' + this.props.entry.period_id + '/' + this.props.entry.account_id;
         text = <Link onClick={onClick} to={url}>{this.props.entry.number} {this.props.entry.name}</Link>;
         edit = this.props.entry.number;
         break;
@@ -80,7 +83,7 @@ class TransactionDetails extends Component {
         break;
       case 'date':
         // TODO: Locale awareness.
-        text = moment(this.props.tx.date).format('DD.MM.YYYY');
+        text = moment(this.props.document.date).format('DD.MM.YYYY');
         edit = text;
         break;
       default:
@@ -128,16 +131,16 @@ class TransactionDetails extends Component {
 
       // Update or create transaction first.
       if (data.date || !this.props.entry.document_id) {
-        await this.props.store.saveDocument(this.props.tx, data);
+        await this.props.store.saveDocument(this.props.document, data);
         if (this.props.entry) {
-          this.props.entry.document_id = this.props.tx.id;
+          this.props.entry.document_id = this.props.document.id;
         } else {
           this.props.cursor.selectCell(1, 0);
           return Promise.resolve();
         }
       }
 
-      return this.props.store.saveEntry(this.props.entry, data, this.props.tx)
+      return this.props.store.saveEntry(this.props.entry, data, this.props.document)
         .then((res) => {
           this.props.cursor.selectEditing(false);
         });
@@ -235,10 +238,10 @@ class TransactionDetails extends Component {
 }
 
 TransactionDetails.propTypes = {
-  entry: PropTypes.object,
+  document: PropTypes.instanceOf(DocumentModel),
+  entry: PropTypes.instanceOf(EntryModel),
   type: PropTypes.string,
   proposal: PropTypes.string,
-  tx: PropTypes.object,
   current: PropTypes.bool,
   selected: PropTypes.bool,
   error: PropTypes.bool,

@@ -1,6 +1,10 @@
 import Model from './Model';
+import { observable } from 'mobx';
 
 class PeriodModel extends Model {
+
+  @observable
+  documentsByAccountId = {};
 
   constructor(parent, init = {}) {
     super(parent, {
@@ -26,6 +30,28 @@ class PeriodModel extends Model {
    */
   addDocument(doc) {
     this.documents[doc.id] = doc;
+    doc.entries.forEach((entry) => {
+      this.documentsByAccountId[entry.account_id] = this.documentsByAccountId[entry.account_id] || new Set();
+      this.documentsByAccountId[entry.account_id].add(doc.id);
+    });
+  }
+
+  /**
+   * Get the document by its ID.
+   * @param {Number} id
+   * @return {null|DocumentModel}
+   */
+  getDocument(id) {
+    return this.documents[id] || null;
+  }
+
+  /**
+   * Get all documents involving the given account.
+   * @param {Number} accountId
+   * @return {DocumentModel[]}
+   */
+  getAccountDocuments(accountId) {
+    return [...(this.documentsByAccountId[accountId] || new Set())].map((id) => this.getDocument(id));
   }
 }
 
