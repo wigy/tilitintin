@@ -35,7 +35,7 @@ class ToolPanel extends Component {
     const disableAll = () => {
       this.props.cursor.resetSelected();
       let state = {};
-      this.props.store.sortTags().forEach((tag) => (state[tag.tag] = true));
+      this.props.store.account.tags.forEach((tag) => (state[tag.tag] = true));
       this.setState({disabled: state});
       this.props.store.tools.tagDisabled = state;
     };
@@ -48,15 +48,19 @@ class ToolPanel extends Component {
     };
 
     let last = null;
-    // TODO: Title below should come from AccountModel.toString().
+
+    if (!this.props.store.account) {
+      return '';
+    }
+
     return (
       <div className="ToolPanel">
-        <h1>{this.props.store.account.number} {this.props.store.account.name}</h1>
+        <h1>{this.props.store.account.toString()}</h1>
 
         <IconButton onClick={enableAll} title="reset" icon="fa-home"></IconButton>
         <IconButton onClick={disableAll} title="disable-all" icon="fa-trash-alt"></IconButton>
 
-        {this.props.store.sortTags().map((tag) => {
+        {this.props.store.account.tags.map((tag) => {
           const spacer = (tag.type !== last);
           const className = (this.state.disabled[tag.tag] ? 'IconButton off' : 'IconButton');
           last = tag.type;

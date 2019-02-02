@@ -9,6 +9,9 @@ class DatabaseModel extends Model {
   // All accounts of this database.
   @observable
   accountsById = {};
+  // All tags of this database.
+  @observable
+  tagsByTag = {};
 
   constructor(parent, init = {}) {
     super(parent, {
@@ -37,6 +40,23 @@ class DatabaseModel extends Model {
   addAccount(account) {
     account.parent = this;
     this.accountsById[account.id] = account;
+  }
+
+  /**
+   * Add new or override old tag for the given database.
+   * @param {AccountModel} account
+   */
+  addTag(tag) {
+    tag.parent = this;
+    this.tagsByTag[tag.tag] = tag;
+  }
+
+  /**
+   * Get the tag by its code.
+   * @param {String} tag
+   */
+  getTag(tag) {
+    return this.tagsByTag[tag] || null;
   }
 
   /**

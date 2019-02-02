@@ -41,8 +41,8 @@ class DocumentModel extends Model {
   /**
    * Get the database this document belongs to.
    */
-  get db() {
-    return this.parent.db;
+  get database() {
+    return this.parent.database;
   }
 }
 

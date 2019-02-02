@@ -7,6 +7,7 @@ import PeriodModel from '../Models/PeriodModel';
 import DocumentModel from '../Models/DocumentModel';
 import EntryModel from '../Models/EntryModel';
 import BalanceModel from '../Models/BalanceModel';
+import TagModel from '../Models/TagModel';
 
 /**
  * The store structure is the following:
@@ -24,26 +25,32 @@ import BalanceModel from '../Models/BalanceModel';
  *           tags: ["Tag1", "Tag2"],
  *         }
  *       },
+ *       periodsById: {
+ *         1: {
+ *           id: 1,
+ *           start_date "2017-01-01",
+ *           end_date "2017-12-31"
+ *         }
+ *       },
+ *       tags: {
+ *         "Tag":
+ *           id: 1,
+ *           tag: "Tag",
+ *           name: "Tag description",
+ *           picture: "https://site.to.store/picture",
+ *           type: "Category",
+ *           order: 102,
+ *       },
  *     },
  *     bar: {
  *       name: "bar",
  *       ...
  *     }
  *   },
- *   db: 'foo',
- *   periodId: 1,
- *   accountId: 123,
+ *   db: 'foo',              // Currently selected db
+ *   periodId: 1,            // Currently selected period
+ *   accountId: 123,         // Currently selected account
  *   lastDate: "2018-01-01", // Latest date entered by user.
- *   TODO: Move inside DB model.
- *   tags: {
- *     "Tag":
- *       id: 1,
- *       tag: "Tag",
- *       name: "Tag description",
- *       picture: "https://site.to.store/picture",
- *       type: "Category",
- *       order: 102,
- *   },
  *   TODO: Move inside DB model.
  *   headings: {
  *     "1001": [{
@@ -57,6 +64,7 @@ import BalanceModel from '../Models/BalanceModel';
  *       Tag2: false
  *     }
  *   },
+ *   // TODO: Move inside DB model.
  *   reports: [...], // Available report identifiers.
  *   reportOptionsAvailable: { // Report options available per report identifier.
  *    'general-ledger': {
@@ -179,7 +187,6 @@ class Store {
 
     this.db = null;
     this.headings = {};
-    this.tags = {};
     this.reports = [];
     this.report = null;
     this.clearPeriod();
@@ -256,8 +263,7 @@ class Store {
     return this.request('/db/' + this.db + '/tags')
       .then((tags) => {
         runInAction(() => {
-          this.tags = {};
-          tags.forEach((tag) => (this.tags[tag.tag] = tag));
+          tags.forEach((tag) => (this.database.addTag(new TagModel(this.database, tag))));
         });
       });
   }
@@ -361,7 +367,7 @@ class Store {
         }
         runInAction(() => {
           accounts.forEach((data) => {
-            const account = new AccountModel(this, data);
+            const account = new AccountModel(this.database, data);
             this.database.addAccount(account);
           });
         });
@@ -410,25 +416,12 @@ class Store {
             this.period.addDocument(doc);
             lastDate = tx.date;
             doc.entries.forEach((entry) => {
-              account.addTags([...entry.tags]);
+              account.addTags([...entry.tagNames]);
             });
           });
           this.lastDate = lastDate;
         });
       });
-  }
-
-  /**
-   * Sort the given list (or current account's) of tags to their official order.
-   * @param {Array<Object>|null} tags
-   * TODO: Models should handle this.
-   */
-  sortTags(tags = null) {
-    if (tags === null) {
-      tags = this.account.tags || [];
-    }
-    let ret = tags.map((tag) => this.tags[tag] || {tag: tag, order: 9999999});
-    return ret.sort((a, b) => a.order - b.order);
   }
 
   /**
@@ -633,7 +626,7 @@ class Store {
       }
       let disabled = true;
       tx.tags.forEach((tag) => {
-        if (!this.tools.tagDisabled[tag]) {
+        if (!this.tools.tagDisabled[tag.tag]) {
           disabled = false;
         }
       });
@@ -662,14 +655,6 @@ class Store {
       return ret.sort(EntryModel.sorter());
     }
     return [];
-  }
-
-  /**
-   * Get a list of accounts sorted by their number.
-   */
-  @computed
-  get accounts() {
-    return Object.values(this.database.accountsById).sort(AccountModel.sorter());
   }
 
   /**
@@ -727,9 +712,17 @@ class Store {
   @computed
   get account() {
     if (this.accountId && this.database) {
-      return this.database.accountsById[this.accountId] || {};
+      return this.database.accountsById[this.accountId] || null;
     }
-    return {};
+    return null;
+  }
+
+  /**
+   * Get a list of accounts sorted by their number.
+   */
+  @computed
+  get accounts() {
+    return this.database ? Object.values(this.database.accountsById).sort(AccountModel.sorter()) : [];
   }
 }
 

@@ -66,7 +66,7 @@ class PeriodModel extends Model {
    * @return {null|AccountModel}
    */
   getAccount(id) {
-    return this.db.getAccount(id);
+    return this.database.getAccount(id);
   }
 
   /**
@@ -81,7 +81,7 @@ class PeriodModel extends Model {
   /**
    * Get the database this period belongs to.
    */
-  get db() {
+  get database() {
     return this.parent;
   }
 }

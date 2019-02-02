@@ -20,8 +20,8 @@ class EntryModel extends Model {
       flags: 0,
       // Order number for this entry.
       row_number: null,
-      // Tags extracted from the description.
-      tags: []
+      // Tag names extracted from the description.
+      tagNames: []
     }, init);
   }
 
@@ -30,8 +30,8 @@ class EntryModel extends Model {
    * @param {Object} data
    */
   initialize(data) {
-    const [description, tags] = TagModel.desc2tags(data.description);
-    return {...data, description, tags};
+    const [description, tagNames] = TagModel.desc2tags(data.description);
+    return {...data, description, tagNames};
   }
 
   getSortKey() {
@@ -55,8 +55,8 @@ class EntryModel extends Model {
   /**
    * Get the database this entry belongs to.
    */
-  get db() {
-    return this.parent.db;
+  get database() {
+    return this.parent.database;
   }
 
   /**
@@ -70,7 +70,11 @@ class EntryModel extends Model {
    * Get the account model this entry is for.
    */
   get account() {
-    return this.db.getAccount(this.account_id);
+    return this.database.getAccount(this.account_id);
+  }
+
+  get tags() {
+    return this.tagNames.map((tag) => this.account.getTag(tag)).sort(TagModel.sorter());
   }
 }
 

@@ -76,7 +76,7 @@ class Transaction extends Component {
           />
         </td>
         <td className="tags" style={{width: (tx.tags.length) * 2.6 + 'ex'}}>
-          <Tags tags={tx.tags}/>
+          <Tags tags={tx.tags}></Tags>
         </td>
         <td className="description">
           <span className="summary">{tx.description}&nbsp;</span>

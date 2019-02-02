@@ -18,6 +18,10 @@ class TagModel extends Model {
     }, init);
   }
 
+  getSortKey() {
+    return this.order;
+  }
+
   /**
    * Extract tags and text from the description string.
    * @param {string} desc

@@ -1,4 +1,5 @@
 import Model from './Model';
+import TagModel from './TagModel';
 
 class AccountModel extends Model {
 
@@ -12,7 +13,7 @@ class AccountModel extends Model {
       // "ASSET/LIABILITY/EQUITY/REVENUE/EXPENSE/PROFIT_PREV/PROFIT"
       type: null,
       // Tags found from transactions of this account.
-      tags: []
+      tagsByTag: {}
     }, init);
   }
 
@@ -24,20 +25,38 @@ class AccountModel extends Model {
     return this.number;
   }
 
-  get store() {
-    return this.parent;
+  /**
+   * Add tags for this account.
+   * @param {TagModel[]|String[]} tags
+   */
+  addTags(tags) {
+    tags.forEach((tagName) => {
+      const tag = this.database.getTag(tagName);
+      if (!tag) {
+        throw new Error(`Cannot find tag '${tagName}' from account ${this.toString()}.`);
+      }
+      this.tagsByTag[tag.tag] = tag;
+    });
   }
 
   /**
-   * Add tags for this account.
-   * @param {String[]} tags
+   * Get tag by its name.
+   * @param {String} tag
    */
-  addTags(tags) {
-    tags.forEach((tag) => {
-      if (this.tags.indexOf(tag) < 0) {
-        this.tags.push(tag);
-      }
-    });
+  getTag(tag) {
+    return this.tagsByTag[tag] || null;
+  }
+
+  get store() {
+    return this.parent.parent;
+  }
+
+  get database() {
+    return this.parent;
+  }
+
+  get tags() {
+    return Object.values(this.tagsByTag).sort(TagModel.sorter());
   }
 }
 

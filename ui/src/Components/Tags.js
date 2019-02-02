@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import Tag from './Tag';
 import Store from '../Stores/Store';
+import TagModel from '../Models/TagModel';
 
 @inject('store')
 @observer
@@ -11,7 +12,7 @@ class Tags extends Component {
   render() {
     return (
       <div className="Tags">
-        {this.props.store.sortTags(this.props.tags).map((tag) => (<Tag key={tag.tag} tag={tag}/>))}
+        {this.props.tags.map((tag) => (<Tag key={tag.tag} tag={tag}/>))}
       </div>
     );
   }
@@ -19,7 +20,7 @@ class Tags extends Component {
 
 Tags.propTypes = {
   store: PropTypes.instanceOf(Store),
-  tags: PropTypes.arrayOf(PropTypes.string)
+  tags: PropTypes.arrayOf(PropTypes.instanceOf(TagModel))
 };
 
 export default Tags;
