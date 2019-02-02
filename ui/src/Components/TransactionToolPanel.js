@@ -13,9 +13,7 @@ import './ToolPanel.css';
 @observer
 class ToolPanel extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {disabled: {}};
+  componentDidMount() {
     this.props.store.tools.tagDisabled = {};
   }
 
@@ -24,27 +22,22 @@ class ToolPanel extends Component {
       return '';
     }
 
+    const tools = this.props.store.tools;
+
     const toggle = (tag) => {
       this.props.cursor.resetSelected();
-      let state = this.state.disabled;
-      state[tag] = !state[tag];
-      this.setState({disabled: state});
-      this.props.store.tools.tagDisabled = state;
+      tools.tagDisabled[tag] = !tools.tagDisabled[tag];
     };
 
     const disableAll = () => {
       this.props.cursor.resetSelected();
-      let state = {};
-      this.props.store.account.tags.forEach((tag) => (state[tag.tag] = true));
-      this.setState({disabled: state});
-      this.props.store.tools.tagDisabled = state;
+      tools.tagDisabled = {};
+      this.props.store.account.tags.forEach((tag) => (tools.tagDisabled[tag.tag] = true));
     };
 
     const enableAll = () => {
       this.props.cursor.resetSelected();
-      let state = {};
-      this.setState({disabled: state});
-      this.props.store.tools.tagDisabled = state;
+      tools.tagDisabled = {};
     };
 
     let last = null;
@@ -62,7 +55,7 @@ class ToolPanel extends Component {
 
         {this.props.store.account.tags.map((tag) => {
           const spacer = (tag.type !== last);
-          const className = (this.state.disabled[tag.tag] ? 'IconButton off' : 'IconButton');
+          const className = (tools.tagDisabled[tag.tag] ? 'IconButton off' : 'IconButton');
           last = tag.type;
           return (
             <div key={tag.tag}>
