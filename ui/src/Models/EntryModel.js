@@ -70,7 +70,7 @@ class EntryModel extends Model {
    * Get the account model this entry is for.
    */
   get account() {
-    return this.store.accountsById[this.account_id] || null;
+    return this.db.getAccount(this.account_id);
   }
 }
 

@@ -80,7 +80,6 @@ import BalanceModel from '../Models/BalanceModel';
 class Store {
 
   @observable accountId = null;
-  @observable accountsById = {};
   @observable changed = false;
   @observable db = null;
   @observable dbsByName = {};
@@ -179,7 +178,6 @@ class Store {
     this.changed = true;
 
     this.db = null;
-    this.accountsById = {};
     this.headings = {};
     this.tags = {};
     this.reports = [];
@@ -358,13 +356,13 @@ class Store {
     return this.request('/db/' + this.db + '/account')
       .then((accounts) => {
         // TODO: Hmm, maybe not good solution for unwanted tag reset but.
-        if (Object.keys(this.accountsById).length) {
+        if (this.database.hasAccounts()) {
           return;
         }
         runInAction(() => {
           accounts.forEach((data) => {
             const account = new AccountModel(this, data);
-            this.accountsById[account.id] = account;
+            this.database.addAccount(account);
           });
         });
       });
@@ -394,14 +392,18 @@ class Store {
    */
   async fetchAccountPeriod(db, periodId, accountId) {
 
-    if (!Object.keys(this.accountsById).length) {
+    if (!this.database) {
+      await this.fetchDatabases();
+    }
+
+    if (!this.database.hasAccounts()) {
       await this.fetchAccounts();
     }
 
     return this.request('/db/' + db + '/account/' + accountId + '/' + periodId)
       .then((data) => {
         runInAction(() => {
-          const account = this.accountsById[data.id];
+          const account = this.database.getAccount(data.id);
           let lastDate;
           data.transactions.forEach((tx) => {
             const doc = new DocumentModel(this.period, tx);
@@ -531,8 +533,8 @@ class Store {
           Object.assign(entry, data);
           // Fix account number and name if missing or changed and we have account.
           if (entry.account_id) {
-            entry.number = this.accountsById[entry.account_id].number;
-            entry.name = this.accountsById[entry.account_id].name;
+            entry.number = this.database.getAccount(entry.account_id).number;
+            entry.name = this.database.getAccount(entry.account_id).name;
           }
           // Fix data for copies of entries in transactions-table.
           this.transactions.forEach((tx, idx) => {
@@ -667,7 +669,7 @@ class Store {
    */
   @computed
   get accounts() {
-    return Object.values(this.accountsById).sort(AccountModel.sorter());
+    return Object.values(this.database.accountsById).sort(AccountModel.sorter());
   }
 
   /**
@@ -724,8 +726,8 @@ class Store {
    */
   @computed
   get account() {
-    if (this.accountId) {
-      return this.accountsById[this.accountId] || {};
+    if (this.accountId && this.database) {
+      return this.database.accountsById[this.accountId] || {};
     }
     return {};
   }
