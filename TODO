@@ -22,7 +22,7 @@ FUTURE FEATURES
     [X] Model for Database.
     [ ] Model for heading.
     [ ] Model for report.
-    [ ] Improve logical structure of the store.
+    [X] Improve logical structure of the store.
 [X] Rename all get-functions as fetch in Store.
 [ ] Change editing so that model has a flags and information about editing state.
 [ ] Drop combining entry data with document data in API http://localhost:3001/db/<name>/account/<accId>/<periodId>

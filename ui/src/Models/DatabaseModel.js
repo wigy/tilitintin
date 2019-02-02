@@ -12,6 +12,9 @@ class DatabaseModel extends Model {
   // All tags of this database.
   @observable
   tagsByTag = {};
+  // All headings of this database.
+  @observable
+  headingsByNumber = {};
 
   constructor(parent, init = {}) {
     super(parent, {
@@ -25,7 +28,7 @@ class DatabaseModel extends Model {
   }
 
   /**
-   * Add new or override old period for the given database.
+   * Add new or override old period for this database.
    * @param {PeriodModel} period
    */
   addPeriod(period) {
@@ -34,7 +37,7 @@ class DatabaseModel extends Model {
   }
 
   /**
-   * Add new or override old account for the given database.
+   * Add new or override old account for this database.
    * @param {AccountModel} account
    */
   addAccount(account) {
@@ -43,12 +46,22 @@ class DatabaseModel extends Model {
   }
 
   /**
-   * Add new or override old tag for the given database.
+   * Add new or override old tag for this database.
    * @param {AccountModel} account
    */
   addTag(tag) {
     tag.parent = this;
     this.tagsByTag[tag.tag] = tag;
+  }
+
+  /**
+   * Add new or override old heading for this database.
+   * @param {HeadingModel} heading
+   */
+  addHeading(heading) {
+    heading.parent = this;
+    this.headingsByNumber[heading.number] = this.headingsByNumber[heading.number] || [];
+    this.headingsByNumber[heading.number].push(heading);
   }
 
   /**
@@ -81,6 +94,13 @@ class DatabaseModel extends Model {
    */
   get store() {
     return this.parent;
+  }
+
+  /**
+   * Get the headings data.
+   */
+  get headings() {
+    return this.headingsByNumber;
   }
 }
 

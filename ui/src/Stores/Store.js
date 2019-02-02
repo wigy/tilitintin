@@ -8,6 +8,7 @@ import DocumentModel from '../Models/DocumentModel';
 import EntryModel from '../Models/EntryModel';
 import BalanceModel from '../Models/BalanceModel';
 import TagModel from '../Models/TagModel';
+import HeadingModel from '../Models/HeadingModel';
 
 /**
  * The store structure is the following:
@@ -41,6 +42,12 @@ import TagModel from '../Models/TagModel';
  *           type: "Category",
  *           order: 102,
  *       },
+ *       headings: {
+ *         "1001": [{
+ *           "text": "Vastaavaa",
+ *           "level": 0
+ *         },...]
+ *       },
  *     },
  *     bar: {
  *       name: "bar",
@@ -51,14 +58,7 @@ import TagModel from '../Models/TagModel';
  *   periodId: 1,            // Currently selected period
  *   accountId: 123,         // Currently selected account
  *   lastDate: "2018-01-01", // Latest date entered by user.
- *   TODO: Move inside DB model.
- *   headings: {
- *     "1001": [{
- *       "text": "Vastaavaa",
- *       "level": 0
- *     },...]
- *   },
- *   tools: {
+ *   tools: {                // Tool panel selections.
  *     tagDisabled: {
  *       Tag1: true,
  *       Tag2: false
@@ -91,7 +91,6 @@ class Store {
   @observable changed = false;
   @observable db = null;
   @observable dbsByName = {};
-  @observable headings = {};
   @observable lastDate = null;
   @observable periodId = null;
   @observable report = null;
@@ -186,7 +185,6 @@ class Store {
     this.changed = true;
 
     this.db = null;
-    this.headings = {};
     this.reports = [];
     this.report = null;
     this.clearPeriod();
@@ -381,10 +379,8 @@ class Store {
     return this.request('/db/' + this.db + '/heading')
       .then((headings) => {
         runInAction(() => {
-          this.headings = {};
           headings.forEach((heading) => {
-            this.headings[heading.number] = this.headings[heading.number] || [];
-            this.headings[heading.number].push(heading);
+            this.database.addHeading(new HeadingModel(this.database, heading));
           });
         });
       });
@@ -723,6 +719,14 @@ class Store {
   @computed
   get accounts() {
     return this.database ? Object.values(this.database.accountsById).sort(AccountModel.sorter()) : [];
+  }
+
+  /**
+   * Get headings data from database
+   */
+  @computed
+  get headings() {
+    return this.database ? this.database.headings : {};
   }
 }
 
