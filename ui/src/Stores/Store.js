@@ -26,7 +26,8 @@ import BalanceModel from '../Models/BalanceModel';
  *       },
  *     },
  *     bar: {
- *       name: "bar"
+ *       name: "bar",
+ *       ...
  *     }
  *   },
  *   db: 'foo',
@@ -43,21 +44,6 @@ import BalanceModel from '../Models/BalanceModel';
  *       type: "Category",
  *       order: 102,
  *   },
- *   TODO: Move inside DB model.
- *   periodsById: {
- *     1: {
- *       id: 1,
- *       start_date: "2016-12-31T22:00:00.000Z",
- *       end_date: "2017-12-30T22:00:00.000Z",
- *       locked: 0
- *       balances: {
- *         123: {
- *           account_id: 123,
- *           total: 3635057,
- *         }
- *       }
- *     }
- *   }
  *   TODO: Move inside DB model.
  *   headings: {
  *     "1001": [{
@@ -101,7 +87,6 @@ class Store {
   @observable headings = {};
   @observable lastDate = null;
   @observable periodId = null;
-  @observable periodsById = {};
   @observable report = null;
   @observable reportOptions = {};
   @observable reportOptionsAvailable = {};
@@ -195,7 +180,6 @@ class Store {
 
     this.db = null;
     this.accountsById = {};
-    this.periodsById = {};
     this.headings = {};
     this.tags = {};
     this.reports = [];
@@ -308,10 +292,8 @@ class Store {
     return this.request('/db/' + this.db + '/period')
       .then((periods) => {
         runInAction(() => {
-          this.periodsById = {};
           periods.forEach((data) => {
-            const period = new PeriodModel(this.dbsByName[this.db], data);
-            this.periodsById[period.id] = period;
+            this.dbsByName[this.db].addPeriod(new PeriodModel(this.dbsByName[this.db], data));
           });
         });
       });
@@ -360,7 +342,7 @@ class Store {
     return this.request('/db/' + this.db + '/period/' + this.periodId)
       .then((balances) => {
         runInAction(() => {
-          const period = this.periodsById[this.periodId];
+          const period = this.period;
           period.balances = {};
           balances.balances.forEach((data) => {
             period.addBalance(new BalanceModel(period, {account_id: data.id, ...data}));
@@ -422,8 +404,8 @@ class Store {
           const account = this.accountsById[data.id];
           let lastDate;
           data.transactions.forEach((tx) => {
-            const doc = new DocumentModel(this.periodsById[tx.period_id], tx);
-            this.periodsById[this.periodId].addDocument(doc);
+            const doc = new DocumentModel(this.period, tx);
+            this.period.addDocument(doc);
             lastDate = tx.date;
             doc.entries.forEach((entry) => {
               account.addTags([...entry.tags]);
@@ -668,9 +650,9 @@ class Store {
    */
   @computed
   get transactions() {
-    if (this.periodId && this.accountId && this.periodsById[this.periodId]) {
+    if (this.periodId && this.accountId && this.period) {
       let ret = [];
-      let docs = this.periodsById[this.periodId].getAccountDocuments(this.accountId);
+      let docs = this.period.getAccountDocuments(this.accountId);
       docs = docs.sort(DocumentModel.sorter());
       docs.forEach((doc) => {
         ret = ret.concat(doc.entries.filter((e) => e.account_id === this.accountId));
@@ -689,11 +671,25 @@ class Store {
   }
 
   /**
-   * Get a list of periods sorted by their id.
+   * Get the current period.
+   */
+  @computed
+  get period() {
+    if (!this.dbsByName[this.db] || !this.periodId) {
+      return null;
+    }
+    return this.dbsByName[this.db].periodsById[this.periodId];
+  }
+
+  /**
+   * Get a list of periods sorted by their starting date.
    */
   @computed
   get periods() {
-    return Object.values(this.periodsById).sort(PeriodModel.sorter(true));
+    if (!this.dbsByName[this.db]) {
+      return [];
+    }
+    return Object.values(this.dbsByName[this.db].periodsById).sort(PeriodModel.sorter(true));
   }
 
   /**
@@ -709,8 +705,8 @@ class Store {
    */
   @computed
   get balances() {
-    if (this.periodId && this.periodsById[this.periodId]) {
-      return Object.values(this.periodsById[this.periodId].balances).sort(BalanceModel.sorter());
+    if (this.periodId && this.period) {
+      return Object.values(this.period.balances).sort(BalanceModel.sorter());
     }
     return [];
   }

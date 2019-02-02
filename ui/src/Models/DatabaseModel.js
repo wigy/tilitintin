@@ -1,6 +1,11 @@
+import { observable } from 'mobx';
 import Model from './Model';
 
 class DatabaseModel extends Model {
+
+  // All periods of this database.
+  @observable
+  periodsById = {};
 
   constructor(parent, init = {}) {
     super(parent, {
@@ -20,6 +25,15 @@ class DatabaseModel extends Model {
    */
   getAccount(id) {
     return this.store.accountsById[id] || null;
+  }
+
+  /**
+   * Add new or override old period for the given database.
+   * @param {PeriodModel} period
+   */
+  addPeriod(period) {
+    period.parent = this;
+    this.periodsById[period.id] = period;
   }
 
   /**

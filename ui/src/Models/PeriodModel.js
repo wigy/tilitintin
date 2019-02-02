@@ -1,5 +1,5 @@
-import Model from './Model';
 import { observable } from 'mobx';
+import Model from './Model';
 
 class PeriodModel extends Model {
 
