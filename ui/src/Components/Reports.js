@@ -17,18 +17,18 @@ class Reports extends Component {
   }
 
   render() {
+    const { db, periodId, accountId } = this.props.store;
+
     if (!this.props.store.token) {
       return '';
     }
-
-    const { db, periodId, account } = this.props.store;
 
     return (
       <div className="Reports">
         <h1><Trans>Reports</Trans></h1>
         <dl>
           {this.props.store.reports.map((format) => <li key={format}>
-            <ReportLink db={db} periodId={periodId} accountId={account.id} format={format}/>
+            <ReportLink db={db} periodId={periodId} accountId={accountId} format={format}/>
           </li>)}
         </dl>
       </div>

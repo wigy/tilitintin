@@ -20,7 +20,7 @@ FUTURE FEATURES
     [X] Model for Period.
     [X] Model for Tag.
     [X] Model for Database.
-    [ ] Model for heading.
+    [X] Model for heading.
     [ ] Model for report.
     [X] Improve logical structure of the store.
 [X] Rename all get-functions as fetch in Store.
