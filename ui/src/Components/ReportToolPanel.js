@@ -39,11 +39,11 @@ class ToolPanel extends Component {
     };
 
     const onToggle = (option) => {
-      store.reportOptions[option] = !store.reportOptions[option];
-      store.fetchReport(store.db, store.periodId, store.report.format, store.reportOptions);
+      store.report.config[option] = !store.report.config[option];
+      store.fetchReport(store.db, store.periodId, store.report.format);
     };
 
-    const options = Object.keys({...store.reportOptionsAvailable}[store.report.format] || {});
+    const options = Object.keys({...store.report.options});
 
     let buttons = [
       <IconButton key="button-print" onClick={onPrint} title="print" icon="fa-print"></IconButton>,
@@ -56,7 +56,7 @@ class ToolPanel extends Component {
         const name = `option-${option}`;
         buttons.push(<IconButton
           key={name}
-          toggle={store.reportOptions[option]}
+          toggle={store.report.config[option]}
           onClick={() => onToggle(option)}
           title={name}
           icon={ICONS[name] || 'fa-cog'}>

@@ -1,4 +1,5 @@
 import { observable } from 'mobx';
+import ReportModel from './ReportModel';
 import Model from './Model';
 
 class PeriodModel extends Model {
@@ -12,6 +13,9 @@ class PeriodModel extends Model {
   // All known documents of the period.
   @observable
   documents = {};
+  // All reports for the period.
+  @observable
+  reportsByFormat = {};
 
   constructor(parent, init = {}) {
     super(parent, {
@@ -52,6 +56,23 @@ class PeriodModel extends Model {
   }
 
   /**
+   * Add a report for this period.
+   * @param {ReportModel} report
+   */
+  addReport(report) {
+    report.parent = this;
+    this.reportsByFormat[report.format] = report;
+  }
+
+  /**
+   * Get the report by its format.
+   * @param {String} format
+   */
+  getReport(format) {
+    return this.reportsByFormat[format] || null;
+  }
+
+  /**
    * Get the document by its ID.
    * @param {Number} id
    * @return {null|DocumentModel}
@@ -83,6 +104,13 @@ class PeriodModel extends Model {
    */
   get database() {
     return this.parent;
+  }
+
+  /**
+   * Get reports for this period.
+   */
+  get reports() {
+    return Object.values(this.reportsByFormat).sort(ReportModel.sorter());
   }
 }
 

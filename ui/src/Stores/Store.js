@@ -1,5 +1,4 @@
 import { runInAction, computed, toJS, observable } from 'mobx';
-import clone from 'clone';
 import config from '../Configuration';
 import AccountModel from '../Models/AccountModel';
 import DatabaseModel from '../Models/DatabaseModel';
@@ -9,6 +8,7 @@ import EntryModel from '../Models/EntryModel';
 import BalanceModel from '../Models/BalanceModel';
 import TagModel from '../Models/TagModel';
 import HeadingModel from '../Models/HeadingModel';
+import ReportModel from '../Models/ReportModel';
 
 /**
  * The store structure is the following:
@@ -48,41 +48,40 @@ import HeadingModel from '../Models/HeadingModel';
  *           "level": 0
  *         },...]
  *       },
+ *       reportsByFormat: {
+ *         "general-ledger": {
+ *            format: 'general-ledger',
+ *            meta: {
+ *              businessName: "Name of the business",
+ *              businessId: "12121212-3"
+ *            },
+ *            'options': {
+ *              compact: 'boolean'
+ *            },
+ *            'config': {
+ *              compact: 'true'
+ *            },
+ *            columns: [{name, title, ...}, ...],
+ *            data: []
+ *         },
+ *       },
  *     },
  *     bar: {
  *       name: "bar",
  *       ...
  *     }
  *   },
- *   db: 'foo',              // Currently selected db
- *   periodId: 1,            // Currently selected period
- *   accountId: 123,         // Currently selected account
- *   lastDate: "2018-01-01", // Latest date entered by user.
- *   tools: {                // Tool panel selections.
+ *   db: 'foo',               // Currently selected db
+ *   periodId: 1,             // Currently selected period
+ *   accountId: 123,          // Currently selected account
+ *   report: {...},           // Latest report fetched
+ *   lastDate: "2018-01-01",  // Latest date entered by user.
+ *   tools: {                 // Tool panel selections.
  *     tagDisabled: {
  *       Tag1: true,
  *       Tag2: false
  *     }
- *   },
- *   // TODO: Move inside DB model.
- *   reports: [...], // Available report identifiers.
- *   reportOptionsAvailable: { // Report options available per report identifier.
- *    'general-ledger': {
- *      compact: 'boolean'
- *    }
- *   },
- *   reportOptions: { // Report options selected.
- *     compact: true
- *   },
- *   report: {
- *     format: 'income-statement',
- *     meta: {
- *       businessName: "Name of the business",
- *       businessId: "12121212-3"
- *     }
- *     columns: [{name, title, ...}, ...],
- *     data: []
- *   } // Current report.
+ *   }
  * }
  */
 class Store {
@@ -94,9 +93,6 @@ class Store {
   @observable lastDate = null;
   @observable periodId = null;
   @observable report = null;
-  @observable reportOptions = {};
-  @observable reportOptionsAvailable = {};
-  @observable reports = [];
   @observable tags = {};
   @observable token = localStorage.getItem('token');
   @observable tools = { tagDisabled: {} };
@@ -185,7 +181,6 @@ class Store {
     this.changed = true;
 
     this.db = null;
-    this.reports = [];
     this.report = null;
     this.clearPeriod();
   }
@@ -216,6 +211,7 @@ class Store {
     this.changed = true;
 
     this.periodId = null;
+    this.report = null;
     this.clearAccount();
   }
 
@@ -308,9 +304,10 @@ class Store {
     return this.request('/db/' + this.db + '/report')
       .then((reports) => {
         runInAction(() => {
-          this.reports = Object.keys(reports.links);
-          this.reportOptionsAvailable = reports.options;
-          this.reportOptions = {};
+          Object.keys(reports.links).forEach((format, idx) => {
+            const opts = {format, order: idx, options: reports.options[format] || {}};
+            this.database.periods.forEach((period) => period.addReport(new ReportModel(period, opts)));
+          });
         });
       });
   }
@@ -319,19 +316,22 @@ class Store {
    * Get the list of report formats available for the current DB.
    */
   async fetchReport(db, periodId, format) {
-    const options = Object.keys(this.reportOptions).map((key) => `${key}=${encodeURIComponent(JSON.stringify(this.reportOptions[key]))}`);
-    const url = '/db/' + db + '/report/' + format + '/' + periodId + (options.length ? '?' + options.join('&') : '');
+    this.setPeriod(db, periodId);
+    if (!this.period) {
+      return;
+    }
+    const report = this.period.getReport(format);
+    const url = report.getUrl();
     if (this.report && this.report.url === url) {
       return;
     }
-    this.setPeriod(db, periodId);
+    runInAction(() => {
+      report.setData(url, []);
+    });
     return this.request(url)
-      .then((report) => {
+      .then((data) => {
         runInAction(() => {
-          report.db = db;
-          report.periodId = periodId;
-          report.options = clone(this.reportOptions);
-          report.url = url;
+          report.setData(url, data);
           this.report = report;
         });
       });
@@ -727,6 +727,14 @@ class Store {
   @computed
   get headings() {
     return this.database ? this.database.headings : {};
+  }
+
+  /**
+   * Get reports for the current period.
+   */
+  @computed
+  get reports() {
+    return this.period ? this.period.reports : [];
   }
 }
 

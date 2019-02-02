@@ -97,6 +97,13 @@ class DatabaseModel extends Model {
   }
 
   /**
+   * Get periods of this database.
+   */
+  get periods() {
+    return Object.values(this.periodsById);
+  }
+
+  /**
    * Get the headings data.
    */
   get headings() {

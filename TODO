@@ -21,7 +21,7 @@ FUTURE FEATURES
     [X] Model for Tag.
     [X] Model for Database.
     [X] Model for heading.
-    [ ] Model for report.
+    [X] Model for report.
     [X] Improve logical structure of the store.
 [X] Rename all get-functions as fetch in Store.
 [ ] Change editing so that model has a flags and information about editing state.

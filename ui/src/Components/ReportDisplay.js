@@ -1,15 +1,23 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { observer } from 'mobx-react';
 import { translate, I18n } from 'react-i18next';
 import ReportLine from './ReportLine';
 import Localize from './Localize';
 import './ReportDisplay.css';
+import ReportModel from '../Models/ReportModel';
 
 @translate('translations')
+@observer
 class ReportHeader extends Component {
 
   render() {
     const { report } = this.props;
+
+    if (!report) {
+      return '';
+    }
+
     const lang = this.props.i18n.language;
     const columns = report.columns.length;
 
@@ -36,16 +44,19 @@ class ReportHeader extends Component {
 }
 
 ReportHeader.propTypes = {
-  report: PropTypes.object.isRequired,
+  report: PropTypes.instanceOf(ReportModel),
   t: PropTypes.func,
   i18n: PropTypes.instanceOf(I18n)
 };
 
+@observer
 class ReportDisplay extends Component {
 
   render() {
     const { report } = this.props;
-
+    if (!report) {
+      return '';
+    }
     return (
       <div className="ReportDisplay">
         <table className="ReportDisplay">
@@ -60,7 +71,7 @@ class ReportDisplay extends Component {
 }
 
 ReportDisplay.propTypes = {
-  report: PropTypes.object.isRequired
+  report: PropTypes.instanceOf(ReportModel)
 };
 
 export default ReportDisplay;
