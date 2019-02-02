@@ -293,7 +293,7 @@ class Store {
       .then((periods) => {
         runInAction(() => {
           periods.forEach((data) => {
-            this.dbsByName[this.db].addPeriod(new PeriodModel(this.dbsByName[this.db], data));
+            this.database.addPeriod(new PeriodModel(this.database, data));
           });
         });
       });
@@ -671,14 +671,30 @@ class Store {
   }
 
   /**
+   * Get a list of dbs.
+   */
+  @computed
+  get dbs() {
+    return Object.values(this.dbsByName).sort(DatabaseModel.sorter(true));
+  }
+
+  /**
+   * Get the current database.
+   */
+  @computed
+  get database() {
+    return this.dbsByName[this.db] || null;
+  }
+
+  /**
    * Get the current period.
    */
   @computed
   get period() {
-    if (!this.dbsByName[this.db] || !this.periodId) {
+    if (!this.database || !this.periodId) {
       return null;
     }
-    return this.dbsByName[this.db].periodsById[this.periodId];
+    return this.database.periodsById[this.periodId];
   }
 
   /**
@@ -686,18 +702,10 @@ class Store {
    */
   @computed
   get periods() {
-    if (!this.dbsByName[this.db]) {
+    if (!this.database) {
       return [];
     }
-    return Object.values(this.dbsByName[this.db].periodsById).sort(PeriodModel.sorter(true));
-  }
-
-  /**
-   * Get a list of dbs.
-   */
-  @computed
-  get dbs() {
-    return Object.values(this.dbsByName).sort(DatabaseModel.sorter(true));
+    return Object.values(this.database.periodsById).sort(PeriodModel.sorter(true));
   }
 
   /**
