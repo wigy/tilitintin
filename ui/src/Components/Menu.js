@@ -17,12 +17,12 @@ import './Menu.css';
 class Menu extends Component {
 
   update({db, periodId}) {
-    if (!this.props.store.setPeriod(db, parseInt(periodId))) {
-      this.props.cursor.resetSelected();
-    }
+    periodId = parseInt(periodId) || null;
+    this.props.store.setPeriod(db, periodId);
   }
 
   componentDidMount() {
+    this.props.store.fetchDatabases();
     this.update(this.props.match.params);
   }
 
@@ -35,7 +35,9 @@ class Menu extends Component {
         this.props.store.logout();
         break;
       case 'db':
+        this.props.store.clearDb();
         this.update({db: args[0]});
+        this.props.cursor.resetSelected();
         this.props.history.push('/' + args[0]);
         break;
       case 'period':
@@ -49,7 +51,9 @@ class Menu extends Component {
           }
           url += '/' + param1;
         }
+        this.props.store.clearPeriod();
         this.update({db, periodId: args[0]});
+        this.props.cursor.resetSelected();
         this.props.history.push(url);
         break;
       case 'txs':
@@ -62,6 +66,7 @@ class Menu extends Component {
         if (accountId) {
           url += '/' + accountId;
         }
+        this.props.cursor.resetSelected();
         this.props.history.push(url);
         break;
       default:

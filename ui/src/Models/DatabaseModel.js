@@ -37,6 +37,15 @@ class DatabaseModel extends Model {
   }
 
   /**
+   * Get the period by its ID.
+   * @param {Number} id
+   * @return {null|PeriodModel}
+   */
+  getPeriod(id) {
+    return this.periodsById[id] || null;
+  }
+
+  /**
    * Add new or override old account for this database.
    * @param {AccountModel} account
    */

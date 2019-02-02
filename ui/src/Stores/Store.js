@@ -10,6 +10,10 @@ import TagModel from '../Models/TagModel';
 import HeadingModel from '../Models/HeadingModel';
 import ReportModel from '../Models/ReportModel';
 
+const DEBUG = false;
+
+const debug = (...args) => DEBUG && console.log.apply(console, args);
+
 /**
  * The store structure is the following:
  * {
@@ -86,22 +90,16 @@ import ReportModel from '../Models/ReportModel';
  */
 class Store {
 
+  @observable db = null;
+  @observable periodId = null;
   @observable accountId = null;
   @observable changed = false;
-  @observable db = null;
   @observable dbsByName = {};
   @observable lastDate = null;
-  @observable periodId = null;
   @observable report = null;
   @observable tags = {};
   @observable token = localStorage.getItem('token');
   @observable tools = { tagDisabled: {} };
-
-  constructor() {
-    // Promises for ongoing GET requests.
-    this.pending = {};
-    this.fetchDatabases();
-  }
 
   /**
    * Make a HTTP request to the back-end.
@@ -124,54 +122,131 @@ class Store {
       options.body = JSON.stringify(data);
     }
 
-    let promise;
+    debug('  Request:', method, config.API_URL + path, data || '');
 
-    if (method === 'GET' && this.pending[path]) {
-      return this.pending[path];
-    }
-
-    promise = fetch(config.API_URL + path, options)
+    return fetch(config.API_URL + path, options)
       .then(res => {
         this.changed = true;
         if ([200, 201, 202, 204].includes(res.status)) {
+          if (DEBUG) {
+            debug('    OK:', method, config.API_URL + path, data || '');
+          }
           return res.status === 200 ? res.json() : null;
         } else {
+          if (DEBUG) {
+            debug('    Fail:', method, config.API_URL + path, data || '');
+          }
           throw new Error(res.status + ' ' + res.statusText);
         }
-      })
-      .finally(() => {
-        if (method === 'GET') {
-          delete this.pending[path];
-        }
       });
+  }
 
-    if (method === 'GET') {
-      this.pending[path] = promise;
+  /**
+   * Get the list of available databases.
+   */
+  async fetchDatabases() {
+    if (!this.token) {
+      return;
     }
-
-    return promise;
+    if (Object.keys(this.dbsByName).length) {
+      return;
+    }
+    if (!this.dbsFetch) {
+      this.dbsFetch = this.request('/db')
+        .then(data => {
+          runInAction(() => {
+            this.dbsByName = {};
+            if (data) {
+              data.forEach((db) => {
+                const model = new DatabaseModel(this, db);
+                this.dbsByName[model.name] = model;
+              });
+            }
+          });
+          this.dbsFetch = null;
+        });
+    }
+    return this.dbsFetch;
   }
 
   /**
    * Set the current database.
    * @param {String} db
-   * @return {Boolean} True if no changes needed.
+   * @return {Promise}
    */
-  setDb(db) {
+  async setDb(db) {
     db = db || null;
     if (this.db === db) {
-      return true;
+      debug('SetDb:', db, 'using old');
+      return;
     }
-    this.clearDb();
-    this.db = db;
-    if (db) {
-      this.fetchPeriods()
-        .then(() => this.fetchReports())
-        .then(() => this.fetchTags())
-        .then(() => this.fetchHeadings())
-        .then(() => this.fetchAccounts());
+    await this.fetchDatabases();
+    if (!this.dbFetch) {
+      debug('SetDb', db, 'fetching...');
+      this.dbFetch = this.fetchPeriods(db)
+        .then(() => this.fetchReports(db))
+        .then(() => this.fetchTags(db))
+        .then(() => this.fetchHeadings(db))
+        .then(() => this.fetchAccounts(db))
+        .then(() => (this.dbFetch = null))
+        .then(() => (this.db = db))
+        .then(() => debug('SetDb', db, 'Done'));
+    } else {
+      debug('SetDb', db, 'sharing...');
     }
-    return false;
+    return this.dbFetch;
+  }
+
+  /**
+   * Set the current period.
+   * @param {String} db
+   * @param {Number} periodId
+   * @return {Promise}
+   */
+  async setPeriod(db, periodId) {
+    periodId = parseInt(periodId) || null;
+    if (this.db === db && this.periodId === periodId) {
+      debug('SetPeriod:', db, periodId, 'using old');
+      return;
+    }
+    await this.setDb(db);
+    if (!this.periodFetch) {
+      debug('SetPeriod:', db, periodId, 'fetching...');
+      this.periodFetch = this.fetchBalances(db, periodId)
+        .then(() => (this.periodFetch = null))
+        .then(() => (this.periodId = periodId))
+        .then(() => debug('SetPeriod', db, periodId, 'Done'));
+    } else {
+      debug('SetPeriod:', db, periodId, 'sharing...');
+    }
+    return this.periodFetch;
+  }
+
+  /**
+   * Set the current period.
+   * @param {String} db
+   * @param {Number} periodId
+   * @return {Promise}
+   */
+  async setAccount(db, periodId, accountId) {
+    // TODO: Need to get rid of this hack.
+    if (accountId === 'none') {
+      return;
+    }
+    periodId = parseInt(periodId) || null;
+    accountId = parseInt(accountId) || null;
+    if (this.db === db && this.periodId === periodId && this.accountId === accountId) {
+      debug('SetAccount:', db, periodId, accountId, 'using old');
+      return;
+    }
+    await this.setPeriod(db, periodId);
+    if (!this.accountFetch) {
+      this.accountFetch = this.fetchAccountPeriod(db, periodId, accountId)
+        .then(() => (this.accountFetch = null))
+        .then(() => (this.accountId = accountId))
+        .then(() => debug('SetAccount:', db, periodId, accountId, 'Done'));
+    }
+    return this.accountFetch;
   }
 
   /**
@@ -186,25 +261,6 @@ class Store {
   }
 
   /**
-   * Set the current period.
-   * @param {String} db
-   * @param {Number} periodId
-   * @return {Boolean} True if no changes needed.
-   */
-  setPeriod(db, periodId) {
-    periodId = parseInt(periodId) || null;
-    if (this.setDb(db) && this.periodId === periodId) {
-      return true;
-    }
-    this.clearPeriod();
-    this.periodId = periodId;
-    if (periodId) {
-      this.fetchBalances();
-    }
-    return false;
-  }
-
-  /**
    * Clear period data.
    */
   clearPeriod() {
@@ -213,28 +269,6 @@ class Store {
     this.periodId = null;
     this.report = null;
     this.clearAccount();
-  }
-
-  /**
-   * Set the current period.
-   * @param {String} db
-   * @param {Number} periodId
-   * @return {Boolean} True if no changes needed.
-   */
-  setAccount(db, periodId, accountId) {
-    if (accountId === 'none') {
-      return true;
-    }
-    accountId = parseInt(accountId) || null;
-    if (this.setPeriod(db, periodId) && this.accountId === accountId) {
-      return true;
-    }
-    this.clearAccount();
-    this.accountId = accountId;
-    if (accountId) {
-      this.fetchAccountPeriod(db, periodId, accountId);
-    }
-    return false;
   }
 
   /**
@@ -251,47 +285,59 @@ class Store {
   }
 
   /**
-   * Get the tag definitions from the current database.
-   */
-  async fetchTags() {
-    return this.request('/db/' + this.db + '/tags')
-      .then((tags) => {
-        runInAction(() => {
-          tags.forEach((tag) => (this.database.addTag(new TagModel(this.database, tag))));
-        });
-      });
-  }
-
-  /**
-   * Get the list of available databases.
-   */
-  async fetchDatabases() {
-    if (!this.token) {
-      return Promise.resolve([]);
-    }
-    return this.request('/db')
-      .then(data => {
-        runInAction(() => {
-          this.dbsByName = {};
-          if (data) {
-            data.forEach((db) => {
-              const model = new DatabaseModel(this, db);
-              this.dbsByName[model.name] = model;
-            });
-          }
-        });
-      });
-  }
-
-  /**
    * Get the list of periods available for the current DB.
    */
-  async fetchPeriods() {
-    return this.request('/db/' + this.db + '/period')
+  async fetchPeriods(db) {
+    return this.request('/db/' + db + '/period')
       .then((periods) => {
         runInAction(() => {
           periods.forEach((data) => {
-            this.database.addPeriod(new PeriodModel(this.database, data));
+            this.dbsByName[db].addPeriod(new PeriodModel(this.dbsByName[db], data));
+          });
+        });
+      });
+  }
+
+  /**
+   * Get the tag definitions from the current database.
+   */
+  async fetchTags(db) {
+    return this.request('/db/' + db + '/tags')
+      .then((tags) => {
+        runInAction(() => {
+          tags.forEach((tag) => (this.dbsByName[db].addTag(new TagModel(this.dbsByName[db], tag))));
+        });
+      });
+  }
+
+  /**
+   * Collect all accounts.
+   */
+  async fetchAccounts(db) {
+    return this.request('/db/' + db + '/account')
+      .then((accounts) => {
+        // TODO: Hmm, maybe not good solution for unwanted tag reset but.
+        if (this.dbsByName[db].hasAccounts()) {
+          return;
+        }
+        runInAction(() => {
+          accounts.forEach((data) => {
+            const account = new AccountModel(this.dbsByName[db], data);
+            this.dbsByName[db].addAccount(account);
+          });
+        });
+      });
+  }
+
+  /**
+   * Collect all account headings.
+   */
+  async fetchHeadings(db) {
+    return this.request('/db/' + db + '/heading')
+      .then((headings) => {
+        runInAction(() => {
+          headings.forEach((heading) => {
+            this.dbsByName[db].addHeading(new HeadingModel(this.dbsByName[db], heading));
           });
         });
       });
@@ -300,13 +346,13 @@ class Store {
   /**
    * Get the list of report formats available for the current DB.
    */
-  async fetchReports() {
-    return this.request('/db/' + this.db + '/report')
+  async fetchReports(db) {
+    return this.request('/db/' + db + '/report')
       .then((reports) => {
         runInAction(() => {
           Object.keys(reports.links).forEach((format, idx) => {
             const opts = {format, order: idx, options: reports.options[format] || {}};
-            this.database.periods.forEach((period) => period.addReport(new ReportModel(period, opts)));
+            this.dbsByName[db].periods.forEach((period) => period.addReport(new ReportModel(period, opts)));
           });
         });
       });
@@ -316,7 +362,7 @@ class Store {
    * Get the list of report formats available for the current DB.
    */
   async fetchReport(db, periodId, format) {
-    this.setPeriod(db, periodId);
+    await this.setPeriod(db, periodId);
     if (!this.period) {
       return;
     }
@@ -340,47 +386,14 @@ class Store {
   /**
    * Get the summary of balances for all accounts in the current period.
    */
-  async fetchBalances() {
-    return this.request('/db/' + this.db + '/period/' + this.periodId)
+  async fetchBalances(db, periodId) {
+    return this.request('/db/' + db + '/period/' + periodId)
       .then((balances) => {
         runInAction(() => {
-          const period = this.period;
+          const period = this.dbsByName[db].getPeriod(periodId);
           period.balances = {};
           balances.balances.forEach((data) => {
             period.addBalance(new BalanceModel(period, {account_id: data.id, ...data}));
-          });
-        });
-      });
-  }
-
-  /**
-   * Collect all accounts.
-   */
-  async fetchAccounts() {
-    return this.request('/db/' + this.db + '/account')
-      .then((accounts) => {
-        // TODO: Hmm, maybe not good solution for unwanted tag reset but.
-        if (this.database.hasAccounts()) {
-          return;
-        }
-        runInAction(() => {
-          accounts.forEach((data) => {
-            const account = new AccountModel(this.database, data);
-            this.database.addAccount(account);
-          });
-        });
-      });
-  }
-
-  /**
-   * Collect all account headings.
-   */
-  async fetchHeadings() {
-    return this.request('/db/' + this.db + '/heading')
-      .then((headings) => {
-        runInAction(() => {
-          headings.forEach((heading) => {
-            this.database.addHeading(new HeadingModel(this.database, heading));
           });
         });
       });
@@ -393,19 +406,10 @@ class Store {
    * @param {Number} accountId
    */
   async fetchAccountPeriod(db, periodId, accountId) {
-
-    if (!this.database) {
-      await this.fetchDatabases();
-    }
-
-    if (!this.database.hasAccounts()) {
-      await this.fetchAccounts();
-    }
-
     return this.request('/db/' + db + '/account/' + accountId + '/' + periodId)
       .then((data) => {
         runInAction(() => {
-          const account = this.database.getAccount(data.id);
+          const account = this.dbsByName[db].getAccount(data.id);
           let lastDate;
           data.transactions.forEach((tx) => {
             const doc = new DocumentModel(this.period, tx);
