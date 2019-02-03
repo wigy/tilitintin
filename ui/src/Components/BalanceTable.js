@@ -1,19 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import BalanceLine from './BalanceLine';
-import { inject, observer } from 'mobx-react';
-import Store from '../Stores/Store';
-import Cursor from '../Stores/Cursor';
+import { observer } from 'mobx-react';
 import BalanceModel from '../Models/BalanceModel';
 
-@inject('store')
-@inject('cursor')
 @observer
 class BalanceTable extends Component {
-
-  componentDidMount() {
-    this.props.cursor.selectPage('Balances');
-  }
 
   render() {
 
@@ -30,8 +22,6 @@ class BalanceTable extends Component {
 }
 
 BalanceTable.propTypes = {
-  store: PropTypes.instanceOf(Store),
-  cursor: PropTypes.instanceOf(Cursor),
   balances: PropTypes.arrayOf(PropTypes.instanceOf(BalanceModel))
 };
 

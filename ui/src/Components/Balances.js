@@ -4,11 +4,17 @@ import { inject, observer } from 'mobx-react';
 import { translate, Trans } from 'react-i18next';
 import BalanceTable from '../Components/BalanceTable';
 import Store from '../Stores/Store';
+import Navigator from '../Stores/Navigator';
 
 @translate('translations')
 @inject('store')
+@inject('navigator')
 @observer
 class Balances extends Component {
+
+  componentDidMount() {
+    this.props.navigator.selectPage('Balances');
+  }
 
   render() {
     if (!this.props.store.token) {
@@ -25,6 +31,7 @@ class Balances extends Component {
 }
 
 Balances.propTypes = {
+  navigator: PropTypes.instanceOf(Navigator),
   store: PropTypes.instanceOf(Store)
 };
 

@@ -22,6 +22,14 @@ class NavigationTargetModel extends Model {
       (this.editable ? 'editable' : '') +
       (this.open ? ' open' : '');
   }
+
+  select() {
+    this.selected = true;
+  }
+
+  leave() {
+    this.selected = false;
+  }
 }
 
 export default NavigationTargetModel;

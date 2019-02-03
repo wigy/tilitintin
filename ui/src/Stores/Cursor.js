@@ -1,41 +1,127 @@
 import { observable, action } from 'mobx';
+import TopologyComponent from './TopologyComponent';
 
 /**
  * Keyboard navigation data.
- *
  */
 class Cursor {
+  // The name of the current page.
   @observable page = 'App';
-  @observable component = null;
+  // Screen setup function returning topology as 2-dimensional array `topology[column][row]`.
+  @observable topology = [[]];
+  @observable componentX = null;
+  @observable componentY = null;
   @observable index = null;
   @observable column = null;
   @observable row = null;
-  @observable editor = false;
 
   // When a modal is active, this is an object with two members: onCancel and onConfirm.
-  @observable activeModal = null;
+  @observable activeModal = null; // TODO: This should be in navigator?
 
-  oldSelected = {};
-  oldIndex = {};
-
-  /**
-   * Reset selections.
-   */
   @action.bound
-  resetSelected() {
+  setTopology(page, topology) {
+    if (this.page === page) {
+      return;
+    }
+    this.page = page;
+    this.topology = topology;
+    this.componentX = 0;
+    this.componentY = 0;
     this.index = null;
     this.column = null;
     this.row = null;
-    this.editor = false;
+  }
+
+  @action.bound
+  keyArrowDown() {
+    const component = this.getComponent();
+    if (component && component.vertical) {
+      const oldIndex = this.index;
+      if (this.indexUpdate(component.length, +1)) {
+        component.moveIndex(oldIndex, this.index);
+      }
+    }
+    return {preventDefault: true};
+  }
+
+  @action.bound
+  keyArrowUp() {
+    const component = this.getComponent();
+    if (component && component.vertical) {
+      const oldIndex = this.index;
+      if (this.indexUpdate(component.length, -1)) {
+        component.moveIndex(oldIndex, this.index);
+      }
+    }
+    return {preventDefault: true};
   }
 
   /**
-   * Select the current navigation target.
-   * @param {String} page
+   * Get the current component from the topology.
+   * @return {TopologyComponent|null}
    */
+  getComponent() {
+    const topology = this.topology();
+    // Check the X-bounds.
+    if (this.componentX >= topology.length) {
+      this.componentX = topology.length - 1;
+      if (this.componentX < 0) {
+        this.componentX = 0;
+        return null;
+      }
+    }
+    // Check the y-bounds.
+    if (this.componentY >= topology[this.componentX].length) {
+      this.componentY = topology[this.componentX].length - 1;
+      if (this.componentY < 0) {
+        this.componentY = 0;
+        return null;
+      }
+    }
+    return new TopologyComponent(topology[this.componentX][this.componentY]);
+  }
+
+  /**
+   * Helper to change index counter and wrap it around boundaries.
+   * @param {Number} N
+   * @param {Number} delta
+   */
+  indexUpdate(N, delta) {
+    const oldIndex = this.index;
+    if (N) {
+      if (this.index === undefined || this.index === null) {
+        this.index = delta < 0 ? N - 1 : 0;
+      } else {
+        this.index += delta;
+        if (this.index < 0) {
+          if (oldIndex === 0) {
+            this.index = N - 1;
+          } else {
+            this.index = 0;
+          }
+        } else if (this.index >= N) {
+          if (oldIndex === N - 1) {
+            this.index = 0;
+          } else {
+            this.index = N - 1;
+          }
+        }
+      }
+      return true;
+    }
+  }
+
+  // TODO: Refactor all this.
+  // ------------------------------------------------------------------------------------
+  oldSelected = {};
+  oldIndex = {};
+
+  @observable component = null;
+  @observable editor = false;
+
   @action.bound
   selectPage(page) {
-    console.log(`Obsolete call to selectPage('${page}'). Must use setTopology() instead.`);
+    console.error('Obsolete call to selectPage().');
     if (this.page === page) {
       return;
     }
@@ -78,10 +164,23 @@ class Cursor {
   }
 
   /**
+   * Reset selections.
+   */
+  @action.bound
+  resetSelected() {
+    console.error('Obsolete call to resetSelected().');
+    this.index = null;
+    this.column = null;
+    this.row = null;
+    this.editor = false;
+  }
+
+  /**
    * Move directly to the given index of the given component.
    */
   @action.bound
   selectIndex(component, index = null) {
+    console.error('Obsolete call to resetIndex().');
     if (arguments.length === 1) {
       index = component;
       component = this.component;
@@ -100,6 +199,7 @@ class Cursor {
    */
   @action.bound
   selectCell(column, row) {
+    console.error('Obsolete call to selectCel().');
     this.column = column;
     this.row = row;
   }
@@ -110,40 +210,8 @@ class Cursor {
    */
   @action.bound
   selectEditing(state = true) {
+    console.error('Obsolete call to selectEditing().');
     this.editor = state;
-  }
-
-  /**
-   * Helper to change index counter and wrap it around boundaries.
-   * @param {Number} index
-   * @param {Number} N
-   * @param {Number} delta
-   */
-  indexUpdate(index, N, delta) {
-    const oldIndex = index;
-    if (N) {
-      if (index === null) {
-        if (index === undefined || index === null) {
-          index = delta < 0 ? N - 1 : 0;
-        }
-      } else {
-        index += delta;
-        if (index < 0) {
-          if (oldIndex === 0) {
-            index = N - 1;
-          } else {
-            index = 0;
-          }
-        } else if (index >= N) {
-          if (oldIndex === N - 1) {
-            index = 0;
-          } else {
-            index = N - 1;
-          }
-        }
-      }
-      return {index};
-    }
   }
 
   /**
@@ -156,6 +224,7 @@ class Cursor {
    * @param {Number} dy
    */
   boxUpdate(column, row, N, M, dx, dy, entryColumn = 0) {
+    console.error('Obsolete call to boxUpdate().');
     if (N && M) {
       column = (column + N + dx) % N;
       if (row === null) {
@@ -180,6 +249,7 @@ class Cursor {
    * @param {String} component
    */
   componentUpdate(component, N) {
+    console.error('Obsolete call to componentUpdate().');
     this.save();
     let index = this.oldIndex[component] || 0;
     if (!N) {

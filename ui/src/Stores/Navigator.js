@@ -1,7 +1,7 @@
 import { action } from 'mobx';
 import moment from 'moment';
 
-const KEY_DEBUG = false;
+const KEY_DEBUG = true;
 
 /**
  * A keyboard navigation handler for the application.
@@ -20,6 +20,70 @@ class Navigator {
    */
   @action.bound
   handle(key) {
+    let update, fn;
+    const keyName = (key.length === 1 ? 'Text' : key);
+
+    // Try cursor handler.
+    fn = 'key' + keyName.replace(/\+/g, '');
+    if (this.cursor[fn]) {
+      update = this.cursor[fn]();
+      if (update && KEY_DEBUG) {
+        console.log(fn, ':', update);
+      }
+    }
+
+    // Try generic handler.
+    if (!update) {
+      fn = 'key' + keyName.replace(/\+/g, '');
+      if (this[fn]) {
+        update = this[fn]();
+        if (update && KEY_DEBUG) {
+          console.log(fn, ':', update);
+        }
+      }
+    }
+
+    if (update) {
+      return update;
+    }
+
+    if (KEY_DEBUG) {
+      console.log(`No handler for key '${key}'.`);
+    }
+
+    return null;
+  }
+
+  /**
+   * Set up the topology for the page.
+   * @param {String} name
+   */
+  @action.bound
+  selectPage(page) {
+    switch (page) {
+      case 'Balances':
+        this.cursor.setTopology(page, () => [[{data: this.store.balances}]]);
+        break;
+      default:
+        this.cursor.setTopology(page, () => [[]]);
+        console.error(`No topology defined for page ${page}.`);
+    }
+  }
+
+  /**
+   * Disable focus change using tab-key.
+   */
+  keyTab() {
+    return {preventDefault: true};
+  }
+  keyShiftTab() {
+    return {preventDefault: true};
+  }
+
+  // TODO: Refactor all these functions.
+  // ------------------------------------------------------------------------------------
+  @action.bound
+  oldHandle(key) {
     const {component} = this.cursor;
     if (component === null) {
       return null;
@@ -89,12 +153,6 @@ class Navigator {
   handleEscape() {
     this.cursor.save();
     return {index: null, column: null, row: null};
-  }
-  handleTab() {
-    return {dontPreventDefault: false};
-  }
-  handleShiftTab() {
-    return {dontPreventDefault: false};
   }
 
   // TODO: How to move these inside appropriate component in easy and readable manner?

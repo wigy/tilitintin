@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { inject } from 'mobx-react';
+import { observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import Money from './Money';
-import Cursor from '../Stores/Cursor';
 import BalanceModel from '../Models/BalanceModel';
 
 import './BalanceLine.css';
 
-@inject('cursor')
+@observer
 class BalanceLine extends Component {
   render() {
     const { balance } = this.props;
@@ -24,7 +23,6 @@ class BalanceLine extends Component {
 }
 
 BalanceLine.propTypes = {
-  cursor: PropTypes.instanceOf(Cursor),
   index: PropTypes.number,
   balance: PropTypes.instanceOf(BalanceModel)
 };
