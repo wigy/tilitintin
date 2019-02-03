@@ -35,7 +35,7 @@ class Cursor {
    */
   @action.bound
   selectPage(page) {
-
+    console.log(`Obsolete call to selectPage('${page}'). Must use setTopology() instead.`);
     if (this.page === page) {
       return;
     }

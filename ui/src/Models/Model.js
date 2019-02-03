@@ -17,6 +17,13 @@ class Model {
   }
 
   /**
+   * Get the name of class without 'Model' postfix.
+   */
+  getObjectType() {
+    return this.constructor.name.replace(/Model$/, '');
+  }
+
+  /**
    * If sortable model, get the value to be used for sorting (default: use `id`).
    */
   getSortKey() {
@@ -29,6 +36,30 @@ class Model {
    */
   initialize(data) {
     return data;
+  }
+
+  /**
+   * Get DOM-element ID for the object.
+   * @return {String}
+   */
+  getId() {
+    console.error(`Model for ${this.getObjectType()} does not implement getId().`);
+  }
+
+  /**
+   * Get detail viewing URL for the object.
+   * @return {String}
+   */
+  getUrl() {
+    console.error(`Model for ${this.getObjectType()} does not implement getUrl().`);
+  }
+
+  /**
+   * Get CSS-classes for the object.
+   * @return {String}
+   */
+  getClasses() {
+    return this.getObjectType();
   }
 
   /**

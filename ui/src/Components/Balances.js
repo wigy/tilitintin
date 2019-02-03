@@ -15,21 +15,17 @@ class Balances extends Component {
       return '';
     }
 
-    const {db, periodId} = this.props.match.params;
-
     return (
       <div className="Period">
         <h1><Trans>Account Balances</Trans></h1>
-        <BalanceTable db={db} periodId={parseInt(periodId)} balances={this.props.store.balances}/>
+        <BalanceTable balances={this.props.store.balances}/>
       </div>
     );
   }
 }
 
 Balances.propTypes = {
-  store: PropTypes.instanceOf(Store),
-  db: PropTypes.string,
-  match: PropTypes.object
+  store: PropTypes.instanceOf(Store)
 };
 
 export default Balances;

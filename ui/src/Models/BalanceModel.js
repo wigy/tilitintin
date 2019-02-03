@@ -1,6 +1,6 @@
-import Model from './Model';
+import NavigationTargetModel from './NavigationTargetModel';
 
-class BalanceModel extends Model {
+class BalanceModel extends NavigationTargetModel {
 
   constructor(parent, init = {}) {
     super(parent, {
@@ -19,11 +19,26 @@ class BalanceModel extends Model {
     return this.account && this.account.number;
   }
 
+  getId() {
+    return 'Balance' + this.account_id;
+  }
+
+  getUrl() {
+    return '/' + this.database.name + '/txs/' + this.period.id + '/' + this.account_id;
+  }
+
   /**
    * Get the period of this balance.
    */
   get period() {
     return this.parent;
+  }
+
+  /**
+   * Get the database of this balance.
+   */
+  get database() {
+    return this.parent.database;
   }
 
   /**

@@ -10,7 +10,7 @@ FUTURE FEATURES
 
 0.4
 [ ] Sort automatically new entries by date, when added.
-[ ] Add more model classes for storing actual data in Store.
+[X] Add more model classes for storing actual data in Store.
     [X] New folder for models.
     [X] Base classes Model and NavigationTargetModel.
     [X] Model for Entry.
@@ -26,6 +26,8 @@ FUTURE FEATURES
 [X] Rename all get-functions as fetch in Store.
 [ ] Change editing so that model has a flags and information about editing state.
 [ ] Drop combining entry data with document data in API http://localhost:3001/db/<name>/account/<accId>/<periodId>
+[ ] Clean up various components passing unnecessarily periods and dbs in addition to the target object.
+    [X] Balance related.
 
 0.6
 [ ] Proposals for account number by looking for account last used with the text given in previous entry.

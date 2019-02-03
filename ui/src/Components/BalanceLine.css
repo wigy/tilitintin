@@ -1,13 +1,13 @@
-.BalanceLine .number {
+.Balance .number {
   padding-left: 0.4em;
   padding-right: 0.4em;
 }
 
-.BalanceLine .name {
+.Balance .name {
   padding-left: 0.4em;
 }
 
-.BalanceLine .balance {
+.Balance .balance {
   white-space: nowrap;
   text-align: right;
   padding-left: 0.4em;

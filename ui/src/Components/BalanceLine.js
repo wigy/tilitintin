@@ -11,11 +11,10 @@ import './BalanceLine.css';
 @inject('cursor')
 class BalanceLine extends Component {
   render() {
-    const {db, periodId, balance, selected} = this.props;
-    const dst = '/' + db + '/txs/' + periodId + '/' + balance.account_id;
-
+    const { balance } = this.props;
+    const dst = balance.getUrl();
     return (
-      <tr id={'Balance' + balance.account_id} className={selected ? 'BalanceLine selected' : 'BalanceLine'}>
+      <tr id={balance.getId()} className={balance.getClasses()}>
         <td className="number"><Link to={dst}>{balance.account && balance.account.number}</Link></td>
         <td className="name"><Link to={dst}>{balance.account && balance.account.name}</Link></td>
         <td className="balance"><Link to={dst}><Money cents={balance.total} currency="EUR"/></Link></td>
@@ -26,11 +25,8 @@ class BalanceLine extends Component {
 
 BalanceLine.propTypes = {
   cursor: PropTypes.instanceOf(Cursor),
-  db: PropTypes.string,
-  periodId: PropTypes.number,
   index: PropTypes.number,
-  balance: PropTypes.instanceOf(BalanceModel),
-  selected: PropTypes.bool
+  balance: PropTypes.instanceOf(BalanceModel)
 };
 
 export default BalanceLine;
