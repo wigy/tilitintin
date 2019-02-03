@@ -210,6 +210,9 @@ class Store {
       return;
     }
     await this.setDb(db);
+    if (!periodId) {
+      return;
+    }
     if (!this.periodFetch) {
       debug('SetPeriod:', db, periodId, 'fetching...');
       this.periodFetch = this.fetchBalances(db, periodId)
