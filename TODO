@@ -2,8 +2,8 @@
 BUGS
 ====
 
-[ ] Downloading balance-sheet produces "undefined" in page break.
-[ ] Env-file example is missing (docker-compose up).
+[X] Downloading balance-sheet produces "undefined" in page break.
+[X] Env-file example is missing (docker-compose up).
 
 FUTURE FEATURES
 ===============
@@ -28,7 +28,7 @@ FUTURE FEATURES
 [ ] Drop combining entry data with document data in API http://localhost:3001/db/<name>/account/<accId>/<periodId>
 [ ] Clean up various components passing unnecessarily periods and dbs in addition to the target object.
     [X] Balance related.
-    [ ] Reports.
+    [ ] Report related.
 [X] Handle movement over duplicates.
 
 0.6
@@ -38,6 +38,7 @@ FUTURE FEATURES
 [ ] Editing tags (maybe add them to text editor).
 [ ] Support for tag parameter for reports to provide different columns per tag (skip 2nd period).
 [ ] Storing tag images on the server.
+[ ] Cleaner error handling for 403 for example.
 
 0.7
 [ ] Tools page: renumber documents in increasing order by date.

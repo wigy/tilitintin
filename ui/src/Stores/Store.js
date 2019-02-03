@@ -455,7 +455,6 @@ class Store {
     this.token = null;
     this.dbsByName = {};
     this.db = null;
-    this.periods = [];
     this.periodId = null;
     this.changed = true;
   }

@@ -9,7 +9,8 @@ natively with the [Node](https://nodejs.org).
 
 ### Using Docker
 
-First drop your *Tilitin* sqlite-databases to the directory `backend/databases` and then build
+Create a file `.env` using a file `.env.example` as a base.
+Then drop your *Tilitin* sqlite-databases to the directory `backend/databases` and then build
 and launch the system
 ```
 docker-compose up
