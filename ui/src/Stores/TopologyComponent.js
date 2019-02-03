@@ -45,6 +45,18 @@ class TopologyComponent {
   }
 
   /**
+   * Get the model pointed by the index.
+   * @param {Number} index
+   * @return {Model|null}
+   */
+  getIndex(index) {
+    if (index < 0 || index >= this.length) {
+      return null;
+    }
+    return this.data[index];
+  }
+
+  /**
    * Get the number of items in the collection.
    */
   get length() {

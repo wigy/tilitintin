@@ -1,7 +1,7 @@
-import Model from './Model';
+import NavigationTargetModel from './NavigationTargetModel';
 import EntryModel from '../Models/EntryModel';
 
-class DocumentModel extends Model {
+class DocumentModel extends NavigationTargetModel {
 
   constructor(parent, init = {}) {
     super(parent, {
@@ -13,14 +13,16 @@ class DocumentModel extends Model {
       // Transaction date as a string "YYYY-MM-DD".
       date: null,
       // A list of entries of this document.
-      entries: [],
-      // If set, the entries are listed in UI.
-      open: false
+      entries: []
     }, init);
   }
 
   getSortKey() {
     return this.number;
+  }
+
+  getId() {
+    return 'Document' + this.id;
   }
 
   /**

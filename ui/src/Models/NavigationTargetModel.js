@@ -23,10 +23,24 @@ class NavigationTargetModel extends Model {
       (this.open ? ' open' : '');
   }
 
+  /**
+   * Find the DOM-element corresponding this element.
+   */
+  getElement() {
+    const id = this.getId();
+    return id ? document.getElementById(id) || null : null;
+  }
+
+  /**
+   * Cursor has entered this model.
+   */
   enter() {
     this.selected = true;
   }
 
+  /**
+   * Cursor has left this model.
+   */
   leave() {
     this.selected = false;
   }

@@ -7,8 +7,6 @@ import TopologyComponent from './TopologyComponent';
 class Cursor {
   // The name of the current page.
   @observable page = 'App';
-  // Screen setup function returning topology as 2-dimensional array `topology[row][column]`.
-  @observable topology = [[]];
   @observable componentX = null;
   @observable componentY = null;
   @observable index = null;
@@ -20,6 +18,8 @@ class Cursor {
 
   // Storage for cursor locations for inactive components.
   savedComponents = {};
+  // Screen setup function returning topology as 2-dimensional array `topology[row][column]`.
+  topology = null;
 
   @action.bound
   setTopology(page, topology) {
@@ -114,7 +114,7 @@ class Cursor {
    * Hook that is called when we are leaving the current component.
    */
   leaveComponent() {
-    const component = this.getComponent();
+    const component = this.getTopologyComponent();
     if (component) {
       this.saveCursor(component);
       component.moveIndex(this.index, null);
@@ -128,7 +128,7 @@ class Cursor {
    * Hook that is called when we have just entered the current component.
    */
   enterComponent() {
-    const component = this.getComponent();
+    const component = this.getTopologyComponent();
     if (component) {
       this.loadCursor(component);
       component.moveIndex(null, this.index);
@@ -184,7 +184,7 @@ class Cursor {
    * @param {Number} delta
    */
   changeIndexBy(delta) {
-    const component = this.getComponent();
+    const component = this.getTopologyComponent();
     if (component && component.vertical) {
       const oldIndex = this.index;
       if (this.indexUpdate(component.length, delta)) {
@@ -202,7 +202,7 @@ class Cursor {
     if (index === null || index === undefined) {
       return;
     }
-    const component = this.getComponent();
+    const component = this.getTopologyComponent();
     if (component) {
       if (index < 0) {
         index = component.length + index;
@@ -221,6 +221,9 @@ class Cursor {
    * @return {TopologyComponent[]}
    */
   getRow() {
+    if (!this.topology) {
+      return [];
+    }
     const topology = this.topology();
     if (this.componentY >= topology.length) {
       this.componentY = topology.length - 1;
@@ -239,7 +242,11 @@ class Cursor {
    * Get the current component from the topology.
    * @return {TopologyComponent|null}
    */
-  getComponent() {
+  getTopologyComponent() {
+    if (!this.topology) {
+      return null;
+    }
+
     const topology = this.topology();
     // Check the X-bounds.
     if (this.componentY >= topology.length) {
@@ -258,6 +265,17 @@ class Cursor {
       }
     }
     return new TopologyComponent(topology[this.componentY][this.componentX]);
+  }
+
+  /**
+   * Get the component pointed by the index in the current topology component.
+   * @return {Model|null}
+   */
+  getComponent() {
+    if (this.index !== null) {
+      const topoComp = this.getTopologyComponent();
+      return topoComp ? topoComp.getIndex(this.index) : null;
+    }
   }
 
   /**
@@ -292,55 +310,9 @@ class Cursor {
 
   // TODO: Refactor all this.
   // ------------------------------------------------------------------------------------
-  oldSelected = {};
-  oldIndex = {};
 
   @observable component = null;
   @observable editor = false;
-
-  @action.bound
-  selectPage(page) {
-    console.error('Obsolete call to selectPage().');
-    if (this.page === page) {
-      return;
-    }
-
-    let component = 'Nothing'; let index = null; let column = null; let row = null;
-
-    if (this.oldSelected[page]) {
-      component = this.oldSelected[page].component;
-      index = this.oldSelected[page].index;
-      column = this.oldSelected[page].column;
-      row = this.oldSelected[page].row;
-    } else {
-      switch (page) {
-        case 'Balances':
-          component = 'BalanceTable';
-          break;
-        case 'Reports':
-          component = 'Nothing';
-          break;
-        case 'Accounts':
-          component = 'Nothing';
-          break;
-        default:
-          console.error('No default components for page', page);
-      }
-    }
-
-    this.oldSelected[this.page] = {
-      component: this.component,
-      index: this.index,
-      column: this.column,
-      row: this.row
-    };
-
-    this.page = page;
-    this.component = component;
-    this.index = index;
-    this.column = column;
-    this.row = row;
-  }
 
   /**
    * Reset selections.
@@ -359,18 +331,7 @@ class Cursor {
    */
   @action.bound
   selectIndex(component, index = null) {
-    console.error('Obsolete call to resetIndex().');
-    if (arguments.length === 1) {
-      index = component;
-      component = this.component;
-    }
-    if (component !== this.component) {
-      this.save();
-      this.component = component;
-    }
-    this.index = index;
-    this.column = null;
-    this.row = null;
+    console.error('Obsolete call to selectIndex().');
   }
 
   /**

@@ -14,37 +14,40 @@ class Navigator {
   }
 
   /**
-   * Update navigation structures in the store based on the key.
+   * Update navigation structures in the store based on the key pressed.
    * @param {String} key
    * @return {Object}
    */
   @action.bound
   handle(key) {
-    let update, fn;
+    let result;
     const keyName = (key.length === 1 ? 'Text' : key);
+    const fn = 'key' + keyName.replace(/\+/g, '');
+
+    // Try component handler.
+    const component = this.cursor.getComponent();
+    if (component && component[fn]) {
+      result = component[fn]();
+    }
 
     // Try cursor handler.
-    fn = 'key' + keyName.replace(/\+/g, '');
-    if (this.cursor[fn]) {
-      update = this.cursor[fn]();
-      if (update && KEY_DEBUG) {
-        console.log(fn, ':', update);
+    if (!result && this.cursor[fn]) {
+      result = this.cursor[fn]();
+      if (result && KEY_DEBUG) {
+        console.log(fn, ':', result);
       }
     }
 
     // Try generic handler.
-    if (!update) {
-      fn = 'key' + keyName.replace(/\+/g, '');
-      if (this[fn]) {
-        update = this[fn]();
-        if (update && KEY_DEBUG) {
-          console.log(fn, ':', update);
-        }
+    if (!result && this[fn]) {
+      result = this[fn]();
+      if (result && KEY_DEBUG) {
+        console.log(fn, ':', result);
       }
     }
 
-    if (update) {
-      return update;
+    if (result) {
+      return result;
     }
 
     if (KEY_DEBUG) {
@@ -65,7 +68,7 @@ class Navigator {
         this.cursor.setTopology(page, () => [
           [
             {name: 'balances', data: this.store.balances},
-            {name: 'transactions', data: this.store.filteredTransactions}
+            {name: 'transactions', data: this.store.filteredTransactions.map((tx) => tx.document)}
           ]
         ]);
         break;
@@ -94,7 +97,6 @@ class Navigator {
       return null;
     }
 
-    let update;
     const keyName = (key.length === 1 ? 'Text' : key);
 
     // Handle keys for modal.
@@ -110,48 +112,6 @@ class Navigator {
           return null;
       }
     }
-
-    // Try component specific handler.
-    let fn = 'handle' + component + keyName.replace(/\+/g, '');
-    if (this[fn]) {
-      update = this[fn](this.cursor);
-      if (update && KEY_DEBUG) {
-        console.log(fn, ':', update);
-      }
-    }
-    // Try generic handler.
-    if (!update) {
-      fn = 'handle' + keyName.replace(/\+/g, '');
-      if (this[fn]) {
-        update = this[fn](this.cursor);
-        if (update && KEY_DEBUG) {
-          console.log(fn, ':', update);
-        }
-      }
-    }
-
-    if (update) {
-      let ret = {preventDefault: true};
-      if (update.dontPreventDefault) {
-        delete update.dontPreventDefault;
-        ret.preventDefault = false;
-      }
-
-      Object.assign(this.cursor, update);
-
-      if (KEY_DEBUG) {
-        const {component, index, column, row, editor} = this.cursor;
-        console.log('=>', {component, index, column, row, editor});
-      }
-
-      return ret;
-    }
-
-    if (KEY_DEBUG) {
-      console.log(`No handler for key '${key}'.`);
-    }
-
-    return null;
   }
 
   // Generic.
@@ -339,20 +299,6 @@ class Navigator {
     // Other cells.
     if (index !== null && row !== null) {
       return {editor: true, dontPreventDefault: true};
-    }
-  }
-
-  // Account balance listing
-  // -----------------------
-  handleBalanceTableArrowRight() {
-    return this.cursor.componentUpdate('TransactionTable', this.store.filteredTransactions.length);
-  }
-  handleBalanceTableEnter({index}) {
-    if (this.store.balances[index]) {
-      // TODO: DRY
-      const el = document.getElementById('Balance' + this.store.balances[index].account_id);
-      el.children[0].children[0].click();
-      return {};
     }
   }
 }
