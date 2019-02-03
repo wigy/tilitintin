@@ -339,24 +339,6 @@ class Navigator {
 
   // Account balance listing
   // -----------------------
-  handleBalanceTableArrowUp({index}, amount = -1) {
-    const ret = this.cursor.indexUpdate(index, this.store.balances.length, amount);
-    // TODO: Would be nice to get rid of direct DOM-manipulation.
-    if (ret) {
-      const el = document.getElementById('Balance' + this.store.balances[ret.index].account_id);
-      el.scrollIntoView({block: 'center', inline: 'center'});
-    }
-    return ret;
-  }
-  handleBalanceTableArrowDown({index}, amount = 1) {
-    return this.handleBalanceTableArrowUp({index}, +1);
-  }
-  handleBalanceTablePageUp({index}) {
-    return this.handleBalanceTableArrowUp({index}, -10);
-  }
-  handleBalanceTablePageDown({index}) {
-    return this.handleBalanceTableArrowUp({index}, 10);
-  }
   handleBalanceTableHome() {
     if (this.store.balances.length) {
       // TODO: DRY

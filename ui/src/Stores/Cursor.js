@@ -32,24 +32,47 @@ class Cursor {
     this.row = null;
   }
 
+  /**
+   * Move one row or index down.
+   */
   @action.bound
   keyArrowDown() {
-    const component = this.getComponent();
-    if (component && component.vertical) {
-      const oldIndex = this.index;
-      if (this.indexUpdate(component.length, +1)) {
-        component.moveIndex(oldIndex, this.index);
-      }
-    }
-    return {preventDefault: true};
+    return this.changeIndexBy(+1);
   }
 
+  /**
+   * Move one row or index up.
+   */
   @action.bound
   keyArrowUp() {
+    return this.changeIndexBy(-1);
+  }
+
+  /**
+   * Move couple rows or indices down.
+   */
+  @action.bound
+  keyPageDown() {
+    return this.changeIndexBy(+10);
+  }
+
+  /**
+   * Move couple rows or indices up.
+   */
+  @action.bound
+  keyPageUp() {
+    return this.changeIndexBy(-10);
+  }
+
+  /**
+   * Adjust the current index by the given amount, if the component is vertical.
+   * @param {Number} delta
+   */
+  changeIndexBy(delta) {
     const component = this.getComponent();
     if (component && component.vertical) {
       const oldIndex = this.index;
-      if (this.indexUpdate(component.length, -1)) {
+      if (this.indexUpdate(component.length, delta)) {
         component.moveIndex(oldIndex, this.index);
       }
     }
