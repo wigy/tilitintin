@@ -7,7 +7,7 @@ import TopologyComponent from './TopologyComponent';
 class Cursor {
   // The name of the current page.
   @observable page = 'App';
-  // Screen setup function returning topology as 2-dimensional array `topology[column][row]`.
+  // Screen setup function returning topology as 2-dimensional array `topology[row][column]`.
   @observable topology = [[]];
   @observable componentX = null;
   @observable componentY = null;
@@ -17,6 +17,9 @@ class Cursor {
 
   // When a modal is active, this is an object with two members: onCancel and onConfirm.
   @observable activeModal = null; // TODO: This should be in navigator?
+
+  // Storage for cursor locations for inactive components.
+  savedComponents = {};
 
   @action.bound
   setTopology(page, topology) {
@@ -65,6 +68,118 @@ class Cursor {
   }
 
   /**
+   * Move to the first index.
+   */
+  @action.bound
+  keyHome() {
+    return this.setIndex(0);
+  }
+
+  /**
+   * Move to the last index.
+   */
+  @action.bound
+  keyEnd() {
+    return this.setIndex(-1);
+  }
+
+  /**
+   * Move to the component left.
+   */
+  @action.bound
+  keyArrowLeft() {
+    if (this.componentX > 0) {
+      this.leaveComponent();
+      this.componentX--;
+      this.enterComponent();
+    }
+    return {preventDefault: true};
+  }
+
+  /**
+   * Move to the component right.
+   */
+  @action.bound
+  keyArrowRight() {
+    const row = this.getRow();
+    if (this.componentX < row.length - 1) {
+      this.leaveComponent();
+      this.componentX++;
+      this.enterComponent();
+    }
+    return {preventDefault: true};
+  }
+
+  /**
+   * Hook that is called when we are leaving the current component.
+   */
+  leaveComponent() {
+    const component = this.getComponent();
+    if (component) {
+      this.saveCursor(component);
+      component.moveIndex(this.index, null);
+    }
+    this.index = null;
+    this.row = null;
+    this.column = null;
+  }
+
+  /**
+   * Hook that is called when we have just entered the current component.
+   */
+  enterComponent() {
+    const component = this.getComponent();
+    if (component) {
+      this.loadCursor(component);
+      component.moveIndex(null, this.index);
+    }
+  }
+
+  /**
+   * Save the current cursor position for the component.
+   * @param {TopologyComponent} component
+   */
+  saveCursor(component) {
+    if (!component) {
+      return;
+    }
+    const name = component.name;
+    if (!name) {
+      console.error(component);
+      throw new Error('Component does not have a name.');
+    }
+    this.savedComponents[name] = {
+      index: this.index,
+      column: this.column,
+      row: this.row
+    };
+  }
+
+  /**
+   * Load the current cursor position for the component.
+   * @param {TopologyComponent} component
+   */
+  loadCursor(component) {
+    if (!component) {
+      return;
+    }
+    const name = component.name;
+    if (!name) {
+      console.error(component);
+      throw new Error('Component does not have a name.');
+    }
+    if (this.savedComponents[name]) {
+      this.index = this.savedComponents[name].index;
+      this.column = this.savedComponents[name].column;
+      this.row = this.savedComponents[name].row;
+    } else {
+      this.index = 0;
+      this.row = null;
+      this.column = null;
+    }
+  }
+
+  /**
    * Adjust the current index by the given amount, if the component is vertical.
    * @param {Number} delta
    */
@@ -80,28 +195,69 @@ class Cursor {
   }
 
   /**
+   * Set the current index to the given number, if it is valid. Negative number counts from the end.
+   * @param {Number|null|undefined} index
+   */
+  setIndex(index) {
+    if (index === null || index === undefined) {
+      return;
+    }
+    const component = this.getComponent();
+    if (component) {
+      if (index < 0) {
+        index = component.length + index;
+      }
+      if (index >= 0 && index < component.length) {
+        const oldIndex = this.index;
+        this.index = index;
+        component.moveIndex(oldIndex, this.index);
+      }
+    }
+    return {preventDefault: true};
+  }
+
+  /**
+   * Get an array of components from the current row.
+   * @return {TopologyComponent[]}
+   */
+  getRow() {
+    const topology = this.topology();
+    if (this.componentY >= topology.length) {
+      this.componentY = topology.length - 1;
+      if (this.componentY < 0) {
+        this.componentY = 0;
+      }
+    }
+    if (topology.length) {
+      return topology[this.componentY].map((comp) => new TopologyComponent(comp));
+    } else {
+      return [];
+    }
+  }
+
+  /**
    * Get the current component from the topology.
    * @return {TopologyComponent|null}
    */
   getComponent() {
     const topology = this.topology();
     // Check the X-bounds.
-    if (this.componentX >= topology.length) {
-      this.componentX = topology.length - 1;
-      if (this.componentX < 0) {
-        this.componentX = 0;
-        return null;
-      }
-    }
-    // Check the y-bounds.
-    if (this.componentY >= topology[this.componentX].length) {
-      this.componentY = topology[this.componentX].length - 1;
+    if (this.componentY >= topology.length) {
+      this.componentY = topology.length - 1;
       if (this.componentY < 0) {
         this.componentY = 0;
         return null;
       }
     }
-    return new TopologyComponent(topology[this.componentX][this.componentY]);
+    // Check the y-bounds.
+    if (this.componentX >= topology[this.componentY].length) {
+      this.componentX = topology[this.componentY].length - 1;
+      if (this.componentX < 0) {
+        this.componentX = 0;
+        return null;
+      }
+    }
+    return new TopologyComponent(topology[this.componentY][this.componentX]);
   }
 
   /**
@@ -281,15 +437,6 @@ class Cursor {
       index = N - 1;
     }
     return {component, index};
-  }
-
-  /**
-   * Save the current position.
-   */
-  save() {
-    if (this.index !== null) {
-      this.oldIndex[this.component] = this.index;
-    }
   }
 }
 

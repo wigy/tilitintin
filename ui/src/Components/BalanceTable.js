@@ -12,8 +12,8 @@ class BalanceTable extends Component {
     return (
       <table className="BalanceTable">
         <tbody>
-          {this.props.balances.map((balance, idx) => {
-            return (<BalanceLine key={balance.account_id} index={idx} balance={balance} />);
+          {this.props.balances.map((balance) => {
+            return (<BalanceLine key={balance.account_id} balance={balance} />);
           })}
         </tbody>
       </table>

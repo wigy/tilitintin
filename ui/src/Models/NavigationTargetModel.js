@@ -23,7 +23,7 @@ class NavigationTargetModel extends Model {
       (this.open ? ' open' : '');
   }
 
-  select() {
+  enter() {
     this.selected = true;
   }
 

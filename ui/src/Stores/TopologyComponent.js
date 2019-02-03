@@ -1,24 +1,46 @@
+import NavigationTargetModel from '../Models/NavigationTargetModel';
 import { action } from 'mobx';
 
 /**
  * Description of some collection of navigational objects.
+ *
+ * Components inside the data are formatted as
+ * [
+ *    [componentX 0 componentY 0],
+ *    [componentX 0 componentY 1],
+ *    [componentX 0 componentY 2, componentX 1 componentY 2, componentX 2 componentY 2]
+ *    [componentX 0 componentY 3, componentX 1 componentY 3],
+ * ]
+ *
  */
 class TopologyComponent {
   constructor(comp) {
+    this.name = comp.name;
     this.data = comp.data;
     this.vertical = true;
     this.horizontal = false;
   }
 
+  /**
+   * Change the current index to the given index.
+   * @param {Number} oldIndex
+   * @param {Number} index
+   */
   @action.bound
   moveIndex(oldIndex, index) {
     if (oldIndex !== null) {
       this.data[oldIndex].leave();
     }
     if (index !== null) {
-      this.data[index].select();
+      if (!(this.data[index] instanceof NavigationTargetModel)) {
+        console.error(this.data[index]);
+        throw new Error(`Invalid navigation target not inherited from NavigationTargetModel.`);
+      }
+      this.data[index].enter();
       const el = document.getElementById(this.data[index].getId());
-      el.scrollIntoView({block: 'center', inline: 'center'});
+      if (el) {
+        el.scrollIntoView({block: 'center', inline: 'center'});
+      }
     }
   }
 

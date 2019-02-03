@@ -1,7 +1,7 @@
-import Model from './Model';
+import NavigationTargetModel from './NavigationTargetModel';
 import TagModel from './TagModel';
 
-class EntryModel extends Model {
+class EntryModel extends NavigationTargetModel {
 
   constructor(parent, init = {}) {
     super(parent, {

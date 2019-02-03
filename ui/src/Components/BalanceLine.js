@@ -23,7 +23,6 @@ class BalanceLine extends Component {
 }
 
 BalanceLine.propTypes = {
-  index: PropTypes.number,
   balance: PropTypes.instanceOf(BalanceModel)
 };
 

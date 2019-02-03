@@ -1,7 +1,7 @@
 import { action } from 'mobx';
 import moment from 'moment';
 
-const KEY_DEBUG = true;
+const KEY_DEBUG = false;
 
 /**
  * A keyboard navigation handler for the application.
@@ -62,7 +62,12 @@ class Navigator {
   selectPage(page) {
     switch (page) {
       case 'Balances':
-        this.cursor.setTopology(page, () => [[{data: this.store.balances}]]);
+        this.cursor.setTopology(page, () => [
+          [
+            {name: 'balances', data: this.store.balances},
+            {name: 'transactions', data: this.store.filteredTransactions}
+          ]
+        ]);
         break;
       default:
         this.cursor.setTopology(page, () => [[]]);
@@ -339,23 +344,6 @@ class Navigator {
 
   // Account balance listing
   // -----------------------
-  handleBalanceTableHome() {
-    if (this.store.balances.length) {
-      // TODO: DRY
-      const el = document.getElementById('Balance' + this.store.balances[0].account_id);
-      el.scrollIntoView({block: 'center', inline: 'center'});
-      return {index: 0};
-    }
-  }
-  handleBalanceTableEnd() {
-    const N = this.store.balances.length;
-    if (N) {
-      // TODO: DRY
-      const el = document.getElementById('Balance' + this.store.balances[N - 1].account_id);
-      el.scrollIntoView({block: 'center', inline: 'center'});
-      return {index: N - 1};
-    }
-  }
   handleBalanceTableArrowRight() {
     return this.cursor.componentUpdate('TransactionTable', this.store.filteredTransactions.length);
   }
