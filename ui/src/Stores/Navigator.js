@@ -68,7 +68,7 @@ class Navigator {
         this.cursor.setTopology(page, () => [
           [
             {name: 'balances', data: this.store.balances},
-            {name: 'transactions', data: this.store.filteredTransactions.map((tx) => tx.document)}
+            {name: 'transactions', data: this.store.filteredTransactions}
           ]
         ]);
         break;

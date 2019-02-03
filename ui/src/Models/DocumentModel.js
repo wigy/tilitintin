@@ -34,14 +34,6 @@ class DocumentModel extends NavigationTargetModel {
   }
 
   /**
-   * Toggle entries visible and non-visible.
-   */
-  keyEnter() {
-    this.toggleOpen();
-    return {preventDefault: true};
-  }
-
-  /**
    * Get the period this document belongs to.
    */
   get period() {

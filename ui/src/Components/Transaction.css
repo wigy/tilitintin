@@ -1,46 +1,35 @@
-.TransactionEntry {
-  display: none;
-}
-
-.TransactionEntry.open {
-  display: table-row;
-}
-
-.TransactionEntry.open td {
+.Transaction.open .TransactionEntry td {
   background-color: white;
 }
 
-.TransactionEntry.error, .Document.error, .Document.open.error .credit .summary, .Document.open.error .debit .summary {
+.TransactionEntry.error, .Transaction.error, .Transaction.open.error .credit .summary, .Transaction.open.error .debit .summary {
   color: red;
   font-weight: inherit;
 }
 
-.TransactionEntry.error, .Document.error {
+.TransactionEntry.error, .Transaction.error {
   background-color: rgba(255,0,0,0.1) !important;
 }
 
-.Document.mismatch {
+.Transaction.mismatch {
   text-decoration: line-through;
 }
 
-.Document .number {
+.Transaction .number {
   width: 5%;
 }
 
-.Document.duplicate .number {
+.Transaction.duplicate .number {
   font-style: italic;
   color: rgba(0,0,0,0.5);
 }
 
-.Document .date {
+.Transaction .date {
   text-align: center;
   width: 10%;
 }
 
-.TransactionEntry .account {
-}
-
-.Document .tags {
+.Transaction .tags {
   width: 5%;
 }
 
@@ -48,40 +37,37 @@
   width: 25%;
 }
 
-.Document .tags .Tag {
+.Transaction .tags .Tag {
   vertical-align: middle;
   margin-right: 1px;
   vertical-align: middle;
 }
 
-.Document .tags .Tag img {
+.Transaction .tags .Tag img {
   margin-top: -1.5ex;
 }
 
-.Document .description, .TransactionEntry .description {
-}
-
-.Document .debit, .TransactionEntry .debit {
+.Transaction .debit, .TransactionEntry .debit {
   text-align: right;
   width: 8%;
 }
 
-.Document.open .debit .summary {
+.Transaction.open .debit .summary {
   color: var(--fg-color-light);
   font-weight: bold;
 }
 
-.Document .credit, .TransactionEntry .credit {
+.Transaction .credit, .TransactionEntry .credit {
   text-align: right;
   width: 8%;
 }
 
-.Document.open .credit .summary {
+.Transaction.open .credit .summary {
   color: var(--fg-color-light);
   font-weight: bold;
 }
 
-.Document .total {
+.Transaction .total {
   text-align: right;
   width: 8%;
 }

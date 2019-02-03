@@ -72,7 +72,7 @@ class TransactionDetails extends Component {
         break;
       case 'account':
         const onClick = () => this.props.cursor.setIndex('TransactionTable', null);
-        url = '/' + this.props.entry.db.name + '/txs/' + this.props.entry.period.id + '/' + this.props.entry.account_id;
+        url = '/' + this.props.entry.database.name + '/txs/' + this.props.entry.period.id + '/' + this.props.entry.account_id;
         text = <Link onClick={onClick} to={url}>{this.props.entry.account.number} {this.props.entry.account.name}</Link>;
         edit = this.props.entry.account.number;
         break;

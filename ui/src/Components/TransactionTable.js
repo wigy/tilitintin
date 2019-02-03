@@ -79,7 +79,7 @@ class TransactionTable extends Component {
             }
             const duplicate = seen[tx.document.number];
             seen[tx.document.number] = true;
-            sum += tx.total;
+            sum += tx.entry.total;
             return <Transaction
               key={idx}
               index={idx}

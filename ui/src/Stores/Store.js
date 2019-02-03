@@ -9,6 +9,7 @@ import BalanceModel from '../Models/BalanceModel';
 import TagModel from '../Models/TagModel';
 import HeadingModel from '../Models/HeadingModel';
 import ReportModel from '../Models/ReportModel';
+import TransactionModel from '../Models/TransactionModel';
 
 const DEBUG = false;
 
@@ -640,7 +641,7 @@ class Store {
       return txs.filter((tx) => visible(tx));
     };
 
-    return filter(this.transactions);
+    return filter(this.transactions).map((tx, index) => new TransactionModel(tx.parent.parent, {entry: tx, index}));
   }
 
   /**

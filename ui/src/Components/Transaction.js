@@ -10,7 +10,7 @@ import Tags from './Tags';
 import TransactionDetails from './TransactionDetails';
 import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
-import EntryModel from '../Models/EntryModel';
+import TransactionModel from '../Models/TransactionModel';
 import './Transaction.css';
 
 @translate('translations')
@@ -48,7 +48,7 @@ class Transaction extends Component {
       column = 0;
       row++;
       // Oops, we are on the last column of last row.
-      if (row >= this.props.tx.entries.length) {
+      if (row >= this.props.tx.document.entries.length) {
         column = 3;
         row--;
       }
@@ -60,32 +60,32 @@ class Transaction extends Component {
   renderMainTx(classes) {
     const {tx, selectedRow} = this.props;
 
-    const money = (<Money cents={tx.amount} currency="EUR" />);
+    const money = (<Money cents={tx.entry.amount} currency="EUR" />);
     const total = (<Money cents={this.props.total} currency="EUR" />);
 
     return (
-      <tr id={tx.document.getId()} key="title" className={classes} onClick={() => this.onClick()}>
+      <tr id={tx.getId()} key="title" className={classes} onClick={() => this.onClick()}>
         <td className="number">
           {tx.document.number}
         </td>
         <td className="date">
           <TransactionDetails
-            selected={tx.open && tx.document.selected && selectedRow === null}
+            selected={tx.open && tx.selected && selectedRow === null}
             type="date"
             document={tx.document}
           />
         </td>
-        <td className="tags" style={{width: (tx.tags.length) * 2.6 + 'ex'}}>
-          <Tags tags={tx.tags}></Tags>
+        <td className="tags" style={{width: (tx.entry.tags.length) * 2.6 + 'ex'}}>
+          <Tags tags={tx.entry.tags}></Tags>
         </td>
         <td className="description">
-          <span className="summary">{tx.description}&nbsp;</span>
+          <span className="summary">{tx.entry.description}&nbsp;</span>
         </td>
         <td className="debit">
-          <span className="summary">&nbsp;{tx.debit ? money : ''}</span>
+          <span className="summary">&nbsp;{tx.entry.debit ? money : ''}</span>
         </td>
         <td className="credit">
-          <span className="summary">&nbsp;{tx.debit ? '' : money}</span>
+          <span className="summary">&nbsp;{tx.entry.debit ? '' : money}</span>
         </td>
         <td className="total">
           {total}
@@ -96,9 +96,9 @@ class Transaction extends Component {
 
   // Render an entry for opened document.
   renderEntry(idx, entry, diff) {
-    const {tx, duplicate, selectedColumn, selectedRow} = this.props;
-    const isSelected = (type) => this.props.tx.document.selected && selectedColumn === type && idx === selectedRow;
-    const current = tx.account_id === entry.account_id;
+    const {duplicate, selectedColumn, selectedRow} = this.props;
+    const isSelected = (type) => this.props.tx.selected && selectedColumn === type && idx === selectedRow;
+    const current = entry.account_id === this.props.store.accountId;
     const classes = 'TransactionEntry alt open' + (duplicate ? ' duplicate' : '');
 
     // Calculate correction to fix total assuming that this entry is the one changed.
@@ -200,8 +200,7 @@ class Transaction extends Component {
     const error = imbalance || missingAccount;
 
     // Set up CSS classes.
-    const classes = tx.document.getClasses() +
-      (tx.open ? ' open' : '') +
+    const classes = tx.getClasses() +
       (error ? ' error' : '') +
       (mismatchingAccount ? ' mismatch' : '') +
       (this.props.duplicate ? ' duplicate' : '');
@@ -212,7 +211,7 @@ class Transaction extends Component {
     ];
 
     // Render entries, if opened.
-    if (tx.document.open && !this.props.duplicate) {
+    if (tx.open) {
       tx.document.entries.forEach((entry, idx) => {
         ret.push(this.renderEntry(idx, entry, debit - credit));
       });
@@ -262,7 +261,7 @@ class Transaction extends Component {
 Transaction.propTypes = {
   store: PropTypes.instanceOf(Store),
   cursor: PropTypes.instanceOf(Cursor),
-  tx: PropTypes.instanceOf(EntryModel),
+  tx: PropTypes.instanceOf(TransactionModel),
   index: PropTypes.number,
   selectedColumn: PropTypes.string,
   selectedRow: PropTypes.number,

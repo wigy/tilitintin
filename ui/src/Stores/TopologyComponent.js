@@ -31,7 +31,7 @@ class TopologyComponent {
     if (oldIndex !== null && this.data[oldIndex]) {
       this.data[oldIndex].leave();
     }
-    if (index !== null) {
+    if (index !== null && this.data[index]) {
       if (!(this.data[index] instanceof NavigationTargetModel)) {
         console.error(this.data[index]);
         throw new Error(`Invalid navigation target not inherited from NavigationTargetModel.`);
