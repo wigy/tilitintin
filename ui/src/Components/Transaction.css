@@ -10,29 +10,29 @@
   background-color: white;
 }
 
-.TransactionEntry.error, .Transaction.error, .Transaction.open.error .credit .summary, .Transaction.open.error .debit .summary {
+.TransactionEntry.error, .Document.error, .Document.open.error .credit .summary, .Document.open.error .debit .summary {
   color: red;
   font-weight: inherit;
 }
 
-.TransactionEntry.error, .Transaction.error {
+.TransactionEntry.error, .Document.error {
   background-color: rgba(255,0,0,0.1) !important;
 }
 
-.Transaction.mismatch {
+.Document.mismatch {
   text-decoration: line-through;
 }
 
-.Transaction .number {
+.Document .number {
   width: 5%;
 }
 
-.Transaction.duplicate .number {
+.Document.duplicate .number {
   font-style: italic;
   color: rgba(0,0,0,0.5);
 }
 
-.Transaction .date {
+.Document .date {
   text-align: center;
   width: 10%;
 }
@@ -40,7 +40,7 @@
 .TransactionEntry .account {
 }
 
-.Transaction .tags {
+.Document .tags {
   width: 5%;
 }
 
@@ -48,40 +48,40 @@
   width: 25%;
 }
 
-.Transaction .tags .Tag {
+.Document .tags .Tag {
   vertical-align: middle;
   margin-right: 1px;
   vertical-align: middle;
 }
 
-.Transaction .tags .Tag img {
+.Document .tags .Tag img {
   margin-top: -1.5ex;
 }
 
-.Transaction .description, .TransactionEntry .description {
+.Document .description, .TransactionEntry .description {
 }
 
-.Transaction .debit, .TransactionEntry .debit {
+.Document .debit, .TransactionEntry .debit {
   text-align: right;
   width: 8%;
 }
 
-.Transaction.open .debit .summary {
+.Document.open .debit .summary {
   color: var(--fg-color-light);
   font-weight: bold;
 }
 
-.Transaction .credit, .TransactionEntry .credit {
+.Document .credit, .TransactionEntry .credit {
   text-align: right;
   width: 8%;
 }
 
-.Transaction.open .credit .summary {
+.Document.open .credit .summary {
   color: var(--fg-color-light);
   font-weight: bold;
 }
 
-.Transaction .total {
+.Document .total {
   text-align: right;
   width: 8%;
 }

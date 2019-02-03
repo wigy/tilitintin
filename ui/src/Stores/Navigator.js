@@ -27,7 +27,7 @@ class Navigator {
     // Try component handler.
     const component = this.cursor.getComponent();
     if (component && component[fn]) {
-      result = component[fn]();
+      result = component[fn](this.cursor);
     }
 
     // Try cursor handler.

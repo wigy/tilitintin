@@ -55,7 +55,7 @@ class TransactionTable extends Component {
       )}<br/>
     </Dialog>);
 
-    const { component, index, row, column, editor } = this.props.cursor;
+    const { row, column, editor } = this.props.cursor;
 
     let sum = 0;
     let seen = {};
@@ -83,7 +83,6 @@ class TransactionTable extends Component {
             return <Transaction
               key={idx}
               index={idx}
-              selected={component === 'TransactionTable' && index === idx}
               selectedColumn={column !== null ? ['account', 'description', 'debit', 'credit'][column] : null}
               selectedRow={row}
               editor={editor}

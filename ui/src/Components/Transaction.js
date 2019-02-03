@@ -58,19 +58,19 @@ class Transaction extends Component {
 
   // Render the main row of the document, i.e. the entry having the current account and data from document it belongs to.
   renderMainTx(classes) {
-    const {tx, selected, selectedRow} = this.props;
+    const {tx, selectedRow} = this.props;
 
     const money = (<Money cents={tx.amount} currency="EUR" />);
     const total = (<Money cents={this.props.total} currency="EUR" />);
 
     return (
-      <tr id={'Transaction' + tx.id} key="title" className={classes} onClick={() => this.onClick()}>
+      <tr id={tx.document.getId()} key="title" className={classes} onClick={() => this.onClick()}>
         <td className="number">
           {tx.document.number}
         </td>
         <td className="date">
           <TransactionDetails
-            selected={tx.open && selected && selectedRow === null}
+            selected={tx.open && tx.document.selected && selectedRow === null}
             type="date"
             document={tx.document}
           />
@@ -97,7 +97,7 @@ class Transaction extends Component {
   // Render an entry for opened document.
   renderEntry(idx, entry, diff) {
     const {tx, duplicate, selectedColumn, selectedRow} = this.props;
-    const isSelected = (type) => this.props.selected && selectedColumn === type && idx === selectedRow;
+    const isSelected = (type) => this.props.tx.document.selected && selectedColumn === type && idx === selectedRow;
     const current = tx.account_id === entry.account_id;
     const classes = 'TransactionEntry alt open' + (duplicate ? ' duplicate' : '');
 
@@ -174,9 +174,8 @@ class Transaction extends Component {
     let credit = 0;
     let missingAccount = false;
     let mismatchingAccount = /* true */ false;
-    /*
-    TODO: Re-implement.
-    tx.entries.forEach((entry, idx) => {
+
+    tx.document.entries.forEach((entry, idx) => {
       if (entry.askDelete) {
         this.entryToDelete = entry;
       }
@@ -193,7 +192,7 @@ class Transaction extends Component {
         }
       }
     });
-    */
+
     const smaller = Math.min(debit, credit);
     debit -= smaller;
     credit -= smaller;
@@ -201,8 +200,7 @@ class Transaction extends Component {
     const error = imbalance || missingAccount;
 
     // Set up CSS classes.
-    const classes = 'Transaction' +
-      (this.props.selected ? ' selected' : '') +
+    const classes = tx.document.getClasses() +
       (tx.open ? ' open' : '') +
       (error ? ' error' : '') +
       (mismatchingAccount ? ' mismatch' : '') +
@@ -268,7 +266,6 @@ Transaction.propTypes = {
   index: PropTypes.number,
   selectedColumn: PropTypes.string,
   selectedRow: PropTypes.number,
-  selected: PropTypes.bool,
   duplicate: PropTypes.bool,
   total: PropTypes.number
 };

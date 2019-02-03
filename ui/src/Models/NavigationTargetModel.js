@@ -44,6 +44,13 @@ class NavigationTargetModel extends Model {
   leave() {
     this.selected = false;
   }
+
+  /**
+   * Change the opened state.
+   */
+  toggleOpen() {
+    this.open = !this.open;
+  }
 }
 
 export default NavigationTargetModel;

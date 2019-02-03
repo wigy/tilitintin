@@ -200,6 +200,9 @@ class Cursor {
    */
   setIndex(index) {
     if (index === null || index === undefined) {
+      this.index = null;
+      this.row = null;
+      this.column = null;
       return;
     }
     const component = this.getTopologyComponent();

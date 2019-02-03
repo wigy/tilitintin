@@ -28,7 +28,7 @@ class TopologyComponent {
    */
   @action.bound
   moveIndex(oldIndex, index) {
-    if (oldIndex !== null) {
+    if (oldIndex !== null && this.data[oldIndex]) {
       this.data[oldIndex].leave();
     }
     if (index !== null) {
