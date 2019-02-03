@@ -137,9 +137,6 @@ class Navigator {
     }
     return ret;
   }
-  handleTransactionTablePageUp({index, column, row}) {
-    return this.handleTransactionTableArrowUp({index, column, row}, -10);
-  }
   handleTransactionTableArrowDown({index, column, row}, amount = +1) {
     if (index !== null && this.store.filteredTransactions[index].open) {
       if (row === this.store.filteredTransactions[index].entries.length - 1) {
@@ -158,32 +155,12 @@ class Navigator {
     }
     return ret;
   }
-  handleTransactionTablePageDown({index, column, row}) {
-    return this.handleTransactionTableArrowDown({index, column, row}, 10);
-  }
-  handleTransactionTableHome() {
-    if (this.store.filteredTransactions.length) {
-      // TODO: DRY
-      const el = document.getElementById('Transaction' + this.store.filteredTransactions[0].id);
-      el.scrollIntoView({block: 'center', inline: 'center'});
-      return {index: 0};
-    }
-  }
-  handleTransactionTableEnd() {
-    const N = this.store.filteredTransactions.length;
-    if (N) {
-      // TODO: DRY
-      const el = document.getElementById('Transaction' + this.store.filteredTransactions[N - 1].id);
-      el.scrollIntoView({block: 'center', inline: 'center'});
-      return {index: N - 1};
-    }
-  }
   handleTransactionTableArrowLeft({index, column, row}) {
     if (index !== null && this.store.filteredTransactions[index].open) {
       const ret = this.cursor.boxUpdate(column, row, 4, this.store.filteredTransactions[index].entries.length, -1, 0);
       return ret;
     }
-    return this.cursor.componentUpdate('BalanceTable', this.store.balances.length);
+    // return this.cursor.componentUpdate('BalanceTable', this.store.balances.length);
   }
   handleTransactionTableArrowRight({index, column, row}) {
     if (index !== null && this.store.filteredTransactions[index].open) {

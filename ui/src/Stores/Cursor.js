@@ -224,10 +224,10 @@ class Cursor {
    * @return {TopologyComponent[]}
    */
   getRow() {
-    if (!this.topology) {
+    const topology = this.getTopology();
+    if (!topology) {
       return [];
     }
-    const topology = this.topology();
     if (this.componentY >= topology.length) {
       this.componentY = topology.length - 1;
       if (this.componentY < 0) {
@@ -246,11 +246,11 @@ class Cursor {
    * @return {TopologyComponent|null}
    */
   getTopologyComponent() {
-    if (!this.topology) {
+    const topology = this.getTopology();
+    if (!topology) {
       return null;
     }
 
-    const topology = this.topology();
     // Check the X-bounds.
     if (this.componentY >= topology.length) {
       this.componentY = topology.length - 1;
@@ -268,6 +268,13 @@ class Cursor {
       }
     }
     return new TopologyComponent(topology[this.componentY][this.componentX]);
+  }
+
+  /**
+   * Get the current topology.
+   */
+  getTopology() {
+    return (this.topology && this.topology()) || null;
   }
 
   /**
@@ -390,22 +397,6 @@ class Cursor {
       }
       return {column, row};
     }
-  }
-
-  /**
-   * Change the current component.
-   * @param {String} component
-   */
-  componentUpdate(component, N) {
-    console.error('Obsolete call to componentUpdate().');
-    this.save();
-    let index = this.oldIndex[component] || 0;
-    if (!N) {
-      index = null;
-    } else if (index >= N) {
-      index = N - 1;
-    }
-    return {component, index};
   }
 }
 
