@@ -35,12 +35,17 @@ function csv(report, options = {}) {
   data.forEach((entry) => {
     let line = {};
     columns.forEach((column) => {
-      line[column.name] = render[column.type](column, entry);
+      if (entry.pageBreak) {
+        line[column.name] = '';
+      } else {
+        line[column.name] = render[column.type](column, entry);
+      }
     });
     csv.push(line);
   });
 
   const fields = columns.map((c) => c.name);
+
   return json2csv(csv, { fields, header: false });
 }
 

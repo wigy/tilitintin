@@ -329,6 +329,11 @@ class Cursor {
     this.editor = false;
   }
 
+  @action.bound
+  selectPage(component, Page = null) {
+    console.error('Obsolete call to selectPage().');
+  }
+
   /**
    * Move directly to the given index of the given component.
    */

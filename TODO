@@ -28,6 +28,7 @@ FUTURE FEATURES
 [ ] Drop combining entry data with document data in API http://localhost:3001/db/<name>/account/<accId>/<periodId>
 [ ] Clean up various components passing unnecessarily periods and dbs in addition to the target object.
     [X] Balance related.
+    [ ] Reports.
 [X] Handle movement over duplicates.
 
 0.6
