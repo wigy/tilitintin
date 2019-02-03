@@ -4,16 +4,16 @@ import { inject, observer } from 'mobx-react';
 import { translate, Trans } from 'react-i18next';
 import BalanceTable from '../Components/BalanceTable';
 import Store from '../Stores/Store';
-import Navigator from '../Stores/Navigator';
+import Cursor from '../Stores/Cursor';
 
 @translate('translations')
 @inject('store')
-@inject('navigator')
+@inject('cursor')
 @observer
 class Balances extends Component {
 
   componentDidMount() {
-    this.props.navigator.selectPage('Balances');
+    this.props.cursor.selectPage('Balances');
   }
 
   render() {
@@ -31,7 +31,7 @@ class Balances extends Component {
 }
 
 Balances.propTypes = {
-  navigator: PropTypes.instanceOf(Navigator),
+  cursor: PropTypes.instanceOf(Cursor),
   store: PropTypes.instanceOf(Store)
 };
 

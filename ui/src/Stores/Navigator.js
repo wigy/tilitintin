@@ -1,95 +1,10 @@
 import { action } from 'mobx';
 import moment from 'moment';
 
-const KEY_DEBUG = false;
-
-/**
- * A keyboard navigation handler for the application.
- */
 class Navigator {
 
-  constructor(cursor, store) {
-    this.cursor = cursor;
-    this.store = store;
-  }
-
-  /**
-   * Update navigation structures in the store based on the key pressed.
-   * @param {String} key
-   * @return {Object}
-   */
-  @action.bound
-  handle(key) {
-    let result;
-    const keyName = (key.length === 1 ? 'Text' : key);
-    const fn = 'key' + keyName.replace(/\+/g, '');
-
-    // Try component handler.
-    const component = this.cursor.getComponent();
-    if (component && component[fn]) {
-      result = component[fn](this.cursor);
-    }
-
-    // Try cursor handler.
-    if (!result && this.cursor[fn]) {
-      result = this.cursor[fn]();
-      if (result && KEY_DEBUG) {
-        console.log(fn, ':', result);
-      }
-    }
-
-    // Try generic handler.
-    if (!result && this[fn]) {
-      result = this[fn]();
-      if (result && KEY_DEBUG) {
-        console.log(fn, ':', result);
-      }
-    }
-
-    if (result) {
-      return result;
-    }
-
-    if (KEY_DEBUG) {
-      console.log(`No handler for key '${key}'.`);
-    }
-
-    return null;
-  }
-
-  /**
-   * Set up the topology for the page.
-   * @param {String} name
-   */
-  @action.bound
-  selectPage(page) {
-    switch (page) {
-      case 'Balances':
-        this.cursor.setTopology(page, () => [
-          [
-            {name: 'balances', data: this.store.balances},
-            {name: 'transactions', data: this.store.filteredTransactions}
-          ]
-        ]);
-        break;
-      default:
-        this.cursor.setTopology(page, () => [[]]);
-        console.error(`No topology defined for page ${page}.`);
-    }
-  }
-
-  /**
-   * Disable focus change using tab-key.
-   */
-  keyTab() {
-    return {preventDefault: true};
-  }
-  keyShiftTab() {
-    return {preventDefault: true};
-  }
-
-  // TODO: Refactor all these functions.
-  // ------------------------------------------------------------------------------------
+  // TODO: Refactor all these functions and move to Cursor.
+  // ------------------------------------------------------
   @action.bound
   oldHandle(key) {
     const {component} = this.cursor;

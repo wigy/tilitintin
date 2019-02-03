@@ -7,17 +7,15 @@ import { BrowserRouter } from 'react-router-dom';
 import registerServiceWorker from './registerServiceWorker';
 import Store from './Stores/Store';
 import Cursor from './Stores/Cursor';
-import Navigator from './Stores/Navigator';
 import i18n from './i18n';
 import './index.css';
 
 let store = new Store();
-let cursor = new Cursor();
-let navigator = new Navigator(cursor, store);
+let cursor = new Cursor(store);
 
 ReactDOM.render(
   <I18nextProvider i18n={ i18n }>
-    <Provider store={store} cursor={cursor} navigator={navigator}>
+    <Provider store={store} cursor={cursor}>
       <BrowserRouter>
         <App />
       </BrowserRouter>

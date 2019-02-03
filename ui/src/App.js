@@ -14,13 +14,13 @@ import Menu from './Components/Menu';
 import ReportToolPanel from './Components/ReportToolPanel';
 import TransactionToolPanel from './Components/TransactionToolPanel';
 import Login from './Components/Login';
-import Navigator from './Stores/Navigator';
+import Cursor from './Stores/Cursor';
 import Store from './Stores/Store';
 
 @withRouter
 @keydown
 @inject('store')
-@inject('navigator')
+@inject('cursor')
 class App extends Component {
 
   /* eslint camelcase: off */
@@ -33,7 +33,7 @@ class App extends Component {
         (event.altKey ? 'Alt+' : '') +
         event.key);
 
-      let keyResult = this.props.navigator.handle(keyName);
+      let keyResult = this.props.cursor.handle(keyName);
 
       if (keyResult) {
         this.props.store.changed = true;
@@ -100,7 +100,7 @@ class App extends Component {
 }
 
 App.propTypes = {
-  navigator: PropTypes.instanceOf(Navigator),
+  cursor: PropTypes.instanceOf(Cursor),
   store: PropTypes.instanceOf(Store),
   keydown: PropTypes.any,
   history: ReactRouterPropTypes.history

@@ -1,12 +1,14 @@
 import { observable, action } from 'mobx';
 import TopologyComponent from './TopologyComponent';
 
+const KEY_DEBUG = false;
+
 /**
- * Keyboard navigation data.
+ * Keyboard navigation handler and current cursor data storage.
  */
 class Cursor {
   // The name of the current page.
-  @observable page = 'App';
+  @observable page = 'None';
   @observable componentX = null;
   @observable componentY = null;
   @observable index = null;
@@ -14,14 +16,91 @@ class Cursor {
   @observable row = null;
 
   // When a modal is active, this is an object with two members: onCancel and onConfirm.
-  @observable activeModal = null; // TODO: This should be in navigator?
+  @observable activeModal = null;
 
   // Storage for cursor locations for inactive components.
   savedComponents = {};
   // Screen setup function returning topology as 2-dimensional array `topology[row][column]`.
   topology = null;
 
+  constructor(store) {
+    this.store = store;
+  }
+  /**
+   * Update navigation structures in the store based on the key pressed.
+   * @param {String} key
+   * @return {Object}
+   */
   @action.bound
+  handle(key) {
+    let result;
+    const keyName = (key.length === 1 ? 'Text' : key);
+    const fn = 'key' + keyName.replace(/\+/g, '');
+
+    // Try model handler.
+    const model = this.getModel();
+    if (model && model[fn]) {
+      result = model[fn](this);
+      if (result && KEY_DEBUG) {
+        console.log(fn, ':', result);
+      }
+    }
+
+    // Try generic handler.
+    if (!result && this[fn]) {
+      result = this[fn]();
+      if (result && KEY_DEBUG) {
+        console.log(fn, ':', result);
+      }
+    }
+
+    if (result) {
+      return result;
+    }
+
+    if (KEY_DEBUG) {
+      console.log(`No handler for key '${key}'.`);
+    }
+
+    return null;
+  }
+
+  /**
+   * Set up the topology for the page.
+   * @param {String} name
+   */
+  @action.bound
+  selectPage(page) {
+    switch (page) {
+      case 'Balances':
+        this.setTopology(page, () => [
+          [
+            {name: 'Balances.balances', data: this.store.balances},
+            {name: 'Balances.transactions', data: this.store.filteredTransactions}
+          ]
+        ]);
+        break;
+      default:
+        this.setTopology(page, () => [[]]);
+        console.error(`No topology defined for page ${page}.`);
+    }
+  }
+
+  /**
+   * Disable focus change using tab-key.
+   */
+  keyTab() {
+    return {preventDefault: true};
+  }
+  keyShiftTab() {
+    return {preventDefault: true};
+  }
+
+  /**
+   * Set up the topology function.
+   * @param {String} page
+   * @param {() => Object[][]} topology
+   */
   setTopology(page, topology) {
     if (this.page === page) {
       return;
@@ -38,15 +117,17 @@ class Cursor {
   /**
    * Move one row or index down.
    */
-  @action.bound
   keyArrowDown() {
+    const model = this.getModel();
+    if (model && model.open) {
+
+    }
     return this.changeIndexBy(+1);
   }
 
   /**
    * Move one row or index up.
    */
-  @action.bound
   keyArrowUp() {
     return this.changeIndexBy(-1);
   }
@@ -54,7 +135,6 @@ class Cursor {
   /**
    * Move couple rows or indices down.
    */
-  @action.bound
   keyPageDown() {
     return this.changeIndexBy(+10);
   }
@@ -62,7 +142,6 @@ class Cursor {
   /**
    * Move couple rows or indices up.
    */
-  @action.bound
   keyPageUp() {
     return this.changeIndexBy(-10);
   }
@@ -70,7 +149,6 @@ class Cursor {
   /**
    * Move to the first index.
    */
-  @action.bound
   keyHome() {
     return this.setIndex(0);
   }
@@ -78,7 +156,6 @@ class Cursor {
   /**
    * Move to the last index.
    */
-  @action.bound
   keyEnd() {
     return this.setIndex(-1);
   }
@@ -86,7 +163,6 @@ class Cursor {
   /**
    * Move to the component left.
    */
-  @action.bound
   keyArrowLeft() {
     if (this.componentX > 0) {
       this.leaveComponent();
@@ -99,7 +175,6 @@ class Cursor {
   /**
    * Move to the component right.
    */
-  @action.bound
   keyArrowRight() {
     const row = this.getRow();
     if (this.componentX < row.length - 1) {
@@ -114,7 +189,7 @@ class Cursor {
    * Hook that is called when we are leaving the current component.
    */
   leaveComponent() {
-    const component = this.getTopologyComponent();
+    const component = this.getComponent();
     if (component) {
       this.saveCursor(component);
       component.moveIndex(this.index, null);
@@ -128,7 +203,7 @@ class Cursor {
    * Hook that is called when we have just entered the current component.
    */
   enterComponent() {
-    const component = this.getTopologyComponent();
+    const component = this.getComponent();
     if (component) {
       this.loadCursor(component);
       component.moveIndex(null, this.index);
@@ -184,7 +259,7 @@ class Cursor {
    * @param {Number} delta
    */
   changeIndexBy(delta) {
-    const component = this.getTopologyComponent();
+    const component = this.getComponent();
     if (component && component.vertical) {
       const oldIndex = this.index;
       if (this.indexUpdate(component.length, delta)) {
@@ -205,7 +280,7 @@ class Cursor {
       this.column = null;
       return;
     }
-    const component = this.getTopologyComponent();
+    const component = this.getComponent();
     if (component) {
       if (index < 0) {
         index = component.length + index;
@@ -245,7 +320,7 @@ class Cursor {
    * Get the current component from the topology.
    * @return {TopologyComponent|null}
    */
-  getTopologyComponent() {
+  getComponent() {
     const topology = this.getTopology();
     if (!topology) {
       return null;
@@ -278,13 +353,13 @@ class Cursor {
   }
 
   /**
-   * Get the component pointed by the index in the current topology component.
+   * Get the model pointed by the index in the current topology component.
    * @return {Model|null}
    */
-  getComponent() {
+  getModel() {
     if (this.index !== null) {
-      const topoComp = this.getTopologyComponent();
-      return topoComp ? topoComp.getIndex(this.index) : null;
+      const comp = this.getComponent();
+      return comp ? comp.getIndex(this.index) : null;
     }
   }
 
@@ -334,11 +409,6 @@ class Cursor {
     this.column = null;
     this.row = null;
     this.editor = false;
-  }
-
-  @action.bound
-  selectPage(component, Page = null) {
-    console.error('Obsolete call to selectPage().');
   }
 
   /**

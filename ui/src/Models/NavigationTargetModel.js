@@ -11,7 +11,7 @@ class NavigationTargetModel extends Model {
   editable =false;
   // If set, this object is extended to show its details (if applicable).
   @observable
-  open =false;
+  open =true;
 
   /**
    * Add classes according to the flags.
