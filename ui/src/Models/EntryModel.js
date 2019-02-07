@@ -38,6 +38,10 @@ class EntryModel extends NavigationTargetModel {
     return this.parent ? [this.parent.number, this.row_number] : this.id;
   }
 
+  columns() {
+    return ['account', 'description', 'debit', 'credit'];
+  }
+
   /**
    * Get the document this entry belongs to.
    */

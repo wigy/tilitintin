@@ -75,8 +75,18 @@ class Cursor {
       case 'Balances':
         this.setTopology(page, () => [
           [
-            {name: 'Balances.balances', data: this.store.balances},
-            {name: 'Balances.transactions', data: this.store.filteredTransactions}
+            {
+              name: 'Balances.balances',
+              data: this.store.balances,
+              vertical: true
+            },
+            {
+              name: 'Balances.transactions',
+              data: this.store.filteredTransactions,
+              vertical: true,
+              subitemExitUp: true,
+              subitemExitDown: true
+            }
           ]
         ]);
         break;
@@ -120,7 +130,10 @@ class Cursor {
   keyArrowDown() {
     const model = this.getModel();
     if (model && model.open) {
-
+      const ret = this.changeBoxBy(0, +1);
+      if (ret) {
+        return ret;
+      }
     }
     return this.changeIndexBy(+1);
   }
@@ -129,7 +142,53 @@ class Cursor {
    * Move one row or index up.
    */
   keyArrowUp() {
+    const model = this.getModel();
+    if (model && model.open) {
+      const ret = this.changeBoxBy(0, -1);
+      if (ret) {
+        return ret;
+      }
+    }
     return this.changeIndexBy(-1);
+  }
+
+  /**
+   * Move to the component left.
+   */
+  keyArrowLeft() {
+    const model = this.getModel();
+    if (model && model.open && this.row !== null) {
+      const ret = this.changeBoxBy(-1, 0);
+      if (ret) {
+        return ret;
+      }
+    }
+    if (this.componentX > 0) {
+      this.leaveComponent();
+      this.componentX--;
+      this.enterComponent();
+    }
+    return {preventDefault: true};
+  }
+
+  /**
+   * Move to the component right.
+   */
+  keyArrowRight() {
+    const model = this.getModel();
+    if (model && model.open && this.row !== null) {
+      const ret = this.changeBoxBy(+1, 0);
+      if (ret) {
+        return ret;
+      }
+    }
+    const row = this.getRow();
+    if (this.componentX < row.length - 1) {
+      this.leaveComponent();
+      this.componentX++;
+      this.enterComponent();
+    }
+    return {preventDefault: true};
   }
 
   /**
@@ -161,28 +220,14 @@ class Cursor {
   }
 
   /**
-   * Move to the component left.
+   * Toggle entries visible and non-visible.
    */
-  keyArrowLeft() {
-    if (this.componentX > 0) {
-      this.leaveComponent();
-      this.componentX--;
-      this.enterComponent();
+  keyEnter() {
+    const model = this.getModel();
+    if (model && model.geometry()) {
+      model.toggleOpen();
+      return {preventDefault: true};
     }
-    return {preventDefault: true};
-  }
-
-  /**
-   * Move to the component right.
-   */
-  keyArrowRight() {
-    const row = this.getRow();
-    if (this.componentX < row.length - 1) {
-      this.leaveComponent();
-      this.componentX++;
-      this.enterComponent();
-    }
-    return {preventDefault: true};
   }
 
   /**
@@ -263,10 +308,28 @@ class Cursor {
     if (component && component.vertical) {
       const oldIndex = this.index;
       if (this.indexUpdate(component.length, delta)) {
+        this.row = null;
+        this.column = null;
+        component.moveBox(null, null);
         component.moveIndex(oldIndex, this.index);
       }
     }
     return {preventDefault: true};
+  }
+
+  changeBoxBy(dx, dy) {
+    const model = this.getModel();
+    if (model) {
+      const component = this.getComponent();
+      const [columns, rows] = model.geometry();
+      const {subitemExitUp, subitemExitDown} = component;
+      const oldRow = this.row;
+      const oldColumn = this.column;
+      if (this.boxUpdate(columns, rows, dx, dy, {subitemExitUp, subitemExitDown})) {
+        component.moveBox(this.index, oldColumn, oldRow, this.column, this.row);
+        return {preventDefault: true};
+      }
+    }
   }
 
   /**
@@ -393,6 +456,44 @@ class Cursor {
     }
   }
 
+  /**
+   * Helper to navigate inside rectangular area.
+   * @param {Number} N Number of columns.
+   * @param {Number} M Number of rows.
+   * @param {Number} dx
+   * @param {Number} dy
+   * @param {Boolean} [options.subitemExitDown]
+   * @param {Boolean} [options.subitemExitDown]
+   * @param {Number} [options.entryColumn]
+   */
+  boxUpdate(N, M, dx, dy, options) {
+    const oldRow = this.row;
+    if (N && M) {
+      this.column = (this.column + N + dx) % N;
+      if (this.row === null) {
+        this.row = 0;
+        this.column = options.entryColumn || 0;
+      } else {
+        this.row += dy;
+        if (this.row < 0) {
+          if (options.subitemExitUp) {
+            return false;
+          } else {
+            this.row = oldRow;
+          }
+        }
+        if (this.row >= M) {
+          if (options.subitemExitDown) {
+            return false;
+          } else {
+            this.row = M - 1;
+          }
+        }
+      }
+      return true;
+    }
+  }
+
   // TODO: Refactor all this.
   // ------------------------------------------------------------------------------------
 
@@ -437,36 +538,6 @@ class Cursor {
   selectEditing(state = true) {
     console.error('Obsolete call to selectEditing().');
     this.editor = state;
-  }
-
-  /**
-   * Helper to navigate inside rectangular area.
-   * @param {Number} column
-   * @param {Number} row
-   * @param {Number} N
-   * @param {Number} M
-   * @param {Number} dx
-   * @param {Number} dy
-   */
-  boxUpdate(column, row, N, M, dx, dy, entryColumn = 0) {
-    console.error('Obsolete call to boxUpdate().');
-    if (N && M) {
-      column = (column + N + dx) % N;
-      if (row === null) {
-        row = 0;
-        column = entryColumn;
-      } else {
-        row += dy;
-        if (row < 0) {
-          row = null;
-          column = null;
-        }
-        if (row >= M) {
-          row = M - 1;
-        }
-      }
-      return {column, row};
-    }
   }
 }
 

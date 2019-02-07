@@ -31,12 +31,8 @@ class TransactionModel extends NavigationTargetModel {
     return 'Transaction' + this.index;
   }
 
-  /**
-   * Toggle entries visible and non-visible.
-   */
-  keyEnter() {
-    this.toggleOpen();
-    return {preventDefault: true};
+  rows() {
+    return this.document.entries;
   }
 
   /**
