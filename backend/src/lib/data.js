@@ -333,17 +333,18 @@ function getPeriodBalances(db, periodId) {
 }
 
 /**
- * Get all transactions for an account during the given period.
+ * Get all documents for an account during the given period.
  * @param {String} db
  * @param {Number} periodId
  * @param {Number} accountId
  */
 function getAccountTransactions(db, periodId, accountId) {
-  return knex.db(db).select('*', 'entry.id AS entry_id', knex.db(db).raw('entry.amount * 100 AS amount')).from('entry')
-    .leftJoin('document', 'document.id', 'entry.document_id')
+  return knex.db(db).select('document.*').from('document')
+    .leftJoin('entry', 'document.id', 'entry.document_id')
     .where({'document.period_id': periodId})
     .where({'entry.account_id': accountId})
-    .orderBy(['document.date', 'document.number', 'entry.row_number'])
+    .orderBy(['document.date', 'document.number'])
+    .groupBy('document.id')
     .then(entries => fillEntries(db, entries, 'document'));
 }
 
@@ -358,10 +359,10 @@ function getAccountTransactionsWithEntries(db, periodId, accountId) {
     .then((txs) => {
       let txByDocID = {};
       const docIds = txs.map((tx) => {
-        txByDocID[tx.document_id] = txByDocID[tx.document_id] || [];
-        txByDocID[tx.document_id].push(tx);
+        txByDocID[tx.id] = txByDocID[tx.id] || [];
+        txByDocID[tx.id].push(tx);
         tx.entries = [];
-        return tx.document_id;
+        return tx.id;
       });
       return knex.db(db).select('entry.*', 'entry.id AS entry_id', 'account.number', 'account.name').from('entry').whereIn('document_id', docIds).orderBy(['document_id', 'row_number'])
         .leftJoin('account', 'account.id', 'entry.account_id')
