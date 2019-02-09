@@ -9,6 +9,7 @@ import './BalanceLine.css';
 
 @observer
 class BalanceLine extends Component {
+
   render() {
     const { balance } = this.props;
     const dst = balance.getUrl();

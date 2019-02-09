@@ -345,6 +345,31 @@ class Cursor {
   }
 
   /**
+   * Switch directly to another topological component.
+   * @param {String} name
+   */
+  setComponent(name) {
+    const component = this.getComponent();
+    if (component.name === name) {
+      return;
+    }
+    this.leaveComponent();
+    // Find new (x,y) from topology.
+    const topology = this.topology();
+    for (let y = 0; y < topology.length; y++) {
+      for (let x = 0; x < topology[y].length; x++) {
+        if (name === topology[y][x].name) {
+          this.componentX = x;
+          this.componentY = y;
+          this.enterComponent();
+          return;
+        }
+      }
+    }
+    throw new Error(`Cannot find topological component called ${name}.`);
+  }
+
+  /**
    * Set the current index to the given number, if it is valid. Negative number counts from the end.
    * @param {Number|null|undefined} index
    */

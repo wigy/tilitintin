@@ -27,11 +27,12 @@ class Transaction extends Component {
     this.props.store.deleteEntry(this.entryToDelete);
   }
 
-  // Handle transaction toggle.
+  // Move to the transaction and toggle it.
   @action.bound
   onClick() {
-    this.props.cursor.selectIndex('TransactionTable', this.props.index);
-    this.props.tx.document.open = !this.props.tx.document.open;
+    this.props.cursor.setComponent('Balances.transactions');
+    this.props.cursor.setIndex(this.props.index);
+    this.props.cursor.keyEnter();
   }
 
   // Select cell, when clicked.
