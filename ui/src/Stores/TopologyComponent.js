@@ -15,12 +15,7 @@ import { action } from 'mobx';
  */
 class TopologyComponent {
   constructor(comp) {
-    this.name = comp.name;
-    this.data = comp.data;
-    this.vertical = comp.vertical;
-    this.horizontal = comp.horizontal;
-    this.subitemExitUp = comp.subitemExitUp;
-    this.subitemExitDown = comp.subitemExitDown;
+    Object.assign(this, comp);
   }
 
   /**
@@ -48,18 +43,23 @@ class TopologyComponent {
 
   /**
    * Change the current sub-item.
+   * @param {Number} oldIndex
+   * @param {Number} index
    * @param {Number} oldColumn
    * @param {Number} oldRow
    * @param {Number} column
    * @param {Number} row
    */
   @action.bound
-  moveBox(index, oldColumn, oldRow, column, row) {
-    if (this.data[index]) {
-      const rows = this.data[index].rows();
+  moveBox(oldIndex, index, oldColumn, oldRow, column, row) {
+    if (this.data[oldIndex]) {
+      const rows = this.data[oldIndex].rows();
       if (oldRow !== null && oldRow >= 0 && oldRow < rows.length) {
         rows[oldRow].leaveSub(oldColumn);
       }
+    }
+    if (this.data[index]) {
+      const rows = this.data[index].rows();
       if (row !== null && row >= 0 && row < rows.length) {
         rows[row].enterSub(column);
       }

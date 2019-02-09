@@ -84,6 +84,7 @@ class Cursor {
               name: 'Balances.transactions',
               data: this.store.filteredTransactions,
               vertical: true,
+              entryColumn: 1,
               subitemExitUp: true,
               subitemExitDown: true
             }
@@ -143,7 +144,7 @@ class Cursor {
    */
   keyArrowUp() {
     const model = this.getModel();
-    if (model && model.open) {
+    if (model) {
       const ret = this.changeBoxBy(0, -1);
       if (ret) {
         return ret;
@@ -226,6 +227,11 @@ class Cursor {
     const model = this.getModel();
     if (model && model.geometry()) {
       model.toggleOpen();
+      if (!model.open) {
+        this.column = null;
+        this.row = null;
+        this.getComponent().moveBox(null, null);
+      }
       return {preventDefault: true};
     }
   }
@@ -313,20 +319,26 @@ class Cursor {
         component.moveBox(null, null);
         component.moveIndex(oldIndex, this.index);
       }
+      return {preventDefault: true};
     }
-    return {preventDefault: true};
   }
 
+  /**
+   * Adjust the currently selected sub-item.
+   * @param {Number} dx
+   * @param {Number} dy
+   */
   changeBoxBy(dx, dy) {
     const model = this.getModel();
-    if (model) {
+    if (model && model.open) {
       const component = this.getComponent();
       const [columns, rows] = model.geometry();
-      const {subitemExitUp, subitemExitDown} = component;
+      const {subitemExitUp, subitemExitDown, entryColumn} = component;
       const oldRow = this.row;
       const oldColumn = this.column;
-      if (this.boxUpdate(columns, rows, dx, dy, {subitemExitUp, subitemExitDown})) {
-        component.moveBox(this.index, oldColumn, oldRow, this.column, this.row);
+      const oldIndex = this.index;
+      if (this.boxUpdate(columns, rows, dx, dy, {subitemExitUp, subitemExitDown, entryColumn})) {
+        component.moveBox(oldIndex, this.index, oldColumn, oldRow, this.column, this.row);
         return {preventDefault: true};
       }
     }
@@ -471,8 +483,21 @@ class Cursor {
     if (N && M) {
       this.column = (this.column + N + dx) % N;
       if (this.row === null) {
-        this.row = 0;
-        this.column = options.entryColumn || 0;
+        if (dy > 0) {
+          this.row = 0;
+          this.column = options.entryColumn || 0;
+        } else if (dy < 0) {
+          if (this.changeIndexBy(-1)) {
+            const model = this.getModel();
+            if (model) {
+              const rows = model.rows();
+              if (rows.length) {
+                this.row = rows.length - 1;
+                this.column = options.entryColumn || 0;
+              }
+            }
+          }
+        }
       } else {
         this.row += dy;
         if (this.row < 0) {
