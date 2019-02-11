@@ -43,6 +43,21 @@ class EntryModel extends NavigationTargetModel {
   }
 
   /**
+   * Calculate if the acconut is `current`, `error` situation and if `sub-selected` should be on.
+   * @param {Number|null} column
+   * @param {Number|null} row
+   */
+  getClasses(column = null, row = null) {
+    return super.getClasses(column, row) +
+      (this.store.accountId === this.account_id ? ' current' : '') +
+      (row !== null &&
+        this.document.entries.indexOf(this) === row &&
+        column !== null &&
+        this.columns()[column] === this.column ? ' sub-selected' : '') +
+      (!this.account_id ? ' error' : '');
+  }
+
+  /**
    * Get the document this entry belongs to.
    */
   get document() {

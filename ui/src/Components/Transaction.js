@@ -60,7 +60,7 @@ class Transaction extends Component {
 
   // Render the main row of the document, i.e. the entry having the current account and data from document it belongs to.
   renderMainTx(classes) {
-    const {tx, selectedRow} = this.props;
+    const {tx} = this.props;
 
     const money = (<Money cents={tx.entry.amount} currency="EUR" />);
     const total = (<Money cents={this.props.total} currency="EUR" />);
@@ -72,7 +72,6 @@ class Transaction extends Component {
         </td>
         <td className="date">
           <TransactionDetails
-            selected={tx.open && tx.selected && selectedRow === null}
             type="date"
             document={tx.document}
           />
@@ -98,9 +97,7 @@ class Transaction extends Component {
 
   // Render an entry for opened document.
   renderEntry(idx, entry, diff) {
-    const {duplicate, selectedColumn, selectedRow} = this.props;
-    const isSelected = (type) => this.props.tx.selected && selectedColumn === type && idx === selectedRow;
-    const current = entry.account_id === this.props.store.accountId;
+    const {duplicate} = this.props;
     const classes = 'TransactionEntry alt open' + (duplicate ? ' duplicate' : '');
 
     // Calculate correction to fix total assuming that this entry is the one changed.
@@ -118,8 +115,6 @@ class Transaction extends Component {
         <td className="account" colSpan={3} onClick={() => this.onClickDetail(0, idx)}>
           <TransactionDetails
             error={!entry.account_id}
-            selected={isSelected('account')}
-            current={current}
             type="account"
             document={entry.document}
             entry={entry}
@@ -128,8 +123,6 @@ class Transaction extends Component {
         </td>
         <td className="description" onClick={() => this.onClickDetail(1, idx)}>
           <TransactionDetails
-            selected={isSelected('description')}
-            current={current}
             type="description"
             document={entry.document}
             entry={entry}
@@ -139,8 +132,6 @@ class Transaction extends Component {
         </td>
         <td className="debit" onClick={() => this.onClickDetail(2, idx)}>
           <TransactionDetails
-            selected={isSelected('debit')}
-            current={current}
             type="debit"
             document={entry.document}
             entry={entry}
@@ -151,8 +142,6 @@ class Transaction extends Component {
         </td>
         <td className="credit" onClick={() => this.onClickDetail(3, idx)}>
           <TransactionDetails
-            selected={isSelected('credit')}
-            current={current}
             type="credit"
             document={entry.document}
             entry={entry}
@@ -265,8 +254,6 @@ Transaction.propTypes = {
   cursor: PropTypes.instanceOf(Cursor),
   tx: PropTypes.instanceOf(TransactionModel),
   index: PropTypes.number,
-  selectedColumn: PropTypes.string,
-  selectedRow: PropTypes.number,
   duplicate: PropTypes.bool,
   total: PropTypes.number
 };

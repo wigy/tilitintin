@@ -60,6 +60,7 @@ class TransactionDetails extends Component {
     let text;
     let edit;
     let url;
+    let target = this.props.entry;
 
     switch (this.props.type) {
       case 'debit':
@@ -84,6 +85,7 @@ class TransactionDetails extends Component {
         // TODO: Locale awareness.
         text = moment(this.props.document.date).format('DD.MM.YYYY');
         edit = text;
+        target = this.props.document;
         break;
       default:
         text = 'TODO';
@@ -212,7 +214,7 @@ class TransactionDetails extends Component {
     // TODO: Must handle editing of the entry's account number, when it is the same as transaction's.
 
     // Show editor instead, if it is turned on.
-    if (this.props.selected && this.props.cursor.editor) {
+    if (this.props.cursor.editor) {
       return (<TextEdit
         value={edit}
         validate={validate}
@@ -225,9 +227,11 @@ class TransactionDetails extends Component {
       />);
     }
 
+    // TODO: Pass tx-model instead and check if it is selected before marking sub-items.
+    // TODO: Put sub-item selection for date of document, when cursor.row is null.
+    const column = this.props.entry ? this.props.entry.columns().indexOf(this.props.type) : null;
     const className = 'TransactionDetails ' +
-      (this.props.current ? ' current' : '') +
-      (this.props.selected ? ' selected' : '') +
+      target.getClasses(column, this.props.cursor.row) +
       (this.props.error ? ' error' : '');
 
     return (
@@ -241,8 +245,6 @@ TransactionDetails.propTypes = {
   entry: PropTypes.instanceOf(EntryModel),
   type: PropTypes.string,
   proposal: PropTypes.string,
-  current: PropTypes.bool,
-  selected: PropTypes.bool,
   error: PropTypes.bool,
   onComplete: PropTypes.func,
   store: PropTypes.instanceOf(Store),

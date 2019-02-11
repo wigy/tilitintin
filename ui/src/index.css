@@ -62,7 +62,7 @@ table tr.alt:nth-child(odd) {
   background-color: var(--odd-alt-color);
 }
 
-.selected {
+.selected, .sub-selected {
   background-color: var(--selected-bg-color) !important;
   outline: 1px solid var(--marking-fg-color) !important;
   outline-offset: -1px;

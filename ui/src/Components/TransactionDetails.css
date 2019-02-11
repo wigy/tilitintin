@@ -20,12 +20,12 @@
   color: transparent;
 }
 
-.TransactionDetails.selected {
+.TransactionDetails.sub-selected {
   outline: 1px black dotted !important;
   outline-offset: -1px;
 }
 
-.TransactionDetails.selected  a {
+.TransactionDetails.sub-selected  a {
   color: none !important;
 }
 

@@ -5,6 +5,7 @@ BUGS
 [X] Downloading balance-sheet produces "undefined" in page break.
 [X] Env-file example is missing (docker-compose up).
 [ ] Arrow up skips sub-items of every second opened row
+[ ] Multiple sub-items are sometimes selected (require tx.selected status)
 
 FUTURE FEATURES
 ===============

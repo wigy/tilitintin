@@ -55,8 +55,6 @@ class TransactionTable extends Component {
       )}<br/>
     </Dialog>);
 
-    const { row, column, editor } = this.props.cursor;
-
     let sum = 0;
     let seen = {};
     let ret = [
@@ -83,9 +81,6 @@ class TransactionTable extends Component {
             return <Transaction
               key={idx}
               index={idx}
-              selectedColumn={column !== null ? ['account', 'description', 'debit', 'credit'][column] : null}
-              selectedRow={row}
-              editor={editor}
               duplicate={duplicate}
               tx={tx}
               total={sum}
