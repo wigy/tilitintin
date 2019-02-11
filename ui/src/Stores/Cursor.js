@@ -86,6 +86,7 @@ class Cursor {
               vertical: true,
               entryColumn: 1,
               subitemExitUp: true,
+              subitemUpStopOnNull: true,
               subitemExitDown: true
             }
           ]
@@ -333,11 +334,11 @@ class Cursor {
     if (model && model.open) {
       const component = this.getComponent();
       const [columns, rows] = model.geometry();
-      const {subitemExitUp, subitemExitDown, entryColumn} = component;
+      const {subitemExitUp, subitemExitDown, entryColumn, subitemUpStopOnNull} = component;
       const oldRow = this.row;
       const oldColumn = this.column;
       const oldIndex = this.index;
-      if (this.boxUpdate(columns, rows, dx, dy, {subitemExitUp, subitemExitDown, entryColumn})) {
+      if (this.boxUpdate(columns, rows, dx, dy, {subitemExitUp, subitemExitDown, entryColumn, subitemUpStopOnNull})) {
         component.moveBox(oldIndex, this.index, oldColumn, oldRow, this.column, this.row);
         return {preventDefault: true};
       }
@@ -537,10 +538,15 @@ class Cursor {
             }
           }
         }
-      } else {
+      } else { // Row not null.
         this.row += dy;
         if (this.row < 0) {
           if (options.subitemExitUp) {
+            if (options.subitemUpStopOnNull) {
+              // Stop at null.
+              this.row = null;
+              return true;
+            }
             return false;
           } else {
             this.row = oldRow;
