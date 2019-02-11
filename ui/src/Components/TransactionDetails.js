@@ -227,12 +227,11 @@ class TransactionDetails extends Component {
       />);
     }
 
-    // TODO: Pass tx-model instead and check if it is selected before marking sub-items.
-    // TODO: Put sub-item selection for date of document, when cursor.row is null.
     const column = this.props.entry ? this.props.entry.columns().indexOf(this.props.type) : null;
     const className = 'TransactionDetails ' +
       target.getClasses(column, this.props.cursor.row) +
-      (this.props.error ? ' error' : '');
+      (this.props.error ? ' error' : '') +
+      (this.props.classNames ? ' ' + this.props.classNames : '');
 
     return (
       <div className={className}>{text}&nbsp;</div>
@@ -244,6 +243,7 @@ TransactionDetails.propTypes = {
   document: PropTypes.instanceOf(DocumentModel),
   entry: PropTypes.instanceOf(EntryModel),
   type: PropTypes.string,
+  classNames: PropTypes.string,
   proposal: PropTypes.string,
   error: PropTypes.bool,
   onComplete: PropTypes.func,

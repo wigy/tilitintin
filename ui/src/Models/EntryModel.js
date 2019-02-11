@@ -43,7 +43,7 @@ class EntryModel extends NavigationTargetModel {
   }
 
   /**
-   * Calculate if the acconut is `current`, `error` situation and if `sub-selected` should be on.
+   * Calculate if the account is `current`, `error` situation and if `sub-selected` should be on.
    * @param {Number|null} column
    * @param {Number|null} row
    */

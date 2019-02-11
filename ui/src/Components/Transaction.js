@@ -73,6 +73,7 @@ class Transaction extends Component {
         <td className="date">
           <TransactionDetails
             type="date"
+            classNames={tx.open && tx.selected && this.props.cursor.row === null ? 'sub-selected' : ''}
             document={tx.document}
           />
         </td>
