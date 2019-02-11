@@ -38,7 +38,8 @@ class Transaction extends Component {
   // Select cell, when clicked.
   @action.bound
   onClickDetail(column, row) {
-    this.props.cursor.selectCell(column, row);
+    this.props.cursor.setIndex(this.props.index);
+    this.props.cursor.setCell(column, row);
   }
 
   // Handle finalizing editing of a cell.
@@ -54,7 +55,7 @@ class Transaction extends Component {
         row--;
       }
     }
-    this.props.cursor.selectCell(column, row);
+    this.props.cursor.setCell(column, row);
   }
 
   // Render the main row of the document, i.e. the entry having the current account and data from document it belongs to.

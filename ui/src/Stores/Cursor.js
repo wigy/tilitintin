@@ -395,6 +395,20 @@ class Cursor {
   }
 
   /**
+   * Set the current location inside the sub-item.
+   * @param {Number} column
+   * @param {Number} row
+   */
+  setCell(column, row) {
+    if (this.row === null) {
+      this.changeBoxBy(column, row + 1);
+    } else {
+      this.changeBoxBy(column - this.column, row - this.row);
+    }
+    return {preventDefault: true};
+  }
+
+  /**
    * Get an array of components from the current row.
    * @return {TopologyComponent[]}
    */
@@ -568,16 +582,6 @@ class Cursor {
   @action.bound
   selectIndex(component, index = null) {
     console.error('Obsolete call to selectIndex().');
-  }
-
-  /**
-   * Move directly to the given (column, row) location.
-   */
-  @action.bound
-  selectCell(column, row) {
-    console.error('Obsolete call to selectCel().');
-    this.column = column;
-    this.row = row;
   }
 
   /**

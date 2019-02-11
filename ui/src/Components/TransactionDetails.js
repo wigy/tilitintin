@@ -134,7 +134,7 @@ class TransactionDetails extends Component {
         if (this.props.entry) {
           this.props.entry.document_id = this.props.document.id;
         } else {
-          this.props.cursor.selectCell(1, 0);
+          this.props.cursor.setCell(1, 0);
           return Promise.resolve();
         }
       }
