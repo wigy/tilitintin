@@ -15,7 +15,7 @@ class Cursor {
   @observable column = null;
   @observable row = null;
 
-  // When a modal is active, this is an object with two members: onCancel and onConfirm.
+  // When a modal is active, this is a reference into it.
   @observable activeModal = null;
 
   // Storage for cursor locations for inactive components.
@@ -37,12 +37,20 @@ class Cursor {
     const keyName = (key.length === 1 ? 'Text' : key);
     const fn = 'key' + keyName.replace(/\+/g, '');
 
+    // Try active modal handler.
+    if (this.activeModal && this.activeModal[fn]) {
+      result = this.activeModal[fn]();
+      if (result && KEY_DEBUG) {
+        console.log('Modal:', fn, ':', result);
+      }
+    }
+
     // Try model handler.
     const model = this.getModel();
-    if (model && model[fn]) {
+    if (!result && model && model[fn]) {
       result = model[fn](this);
       if (result && KEY_DEBUG) {
-        console.log(fn, ':', result);
+        console.log('Model:', fn, ':', result);
       }
     }
 
@@ -50,7 +58,7 @@ class Cursor {
     if (!result && this[fn]) {
       result = this[fn]();
       if (result && KEY_DEBUG) {
-        console.log(fn, ':', result);
+        console.log('Cursor:', fn, ':', result);
       }
     }
 

@@ -28,7 +28,9 @@ FUTURE FEATURES
 [X] Rename all get-functions as fetch in Store.
 [ ] Change editing so that model has a flags and information about editing state.
     [X] Navigation.
-    [ ] Transaction highlight.
+    [X] Transaction highlight.
+    [ ] Deleting entry.
+    [X] Deleting document.
     [ ] Changing entry.
     [ ] Changing document.
     [ ] Go through Navigator and re-implement all functions. Then delete it.

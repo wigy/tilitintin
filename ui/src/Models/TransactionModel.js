@@ -20,19 +20,25 @@ class TransactionModel extends NavigationTargetModel {
     return this.index;
   }
 
-  /**
-   * Set up the document automatically.
-   */
-  initialize(data) {
-    return {...data, document: data.document || data.entry.document};
-  }
-
   getId() {
     return 'Transaction' + this.index;
   }
 
   rows() {
     return this.document.entries;
+  }
+
+  /**
+   * Mark either document or entry for deletion.
+   * @param {Cursor} cursor
+   */
+  keyDelete(cursor) {
+    if (cursor.row === null) {
+      this.document.markForDeletion();
+    } else {
+      this.entry.markForDeletion();
+    }
+    this.index++;
   }
 
   /**

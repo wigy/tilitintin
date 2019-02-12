@@ -47,6 +47,21 @@ class PeriodModel extends Model {
   }
 
   /**
+   * Remove a document from this period.
+   * @param {DocumentModel} doc
+   */
+  deleteDocument(doc) {
+    const accounts = new Set();
+    doc.entries.forEach((entry) => {
+      accounts.add(entry.account_id);
+      if (this.documentsByAccountId[entry.account_id]) {
+        this.documentsByAccountId[entry.account_id].delete(doc.id);
+      }
+    });
+    delete this.documents[doc.id];
+  }
+
+  /**
    * Add new or override old balance for the given account.
    * @param {BalanceModel} balance
    */

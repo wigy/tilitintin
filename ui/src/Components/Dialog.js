@@ -13,27 +13,22 @@ import Cursor from '../Stores/Cursor';
 class DialogContent extends Component {
 
   componentDidMount = () => {
-    this.props.cursor.activeModal = {
-      onCancel: () => {
-        this.onCancel();
-      },
-      onConfirm: () => {
-        this.onConfirm();
-      }
-    };
+    this.props.cursor.activeModal = this;
   }
 
   componentWillUnmount = () => {
     this.props.cursor.activeModal = null;
   }
 
-  onCancel = () => {
+  keyEscape = () => {
     this.props.onClose(false);
+    return {preventDefault: true};
   };
 
-  onConfirm = () => {
-    this.props.onConfirm();
+  keyEnter = () => {
     this.props.onClose(true);
+    this.props.onConfirm();
+    return {preventDefault: true};
   };
 
   render() {

@@ -569,19 +569,17 @@ class Store {
   }
 
   /**
-   * Remove a transaction and all of its entries from the system.
-   * @param {Object} tx
+   * Remove a document and all of its entries from the system.
+   * @param {Object} doc
    */
-  async deleteTransaction(tx) {
-    const path = '/db/' + this.db + '/document/' + tx.id;
+  async deleteDocument(doc) {
+    const path = '/db/' + this.db + '/document/' + doc.id;
     return this.request(path, 'DELETE')
       .then(() => {
         runInAction(() => {
-          const remaining = this.transactions.filter((t) => t.id !== tx.id);
-          this.transactions.replace(remaining);
-          // TODO: Once we have better class structure, update directly balances collection.
-          this.fetchBalances();
+          this.period.deleteDocument(doc);
         });
+        return this.fetchBalances(this.db, this.periodId);
       });
   }
 
@@ -640,7 +638,7 @@ class Store {
       return txs.filter((tx) => visible(tx));
     };
 
-    return filter(this.transactions).map((tx, index) => new TransactionModel(tx.parent.parent, {entry: tx, index}));
+    return filter(this.transactions).map((entry, index) => new TransactionModel(entry.parent.parent, {entry, document: entry.parent, index}));
   }
 
   /**

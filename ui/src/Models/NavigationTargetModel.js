@@ -15,6 +15,9 @@ class NavigationTargetModel extends Model {
   // If set, the named sub-item column is currently selected.
   @observable
   column = null;
+  // If set, this model is marked for deletion.
+  @observable
+  askForDelete = false;
 
   /**
    * Add classes according to the flags and possibly for the given (column, row) sub-item.
@@ -101,6 +104,20 @@ class NavigationTargetModel extends Model {
       throw new Error(`No geometry defined for ${this.getObjectType()}Model (needs functions column() and rows()).`);
     }
     this.open = !this.open;
+  }
+
+  /**
+   * Mark this model for deletion request.
+   */
+  markForDeletion() {
+    this.askForDelete = true;
+  }
+
+  /**
+   * Remove deletion request.
+   */
+  cancelDeletion() {
+    this.askForDelete = false;
   }
 }
 

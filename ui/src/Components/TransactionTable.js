@@ -19,18 +19,12 @@ class TransactionTable extends Component {
   txToDelete = null;
 
   /**
-   * Remove a transaction and all of its entries from the system.
-   * @param {Object} tx
+   * Remove a document and all of its entries from the system.
+   * @param {TransactionModel} tx
    */
-  deleteTransaction(tx) {
-    this.props.store.deleteTransaction(tx)
-      .then(() => {
-        let { index } = this.props.cursor;
-        if (index >= this.props.store.transactions.length) {
-          index = this.props.store.transactions.length ? index - 1 : null;
-          this.props.cursor.selectIndex('TransactionTable', index);
-        }
-      });
+  deleteDocument(tx) {
+    this.props.store.deleteDocument(tx.document)
+      .then(() => this.props.cursor.changeIndexBy(-1));
   }
 
   render() {
@@ -41,16 +35,14 @@ class TransactionTable extends Component {
 
     const deleteDialog = (tx) => (<Dialog key="dialog"
       title={<Trans>Delete these transactions?</Trans>}
-      isVisible={tx.askDelete}
-      onClose={() => { tx.askDelete = false; }}
-      onConfirm={() => this.deleteTransaction(tx)}>
-      <i>#{tx.number}</i><br/>
-      {tx.entries.map((entry, idx) =>
+      isVisible={tx.document.askForDelete}
+      onClose={() => { tx.document.askForDelete = false; this.txToDelete = null; }}
+      onConfirm={() => this.deleteDocument(tx)}>
+      <i>#{tx.document.number}</i><br/>
+      {tx.document.entries.map((entry, idx) =>
         <div key={idx}>
-          <i>{entry.number} {entry.name}:</i><br/>
-          {entry.description}
-          <b> {entry.debit ? '+' : '-'}<Money currency="EUR" cents={entry.amount}></Money></b>
-          <br/>
+          <i>{entry.account.toString()}:</i><br/>
+          {entry.description} <b> {entry.debit ? '+' : '-'}<Money currency="EUR" cents={entry.amount}></Money></b><br/>
         </div>
       )}<br/>
     </Dialog>);
@@ -72,7 +64,7 @@ class TransactionTable extends Component {
         </thead>
         <tbody>{
           this.props.store.filteredTransactions.map((tx, idx) => {
-            if (tx.askDelete) {
+            if (tx.document.askForDelete) {
               this.txToDelete = tx;
             }
             const duplicate = seen[tx.document.number];

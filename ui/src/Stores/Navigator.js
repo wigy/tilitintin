@@ -1,33 +1,9 @@
-import { action } from 'mobx';
 import moment from 'moment';
 
 class Navigator {
 
   // TODO: Refactor all these functions and move to Cursor.
   // ------------------------------------------------------
-  @action.bound
-  oldHandle(key) {
-    const {component} = this.cursor;
-    if (component === null) {
-      return null;
-    }
-
-    const keyName = (key.length === 1 ? 'Text' : key);
-
-    // Handle keys for modal.
-    if (this.cursor.activeModal) {
-      switch (keyName) {
-        case 'Escape':
-          this.cursor.activeModal.onCancel();
-          return null;
-        case 'Enter':
-          this.cursor.activeModal.onConfirm();
-          return null;
-        default:
-          return null;
-      }
-    }
-  }
 
   // Generic.
   handleEscape() {
@@ -174,13 +150,6 @@ class Navigator {
       this.store.transactions[index].entries.push(entry);
       // this.cursor.selectCell(0, this.store.transactions[index].entries.length - 1);
       this.cursor.selectEditing();
-    }
-  }
-  handleTransactionTableDelete({index, row}) {
-    if (row !== null) {
-      this.store.transactions[index].entries[row].askDelete = true;
-    } else if (index !== null) {
-      this.store.transactions[index].askDelete = true;
     }
   }
   handleTransactionTableText({index, row, editor}) {
