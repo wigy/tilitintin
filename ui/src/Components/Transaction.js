@@ -103,9 +103,10 @@ class Transaction extends Component {
   }
 
   // Render an entry for opened document.
-  renderEntry(idx, entry, diff) {
+  renderEntry(idx, tx, diff) {
     const {duplicate} = this.props;
     const classes = 'TransactionEntry alt open' + (duplicate ? ' duplicate' : '');
+    const entry = tx.document.entries[idx];
 
     // Calculate correction to fix total assuming that this entry is the one changed.
     if (entry.debit) {
@@ -210,8 +211,8 @@ class Transaction extends Component {
 
     // Render entries, if opened.
     if (tx.open) {
-      tx.document.entries.forEach((entry, idx) => {
-        ret.push(this.renderEntry(idx, entry, debit - credit));
+      tx.document.entries.forEach((_, idx) => {
+        ret.push(this.renderEntry(idx, tx, debit - credit));
       });
     }
 

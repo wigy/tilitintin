@@ -7,6 +7,7 @@ BUGS
 [ ] Arrow up skips sub-items of every second opened row
 [ ] Multiple sub-items are sometimes selected (require tx.selected status)
 [ ] Cursor behaves funny after pressing Escape.
+[ ] Kyläyhdistys Jäsenmaksutulot shows duplicates during navigation when many entries opened.
 
 FUTURE FEATURES
 ===============
@@ -41,6 +42,8 @@ FUTURE FEATURES
     [ ] Report related.
 [X] Handle movement over duplicates.
 [X] Merge Navigator class to Cursor.
+[ ] Check if further refactoring is possible with setIndex() and setCell().
+[ ] TODO cleanup.
 
 0.6
 [ ] Proposals for account number by looking for account last used with the text given in previous entry.
@@ -50,21 +53,25 @@ FUTURE FEATURES
 [ ] Support for tag parameter for reports to provide different columns per tag (skip 2nd period).
 [ ] Storing tag images on the server.
 [ ] Cleaner error handling for 403 for example.
+[ ] TODO cleanup.
 
 0.7
 [ ] Tools page: renumber documents in increasing order by date.
 [ ] VAT handling.
 [ ] End of period handling.
+[ ] TODO cleanup.
 
 0.8
 [ ] Filtering tool for full account list: Assets, Income, Expense, Other
 [ ] Creating tx when there is not a single account listed.
 [ ] Account search.
+[ ] TODO cleanup.
 
 0.9
 [ ] Create database.
 [ ] Create new period.
 [ ] Creating accounts.
+[ ] TODO cleanup.
 
 1.0
 [ ] User management.

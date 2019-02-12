@@ -12,6 +12,9 @@ class NavigationTargetModel extends Model {
   // If set, this object is extended to show its details (if applicable).
   @observable
   open = false;
+  // If set, then this object is now in editing mode (if applicable).
+  @observable
+  edit = false;
   // If set, the named sub-item column is currently selected.
   @observable
   column = null;
@@ -97,6 +100,13 @@ class NavigationTargetModel extends Model {
   }
 
   /**
+   * Check if this model can be edited now.
+   */
+  canEdit() {
+    return false;
+  }
+
+  /**
    * Change the opened state.
    */
   toggleOpen() {
@@ -118,6 +128,24 @@ class NavigationTargetModel extends Model {
    */
   cancelDeletion() {
     this.askForDelete = false;
+  }
+
+  /**
+   * Start editing if capable.
+   */
+  turnEditorOn(cursor) {
+    if (this.canEdit()) {
+      this.edit = true;
+      cursor.editTarget = this;
+    }
+  }
+
+  /**
+   * Stop editing.
+   */
+  turnEditorOff(cursor) {
+    this.edit = false;
+    cursor.editTarget = null;
   }
 }
 

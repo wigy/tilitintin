@@ -57,10 +57,11 @@ class TransactionDetails extends Component {
   }
 
   render() {
+    // TODO: This is messy and needs clean up.
     let text;
     let edit;
     let url;
-    let target = this.props.entry;
+    let target = this.props.type === 'date' ? this.props.document : this.props.entry;
 
     switch (this.props.type) {
       case 'debit':
@@ -85,7 +86,6 @@ class TransactionDetails extends Component {
         // TODO: Locale awareness.
         text = moment(this.props.document.date).format('DD.MM.YYYY');
         edit = text;
-        target = this.props.document;
         break;
       default:
         text = 'TODO';
@@ -126,6 +126,7 @@ class TransactionDetails extends Component {
       }
 
       if (Object.keys(data).length === 0) {
+        // TODO: Hmm? Is this needed.
         this.props.cursor.editor = null;
         return Promise.resolve();
       }
@@ -213,8 +214,7 @@ class TransactionDetails extends Component {
 
     // TODO: Must handle editing of the entry's account number, when it is the same as transaction's.
 
-    // Show editor instead, if it is turned on.
-    if (this.props.cursor.editor) {
+    if (this.props.entry && this.props.entry.edit && this.props.entry.column === this.props.type) {
       return (<TextEdit
         value={edit}
         validate={validate}

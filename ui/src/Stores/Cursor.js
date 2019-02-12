@@ -17,6 +17,8 @@ class Cursor {
 
   // When a modal is active, this is a reference into it.
   @observable activeModal = null;
+  // When editing is active, this points to the model edited.
+  @observable editTarget = null;
 
   // Storage for cursor locations for inactive components.
   savedComponents = {};
@@ -607,7 +609,6 @@ class Cursor {
   // TODO: Refactor all this.
   // ------------------------------------------------------------------------------------
 
-  @observable component = null;
   @observable editor = false;
 
   /**
@@ -620,14 +621,6 @@ class Cursor {
     this.column = null;
     this.row = null;
     this.editor = false;
-  }
-
-  /**
-   * Move directly to the given index of the given component.
-   */
-  @action.bound
-  selectIndex(component, index = null) {
-    console.error('Obsolete call to selectIndex().');
   }
 
   /**

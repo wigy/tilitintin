@@ -42,6 +42,17 @@ class TransactionModel extends NavigationTargetModel {
   }
 
   /**
+   * Turn editor on, if this is opened.
+   * @param {Cursor} cursor
+   */
+  keyEnter(cursor) {
+    if (this.open && cursor.row !== null) {
+      this.document.entries[cursor.row].turnEditorOn(cursor);
+      return {preventDefault: true};
+    }
+  }
+
+  /**
    * Get the period this document belongs to.
    */
   get period() {

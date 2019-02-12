@@ -77,7 +77,6 @@ class TextEdit extends Component {
 }
 
 TextEdit.propTypes = {
-  periodId: PropTypes.any,
   onCancel: PropTypes.func,
   onComplete: PropTypes.func,
   onChange: PropTypes.func,

@@ -64,7 +64,7 @@ class Navigator {
 
       };
       this.store.transactions.push(tx);
-      this.cursor.selectIndex('TransactionTable', this.store.filteredTransactions.length - 1);
+      // this.cursor.selectIndex('TransactionTable', this.store.filteredTransactions.length - 1);
       this.cursor.selectEditing();
     } else {
       const sample = this.store.transactions[index].entries[row];

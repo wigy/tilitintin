@@ -43,6 +43,20 @@ class EntryModel extends NavigationTargetModel {
   }
 
   /**
+   * Check if the cell is currently selected.
+   * @param {Number} column
+   * @param {Number} row
+   */
+  isSubSelected(column, row) {
+    return (
+      row !== null &&
+      this.document.entries.indexOf(this) === row &&
+      column !== null &&
+      this.columns()[column] === this.column
+    );
+  }
+
+  /**
    * Calculate if the account is `current`, `error` situation and if `sub-selected` should be on.
    * @param {Number|null} column
    * @param {Number|null} row
@@ -50,11 +64,15 @@ class EntryModel extends NavigationTargetModel {
   getClasses(column = null, row = null) {
     return super.getClasses(column, row) +
       (this.store.accountId === this.account_id ? ' current' : '') +
-      (row !== null &&
-        this.document.entries.indexOf(this) === row &&
-        column !== null &&
-        this.columns()[column] === this.column ? ' sub-selected' : '') +
+      (this.isSubSelected(column, row) ? ' sub-selected' : '') +
       (!this.account_id ? ' error' : '');
+  }
+
+  /**
+   * This is editable.
+   */
+  canEdit() {
+    return true;
   }
 
   /**
