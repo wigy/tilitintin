@@ -2,63 +2,8 @@ import moment from 'moment';
 
 class Navigator {
 
-  // TODO: Refactor all these functions and move to Cursor.
-  // ------------------------------------------------------
-
-  // Generic.
-  handleEscape() {
-    this.cursor.save();
-    return {index: null, column: null, row: null};
-  }
-
-  // TODO: How to move these inside appropriate component in easy and readable manner?
-  // TODO: Add support for page up and page down.
-
   // Transaction listing for an account
   // ----------------------------------
-  handleTransactionTableArrowUp({index, column, row}, amount = -1) {
-    if (index !== null && row !== null && this.store.filteredTransactions[index].open) {
-      const ret = this.cursor.boxUpdate(column, row, 4, this.store.filteredTransactions[index].entries.length, 0, amount);
-      return ret;
-    }
-    const ret = this.cursor.indexUpdate(index, this.store.filteredTransactions.length, amount);
-    if (ret) {
-      const el = document.getElementById('Transaction' + this.store.filteredTransactions[ret.index].id);
-      el.scrollIntoView({block: 'center', inline: 'center'});
-    }
-    return ret;
-  }
-  handleTransactionTableArrowDown({index, column, row}, amount = +1) {
-    if (index !== null && this.store.filteredTransactions[index].open) {
-      if (row === this.store.filteredTransactions[index].entries.length - 1) {
-        const ret = this.cursor.indexUpdate(index, this.store.filteredTransactions.length, amount);
-        ret.column = null;
-        ret.row = null;
-        return ret;
-      }
-      const ret = this.cursor.boxUpdate(column, row, 4, this.store.filteredTransactions[index].entries.length, 0, amount, 1);
-      return ret;
-    }
-    const ret = this.cursor.indexUpdate(index, this.store.filteredTransactions.length, amount);
-    if (ret) {
-      const el = document.getElementById('Transaction' + this.store.filteredTransactions[ret.index].id);
-      el.scrollIntoView({block: 'center', inline: 'center'});
-    }
-    return ret;
-  }
-  handleTransactionTableArrowLeft({index, column, row}) {
-    if (index !== null && this.store.filteredTransactions[index].open) {
-      const ret = this.cursor.boxUpdate(column, row, 4, this.store.filteredTransactions[index].entries.length, -1, 0);
-      return ret;
-    }
-    // return this.cursor.componentUpdate('BalanceTable', this.store.balances.length);
-  }
-  handleTransactionTableArrowRight({index, column, row}) {
-    if (index !== null && this.store.filteredTransactions[index].open) {
-      const ret = this.cursor.boxUpdate(column, row, 4, this.store.filteredTransactions[index].entries.length, +1, 0);
-      return ret;
-    }
-  }
   handleTransactionTableEnter({index, row}) {
     if (index !== null && row === null) {
       this.store.filteredTransactions[index].document.open = !this.store.filteredTransactions[index].document.open;
@@ -80,13 +25,6 @@ class Navigator {
       }
       return {column, row};
     }
-  }
-  handleTransactionTableEscape({index}) {
-    if (index !== null && this.store.filteredTransactions[index].open) {
-      this.store.filteredTransactions[index].open = false;
-      return {index, row: null, column: null};
-    }
-    return this.handleEscape();
   }
   handleTransactionTableInsert({index, row}) {
     if (row === null) {

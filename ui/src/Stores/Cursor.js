@@ -246,6 +246,23 @@ class Cursor {
   }
 
   /**
+   *
+   */
+  keyEscape() {
+    const model = this.getModel();
+    if (model && model.open) {
+      if (this.row !== null) {
+        this.setCell(null, null);
+      } else {
+        model.toggleOpen();
+      }
+    } else {
+      this.changeIndexBy(null);
+    }
+    return {preventDefault: true};
+  }
+
+  /**
    * Hook that is called when we are leaving the current component.
    */
   leaveComponent() {
@@ -315,45 +332,6 @@ class Cursor {
   }
 
   /**
-   * Adjust the current index by the given amount, if the component is vertical.
-   * @param {Number} delta
-   */
-  changeIndexBy(delta) {
-    const component = this.getComponent();
-    if (component && component.vertical) {
-      const oldIndex = this.index;
-      if (this.indexUpdate(component.length, delta)) {
-        this.row = null;
-        this.column = null;
-        component.moveBox(null, null);
-        component.moveIndex(oldIndex, this.index);
-      }
-      return {preventDefault: true};
-    }
-  }
-
-  /**
-   * Adjust the currently selected sub-item.
-   * @param {Number} dx
-   * @param {Number} dy
-   */
-  changeBoxBy(dx, dy) {
-    const model = this.getModel();
-    if (model && model.open) {
-      const component = this.getComponent();
-      const [columns, rows] = model.geometry();
-      const {subitemExitUp, subitemExitDown, entryColumn, subitemUpStopOnNull} = component;
-      const oldRow = this.row;
-      const oldColumn = this.column;
-      const oldIndex = this.index;
-      if (this.boxUpdate(columns, rows, dx, dy, {subitemExitUp, subitemExitDown, entryColumn, subitemUpStopOnNull})) {
-        component.moveBox(oldIndex, this.index, oldColumn, oldRow, this.column, this.row);
-        return {preventDefault: true};
-      }
-    }
-  }
-
-  /**
    * Switch directly to another topological component.
    * @param {String} name
    */
@@ -404,17 +382,62 @@ class Cursor {
   }
 
   /**
+   * Adjust the current index by the given amount, if the component is vertical.
+   * @param {Number|null} delta
+   */
+  changeIndexBy(delta) {
+    const component = this.getComponent();
+    if (component && component.vertical) {
+      const oldIndex = this.index;
+      if (this.indexUpdate(component.length, delta)) {
+        this.row = null;
+        this.column = null;
+        component.moveBox(null, null);
+        component.moveIndex(oldIndex, this.index);
+        if (delta === null) {
+          this.leaveComponent();
+        }
+      }
+      return {preventDefault: true};
+    }
+  }
+
+  /**
    * Set the current location inside the sub-item.
    * @param {Number} column
    * @param {Number} row
    */
   setCell(column, row) {
-    if (this.row === null) {
+    if (column === null && row === null) {
+      this.changeBoxBy(null, null);
+    } else if (this.row === null) {
       this.changeBoxBy(column, row + 1);
     } else {
       this.changeBoxBy(column - this.column, row - this.row);
     }
     return {preventDefault: true};
+  }
+
+  /**
+   * Adjust the currently selected sub-item.
+   * @param {Number|null} dx
+   * @param {Number|null} dy
+   */
+
+  changeBoxBy(dx, dy) {
+    const model = this.getModel();
+    if (model && model.open) {
+      const component = this.getComponent();
+      const [columns, rows] = model.geometry();
+      const {subitemExitUp, subitemExitDown, entryColumn, subitemUpStopOnNull} = component;
+      const oldRow = this.row;
+      const oldColumn = this.column;
+      const oldIndex = this.index;
+      if (this.boxUpdate(columns, rows, dx, dy, {subitemExitUp, subitemExitDown, entryColumn, subitemUpStopOnNull})) {
+        component.moveBox(oldIndex, this.index, oldColumn, oldRow, this.column, this.row);
+        return {preventDefault: true};
+      }
+    }
   }
 
   /**
@@ -489,11 +512,15 @@ class Cursor {
   /**
    * Helper to change index counter and wrap it around boundaries.
    * @param {Number} N
-   * @param {Number} delta
+   * @param {Number|null} delta
    */
   indexUpdate(N, delta) {
     const oldIndex = this.index;
     if (N) {
+      if (delta === null) {
+        this.index = null;
+        return true;
+      }
       if (this.index === undefined || this.index === null) {
         this.index = delta < 0 ? N - 1 : 0;
       } else {
@@ -520,15 +547,20 @@ class Cursor {
    * Helper to navigate inside rectangular area.
    * @param {Number} N Number of columns.
    * @param {Number} M Number of rows.
-   * @param {Number} dx
-   * @param {Number} dy
+   * @param {Number|null} dx
+   * @param {Number|null} dy
    * @param {Boolean} [options.subitemExitDown]
    * @param {Boolean} [options.subitemExitDown]
    * @param {Number} [options.entryColumn]
    */
   boxUpdate(N, M, dx, dy, options) {
-    const oldRow = this.row;
     if (N && M) {
+      if (dx === null && dy === null) {
+        this.row = null;
+        this.column = null;
+        return true;
+      }
+      const oldRow = this.row;
       this.column = (this.column + N + dx) % N;
       if (this.row === null) {
         if (dy > 0) {
