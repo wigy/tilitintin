@@ -36,9 +36,9 @@ class TransactionModel extends NavigationTargetModel {
     if (cursor.row === null) {
       this.document.markForDeletion();
     } else {
-      this.entry.markForDeletion();
+      this.document.entries[cursor.row].markForDeletion();
     }
-    this.index++;
+    return {preventDefault: true};
   }
 
   /**

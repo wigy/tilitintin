@@ -554,17 +554,9 @@ class Store {
     return this.request(path, 'DELETE')
       .then(() => {
         runInAction(() => {
-          this.transactions.forEach((tx, idx) => {
-            for (let i = 0; i < tx.entries.length; i++) {
-              if (tx.entries[i].id === entry.id) {
-                tx.entries.splice(i, 1);
-                i--;
-              }
-            }
-          });
-          // TODO: Once we have better class structure, update directly balances collection.
-          this.fetchBalances();
+          this.period.deleteEntry(entry);
         });
+        return this.fetchBalances(this.db, this.periodId);
       });
   }
 

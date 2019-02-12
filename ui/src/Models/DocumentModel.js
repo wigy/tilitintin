@@ -34,6 +34,14 @@ class DocumentModel extends NavigationTargetModel {
   }
 
   /**
+   * Remove an entry from this document.
+   * @param {EntryModel} entry
+   */
+  deleteEntry(entry) {
+    this.entries.replace(this.entries.filter((e) => e.id !== entry.id));
+  }
+
+  /**
    * Get the period this document belongs to.
    */
   get period() {

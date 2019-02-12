@@ -62,6 +62,16 @@ class PeriodModel extends Model {
   }
 
   /**
+   * Remove an entry from this period.
+   * @param {EntryModel} entry
+   */
+  deleteEntry(entry) {
+    for (let docId of this.documentsByAccountId[entry.account_id]) {
+      this.getDocument(docId).deleteEntry(entry);
+    }
+  }
+
+  /**
    * Add new or override old balance for the given account.
    * @param {BalanceModel} balance
    */

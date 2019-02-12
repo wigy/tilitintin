@@ -24,7 +24,13 @@ class Transaction extends Component {
 
   @action.bound
   deleteEntry() {
-    this.props.store.deleteEntry(this.entryToDelete);
+    const {index, column, row} = this.props.cursor;
+    this.props.store.deleteEntry(this.entryToDelete)
+      .then(() => {
+        this.props.cursor.setIndex(index);
+        this.props.cursor.keyEnter();
+        this.props.cursor.setCell(column, row);
+      });
   }
 
   // Move to the transaction and toggle it.
@@ -165,10 +171,10 @@ class Transaction extends Component {
     let debit = 0;
     let credit = 0;
     let missingAccount = false;
-    let mismatchingAccount = /* true */ false;
+    let mismatchingAccount = false;
 
     tx.document.entries.forEach((entry, idx) => {
-      if (entry.askDelete) {
+      if (entry.askForDelete) {
         this.entryToDelete = entry;
       }
       if (entry.debit) {
@@ -216,10 +222,10 @@ class Transaction extends Component {
           <td colSpan={7}>
             <Dialog
               title={<Trans>Delete this transaction?</Trans>}
-              isVisible={this.entryToDelete.askDelete}
-              onClose={() => (this.entryToDelete.askDelete = false)}
+              isVisible={this.entryToDelete.askForDelete}
+              onClose={() => { this.entryToDelete.askForDelete = null; this.entryToDelete.askForDelete = false; }}
               onConfirm={() => this.deleteEntry()}>
-              <i>{this.entryToDelete.number} {this.entryToDelete.name}</i><br/>
+              <i>{this.entryToDelete.account.toString()}</i><br/>
               {this.entryToDelete.description}<br/>
               <b>{this.entryToDelete.debit ? '+' : '-'}<Money currency="EUR" cents={this.entryToDelete.amount}></Money></b>
             </Dialog>
@@ -229,9 +235,9 @@ class Transaction extends Component {
     }
 
     // Render imbalance
-    if (imbalance) {
+    if (imbalance && this.props.tx.open) {
       ret.push(
-        <tr key="imbalance" className={'alt error TransactionEntry' + (tx.open ? ' open' : '')} onClick={() => this.onClick()}>
+        <tr key="imbalance" className={'alt error TransactionEntry'} onClick={() => this.onClick()}>
           <td className="account" colSpan={3}></td>
           <td className="description">
             <Trans>Debit and credit do not match</Trans>
