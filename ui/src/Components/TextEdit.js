@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { translate, Trans } from 'react-i18next';
+import Model from '../Models/Model';
 import './TextEdit.css';
 
 @translate('translations')
@@ -10,6 +11,7 @@ class TextEdit extends Component {
     super(props);
     this.state = {
       value: props.value || '',
+      proposal: null,
       error: null
     };
   }
@@ -21,7 +23,7 @@ class TextEdit extends Component {
 
   onKeyPress(event) {
     if (event.key === 'Enter' || event.key === 'Tab') {
-      const value = this.state.value;
+      const value = this.state.proposal || this.state.value;
       const error = this.props.validate && this.props.validate(value);
       if (error) {
         this.setState({error});
@@ -57,6 +59,10 @@ class TextEdit extends Component {
     const value = event.target.value;
     this.props.onChange && this.props.onChange(value);
     this.setState({value, error: null});
+    if (this.props.proposal) {
+      this.props.proposal(value)
+        .then((proposal) => this.setState({proposal}));
+    }
   }
 
   render() {
@@ -71,7 +77,7 @@ class TextEdit extends Component {
           onKeyUp={event => this.onKeyUp(event)}
           onKeyDown={event => this.onKeyDown(event)}
         />
-        <div className="proposal">{this.props.proposal}</div>
+        <div className="proposal">{this.state.proposal}</div>
       </div>);
   }
 }
@@ -82,7 +88,8 @@ TextEdit.propTypes = {
   onChange: PropTypes.func,
   validate: PropTypes.func,
   value: PropTypes.any,
-  proposal: PropTypes.string
+  target: PropTypes.instanceOf(Model),
+  proposal: PropTypes.func
 };
 
 export default TextEdit;

@@ -48,6 +48,7 @@ FUTURE FEATURES
 [ ] TODO cleanup.
 
 0.6
+[ ] Support for array of proposals and navigation for them.
 [ ] Proposals for account number by looking for account last used with the text given in previous entry.
 [ ] Proposals for accounts, when typing partial name of it.
 [ ] Dim the screen while running network operation.

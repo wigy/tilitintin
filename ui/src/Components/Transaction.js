@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import { action } from 'mobx';
 import { translate, Trans } from 'react-i18next';
-import { sprintf } from 'sprintf-js';
 import Dialog from './Dialog';
 import Money from './Money';
 import Tags from './Tags';
@@ -104,20 +103,10 @@ class Transaction extends Component {
   }
 
   // Render an entry for opened document.
-  renderEntry(idx, tx, diff) {
+  renderEntry(idx, tx) {
     const {duplicate} = this.props;
     const classes = 'TransactionEntry alt open' + (duplicate ? ' duplicate' : '');
     const entry = tx.document.entries[idx];
-
-    // Calculate correction to fix total assuming that this entry is the one changed.
-    if (entry.debit) {
-      diff -= entry.amount;
-    } else {
-      diff += entry.amount;
-    }
-
-    const proposalDebit = diff < 0 ? sprintf('%.2f', -diff / 100) + '' : null;
-    const proposalCredit = diff > 0 ? sprintf('%.2f', diff / 100) + '' : null;
 
     return (
       <tr key={idx} className={classes}>
@@ -146,7 +135,6 @@ class Transaction extends Component {
             entry={entry}
             onClick={() => this.onClickDetail()}
             onComplete={() => this.onComplete(2, idx)}
-            proposal={proposalDebit}
           />
         </td>
         <td className="credit" onClick={() => this.onClickDetail(3, idx)}>
@@ -156,7 +144,6 @@ class Transaction extends Component {
             entry={entry}
             onClick={() => this.onClickDetail()}
             onComplete={() => this.onComplete(3, idx)}
-            proposal={proposalCredit}
           />
         </td>
         <td className="empty">
@@ -170,19 +157,12 @@ class Transaction extends Component {
     const tx = this.props.tx;
 
     // Calculate imbalance, missing accounts, mismatching account, and look for deletion request.
-    let debit = 0;
-    let credit = 0;
     let missingAccount = false;
     let mismatchingAccount = false;
 
     tx.document.entries.forEach((entry, idx) => {
       if (entry.askForDelete) {
         this.entryToDelete = entry;
-      }
-      if (entry.debit) {
-        debit += entry.amount;
-      } else {
-        credit += entry.amount;
       }
       if (!entry.account_id) {
         missingAccount = true;
@@ -193,11 +173,8 @@ class Transaction extends Component {
       }
     });
 
-    const smaller = Math.min(debit, credit);
-    debit -= smaller;
-    credit -= smaller;
-    const imbalance = (credit !== debit);
-    const error = imbalance || missingAccount;
+    const imbalance = tx.document.imbalance();
+    const error = !!imbalance || missingAccount;
 
     // Set up CSS classes.
     const classes = tx.getClasses() +
@@ -213,7 +190,7 @@ class Transaction extends Component {
     // Render entries, if opened.
     if (tx.open) {
       tx.document.entries.forEach((_, idx) => {
-        ret.push(this.renderEntry(idx, tx, debit - credit));
+        ret.push(this.renderEntry(idx, tx));
       });
     }
 
@@ -245,10 +222,10 @@ class Transaction extends Component {
             <Trans>Debit and credit do not match</Trans>
           </td>
           <td className="debit">
-            {credit ? <Money cents={credit} currency="€"/> : ''}
+            {imbalance < 0 ? <Money cents={imbalance} currency="€"/> : ''}
           </td>
           <td className="credit">
-            {debit ? <Money cents={debit} currency="€"/> : ''}
+            {imbalance > 0 ? <Money cents={imbalance} currency="€"/> : ''}
           </td>
           <td className="empty"></td>
         </tr>);

@@ -114,6 +114,24 @@ class EntryModel extends NavigationTargetModel {
     return value ? null : REQUIRED;
   }
   // TODO: Handle tags on `change` and on `get.edit`.
+  ['proposal.description'](value) {
+    // Find the first text that matches.
+    const texts = new Set();
+    this.store.transactions.forEach((tx) => {
+      for (let i = 0; i < tx.document.entries.length; i++) {
+        if (tx.document.entries[i].account_id === this.account_id && tx.document.entries[i].id !== this.id) {
+          texts.add(tx.document.entries[i].description);
+        }
+      }
+    });
+    const candidates = [...texts].sort();
+    value = value.trim();
+    for (let i = 0; i < candidates.length; i++) {
+      if (candidates[i].startsWith(value)) {
+        return candidates[i];
+      }
+    }
+  }
 
   /**
    * Format as money, if this is debit entry.
@@ -146,6 +164,12 @@ class EntryModel extends NavigationTargetModel {
       this.amount = Math.round(str2num(value) * 100);
     }
   }
+  ['proposal.debit'](value) {
+    if (value === ' ') {
+      let miss = this.document.imbalance() + (this.debit ? -this.amount : this.amount);
+      return miss < 0 ? sprintf('%.2f', -miss / 100) : null;
+    }
+  }
 
   /**
    * Format as money, if this is credit entry.
@@ -163,6 +187,12 @@ class EntryModel extends NavigationTargetModel {
     if (value !== '') {
       this.debit = 0;
       this.amount = Math.round(str2num(value) * 100);
+    }
+  }
+  ['proposal.credit'](value) {
+    if (value === ' ') {
+      let miss = this.document.imbalance() + (this.debit ? -this.amount : this.amount);
+      return miss > 0 ? sprintf('%.2f', miss / 100) : null;
     }
   }
 

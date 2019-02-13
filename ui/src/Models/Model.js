@@ -102,6 +102,16 @@ class Model {
   }
 
   /**
+   * Calculate proposal for the field value based on partial value given.
+   * @param {String} field
+   * @param {String} value
+   */
+  async proposal(field, value) {
+    const name = `proposal.${field}`;
+    return name in this ? this[name](value) : null;
+  }
+
+  /**
    * Change the value of one field of this model.
    * @param {String} field
    * @param {Any} value

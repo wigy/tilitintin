@@ -79,6 +79,25 @@ class DocumentModel extends NavigationTargetModel {
   }
 
   /**
+   * Calculate difference of entry balances.
+   */
+  imbalance() {
+    let debit = 0;
+    let credit = 0;
+    this.entries.forEach((entry, idx) => {
+      if (entry.debit) {
+        debit += entry.amount;
+      } else {
+        credit += entry.amount;
+      }
+    });
+    const smaller = Math.min(debit, credit);
+    debit -= smaller;
+    credit -= smaller;
+    return debit - credit;
+  }
+
+  /**
    * Get the period this document belongs to.
    */
   get period() {
