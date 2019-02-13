@@ -1,5 +1,26 @@
+import React from 'react';
+import moment from 'moment';
+import { sprintf } from 'sprintf-js';
+import { Trans } from 'react-i18next';
 import NavigationTargetModel from './NavigationTargetModel';
 import EntryModel from '../Models/EntryModel';
+
+// Helper to convert string to date.
+const str2date = (str, sample) => {
+  sample = sample ? new Date(sample) : new Date();
+  // TODO: Localization support.
+  if (/^\d{1,2}(\.\d{1,2})?(\.\d{2,4})?\.?$/.test(str)) {
+    let [day, month, year] = str.split('.');
+    day = parseInt(day);
+    month = parseInt(month) || (sample.getMonth() + 1);
+    year = parseInt(year) || sample.getFullYear();
+    if (year < 100) {
+      year += 2000;
+    }
+    const date = moment(sprintf('%04d-%02d-%02d', year, month, day));
+    return date.isValid() ? date.format('YYYY-MM-DD') : undefined;
+  }
+};
 
 class DocumentModel extends NavigationTargetModel {
 
@@ -23,6 +44,18 @@ class DocumentModel extends NavigationTargetModel {
 
   getId() {
     return 'Document' + this.id;
+  }
+
+  /**
+   * Use localized date.
+   */
+  ['get.date']() {
+    // TODO: Locale awareness.
+    return moment(this.date).format('DD.MM.YYYY');
+  }
+  ['validate.date'](value) {
+    const INVALID_DATE = <Trans>Date is incorrect.</Trans>;
+    return str2date(value, this.store.lastDate) ? null : INVALID_DATE;
   }
 
   /**

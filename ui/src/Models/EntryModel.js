@@ -1,5 +1,22 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { sprintf } from 'sprintf-js';
+import { Trans } from 'react-i18next';
 import NavigationTargetModel from './NavigationTargetModel';
 import TagModel from './TagModel';
+import Money from '../Components/Money';
+
+// Helper to evaluate string expression value to number.
+const str2num = (str) => {
+  str = str.replace(',', '.').replace(/ /g, '');
+  try {
+    //  TODO: This crashes for some reason: safeEval(str, {navigator: window.navigator});
+    /* eslint no-eval: off */
+    return eval(str);
+  } catch (err) {
+    return NaN;
+  }
+};
 
 class EntryModel extends NavigationTargetModel {
 
@@ -73,6 +90,69 @@ class EntryModel extends NavigationTargetModel {
    */
   canEdit() {
     return true;
+  }
+
+  /**
+   * Description is required.
+   * @param {String} value
+   */
+  ['validate.description'](value) {
+    const REQUIRED = <Trans>This field is required.</Trans>;
+    return value ? null : REQUIRED;
+  }
+
+  /**
+   * Format as money, if this is debit entry.
+   */
+  ['get.debit']() {
+    return this.debit && this.amount !== '' ? (<Money cents={this.amount} currency="EUR" />) : <span className="filler">-</span>;
+  }
+  ['get.edit.debit']() {
+    return this.debit ? sprintf('%.2f', this.amount / 100) : '';
+  }
+  ['validate.debit'](value) {
+    const INVALID_NUMBER = <Trans>Numeric value incorrect.</Trans>;
+    const NO_NEGATIVE = <Trans>Cannot be negative.</Trans>;
+
+    if (value === '') {
+      return null;
+    }
+    const num = str2num(value);
+    if (isNaN(num)) {
+      return INVALID_NUMBER;
+    }
+    if (num < 0) {
+      return NO_NEGATIVE;
+    }
+    return null;
+  }
+
+  /**
+   * Format as money, if this is credit entry.
+   */
+  ['get.credit']() {
+    return !this.debit && this.amount !== '' ? (<Money cents={this.amount} currency="EUR" />) : <span className="filler">-</span>;
+  }
+  ['get.edit.credit']() {
+    return !this.debit ? sprintf('%.2f', this.amount / 100) : '';
+  }
+  ['validate.credit'](value) {
+    return this['validate.debit'](value);
+  }
+  /**
+   * Render link to the transaction listing of the account. For editing, use account number.
+   */
+  ['get.account']() {
+    const onClick = () => this.props.cursor.setIndex('TransactionTable', null);
+    let url = '/' + this.database.name + '/txs/' + this.period.id + '/' + this.account_id;
+    return <Link onClick={onClick} to={url}>{this.account.toString()}</Link>;
+  }
+  ['get.edit.account']() {
+    return this.account.number;
+  }
+  ['validate.account'](value) {
+    const INVALID_ACCOUNT = <Trans>No such account found.</Trans>;
+    return this.store.accounts.filter(a => a.number === value).length ? null : INVALID_ACCOUNT;
   }
 
   /**

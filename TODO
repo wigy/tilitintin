@@ -8,6 +8,7 @@ BUGS
 [ ] Multiple sub-items are sometimes selected (require tx.selected status)
 [ ] Cursor behaves funny after pressing Escape.
 [ ] Kyläyhdistys Jäsenmaksutulot shows duplicates during navigation when many entries opened.
+[ ] Clicking one in long list of accounts activates wrong account.
 
 FUTURE FEATURES
 ===============

@@ -63,6 +63,34 @@ class Model {
   }
 
   /**
+   * Get visual presentation of the given field: if there is `get.<field>` function, use it, otherwise field value itself.
+   * @param {String} field
+   */
+  getView(field) {
+    const name = `get.${field}`;
+    return name in this ? this[name]() : this[field];
+  }
+
+  /**
+   * Get visual presentation of the given field for editable value. Defaults to view.
+   * @param {String} field
+   */
+  getEdit(field) {
+    const name = `get.edit.${field}`;
+    return name in this ? this[name]() : this.getView(field);
+  }
+
+  /**
+   * Check if the value can be converted to the given field.
+   * @param {Any} value
+   * @return {String|null} Error message if not valid.
+   */
+  validate(field, value) {
+    const name = `validate.${field}`;
+    return name in this ? this[name](value) : true;
+  }
+
+  /**
    * Get the store.
    */
   get store() {

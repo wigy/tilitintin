@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
-import { Link } from 'react-router-dom';
-import { translate, Trans } from 'react-i18next';
-import Money from './Money';
+import { translate } from 'react-i18next';
 import TextEdit from './TextEdit';
 import Store from '../Stores/Store';
 import EntryModel from '../Models/EntryModel';
@@ -58,39 +56,10 @@ class TransactionDetails extends Component {
 
   render() {
     // TODO: This is messy and needs clean up.
-    let text;
-    let edit;
-    let url;
     let target = this.props.type === 'date' ? this.props.document : this.props.entry;
 
-    switch (this.props.type) {
-      case 'debit':
-        text = this.props.entry.debit && this.props.entry.amount !== '' ? (<Money cents={this.props.entry.amount} currency="EUR" />) : <span className="filler">-</span>;
-        edit = this.props.entry.debit ? sprintf('%.2f', this.props.entry.amount / 100) : '';
-        break;
-      case 'credit':
-        text = !this.props.entry.debit && this.props.entry.amount !== '' ? (<Money cents={this.props.entry.amount} currency="EUR" />) : <span className="filler">-</span>;
-        edit = !this.props.entry.debit ? sprintf('%.2f', this.props.entry.amount / 100) : '';
-        break;
-      case 'account':
-        const onClick = () => this.props.cursor.setIndex('TransactionTable', null);
-        url = '/' + this.props.entry.database.name + '/txs/' + this.props.entry.period.id + '/' + this.props.entry.account_id;
-        text = <Link onClick={onClick} to={url}>{this.props.entry.account.number} {this.props.entry.account.name}</Link>;
-        edit = this.props.entry.account.number;
-        break;
-      case 'description':
-        text = this.props.entry.description;
-        edit = text;
-        break;
-      case 'date':
-        // TODO: Locale awareness.
-        text = moment(this.props.document.date).format('DD.MM.YYYY');
-        edit = text;
-        break;
-      default:
-        text = 'TODO';
-        edit = '';
-    }
+    const text = target.getView(this.props.type);
+    const edit = target.getEdit(this.props.type);
 
     // A function called after editing is finished.
     const onComplete = async (value) => {
@@ -123,12 +92,6 @@ class TransactionDetails extends Component {
           this.props.store.lastDate = data.date;
           break;
         default:
-      }
-
-      if (Object.keys(data).length === 0) {
-        // TODO: Hmm? Is this needed.
-        this.props.cursor.editor = null;
-        return Promise.resolve();
       }
 
       // Update or create transaction first.
@@ -178,46 +141,12 @@ class TransactionDetails extends Component {
       this.setState({proposal});
     };
 
-    // Validator of the value.
-    const validate = (value) => {
-
-      const REQUIRED = <Trans>This field is required.</Trans>;
-      const INVALID_ACCOUNT = <Trans>No such account found.</Trans>;
-      const INVALID_NUMBER = <Trans>Numeric value incorrect.</Trans>;
-      const NO_NEGATIVE = <Trans>Cannot be negative.</Trans>;
-      const INVALID_DATE = <Trans>Date is incorrect.</Trans>;
-
-      switch (this.props.type) {
-        case 'account':
-          return this.props.store.accounts.filter(a => a.number === value).length ? null : INVALID_ACCOUNT;
-        case 'description':
-          return value ? null : REQUIRED;
-        case 'credit':
-        case 'debit':
-          if (value === '') {
-            return null;
-          }
-          const num = str2num(value);
-          if (isNaN(num)) {
-            return INVALID_NUMBER;
-          }
-          if (num < 0) {
-            return NO_NEGATIVE;
-          }
-          return null;
-        case 'date':
-          return str2date(value, this.props.store.lastDate) ? null : INVALID_DATE;
-        default:
-          return 'TODO';
-      }
-    };
-
     // TODO: Must handle editing of the entry's account number, when it is the same as transaction's.
-
+    // TODO: Handle date editing.
     if (this.props.entry && this.props.entry.edit && this.props.entry.column === this.props.type) {
       return (<TextEdit
         value={edit}
-        validate={validate}
+        validate={value => target.validate(this.props.type, value)}
         proposal={this.state.proposal}
         onComplete={value => onComplete(value).then(() => {
           this.props.onComplete && this.props.onComplete();
@@ -242,7 +171,7 @@ class TransactionDetails extends Component {
 TransactionDetails.propTypes = {
   document: PropTypes.instanceOf(DocumentModel),
   entry: PropTypes.instanceOf(EntryModel),
-  type: PropTypes.string,
+  type: PropTypes.string, // TODO: Rename as 'field'.
   classNames: PropTypes.string,
   proposal: PropTypes.string,
   error: PropTypes.bool,
