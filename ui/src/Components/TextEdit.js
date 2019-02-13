@@ -21,7 +21,7 @@ class TextEdit extends Component {
 
   onKeyPress(event) {
     if (event.key === 'Enter' || event.key === 'Tab') {
-      const value = this.props.proposal !== null && this.props.proposal !== '' && this.props.proposal !== undefined ? this.props.proposal : this.state.value;
+      const value = this.state.value;
       const error = this.props.validate && this.props.validate(value);
       if (error) {
         this.setState({error});
