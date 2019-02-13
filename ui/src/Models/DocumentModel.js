@@ -57,6 +57,10 @@ class DocumentModel extends NavigationTargetModel {
     const INVALID_DATE = <Trans>Date is incorrect.</Trans>;
     return str2date(value, this.store.lastDate) ? null : INVALID_DATE;
   }
+  ['change.date'](value) {
+    this.date = str2date(value, this.store.lastDate);
+    this.store.lastDate = this.date;
+  }
 
   /**
    * Instantiate entries.

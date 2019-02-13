@@ -5,6 +5,7 @@ import { Trans } from 'react-i18next';
 import NavigationTargetModel from './NavigationTargetModel';
 import TagModel from './TagModel';
 import Money from '../Components/Money';
+// import safeEval from 'safer-eval';
 
 // Helper to evaluate string expression value to number.
 const str2num = (str) => {
@@ -40,6 +41,18 @@ class EntryModel extends NavigationTargetModel {
       // Tag names extracted from the description.
       tagNames: []
     }, init);
+  }
+
+  /**
+   * Combine tags to description.
+   */
+  toJSON() {
+    let ret = super.toJSON();
+    if (ret.tagNames.length) {
+      ret.description = '[' + ret.tagNames.join('][') + '] ' + ret.description;
+    }
+    delete ret.tagNames;
+    return ret;
   }
 
   /**
@@ -100,6 +113,7 @@ class EntryModel extends NavigationTargetModel {
     const REQUIRED = <Trans>This field is required.</Trans>;
     return value ? null : REQUIRED;
   }
+  // TODO: Handle tags on `change` and on `get.edit`.
 
   /**
    * Format as money, if this is debit entry.
@@ -126,6 +140,12 @@ class EntryModel extends NavigationTargetModel {
     }
     return null;
   }
+  ['change.debit'](value) {
+    if (value !== '') {
+      this.debit = 1;
+      this.amount = Math.round(str2num(value) * 100);
+    }
+  }
 
   /**
    * Format as money, if this is credit entry.
@@ -139,6 +159,13 @@ class EntryModel extends NavigationTargetModel {
   ['validate.credit'](value) {
     return this['validate.debit'](value);
   }
+  ['change.credit'](value) {
+    if (value !== '') {
+      this.debit = 0;
+      this.amount = Math.round(str2num(value) * 100);
+    }
+  }
+
   /**
    * Render link to the transaction listing of the account. For editing, use account number.
    */
@@ -153,6 +180,10 @@ class EntryModel extends NavigationTargetModel {
   ['validate.account'](value) {
     const INVALID_ACCOUNT = <Trans>No such account found.</Trans>;
     return this.store.accounts.filter(a => a.number === value).length ? null : INVALID_ACCOUNT;
+  }
+  ['change.account'](value) {
+    const account = this.store.accounts.filter(a => a.number === value);
+    this.account_id = account[0].id;
   }
 
   /**

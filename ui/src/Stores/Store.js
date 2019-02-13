@@ -1,4 +1,4 @@
-import { runInAction, computed, toJS, observable } from 'mobx';
+import { runInAction, computed, observable } from 'mobx';
 import config from '../Configuration';
 import AccountModel from '../Models/AccountModel';
 import DatabaseModel from '../Models/DatabaseModel';
@@ -463,7 +463,7 @@ class Store {
    * @param {Object} tx
    * @param {Object} data
    */
-  async saveDocument(tx, data) {
+  async OLDsaveDocument(tx, data) {
     let write = {
       period_id: tx.period_id || this.periodId
     };
@@ -490,58 +490,18 @@ class Store {
 
   /**
    * Change entry content.
-   * @param {Object} entry
-   * @param {Object} data
-   * @param {Object} tx
+   * @param {EntryModel} entry
    */
-  async saveEntry(entry, data, tx) {
-
-    // Compile fields to DB format.
-    let write = {};
-    // Create new entry, if no ID.
-    if (!entry.id) {
-      Object.assign(write, toJS(entry));
-    }
-    Object.assign(write, data);
-
-    if ('tags' in data) {
-      if (data.tags.length) {
-        write.description = '[' + data.tags.join('][') + '] ' + data.description;
-      } else {
-        write.description = data.description || '';
-      }
-    }
-    // Clean up trash.
-    delete write.name;
-    delete write.number;
-    delete write.tags;
-
-    return this.request('/db/' + this.db + '/entry/' + (entry.id || ''), entry.id ? 'PATCH' : 'POST', write)
+  async saveEntry(entry) {
+    return this.request('/db/' + this.db + '/entry/' + (entry.id || ''), entry.id ? 'PATCH' : 'POST', entry.toJSON())
       .then((res) => {
         runInAction(() => {
           if (!entry.id) {
             entry.id = res.id;
-            // Update also tx, if it is freshly created.
-            if (!tx.entry_id) {
-              tx.entry_id = res.id;
-            }
           }
-          Object.assign(entry, data);
-          // Fix account number and name if missing or changed and we have account.
-          if (entry.account_id) {
-            entry.number = this.database.getAccount(entry.account_id).number;
-            entry.name = this.database.getAccount(entry.account_id).name;
-          }
-          // Fix data for copies of entries in transactions-table.
-          this.transactions.forEach((tx, idx) => {
-            // If account ID has changed, leave transaction as it is.
-            if (entry.id === tx.entry_id && entry.account_id === tx.account_id) {
-              Object.assign(this.transactions[idx], data);
-            }
-          });
-          // TODO: Once we have better class structure, update directly balances collection.
-          this.fetchBalances();
         });
+        // TODO: Here or elsewhere?
+        // return this.fetchBalances();
       });
   }
 

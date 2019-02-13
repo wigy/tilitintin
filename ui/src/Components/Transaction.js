@@ -71,6 +71,7 @@ class Transaction extends Component {
     const money = (<Money cents={tx.entry.amount} currency="EUR" />);
     const total = (<Money cents={this.props.total} currency="EUR" />);
 
+    // TODO: Move on next cell with onComplete () => this.props.cursor.setCell(1, 0); after editing date.
     return (
       <tr id={tx.getId()} key="title" className={classes} onClick={() => this.onClick()}>
         <td className="number">

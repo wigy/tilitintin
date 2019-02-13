@@ -4,6 +4,7 @@ class Model {
 
   constructor(parent, variables, init = {}) {
     this.parent = parent;
+    this.variables = Object.keys(variables);
     if (!parent) {
       console.warn(`No parent given for ${this.constructor.name}: ${JSON.stringify(variables)}`);
     }
@@ -14,6 +15,15 @@ class Model {
         this[key] = init[key];
       }
     });
+  }
+
+  /**
+   * Construct a JSON-object compatible with DB format.
+   */
+  toJSON() {
+    let ret = {};
+    this.variables.forEach((k) => (ret[k] = this[k]));
+    return ret;
   }
 
   /**
@@ -82,12 +92,38 @@ class Model {
 
   /**
    * Check if the value can be converted to the given field.
+   * @param {String} field
    * @param {Any} value
-   * @return {String|null} Error message if not valid.
+   * @return {ReactElement|null} Error message if not valid.
    */
   validate(field, value) {
     const name = `validate.${field}`;
     return name in this ? this[name](value) : true;
+  }
+
+  /**
+   * Change the value of one field of this model.
+   * @param {String} field
+   * @param {Any} value
+   */
+  async change(field, value) {
+    const name = `change.${field}`;
+    if (name in this) {
+      this[name](value);
+      return;
+    }
+    this[field] = value;
+  }
+
+  /**
+   * Write this instance to the store.
+   */
+  async save() {
+    const name = `save${this.getObjectType()}`;
+    if (!this.store[name]) {
+      throw new Error(`Store does not have ${name}() function.`);
+    }
+    return this.store[name](this);
   }
 
   /**

@@ -40,7 +40,7 @@ class Cursor {
     const fn = 'key' + keyName.replace(/\+/g, '');
 
     // Try active modal handler.
-    if (this.activeModal && this.activeModal[fn]) {
+    if (!result && this.activeModal && this.activeModal[fn]) {
       result = this.activeModal[fn]();
       if (result && KEY_DEBUG) {
         console.log('Modal:', fn, ':', result);
