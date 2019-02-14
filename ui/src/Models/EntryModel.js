@@ -78,12 +78,16 @@ class EntryModel extends NavigationTargetModel {
    * @param {Number} row
    */
   isSubSelected(column, row) {
-    return (
+    if (
       row !== null &&
       this.document.entries.indexOf(this) === row &&
       column !== null &&
       this.columns()[column] === this.column
-    );
+    ) {
+      const txs = this.store.filteredTransactions.filter(tx => tx.selected);
+      return (txs.length && txs[0].document === this.document);
+    }
+    return false;
   }
 
   /**

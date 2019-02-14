@@ -2,17 +2,6 @@ import moment from 'moment';
 
 class Navigator {
 
-  // Transaction listing for an account
-  // ----------------------------------
-  handleTransactionTableEnter({index, row}) {
-    if (index !== null && row === null) {
-      this.store.filteredTransactions[index].document.open = !this.store.filteredTransactions[index].document.open;
-    }
-    if (index !== null && row !== null) {
-      return {editor: true};
-    }
-    return {row: null, column: null};
-  }
   handleTransactionTableTab({index, column, row}) {
     if (index !== null && row !== null) {
       column++;
