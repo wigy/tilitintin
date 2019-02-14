@@ -62,12 +62,6 @@ class PeriodModel extends Model {
   }
 
   /**
-   * Append an entry to this period.
-   */
-  addEntry(entry) {
-  }
-
-  /**
    * Remove an entry from this period.
    * @param {EntryModel} entry
    */

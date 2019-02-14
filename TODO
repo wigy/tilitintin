@@ -9,6 +9,7 @@ BUGS
 [ ] Cursor behaves funny after pressing Escape.
 [ ] Clicking one in long list of accounts activates wrong account.
 [ ] Clicking another tx detail maintains editor mode, if it is open.
+[ ] Deleting unsaved entry fails.
 
 FUTURE FEATURES
 ===============

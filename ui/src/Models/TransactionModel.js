@@ -1,5 +1,8 @@
+import { runInAction } from 'mobx';
+import moment from 'moment';
 import NavigationTargetModel from './NavigationTargetModel';
 import EntryModel from './EntryModel';
+import DocumentModel from './DocumentModel';
 
 /**
  * Temporary model to arrange entries of the one account as a pairs of its document and the entry itself.
@@ -48,7 +51,24 @@ class TransactionModel extends NavigationTargetModel {
    */
   keyInsert(cursor) {
     if (cursor.row === null) {
-
+      const document = new DocumentModel(this.document, {
+        period_id: this.period.id,
+        date: this.store.lastDate || moment().format('YYYY-MM-DD')
+      });
+      document.save()
+        .then(() => {
+          runInAction(() => {
+            const oldId = this.store.accountId;
+            const entry = new EntryModel(document, {document_id: document.id, row_number: 1, account_id: this.store.accountId});
+            document.addEntry(entry);
+            this.store.keepDocumentIdOpen = document.id;
+            // TODO: Why this does not trigger computed property `transactions` recalculation without forcing it by modifying accountId?
+            this.period.addDocument(document);
+            this.store.accountId = null;
+            this.store.accountId = oldId;
+            cursor.setIndex(this.store.filteredTransactions.length - 1);
+          });
+        });
     } else {
       this.store.keepDocumentIdOpen = this.document.id;
       const rowNumber = this.document.entries.reduce((prev, cur) => Math.max(prev, cur.row_number), 0) + 1;

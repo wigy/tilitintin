@@ -472,6 +472,9 @@ class Store {
           if (!doc.id) {
             doc.id = res.id;
           }
+          if (!doc.number) {
+            doc.number = res.number;
+          }
         });
       });
   }

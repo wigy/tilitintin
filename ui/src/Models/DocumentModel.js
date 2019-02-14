@@ -93,7 +93,6 @@ class DocumentModel extends NavigationTargetModel {
    * @param {EntryModel} entry
    */
   addEntry(entry) {
-    this.period.addEntry(entry);
     this.entries.push(entry);
   }
 
