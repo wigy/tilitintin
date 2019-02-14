@@ -78,7 +78,7 @@ class Transaction extends Component {
         </td>
         <td className="date">
           <TransactionDetails
-            type="date"
+            field="date"
             classNames={tx.open && tx.selected && this.props.cursor.row === null ? 'sub-selected' : ''}
             document={tx.document}
           />
@@ -113,7 +113,7 @@ class Transaction extends Component {
         <td className="account" colSpan={3} onClick={() => this.onClickDetail(0, idx)}>
           <TransactionDetails
             error={!entry.account_id}
-            type="account"
+            field="account"
             document={entry.document}
             entry={entry}
             onComplete={() => this.onComplete(0, idx)}
@@ -121,7 +121,7 @@ class Transaction extends Component {
         </td>
         <td className="description" onClick={() => this.onClickDetail(1, idx)}>
           <TransactionDetails
-            type="description"
+            field="description"
             document={entry.document}
             entry={entry}
             onComplete={() => this.onComplete(1, idx)}
@@ -130,7 +130,7 @@ class Transaction extends Component {
         </td>
         <td className="debit" onClick={() => this.onClickDetail(2, idx)}>
           <TransactionDetails
-            type="debit"
+            field="debit"
             document={entry.document}
             entry={entry}
             onClick={() => this.onClickDetail()}
@@ -139,7 +139,7 @@ class Transaction extends Component {
         </td>
         <td className="credit" onClick={() => this.onClickDetail(3, idx)}>
           <TransactionDetails
-            type="credit"
+            field="credit"
             document={entry.document}
             entry={entry}
             onClick={() => this.onClickDetail()}

@@ -17,22 +17,22 @@ import './TransactionDetails.css';
 class TransactionDetails extends Component {
 
   render() {
-    let target = this.props.type === 'date' ? this.props.document : this.props.entry;
+    let target = this.props.field === 'date' ? this.props.document : this.props.entry;
 
-    const text = target.getView(this.props.type);
-    const edit = target.getEdit(this.props.type);
+    const text = target.getView(this.props.field);
+    const edit = target.getEdit(this.props.field);
 
     // TODO: Must handle editing of the entry's account number, when it is the same as transaction's.
     // TODO: Handle date editing.
     // TODO: Handle date saving.
     // TODO: Many props not necessary, since model is passed.
-    if (this.props.entry && this.props.entry.edit && this.props.entry.column === this.props.type) {
+    if (this.props.entry && this.props.entry.edit && this.props.entry.column === this.props.field) {
       return (<TextEdit
         value={edit}
         target={target}
-        validate={value => target.validate(this.props.type, value)}
-        proposal={value => target.proposal(this.props.type, value)}
-        onComplete={value => target.change(this.props.type, value)
+        validate={value => target.validate(this.props.field, value)}
+        proposal={value => target.proposal(this.props.field, value)}
+        onComplete={value => target.change(this.props.field, value)
           .then(() => target.save())
           .then(() => target.turnEditorOff(this.props.cursor))
           .then(() => this.props.onComplete && this.props.onComplete())}
@@ -40,7 +40,7 @@ class TransactionDetails extends Component {
       />);
     }
 
-    const column = this.props.entry ? this.props.entry.columns().indexOf(this.props.type) : null;
+    const column = this.props.entry ? this.props.entry.columns().indexOf(this.props.field) : null;
     const className = 'TransactionDetails ' +
       target.getClasses(column, this.props.cursor.row) +
       (this.props.error ? ' error' : '') +
@@ -55,7 +55,7 @@ class TransactionDetails extends Component {
 TransactionDetails.propTypes = {
   document: PropTypes.instanceOf(DocumentModel),
   entry: PropTypes.instanceOf(EntryModel),
-  type: PropTypes.string, // TODO: Rename as 'field'.
+  field: PropTypes.string,
   classNames: PropTypes.string,
   error: PropTypes.bool,
   onComplete: PropTypes.func,
