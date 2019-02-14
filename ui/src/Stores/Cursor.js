@@ -102,6 +102,15 @@ class Cursor {
           ]
         ]);
         break;
+
+      case 'Reports':
+        this.setTopology(page, () => [[]]);
+        break;
+
+      case 'Accounts':
+        this.setTopology(page, () => [[]]);
+        break;
+
       default:
         this.setTopology(page, () => [[]]);
         console.error(`No topology defined for page ${page}.`);
@@ -421,6 +430,19 @@ class Cursor {
   }
 
   /**
+   * Reset all selections.
+   */
+  @action.bound
+  resetSelected() {
+    const model = this.getModel();
+    if (model) {
+      model.turnEditorOff(this);
+    }
+    this.setCell(null, null);
+    this.setIndex(null);
+  }
+
+  /**
    * Adjust the currently selected sub-item.
    * @param {Number|null} dx
    * @param {Number|null} dy
@@ -604,33 +626,6 @@ class Cursor {
       }
       return true;
     }
-  }
-
-  // TODO: Refactor all this.
-  // ------------------------------------------------------------------------------------
-
-  @observable editor = false;
-
-  /**
-   * Reset selections.
-   */
-  @action.bound
-  resetSelected() {
-    console.error('Obsolete call to resetSelected().');
-    this.index = null;
-    this.column = null;
-    this.row = null;
-    this.editor = false;
-  }
-
-  /**
-   * Turn editor on.
-   * @param {Boolean} state
-   */
-  @action.bound
-  selectEditing(state = true) {
-    console.error('Obsolete call to selectEditing().');
-    this.editor = state;
   }
 }
 
