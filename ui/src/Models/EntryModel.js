@@ -27,11 +27,11 @@ class EntryModel extends NavigationTargetModel {
       // The linked account this entry is affecting.
       account_id: null,
       // Positive amount in cents.
-      amount: null,
+      amount: 0,
       // If set to 1, this is debit, otherwise credit.
-      debit: null,
+      debit: 1,
       // Description text without tags.
-      description: null,
+      description: '',
       // ID of the document this entry belongs to.
       document_id: null,
       // TODO: What is this?
@@ -60,7 +60,7 @@ class EntryModel extends NavigationTargetModel {
    * @param {Object} data
    */
   initialize(data) {
-    const [description, tagNames] = TagModel.desc2tags(data.description);
+    const [description, tagNames] = TagModel.desc2tags(data.description || '');
     return {...data, description, tagNames};
   }
 
@@ -99,7 +99,7 @@ class EntryModel extends NavigationTargetModel {
     return super.getClasses(column, row) +
       (this.store.accountId === this.account_id ? ' current' : '') +
       (this.isSubSelected(column, row) ? ' sub-selected' : '') +
-      (!this.account_id ? ' error' : '');
+      (this.account_id === 0 ? ' error' : '');
   }
 
   /**
@@ -107,6 +107,14 @@ class EntryModel extends NavigationTargetModel {
    */
   canEdit() {
     return true;
+  }
+
+  /**
+   * Force keeping document open when making changes in entries.
+   */
+  async change(field, value) {
+    this.store.keepDocumentIdOpen = this.document.id;
+    return super.change(field, value);
   }
 
   /**
@@ -204,12 +212,15 @@ class EntryModel extends NavigationTargetModel {
    * Render link to the transaction listing of the account. For editing, use account number.
    */
   ['get.account']() {
+    if (!this.account_id) {
+      return '';
+    }
     const onClick = () => this.props.cursor.setIndex('TransactionTable', null);
     let url = '/' + this.database.name + '/txs/' + this.period.id + '/' + this.account_id;
     return <Link onClick={onClick} to={url}>{this.account.toString()}</Link>;
   }
   ['get.edit.account']() {
-    return this.account.number;
+    return this.account_id ? this.account.number : '';
   }
   ['validate.account'](value) {
     const INVALID_ACCOUNT = <Trans>No such account found.</Trans>;
@@ -218,6 +229,16 @@ class EntryModel extends NavigationTargetModel {
   ['change.account'](value) {
     const account = this.store.accounts.filter(a => a.number === value);
     this.account_id = account[0].id;
+  }
+
+  /**
+   * Turn null account_id to 0.
+   */
+  async save() {
+    if (this.account_id === null) {
+      this.account_id = 0;
+    }
+    return super.save();
   }
 
   /**

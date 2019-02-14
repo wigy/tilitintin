@@ -164,7 +164,7 @@ class Transaction extends Component {
       if (entry.askForDelete) {
         this.entryToDelete = entry;
       }
-      if (!entry.account_id) {
+      if (entry.account_id === 0) { // Null account_id is valid until first save, when it turns to 0.
         missingAccount = true;
       } else {
         if (entry.account_id === tx.account_id) {

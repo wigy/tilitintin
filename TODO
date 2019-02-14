@@ -8,6 +8,7 @@ BUGS
 [ ] Multiple sub-items are sometimes selected (require tx.selected status)
 [ ] Cursor behaves funny after pressing Escape.
 [ ] Clicking one in long list of accounts activates wrong account.
+[ ] Clicking another tx detail maintains editor mode, if it is open.
 
 FUTURE FEATURES
 ===============
@@ -35,7 +36,7 @@ FUTURE FEATURES
     [X] Changing entry.
     [X] Changing document.
     [X] Proposal calculations.
-    [ ] Creating entry.
+    [X] Creating entry.
     [ ] Creating document.
     [ ] Go through Navigator and re-implement all functions. Then delete it.
 [X] Drop combining entry data with document data in API http://localhost:3001/db/<name>/account/<accId>/<periodId>
@@ -47,15 +48,18 @@ FUTURE FEATURES
 [ ] Check if further refactoring is possible with setIndex() and setCell().
 [ ] TODO cleanup.
 
+0.5
+[ ] Editing tags (maybe add them to text editor).
+[ ] Support for tag parameter for reports to provide different columns per tag (skip 2nd period).
+[ ] Storing tag images on the server.
+[ ] Cleaner error handling for 403 for example.
+[ ] TODO cleanup.
+
 0.6
 [ ] Support for array of proposals and navigation for them.
 [ ] Proposals for account number by looking for account last used with the text given in previous entry.
 [ ] Proposals for accounts, when typing partial name of it.
 [ ] Dim the screen while running network operation.
-[ ] Editing tags (maybe add them to text editor).
-[ ] Support for tag parameter for reports to provide different columns per tag (skip 2nd period).
-[ ] Storing tag images on the server.
-[ ] Cleaner error handling for 403 for example.
 [ ] TODO cleanup.
 
 0.7

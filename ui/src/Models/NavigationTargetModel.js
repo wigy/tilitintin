@@ -6,9 +6,6 @@ class NavigationTargetModel extends Model {
   // If set, this object is currently selected.
   @observable
   selected =false;
-  // If set, this object is currently being edited.
-  @observable
-  editable =false;
   // If set, this object is extended to show its details (if applicable).
   @observable
   open = false;
@@ -28,7 +25,6 @@ class NavigationTargetModel extends Model {
   getClasses(column = null, row = null) {
     return super.getClasses() +
       (this.selected ? ' selected' : '') +
-      (this.editable ? 'editable' : '') +
       (this.open ? ' open' : '');
   }
 

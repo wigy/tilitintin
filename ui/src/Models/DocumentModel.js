@@ -89,6 +89,15 @@ class DocumentModel extends NavigationTargetModel {
   }
 
   /**
+   * Add an entry to this document.
+   * @param {EntryModel} entry
+   */
+  addEntry(entry) {
+    this.period.addEntry(entry);
+    this.entries.push(entry);
+  }
+
+  /**
    * Calculate difference of entry balances.
    */
   imbalance() {

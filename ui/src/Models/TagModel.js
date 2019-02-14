@@ -29,8 +29,8 @@ class TagModel extends Model {
    */
   static desc2tags(desc) {
     let ret = [desc, []];
-    const regex = /^((\[[a-zA-Z0-9]+\])*)\s*(.*)/.exec(desc);
-    if (regex[1]) {
+    const regex = /^((\[[a-zA-Z0-9]+\])+)\s*(.*)/.exec(desc);
+    if (regex && regex[1]) {
       ret[0] = regex[3];
       ret[1] = regex[1].substr(1, regex[1].length - 2).split('][');
     }

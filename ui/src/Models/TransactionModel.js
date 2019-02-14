@@ -1,4 +1,5 @@
 import NavigationTargetModel from './NavigationTargetModel';
+import EntryModel from './EntryModel';
 
 /**
  * Temporary model to arrange entries of the one account as a pairs of its document and the entry itself.
@@ -37,6 +38,23 @@ class TransactionModel extends NavigationTargetModel {
       this.document.markForDeletion();
     } else {
       this.document.entries[cursor.row].markForDeletion();
+    }
+    return {preventDefault: true};
+  }
+
+  /**
+   * Mark either document or entry for deletion.
+   * @param {Cursor} cursor
+   */
+  keyInsert(cursor) {
+    if (cursor.row === null) {
+
+    } else {
+      this.store.keepDocumentIdOpen = this.document.id;
+      const rowNumber = this.document.entries.reduce((prev, cur) => Math.max(prev, cur.row_number), 0) + 1;
+      const entry = new EntryModel(this.document, {document_id: this.document.id, row_number: rowNumber});
+      this.document.addEntry(entry);
+      cursor.setCell(0, this.document.entries.length - 1);
     }
     return {preventDefault: true};
   }
