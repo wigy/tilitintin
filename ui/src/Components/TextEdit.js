@@ -87,7 +87,7 @@ TextEdit.propTypes = {
   onComplete: PropTypes.func,
   onChange: PropTypes.func,
   validate: PropTypes.func,
-  value: PropTypes.any,
+  value: PropTypes.string,
   target: PropTypes.instanceOf(Model),
   proposal: PropTypes.func
 };

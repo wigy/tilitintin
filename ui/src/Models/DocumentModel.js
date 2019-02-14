@@ -38,12 +38,22 @@ class DocumentModel extends NavigationTargetModel {
     }, init);
   }
 
+  toJSON() {
+    let ret = super.toJSON();
+    delete ret.entries;
+    return ret;
+  }
+
   getSortKey() {
     return this.number;
   }
 
   getId() {
     return 'Document' + this.id;
+  }
+
+  canEdit() {
+    return true;
   }
 
   /**

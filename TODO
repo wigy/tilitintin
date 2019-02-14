@@ -14,7 +14,6 @@ FUTURE FEATURES
 ===============
 
 0.4
-[ ] Sort automatically new entries by date, when added.
 [X] Add more model classes for storing actual data in Store.
     [X] New folder for models.
     [X] Base classes Model and NavigationTargetModel.
@@ -35,8 +34,10 @@ FUTURE FEATURES
     [X] Deleting entry.
     [X] Deleting document.
     [X] Changing entry.
-    [ ] Changing document.
+    [X] Changing document.
     [X] Proposal calculations.
+    [ ] Creating entry.
+    [ ] Creating document.
     [ ] Go through Navigator and re-implement all functions. Then delete it.
 [X] Drop combining entry data with document data in API http://localhost:3001/db/<name>/account/<accId>/<periodId>
 [ ] Clean up various components passing unnecessarily periods and dbs in addition to the target object.

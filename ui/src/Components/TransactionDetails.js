@@ -19,16 +19,11 @@ class TransactionDetails extends Component {
   render() {
     let target = this.props.field === 'date' ? this.props.document : this.props.entry;
 
-    const text = target.getView(this.props.field);
-    const edit = target.getEdit(this.props.field);
+    if ((this.props.document.edit && this.props.field === 'date') ||
+      (this.props.entry && this.props.entry.edit && this.props.entry.column === this.props.field)) {
 
-    // TODO: Must handle editing of the entry's account number, when it is the same as transaction's.
-    // TODO: Handle date editing.
-    // TODO: Handle date saving.
-    // TODO: Many props not necessary, since model is passed.
-    if (this.props.entry && this.props.entry.edit && this.props.entry.column === this.props.field) {
       return (<TextEdit
-        value={edit}
+        value={target.getEdit(this.props.field)}
         target={target}
         validate={value => target.validate(this.props.field, value)}
         proposal={value => target.proposal(this.props.field, value)}
@@ -47,7 +42,7 @@ class TransactionDetails extends Component {
       (this.props.classNames ? ' ' + this.props.classNames : '');
 
     return (
-      <div className={className}>{text}&nbsp;</div>
+      <div className={className}>{target.getView(this.props.field)}&nbsp;</div>
     );
   }
 }

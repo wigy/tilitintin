@@ -90,16 +90,6 @@ class Navigator {
       this.cursor.selectEditing();
     }
   }
-  handleTransactionTableText({index, row, editor}) {
-    // Date cell.
-    if (index !== null && row === null) {
-      return {editor: true};
-    }
-    // Other cells.
-    if (index !== null && row !== null) {
-      return {editor: true, dontPreventDefault: true};
-    }
-  }
 }
 
 export default Navigator;

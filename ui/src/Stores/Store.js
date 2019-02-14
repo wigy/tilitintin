@@ -460,30 +460,15 @@ class Store {
   }
   /**
    * Change transaction content.
-   * @param {Object} tx
-   * @param {Object} data
+   * @param {DocumentModel} doc
    */
-  async OLDsaveDocument(tx, data) {
-    let write = {
-      period_id: tx.period_id || this.periodId
-    };
-    if (data.date) {
-      write.date = data.date;
-    }
-
-    return this.request('/db/' + this.db + '/document/' + (tx.id ? tx.id : ''), tx.id ? 'PATCH' : 'POST', write)
+  async saveDocument(doc) {
+    return this.request('/db/' + this.db + '/document/' + (doc.id ? doc.id : ''), doc.id ? 'PATCH' : 'POST', doc.toJSON())
       .then((res) => {
         runInAction(() => {
-          if (res) {
-            Object.assign(tx, res);
-          } else if (data.date) {
-            tx.date = data.date;
+          if (!doc.id) {
+            doc.id = res.id;
           }
-          // TODO: This should be done but UI is not tracking correctly the sudden order change.
-          //       Maybe enable this once the proper class structure is established and cursor selection
-          //       is carried around in the model itself.
-          // const sorted = this.transactions.slice().sort((a, b) => (a.date < b.date ? -1 : (a.date > b.date ? 1 : 0)));
-          // this.transactions.replace(sorted);
         });
       });
   }
@@ -500,8 +485,7 @@ class Store {
             entry.id = res.id;
           }
         });
-        // TODO: Here or elsewhere?
-        // return this.fetchBalances();
+        return this.fetchBalances(this.db, this.periodId);
       });
   }
 
