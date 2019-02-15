@@ -40,7 +40,7 @@ FUTURE FEATURES
     [X] Proposal calculations.
     [X] Creating entry.
     [X] Creating document.
-    [ ] Go through Navigator and re-implement all functions. Then delete it.
+    [X] Go through Navigator and re-implement all functions. Then delete it.
 [X] Drop combining entry data with document data in API http://localhost:3001/db/<name>/account/<accId>/<periodId>
 [ ] Clean up various components passing unnecessarily periods and dbs in addition to the target object.
     [X] Balance related.
