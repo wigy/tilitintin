@@ -30,7 +30,7 @@ FUTURE FEATURES
     [X] Model for report.
     [X] Improve logical structure of the store.
 [X] Rename all get-functions as fetch in Store.
-[ ] Change editing so that model has a flags and information about editing state.
+[X] Change editing so that model has a flags and information about editing state.
     [X] Navigation.
     [X] Transaction highlight.
     [X] Deleting entry.
@@ -42,9 +42,9 @@ FUTURE FEATURES
     [X] Creating document.
     [X] Go through Navigator and re-implement all functions. Then delete it.
 [X] Drop combining entry data with document data in API http://localhost:3001/db/<name>/account/<accId>/<periodId>
-[ ] Clean up various components passing unnecessarily periods and dbs in addition to the target object.
+[X] Clean up various components passing unnecessarily periods and dbs in addition to the target object.
     [X] Balance related.
-    [ ] Report related.
+    [X] Report related.
 [X] Handle movement over duplicates.
 [X] Merge Navigator class to Cursor.
 [ ] Check if further refactoring is possible with setIndex() and setCell().
