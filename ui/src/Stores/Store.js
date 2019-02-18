@@ -236,8 +236,7 @@ class Store {
    * @return {Promise}
    */
   async setAccount(db, periodId, accountId) {
-    // TODO: Need to get rid of this hack.
-    if (accountId === 'none') {
+    if (accountId === '') {
       return;
     }
     periodId = parseInt(periodId) || null;

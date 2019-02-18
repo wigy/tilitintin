@@ -47,9 +47,9 @@ FUTURE FEATURES
     [X] Report related.
 [X] Handle movement over duplicates.
 [X] Merge Navigator class to Cursor.
-[ ] Check if further refactoring is possible with setIndex() and setCell().
+[X] Check if further refactoring is possible with setIndex() and setCell().
 [ ] Propose descriptions from the same document first.
-[ ] TODO cleanup.
+[X] TODO cleanup.
 
 0.5
 [ ] Editing tags (maybe add them to text editor).

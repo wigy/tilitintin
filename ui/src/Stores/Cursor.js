@@ -372,11 +372,11 @@ class Cursor {
    * @param {Number|null|undefined} index
    */
   setIndex(index) {
+    this.setCell(null, null);
     if (index === null || index === undefined) {
       this.index = null;
-      this.row = null;
-      this.column = null;
-      return;
+      this.leaveComponent();
+      return {preventDefault: true};
     }
     const component = this.getComponent();
     if (component) {
@@ -388,8 +388,8 @@ class Cursor {
         this.index = index;
         component.moveIndex(oldIndex, this.index);
       }
+      return {preventDefault: true};
     }
-    return {preventDefault: true};
   }
 
   /**
@@ -399,17 +399,7 @@ class Cursor {
   changeIndexBy(delta) {
     const component = this.getComponent();
     if (component && component.vertical) {
-      const oldIndex = this.index;
-      if (this.indexUpdate(component.length, delta)) {
-        this.row = null;
-        this.column = null;
-        component.moveBox(null, null);
-        component.moveIndex(oldIndex, this.index);
-        if (delta === null) {
-          this.leaveComponent();
-        }
-      }
-      return {preventDefault: true};
+      return this.setIndex(this.indexUpdate(this.index, component.length, delta));
     }
   }
 
@@ -427,19 +417,6 @@ class Cursor {
       this.changeBoxBy(column - this.column, row - this.row);
     }
     return {preventDefault: true};
-  }
-
-  /**
-   * Reset all selections.
-   */
-  @action.bound
-  resetSelected() {
-    const model = this.getModel();
-    if (model) {
-      model.turnEditorOff(this);
-    }
-    this.setCell(null, null);
-    this.setIndex(null);
   }
 
   /**
@@ -462,6 +439,19 @@ class Cursor {
         return {preventDefault: true};
       }
     }
+  }
+
+  /**
+   * Reset all selections.
+   */
+  @action.bound
+  resetSelected() {
+    const model = this.getModel();
+    if (model) {
+      model.turnEditorOff(this);
+    }
+    this.setCell(null, null);
+    this.setIndex(null);
   }
 
   /**
@@ -535,35 +525,34 @@ class Cursor {
 
   /**
    * Helper to change index counter and wrap it around boundaries.
+   * @param {Number|null} index
    * @param {Number} N
    * @param {Number|null} delta
    */
-  indexUpdate(N, delta) {
-    const oldIndex = this.index;
+  indexUpdate(index, N, delta) {
+    const oldIndex = index;
     if (N) {
       if (delta === null) {
-        this.index = null;
-        return true;
+        return null;
       }
-      if (this.index === undefined || this.index === null) {
-        this.index = delta < 0 ? N - 1 : 0;
-      } else {
-        this.index += delta;
-        if (this.index < 0) {
-          if (oldIndex === 0) {
-            this.index = N - 1;
-          } else {
-            this.index = 0;
-          }
-        } else if (this.index >= N) {
-          if (oldIndex === N - 1) {
-            this.index = 0;
-          } else {
-            this.index = N - 1;
-          }
+      if (oldIndex === undefined || oldIndex === null) {
+        return delta < 0 ? N - 1 : 0;
+      }
+      index += delta;
+      if (index < 0) {
+        if (oldIndex === 0) {
+          index = N - 1;
+        } else {
+          index = 0;
+        }
+      } else if (index >= N) {
+        if (oldIndex === N - 1) {
+          index = 0;
+        } else {
+          index = N - 1;
         }
       }
-      return true;
+      return index;
     }
   }
 
