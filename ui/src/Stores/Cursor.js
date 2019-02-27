@@ -149,6 +149,10 @@ class Cursor {
    * Move one row or index down.
    */
   keyArrowDown() {
+    if (this.index === null && this.getComponent()) {
+      this.enterComponent(this.getComponent());
+      return {preventDefault: true};
+    }
     const model = this.getModel();
     if (model && model.open) {
       const ret = this.changeBoxBy(0, +1);
@@ -163,6 +167,10 @@ class Cursor {
    * Move one row or index up.
    */
   keyArrowUp() {
+    if (this.index === null && this.getComponent()) {
+      this.enterComponent(this.getComponent());
+      return {preventDefault: true};
+    }
     const model = this.getModel();
     if (model) {
       const ret = this.changeBoxBy(0, -1);
@@ -257,7 +265,7 @@ class Cursor {
   }
 
   /**
-   *
+   * Leave/close/de-select the current.
    */
   keyEscape() {
     const model = this.getModel();
@@ -268,7 +276,7 @@ class Cursor {
         model.toggleOpen();
       }
     } else {
-      this.changeIndexBy(null);
+      this.setIndex(null);
     }
     return {preventDefault: true};
   }
@@ -301,21 +309,26 @@ class Cursor {
   /**
    * Save the current cursor position for the component.
    * @param {TopologyComponent} component
+   * @return {Boolean}
    */
   saveCursor(component) {
     if (!component) {
-      return;
+      return false;
     }
     const name = component.name;
     if (!name) {
       console.error(component);
       throw new Error('Component does not have a name.');
     }
+    if (this.index === null) {
+      return false;
+    }
     this.savedComponents[name] = {
       index: this.index,
       column: this.column,
       row: this.row
     };
+    return true;
   }
 
   /**
@@ -372,19 +385,20 @@ class Cursor {
    * @param {Number|null|undefined} index
    */
   setIndex(index) {
+    const component = this.getComponent();
+    const oldIndex = this.index;
     this.setCell(null, null);
     if (index === null || index === undefined) {
-      this.index = null;
       this.leaveComponent();
+      this.index = null;
+      component.moveIndex(oldIndex, null);
       return {preventDefault: true};
     }
-    const component = this.getComponent();
     if (component) {
       if (index < 0) {
         index = component.length + index;
       }
       if (index >= 0 && index < component.length) {
-        const oldIndex = this.index;
         this.index = index;
         component.moveIndex(oldIndex, this.index);
       }
