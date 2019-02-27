@@ -31,11 +31,24 @@ class ToolPanel extends Component {
 
     const onDownload = () => {
       const url = `${Configuration.API_URL}/db/${store.db}/report/${store.report.format}/${store.periodId}?csv&lang=${lang}`;
-      const hiddenElement = document.createElement('a');
-      hiddenElement.href = url;
-      hiddenElement.target = '_blank';
-      hiddenElement.download = 'report.csv';
-      hiddenElement.click();
+
+      fetch(url, {
+        method: 'GET',
+        headers: new Headers({
+          'Authorization': 'Bearer ' + store.token
+        })
+      })
+        .then(response => response.blob())
+        .then(blob => {
+          var url = window.URL.createObjectURL(blob);
+          var a = document.createElement('a');
+          a.href = url;
+          a.target = '_blank';
+          a.download = store.report.fileName();
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+        });
     };
 
     const onToggle = (option) => {

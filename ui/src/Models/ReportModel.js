@@ -30,6 +30,13 @@ class ReportModel extends Model {
   }
 
   /**
+   * Recommended file name for the report.
+   */
+  fileName() {
+    return this.format + '.csv';
+  }
+
+  /**
    * Initialize config from options.
    * @param {Object} data
    */

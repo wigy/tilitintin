@@ -11,7 +11,7 @@ BUGS
 [ ] Clicking another tx detail maintains editor mode, if it is open.
 [ ] Deleting unsaved entry fails.
 [ ] Moving cursor in account list first and then switching to other menu and back causes second cursor.
-[ ] Download does not embed authentication token when downloading CSV.
+[X] Download does not embed authentication token when downloading CSV.
 
 
 FUTURE FEATURES
