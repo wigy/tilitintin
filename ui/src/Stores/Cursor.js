@@ -391,7 +391,7 @@ class Cursor {
     if (index === null || index === undefined) {
       this.leaveComponent();
       this.index = null;
-      component.moveIndex(oldIndex, null);
+      component && component.moveIndex(oldIndex, null);
       return {preventDefault: true};
     }
     if (component) {
