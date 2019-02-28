@@ -16,14 +16,8 @@ class BalanceLine extends Component {
   // Move to the clicked balance line.
   @action.bound
   onClick() {
-    let index = null;
-    Object.values(this.props.balance.period.balances).forEach((balance, idx) => {
-      if (balance.account_id === this.props.balance.account_id) {
-        index = idx;
-      }
-    });
     this.props.cursor.setComponent('Balances.balances');
-    this.props.cursor.setIndex(index);
+    this.props.cursor.setIndex(this.props.index, {noScroll: true});
   }
 
   render() {
@@ -41,7 +35,8 @@ class BalanceLine extends Component {
 
 BalanceLine.propTypes = {
   balance: PropTypes.instanceOf(BalanceModel),
-  cursor: PropTypes.instanceOf(Cursor)
+  cursor: PropTypes.instanceOf(Cursor),
+  index: PropTypes.number
 };
 
 export default BalanceLine;

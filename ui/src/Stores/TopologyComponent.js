@@ -22,9 +22,10 @@ class TopologyComponent {
    * Change the current index to the given index.
    * @param {Number} oldIndex
    * @param {Number} index
+   * @param {Boolean} options.noScroll
    */
   @action.bound
-  moveIndex(oldIndex, index) {
+  moveIndex(oldIndex, index, options = {}) {
     if (oldIndex !== null && this.data[oldIndex]) {
       this.data[oldIndex].leave();
     }
@@ -35,7 +36,7 @@ class TopologyComponent {
       }
       this.data[index].enter();
       const el = document.getElementById(this.data[index].getId());
-      if (el) {
+      if (el && !options.noScroll) {
         el.scrollIntoView({block: 'center', inline: 'center'});
       }
     }

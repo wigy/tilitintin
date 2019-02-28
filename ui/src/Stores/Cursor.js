@@ -383,15 +383,16 @@ class Cursor {
   /**
    * Set the current index to the given number, if it is valid. Negative number counts from the end.
    * @param {Number|null|undefined} index
+   * @param {Boolean} options.noScroll
    */
-  setIndex(index) {
+  setIndex(index, options = {}) {
     const component = this.getComponent();
     const oldIndex = this.index;
     this.setCell(null, null);
     if (index === null || index === undefined) {
       this.leaveComponent();
       this.index = null;
-      component && component.moveIndex(oldIndex, null);
+      component && component.moveIndex(oldIndex, null, options);
       return {preventDefault: true};
     }
     if (component) {
@@ -400,7 +401,7 @@ class Cursor {
       }
       if (index >= 0 && index < component.length) {
         this.index = index;
-        component.moveIndex(oldIndex, this.index);
+        component.moveIndex(oldIndex, this.index, options);
       }
       return {preventDefault: true};
     }
