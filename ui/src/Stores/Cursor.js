@@ -427,7 +427,7 @@ class Cursor {
     if (column === null && row === null) {
       this.changeBoxBy(null, null);
     } else if (this.row === null) {
-      this.changeBoxBy(column, row + 1);
+      this.changeBoxBy(column - this.column, row + 1);
     } else {
       this.changeBoxBy(column - this.column, row - this.row);
     }

@@ -12,7 +12,7 @@ BUGS
 [ ] Deleting unsaved entry fails.
 [ ] Moving cursor in account list first and then switching to other menu and back causes second cursor.
 [X] Download does not embed authentication token when downloading CSV.
-
+[ ] In Transaction.js onComplete() does not move the cursor correctly after editing date.
 
 FUTURE FEATURES
 ===============
