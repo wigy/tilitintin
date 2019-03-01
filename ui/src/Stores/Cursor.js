@@ -22,6 +22,8 @@ class Cursor {
 
   // Storage for cursor locations for inactive components.
   savedComponents = {};
+  // Storage for last components for page.
+  savedPages = {};
   // Screen setup function returning topology as 2-dimensional array `topology[row][column]`.
   topology = null;
 
@@ -128,7 +130,7 @@ class Cursor {
   }
 
   /**
-   * Set up the topology function.
+   * Set up the topology function and change the page.
    * @param {String} page
    * @param {() => Object[][]} topology
    */
@@ -136,13 +138,63 @@ class Cursor {
     if (this.page === page) {
       return;
     }
+    this.leaveComponent();
+    this.leavePage();
     this.page = page;
     this.topology = topology;
-    this.componentX = 0;
-    this.componentY = 0;
+    this.enterPage();
+    this.enterComponent();
+  }
+
+  /**
+   * Save current component for the page.
+   */
+  leavePage() {
+    const { componentX, componentY } = this;
+    this.savedPages[this.page] = { componentX, componentY };
+  }
+
+  /**
+   * Restore current component for the page.
+   */
+  enterPage() {
+    if (this.savedPages[this.page]) {
+      const { componentX, componentY } = this.savedPages[this.page];
+      this.componentX = componentX;
+      this.componentY = componentY;
+    } else {
+      this.componentX = 0;
+      this.componentY = 0;
+    }
+  }
+
+  /**
+   * Hook that is called when we are leaving the current component.
+   */
+  leaveComponent() {
+    const component = this.getComponent();
+    if (component) {
+      this.saveCursor(component);
+      component.moveIndex(this.index, null);
+    }
     this.index = null;
-    this.column = null;
     this.row = null;
+    this.column = null;
+  }
+
+  /**
+   * Hook that is called when we have just entered the current component.
+   */
+  enterComponent() {
+    const component = this.getComponent();
+    if (component) {
+      this.loadCursor(component);
+      component.moveIndex(null, this.index);
+    } else {
+      this.index = null;
+      this.row = null;
+      this.column = null;
+    }
   }
 
   /**
@@ -282,31 +334,6 @@ class Cursor {
   }
 
   /**
-   * Hook that is called when we are leaving the current component.
-   */
-  leaveComponent() {
-    const component = this.getComponent();
-    if (component) {
-      this.saveCursor(component);
-      component.moveIndex(this.index, null);
-    }
-    this.index = null;
-    this.row = null;
-    this.column = null;
-  }
-
-  /**
-   * Hook that is called when we have just entered the current component.
-   */
-  enterComponent() {
-    const component = this.getComponent();
-    if (component) {
-      this.loadCursor(component);
-      component.moveIndex(null, this.index);
-    }
-  }
-
-  /**
    * Save the current cursor position for the component.
    * @param {TopologyComponent} component
    * @return {Boolean}
@@ -345,9 +372,8 @@ class Cursor {
       throw new Error('Component does not have a name.');
     }
     if (this.savedComponents[name]) {
-      this.index = this.savedComponents[name].index;
-      this.column = this.savedComponents[name].column;
-      this.row = this.savedComponents[name].row;
+      this.setIndex(this.savedComponents[name].index);
+      this.setCell(this.savedComponents[name].column, this.savedComponents[name].row);
     } else {
       this.index = 0;
       this.row = null;
@@ -427,7 +453,7 @@ class Cursor {
     if (column === null && row === null) {
       this.changeBoxBy(null, null);
     } else if (this.row === null) {
-      this.changeBoxBy(column - this.column, row + 1);
+      this.changeBoxBy(column - this.column, row);
     } else {
       this.changeBoxBy(column - this.column, row - this.row);
     }
@@ -439,7 +465,6 @@ class Cursor {
    * @param {Number|null} dx
    * @param {Number|null} dy
    */
-
   changeBoxBy(dx, dy) {
     const model = this.getModel();
     if (model && model.open) {

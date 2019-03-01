@@ -43,7 +43,6 @@ class Transaction extends Component {
   // Select cell, when clicked.
   @action.bound
   onClickDetail(column, row) {
-    this.props.cursor.setIndex(this.props.index);
     this.props.cursor.setCell(column, row);
   }
 
