@@ -51,7 +51,7 @@ function time2str(timestamp) {
 }
 
 /**
- * Construct column title.
+ * Construct column title for period.
  * @param {String} formatName
  * @param {Object} period
  */
