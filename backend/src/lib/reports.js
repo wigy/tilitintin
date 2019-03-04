@@ -41,17 +41,28 @@ function code2item(code) {
 }
 
 /**
+ * Convert time stamp to string.
+ * @param {Number} timestamp
+ *
+ * This function fixes time stamp error for old Tilitin database, which has period 22:00PM Finnish time as period start/end.
+ */
+function time2str(timestamp) {
+  return moment(timestamp).add(2, 'hours').format('YYYY-MM-DD');
+}
+
+/**
  * Construct column title.
  * @param {String} formatName
  * @param {Object} period
  */
 function columnTitle(formatName, period) {
+  console.log(period);
   switch (formatName) {
     case 'balance-sheet':
     case 'balance-sheet-detailed':
-      return '{' + moment(period.end_date).format('YYYY-MM-DD') + '}';
+      return '{' + time2str(period.end_date) + '}';
     default:
-      return '{' + moment(period.start_date).format('YYYY-MM-DD') + '} - {' + moment(period.end_date).format('YYYY-MM-DD') + '}';
+      return '{' + time2str(period.start_date) + '} - {' + time2str(period.end_date) + '}';
   }
 }
 
@@ -135,7 +146,7 @@ processEntries.GeneralJournal = (entries, periods, formatName, format, settings)
       bold: true,
       id: `#${docId}`,
       needLocalization: true,
-      name: `{${moment(lines[0].date).format('YYYY-MM-DD')}}`
+      name: `{${time2str(lines[0].date)}}`
     });
     if (!settings.query.compact) {
       descriptions(lines).forEach((text) => {
@@ -241,7 +252,7 @@ processEntries.GeneralLedger = (entries, periods, formatName, format, settings) 
           tab: 0,
           needLocalization: true,
           id: `#${line.documentId}`,
-          name: `{${moment(line.date).format('YYYY-MM-DD')}} ${line.description.replace(/^(\[.+?\])+\s*/g, '')}`,
+          name: `{${time2str(line.date)}} ${line.description.replace(/^(\[.+?\])+\s*/g, '')}`,
           amounts: line.amounts
         });
       } else {
@@ -249,7 +260,7 @@ processEntries.GeneralLedger = (entries, periods, formatName, format, settings) 
           tab: 0,
           needLocalization: true,
           id: `#${line.documentId}`,
-          name: `{${moment(line.date).format('YYYY-MM-DD')}}`
+          name: `{${time2str(line.date)}}`
         });
         data.push({
           tab: 0,
