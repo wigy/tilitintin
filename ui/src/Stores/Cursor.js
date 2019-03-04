@@ -450,10 +450,17 @@ class Cursor {
    * @param {Number} row
    */
   setCell(column, row) {
+    const model = this.getModel();
+    if (model) {
+      model.turnEditorOff(this);
+    }
     if (column === null && row === null) {
       this.changeBoxBy(null, null);
     } else if (this.row === null) {
-      this.changeBoxBy(column - this.column, row);
+      const component = this.getComponent();
+      component.moveBox(this.index, this.index, null, null, column, row);
+      this.column = column;
+      this.row = row;
     } else {
       this.changeBoxBy(column - this.column, row - this.row);
     }
@@ -486,10 +493,6 @@ class Cursor {
    */
   @action.bound
   resetSelected() {
-    const model = this.getModel();
-    if (model) {
-      model.turnEditorOff(this);
-    }
     this.setCell(null, null);
     this.setIndex(null);
   }
@@ -617,7 +620,7 @@ class Cursor {
       this.column = (this.column + N + dx) % N;
       if (this.row === null) {
         if (dy > 0) {
-          this.row = 0;
+          this.row = dy - 1;
           this.column = options.entryColumn || 0;
         } else if (dy < 0) {
           if (this.changeIndexBy(-1)) {

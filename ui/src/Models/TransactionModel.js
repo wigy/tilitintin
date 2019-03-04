@@ -125,7 +125,7 @@ class TransactionModel extends NavigationTargetModel {
    */
   keyEnter(cursor) {
     if (this.open && cursor.row !== null) {
-      this.document.entries[cursor.row].turnEditorOn(cursor);
+      this.turnEditorOn(cursor);
       return {preventDefault: true};
     }
   }
@@ -140,9 +140,21 @@ class TransactionModel extends NavigationTargetModel {
         this.document.turnEditorOn(cursor);
         return {preventDefault: true};
       } else {
-        this.document.entries[cursor.row].turnEditorOn(cursor);
+        this.turnEditorOn(cursor);
         return {preventDefault: false};
       }
+    }
+  }
+
+  turnEditorOn(cursor) {
+    if (cursor.row !== null && cursor.row < this.document.entries.length) {
+      this.document.entries[cursor.row].turnEditorOn(cursor);
+    }
+  }
+
+  turnEditorOff(cursor) {
+    if (cursor.row !== null && cursor.row < this.document.entries.length) {
+      this.document.entries[cursor.row].turnEditorOff(cursor);
     }
   }
 
