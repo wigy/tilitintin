@@ -13,7 +13,7 @@ BUGS
 [X] In Transaction.js onComplete() does not move the cursor correctly after editing date.
 [ ] Arrow up skips sub-items of every second opened row
 [ ] Multiple sub-items are sometimes selected (require tx.selected status)
-[ ] Deleting unsaved entry fails.
+[X] Deleting unsaved entry fails.
 [ ] Pressing a tag filter messes up the stored cursor for transaction table.
 [ ] Cursor can be hidden by visiting long transaction list and the switching account with shorter transaction list.
 

@@ -203,7 +203,7 @@ class Transaction extends Component {
               isVisible={this.entryToDelete.askForDelete}
               onClose={() => { this.entryToDelete.askForDelete = null; this.entryToDelete.askForDelete = false; }}
               onConfirm={() => this.deleteEntry()}>
-              <i>{this.entryToDelete.account.toString()}</i><br/>
+              <i>{this.entryToDelete.account && this.entryToDelete.account.toString()}</i><br/>
               {this.entryToDelete.description}<br/>
               <b>{this.entryToDelete.debit ? '+' : '-'}<Money currency="EUR" cents={this.entryToDelete.amount}></Money></b>
             </Dialog>

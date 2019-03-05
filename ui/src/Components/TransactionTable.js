@@ -41,7 +41,7 @@ class TransactionTable extends Component {
       <i>#{tx.document.number}</i><br/>
       {tx.document.entries.map((entry, idx) =>
         <div key={idx}>
-          <i>{entry.account.toString()}:</i><br/>
+          <i>{entry.account && entry.account.toString()}:</i><br/>
           {entry.description} <b> {entry.debit ? '+' : '-'}<Money currency="EUR" cents={entry.amount}></Money></b><br/>
         </div>
       )}<br/>

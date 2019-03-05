@@ -66,8 +66,10 @@ class PeriodModel extends Model {
    * @param {EntryModel} entry
    */
   deleteEntry(entry) {
-    for (let docId of this.documentsByAccountId[entry.account_id]) {
-      this.getDocument(docId).deleteEntry(entry);
+    if (entry.account_id) {
+      for (let docId of this.documentsByAccountId[entry.account_id]) {
+        this.getDocument(docId).deleteEntry(entry);
+      }
     }
   }
 

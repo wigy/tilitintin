@@ -499,6 +499,10 @@ class Store {
    * @param {Object} entry
    */
   async deleteEntry(entry) {
+    if (!entry.id) {
+      entry.document.entries.remove(entry);
+      return;
+    }
     const path = '/db/' + this.db + '/entry/' + entry.id;
     return this.request(path, 'DELETE')
       .then(() => {
