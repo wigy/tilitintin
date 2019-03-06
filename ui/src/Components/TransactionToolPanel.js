@@ -25,19 +25,25 @@ class ToolPanel extends Component {
     const tools = this.props.store.tools;
 
     const toggle = (tag) => {
+      this.props.cursor.leaveComponent();
       this.props.cursor.resetSelected();
       tools.tagDisabled[tag] = !tools.tagDisabled[tag];
+      this.props.cursor.enterComponent();
     };
 
     const disableAll = () => {
+      this.props.cursor.leaveComponent();
       this.props.cursor.resetSelected();
       tools.tagDisabled = {};
       this.props.store.account.tags.forEach((tag) => (tools.tagDisabled[tag.tag] = true));
+      this.props.cursor.enterComponent();
     };
 
     const enableAll = () => {
+      this.props.cursor.leaveComponent();
       this.props.cursor.resetSelected();
       tools.tagDisabled = {};
+      this.props.cursor.enterComponent();
     };
 
     let last = null;

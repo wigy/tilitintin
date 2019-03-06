@@ -372,6 +372,10 @@ class Cursor {
       throw new Error('Component does not have a name.');
     }
     if (this.savedComponents[name]) {
+      if (this.savedComponents[name].index >= component.length) {
+        this.setIndex(component.length ? component.length - 1 : null);
+        return;
+      }
       this.setIndex(this.savedComponents[name].index);
       this.setCell(this.savedComponents[name].column, this.savedComponents[name].row);
     } else {

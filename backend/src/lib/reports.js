@@ -56,7 +56,6 @@ function time2str(timestamp) {
  * @param {Object} period
  */
 function columnTitle(formatName, period) {
-  console.log(period);
   switch (formatName) {
     case 'balance-sheet':
     case 'balance-sheet-detailed':

@@ -14,8 +14,8 @@ BUGS
 [ ] Arrow up skips sub-items of every second opened row
 [ ] Multiple sub-items are sometimes selected (require tx.selected status)
 [X] Deleting unsaved entry fails.
-[ ] Pressing a tag filter messes up the stored cursor for transaction table.
-[ ] Cursor can be hidden by visiting long transaction list and the switching account with shorter transaction list.
+[X] Pressing a tag filter messes up the stored cursor for transaction table.
+[X] Cursor can be hidden by visiting long transaction list and the switching account with shorter transaction list.
 
 FUTURE FEATURES
 ===============
@@ -58,7 +58,7 @@ FUTURE FEATURES
 
 0.5
 [ ] Editing tags in description (maybe add them to text editor).
-[ ] Support for tag parameter for reports to provide different columns per tag (skip 2nd period).
+[ ] Support for tag parameter for reports to provide different columns per tag (in that case no 2nd period).
 [ ] Storing tag images on the server.
 [ ] Cleaner error handling for 403 for example.
 [ ] TODO cleanup.
