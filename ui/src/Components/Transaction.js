@@ -76,6 +76,7 @@ class Transaction extends Component {
         </td>
         <td className="date">
           <TransactionDetails
+            index={this.props.index}
             field="date"
             classNames={tx.open && tx.selected && this.props.cursor.row === null ? 'sub-selected' : ''}
             document={tx.document}
@@ -111,6 +112,7 @@ class Transaction extends Component {
       <tr key={idx} className={classes}>
         <td className="account" colSpan={3} onClick={() => this.onClickDetail(0, idx)}>
           <TransactionDetails
+            index={this.props.index}
             error={!entry.account_id}
             field="account"
             document={entry.document}
@@ -120,6 +122,7 @@ class Transaction extends Component {
         </td>
         <td className="description" onClick={() => this.onClickDetail(1, idx)}>
           <TransactionDetails
+            index={this.props.index}
             field="description"
             document={entry.document}
             entry={entry}
@@ -129,6 +132,7 @@ class Transaction extends Component {
         </td>
         <td className="debit" onClick={() => this.onClickDetail(2, idx)}>
           <TransactionDetails
+            index={this.props.index}
             field="debit"
             document={entry.document}
             entry={entry}
@@ -138,6 +142,7 @@ class Transaction extends Component {
         </td>
         <td className="credit" onClick={() => this.onClickDetail(3, idx)}>
           <TransactionDetails
+            index={this.props.index}
             field="credit"
             document={entry.document}
             entry={entry}

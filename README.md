@@ -63,6 +63,6 @@ In UI you can do filtering using the categories defined.
 
 ### 0.3
   * Simple one environment configurable account for authentication.
-  * Basic navigation and editing of the imported database.
+  * Basic navigation and editing of the original database.
   * Complete API for handling viewing, editing and reporting.
   * Full viewing and printing support for all original reports with additional options.

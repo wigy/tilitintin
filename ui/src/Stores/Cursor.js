@@ -477,17 +477,36 @@ class Cursor {
    * @param {Number|null} dy
    */
   changeBoxBy(dx, dy) {
+    const component = this.getComponent();
+    const {subitemExitUp, subitemExitDown, entryColumn, subitemUpStopOnNull} = component;
     const model = this.getModel();
-    if (model && model.open) {
-      const component = this.getComponent();
+    if (model && model.open && dy >= 0) {
       const [columns, rows] = model.geometry();
-      const {subitemExitUp, subitemExitDown, entryColumn, subitemUpStopOnNull} = component;
       const oldRow = this.row;
       const oldColumn = this.column;
       const oldIndex = this.index;
       if (this.boxUpdate(columns, rows, dx, dy, {subitemExitUp, subitemExitDown, entryColumn, subitemUpStopOnNull})) {
         component.moveBox(oldIndex, this.index, oldColumn, oldRow, this.column, this.row);
         return {preventDefault: true};
+      }
+    } else if (dy < 0) {
+      if (this.row === null) {
+        const index = (this.index + dy + component.length) % component.length;
+        const model = this.getModel(index);
+        if (model && model.open && this.setIndex(index)) {
+          const [, rows] = model.geometry();
+          return this.setCell(entryColumn || 0, rows - 1);
+        }
+      } else {
+        // TODO: DRY
+        const [columns, rows] = model.geometry();
+        const oldRow = this.row;
+        const oldColumn = this.column;
+        const oldIndex = this.index;
+        if (this.boxUpdate(columns, rows, dx, dy, {subitemExitUp, subitemExitDown, entryColumn, subitemUpStopOnNull})) {
+          component.moveBox(oldIndex, this.index, oldColumn, oldRow, this.column, this.row);
+          return {preventDefault: true};
+        }
       }
     }
   }
@@ -563,10 +582,10 @@ class Cursor {
    * Get the model pointed by the index in the current topology component.
    * @return {Model|null}
    */
-  getModel() {
-    if (this.index !== null) {
+  getModel(index = this.index) {
+    if (index !== null) {
       const comp = this.getComponent();
-      return comp ? comp.getIndex(this.index) : null;
+      return comp ? comp.getIndex(index) : null;
     }
   }
 
@@ -609,7 +628,7 @@ class Cursor {
    * @param {Number} M Number of rows.
    * @param {Number|null} dx
    * @param {Number|null} dy
-   * @param {Boolean} [options.subitemExitDown]
+   * @param {Boolean} [options.subitemExitUp]
    * @param {Boolean} [options.subitemExitDown]
    * @param {Number} [options.entryColumn]
    */

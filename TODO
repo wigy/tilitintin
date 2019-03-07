@@ -11,8 +11,8 @@ BUGS
 [X] Moving cursor in account list first and then switching to other menu and back causes second cursor.
 [X] Download does not embed authentication token when downloading CSV.
 [X] In Transaction.js onComplete() does not move the cursor correctly after editing date.
-[ ] Arrow up skips sub-items of every second opened row
-[ ] Multiple sub-items are sometimes selected (require tx.selected status)
+[X] Arrow up skips sub-items of every second opened row
+[X] Multiple sub-items are sometimes selected (require tx.selected status)
 [X] Deleting unsaved entry fails.
 [X] Pressing a tag filter messes up the stored cursor for transaction table.
 [X] Cursor can be hidden by visiting long transaction list and the switching account with shorter transaction list.
@@ -54,6 +54,7 @@ FUTURE FEATURES
 [X] Merge Navigator class to Cursor.
 [X] Check if further refactoring is possible with setIndex() and setCell().
 [X] Propose descriptions from the same document first.
+[ ] Q1, ..., Q4 options for reporting.
 [X] TODO cleanup.
 
 0.5

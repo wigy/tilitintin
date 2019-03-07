@@ -81,6 +81,14 @@ class TransactionTable extends Component {
         </tbody>
       </table>
     ];
+
+    /*
+    Cursor debug helper.
+    ret.push(<div key="my">Index {JSON.stringify(this.props.cursor.index)}</div>);
+    ret.push(<div key="my1">Column {JSON.stringify(this.props.cursor.column)}</div>);
+    ret.push(<div key="my2">Row {JSON.stringify(this.props.cursor.row)}</div>);
+    */
+
     if (this.txToDelete) {
       ret.push(deleteDialog(this.txToDelete));
     }

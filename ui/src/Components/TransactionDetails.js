@@ -36,10 +36,17 @@ class TransactionDetails extends Component {
     }
 
     const column = this.props.entry ? this.props.entry.columns().indexOf(this.props.field) : null;
-    const className = 'TransactionDetails ' +
+    let className = 'TransactionDetails ' +
       target.getClasses(column, this.props.cursor.row) +
       (this.props.error ? ' error' : '') +
       (this.props.classNames ? ' ' + this.props.classNames : '');
+
+    // Currently we cannot determine if the selected entry belongs to the selected document in the model
+    // level. Thus we remove sub-selection flags in case that they are not on the exact selected document
+    // copy. Multiple instances of the same document is visible on the screen.
+    if (this.props.cursor.index !== this.props.index) {
+      className = className.replace(/ sub-selected/, '');
+    }
 
     return (
       <div className={className}>{target.getView(this.props.field)}&nbsp;</div>
@@ -50,6 +57,7 @@ class TransactionDetails extends Component {
 TransactionDetails.propTypes = {
   document: PropTypes.instanceOf(DocumentModel),
   entry: PropTypes.instanceOf(EntryModel),
+  index: PropTypes.number,
   field: PropTypes.string,
   classNames: PropTypes.string,
   error: PropTypes.bool,
