@@ -46,6 +46,10 @@ i18n.init({
         'icon-reset': 'Näytä kaikki',
         'icon-disable-all': 'Piilota kaikki',
         'icon-option-compact': 'Tiivistetympi esitysmuoto',
+        'icon-option-quarter1': 'Ensimmäinen neljännes',
+        'icon-option-quarter2': 'Ensimmäinen puoli vuotta',
+        'icon-option-quarter3': 'Kolme neljännestä',
+        'icon-option-full': 'Koko vuosi',
 
         'column-document-number': 'Nro',
         'column-account-number': 'Nro',

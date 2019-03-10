@@ -9,7 +9,11 @@ import Configuration from '../Configuration';
 import './ToolPanel.css';
 
 const ICONS = {
-  'option-compact': 'fa-tasks'
+  'option-compact': 'fa-tasks',
+  'option-quarter1': 'fa-thermometer-quarter',
+  'option-quarter2': 'fa-thermometer-half',
+  'option-quarter3': 'fa-thermometer-three-quarters',
+  'option-full': 'fa-thermometer-full'
 };
 
 @translate('translations')
@@ -66,14 +70,38 @@ class ToolPanel extends Component {
     if (options.length) {
       buttons.push(<IconSpacer key="space"/>);
       options.forEach((option) => {
+        const [optionType, optionArg1] = store.report.options[option].split(':');
         const name = `option-${option}`;
-        buttons.push(<IconButton
-          key={name}
-          toggle={store.report.config[option]}
-          onClick={() => onToggle(option)}
-          title={name}
-          icon={ICONS[name] || 'fa-cog'}>
-        </IconButton>);
+        switch (optionType) {
+          case 'boolean':
+            buttons.push(<IconButton
+              key={name}
+              toggle={store.report.config[option]}
+              onClick={() => onToggle(option)}
+              title={name}
+              icon={ICONS[name] || 'fa-cog'}>
+            </IconButton>);
+            break;
+          case 'radio':
+            // TODO: Set up defaults when loading options.
+            buttons.push(<IconButton
+              key={name}
+              toggle={store.report.config[option]}
+              onClick={() => {
+                Object.entries(store.report.options).forEach(([opt, type]) => {
+                  if (type.startsWith('radio:' + optionArg1)) {
+                    store.report.config[opt] = false;
+                  }
+                });
+                onToggle(option);
+              }}
+              title={name}
+              icon={ICONS[name] || 'fa-cog'}>
+            </IconButton>);
+            break;
+          default:
+            throw new Error(`Unsupported report option type ${optionType}`);
+        }
       });
     }
 

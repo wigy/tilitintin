@@ -54,7 +54,7 @@ FUTURE FEATURES
 [X] Merge Navigator class to Cursor.
 [X] Check if further refactoring is possible with setIndex() and setCell().
 [X] Propose descriptions from the same document first.
-[ ] Q1, ..., Q4 options for reporting.
+[X] Q1, ..., Q4 options for reporting.
 [X] TODO cleanup.
 
 0.5

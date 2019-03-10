@@ -54,14 +54,29 @@ function time2str(timestamp) {
  * Construct column title for period.
  * @param {String} formatName
  * @param {Object} period
+ * @param {Object} settings
  */
-function columnTitle(formatName, period) {
+function columnTitle(formatName, period, settings) {
+  let start = time2str(period.start_date);
+  let end;
+  if (settings.query.quarter1) {
+    const year = moment(period.start_date + 3 * 60 * 60 * 1000).utc().year();
+    end = moment({year, month: 3, date: 1}).subtract(1, 'day').format('YYYY-MM-DD');
+  } else if (settings.query.quarter2) {
+    const year = moment(period.start_date + 3 * 60 * 60 * 1000).utc().year();
+    end = moment({year, month: 6, date: 1}).subtract(1, 'day').format('YYYY-MM-DD');
+  } else if (settings.query.quarter3) {
+    const year = moment(period.start_date + 3 * 60 * 60 * 1000).utc().year();
+    end = moment({year, month: 9, date: 1}).subtract(1, 'day').format('YYYY-MM-DD');
+  } else {
+    end = time2str(period.end_date);
+  }
   switch (formatName) {
     case 'balance-sheet':
     case 'balance-sheet-detailed':
-      return '{' + time2str(period.end_date) + '}';
+      return '{' + end + '}';
     default:
-      return '{' + time2str(period.start_date) + '} - {' + time2str(period.end_date) + '}';
+      return '{' + start + '} - {' + end + '}';
   }
 }
 
@@ -300,7 +315,7 @@ processEntries.Default = (entries, periods, formatName, format, settings) => {
     return {
       type: 'numeric',
       name: 'period' + period.id,
-      title: columnTitle(formatName, period)
+      title: columnTitle(formatName, period, settings)
     };
   }).reverse();
   const columnNames = columns.map((col) => col.name);
@@ -410,6 +425,17 @@ function processEntries(entries, periods, formatName, format, settings) {
     return [];
   }
 
+  // Apply query filtering.
+  let filter = () => true;
+  if (settings.query.quarter1) {
+    filter = (entry) => moment(entry.date + 3 * 60 * 60 * 1000).utc().quarter() <= 1;
+  } if (settings.query.quarter2) {
+    filter = (entry) => moment(entry.date + 3 * 60 * 60 * 1000).utc().quarter() <= 2;
+  } if (settings.query.quarter3) {
+    filter = (entry) => moment(entry.date + 3 * 60 * 60 * 1000).utc().quarter() <= 3;
+  }
+  entries = entries.filter(filter);
+
   // Select data conversion function and run it.
   const camelCaseName = formatName.split('-').map((s) => s[0].toUpperCase() + s.substr(1)).join('');
   let results;
@@ -506,7 +532,47 @@ function customReports() {
   }];
 }
 
+/**
+ * Get the list of standard report format options.
+ */
+function standardOptions() {
+  return [{
+    id: 'income-statement',
+    options: {
+      'quarter1': 'radio:1',
+      'quarter2': 'radio:1',
+      'quarter3': 'radio:1',
+      'full': 'radio:1:default'
+    }
+  }, {
+    id: 'income-statement-detailed',
+    options: {
+      'quarter1': 'radio:1',
+      'quarter2': 'radio:1',
+      'quarter3': 'radio:1',
+      'full': 'radio:1:default'
+    }
+  }, {
+    id: 'balance-sheet',
+    options: {
+      'quarter1': 'radio:1',
+      'quarter2': 'radio:1',
+      'quarter3': 'radio:1',
+      'full': 'radio:1:default'
+    }
+  }, {
+    id: 'balance-sheet-detailed',
+    options: {
+      'quarter1': 'radio:1',
+      'quarter2': 'radio:1',
+      'quarter3': 'radio:1',
+      'full': 'radio:1:default'
+    }
+  }];
+}
+
 module.exports = {
   create,
-  customReports
+  customReports,
+  standardOptions
 };

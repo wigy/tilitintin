@@ -46,7 +46,17 @@ class ReportModel extends Model {
       data.config = data.config || {};
       Object.keys(data.options).forEach((option) => {
         if (!(option in data.config)) {
-          data.config[option] = false; // Only boolean options supported for now.
+          const [type, arg1, arg2] = data.options[option].split(':');
+          switch (type) {
+            case 'boolean':
+              data.config[option] = arg1 === 'true';
+              break;
+            case 'radio':
+              data.config[option] = arg2 === 'default';
+              break;
+            default:
+              throw new Error(`No initializer for report option type '${type}'.`);
+          }
         }
       });
     }

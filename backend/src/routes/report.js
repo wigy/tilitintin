@@ -12,6 +12,7 @@ const config = require('../config');
 const options = () => {
   const options = {};
   reports.customReports().map((report) => (options[report.id] = report.options || {}));
+  reports.standardOptions().map((report) => (options[report.id] = report.options || {}));
   return options;
 };
 

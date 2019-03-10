@@ -478,7 +478,7 @@ class Cursor {
    */
   changeBoxBy(dx, dy) {
     const component = this.getComponent();
-    const {subitemExitUp, subitemExitDown, entryColumn, subitemUpStopOnNull} = component;
+    const {subitemExitUp, subitemExitDown, entryColumn, subitemUpStopOnNull} = component || {};
     const model = this.getModel();
     if (model && model.open && dy >= 0) {
       const [columns, rows] = model.geometry();
