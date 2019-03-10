@@ -61,6 +61,12 @@ In UI you can do filtering using the categories defined.
 
 ## Version History
 
+### 0.4
+  * Refactor store to use models.
+  * Refactor navigation to move more responsibility to models.
+  * Clean up navigation code in general.
+  * Quarter options for income and balance reports.
+
 ### 0.3
   * Simple one environment configurable account for authentication.
   * Basic navigation and editing of the original database.
