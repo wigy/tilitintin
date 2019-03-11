@@ -26,21 +26,22 @@ class AccountModel extends Model {
   }
 
   /**
-   * Add tags for this account.
-   * @param {TagModel[]|String[]} tags
+   * Set tags for this account.
+   * @param {String[]} tags
    */
-  addTags(tags) {
+  setTags(tags) {
+    this.tagsByTag = {};
     tags.forEach((tagName) => {
       const tag = this.database.getTag(tagName);
       if (!tag) {
-        throw new Error(`Cannot find tag '${tagName}' from account ${this.toString()}.`);
+        throw new Error(`Cannot find tag '${tagName}' for account ${this.toString()}.`);
       }
       this.tagsByTag[tag.tag] = tag;
     });
   }
 
   /**
-   * Get tag by its name.
+   * Get tag by its code.
    * @param {String} tag
    */
   getTag(tag) {

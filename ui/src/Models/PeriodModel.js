@@ -127,6 +127,22 @@ class PeriodModel extends Model {
   }
 
   /**
+   * Update tags for all accounts from the current documents.
+   */
+  refreshTags() {
+    const tags = {};
+    Object.values(this.documents).forEach((doc) => {
+      doc.entries.forEach((entry) => {
+        tags[entry.account_id] = tags[entry.account_id] || new Set();
+        entry.tagNames.forEach((tag) => tags[entry.account_id].add(tag));
+      });
+    });
+    Object.keys(tags).forEach((accountId) => {
+      this.getAccount(accountId).setTags([...tags[accountId]]);
+    });
+  }
+
+  /**
    * Get the database this period belongs to.
    */
   get database() {

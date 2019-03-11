@@ -6,5 +6,5 @@ ADD package.json .
 RUN npm install
 ADD . .
 
-EXPOSE 3002
+EXPOSE 3102
 CMD ["npm", "start"]

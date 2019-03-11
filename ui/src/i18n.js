@@ -33,6 +33,7 @@ i18n.init({
         'Saving failed.': 'Tallennus epäonnistui.',
         'This field is required.': 'Tämä kenttä ei voi olla tyhjä.',
         'Date is incorrect.': 'Virheellinen päivämäärä.',
+        'Undefined tag.': 'Tägiä ei ole määritelty.',
 
         'report-general-journal': 'Päiväkirja',
         'report-general-ledger': 'Pääkirja',

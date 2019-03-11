@@ -118,14 +118,51 @@ class EntryModel extends NavigationTargetModel {
   }
 
   /**
-   * Description is required.
+   * Split a string starting with tags to list of tags and the rest of the string.
+   * @param {String} value
+   * @return [String[], String|null]
+   * If tags are not valid, the reminder part is null.
+   */
+  extractTags(value) {
+    let tags = [];
+    value = value.trim();
+    const regex = /^(\[(\w+?)\])+/.exec(value);
+    if (regex) {
+      tags = regex[0].substr(1, regex[0].length - 2).split('][');
+      for (const tagName of tags) {
+        if (!this.database.hasTag(tagName)) {
+          return [[], null];
+        }
+      }
+      value = value.substr(regex[0].length).trim();
+    }
+    return [tags, value];
+  }
+
+  /**
+   * Description is required field, which includes also tags during the edit.
    * @param {String} value
    */
   ['validate.description'](value) {
     const REQUIRED = <Trans>This field is required.</Trans>;
+    const INVALID_TAG = <Trans>Undefined tag.</Trans>;
+
+    const [, newValue] = this.extractTags(value);
+    if (newValue === null) {
+      return INVALID_TAG;
+    }
     return value ? null : REQUIRED;
   }
-  // TODO: Handle tags on `change` and on `get.edit`.
+  ['get.edit.description']() {
+    const tags = this.tagNames.length ? '[' + this.tagNames.map(t => t).join('][') + '] ' : '';
+    return tags + this.description;
+  }
+  ['change.description'](value) {
+    const [tags, newValue] = this.extractTags(value);
+    this.description = newValue;
+    this.tagNames.replace(tags);
+    this.period.refreshTags();
+  }
   ['proposal.description'](value) {
     // Find the first text that matches.
     const texts = new Set();
@@ -294,8 +331,11 @@ class EntryModel extends NavigationTargetModel {
     return this.database.getAccount(this.account_id);
   }
 
+  /**
+   * Collect tag instances of this entry.
+   */
   get tags() {
-    return this.tagNames.map((tag) => this.account.getTag(tag)).sort(TagModel.sorter());
+    return this.tagNames.map((tag) => this.database.getTag(tag)).sort(TagModel.sorter());
   }
 }
 

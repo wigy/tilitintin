@@ -7,7 +7,7 @@ services:
     build:
       context: backend
     ports:
-      - 3001:3001
+      - 3101:3101
     env_file:
       - .env
     volumes:
@@ -20,7 +20,7 @@ services:
     build:
       context: ui
     ports:
-      - 3002:3002
+      - 3102:3102
     volumes:
       - ./ui/src:/var/app/src
     command: npm run dev

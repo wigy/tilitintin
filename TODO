@@ -10,7 +10,7 @@ FUTURE FEATURES
 [ ] Editing tags in description (maybe add them to text editor).
 [ ] Support for tag parameter for reports to provide different columns per tag (in that case no 2nd period).
 [ ] Storing tag images on the server.
-[ ] Cleaner error handling for 403 for example.
+[ ] Cleaner error handling for 403 for example (go to account url directly when not authenticated).
 [ ] TODO cleanup.
 
 0.6

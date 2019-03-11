@@ -74,6 +74,15 @@ class DatabaseModel extends Model {
   }
 
   /**
+   * Check if the given tag is defined.
+   * @param {String} tag
+   * @return {Boolean}
+   */
+  hasTag(tag) {
+    return !!this.tagsByTag[tag];
+  }
+
+  /**
    * Get the tag by its code.
    * @param {String} tag
    */

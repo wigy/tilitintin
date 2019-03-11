@@ -415,16 +415,13 @@ class Store {
     return this.request('/db/' + db + '/account/' + accountId + '/' + periodId)
       .then((data) => {
         runInAction(() => {
-          const account = this.dbsByName[db].getAccount(data.id);
           let lastDate;
           data.transactions.forEach((tx) => {
             const doc = new DocumentModel(this.period, tx);
             this.period.addDocument(doc);
             lastDate = tx.date;
-            doc.entries.forEach((entry) => {
-              account.addTags([...entry.tagNames]);
-            });
           });
+          this.period.refreshTags();
           this.lastDate = lastDate;
         });
       });
