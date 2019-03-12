@@ -29,17 +29,23 @@ function checkToken(req, res, next) {
     token = req.query.token;
   }
 
-  if (token) {
-    jwt.verify(token, config.SECRET, (err, decoded) => {
-      if (!err && decoded.service === 'Tilitintin') {
-        req.user = decoded.user;
-        next();
-      }
-    });
+  if (!token) {
+    res.status(403).send('Unauthorized.');
     return;
   }
 
-  res.status(403).send('Unauthorized.');
+  jwt.verify(token, config.SECRET, (err, decoded) => {
+    if (err) {
+      res.status(403).send('Unauthorized.');
+      return;
+    }
+    if (decoded.service !== 'Tilitintin') {
+      res.status(403).send('Unauthorized.');
+      return;
+    }
+    req.user = decoded.user;
+  });
+  next();
 }
 
 router.get('/', checkToken, (req, res) => {
