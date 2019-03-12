@@ -2,14 +2,16 @@
 const promiseSeq = require('promise-sequential');
 const knex = require('../src/lib/knex');
 const tags = require('../src/lib/tags');
-const { util: { cli} } = require('libfyffe');
+const { util: { cli } } = require('libfyffe');
+const USER = process.env.FYFFE_USER || 'user';
 
-cli.arg_('db', knex.dbs());
+knex.setUser(USER);
+cli.arg_('db', knex.dbs(USER));
 cli.arg('operation', ['ls', 'add', 'remove-all']);
 
 async function main() {
 
-  switch(cli.operation) {
+  switch (cli.operation) {
 
     case 'add':
       cli.arg_('tag', 'a tag text');

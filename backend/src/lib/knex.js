@@ -9,42 +9,82 @@ if (!fs.existsSync(config.DBPATH)) {
 
 /**
  * Get the list of database names available.
- * @return {array<string>} A list of base names without `.sqlite`.
+ * @param {String} user
+ * @return {String[]} A list of base names without `.sqlite`.
  */
-function dbs() {
-  return glob.sync(config.DBPATH + '/*.sqlite').map(path => path.replace(/.*\/(.*)\.sqlite$/, '$1'));
+function dbs(user) {
+  if (!user) {
+    return [];
+  }
+  return glob.sync(config.DBPATH + '/' + user + '/*.sqlite').map(path => path.replace(/.*\/(.*)\.sqlite$/, '$1'));
 }
 
 /**
  * Check if database exists.
- * @param {string} name The database name without `.sqlite`.
- * @returns {boolean}
+ * @param {String} user
+ * @param {String} name The database name without `.sqlite`.
+ * @returns {Boolean}
  */
-function isdb(name) {
-  return dbs().includes(name);
+function isDb(user, name) {
+  return dbs(user).includes(name);
+}
+
+// Current user.
+let user = null;
+
+/**
+ * Set the current user.
+ * @param {String} u
+ */
+function setUser(u) {
+  user = u;
 }
 
 /**
- * Get the database handle.
- * @param {string} name The database name without `.sqlite`.
+ * Get the database handle for the current user.
+ * @param {String} name The database name without `.sqlite`.
  * @return {Knex} A configured knex instance.
  */
 function db(name) {
-  if (!isdb(name)) {
+  if (!user || !isDb(user, name)) {
     throw new Error('No such DB as ' + name);
   }
   return knex({
     client: 'sqlite3',
     connection: {
-      filename: config.DBPATH + '/' + name + '.sqlite'
+      filename: userPath(name + '.sqlite')
     },
     useNullAsDefault: true
   });
 }
 
+/**
+ * Construct a path to the user file.
+ * @param {String} basename
+ */
+function userPath(basename) {
+  return config.DBPATH + '/' + user + '/' + basename;
+}
+
+/**
+ * Check if the user file exists and return its path.
+ * @param {String} basename
+ * @return {String|null}
+ */
+function userFile(basename) {
+  if (!basename) {
+    return null;
+  }
+  const path = userPath(basename);
+  return fs.existsSync(path) ? path : null;
+}
+
 module.exports = {
-  dbs: dbs,
-  isdb: isdb,
-  db: db,
-  knex: knex
+  dbs,
+  isDb,
+  setUser,
+  db,
+  userPath,
+  userFile,
+  knex
 };

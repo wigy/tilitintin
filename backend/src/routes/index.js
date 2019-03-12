@@ -4,6 +4,9 @@ const router = express.Router();
 const config = require('../config');
 const knex = require('../lib/knex');
 
+/**
+ * Authenticate against fixed credentials and construct a token.
+ */
 router.post('/auth', (req, res) => {
   const {user, password} = req.body;
   if (user === config.TILITIN_USER && password === config.TILITIN_PASSWORD) {
@@ -14,25 +17,28 @@ router.post('/auth', (req, res) => {
   }
 });
 
+/**
+ * Check the token and `user` to the request, if valid.
+ */
 function checkToken(req, res, next) {
-  if (!config.AUTHENTICATION) {
-    next();
+  let token;
+  const { authorization } = req.headers;
+  if (authorization && authorization.substr(0, 7) === 'Bearer ') {
+    token = authorization.substr(7, authorization.length - 7);
+  } else if (req.query.token) {
+    token = req.query.token;
+  }
+
+  if (token) {
+    jwt.verify(token, config.SECRET, (err, decoded) => {
+      if (!err && decoded.service === 'Tilitintin') {
+        req.user = decoded.user;
+        next();
+      }
+    });
     return;
   }
-  const auth = req.headers.authorization;
-  if (auth) {
-    if (auth.substr(0, 7) === 'Bearer ') {
-      let token = auth.substr(7, auth.length - 7);
-      jwt.verify(token, config.SECRET, (err, decoded) => {
-        if (err || decoded.service !== 'Tilitintin') {
-          res.status(403).send('Unauthorized.');
-        } else {
-          next();
-        }
-      });
-      return;
-    }
-  }
+
   res.status(403).send('Unauthorized.');
 }
 
@@ -44,17 +50,18 @@ router.get('/', checkToken, (req, res) => {
 });
 
 router.get('/db/', checkToken, (req, res) => {
-  res.send(knex.dbs().map(db => {
+  res.send(knex.dbs(req.user).map(db => {
     return {name: db, links: {view: config.BASEURL + '/db/' + db}};
   }));
 });
 
 function checkDb(req, res, next) {
   const {db} = req.params;
-  if (!knex.isdb(db)) {
+  if (!knex.isDb(req.user, db)) {
     res.status(404).send('Database not found.');
   } else {
     req.db = db;
+    knex.setUser(req.user);
     next();
   }
 }

@@ -10,7 +10,7 @@ natively with the [Node](https://nodejs.org).
 ### Using Docker
 
 Create a file `.env` using a file `.env.example` as a base.
-Then drop your *Tilitin* sqlite-databases to the directory `backend/databases` and then build
+Then drop your *Tilitin* sqlite-databases to the directory `backend/databases/user` and then build
 and launch the system
 ```
 docker-compose up
@@ -19,7 +19,7 @@ docker-compose up
 ### Using Node
 
 In this case you can just add symbolic links pointing to your *Tilitin* sqlite-databases to
-the directory `backend/databases`. Then you launch the backend
+the directory `backend/databases/user`. Then you launch the backend
 ```
 cd backend
 npm start
@@ -30,6 +30,10 @@ In addition, the frontend is needed. Add an other console and launch
 cd ui
 npm start
 ```
+
+## Default user
+
+Default user is `user` and password is `pass`.
 
 ## Features
 

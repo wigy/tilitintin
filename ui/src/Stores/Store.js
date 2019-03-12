@@ -136,6 +136,8 @@ class Store {
             debug('    OK:', method, config.API_URL + path, data || '');
           }
           return res.status === 200 ? res.json() : null;
+        } else if (res.status === 403) {
+          this.logout();
         } else {
           if (DEBUG) {
             debug('    Fail:', method, config.API_URL + path, data || '');
@@ -294,6 +296,9 @@ class Store {
    * Get the list of periods available for the current DB.
    */
   async fetchPeriods(db) {
+    if (!this.token) {
+      return;
+    }
     return this.request('/db/' + db + '/period')
       .then((periods) => {
         runInAction(() => {
@@ -308,6 +313,9 @@ class Store {
    * Get the tag definitions from the current database.
    */
   async fetchTags(db) {
+    if (!this.token) {
+      return;
+    }
     return this.request('/db/' + db + '/tags')
       .then((tags) => {
         runInAction(() => {
@@ -320,6 +328,9 @@ class Store {
    * Collect all accounts.
    */
   async fetchAccounts(db) {
+    if (!this.token) {
+      return;
+    }
     return this.request('/db/' + db + '/account')
       .then((accounts) => {
         // TODO: Hmm, maybe not good solution for unwanted tag reset but.
@@ -339,6 +350,9 @@ class Store {
    * Collect all account headings.
    */
   async fetchHeadings(db) {
+    if (!this.token) {
+      return;
+    }
     return this.request('/db/' + db + '/heading')
       .then((headings) => {
         runInAction(() => {
@@ -353,6 +367,9 @@ class Store {
    * Get the list of report formats available for the current DB.
    */
   async fetchReports(db) {
+    if (!this.token) {
+      return;
+    }
     return this.request('/db/' + db + '/report')
       .then((reports) => {
         runInAction(() => {
@@ -393,6 +410,9 @@ class Store {
    * Get the summary of balances for all accounts in the current period.
    */
   async fetchBalances(db, periodId) {
+    if (!this.token) {
+      return;
+    }
     return this.request('/db/' + db + '/period/' + periodId)
       .then((balances) => {
         runInAction(() => {
@@ -412,6 +432,9 @@ class Store {
    * @param {Number} accountId
    */
   async fetchAccountPeriod(db, periodId, accountId) {
+    if (!this.token) {
+      return;
+    }
     return this.request('/db/' + db + '/account/' + accountId + '/' + periodId)
       .then((data) => {
         runInAction(() => {
@@ -456,7 +479,9 @@ class Store {
     this.db = null;
     this.periodId = null;
     this.changed = true;
+    this.clearDb();
   }
+
   /**
    * Change transaction content.
    * @param {DocumentModel} doc

@@ -1,14 +1,16 @@
 #!/usr/bin/env node
 const knex = require('../src/lib/knex');
 const { config, util: {cli}, core: {fyffe} } = require('libfyffe');
+const USER = process.env.FYFFE_USER || 'user';
 
-cli.arg('db', knex.dbs());
+knex.setUser(USER);
+cli.arg('db', knex.dbs(USER));
 
 config.loadIni();
 
 async function main() {
   const dbName = 'db';
-  fyffe.setDb(dbName, knex.db(cli.db))
+  fyffe.setDb(dbName, knex.db(cli.db));
   await fyffe.loadTags(dbName);
   await fyffe.loadAccounts(dbName);
   await fyffe.loadBalances(dbName);
@@ -20,5 +22,5 @@ async function main() {
 }
 
 main()
-  .then(() =>   process.exit())
-  .catch((err) => {console.error(err); process.exit()});
+  .then(() => process.exit())
+  .catch((err) => { console.error(err); process.exit(); });

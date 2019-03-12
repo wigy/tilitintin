@@ -1,3 +1,5 @@
+const fs = require('fs');
+const http = require('request-promise');
 const knex = require('./knex');
 
 /**
@@ -58,15 +60,27 @@ function getAll(db) {
  * @return {Promise}
  */
 function add(db, tag, name, picture, type, order) {
-  return ensure(db)
+  const isJpeg = /\.(jpg|jpeg)$/i.test(picture);
+  const isPng = /\.(png)$/i.test(picture);
+  if (!isJpeg && !isPng) {
+    throw new Error(`Image format not recognized from URL.`);
+  }
+
+  return http.get(picture, {encoding: null})
+    .then(res => {
+      fs.writeFileSync(knex.userPath(tag + '.' + (isJpeg ? 'jpg' : 'png')), res);
+    })
     .then(() => {
-      return knex.db(db)('tags').insert({
-        tag: tag,
-        name: name,
-        picture: picture,
-        type: type,
-        order: order
-      });
+      return ensure(db)
+        .then(() => {
+          return knex.db(db)('tags').insert({
+            tag: tag,
+            name: name,
+            picture: picture,
+            type: type,
+            order: order
+          });
+        });
     });
 }
 

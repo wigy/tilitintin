@@ -1,4 +1,5 @@
 import Model from './Model';
+import Configuration from '../Configuration';
 
 class TagModel extends Model {
 
@@ -20,6 +21,13 @@ class TagModel extends Model {
 
   getSortKey() {
     return this.order;
+  }
+
+  /**
+   * Construct URL for API image viewer.
+   */
+  get url() {
+    return `${Configuration.API_URL}/db/${this.store.db}/tags/${this.id}/view?token=${this.store.token}`;
   }
 
   /**

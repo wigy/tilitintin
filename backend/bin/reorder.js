@@ -4,9 +4,11 @@
  */
 const promiseSeq = require('promise-sequential');
 const knex = require('../src/lib/knex');
-const { util: { cli} } = require('libfyffe');
+const { util: { cli } } = require('libfyffe');
+const USER = process.env.FYFFE_USER || 'user';
 
-cli.arg('db', knex.dbs());
+knex.setUser(USER);
+cli.arg('db', knex.dbs(USER));
 
 knex.db(cli.db)
   .select('*')
@@ -38,4 +40,4 @@ knex.db(cli.db)
   })
   .then((txs) => promiseSeq(txs))
   .then(() => process.exit())
-  .catch((err) => {console.error(err); process.exit()});
+  .catch((err) => { console.error(err); process.exit(); });

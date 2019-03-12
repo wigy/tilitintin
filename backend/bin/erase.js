@@ -4,9 +4,11 @@
  */
 const promiseSeq = require('promise-sequential');
 const knex = require('../src/lib/knex');
-const { util: { cli} } = require('libfyffe');
+const { util: { cli } } = require('libfyffe');
+const USER = process.env.FYFFE_USER || 'user';
 
-cli.arg_('db', knex.dbs());
+knex.setUser(USER);
+cli.arg_('db', knex.dbs(USER));
 cli.arg_('period', 'period ID');
 cli.arg('account', 'account number');
 
