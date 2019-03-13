@@ -34,8 +34,7 @@ class ToolPanel extends Component {
     };
 
     const onDownload = () => {
-      const url = `${Configuration.API_URL}/db/${store.db}/report/${store.report.format}/${store.periodId}?csv&lang=${lang}`;
-
+      const url = `${Configuration.API_URL}${store.report.getUrl()}&csv&lang=${lang}`;
       fetch(url, {
         method: 'GET',
         headers: new Headers({

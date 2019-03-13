@@ -50,6 +50,18 @@ function getAll(db) {
 }
 
 /**
+ * Get tags of certain types.
+ * @param {string} db The database name without `.sqlite`.
+ * @param {string[]} types Names of tag types.
+ */
+function getByTypes(db, types) {
+  return ensure(db)
+    .then(() => {
+      return knex.db(db).select('*').from('tags').whereIn('type', types).orderBy('order');
+    });
+}
+
+/**
  * Insert a tag.
  * @param {string} db The database name without `.sqlite`.
  * @param {string} tag
@@ -85,8 +97,9 @@ function add(db, tag, name, picture, type, order) {
 }
 
 module.exports = {
-  isReady: isReady,
-  add: add,
-  ensure: ensure,
-  getAll: getAll
+  isReady,
+  add,
+  ensure,
+  getAll,
+  getByTypes
 };

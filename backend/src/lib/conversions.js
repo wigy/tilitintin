@@ -32,8 +32,12 @@ function csv(report, options = {}) {
   };
 
   const { data, columns } = report;
+  let line = {};
+  columns.forEach((column) => (line[column.name] = column.title));
+  csv.push(line);
+
   data.forEach((entry) => {
-    let line = {};
+    line = {};
     columns.forEach((column) => {
       if (entry.pageBreak) {
         line[column.name] = '';

@@ -70,7 +70,7 @@ router.get('/:format/:period', (req, res) => {
     .then(prev => {
       const special = reports.customReports().filter((report) => report.id === format);
 
-      if (prev && !special.length) {
+      if (prev && !special.length && !query.byTags) {
         periods.push(prev.id);
       }
 

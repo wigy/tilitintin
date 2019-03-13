@@ -1,5 +1,7 @@
 const moment = require('moment');
 const knex = require('./knex');
+const tags = require('./tags');
+const settings = require('./settings');
 
 /**
  * Construct rendering information object based on the code.
@@ -306,9 +308,141 @@ processEntries.GeneralLedger = (entries, periods, formatName, format, settings) 
 };
 
 /**
+ * General purpose processor returning data split between tags.
+ */
+processEntries.DefaultByTags = (entries, periods, formatName, format, settings) => {
+
+  // Construct columns for each tag and extra column for non-tagged.
+  const columns = settings.tags.map((tag) => ({
+    type: 'numeric',
+    name: `tag-${tag.tag}`,
+    title: tag.name
+  }));
+  columns.push({
+    type: 'numeric',
+    name: 'other',
+    title: 'Other' // TODO: Translate in UI.
+  });
+  const columnNames = columns.map((col) => col.name);
+  const tagSet = new Set(settings.tags.map(t => t.tag));
+  columns.unshift({
+    name: 'title',
+    title: '',
+    type: 'name'
+  });
+
+  // Summarize all totals from the entries.
+  const totals = {};
+  columnNames.forEach((column) => (totals[column] = new Map()));
+  const accountNames = new Map();
+  const accountNumbers = new Set();
+  const regex = /^((\[\w+\])+)/;
+  entries.forEach((entry) => {
+    let shares = [];
+    const r = regex.exec(entry.description);
+    if (r) {
+      shares = r[1].substr(1, r[1].length - 2).split('][').filter(t => tagSet.has(t));
+    }
+    let amount = entry.amount;
+    if (shares.length) {
+      // Share the amount so that rounding errors are put to other.
+      const piece = amount < 0 ? Math.ceil(amount / shares.length) : Math.floor(amount / shares.length);
+      shares.forEach((tag) => {
+        const column = `tag-${tag}`;
+        totals[column][entry.number] = totals[column][entry.number] || 0;
+        totals[column][entry.number] += piece;
+        amount -= piece;
+      });
+    }
+    if (amount) {
+      totals.other[entry.number] = totals.other[entry.number] || 0;
+      totals.other[entry.number] += amount;
+    }
+
+    accountNames[entry.number] = entry.name;
+    accountNumbers.add(entry.number);
+  });
+
+  // TODO: DRY: Same as below.
+  // Parse report and construct format.
+  const allAccounts = [...accountNumbers].sort();
+  let ret = [];
+  format.split('\n').forEach((line) => {
+    line = line.trim();
+    if (line === '') {
+      return;
+    }
+    if (line === '--') {
+      ret.push({pageBreak: true});
+      return;
+    }
+
+    // Split the line and reset variables.
+    const [code, ...parts] = line.split(';');
+    const name = parts.pop();
+    let amounts = {};
+    columnNames.forEach((column) => (amounts[column] = null));
+    let unused = true;
+    let item = code2item(code);
+
+    // Collect all totals inside any of the account number ranges.
+    for (let i = 0; i < parts.length; i += 2) {
+      const from = parts[i];
+      const to = parts[i + 1];
+      columnNames.forEach((column) => {
+        allAccounts.forEach((number) => {
+          if (number >= from && number < to) {
+            unused = false;
+            if (totals[column][number] !== undefined) {
+              amounts[column] += totals[column][number];
+            }
+          }
+        });
+      });
+    }
+
+    // If we actually show details we can skip this entry and fill details below.
+    if (!item.accountDetails) {
+      if (item.required || !unused) {
+        item.name = name;
+        item.amounts = amounts;
+        ret.push(item);
+      }
+    }
+
+    // Fill in account details for the entries wanting it.
+    if (item.accountDetails) {
+      for (let i = 0; i < parts.length; i += 2) {
+        const from = parts[i];
+        const to = parts[i + 1];
+        allAccounts.forEach((number) => {
+          if (number >= from && number < to) {
+            let item = code2item(code);
+            item.isAccount = true;
+            delete item.accountDetails;
+            item.name = accountNames[number];
+            item.number = number;
+            item.amounts = {};
+            columnNames.forEach((column) => {
+              item.amounts[column] = totals[column][number] + 0;
+            });
+            ret.push(item);
+          }
+        });
+      }
+    }
+  });
+
+  return { columns, data: ret };
+};
+
+/**
  * General purpose processor.
  */
 processEntries.Default = (entries, periods, formatName, format, settings) => {
+  if (settings.query.byTags) {
+    return processEntries.DefaultByTags(entries, periods, formatName, format, settings);
+  }
 
   // Construct meta data for columns.
   let columns = periods.map((period) => {
@@ -336,7 +470,6 @@ processEntries.Default = (entries, periods, formatName, format, settings) => {
     totals[column][entry.number] += entry.amount;
     accountNames[entry.number] = entry.name;
     accountNumbers.add(entry.number);
-    // TODO: Calculate also by tags.
   });
 
   // Parse report and construct format.
@@ -476,7 +609,7 @@ function processEntries(entries, periods, formatName, format, settings) {
  * * `useRemainingColumns` if set, extend this column index to use all the rest columns in the row.
  * * `accountDetails` if true, after this are summarized accounts under this entry.
  * * `isAccount` if true, this is an account entry.
- * * `needLocalization` if set, value is localized, i.e. translated via Localization component.
+ * * `needLocalization` if set, value should be localized, i.e. translated via Localization component in ui.
  * * `name` Title of the entry.
  * * `number` Account number if the entry is an account.
  * * `amounts` An object with entry `all` for full total and [Tags] indexing the tag specific totals.
@@ -486,31 +619,34 @@ async function create(db, periodIds, formatName, format, query = {}) {
   const negateSomeEntries = (formatName !== 'general-journal' && formatName !== 'general-ledger');
   const negateSql = '(1 - (entry.debit == 0) * 2)' + (negateSomeEntries ? ' * (1 - ((account.type IN (1, 2, 3, 4, 5)) * 2))' : '');
 
-  return knex.db(db).select('*').from('settings').first()
-    .then((settings) => {
-      settings.query = query;
-      return knex.db(db).select('*').from('period').whereIn('period.id', periodIds)
-        .then((periods) => {
-          return knex.db(db).select(
-            knex.db(db).raw('document.period_id AS periodId'),
-            'document.number AS documentId',
-            'document.date',
-            'account.name',
-            'account.type',
-            'account.number',
-            knex.db(db).raw(`ROUND(${negateSql} * entry.amount * 100) AS amount`),
-            'entry.description'
-          )
-            .from('entry')
-            .leftJoin('account', 'account.id', 'entry.account_id')
-            .leftJoin('document', 'document.id', 'entry.document_id')
-            .whereIn('document.period_id', periodIds)
-            .orderBy('document.date')
-            .orderBy('document.id')
-            .orderBy('entry.row_number')
-            .then((entries) => processEntries(entries, periods, formatName, format, settings));
-        });
-    });
+  const reportSettings = await knex.db(db).select('*').from('settings').first();
+  reportSettings.query = query;
+
+  if (query.byTags) {
+    const tagTypes = await settings.get(db, 'income-statement-tag-types', []);
+    reportSettings.tags = await tags.getByTypes(db, tagTypes);
+  }
+
+  const periods = await knex.db(db).select('*').from('period').whereIn('period.id', periodIds);
+
+  return knex.db(db).select(
+    knex.db(db).raw('document.period_id AS periodId'),
+    'document.number AS documentId',
+    'document.date',
+    'account.name',
+    'account.type',
+    'account.number',
+    knex.db(db).raw(`ROUND(${negateSql} * entry.amount * 100) AS amount`),
+    'entry.description'
+  )
+    .from('entry')
+    .leftJoin('account', 'account.id', 'entry.account_id')
+    .leftJoin('document', 'document.id', 'entry.document_id')
+    .whereIn('document.period_id', periodIds)
+    .orderBy('document.date')
+    .orderBy('document.id')
+    .orderBy('entry.row_number')
+    .then((entries) => processEntries(entries, periods, formatName, format, reportSettings));
 }
 
 /**
@@ -542,7 +678,8 @@ function standardOptions() {
       'quarter1': 'radio:1',
       'quarter2': 'radio:1',
       'quarter3': 'radio:1',
-      'full': 'radio:1:default'
+      'full': 'radio:1:default',
+      'byTags': 'boolean'
     }
   }, {
     id: 'income-statement-detailed',
@@ -550,7 +687,8 @@ function standardOptions() {
       'quarter1': 'radio:1',
       'quarter2': 'radio:1',
       'quarter3': 'radio:1',
-      'full': 'radio:1:default'
+      'full': 'radio:1:default',
+      'byTags': 'boolean'
     }
   }, {
     id: 'balance-sheet',
