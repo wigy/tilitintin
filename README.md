@@ -65,6 +65,12 @@ In UI you can do filtering using the categories defined.
 
 ## Version History
 
+### 0.5
+  * Editing tags in description.
+  * Income report sorted by tag.
+  * Storing tag images on the server.
+  * Cleaner error handling.
+
 ### 0.4
   * Refactor store to use models.
   * Refactor navigation to move more responsibility to models.

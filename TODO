@@ -6,13 +6,6 @@ BUGS
 FUTURE FEATURES
 ===============
 
-0.5
-[X] Editing tags in description (maybe add them to text editor).
-[X] Support for tag parameter for reports to provide different columns per tag (in that case no 2nd period).
-[X] Storing tag images on the server.
-[X] Cleaner error handling for 403 for example.
-[X] TODO cleanup.
-
 0.6
 [ ] Tools page: renumber documents in increasing order by date.
 [ ] VAT handling.
