@@ -308,6 +308,88 @@ processEntries.GeneralLedger = (entries, periods, formatName, format, settings) 
 };
 
 /**
+ * Parse report format and construct a report from the pre-calculated totals and accounts.
+ * @param {String[]} accountNumbers
+ * @param {String[]} accountNames
+ * @param {String[]} columnNames
+ * @param {String} format
+ * @param {Object} totals
+ */
+function parseAndCombineReport(accountNumbers, accountNames, columnNames, format, totals) {
+
+  // Parse report and construct format.
+  const allAccounts = [...accountNumbers].sort();
+  let ret = [];
+  format.split('\n').forEach((line) => {
+    line = line.trim();
+    if (line === '') {
+      return;
+    }
+    if (line === '--') {
+      ret.push({pageBreak: true});
+      return;
+    }
+
+    // Split the line and reset variables.
+    const [code, ...parts] = line.split(';');
+    const name = parts.pop();
+    let amounts = {};
+    columnNames.forEach((column) => (amounts[column] = null));
+    let unused = true;
+    let item = code2item(code);
+
+    // Collect all totals inside any of the account number ranges.
+    for (let i = 0; i < parts.length; i += 2) {
+      const from = parts[i];
+      const to = parts[i + 1];
+      columnNames.forEach((column) => {
+        allAccounts.forEach((number) => {
+          if (number >= from && number < to) {
+            unused = false;
+            if (totals[column][number] !== undefined) {
+              amounts[column] += totals[column][number];
+            }
+          }
+        });
+      });
+    }
+
+    // If we actually show details we can skip this entry and fill details below.
+    if (!item.accountDetails) {
+      if (item.required || !unused) {
+        item.name = name;
+        item.amounts = amounts;
+        ret.push(item);
+      }
+    }
+
+    // Fill in account details for the entries wanting it.
+    if (item.accountDetails) {
+      for (let i = 0; i < parts.length; i += 2) {
+        const from = parts[i];
+        const to = parts[i + 1];
+        allAccounts.forEach((number) => {
+          if (number >= from && number < to) {
+            let item = code2item(code);
+            item.isAccount = true;
+            delete item.accountDetails;
+            item.name = accountNames[number];
+            item.number = number;
+            item.amounts = {};
+            columnNames.forEach((column) => {
+              item.amounts[column] = totals[column][number] + 0;
+            });
+            ret.push(item);
+          }
+        });
+      }
+    }
+  });
+
+  return ret;
+}
+
+/**
  * General purpose processor returning data split between tags.
  */
 processEntries.DefaultByTags = (entries, periods, formatName, format, settings) => {
@@ -321,7 +403,7 @@ processEntries.DefaultByTags = (entries, periods, formatName, format, settings) 
   columns.push({
     type: 'numeric',
     name: 'other',
-    title: 'Other' // TODO: Translate in UI.
+    title: '{Other}'
   });
   const columnNames = columns.map((col) => col.name);
   const tagSet = new Set(settings.tags.map(t => t.tag));
@@ -363,77 +445,7 @@ processEntries.DefaultByTags = (entries, periods, formatName, format, settings) 
     accountNumbers.add(entry.number);
   });
 
-  // TODO: DRY: Same as below.
-  // Parse report and construct format.
-  const allAccounts = [...accountNumbers].sort();
-  let ret = [];
-  format.split('\n').forEach((line) => {
-    line = line.trim();
-    if (line === '') {
-      return;
-    }
-    if (line === '--') {
-      ret.push({pageBreak: true});
-      return;
-    }
-
-    // Split the line and reset variables.
-    const [code, ...parts] = line.split(';');
-    const name = parts.pop();
-    let amounts = {};
-    columnNames.forEach((column) => (amounts[column] = null));
-    let unused = true;
-    let item = code2item(code);
-
-    // Collect all totals inside any of the account number ranges.
-    for (let i = 0; i < parts.length; i += 2) {
-      const from = parts[i];
-      const to = parts[i + 1];
-      columnNames.forEach((column) => {
-        allAccounts.forEach((number) => {
-          if (number >= from && number < to) {
-            unused = false;
-            if (totals[column][number] !== undefined) {
-              amounts[column] += totals[column][number];
-            }
-          }
-        });
-      });
-    }
-
-    // If we actually show details we can skip this entry and fill details below.
-    if (!item.accountDetails) {
-      if (item.required || !unused) {
-        item.name = name;
-        item.amounts = amounts;
-        ret.push(item);
-      }
-    }
-
-    // Fill in account details for the entries wanting it.
-    if (item.accountDetails) {
-      for (let i = 0; i < parts.length; i += 2) {
-        const from = parts[i];
-        const to = parts[i + 1];
-        allAccounts.forEach((number) => {
-          if (number >= from && number < to) {
-            let item = code2item(code);
-            item.isAccount = true;
-            delete item.accountDetails;
-            item.name = accountNames[number];
-            item.number = number;
-            item.amounts = {};
-            columnNames.forEach((column) => {
-              item.amounts[column] = totals[column][number] + 0;
-            });
-            ret.push(item);
-          }
-        });
-      }
-    }
-  });
-
-  return { columns, data: ret };
+  return { columns, data: parseAndCombineReport(accountNumbers, accountNames, columnNames, format, totals) };
 };
 
 /**
@@ -472,76 +484,7 @@ processEntries.Default = (entries, periods, formatName, format, settings) => {
     accountNumbers.add(entry.number);
   });
 
-  // Parse report and construct format.
-  const allAccounts = [...accountNumbers].sort();
-  let ret = [];
-  format.split('\n').forEach((line) => {
-    line = line.trim();
-    if (line === '') {
-      return;
-    }
-    if (line === '--') {
-      ret.push({pageBreak: true});
-      return;
-    }
-
-    // Split the line and reset variables.
-    const [code, ...parts] = line.split(';');
-    const name = parts.pop();
-    let amounts = {};
-    columnNames.forEach((column) => (amounts[column] = null));
-    let unused = true;
-    let item = code2item(code);
-
-    // Collect all totals inside any of the account number ranges.
-    for (let i = 0; i < parts.length; i += 2) {
-      const from = parts[i];
-      const to = parts[i + 1];
-      columnNames.forEach((column) => {
-        allAccounts.forEach((number) => {
-          if (number >= from && number < to) {
-            unused = false;
-            if (totals[column][number] !== undefined) {
-              amounts[column] += totals[column][number];
-            }
-          }
-        });
-      });
-    }
-
-    // If we actually show details we can skip this entry and fill details below.
-    if (!item.accountDetails) {
-      if (item.required || !unused) {
-        item.name = name;
-        item.amounts = amounts;
-        ret.push(item);
-      }
-    }
-
-    // Fill in account details for the entries wanting it.
-    if (item.accountDetails) {
-      for (let i = 0; i < parts.length; i += 2) {
-        const from = parts[i];
-        const to = parts[i + 1];
-        allAccounts.forEach((number) => {
-          if (number >= from && number < to) {
-            let item = code2item(code);
-            item.isAccount = true;
-            delete item.accountDetails;
-            item.name = accountNames[number];
-            item.number = number;
-            item.amounts = {};
-            columnNames.forEach((column) => {
-              item.amounts[column] = totals[column][number] + 0;
-            });
-            ret.push(item);
-          }
-        });
-      }
-    }
-  });
-
-  return { columns, data: ret };
+  return { columns, data: parseAndCombineReport(accountNumbers, accountNames, columnNames, format, totals) };
 };
 
 /**

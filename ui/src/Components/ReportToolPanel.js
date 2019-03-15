@@ -13,7 +13,8 @@ const ICONS = {
   'option-quarter1': 'fa-thermometer-quarter',
   'option-quarter2': 'fa-thermometer-half',
   'option-quarter3': 'fa-thermometer-three-quarters',
-  'option-full': 'fa-thermometer-full'
+  'option-full': 'fa-thermometer-full',
+  'option-byTags': 'fa-tag'
 };
 
 @translate('translations')
@@ -82,7 +83,6 @@ class ToolPanel extends Component {
             </IconButton>);
             break;
           case 'radio':
-            // TODO: Set up defaults when loading options.
             buttons.push(<IconButton
               key={name}
               toggle={store.report.config[option]}

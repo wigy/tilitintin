@@ -15,6 +15,7 @@ i18n.init({
         'Description': 'Kuvaus',
         'Login': 'Kirjaudu',
         'Logout': 'Poistu',
+        'Other': 'Muu',
         'Password': 'Salasana',
         'period {{period}}': 'jakso {{period}}',
         'Reports': 'Raportit',
@@ -51,6 +52,7 @@ i18n.init({
         'icon-option-quarter2': 'Ensimmäinen puoli vuotta',
         'icon-option-quarter3': 'Kolme neljännestä',
         'icon-option-full': 'Koko vuosi',
+        'icon-option-byTags': 'Tägeittäin',
 
         'column-document-number': 'Nro',
         'column-account-number': 'Nro',

@@ -7,15 +7,21 @@ class Localize extends Component {
 
   localize(text) {
     const lang = this.props.i18n.language;
+
     let match;
     do {
-      match = /(\{(\d\d\d\d-\d\d-\d\d)\})/g.exec(text);
+      match = /(\{(\d\d\d\d-\d\d-\d\d)\})/.exec(text);
       if (match) {
         text = text.replace(match[1], new Date(match[2]).toLocaleDateString(lang));
+      } else {
+        match = /(\{(.*?)\})/.exec(text);
+        if (match) {
+          text = text.replace(match[1], this.props.t(match[2]));
+        }
       }
     } while (match);
 
-    return this.props.t(text);
+    return text;
   }
 
   render() {
@@ -26,7 +32,7 @@ class Localize extends Component {
     if (typeof what === 'string') {
       return this.localize(what);
     }
-    return 'TODO: Localize ' + typeof what;
+    return 'No localization available for ' + typeof what;
   }
 }
 

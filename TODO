@@ -8,22 +8,25 @@ FUTURE FEATURES
 
 0.5
 [X] Editing tags in description (maybe add them to text editor).
-[ ] Support for tag parameter for reports to provide different columns per tag (in that case no 2nd period).
+[X] Support for tag parameter for reports to provide different columns per tag (in that case no 2nd period).
 [X] Storing tag images on the server.
 [X] Cleaner error handling for 403 for example.
-[ ] TODO cleanup.
+[X] TODO cleanup.
 
 0.6
+[ ] Tools page: renumber documents in increasing order by date.
+[ ] VAT handling.
+[ ] End of period handling.
+[ ] Period locking.
+[ ]   Locking page.
+[ ]   Disable changing of the locked period.
+[ ] TODO cleanup.
+
+0.7
 [ ] Support for array of proposals and navigation for them.
 [ ] Proposals for account number by looking for account last used with the text given in previous entry.
 [ ] Proposals for accounts, when typing partial name of it.
 [ ] Dim the screen while running network operation.
-[ ] TODO cleanup.
-
-0.7
-[ ] Tools page: renumber documents in increasing order by date.
-[ ] VAT handling.
-[ ] End of period handling.
 [ ] TODO cleanup.
 
 0.8

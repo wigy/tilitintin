@@ -56,8 +56,8 @@ class ToolPanel extends Component {
       <div className="ToolPanel">
         <h1>{this.props.store.account.toString()}</h1>
 
-        <IconButton onClick={enableAll} title="reset" icon="fa-home"></IconButton>
-        <IconButton onClick={disableAll} title="disable-all" icon="fa-trash-alt"></IconButton>
+        <IconButton onClick={enableAll} title="reset" icon="fas fa-clone"></IconButton>
+        <IconButton onClick={disableAll} title="disable-all" icon="far fa-clone"></IconButton>
 
         {this.props.store.account.tags.map((tag) => {
           const spacer = (tag.type !== last);
