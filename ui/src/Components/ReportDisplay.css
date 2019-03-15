@@ -9,6 +9,7 @@ table.ReportDisplay tr {
 
 table.ReportDisplay tr td {
   border: none !important;
+  padding: 0 1em;
 }
 
 table.ReportDisplay tr.columns {
