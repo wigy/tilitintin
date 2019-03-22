@@ -21,6 +21,7 @@ i18n.init({
         'Reports': 'Raportit',
         'Select database': 'Valitse kanta',
         'Select period': 'Valitse jakso',
+        'Tools': 'Työkalut',
         'Total': 'Yhteensä',
         'Transactions': 'Tapahtumat',
         'Username': 'Käyttäjätunnus',
@@ -53,6 +54,7 @@ i18n.init({
         'icon-option-quarter3': 'Kolme neljännestä',
         'icon-option-full': 'Koko vuosi',
         'icon-option-byTags': 'Tägeittäin',
+        'icon-summarize-vat-period': 'Laske VAT velat/saatavat',
 
         'column-document-number': 'Nro',
         'column-account-number': 'Nro',

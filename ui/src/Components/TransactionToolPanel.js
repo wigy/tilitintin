@@ -11,7 +11,7 @@ import './ToolPanel.css';
 @inject('store')
 @inject('cursor')
 @observer
-class ToolPanel extends Component {
+class TransactionToolPanel extends Component {
 
   componentDidMount() {
     this.props.store.tools.tagDisabled = {};
@@ -80,9 +80,9 @@ class ToolPanel extends Component {
   }
 }
 
-ToolPanel.propTypes = {
+TransactionToolPanel.propTypes = {
   cursor: PropTypes.instanceOf(Cursor),
   store: PropTypes.instanceOf(Store)
 };
 
-export default ToolPanel;
+export default TransactionToolPanel;

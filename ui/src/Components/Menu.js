@@ -59,6 +59,7 @@ class Menu extends Component {
       case 'txs':
       case 'account':
       case 'report':
+      case 'tools':
         url = '/' + db + '/' + key;
         if (periodId) {
           url += '/' + periodId;
@@ -106,24 +107,29 @@ class Menu extends Component {
             </NavDropdown>
           </Nav>
 
-          <Nav bsStyle="tabs" pullRight activeKey="5" onSelect={() => this.handleSelect('logout')}>
-            <NavItem eventKey="5" disabled={notLoggedIn}>
+          <Nav bsStyle="tabs" pullRight activeKey="3" onSelect={() => this.handleSelect('logout')}>
+            <NavItem eventKey="3" disabled={notLoggedIn}>
               <Trans>Logout</Trans>
             </NavItem>
           </Nav>
 
-          <Nav bsStyle="tabs" pullRight activeKey="4" onSelect={() => this.handleSelect('account')}>
+          <Nav bsStyle="tabs" pullRight activeKey="4" onSelect={() => this.handleSelect('tools')}>
             <NavItem eventKey="4" disabled={!db || !periodId || notLoggedIn}>
+              <Trans>Tools</Trans>
+            </NavItem>
+          </Nav>
+          <Nav bsStyle="tabs" pullRight activeKey="5" onSelect={() => this.handleSelect('account')}>
+            <NavItem eventKey="5" disabled={!db || !periodId || notLoggedIn}>
               <Trans>Accounts</Trans>
             </NavItem>
           </Nav>
-          <Nav bsStyle="tabs" pullRight activeKey="5" onSelect={() => this.handleSelect('report')}>
-            <NavItem eventKey="5" disabled={!db || !periodId || notLoggedIn}>
+          <Nav bsStyle="tabs" pullRight activeKey="6" onSelect={() => this.handleSelect('report')}>
+            <NavItem eventKey="6" disabled={!db || !periodId || notLoggedIn}>
               <Trans>Reports</Trans>
             </NavItem>
           </Nav>
-          <Nav bsStyle="tabs" pullRight activeKey="6" onSelect={() => this.handleSelect('txs')}>
-            <NavItem eventKey="6" disabled={!db || !periodId || notLoggedIn}>
+          <Nav bsStyle="tabs" pullRight activeKey="7" onSelect={() => this.handleSelect('txs')}>
+            <NavItem eventKey="7" disabled={!db || !periodId || notLoggedIn}>
               <Trans>Transactions</Trans>
             </NavItem>
           </Nav>

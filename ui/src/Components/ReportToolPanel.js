@@ -20,7 +20,7 @@ const ICONS = {
 @translate('translations')
 @inject('store')
 @observer
-class ToolPanel extends Component {
+class ReportToolPanel extends Component {
 
   render() {
     const store = this.props.store;
@@ -113,10 +113,10 @@ class ToolPanel extends Component {
   }
 }
 
-ToolPanel.propTypes = {
+ReportToolPanel.propTypes = {
   t: PropTypes.func,
   i18n: PropTypes.instanceOf(I18n),
   store: PropTypes.instanceOf(Store)
 };
 
-export default ToolPanel;
+export default ReportToolPanel;

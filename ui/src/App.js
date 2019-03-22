@@ -13,6 +13,7 @@ import Report from './Components/Report';
 import Menu from './Components/Menu';
 import ReportToolPanel from './Components/ReportToolPanel';
 import TransactionToolPanel from './Components/TransactionToolPanel';
+import ToolsToolPanel from './Components/ToolsToolPanel';
 import Login from './Components/Login';
 import Cursor from './Stores/Cursor';
 import Store from './Stores/Store';
@@ -74,6 +75,8 @@ class App extends Component {
           <Route exact path="/:db/report/:periodId/:accountId" component={Menu}/>
           <Route exact path="/:db/report/:periodId//:format" component={Menu}/>
           <Route exact path="/:db/report/:periodId/:accountId/:format" component={Menu}/>
+          <Route exact path="/:db/tools/:periodId" component={Menu}/>
+          <Route exact path="/:db/tools/:periodId/:accountId" component={Menu}/>
         </div>
         <div className="SidePanel Panel">
           <div className="Frame">
@@ -86,6 +89,7 @@ class App extends Component {
             <Route path="/:db/txs/:periodId/:accountId" component={TransactionToolPanel}/>
             <Route path="/:db/report/:periodId//:format" component={ReportToolPanel}/>
             <Route path="/:db/report/:periodId/:accountId/:format" component={ReportToolPanel}/>
+            <Route path="/:db/tools/:periodId" component={ToolsToolPanel}/>
           </div>
         </div>
         <div className="MainPanel Panel">
