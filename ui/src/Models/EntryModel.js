@@ -318,6 +318,13 @@ class EntryModel extends NavigationTargetModel {
   }
 
   /**
+   * Get the description prefixed by the tags.
+   */
+  get text() {
+    return this.tagNames.length ? '[' + this.tagNames.join('][') + '] ' + this.description : this.description;
+  }
+
+  /**
    * Get the positive (debit) or negative (credit) value of cents.
    */
   get total() {

@@ -9,6 +9,8 @@ class DatabaseModel extends Model {
   // All accounts of this database.
   @observable
   accountsById = {};
+  @observable
+  accountsByNumber = {};
   // All tags of this database.
   @observable
   tagsByTag = {};
@@ -52,6 +54,7 @@ class DatabaseModel extends Model {
   addAccount(account) {
     account.parent = this;
     this.accountsById[account.id] = account;
+    this.accountsByNumber[account.number] = account;
   }
 
   /**
@@ -97,6 +100,15 @@ class DatabaseModel extends Model {
    */
   getAccount(id) {
     return this.accountsById[id] || null;
+  }
+
+  /**
+   * Get the account by its number.
+   * @param {Number} number
+   * @return {null|AccountModel}
+   */
+  getAccountByNumber(number) {
+    return this.accountsByNumber[number] || null;
   }
 
   /**

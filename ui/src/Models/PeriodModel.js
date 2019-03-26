@@ -127,6 +127,14 @@ class PeriodModel extends Model {
   }
 
   /**
+   * Get all documents loaded.
+   * @return {DocumentModel[]}
+   */
+  getAllDocuments() {
+    return Object.values({...this.documents});
+  }
+
+  /**
    * Update tags for all accounts from the current documents.
    */
   refreshTags() {

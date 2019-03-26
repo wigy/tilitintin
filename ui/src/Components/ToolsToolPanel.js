@@ -25,6 +25,7 @@ class ToolsToolPanel extends Component {
       case 'vat':
         label = 'Value Added Tax';
         buttons = [
+          <IconButton key="button-fix" onClick={null} title="fix-vat-descriptions" icon="fa-paperclip"></IconButton>,
           <IconButton key="button-vat" onClick={null} title="summarize-vat-period" icon="fa-balance-scale"></IconButton>
         ];
         break;

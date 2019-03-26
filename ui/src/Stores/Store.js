@@ -594,6 +594,17 @@ class Store {
   }
 
   /**
+   * Get all currently loaded documents.
+   * @return {DocumentModel[]}
+   */
+  getAllDocuments() {
+    if (!this.period) {
+      return [];
+    }
+    return this.period.getAllDocuments();
+  }
+
+  /**
    * Get a list of all entries for the currently selected account of the current period.
    */
   @computed

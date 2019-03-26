@@ -56,6 +56,7 @@ i18n.init({
         'icon-option-full': 'Koko vuosi',
         'icon-option-byTags': 'Tägeittäin',
         'icon-summarize-vat-period': 'Kerää ALV velat/saatavat',
+        'icon-fix-vat-descriptions': 'Korjaa puuttuvat kuvaukset',
 
         'column-document-number': 'Nro',
         'column-account-number': 'Nro',
