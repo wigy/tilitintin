@@ -19,6 +19,8 @@ class AccountModel extends Model {
       type: null,
       // Combined flags.
       flags: 0,
+      // VAT percentage used for the account.
+      vat_percentage: 0,
       // Tags found from transactions of this account.
       tagsByTag: {}
     }, init);

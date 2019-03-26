@@ -14,6 +14,7 @@ FUTURE FEATURES
 [ ] Period locking.
 [ ]   Locking page.
 [ ]   Disable changing of the locked period.
+[ ] When entering debit/credit, add automatically VAT line if vat_percentage set.
 [ ] TODO cleanup.
 
 0.7
