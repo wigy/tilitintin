@@ -11,6 +11,27 @@ import './ToolPanel.css';
 @observer
 class ToolsToolPanel extends Component {
 
+  /**
+   * Copy a description to the empty VAT fields usually inherited from Tilitin data.
+   */
+  async fixDescriptions() {
+    const entriesChanged = new Set();
+    this.props.store.getAllDocuments().forEach((doc) => {
+      doc.entries.forEach((entry) => {
+        if (entry.text === '') {
+          const samples = doc.entries.filter((e) => e.text !== '');
+          if (samples.length) {
+            entry.setText(samples[0].text);
+            entriesChanged.add(entry);
+          }
+        }
+      });
+    });
+    for (const entry of [...entriesChanged]) {
+      await entry.save();
+    }
+  }
+
   render() {
     const store = this.props.store;
     const tool = this.props.match.params.tool || 'vat';
@@ -25,7 +46,7 @@ class ToolsToolPanel extends Component {
       case 'vat':
         label = 'Value Added Tax';
         buttons = [
-          <IconButton key="button-fix" onClick={null} title="fix-vat-descriptions" icon="fa-paperclip"></IconButton>,
+          <IconButton key="button-fix" onClick={() => this.fixDescriptions()} title="fix-vat-descriptions" icon="fa-paperclip"></IconButton>,
           <IconButton key="button-vat" onClick={null} title="summarize-vat-period" icon="fa-balance-scale"></IconButton>
         ];
         break;

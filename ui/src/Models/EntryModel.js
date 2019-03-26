@@ -325,6 +325,14 @@ class EntryModel extends NavigationTargetModel {
   }
 
   /**
+   * Extract tags from the text and set them and the description.
+   * @param {String} text
+   */
+  setText(text) {
+    this['change.description'](text);
+  }
+
+  /**
    * Get the positive (debit) or negative (credit) value of cents.
    */
   get total() {

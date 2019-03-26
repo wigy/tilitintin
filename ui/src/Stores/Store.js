@@ -407,11 +407,17 @@ class Store {
   }
 
   /**
-   * Get the summary of balances for all accounts in the current period.
+   * Get the summary of balances for all accounts in the given period.
    */
-  async fetchBalances(db, periodId) {
+  async fetchBalances(db = null, periodId = null) {
     if (!this.token) {
       return;
+    }
+    if (!db) {
+      db = this.db;
+    }
+    if (!periodId) {
+      periodId = this.periodId;
     }
     return this.request('/db/' + db + '/period/' + periodId)
       .then((balances) => {
@@ -512,7 +518,6 @@ class Store {
             entry.id = res.id;
           }
         });
-        return this.fetchBalances(this.db, this.periodId);
       });
   }
 
