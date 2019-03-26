@@ -21,6 +21,13 @@ const str2num = (str) => {
 
 class EntryModel extends NavigationTargetModel {
 
+  static FLAGS = {
+    // If set, this entry is summary for VAT.
+    VAT_IGNORE: 1,
+    // If set, this entry has been collected for VAT.
+    VAT_RECONCILED: 2
+  };
+
   constructor(parent, init = {}) {
     super(parent, {
       id: null,
@@ -34,7 +41,7 @@ class EntryModel extends NavigationTargetModel {
       description: '',
       // ID of the document this entry belongs to.
       document_id: null,
-      // TODO: What is this?
+      // Combined flags.
       flags: 0,
       // Order number for this entry.
       row_number: null,

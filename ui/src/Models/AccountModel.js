@@ -3,6 +3,11 @@ import TagModel from './TagModel';
 
 class AccountModel extends Model {
 
+  static FLAGS = {
+    // If set, this is favorite account.
+    FAVORITE: 1
+  };
+
   constructor(parent, init = {}) {
     super(parent, {
       id: null,
@@ -12,6 +17,8 @@ class AccountModel extends Model {
       name: null,
       // "ASSET/LIABILITY/EQUITY/REVENUE/EXPENSE/PROFIT_PREV/PROFIT"
       type: null,
+      // Combined flags.
+      flags: 0,
       // Tags found from transactions of this account.
       tagsByTag: {}
     }, init);
