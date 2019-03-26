@@ -2,6 +2,7 @@
 BUGS
 ====
 
+[ ] Invalid user/password is not handled smoothly.
 
 FUTURE FEATURES
 ===============

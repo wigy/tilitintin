@@ -54,7 +54,7 @@ i18n.init({
         'icon-option-quarter3': 'Kolme neljännestä',
         'icon-option-full': 'Koko vuosi',
         'icon-option-byTags': 'Tägeittäin',
-        'icon-summarize-vat-period': 'Laske VAT velat/saatavat',
+        'icon-summarize-vat-period': 'Kerää ALV velat/saatavat',
 
         'column-document-number': 'Nro',
         'column-account-number': 'Nro',
