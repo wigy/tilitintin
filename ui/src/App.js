@@ -8,12 +8,14 @@ import './App.css';
 import Balances from './Components/Balances';
 import AccountTransactions from './Components/AccountTransactions';
 import Accounts from './Components/Accounts';
-import Reports from './Components/Reports';
+import ReportsList from './Components/ReportsList';
 import Report from './Components/Report';
 import Menu from './Components/Menu';
 import ReportToolPanel from './Components/ReportToolPanel';
 import TransactionToolPanel from './Components/TransactionToolPanel';
 import ToolsToolPanel from './Components/ToolsToolPanel';
+import ToolsList from './Components/ToolsList';
+import Tools from './Components/Tools';
 import Login from './Components/Login';
 import Cursor from './Stores/Cursor';
 import Store from './Stores/Store';
@@ -77,11 +79,14 @@ class App extends Component {
           <Route exact path="/:db/report/:periodId/:accountId/:format" component={Menu}/>
           <Route exact path="/:db/tools/:periodId" component={Menu}/>
           <Route exact path="/:db/tools/:periodId/:accountId" component={Menu}/>
+          <Route exact path="/:db/tools/:periodId//:tool" component={Menu}/>
+          <Route exact path="/:db/tools/:periodId/:accountId/:tool" component={Menu}/>
         </div>
         <div className="SidePanel Panel">
           <div className="Frame">
             <Route path="/:db/txs/:periodId" component={Balances}/>
-            <Route path="/:db/report/:periodId" component={Reports}/>
+            <Route path="/:db/report/:periodId" component={ReportsList}/>
+            <Route path="/:db/tools/:periodId" component={ToolsList}/>
           </div>
         </div>
         <div className="MainTopPanel Panel">
@@ -89,7 +94,10 @@ class App extends Component {
             <Route path="/:db/txs/:periodId/:accountId" component={TransactionToolPanel}/>
             <Route path="/:db/report/:periodId//:format" component={ReportToolPanel}/>
             <Route path="/:db/report/:periodId/:accountId/:format" component={ReportToolPanel}/>
-            <Route path="/:db/tools/:periodId" component={ToolsToolPanel}/>
+            <Route exact path="/:db/tools/:periodId" component={ToolsToolPanel}/>
+            <Route exact path="/:db/tools/:periodId/:accountId" component={ToolsToolPanel}/>
+            <Route exact path="/:db/tools/:periodId//:tool" component={ToolsToolPanel}/>
+            <Route exact path="/:db/tools/:periodId/:accountId/:tool" component={ToolsToolPanel}/>
           </div>
         </div>
         <div className="MainPanel Panel">
@@ -98,6 +106,9 @@ class App extends Component {
             <Route path="/:db/account/:periodId" component={Accounts}/>
             <Route path="/:db/report/:periodId//:format" component={Report}/>
             <Route path="/:db/report/:periodId/:accountId/:format" component={Report}/>
+            <Route exact path="/:db/tools/:periodId/:accountId" component={Tools}/>
+            <Route exact path="/:db/tools/:periodId//:tool" component={Tools}/>
+            <Route exact path="/:db/tools/:periodId/:accountId/:tool" component={Tools}/>
             <Login />
           </div>
         </div>

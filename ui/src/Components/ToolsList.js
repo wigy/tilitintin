@@ -2,41 +2,42 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import { translate, Trans } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
-import ReportLink from './ReportLink';
 
 @translate('translations')
 @inject('store')
 @inject('cursor')
 @observer
-class Reports extends Component {
+class ToolsList extends Component {
 
   componentDidMount() {
-    this.props.cursor.selectPage('Reports');
+    this.props.cursor.selectPage('Tools');
   }
 
   render() {
-    if (!this.props.store.token) {
+    const { store } = this.props;
+    if (!store.token) {
       return '';
     }
 
+    const url = (page) => '/' + store.db + '/tools/' + store.periodId + '/' + ((store.account && store.account.id) || '') + '/' + page;
+
     return (
-      <div className="Reports">
-        <h1><Trans>Reports</Trans></h1>
+      <div>
+        <h1><Trans>Tools</Trans></h1>
         <dl>
-          {this.props.store.reports.map((report) => <li key={report.format}>
-            <ReportLink report={report}/>
-          </li>)}
+          <li><Link to={url('vat')}><Trans>Value Added Tax</Trans></Link></li>
         </dl>
       </div>
     );
   }
 }
 
-Reports.propTypes = {
+ToolsList.propTypes = {
   cursor: PropTypes.instanceOf(Cursor),
   store: PropTypes.instanceOf(Store)
 };
 
-export default Reports;
+export default ToolsList;

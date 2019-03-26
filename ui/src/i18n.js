@@ -25,6 +25,7 @@ i18n.init({
         'Total': 'Yhteensä',
         'Transactions': 'Tapahtumat',
         'Username': 'Käyttäjätunnus',
+        'Value Added Tax': 'Arvonlisävero',
 
         'Cannot be negative.': 'Ei voi olla negatiivinen.',
         'Debit and credit do not match': 'Debet ja kredit ei täsmää',

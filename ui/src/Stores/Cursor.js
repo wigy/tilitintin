@@ -113,6 +113,10 @@ class Cursor {
         this.setTopology(page, () => [[]]);
         break;
 
+      case 'Tools':
+        this.setTopology(page, () => [[]]);
+        break;
+
       default:
         this.setTopology(page, () => [[]]);
         console.error(`No topology defined for page ${page}.`);
