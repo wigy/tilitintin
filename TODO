@@ -3,6 +3,7 @@ BUGS
 ====
 
 [ ] Invalid user/password is not handled smoothly.
+[ ] Select non-oy and go to VAT pages.
 
 FUTURE FEATURES
 ===============

@@ -67,3 +67,9 @@ table tr.alt:nth-child(odd) {
   outline: 1px solid var(--marking-fg-color) !important;
   outline-offset: -1px;
 }
+
+.disabled-link {
+  pointer-events: none;
+  user-select: none;
+  color: gray !important;
+}

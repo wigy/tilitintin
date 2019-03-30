@@ -22,13 +22,14 @@ class ToolsList extends Component {
       return '';
     }
 
-    const url = (page) => '/' + store.db + '/tools/' + store.periodId + '/' + ((store.account && store.account.id) || '') + '/' + page;
+    const url = (page) => '/' + (store.db || '_') + '/tools/' + (store.periodId || '') + '/' + ((store.account && store.account.id) || '') + '/' + page;
 
     return (
       <div>
         <h1><Trans>Tools</Trans></h1>
         <dl>
-          <li><Link to={url('vat')}><Trans>Value Added Tax</Trans></Link></li>
+          <li><Link className={store.db ? '' : 'disabled-link'} to={url('periods')}><Trans>Periods</Trans></Link></li>
+          <li><Link className={store.periodId ? '' : 'disabled-link'} to={url('vat')}><Trans>Value Added Tax</Trans></Link></li>
         </dl>
       </div>
     );

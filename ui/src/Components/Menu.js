@@ -17,6 +17,9 @@ import './Menu.css';
 class Menu extends Component {
 
   update({db, periodId}) {
+    if (db === '_') {
+      db = null;
+    }
     periodId = parseInt(periodId) || null;
     this.props.store.setPeriod(db, periodId);
   }
@@ -60,7 +63,7 @@ class Menu extends Component {
       case 'account':
       case 'report':
       case 'tools':
-        url = '/' + db + '/' + key;
+        url = '/' + (db || '_') + '/' + key;
         if (periodId) {
           url += '/' + periodId;
         }
@@ -114,7 +117,7 @@ class Menu extends Component {
           </Nav>
 
           <Nav bsStyle="tabs" pullRight activeKey="4" onSelect={() => this.handleSelect('tools')}>
-            <NavItem eventKey="4" disabled={!db || !periodId || notLoggedIn}>
+            <NavItem eventKey="4">
               <Trans>Tools</Trans>
             </NavItem>
           </Nav>

@@ -152,6 +152,7 @@ class ToolsToolPanel extends Component {
         break;
 
       default:
+        label = 'Periods';
         buttons = [];
     }
 
