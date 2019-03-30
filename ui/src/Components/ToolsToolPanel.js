@@ -133,7 +133,7 @@ class ToolsToolPanel extends Component {
 
   render() {
     const store = this.props.store;
-    const tool = this.props.match.params.tool || 'vat';
+    const tool = this.props.match.params.tool || 'periods';
 
     if (!store.token) {
       return '';
@@ -151,8 +151,15 @@ class ToolsToolPanel extends Component {
         ];
         break;
 
-      default:
+      case 'periods':
         label = 'Periods';
+        buttons = [
+          <IconButton key="button-new" disabled={true} onClick={() => {}} title="create-period" icon="fa-calendar-plus"></IconButton>
+        ];
+        break;
+
+      default:
+        label = 'Unknown';
         buttons = [];
     }
 

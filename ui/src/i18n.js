@@ -74,6 +74,7 @@ i18n.init({
         'icon-summarize-vat-period': 'Kerää ALV velat/saatavat',
         'icon-lock-period': 'Lukitse tilikausi',
         'icon-unlock-period': 'Poista tilikauden lukitus',
+        'icon-create-period': 'Aloita uusi tilikausi',
 
         'column-account-number': 'Nro',
         'column-balance': 'Saldo',
