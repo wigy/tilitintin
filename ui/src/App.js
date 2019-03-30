@@ -90,6 +90,7 @@ class App extends Component {
             <Route path="/:db/report/:periodId" component={ReportsList}/>
             <Route exact path="/:db/tools" component={ToolsList}/>
             <Route exact path="/:db/tools/:periodId" component={ToolsList}/>
+            <Route exact path="/:db/tools/:periodId//:tool" component={ToolsList}/>
             <Route exact path="/:db/tools///:tool" component={ToolsList}/>
           </div>
         </div>
@@ -112,6 +113,7 @@ class App extends Component {
             <Route path="/:db/report/:periodId//:format" component={Report}/>
             <Route path="/:db/report/:periodId/:accountId/:format" component={Report}/>
             <Route exact path="/:db/tools" component={Tools}/>
+            <Route exact path="/:db/tools///:tool" component={Tools}/>
             <Route exact path="/:db/tools/:periodId/" component={Tools}/>
             <Route exact path="/:db/tools/:periodId/:accountId" component={Tools}/>
             <Route exact path="/:db/tools/:periodId//:tool" component={Tools}/>

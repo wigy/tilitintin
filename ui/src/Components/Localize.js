@@ -5,14 +5,17 @@ import { translate, I18n } from 'react-i18next';
 @translate('translations')
 class Localize extends Component {
 
-  localize(text) {
+  date(text) {
     const lang = this.props.i18n.language;
+    return new Date(text).toLocaleDateString(lang);
+  }
 
+  localize(text) {
     let match;
     do {
       match = /(\{(\d\d\d\d-\d\d-\d\d)\})/.exec(text);
       if (match) {
-        text = text.replace(match[1], new Date(match[2]).toLocaleDateString(lang));
+        text = text.replace(match[1], this.date(match[2]));
       } else {
         match = /(\{(.*?)\})/.exec(text);
         if (match) {
@@ -25,6 +28,9 @@ class Localize extends Component {
   }
 
   render() {
+    if ('date' in this.props) {
+      return this.date(this.props.date);
+    }
     const what = this.props.children;
     if (what === undefined) {
       return '';
@@ -38,7 +44,7 @@ class Localize extends Component {
 
 Localize.propTypes = {
   t: PropTypes.func,
-  text: PropTypes.string,
+  date: PropTypes.string,
   children: PropTypes.any,
   i18n: PropTypes.instanceOf(I18n)
 };

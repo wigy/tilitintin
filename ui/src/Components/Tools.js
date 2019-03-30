@@ -5,6 +5,7 @@ import { translate } from 'react-i18next';
 import Store from '../Stores/Store';
 import Settings from '../Stores/Settings';
 import ToolsForVAT from './ToolsForVAT';
+import ToolsForPeriods from './ToolsForPeriods';
 
 @translate('translations')
 @inject('store')
@@ -19,8 +20,10 @@ class Tools extends Component {
     }
     const {db, periodId, tool} = this.props.match.params;
 
-    if (!tool || tool === 'vat') {
+    if (tool === 'vat') {
       return <ToolsForVAT db={db} periodId={periodId}/>;
+    } else {
+      return <ToolsForPeriods db={db}/>;
     }
   }
 }
