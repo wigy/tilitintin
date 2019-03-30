@@ -93,6 +93,8 @@ class DocumentModel extends NavigationTargetModel {
    * @param {EntryModel} entry
    */
   addEntry(entry) {
+    entry.document_id = this.id;
+    entry.parent = this;
     this.entries.push(entry);
   }
 

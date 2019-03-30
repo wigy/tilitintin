@@ -47,7 +47,7 @@ class Tools extends Component {
     const tool = this.props.match.params.tool || 'vat';
 
     if (tool === 'vat') {
-      const VAT = this.props.store.period ? this.props.store.period.summarizeVAT() : {sales: 0, purchases: 0};
+      const VAT = this.props.store.period ? this.props.store.period.VATSummary : {sales: 0, purchases: 0};
 
       return (
         <div className="Tools">
@@ -56,7 +56,7 @@ class Tools extends Component {
             <b><Trans>VAT from sales</Trans>: <Money cents={VAT.sales} currency="€"></Money></b><br/>
             <b><Trans>{VAT.sales + VAT.purchases < 0 ? 'Payable' : 'Receivable'}</Trans>: <Money cents={VAT.sales + VAT.purchases} currency="€"></Money></b><br/>
           </SubPanel>
-          {this.props.store.getAllDocuments().map((doc) => {
+          {this.props.store.period && this.props.store.period.openVATDocuments.map((doc) => {
             return <div key={doc.id}>
               <Localize>{`{${doc.date}}`}</Localize>
               <br/>

@@ -1,4 +1,4 @@
-import { observable } from 'mobx';
+import { computed, observable } from 'mobx';
 import ReportModel from './ReportModel';
 import Model from './Model';
 
@@ -39,6 +39,7 @@ class PeriodModel extends Model {
    */
   addDocument(doc) {
     doc.parent = this;
+    doc.period_id = this.id;
     this.documents[doc.id] = doc;
     doc.entries.forEach((entry) => {
       this.documentsByAccountId[entry.account_id] = this.documentsByAccountId[entry.account_id] || new Set();
@@ -127,11 +128,24 @@ class PeriodModel extends Model {
   }
 
   /**
-   * Get all documents loaded.
+   * Get currently loaded documents having entry for accounts and matching the filter.
+   * @param {String[]} [accounts]
+   * @param {Function<EntryModel>} [filter]
    * @return {DocumentModel[]}
    */
-  getAllDocuments() {
-    return Object.values({...this.documents});
+  getDocuments(accounts = null, filter = null) {
+    let docs = Object.values({...this.documents});
+    if (accounts !== null) {
+      docs = docs.filter((doc) => {
+        for (const entry of doc.entries) {
+          if (accounts.includes(entry.account.number)) {
+            return filter === null ? true : filter(entry);
+          }
+        }
+        return false;
+      });
+    }
+    return docs;
   }
 
   /**
@@ -154,12 +168,13 @@ class PeriodModel extends Model {
    * Calculate sum of unprocessed payable and receivable for VAT.
    * @return {Object} An object with `sales` and `purchases`.
    */
-  summarizeVAT() {
+  @computed
+  get VATSummary() {
     let sales = 0;
     let purchases = 0;
     const { VAT_SALES_ACCOUNT, VAT_PURCHASES_ACCOUNT } = this.settings;
 
-    this.store.getAllDocuments().forEach((doc) => {
+    this.openVATDocuments.forEach((doc) => {
       doc.entries.forEach((entry) => {
         const acc = entry.account.number;
         if (acc === VAT_SALES_ACCOUNT) {
@@ -171,6 +186,15 @@ class PeriodModel extends Model {
       });
     });
     return {sales, purchases};
+  }
+
+  /**
+   * Gather documents with non-reconciled VAT entries.
+   */
+  @computed
+  get openVATDocuments() {
+    const { VAT_SALES_ACCOUNT, VAT_PURCHASES_ACCOUNT } = this.settings;
+    return this.store.getDocuments([VAT_SALES_ACCOUNT, VAT_PURCHASES_ACCOUNT], (entry) => !entry.VAT_RECONCILED && !entry.VAT_IGNORE);
   }
 
   /**

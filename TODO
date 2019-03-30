@@ -8,13 +8,14 @@ FUTURE FEATURES
 ===============
 
 0.6
+[X] VAT handling.
+[ ] When entering debit/credit, add automatically VAT line if vat_percentage set.
 [ ] Tools page: renumber documents in increasing order by date.
-[ ] VAT handling.
-[ ] End of period handling.
 [ ] Period locking.
 [ ]   Locking page.
-[ ]   Disable changing of the locked period.
-[ ] When entering debit/credit, add automatically VAT line if vat_percentage set.
+[ ]   Disable changing of the locked period in API.
+[ ]   Disable changing of the locked period in UI.
+[ ] End of period handling.
 [ ] TODO cleanup.
 
 0.7
@@ -26,6 +27,8 @@ FUTURE FEATURES
 
 0.8
 [ ] Filtering tool for full account list: Assets, Income, Expense, Other
+[ ] Filtering favorite accounts.
+[ ] Displaying and marking an account favorite (with star etc.)
 [ ] Creating tx when there is not a single account listed.
 [ ] Account search.
 [ ] TODO cleanup.

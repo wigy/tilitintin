@@ -359,6 +359,31 @@ class EntryModel extends NavigationTargetModel {
   get tags() {
     return this.tagNames.map((tag) => this.database.getTag(tag)).sort(TagModel.sorter());
   }
+
+  /**
+   * Set or clear a flag.
+   * @param {String} name
+   * @param {Boolean} value
+   */
+  setFlag(name, value) {
+    if (value) {
+      this.flags = this.flags | EntryModel.FLAGS[name];
+    } else {
+      this.flags = this.flags & ~EntryModel.FLAGS[name];
+    }
+  }
+  /**
+   * Get a value of a flag.
+   * @param {String} name
+   */
+  getFlag(name) {
+    return !!(this.flags & EntryModel.FLAGS[name]);
+  }
+
+  get VAT_IGNORE() { return this.getFlag('VAT_IGNORE'); }
+  set VAT_IGNORE(value) { this.setFlag('VAT_IGNORE', value); }
+  get VAT_RECONCILED() { return this.getFlag('VAT_RECONCILED'); }
+  set VAT_RECONCILED(value) { this.setFlag('VAT_RECONCILED', value); }
 }
 
 export default EntryModel;

@@ -48,6 +48,10 @@ class Settings {
   get VAT_SALES_ACCOUNT() { return this.get('vat-sales-account'); }
   @computed
   get VAT_PURCHASES_ACCOUNT() { return this.get('vat-purchases-account'); }
+  @computed
+  get VAT_RECEIVABLE_ACCOUNT() { return this.get('vat-receivable-account'); }
+  @computed
+  get VAT_PAYABLE_ACCOUNT() { return this.get('vat-payable-account'); }
 }
 
 export default Settings;

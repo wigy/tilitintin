@@ -620,14 +620,16 @@ class Store {
   }
 
   /**
-   * Get all currently loaded documents.
+   * Get currently loaded documents having entry for accounts and matching the filter.
+   * @param {String[]} [accounts]
+   * @param {Function<EntryModel>} [filter]
    * @return {DocumentModel[]}
    */
-  getAllDocuments() {
+  getDocuments(accounts = null, filter = null) {
     if (!this.period) {
       return [];
     }
-    return this.period.getAllDocuments();
+    return this.period.getDocuments(accounts, filter);
   }
 
   /**
