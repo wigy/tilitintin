@@ -26,6 +26,10 @@ i18n.init({
         'Transactions': 'Tapahtumat',
         'Username': 'Käyttäjätunnus',
         'Value Added Tax': 'Arvonlisävero',
+        'VAT from purchases': 'ALV ostoista',
+        'VAT from sales': 'ALV myynnistä',
+        'Payable': 'Maksettavaa',
+        'Receivable': 'Saatavia',
 
         'Cannot be negative.': 'Ei voi olla negatiivinen.',
         'Debit and credit do not match': 'Debet ja kredit ei täsmää',
