@@ -34,6 +34,10 @@ class AccountModel extends Model {
     return this.number;
   }
 
+  getUrl() {
+    return '/' + this.database.name + '/txs/' + this.store.period.id + '/' + this.id;
+  }
+
   /**
    * Set tags for this account.
    * @param {String[]} tags
