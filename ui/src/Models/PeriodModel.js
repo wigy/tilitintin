@@ -84,6 +84,22 @@ class PeriodModel extends Model {
   }
 
   /**
+   * Get balance by account ID.
+   * @param {Number} accountId
+   */
+  getBalance(accountId) {
+    return this.balances[accountId];
+  }
+
+  /**
+   * Get balance by account number.
+   * @param {String} number
+   */
+  getBalanceByNumber(number) {
+    return this.getBalance(this.database.getAccountByNumber(number).id);
+  }
+
+  /**
    * Add a report for this period.
    * @param {ReportModel} report
    */

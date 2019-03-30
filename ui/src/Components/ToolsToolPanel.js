@@ -128,6 +128,7 @@ class ToolsToolPanel extends Component {
       await entry.save();
     }
     store.period.addDocument(doc);
+    store.fetchBalances();
   }
 
   render() {

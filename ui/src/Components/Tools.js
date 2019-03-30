@@ -47,14 +47,22 @@ class Tools extends Component {
     const tool = this.props.match.params.tool || 'vat';
 
     if (tool === 'vat') {
-      const VAT = this.props.store.period ? this.props.store.period.VATSummary : {sales: 0, purchases: 0};
-
+      if (!this.props.store.period) {
+        return '';
+      }
+      const VAT = this.props.store.period.VATSummary;
+      const { VAT_RECEIVABLE_ACCOUNT, VAT_PAYABLE_ACCOUNT } = this.props.settings;
+      const payable = this.props.store.period.getBalanceByNumber(VAT_PAYABLE_ACCOUNT);
+      const receivable = this.props.store.period.getBalanceByNumber(VAT_RECEIVABLE_ACCOUNT);
       return (
         <div className="Tools">
           <SubPanel>
-            <b><Trans>VAT from purchases</Trans>: <Money cents={VAT.purchases} currency="€"></Money></b><br/>
-            <b><Trans>VAT from sales</Trans>: <Money cents={VAT.sales} currency="€"></Money></b><br/>
-            <b><Trans>{VAT.sales + VAT.purchases < 0 ? 'Payable' : 'Receivable'}</Trans>: <Money cents={VAT.sales + VAT.purchases} currency="€"></Money></b><br/>
+            <b><Trans>Current VAT receivable</Trans>: <Money cents={receivable ? receivable.total : 0} currency="€"></Money></b><br/>
+            <b><Trans>Current VAT payable</Trans>: <Money cents={payable ? payable.total : 0} currency="€"></Money></b><br/>
+            <br/>
+            <b><Trans>Cumulated VAT from purchases</Trans>: <Money cents={VAT.purchases} currency="€"></Money></b><br/>
+            <b><Trans>Cumulated VAT from sales</Trans>: <Money cents={VAT.sales} currency="€"></Money></b><br/>
+            <b><Trans>{VAT.sales + VAT.purchases < 0 ? 'Payable to add' : 'Receivable to add'}</Trans>: <Money cents={VAT.sales + VAT.purchases} currency="€"></Money></b><br/>
           </SubPanel>
           {this.props.store.period && this.props.store.period.openVATDocuments.map((doc) => {
             return <div key={doc.id}>
