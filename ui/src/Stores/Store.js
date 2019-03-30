@@ -105,6 +105,10 @@ class Store {
   // A hack to keep document open when `filteredTransactions` recalculation happens after adding new entries.
   keepDocumentIdOpen = null;
 
+  constructor(settings) {
+    this.settings = settings;
+  }
+
   /**
    * Make a HTTP request to the back-end.
    * @param {String} path
@@ -189,7 +193,8 @@ class Store {
     await this.fetchDatabases();
     if (!this.dbFetch) {
       debug('SetDb', db, 'fetching...');
-      this.dbFetch = this.fetchPeriods(db)
+      this.dbFetch = this.fetchSettings(db)
+        .then(() => this.fetchPeriods(db))
         .then(() => this.fetchReports(db))
         .then(() => this.fetchTags(db))
         .then(() => this.fetchHeadings(db))
@@ -265,6 +270,7 @@ class Store {
 
     this.db = null;
     this.report = null;
+    this.settings.reset();
     this.clearPeriod();
   }
 
@@ -290,6 +296,21 @@ class Store {
       tagDisabled: {
       }
     };
+  }
+
+  /**
+   * Get the settings from the DB.
+   */
+  async fetchSettings(db) {
+    if (!this.token) {
+      return;
+    }
+    return this.request('/db/' + db + '/settings')
+      .then((settings) => {
+        runInAction(() => {
+          this.settings.update(settings);
+        });
+      });
   }
 
   /**

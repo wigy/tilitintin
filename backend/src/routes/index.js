@@ -93,5 +93,6 @@ router.use('/db/:db/entry', checkToken, checkDb, require('./entry'));
 router.use('/db/:db/heading', checkToken, checkDb, require('./heading'));
 router.use('/db/:db/tags', checkToken, checkDb, require('./tags'));
 router.use('/db/:db/report', checkToken, checkDb, require('./report'));
+router.use('/db/:db/settings', checkToken, checkDb, require('./settings'));
 
 module.exports = router;

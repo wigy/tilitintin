@@ -151,6 +151,29 @@ class PeriodModel extends Model {
   }
 
   /**
+   * Calculate sum of unprocessed payable and receivable for VAT.
+   * @return {Object} An object with `sales` and `purchases`.
+   */
+  summarizeVAT() {
+    let sales = 0;
+    let purchases = 0;
+    const { VAT_SALES_ACCOUNT, VAT_PURCHASES_ACCOUNT } = this.settings;
+
+    this.store.getAllDocuments().forEach((doc) => {
+      doc.entries.forEach((entry) => {
+        const acc = entry.account.number;
+        if (acc === VAT_SALES_ACCOUNT) {
+          sales += entry.total;
+        }
+        if (acc === VAT_PURCHASES_ACCOUNT) {
+          purchases += entry.total;
+        }
+      });
+    });
+    return {sales, purchases};
+  }
+
+  /**
    * Get the database this period belongs to.
    */
   get database() {

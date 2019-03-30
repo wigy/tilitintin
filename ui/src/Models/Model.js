@@ -144,6 +144,13 @@ class Model {
   }
 
   /**
+   * Get the settings.
+   */
+  get settings() {
+    return this.store.settings;
+  }
+
+  /**
    * Construct a sorting function for sorting model instances.
    */
   static sorter(reverse = false) {

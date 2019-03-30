@@ -30,6 +30,7 @@ class Cursor {
   constructor(store) {
     this.store = store;
   }
+
   /**
    * Update navigation structures in the store based on the key pressed.
    * @param {String} key
