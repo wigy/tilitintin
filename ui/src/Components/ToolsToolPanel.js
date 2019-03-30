@@ -12,20 +12,31 @@ import './ToolPanel.css';
 class ToolsToolPanel extends Component {
 
   /**
+   * Collect entries with empty descriptions.
+   */
+  emptyEntries() {
+    const emptyDescriptions = new Set();
+    this.props.store.getAllDocuments().forEach((doc) => {
+      doc.entries.forEach((entry) => {
+        if (entry.text === '') {
+          emptyDescriptions.add(entry);
+        }
+      });
+    });
+    return emptyDescriptions;
+  }
+
+  /**
    * Copy a description to the empty VAT fields usually inherited from Tilitin data.
    */
   async fixDescriptions() {
     const entriesChanged = new Set();
-    this.props.store.getAllDocuments().forEach((doc) => {
-      doc.entries.forEach((entry) => {
-        if (entry.text === '') {
-          const samples = doc.entries.filter((e) => e.text !== '');
-          if (samples.length) {
-            entry.setText(samples[0].text);
-            entriesChanged.add(entry);
-          }
-        }
-      });
+    [...this.emptyEntries()].forEach((entry) => {
+      const samples = entry.parent.entries.filter((e) => e.text !== '');
+      if (samples.length) {
+        entry.setText(samples[0].text);
+        entriesChanged.add(entry);
+      }
     });
     for (const entry of [...entriesChanged]) {
       await entry.save();
@@ -41,12 +52,11 @@ class ToolsToolPanel extends Component {
     }
 
     let buttons, label;
-
     switch (tool) {
       case 'vat':
         label = 'Value Added Tax';
         buttons = [
-          <IconButton key="button-fix" onClick={() => this.fixDescriptions()} title="fix-vat-descriptions" icon="fa-paperclip"></IconButton>,
+          <IconButton key="button-fix" disabled={!this.emptyEntries().size} onClick={() => this.fixDescriptions()} title="fix-vat-descriptions" icon="fa-paperclip"></IconButton>,
           <IconButton key="button-vat" onClick={null} title="summarize-vat-period" icon="fa-balance-scale"></IconButton>
         ];
         break;

@@ -4,7 +4,7 @@ import TagModel from './TagModel';
 class AccountModel extends Model {
 
   static FLAGS = {
-    // If set, this is favorite account.
+    // If set, this is a favorite account.
     FAVORITE: 1
   };
 
