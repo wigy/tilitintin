@@ -6,6 +6,8 @@ import { translate, I18n, Trans } from 'react-i18next';
 import Store from '../Stores/Store';
 import Settings from '../Stores/Settings';
 import IconButton from './IconButton';
+import Dialog from './Dialog';
+import Localize from './Localize';
 import DocumentModel from '../Models/DocumentModel';
 import EntryModel from '../Models/EntryModel';
 import './ToolPanel.css';
@@ -16,6 +18,10 @@ import moment from 'moment';
 @inject('settings')
 @observer
 class ToolsToolPanel extends Component {
+
+  state = {
+    askNewPeriod: false
+  };
 
   /**
    * Collect entries with empty descriptions.
@@ -131,6 +137,14 @@ class ToolsToolPanel extends Component {
     store.fetchBalances();
   }
 
+  /**
+   * Create new period.
+   */
+  async createPeriod(startDate, endDate) {
+    const store = this.props.store;
+    await store.database.createNewPeriod(startDate, endDate, this.props.t('Initial balance'));
+  }
+
   render() {
     const store = this.props.store;
     const tool = this.props.match.params.tool || 'periods';
@@ -140,6 +154,7 @@ class ToolsToolPanel extends Component {
     }
 
     let buttons, label;
+    let startDate, endDate;
     const VAT = this.props.store.period ? this.props.store.period.VATSummary : {sales: 0, purchases: 0};
 
     switch (tool) {
@@ -154,8 +169,10 @@ class ToolsToolPanel extends Component {
       case 'periods':
         label = 'Periods';
         buttons = [
-          <IconButton key="button-new" disabled={true} onClick={() => {}} title="create-period" icon="fa-calendar-plus"></IconButton>
+          <IconButton key="button-new" onClick={() => this.setState({askNewPeriod: true})} title="create-period" icon="fa-calendar-plus"></IconButton>
         ];
+        startDate = store.database && moment(store.database.periods[store.database.periods.length - 1].end_date).add(1, 'day').format('YYYY-MM-DD');
+        endDate = store.database && moment(store.database.periods[store.database.periods.length - 1].end_date).add(1, 'year').format('YYYY-MM-DD');
         break;
 
       default:
@@ -167,6 +184,13 @@ class ToolsToolPanel extends Component {
       <div className="ToolPanel">
         <h1><Trans>{label}</Trans></h1>
         {buttons}
+        <Dialog key="dialog"
+          title={<Trans>Start new period?</Trans>}
+          isVisible={this.state.askNewPeriod}
+          onClose={() => { this.setState({askNewPeriod: false}); }}
+          onConfirm={() => this.createPeriod(startDate, endDate)}>
+          <Localize date={startDate} /> - <Localize date={endDate} />
+        </Dialog>
       </div>
     );
   }

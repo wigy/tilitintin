@@ -1,5 +1,8 @@
 import { observable } from 'mobx';
 import Model from './Model';
+import PeriodModel from './PeriodModel';
+import DocumentModel from './DocumentModel';
+import EntryModel from './EntryModel';
 
 class DatabaseModel extends Model {
 
@@ -74,6 +77,84 @@ class DatabaseModel extends Model {
     heading.parent = this;
     this.headingsByNumber[heading.number] = this.headingsByNumber[heading.number] || [];
     this.headingsByNumber[heading.number].push(heading);
+  }
+
+  /**
+   * Look from the account list the account collecting profit.
+   */
+  getProfitAccount() {
+    for (const account of Object.values(this.accountsById)) {
+      if (account.type === 'PROFIT_PREV') {
+        return account;
+      }
+    }
+  }
+
+  /**
+   * Create new period with initial balances taken from the latest period.
+   */
+  async createNewPeriod(startDate, endDate, initText) {
+    if (!this.periods.length) {
+      throw new Error('Creating a period for empty database not yet supported.');
+    }
+    const profitAcc = this.getProfitAccount();
+    if (!profitAcc) {
+      throw new Error('Cannot find previous profit account.');
+    }
+    const lastPeriod = this.periods[this.periods.length - 1];
+
+    // Collect the balances from the previous period.
+    await this.store.fetchBalances(this.name, lastPeriod.id);
+    let profit = 0;
+    let balances = [];
+    Object.values(lastPeriod.balances).forEach((balance) => {
+      const acc = this.accountsById[balance.account_id];
+      switch (acc.type) {
+        case 'ASSET':
+        case 'LIABILITY':
+        case 'EQUITY':
+          if (balance.total) {
+            balances.push({id: acc.id, number: acc.number, balance: balance.total});
+          }
+          break;
+        case 'REVENUE':
+        case 'EXPENSE':
+        case 'PROFIT_PREV':
+          profit += balance.total;
+          break;
+        default:
+          throw new Error(`No idea how to handle ${acc.type} account, when creating new period.`);
+      }
+    });
+
+    // Create period.
+    const period = new PeriodModel(this, {start_date: startDate, end_date: endDate});
+    this.addPeriod(period);
+    await period.save();
+
+    // Create document.
+    const doc = new DocumentModel(period, {number: 0, date: startDate});
+    period.addDocument(doc);
+    await doc.save();
+
+    // Prepare profit entry.
+    if (profit) {
+      balances.push({id: profitAcc.id, number: profitAcc.number, balance: profit});
+    }
+
+    // Create entries.
+    balances.sort((a, b) => (a.number > b.number ? 1 : (a.number < b.number ? -1 : 0)));
+    for (const balance of balances) {
+      const entry = new EntryModel(doc, {
+        account_id: balance.id,
+        amount: Math.abs(balance.balance),
+        debit: balance.balance > 0 ? 1 : 0,
+        row_number: doc.entries.length + 1,
+        description: initText
+      });
+      doc.addEntry(entry);
+      await entry.save();
+    }
   }
 
   /**

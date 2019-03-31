@@ -14,6 +14,11 @@ router.get('/:id', (req, res) => {
     });
 });
 
+router.post('/', async (req, res) => {
+  return data.createOne(req.db, 'period', req.body)
+    .then((data) => res.send(data));
+});
+
 router.patch('/:id', (req, res) => {
   let obj = req.body;
   data.updateOne(req.db, 'period', req.params.id, obj)

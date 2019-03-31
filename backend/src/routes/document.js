@@ -23,7 +23,12 @@ router.post('/', async (req, res) => {
     res.sendStatus(403);
     return;
   }
-  const number = await data.getNextDocument(req.db, req.body.period_id);
+  let number;
+  if ('number' in req.body) {
+    number = req.body.number;
+  } else {
+    number = await data.getNextDocument(req.db, req.body.period_id);
+  }
   return data.createOne(req.db, 'document', {...req.body, number})
     .then((data) => res.send(data));
 });
