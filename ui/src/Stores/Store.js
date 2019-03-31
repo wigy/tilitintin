@@ -113,7 +113,7 @@ class Store {
    * Make a HTTP request to the back-end.
    * @param {String} path
    * @param {String} method
-   * @param {Object} data
+   * @param {Object|null|undefined} data
    */
   async request(path, method = 'GET', data = null) {
     let options = {
@@ -140,8 +140,10 @@ class Store {
             debug('    OK:', method, config.API_URL + path, data || '');
           }
           return res.status === 200 ? res.json() : null;
-        } else if (res.status === 403) {
+        } else if (res.status === 401) {
           this.logout();
+        } else if (res.status === 403) {
+          return undefined;
         } else {
           if (DEBUG) {
             debug('    Fail:', method, config.API_URL + path, data || '');

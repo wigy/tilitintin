@@ -122,7 +122,7 @@ function fillEntries (db, entries, className, joinClass) {
  * @param {object} where
  * @param {Array} order
  */
-function listAll(db, className, where, order) {
+async function listAll(db, className, where, order) {
   if (!fields[className]) {
     throw new Error('No definition for entries for ' + className);
   }
@@ -144,7 +144,7 @@ function listAll(db, className, where, order) {
  * @param {String} joinClass
  * @param {String[]} joinClassOrder
  */
-function getOne(db, className, id, joinClass = null, joinClassOrder = null) {
+async function getOne(db, className, id, joinClass = null, joinClassOrder = null) {
   let ret = null;
   return knex.db(db).select('*').from(className).where({'id': id})
     .then(entries => {
@@ -170,7 +170,7 @@ function getOne(db, className, id, joinClass = null, joinClassOrder = null) {
  * @param {Number} id
  * @param {Object} data
  */
-function updateOne(db, className, id, data) {
+async function updateOne(db, className, id, data) {
   try {
     id = parseInt(id);
   } catch (err) {
@@ -198,7 +198,7 @@ function updateOne(db, className, id, data) {
  * @param {String} className
  * @param {Number} id
  */
-function deleteOne(db, className, id) {
+async function deleteOne(db, className, id) {
   return deleteMany(db, className, {'id': id});
 }
 
@@ -209,7 +209,7 @@ function deleteOne(db, className, id) {
  * @param {Number} id
  * @param {Object} where
  */
-function deleteMany(db, className, where) {
+async function deleteMany(db, className, where) {
   return knex.db(db)(className).where(where).delete()
     .then(() => 204)
     .catch((err) => {
@@ -225,7 +225,7 @@ function deleteMany(db, className, where) {
  * @param {Object} data
  * @return {Object}
  */
-function createOne(db, className, data) {
+async function createOne(db, className, data) {
   dateFields[className].forEach(d => {
     if (d in data) {
       data[d] = new Date(data[d]).getTime();
@@ -250,7 +250,7 @@ function createOne(db, className, data) {
  * @param {String} db
  * @param {Number} periodId
  */
-function getPeriodAccounts(db, periodId) {
+async function getPeriodAccounts(db, periodId) {
   return knex.db(db).select('account.id', 'account.number', 'account.name').from('entry')
     .leftJoin('account', 'account.id', 'entry.account_id')
     .leftJoin('document', 'document.id', 'entry.document_id')
@@ -259,7 +259,7 @@ function getPeriodAccounts(db, periodId) {
     .groupBy('entry.account_id');
 }
 
-function getPeriodCredits(db, periodId) {
+async function getPeriodCredits(db, periodId) {
   return knex.db(db).select('account.id', 'account.number', 'account.name', knex.db(db).raw('SUM(entry.amount * 100) as amount')).from('entry')
     .leftJoin('account', 'account.id', 'entry.account_id')
     .leftJoin('document', 'document.id', 'entry.document_id')
@@ -269,7 +269,7 @@ function getPeriodCredits(db, periodId) {
     .groupBy('entry.account_id');
 }
 
-function getPeriodDebits(db, periodId) {
+async function getPeriodDebits(db, periodId) {
   return knex.db(db).select('account.id', 'account.number', 'account.name', knex.db(db).raw('SUM(entry.amount * 100) as amount')).from('entry')
     .leftJoin('account', 'account.id', 'entry.account_id')
     .leftJoin('document', 'document.id', 'entry.document_id')
@@ -284,7 +284,7 @@ function getPeriodDebits(db, periodId) {
  * @param {String} db
  * @param {Number} periodId
  */
-function getPeriodBalances(db, periodId) {
+async function getPeriodBalances(db, periodId) {
   return getOne(db, 'period', periodId)
     .then(data => {
       return getPeriodCredits(db, periodId)
@@ -338,7 +338,7 @@ function getPeriodBalances(db, periodId) {
  * @param {Number} periodId
  * @param {Number} accountId
  */
-function getAccountTransactions(db, periodId, accountId) {
+async function getAccountTransactions(db, periodId, accountId) {
   return knex.db(db).select('document.*').from('document')
     .leftJoin('entry', 'document.id', 'entry.document_id')
     .where({'document.period_id': periodId})
@@ -354,7 +354,7 @@ function getAccountTransactions(db, periodId, accountId) {
  * @param {Number} periodId
  * @param {Number} accountId
  */
-function getAccountTransactionsWithEntries(db, periodId, accountId) {
+async function getAccountTransactionsWithEntries(db, periodId, accountId) {
   return getAccountTransactions(db, periodId, accountId)
     .then((txs) => {
       let txByDocID = {};
@@ -384,7 +384,7 @@ function getAccountTransactionsWithEntries(db, periodId, accountId) {
  * @param {Number} periodId
  * @param {Number} accountId
  */
-function getAccountTransactionsByNumber(db, periodId, accountNumber) {
+async function getAccountTransactionsByNumber(db, periodId, accountNumber) {
   return getAccountId(db, accountNumber)
     .then(({id}) => {
       return getAccountTransactions(db, periodId, id);
@@ -397,7 +397,7 @@ function getAccountTransactionsByNumber(db, periodId, accountNumber) {
  * @param {Number} number Account number.
  * @return An object {id: <id>, number: <number>} or null if not found.
  */
-function getAccountId(db, number) {
+async function getAccountId(db, number) {
   return knex.db(db).select('id').from('account')
     .where({'account.number': number})
     .then(account => (account.length ? {number: number, id: account[0].id} : null));
@@ -408,7 +408,7 @@ function getAccountId(db, number) {
  * @param {String} db
  */
 let accountsById = null;
-function getAccountsById(db) {
+async function getAccountsById(db) {
   if (accountsById) {
     return Promise.resolve(accountsById);
   }
@@ -426,7 +426,7 @@ function getAccountsById(db) {
  * @param {String} db
  */
 let accountsByNumber = null;
-function getAccountsByNumber(db) {
+async function getAccountsByNumber(db) {
   if (accountsByNumber) {
     return Promise.resolve(accountsByNumber);
   }
@@ -444,7 +444,7 @@ function getAccountsByNumber(db) {
  * @param {String} db
  */
 let accountNamesByNumber = null;
-function getAccountNamesByNumber(db) {
+async function getAccountNamesByNumber(db) {
   if (accountNamesByNumber) {
     return Promise.resolve(accountNamesByNumber);
   }
@@ -461,7 +461,7 @@ function getAccountNamesByNumber(db) {
  * Get the latest settings from the database.
  * @param {String} db
  */
-function getSettings(db) {
+async function getSettings(db) {
   return knex.db(db).select('*').from('settings').first();
 }
 
@@ -470,7 +470,7 @@ function getSettings(db) {
  * @param {String} db
  * @param {Number} periodId
  */
-function getNextDocument(db, periodId) {
+async function getNextDocument(db, periodId) {
   return knex.db(db)
     .select(knex.db(db).raw('MAX(number) AS number'))
     .from('document')
@@ -482,23 +482,58 @@ function getNextDocument(db, periodId) {
     });
 }
 
+/**
+ * Check if the period of the target is locked.
+ * @param {String} what
+ * @param {Number} id
+ */
+async function isLocked(db, what, id) {
+  switch (what) {
+    case 'entry':
+      return knex.db(db).select('document_id').from('entry').where({id}).first()
+        .then((res) => res && knex.db(db).select('period_id').from('document').where({id: res.document_id}).first())
+        .then((res) => res && knex.db(db).select('locked').from('period').where({id: res.period_id}).first())
+        .then((res) => {
+          return !res || res.locked;
+        });
+
+    case 'document':
+      return knex.db(db).select('period_id').from('document').where({id}).first()
+        .then((res) => res && knex.db(db).select('locked').from('period').where({id: res.period_id}).first())
+        .then((res) => {
+          return !res || res.locked;
+        });
+
+    case 'period':
+      return knex.db(db).select('locked').from('period').where({id}).first()
+        .then((res) => {
+          return !res || res.locked;
+        });
+
+    default:
+      dump.error(`Don't know how to check lock for '${what}'.`);
+      return true;
+  }
+}
+
 module.exports = {
-  fillEntries: fillEntries,
-  listAll: listAll,
-  getOne: getOne,
-  deleteOne: deleteOne,
-  deleteMany: deleteMany,
-  createOne: createOne,
-  updateOne: updateOne,
-  getPeriodAccounts: getPeriodAccounts,
-  getPeriodBalances: getPeriodBalances,
-  getAccountId: getAccountId,
-  getAccountsById: getAccountsById,
-  getAccountsByNumber: getAccountsByNumber,
-  getAccountNamesByNumber: getAccountNamesByNumber,
-  getAccountTransactions: getAccountTransactions,
-  getAccountTransactionsWithEntries: getAccountTransactionsWithEntries,
-  getAccountTransactionsByNumber: getAccountTransactionsByNumber,
-  getSettings: getSettings,
-  getNextDocument: getNextDocument
+  fillEntries,
+  listAll,
+  getOne,
+  deleteOne,
+  deleteMany,
+  createOne,
+  updateOne,
+  getPeriodAccounts,
+  getPeriodBalances,
+  getAccountId,
+  getAccountsById,
+  getAccountsByNumber,
+  getAccountNamesByNumber,
+  getAccountTransactions,
+  getAccountTransactionsWithEntries,
+  getAccountTransactionsByNumber,
+  getSettings,
+  getNextDocument,
+  isLocked
 };

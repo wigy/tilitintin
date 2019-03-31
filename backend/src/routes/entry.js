@@ -7,7 +7,12 @@ router.get('/', (req, res) => {
     .then(entries => res.send(entries));
 });
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
+  const locked = await data.isLocked(req.db, 'document', req.body.document_id);
+  if (locked) {
+    res.sendStatus(403);
+    return;
+  }
   let obj = req.body;
   if ('amount' in obj) {
     obj.amount /= 100;
@@ -21,7 +26,12 @@ router.get('/:id', (req, res) => {
     .then(entry => res.send(entry));
 });
 
-router.patch('/:id', (req, res) => {
+router.patch('/:id', async (req, res) => {
+  const locked = await data.isLocked(req.db, 'entry', req.params.id);
+  if (locked) {
+    res.sendStatus(403);
+    return;
+  }
   let obj = req.body;
   if ('amount' in obj) {
     obj.amount /= 100;
@@ -30,7 +40,12 @@ router.patch('/:id', (req, res) => {
     .then((code) => res.status(code).send());
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async (req, res) => {
+  const locked = await data.isLocked(req.db, 'entry', req.params.id);
+  if (locked) {
+    res.sendStatus(403);
+    return;
+  }
   data.deleteOne(req.db, 'entry', req.params.id)
     .then((code) => res.status(code).send());
 });

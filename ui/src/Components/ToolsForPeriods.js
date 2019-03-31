@@ -43,7 +43,7 @@ class ToolsForPeriods extends Component {
               <th><Trans>Locked</Trans></th>
               <th></th>
             </tr>
-            {this.props.store.database.periods.map((period) =>
+            {this.props.store.database.periods.reverse().map((period) =>
               <tr key={period.id}>
                 <td>
                   {period.id}
@@ -58,8 +58,8 @@ class ToolsForPeriods extends Component {
                   <Trans>{period.locked ? 'Yes' : 'No'}</Trans>
                 </td>
                 <td>
-                  <IconButton disabled={!!period.locked} onClick={() => this.lockPeriod(period)} title="lock-period" icon="fa fa-lock"></IconButton>
-                  <IconButton disabled={!period.locked} onClick={() => this.unlockPeriod(period)} title="unlock-period" icon="fa fa-unlock"></IconButton>
+                  <IconButton toggle={!!period.locked} onClick={() => this.lockPeriod(period)} title="lock-period" icon="fa fa-lock"></IconButton>
+                  <IconButton toggle={!period.locked} onClick={() => this.unlockPeriod(period)} title="unlock-period" icon="fa fa-unlock"></IconButton>
                 </td>
               </tr>
             )}
