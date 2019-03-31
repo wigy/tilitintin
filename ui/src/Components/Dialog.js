@@ -32,7 +32,6 @@ class DialogContent extends Component {
   };
 
   render() {
-
     return (
       <Modal.Dialog>
         <Modal.Header>
@@ -42,8 +41,8 @@ class DialogContent extends Component {
         <Modal.Body>{this.props.children}</Modal.Body>
 
         <Modal.Footer>
-          <Button onClick={this.onCancel}><Trans>Cancel</Trans></Button>
-          <Button onClick={this.onConfirm} bsStyle="primary"><Trans>Confirm</Trans></Button>
+          <Button onClick={this.keyEscape}><Trans>Cancel</Trans></Button>
+          <Button onClick={this.keyEnter} bsStyle="primary"><Trans>Confirm</Trans></Button>
         </Modal.Footer>
       </Modal.Dialog>
     );

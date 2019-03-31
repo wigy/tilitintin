@@ -5,7 +5,6 @@ BUGS
 [ ] Invalid user/password is not handled smoothly.
 [ ] Select non-oy and go to VAT pages: Crash on non-existing account fetching.
 [ ] Changing period does not refresh screen after creating new periods.
-[ ] Dialog buttons die once you press Escape once.
 
 FUTURE FEATURES
 ===============
