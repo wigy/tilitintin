@@ -11,7 +11,7 @@ FUTURE FEATURES
 
 0.6
 [X] VAT handling.
-[ ] When entering debit/credit, add automatically VAT line if vat_percentage set.
+[X] When entering debit/credit, add automatically VAT line if vat_percentage set.
 [ ] Tools page: renumber documents in increasing order by date.
 [X] Period locking.
 [X]   Locking page.

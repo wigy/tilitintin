@@ -8,12 +8,15 @@ import Money from './Money';
 import Tags from './Tags';
 import TransactionDetails from './TransactionDetails';
 import Store from '../Stores/Store';
+import Settings from '../Stores/Settings';
 import Cursor from '../Stores/Cursor';
 import TransactionModel from '../Models/TransactionModel';
+import EntryModel from '../Models/EntryModel';
 import './Transaction.css';
 
 @translate('translations')
 @inject('store')
+@inject('settings')
 @inject('cursor')
 @observer
 class Transaction extends Component {
@@ -49,6 +52,47 @@ class Transaction extends Component {
   // Handle finalizing editing of a cell.
   @action.bound
   onComplete(column, row) {
+
+    // Automatically add VAT entry for purchases.
+    if (column === 2) {
+      const entry = this.props.tx.entry;
+      const document = entry.document;
+      const entryAccount = entry.account;
+      if (entryAccount.vat_percentage) {
+        const vatAccount = this.props.store.database.getAccountByNumber(this.props.settings.VAT_PURCHASES_ACCOUNT);
+        if (document.entries.filter(e => e.account_id === vatAccount.id).length === 0) {
+          const vat = new EntryModel(entry, {
+            account_id: vatAccount.id,
+            amount: Math.round(entryAccount.vat_percentage * entry.amount / 100),
+            debit: 1,
+            row_number: document.entries.length + 1
+          });
+          document.addEntry(vat);
+          vat.save();
+        }
+      }
+    }
+    // Automatically add VAT entry for sales.
+    if (column === 3) {
+      const entry = this.props.tx.entry;
+      const document = entry.document;
+      const entryAccount = entry.account;
+      if (entryAccount.vat_percentage) {
+        const vatAccount = this.props.store.database.getAccountByNumber(this.props.settings.VAT_SALES_ACCOUNT);
+        // TODO: DRY
+        if (document.entries.filter(e => e.account_id === vatAccount.id).length === 0) {
+          const vat = new EntryModel(entry, {
+            account_id: vatAccount.id,
+            amount: Math.round(entryAccount.vat_percentage * entry.amount / 100),
+            debit: 1,
+            row_number: document.entries.length + 1
+          });
+          document.addEntry(vat);
+          vat.save();
+        }
+      }
+    }
+
     column++;
     if (column === 4) {
       column = 0;
@@ -241,6 +285,7 @@ class Transaction extends Component {
 
 Transaction.propTypes = {
   store: PropTypes.instanceOf(Store),
+  settings: PropTypes.instanceOf(Settings),
   cursor: PropTypes.instanceOf(Cursor),
   tx: PropTypes.instanceOf(TransactionModel),
   index: PropTypes.number,

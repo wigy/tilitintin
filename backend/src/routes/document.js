@@ -24,7 +24,7 @@ router.post('/', async (req, res) => {
     return;
   }
   let number;
-  if ('number' in req.body) {
+  if (req.body.number !== null && req.body.number !== undefined) {
     number = req.body.number;
   } else {
     number = await data.getNextDocument(req.db, req.body.period_id);
