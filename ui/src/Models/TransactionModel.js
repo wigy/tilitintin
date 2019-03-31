@@ -38,8 +38,14 @@ class TransactionModel extends NavigationTargetModel {
    */
   keyDelete(cursor) {
     if (cursor.row === null) {
+      if (!this.document.canEdit()) {
+        return;
+      }
       this.document.markForDeletion();
     } else {
+      if (!this.document.entries[cursor.row].canEdit()) {
+        return;
+      }
       this.document.entries[cursor.row].markForDeletion();
     }
     return {preventDefault: true};
@@ -90,6 +96,9 @@ class TransactionModel extends NavigationTargetModel {
    * @param {Cursor} cursor
    */
   keyInsert(cursor) {
+    if (this.period.locked) {
+      return;
+    }
     if (cursor.row === null) {
       const document = new DocumentModel(this.document, {
         period_id: this.period.id,

@@ -52,8 +52,11 @@ class DocumentModel extends NavigationTargetModel {
     return 'Document' + this.id;
   }
 
+  /**
+   * This is editable if period not locked.
+   */
   canEdit() {
-    return true;
+    return !this.period.locked;
   }
 
   /**

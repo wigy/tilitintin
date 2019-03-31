@@ -110,10 +110,10 @@ class EntryModel extends NavigationTargetModel {
   }
 
   /**
-   * This is editable.
+   * This is editable if period not locked.
    */
   canEdit() {
-    return true;
+    return !this.period.locked;
   }
 
   /**
