@@ -21,7 +21,15 @@ router.post('/auth', (req, res) => {
  * Check the token and `user` to the request, if valid.
  */
 function checkToken(req, res, next) {
+
+  if (config.AUTO_LOGIN_USER) {
+    req.user = 'user';
+    next();
+    return;
+  }
+
   let token;
+
   const { authorization } = req.headers;
   if (authorization && authorization.substr(0, 7) === 'Bearer ') {
     token = authorization.substr(7, authorization.length - 7);

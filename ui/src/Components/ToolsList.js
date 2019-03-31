@@ -29,6 +29,7 @@ class ToolsList extends Component {
         <h1><Trans>Tools</Trans></h1>
         <dl>
           <li><Link className={store.db ? '' : 'disabled-link'} to={url('periods')}><Trans>Periods</Trans></Link></li>
+          <li><Link className={store.db ? '' : 'disabled-link'} to={url('documents')}><Trans>Documents</Trans></Link></li>
           <li><Link className={store.periodId ? '' : 'disabled-link'} to={url('vat')}><Trans>Value Added Tax</Trans></Link></li>
         </dl>
       </div>

@@ -17,6 +17,8 @@ i18n.init({
         'Date': 'Päiväys',
         'Debit': 'Debet',
         'Description': 'Kuvaus',
+        'Documents': 'Tositteet',
+        'Documents that need renumbering': 'Uudelleennumerointia vaativat tositteet',
         'End Date': 'Loppuu',
         'Initial balance': 'Alkusaldo',
         'Locked': 'Lukittu',
@@ -77,6 +79,7 @@ i18n.init({
         'icon-lock-period': 'Lukitse tilikausi',
         'icon-unlock-period': 'Poista tilikauden lukitus',
         'icon-create-period': 'Aloita uusi tilikausi',
+        'icon-sort-documents': 'Järjestä tositenumerot päivämääräjän mukaan',
 
         'column-account-number': 'Nro',
         'column-balance': 'Saldo',

@@ -140,9 +140,28 @@ class ToolsToolPanel extends Component {
   /**
    * Create new period.
    */
+  @action.bound
   async createPeriod(startDate, endDate) {
     const store = this.props.store;
     await store.database.createNewPeriod(startDate, endDate, this.props.t('Initial balance'));
+  }
+
+  /**
+   * Renumber documents of the period.
+   */
+  @action.bound
+  async renumberDocuments(db, periodId) {
+    const data = await this.props.store.request('/db/' + db + '/document/?period=' + periodId);
+    let next = 0;
+    for (const doc of data) {
+      if (doc.number !== next) {
+        doc.number = next;
+        const model = new DocumentModel(this.props.store.period, doc);
+        await model.save();
+      }
+      next++;
+    }
+    // TODO: Screen is not refreshed without manual refresh.
   }
 
   render() {
@@ -173,6 +192,14 @@ class ToolsToolPanel extends Component {
         ];
         startDate = store.database && moment(store.database.periods[store.database.periods.length - 1].end_date).add(1, 'day').format('YYYY-MM-DD');
         endDate = store.database && moment(store.database.periods[store.database.periods.length - 1].end_date).add(1, 'year').format('YYYY-MM-DD');
+        break;
+
+      case 'documents':
+        label = 'Documents';
+        // TODO: Bad architecture. Would need to fetch twice the same data in order to see if this is disabled.
+        buttons = [
+          <IconButton key="button-new" onClick={() => this.renumberDocuments(this.props.store.db, this.props.store.periodId)} title="sort-documents" icon="fas fa-sort-numeric-up"></IconButton>
+        ];
         break;
 
       default:

@@ -3,7 +3,13 @@ const router = express.Router();
 const data = require('../lib/data');
 
 router.get('/', (req, res) => {
-  data.listAll(req.db, 'document', null, ['number'])
+  let where = null;
+  let order = ['number'];
+  if (req.query.period) {
+    where = { period_id: parseInt(req.query.period) };
+    order = ['date', 'id'];
+  }
+  data.listAll(req.db, 'document', where, order)
     .then(documents => res.send(documents));
 });
 

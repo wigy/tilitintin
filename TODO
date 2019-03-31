@@ -5,6 +5,7 @@ BUGS
 [ ] Invalid user/password is not handled smoothly.
 [ ] Select non-oy and go to VAT pages: Crash on non-existing account fetching.
 [ ] Changing period does not refresh screen after creating new periods.
+[ ] No refresh and no disabled icon for document renumbering.
 
 FUTURE FEATURES
 ===============
@@ -12,7 +13,7 @@ FUTURE FEATURES
 0.6
 [X] VAT handling.
 [X] When entering debit/credit, add automatically VAT line if vat_percentage set.
-[ ] Tools page: renumber documents in increasing order by date.
+[X] Tools page: renumber documents in increasing order by date.
 [X] Period locking.
 [X]   Locking page.
 [X]   Disable changing of the locked period in API.
