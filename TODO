@@ -13,7 +13,7 @@ FUTURE FEATURES
 [ ] When entering debit/credit, add automatically VAT line if vat_percentage set.
 [ ] Tools page: renumber documents in increasing order by date.
 [ ] Period locking.
-[ ]   Locking page.
+[X]   Locking page.
 [ ]   Disable changing of the locked period in API.
 [ ]   Disable changing of the locked period in UI.
 [ ] End of period handling.
@@ -23,6 +23,7 @@ FUTURE FEATURES
 [ ] Support for array of proposals and navigation for them.
 [ ] Proposals for account number by looking for account last used with the text given in previous entry.
 [ ] Proposals for accounts, when typing partial name of it.
+[ ] Propose description of the previous entry in the same document by default.
 [ ] Dim the screen while running network operation.
 [ ] TODO cleanup.
 

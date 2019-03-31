@@ -510,7 +510,22 @@ class Store {
   }
 
   /**
-   * Change transaction content.
+   * Save period content.
+   * @param {PeriodModel} period
+   */
+  async savePeriod(period) {
+    return this.request('/db/' + this.db + '/period/' + (period.id || ''), period.id ? 'PATCH' : 'POST', period.toJSON())
+      .then((res) => {
+        runInAction(() => {
+          if (!period.id) {
+            period.id = res.id;
+          }
+        });
+      });
+  }
+
+  /**
+   * Save transaction content.
    * @param {DocumentModel} doc
    */
   async saveDocument(doc) {
@@ -528,7 +543,7 @@ class Store {
   }
 
   /**
-   * Change entry content.
+   * Save entry content.
    * @param {EntryModel} entry
    */
   async saveEntry(entry) {
