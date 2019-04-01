@@ -16,6 +16,7 @@ cli.opt('show-stock', null, 'Display stock before and after.');
 cli.opt('show-balances', null, 'Display account balances before and after.');
 cli.opt('start-date', null, 'Ignore all transactions before this date.');
 cli.opt('skip-errors', null, 'If import fails, just print and skip the failed transaction.');
+cli.opt('import-errors', null, 'If import fails, create move transaction to imbalance account.');
 cli.opt('stock', null, 'Set explicit stocks `SERVICE1:ETH=0.12,SERVICE2:ETH=1.22`.');
 cli.opt('zero-moves', null, 'Do not add to the stock commodities moved in.');
 cli.arg_('db', knex.dbs(USER));
@@ -35,6 +36,7 @@ config.set({
     startDate: cli.options['start-date'],
     skipErrors: cli.options['skip-errors'],
     zeroMoves: cli.options['zero-moves'],
+    importErrors: cli.options['import-errors']
   }
 });
 
