@@ -214,6 +214,28 @@ class PeriodModel extends Model {
   }
 
   /**
+   * Gather change proposals for incorrectly numbered documents.
+   */
+  @computed
+  get incorrectlyNumberedDocuments() {
+    let next = 0;
+    const changed = [];
+    const docs = Object.values(this.documents).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime() || a.number - b.number);
+    docs.forEach((doc) => {
+      if (doc.number !== next) {
+        changed.push({
+          id: doc.id,
+          date: doc.date,
+          number: doc.number,
+          newNumber: next
+        });
+      }
+      next++;
+    });
+    return changed;
+  }
+
+  /**
    * Get the database this period belongs to.
    */
   get database() {

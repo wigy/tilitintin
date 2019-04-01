@@ -229,8 +229,9 @@ class Store {
     if (!this.periodFetch) {
       debug('SetPeriod:', db, periodId, 'fetching...');
       this.periodFetch = this.fetchBalances(db, periodId)
-        .then(() => (this.periodFetch = null))
         .then(() => (this.periodId = periodId))
+        .then(() => this.fetchDocuments(db, periodId))
+        .then(() => (this.periodFetch = null))
         .then(() => debug('SetPeriod', db, periodId, 'Done'));
     } else {
       debug('SetPeriod:', db, periodId, 'sharing...');
@@ -255,13 +256,8 @@ class Store {
       return;
     }
     await this.setPeriod(db, periodId);
-    if (!this.accountFetch) {
-      this.accountFetch = this.fetchAccountPeriod(db, periodId, accountId)
-        .then(() => (this.accountFetch = null))
-        .then(() => (this.accountId = accountId))
-        .then(() => debug('SetAccount:', db, periodId, accountId, 'Done'));
-    }
-    return this.accountFetch;
+    this.accountId = accountId;
+    debug('SetAccount:', db, periodId, accountId, 'Done');
   }
 
   /**
@@ -356,7 +352,7 @@ class Store {
     }
     return this.request('/db/' + db + '/account')
       .then((accounts) => {
-        // TODO: Hmm, maybe not good solution for unwanted tag reset but.
+        // TODO: Hmm, maybe not good solution for unwanted tag reset but...
         if (this.dbsByName[db].hasAccounts()) {
           return;
         }
@@ -455,10 +451,40 @@ class Store {
   }
 
   /**
+   * Get the documents with entries for the given period.
+   */
+  async fetchDocuments(db = null, periodId = null) {
+    if (!this.token) {
+      return;
+    }
+    if (!db) {
+      db = this.db;
+    }
+    if (!periodId) {
+      periodId = this.periodId;
+    }
+    return this.request('/db/' + db + '/document?entries&period=' + periodId)
+      .then((data) => {
+        runInAction(() => {
+          let lastDate;
+          data.forEach((tx) => {
+            const doc = new DocumentModel(this.period, tx);
+            this.period.addDocument(doc);
+            lastDate = tx.date;
+          });
+          this.period.refreshTags();
+          this.lastDate = lastDate;
+        });
+      });
+  }
+
+  /**
    * Fetch the account data for the given period and store it to this store as current account.
    * @param {String} db
    * @param {Number} periodId
    * @param {Number} accountId
+   *
+   * TODO: This should not be needed anymore?
    */
   async fetchAccountPeriod(db, periodId, accountId) {
     if (!this.token) {
@@ -748,6 +774,14 @@ class Store {
   @computed
   get reports() {
     return this.period ? this.period.reports : [];
+  }
+
+  /**
+   * Get all documents for the current period.
+   */
+  @computed
+  get documents() {
+    return this.period ? this.period.getDocuments() : [];
   }
 }
 

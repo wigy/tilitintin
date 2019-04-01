@@ -6,6 +6,10 @@ router.get('/', (req, res) => {
   let where = null;
   let order = ['number'];
   if (req.query.period) {
+    if ('entries' in req.query) {
+      return data.getPeriodTransactionsWithEntries(req.db, parseInt(req.query.period))
+        .then((documents) => res.send(documents));
+    }
     where = { period_id: parseInt(req.query.period) };
     order = ['date', 'id'];
   }

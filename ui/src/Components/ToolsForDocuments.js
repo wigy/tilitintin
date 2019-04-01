@@ -12,28 +12,6 @@ import './ToolsForPeriods.css';
 @observer
 class ToolsForPeriods extends Component {
 
-  state = {
-    changes: []
-  };
-
-  componentDidMount() {
-    const {db, periodId} = this.props;
-    let next = 0;
-    let changes = [];
-    // TODO: Same request than in ToolsToolPanel. Reorganize code.
-    this.props.store.request('/db/' + db + '/document/?period=' + periodId)
-      .then((data) => {
-        data.forEach(doc => {
-          if (doc.number !== next) {
-            doc.newNumber = next;
-            changes.push(doc);
-          }
-          next++;
-        });
-      });
-    this.setState({changes});
-  }
-
   render() {
 
     if (!this.props.store.token) {
@@ -43,13 +21,17 @@ class ToolsForPeriods extends Component {
       return '';
     }
 
+    const toRenumber = this.props.store.period.incorrectlyNumberedDocuments;
+
     return (
       <div className="Tools">
         <h1><Trans>Documents that need renumbering</Trans></h1>
         {
-          this.state.changes.map((c) => <div key={c.id}>
-            <b><Localize date={c.date}></Localize></b> #{c.number} {'->'} #{c.newNumber}
-          </div>)
+          toRenumber.length
+            ? toRenumber.map((c) => <div key={c.id}>
+              <b><Localize date={c.date}></Localize></b> #{c.number} {'->'} #{c.newNumber}
+            </div>)
+            : <Trans>All documents are correctly numbered.</Trans>
         }
       </div>
     );

@@ -379,6 +379,36 @@ async function getAccountTransactionsWithEntries(db, periodId, accountId) {
 }
 
 /**
+ * Get all transactions for the given period including all entries for each transaction.
+ * @param {String} db
+ * @param {Number} periodId
+ * @param {Number} accountId
+ */
+async function getPeriodTransactionsWithEntries(db, periodId) {
+  return knex.db(db).select('*').from('document').where({period_id: periodId})
+    .then((docs) => {
+      fillEntries(db, docs, 'document');
+      let docsById = {};
+      docs.forEach((doc) => {
+        docsById[doc.id] = doc;
+        docsById[doc.id].entries = [];
+      });
+
+      return knex.db(db).select('entry.*').from('document').where({period_id: periodId})
+        .join('entry', 'entry.document_id', 'document.id')
+        .orderBy(['entry.document_id', 'entry.row_number'])
+        .then((entries) => {
+          fillEntries(db, entries, 'entry');
+          entries.forEach((entry) => {
+            entry.amount = Math.round(entry.amount * 100);
+            docsById[entry.document_id].entries.push(entry);
+          });
+          return Object.values(docsById);
+        });
+    });
+}
+
+/**
  * Get all transactions for an account (specified by account number) during the given period.
  * @param {String} db
  * @param {Number} periodId
@@ -533,6 +563,7 @@ module.exports = {
   getAccountTransactions,
   getAccountTransactionsWithEntries,
   getAccountTransactionsByNumber,
+  getPeriodTransactionsWithEntries,
   getSettings,
   getNextDocument,
   isLocked

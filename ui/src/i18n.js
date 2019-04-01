@@ -7,6 +7,7 @@ i18n.init({
         'Account Balances': 'Tilien saldot',
         'Account scheme': 'Tilikartta',
         'Accounts': 'Tilit',
+        'All documents are correctly numbered.': 'Kaikki tositteet on numeroitu oikein.',
         'Cancel': 'Peru',
         'Confirm': 'Hyväksy',
         'Credit': 'Kredit',

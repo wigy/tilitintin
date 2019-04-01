@@ -151,17 +151,12 @@ class ToolsToolPanel extends Component {
    */
   @action.bound
   async renumberDocuments(db, periodId) {
-    const data = await this.props.store.request('/db/' + db + '/document/?period=' + periodId);
-    let next = 0;
-    for (const doc of data) {
-      if (doc.number !== next) {
-        doc.number = next;
-        const model = new DocumentModel(this.props.store.period, doc);
-        await model.save();
-      }
-      next++;
+    const toRenumber = this.props.store.period.incorrectlyNumberedDocuments;
+    for (const change of toRenumber) {
+      const doc = this.props.store.period.getDocument(change.id);
+      doc.number = change.newNumber;
+      await doc.save();
     }
-    // TODO: Screen is not refreshed without manual refresh.
   }
 
   render() {
@@ -196,9 +191,9 @@ class ToolsToolPanel extends Component {
 
       case 'documents':
         label = 'Documents';
-        // TODO: Bad architecture. Would need to fetch twice the same data in order to see if this is disabled.
+        const toRenumber = store.period ? store.period.incorrectlyNumberedDocuments : [];
         buttons = [
-          <IconButton key="button-new" onClick={() => this.renumberDocuments(this.props.store.db, this.props.store.periodId)} title="sort-documents" icon="fas fa-sort-numeric-up"></IconButton>
+          <IconButton key="button-new" disabled={!toRenumber.length} onClick={() => this.renumberDocuments(this.props.store.db, this.props.store.periodId)} title="sort-documents" icon="fas fa-sort-numeric-up"></IconButton>
         ];
         break;
 
