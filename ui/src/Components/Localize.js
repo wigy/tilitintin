@@ -11,7 +11,7 @@ class Localize extends Component {
     do {
       match = /(\{(\d\d\d\d-\d\d-\d\d)\})/.exec(text);
       if (match) {
-        text = text.replace(match[1], this.date(match[2]));
+        text = text.replace(match[1], date2str(match[2]));
       } else {
         match = /(\{(.*?)\})/.exec(text);
         if (match) {

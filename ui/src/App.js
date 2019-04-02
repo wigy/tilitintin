@@ -91,7 +91,6 @@ class App extends Component {
         <div className="MainTopPanel Panel">
           <div className="Frame">
             <Route path="/:db/txs/:periodId/:accountId" component={TransactionToolPanel}/>
-            <Route path="/:db/report/:periodId//:format" component={ReportToolPanel}/>
             <Route path="/:db/report/:periodId/:accountId?/:format?" component={ReportToolPanel}/>
             <Route exact path="/:db/tools/:periodId?/:accountId?/:tool?" component={ToolsToolPanel}/>
             <Route exact path="/:db/tools/:periodId//:tool?" component={ToolsToolPanel}/>
