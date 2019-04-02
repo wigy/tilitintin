@@ -15,30 +15,6 @@ import SubPanel from './SubPanel';
 @observer
 class ToolsForVAT extends Component {
 
-  update(db, periodId) {
-    const {database} = this.props.store;
-    if (this.fetching) {
-      return;
-    }
-    if (database) {
-      this.fetching = true;
-      // TODO: Avoid double fetching (e.g. every keypress). Why this is called so often?
-      // TODO: We could clear all documents at this point to reduce unnecessary calculations.
-      this.props.store.fetchAccountPeriod(db, periodId, database.getAccountByNumber(this.props.settings.VAT_SALES_ACCOUNT).id);
-      this.props.store.fetchAccountPeriod(db, periodId, database.getAccountByNumber(this.props.settings.VAT_PURCHASES_ACCOUNT).id);
-    }
-  }
-
-  componentDidMount() {
-    const {db, periodId} = this.props;
-    this.update(db, periodId);
-  }
-
-  componentDidUpdate() {
-    const {db, periodId} = this.props;
-    this.update(db, periodId);
-  }
-
   render() {
 
     if (!this.props.store.token) {
