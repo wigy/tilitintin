@@ -1,14 +1,10 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { translate, I18n } from 'react-i18next';
+import { date2str } from '../Util';
 
 @translate('translations')
 class Localize extends Component {
-
-  date(text) {
-    const lang = this.props.i18n.language;
-    return new Date(text).toLocaleDateString(lang);
-  }
 
   localize(text) {
     let match;
@@ -29,7 +25,7 @@ class Localize extends Component {
 
   render() {
     if ('date' in this.props) {
-      return this.date(this.props.date);
+      return date2str(this.props.date);
     }
     const what = this.props.children;
     if (what === undefined) {
