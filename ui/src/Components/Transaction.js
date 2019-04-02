@@ -55,8 +55,8 @@ class Transaction extends Component {
 
     // Helper to create VAT entry, if needed.
     const checkAndAddVat = (VATAccount, debit) => {
-      const entry = this.props.tx.entry;
-      const document = entry.document;
+      const document = this.props.tx.document;
+      const entry = document.entries[row];
       const account = entry.account;
       const vatAccount = this.props.store.database.getAccountByNumber(VATAccount);
       if (account.vat_percentage) {

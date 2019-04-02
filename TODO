@@ -5,8 +5,8 @@ BUGS
 [ ] Invalid user/password is not handled smoothly.
 [ ] Select non-oy and go to VAT pages: Crash on non-existing account fetching.
 [ ] Changing period does not refresh screen after creating new periods.
-[ ] No refresh and no disabled icon for document renumbering.
 [ ] Translation of columns missing in general ledger report.
+[ ] Clicking an account link in transaction list reloads whole page.
 
 FUTURE FEATURES
 ===============
