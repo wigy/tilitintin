@@ -53,44 +53,33 @@ class Transaction extends Component {
   @action.bound
   onComplete(column, row) {
 
-    // Automatically add VAT entry for purchases.
-    if (column === 2) {
+    // Helper to create VAT entry, if needed.
+    const checkAndAddVat = (VATAccount, debit) => {
       const entry = this.props.tx.entry;
       const document = entry.document;
-      const entryAccount = entry.account;
-      if (entryAccount.vat_percentage) {
-        const vatAccount = this.props.store.database.getAccountByNumber(this.props.settings.VAT_PURCHASES_ACCOUNT);
+      const account = entry.account;
+      const vatAccount = this.props.store.database.getAccountByNumber(VATAccount);
+      if (account.vat_percentage) {
         if (document.entries.filter(e => e.account_id === vatAccount.id).length === 0) {
-          const vat = new EntryModel(entry, {
+          const vat = new EntryModel(document, {
             account_id: vatAccount.id,
-            amount: Math.round(entryAccount.vat_percentage * entry.amount / 100),
-            debit: 1,
+            amount: Math.round(account.vat_percentage * entry.amount / 100),
+            debit,
             row_number: document.entries.length + 1
           });
           document.addEntry(vat);
           vat.save();
         }
       }
+    };
+
+    // Automatically add VAT entry for purchases.
+    if (column === 2) {
+      checkAndAddVat(this.props.settings.VAT_PURCHASES_ACCOUNT, 1);
     }
     // Automatically add VAT entry for sales.
     if (column === 3) {
-      const entry = this.props.tx.entry;
-      const document = entry.document;
-      const entryAccount = entry.account;
-      if (entryAccount.vat_percentage) {
-        const vatAccount = this.props.store.database.getAccountByNumber(this.props.settings.VAT_SALES_ACCOUNT);
-        // TODO: DRY
-        if (document.entries.filter(e => e.account_id === vatAccount.id).length === 0) {
-          const vat = new EntryModel(entry, {
-            account_id: vatAccount.id,
-            amount: Math.round(entryAccount.vat_percentage * entry.amount / 100),
-            debit: 1,
-            row_number: document.entries.length + 1
-          });
-          document.addEntry(vat);
-          vat.save();
-        }
-      }
+      checkAndAddVat(this.props.settings.VAT_SALES_ACCOUNT, 0);
     }
 
     column++;
