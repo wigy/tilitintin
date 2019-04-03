@@ -64,7 +64,14 @@ class ToolsToolPanel extends Component {
   @action.bound
   async createVATEntry() {
     const store = this.props.store;
-    const {VAT_SALES_ACCOUNT, VAT_PURCHASES_ACCOUNT, VAT_RECEIVABLE_ACCOUNT, VAT_PAYABLE_ACCOUNT} = this.props.settings;
+    const {
+      VAT_SALES_ACCOUNT,
+      VAT_PURCHASES_ACCOUNT,
+      VAT_RECEIVABLE_ACCOUNT,
+      VAT_PAYABLE_ACCOUNT,
+      VAT_DELAYED_RECEIVABLE_ACCOUNT,
+      VAT_DELAYED_PAYABLE_ACCOUNT
+    } = this.props.settings;
     // Collect entries.
     let sales = 0;
     let purchases = 0;
@@ -83,7 +90,13 @@ class ToolsToolPanel extends Component {
       }
     }
     // Create new VAT payable/receivable.
-    const doc = new DocumentModel(store.period, {period_id: store.periodId, date: moment().format('YYYY-MM-DD')});
+    let date = moment().format('YYYY-MM-DD');
+    let isDelayed = false;
+    if (date > store.period.end_date) {
+      isDelayed = true;
+      date = store.period.end_date;
+    }
+    const doc = new DocumentModel(store.period, {period_id: store.periodId, date});
     await doc.save();
     if (sales) {
       doc.addEntry(new EntryModel(doc, {
@@ -105,10 +118,10 @@ class ToolsToolPanel extends Component {
         description: this.props.t('VAT update')
       }));
     }
-    // TODO: If the date is off from the period, consider adding it to "Siirtosaamiset/Siirtovelat".
+    // Add it to the receivable or to the payable VAT.
     if (sales + purchases < 0) {
       doc.addEntry(new EntryModel(doc, {
-        account_id: store.database.getAccountByNumber(VAT_PAYABLE_ACCOUNT).id,
+        account_id: store.database.getAccountByNumber(isDelayed ? VAT_DELAYED_PAYABLE_ACCOUNT : VAT_PAYABLE_ACCOUNT).id,
         debit: 0,
         amount: -(sales + purchases),
         row_number: doc.entries.length + 1,
@@ -117,14 +130,14 @@ class ToolsToolPanel extends Component {
     }
     if (sales + purchases > 0) {
       doc.addEntry(new EntryModel(doc, {
-        account_id: store.database.getAccountByNumber(VAT_RECEIVABLE_ACCOUNT).id,
+        account_id: store.database.getAccountByNumber(isDelayed ? VAT_DELAYED_RECEIVABLE_ACCOUNT : VAT_RECEIVABLE_ACCOUNT).id,
         debit: 1,
         amount: sales + purchases,
         row_number: doc.entries.length + 1,
         description: this.props.t('VAT update')
       }));
     }
-    // Save entries.
+
     for (const entry of doc.entries) {
       await entry.save();
     }

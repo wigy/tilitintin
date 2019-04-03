@@ -7,7 +7,9 @@ class Settings {
     'vat-sales-account': undefined,
     'vat-purchases-account': undefined,
     'vat-receivable-account': undefined,
-    'vat-payable-account': undefined
+    'vat-payable-account': undefined,
+    'vat-delayed-receivable-account': undefined,
+    'vat-delayed-payable-account': undefined
   };
 
   defaults = {
@@ -15,7 +17,9 @@ class Settings {
     'vat-sales-account': '29391',
     'vat-purchases-account': '29392',
     'vat-receivable-account': '1763',
-    'vat-payable-account': '2939'
+    'vat-payable-account': '2939',
+    'vat-delayed-receivable-account': '1845',
+    'vat-delayed-payable-account': '2977'
   };
 
   /**
@@ -52,6 +56,10 @@ class Settings {
   get VAT_RECEIVABLE_ACCOUNT() { return this.get('vat-receivable-account'); }
   @computed
   get VAT_PAYABLE_ACCOUNT() { return this.get('vat-payable-account'); }
+  @computed
+  get VAT_DELAYED_RECEIVABLE_ACCOUNT() { return this.get('vat-delayed-receivable-account'); }
+  @computed
+  get VAT_DELAYED_PAYABLE_ACCOUNT() { return this.get('vat-delayed-payable-account'); }
 }
 
 export default Settings;

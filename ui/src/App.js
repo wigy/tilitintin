@@ -79,6 +79,7 @@ class App extends Component {
           <Route exact path="/:db/report/:periodId/:accountId/:format" component={Menu}/>
           <Route exact path="/:db/tools/:periodId?/:accountId?/:tool?" component={Menu}/>
           <Route exact path="/:db/tools/:periodId//:tool?" component={Menu}/>
+          <Route exact path="/:db/tools///:tool?" component={Menu}/>
         </div>
         <div className="SidePanel Panel">
           <div className="Frame">
