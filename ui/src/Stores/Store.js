@@ -479,33 +479,6 @@ class Store {
   }
 
   /**
-   * Fetch the account data for the given period and store it to this store as current account.
-   * @param {String} db
-   * @param {Number} periodId
-   * @param {Number} accountId
-   *
-   * TODO: This should not be needed anymore?
-   */
-  async fetchAccountPeriod(db, periodId, accountId) {
-    if (!this.token) {
-      return;
-    }
-    return this.request('/db/' + db + '/account/' + accountId + '/' + periodId)
-      .then((data) => {
-        runInAction(() => {
-          let lastDate;
-          data.transactions.forEach((tx) => {
-            const doc = new DocumentModel(this.period, tx);
-            this.period.addDocument(doc);
-            lastDate = tx.date;
-          });
-          this.period.refreshTags();
-          this.lastDate = lastDate;
-        });
-      });
-  }
-
-  /**
    * Login to the back-end.
    * @param {String} user
    * @param {String} password
