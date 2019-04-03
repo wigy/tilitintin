@@ -7,6 +7,7 @@ BUGS
 [ ] Changing period does not refresh screen after creating new periods.
 [ ] Translation of columns missing in general ledger report.
 [ ] Clicking an account link in transaction list reloads whole page.
+[ ] Auto-created VAT is not removable.
 
 FUTURE FEATURES
 ===============
