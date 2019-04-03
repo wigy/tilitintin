@@ -5,19 +5,7 @@ import { Trans } from 'react-i18next';
 import NavigationTargetModel from './NavigationTargetModel';
 import TagModel from './TagModel';
 import Money from '../Components/Money';
-// import safeEval from 'safer-eval';
-
-// Helper to evaluate string expression value to number.
-const str2num = (str) => {
-  str = str.replace(',', '.').replace(/ /g, '');
-  try {
-    //  TODO: This crashes for some reason: safeEval(str, {navigator: window.navigator});
-    /* eslint no-eval: off */
-    return eval(str);
-  } catch (err) {
-    return NaN;
-  }
-};
+import { str2num } from '../Util';
 
 class EntryModel extends NavigationTargetModel {
 

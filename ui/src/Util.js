@@ -1,4 +1,5 @@
 import moment from 'moment';
+import safeEval from 'safer-eval';
 import { sprintf } from 'sprintf-js';
 import i18n from './i18n';
 
@@ -34,4 +35,18 @@ export function str2date(str, sample) {
   }
   const date = moment(sprintf('%04d-%02d-%02d', year, month, day));
   return date.isValid() ? date.format('YYYY-MM-DD') : undefined;
+}
+
+/**
+ * Convert a string expression to the evaluated number.
+ * @param {String} str
+ * @return {NaN|Number}
+ */
+export function str2num(str) {
+  str = str.replace(',', '.').replace(/ /g, '');
+  try {
+    return safeEval(str, {navigator: window.navigator});
+  } catch (err) {
+    return NaN;
+  }
 }
