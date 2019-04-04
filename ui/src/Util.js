@@ -49,7 +49,7 @@ export function str2date(str, sample) {
  * @return {NaN|Number}
  */
 export function str2num(str) {
-  str = str.replace(',', '.').replace(/ /g, '');
+  str = str.replace(',', '.').replace(/[ $€£]/g, '');
   try {
     return safeEval(str, {navigator: window.navigator});
   } catch (err) {
