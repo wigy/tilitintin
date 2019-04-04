@@ -60,7 +60,7 @@ class EntryModel extends NavigationTargetModel {
   }
 
   getSortKey() {
-    return this.parent ? [this.parent.number, this.row_number] : this.id;
+    return this.parent ? [this.parent.date, this.parent.number, this.row_number] : this.id;
   }
 
   columns() {

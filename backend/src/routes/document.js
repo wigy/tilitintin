@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
         .then((documents) => res.send(documents));
     }
     where = { period_id: parseInt(req.query.period) };
-    order = ['date', 'id'];
+    order = ['date', 'number', 'id'];
   }
   data.listAll(req.db, 'document', where, order)
     .then(documents => res.send(documents));

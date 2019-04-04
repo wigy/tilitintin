@@ -27,7 +27,7 @@ class DocumentModel extends NavigationTargetModel {
   }
 
   getSortKey() {
-    return this.number;
+    return [this.date, this.number, this.id];
   }
 
   getId() {
