@@ -9,7 +9,13 @@ import i18n from './i18n';
  */
 export function date2str(date) {
   const lang = i18n.language;
-  return new Date(date).toLocaleDateString(lang);
+  // Note: Date(date).toLocaleDateString(lang) is too slow compared to this.
+  switch (lang) {
+    case 'fi':
+      return moment(date).format('DD.MM.YYYY');
+    default:
+      throw new Error(`Language ${lang} not supported.`);
+  }
 }
 
 /**

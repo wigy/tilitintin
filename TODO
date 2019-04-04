@@ -8,7 +8,7 @@ BUGS
 [ ] Translation of columns missing in general ledger report.
 [ ] Clicking an account link in transaction list reloads whole page.
 [ ] Auto-created VAT is not removable.
-[ ] Browsing long list is slow (maybe fetching all causes this?).
+[X] Browsing long list is slow.
 [X] Sort transactions according to date, not number.
 
 FUTURE FEATURES
