@@ -96,6 +96,7 @@ class ToolsToolPanel extends Component {
       isDelayed = true;
       date = store.period.end_date;
     }
+    // TODO: Use store separate call.
     const doc = new DocumentModel(store.period, {period_id: store.periodId, date});
     await doc.save();
     if (sales) {

@@ -42,9 +42,20 @@ class PeriodModel extends Model {
     doc.period_id = this.id;
     this.documents[doc.id] = doc;
     doc.entries.forEach((entry) => {
-      this.documentsByAccountId[entry.account_id] = this.documentsByAccountId[entry.account_id] || new Set();
-      this.documentsByAccountId[entry.account_id].add(doc.id);
+      this.addEntry(entry);
     });
+  }
+
+  /**
+   * Establish account linking with entry.
+   * @param {EntryModel} entry
+   */
+  addEntry(entry) {
+    if (!entry.document || !entry.document.id || !entry.account_id) {
+      return;
+    }
+    this.documentsByAccountId[entry.account_id] = this.documentsByAccountId[entry.account_id] || new Set();
+    this.documentsByAccountId[entry.account_id].add(entry.document.id);
   }
 
   /**

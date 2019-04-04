@@ -143,6 +143,7 @@ class DatabaseModel extends Model {
     }
 
     // Create entries.
+    // TODO: Use Store API.
     balances.sort((a, b) => (a.number > b.number ? 1 : (a.number < b.number ? -1 : 0)));
     for (const balance of balances) {
       const entry = new EntryModel(doc, {

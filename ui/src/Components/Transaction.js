@@ -67,7 +67,9 @@ class Transaction extends Component {
             debit,
             row_number: document.entries.length + 1
           });
+          // TODO: This should be separate API call.
           document.addEntry(vat);
+          document.period.addEntry(vat);
           vat.save();
         }
       }
