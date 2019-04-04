@@ -107,6 +107,7 @@ class TransactionModel extends NavigationTargetModel {
       document.save()
         .then(() => {
           runInAction(() => {
+            // TODO: Use Store API to create this.
             const oldId = this.store.accountId;
             const entry = new EntryModel(document, {document_id: document.id, row_number: 1, account_id: this.store.accountId});
             document.addEntry(entry);
@@ -121,7 +122,8 @@ class TransactionModel extends NavigationTargetModel {
     } else {
       this.store.keepDocumentIdOpen = this.document.id;
       const rowNumber = this.document.entries.reduce((prev, cur) => Math.max(prev, cur.row_number), 0) + 1;
-      const entry = new EntryModel(this.document, {document_id: this.document.id, row_number: rowNumber});
+      const description = this.document.entries.length ? this.document.entries[this.document.entries.length - 1].text : '';
+      const entry = new EntryModel(this.document, {document_id: this.document.id, row_number: rowNumber, description});
       this.document.addEntry(entry);
       cursor.setCell(0, this.document.entries.length - 1);
     }

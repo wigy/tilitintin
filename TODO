@@ -7,6 +7,8 @@ BUGS
 [ ] Changing period does not refresh screen after creating new periods.
 [ ] Translation of columns missing in general ledger report.
 [ ] Clicking an account link in transaction list reloads whole page.
+[ ] Document closes after date editing.
+[ ] Changing the account number of document does not show it on another account without refresh.
 [X] Auto-created VAT is not removable.
 [X] Browsing long list is slow.
 [X] Sort transactions according to date, not number.
