@@ -7,7 +7,7 @@ BUGS
 [ ] Changing period does not refresh screen after creating new periods.
 [ ] Translation of columns missing in general ledger report.
 [ ] Clicking an account link in transaction list reloads whole page.
-[ ] Document closes after date editing.
+[ ] Document closes after editing date.
 [ ] Changing the account number of document does not show it on another account without refresh.
 [X] Auto-created VAT is not removable.
 [X] Browsing long list is slow.
@@ -25,10 +25,11 @@ FUTURE FEATURES
 [X]   Disable changing of the locked period in API.
 [X]   Disable changing of the locked period in UI.
 [X] End of period handling.
+[ ] When editing date, use the first pressed key as well.
 [X] TODO cleanup.
 
 0.7
-[ ] When editing date, use the first pressed key as well.
+[ ] Show tags as well on opened transaction.
 [ ] Support for array of proposals and navigation for them.
 [ ]   Partial filling when pressing left.
 [ ]   Offer tags in the beginning of the line.
