@@ -12,6 +12,7 @@ BUGS
 [X] Auto-created VAT is not removable.
 [X] Browsing long list is slow.
 [X] Sort transactions according to date, not number.
+[ ] Balance report wrong for Q1.
 
 FUTURE FEATURES
 ===============
