@@ -11,6 +11,7 @@ cli.opt('debug-stock', null, 'Display stock and average changes in detail.');
 cli.opt('dry-run', null, 'To turn dry-run on.');
 cli.opt('force', null, 'Import even if the entries are found already.');
 cli.opt('no-profit', null, 'Turn off profit and losses calculations (to be calculated later).');
+cli.opt('trade-profit', null, 'Turn on profit and losses calculations on every trade (needs Harvest).');
 cli.opt('service', null, 'Set explicit name for the service instead of the automatic recognition.');
 cli.opt('show-stock', null, 'Display stock before and after.');
 cli.opt('show-balances', null, 'Display account balances before and after.');
@@ -31,6 +32,7 @@ config.set({
     dryRun: cli.options['dry-run'] || cli.options.debug,
     force: cli.options.force,
     noProfit: cli.options['no-profit'],
+    tradeProfit: cli.options['trade-profit'],
     showBalances: cli.options['show-balances'],
     showStock: cli.options['show-stock'],
     startDate: cli.options['start-date'],
