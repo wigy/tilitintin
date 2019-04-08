@@ -192,6 +192,26 @@ class PeriodModel extends Model {
   }
 
   /**
+   * Lock the period.
+   */
+  lock() {
+    this.store.request(`/db/${this.database.name}/period/${this.id}`, 'PATCH', {locked: 1})
+      .then(() => {
+        this.locked = 1;
+      });
+  }
+
+  /**
+   * Unlock the period.
+   */
+  unlock() {
+    this.store.request(`/db/${this.database.name}/period/${this.id}`, 'PATCH', {locked: 0})
+      .then(() => {
+        this.locked = 0;
+      });
+  }
+
+  /**
    * Calculate sum of unprocessed payable and receivable for VAT.
    * @return {Object} An object with `sales` and `purchases`.
    */

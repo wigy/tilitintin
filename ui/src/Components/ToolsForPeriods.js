@@ -13,16 +13,6 @@ import './ToolsForPeriods.css';
 @observer
 class ToolsForPeriods extends Component {
 
-  lockPeriod(period) {
-    period.locked = 1;
-    period.save();
-  }
-
-  unlockPeriod(period) {
-    period.locked = 0;
-    period.save();
-  }
-
   render() {
 
     if (!this.props.store.token) {
@@ -58,8 +48,8 @@ class ToolsForPeriods extends Component {
                   <Trans>{period.locked ? 'Yes' : 'No'}</Trans>
                 </td>
                 <td>
-                  <IconButton toggle={!!period.locked} onClick={() => this.lockPeriod(period)} title="lock-period" icon="fa fa-lock"></IconButton>
-                  <IconButton toggle={!period.locked} onClick={() => this.unlockPeriod(period)} title="unlock-period" icon="fa fa-unlock"></IconButton>
+                  <IconButton toggle={!!period.locked} onClick={() => period.lock()} title="lock-period" icon="fa fa-lock"></IconButton>
+                  <IconButton toggle={!period.locked} onClick={() => period.unlock()} title="unlock-period" icon="fa fa-unlock"></IconButton>
                 </td>
               </tr>
             )}

@@ -12,7 +12,8 @@ BUGS
 [X] Auto-created VAT is not removable.
 [X] Browsing long list is slow.
 [X] Sort transactions according to date, not number.
-[ ] Balance report wrong for Q1.
+[X] Balance report wrong for Q1.
+[X] Fix locking the period that it does not change starting time.
 
 FUTURE FEATURES
 ===============
@@ -28,7 +29,6 @@ FUTURE FEATURES
 [X] End of period handling.
 [ ] When editing date, use the first pressed key as well.
 [ ] Check what can be removed from backend/src/lib that is in libfyffe.
-[ ] Add more decimals for crypt import averages.
 [X] TODO cleanup.
 
 0.7
@@ -41,6 +41,7 @@ FUTURE FEATURES
 [ ] Propose description of the previous entry in the same document by default (or set it straight when creating new).
 [ ] Automatically embed all tags entered to all entries.
 [ ] Dim the screen while running network operation.
+[ ] Verify if you create new period that initial transactions are within period (check original Tilitin balance report).
 [ ] TODO cleanup.
 
 0.8
