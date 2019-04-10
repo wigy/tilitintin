@@ -90,19 +90,19 @@ processEntries.GeneralJournal = (entries, periods, formatName, format, settings)
   let columns = [{
     type: 'id',
     name: 'id',
-    title: 'column-document-number'
+    title: '{column-document-number}'
   }, {
     type: 'name',
     name: 'title',
-    title: 'column-date-and-accounts'
+    title: '{column-date-and-accounts}'
   }, {
     type: 'numeric',
     name: 'debit',
-    title: 'column-debit'
+    title: '{column-debit}'
   }, {
     type: 'numeric',
     name: 'credit',
-    title: 'column-credit'
+    title: '{column-credit}'
   }];
 
   // Pre-process entries by their document number.
@@ -202,23 +202,23 @@ processEntries.GeneralLedger = (entries, periods, formatName, format, settings) 
   let columns = [{
     type: 'id',
     name: 'account',
-    title: 'column-account-number'
+    title: '{column-account-number}'
   }, {
     type: 'name',
     name: 'name',
-    title: 'column-name-or-date'
+    title: '{column-name-or-date}'
   }, {
     type: 'numeric',
     name: 'debit',
-    title: 'column-debit'
+    title: '{column-debit}'
   }, {
     type: 'numeric',
     name: 'credit',
-    title: 'column-credit'
+    title: '{column-credit}'
   }, {
     type: 'numeric',
     name: 'balance',
-    title: 'column-balance'
+    title: '{column-balance}'
   }];
 
   // Pre-process entries by their account number.
