@@ -149,7 +149,7 @@ class TransactionModel extends NavigationTargetModel {
     if (this.open) {
       if (cursor.row === null) {
         this.document.turnEditorOn(cursor);
-        return {preventDefault: true};
+        return {preventDefault: false};
       } else {
         this.turnEditorOn(cursor);
         return {preventDefault: false};
