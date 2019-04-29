@@ -129,8 +129,8 @@ class DatabaseModel extends Model {
 
     // Create period.
     const period = new PeriodModel(this, {start_date: startDate, end_date: endDate});
-    this.addPeriod(period);
     await period.save();
+    this.addPeriod(period);
 
     // Create document.
     const doc = new DocumentModel(period, {number: 0, date: startDate});

@@ -193,6 +193,9 @@ class Store {
       return;
     }
     await this.fetchDatabases();
+    if (!db) {
+      return;
+    }
     if (!this.dbFetch) {
       debug('SetDb', db, 'fetching...');
       this.dbFetch = this.fetchSettings(db)
