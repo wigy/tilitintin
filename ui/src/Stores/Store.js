@@ -12,7 +12,7 @@ import ReportModel from '../Models/ReportModel';
 import TransactionModel from '../Models/TransactionModel';
 import i18n from '../i18n';
 
-const DEBUG = true;
+const DEBUG = false;
 
 const debug = (...args) => DEBUG && console.log.apply(console, args);
 

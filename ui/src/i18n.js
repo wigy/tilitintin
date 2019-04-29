@@ -38,6 +38,7 @@ i18n.init({
         'Select period': 'Valitse tilikausi',
         'Start Date': 'Alkaa',
         'Start new period?': 'Aloitetaanko uusi tilikausi?',
+        'This database does not have configured VAT accounts.': 'Tässä tietokannassa ei ole konfiguroituna ALV-tilejä.',
         'Tools': 'Työkalut',
         'Total': 'Yhteensä',
         'Transactions': 'Tapahtumat',

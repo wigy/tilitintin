@@ -26,12 +26,24 @@ class ToolsForVAT extends Component {
 
     const VAT = this.props.store.period.VATSummary;
     const { VAT_SALES_ACCOUNT, VAT_PURCHASES_ACCOUNT, VAT_RECEIVABLE_ACCOUNT, VAT_PAYABLE_ACCOUNT } = this.props.settings;
+
     const vatSalesAccount = this.props.store.database.getAccountByNumber(VAT_SALES_ACCOUNT);
     const vatPurchasesAccount = this.props.store.database.getAccountByNumber(VAT_PURCHASES_ACCOUNT);
     const vatPayableAccount = this.props.store.database.getAccountByNumber(VAT_PAYABLE_ACCOUNT);
     const vatReceivableAccount = this.props.store.database.getAccountByNumber(VAT_RECEIVABLE_ACCOUNT);
+
+    if (!vatSalesAccount || !vatPurchasesAccount || !vatPayableAccount || !vatReceivableAccount) {
+      return (
+        <div className="Tools">
+          <SubPanel>
+            <Trans>This database does not have configured VAT accounts.</Trans>
+          </SubPanel>
+        </div>);
+    }
+
     const payable = this.props.store.period.getBalanceByNumber(VAT_PAYABLE_ACCOUNT);
     const receivable = this.props.store.period.getBalanceByNumber(VAT_RECEIVABLE_ACCOUNT);
+
     return (
       <div className="Tools">
         <SubPanel>
