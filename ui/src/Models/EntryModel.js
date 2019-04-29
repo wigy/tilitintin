@@ -152,6 +152,10 @@ class EntryModel extends NavigationTargetModel {
     const tags = this.tagNames.length ? '[' + this.tagNames.map(t => t).join('][') + '] ' : '';
     return tags + this.description;
   }
+  ['get.description']() {
+    const tags = this.tagNames.length ? '[' + this.tagNames.map(t => t).join('][') + '] ' : '';
+    return tags + this.description;
+  }
   ['change.description'](value) {
     const [tags, newValue] = this.extractTags(value);
     this.description = newValue;

@@ -22,6 +22,7 @@ i18n.init({
         'Documents that need renumbering': 'Uudelleennumerointia vaativat tositteet',
         'End Date': 'Loppuu',
         'Initial balance': 'Alkusaldo',
+        'Invalid credentials.': 'Kirjautuminen epäonnistui.',
         'Locked': 'Lukittu',
         'Login': 'Kirjaudu',
         'Logout': 'Poistu',

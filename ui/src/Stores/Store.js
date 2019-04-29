@@ -10,8 +10,9 @@ import TagModel from '../Models/TagModel';
 import HeadingModel from '../Models/HeadingModel';
 import ReportModel from '../Models/ReportModel';
 import TransactionModel from '../Models/TransactionModel';
+import i18n from '../i18n';
 
-const DEBUG = false;
+const DEBUG = true;
 
 const debug = (...args) => DEBUG && console.log.apply(console, args);
 
@@ -92,6 +93,7 @@ const debug = (...args) => DEBUG && console.log.apply(console, args);
 class Store {
 
   @observable db = null;
+  @observable messages = [];
   @observable periodId = null;
   @observable accountId = null;
   @observable changed = false;
@@ -132,22 +134,20 @@ class Store {
 
     debug('  Request:', method, config.API_URL + path, data || '');
 
+    this.messages.replace([]);
     return fetch(config.API_URL + path, options)
       .then(res => {
         this.changed = true;
         if ([200, 201, 202, 204].includes(res.status)) {
-          if (DEBUG) {
-            debug('    OK:', method, config.API_URL + path, data || '');
-          }
+          debug('    OK:', method, config.API_URL + path, data || '');
           return res.status === 200 ? res.json() : null;
         } else if (res.status === 401) {
+          this.messages.push([i18n.t('Invalid credentials.')]);
           this.logout();
         } else if (res.status === 403) {
           return undefined;
         } else {
-          if (DEBUG) {
-            debug('    Fail:', method, config.API_URL + path, data || '');
-          }
+          debug('    Fail:', method, config.API_URL + path, data || '');
           throw new Error(res.status + ' ' + res.statusText);
         }
       });

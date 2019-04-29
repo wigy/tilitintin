@@ -36,6 +36,7 @@ class Menu extends Component {
     switch (key) {
       case 'logout':
         this.props.store.logout();
+        this.props.history.push('/');
         break;
       case 'db':
         this.props.store.clearDb();
