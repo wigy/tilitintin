@@ -96,6 +96,7 @@ class Transaction extends Component {
   // Render the main row of the document, i.e. the entry having the current account and data from document it belongs to.
   renderMainTx(classes) {
     const {tx} = this.props;
+    const num = tx.document.number;
 
     const money = (<Money cents={tx.entry.amount} currency="EUR" />);
     const total = (<Money cents={this.props.total} currency="EUR" />);
@@ -111,7 +112,14 @@ class Transaction extends Component {
             field="date"
             classNames={tx.open && tx.selected && this.props.cursor.row === null ? 'sub-selected' : ''}
             document={tx.document}
-            onComplete={() => this.props.cursor.setCell(0, 0)}
+            onComplete={() => {
+              this.props.cursor.setCell(0, 0);
+              // Find the new row after order by date has been changed.
+              const numbers = this.props.store.filteredTransactions.map(tx => tx.document.number);
+              // New order is here but why we fail to get correct doc #?
+              console.log(numbers);
+              console.log('#', num);
+            }}
           />
         </td>
         <td className="tags" style={{width: (tx.entry.tags.length) * 2.6 + 'ex'}}>
