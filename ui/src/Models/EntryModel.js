@@ -269,9 +269,8 @@ class EntryModel extends NavigationTargetModel {
     if (!this.account_id) {
       return '';
     }
-    const onClick = () => this.props.cursor.setIndex('TransactionTable', null);
     let url = '/' + this.database.name + '/txs/' + this.period.id + '/' + this.account_id;
-    return <Link onClick={onClick} to={url}>{this.account.toString()}</Link>;
+    return <Link to={url}>{this.account.toString()}</Link>;
   }
   ['get.edit.account']() {
     return this.account_id ? this.account.number : '';
