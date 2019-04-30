@@ -59,6 +59,7 @@ class PeriodModel extends Model {
     for (const entry of entries) {
       await doc.createEntry(entry);
     }
+    return doc;
   }
 
   /**

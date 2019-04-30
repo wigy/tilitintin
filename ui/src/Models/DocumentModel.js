@@ -94,17 +94,24 @@ class DocumentModel extends NavigationTargetModel {
    */
   async createEntry(data) {
     if (data.number) {
-      data.id = this.period.getAccountByNumber(data.number).id;
+      data.id = this.database.getAccountByNumber(data.number).id;
     }
-    const entry = new EntryModel(this, {
+    const init = {
       account_id: data.id,
       amount: Math.abs(data.amount),
       debit: data.amount > 0 ? 1 : 0,
       row_number: this.entries.length + 1,
       description: data.description
-    });
+    };
+    if ('flags' in data) {
+      init.flags = data.flags;
+    }
+
+    const entry = new EntryModel(this, init);
     this.addEntry(entry);
     await entry.save();
+
+    return entry;
   }
 
   /**

@@ -8,7 +8,6 @@ import Settings from '../Stores/Settings';
 import IconButton from './IconButton';
 import Dialog from './Dialog';
 import Localize from './Localize';
-import DocumentModel from '../Models/DocumentModel';
 import EntryModel from '../Models/EntryModel';
 import './ToolPanel.css';
 import moment from 'moment';
@@ -96,58 +95,49 @@ class ToolsToolPanel extends Component {
       isDelayed = true;
       date = store.period.end_date;
     }
-    // TODO: Use store separate call.
-    const doc = new DocumentModel(store.period, {period_id: store.periodId, date});
-    await doc.save();
+
+    const doc = {date, entries: []};
+
     if (sales) {
-      doc.addEntry(new EntryModel(doc, {
-        account_id: store.database.getAccountByNumber(VAT_SALES_ACCOUNT).id,
-        debit: 1,
+      doc.entries.push({
+        number: VAT_SALES_ACCOUNT,
         amount: -sales,
         flags: EntryModel.FLAGS.VAT_IGNORE,
-        row_number: doc.entries.length + 1,
         description: this.props.t('VAT update')
-      }));
+      });
     }
     if (purchases) {
-      doc.addEntry(new EntryModel(doc, {
-        account_id: store.database.getAccountByNumber(VAT_PURCHASES_ACCOUNT).id,
-        debit: 0,
-        amount: purchases,
+      doc.entries.push({
+        number: VAT_PURCHASES_ACCOUNT,
+        amount: -purchases,
         flags: EntryModel.FLAGS.VAT_IGNORE,
-        row_number: doc.entries.length + 1,
         description: this.props.t('VAT update')
-      }));
+      });
     }
     // Add it to the receivable or to the payable VAT.
     if (sales + purchases < 0) {
-      doc.addEntry(new EntryModel(doc, {
-        account_id: store.database.getAccountByNumber(isDelayed ? VAT_DELAYED_PAYABLE_ACCOUNT : VAT_PAYABLE_ACCOUNT).id,
-        debit: 0,
-        amount: -(sales + purchases),
-        row_number: doc.entries.length + 1,
+      doc.entries.push({
+        number: isDelayed ? VAT_DELAYED_PAYABLE_ACCOUNT : VAT_PAYABLE_ACCOUNT,
+        amount: sales + purchases,
         description: this.props.t('VAT update')
-      }));
+      });
     }
     if (sales + purchases > 0) {
-      doc.addEntry(new EntryModel(doc, {
-        account_id: store.database.getAccountByNumber(isDelayed ? VAT_DELAYED_RECEIVABLE_ACCOUNT : VAT_RECEIVABLE_ACCOUNT).id,
-        debit: 1,
+      doc.entries.push({
+        number: isDelayed ? VAT_DELAYED_RECEIVABLE_ACCOUNT : VAT_RECEIVABLE_ACCOUNT,
         amount: sales + purchases,
-        row_number: doc.entries.length + 1,
         description: this.props.t('VAT update')
-      }));
+      });
     }
 
-    for (const entry of doc.entries) {
-      await entry.save();
-    }
+    await store.period.createDocument(doc);
+
     // Mark entries as reconciled.
     for (const entry of entries) {
       entry.VAT_RECONCILED = true;
       await entry.save();
     }
-    store.period.addDocument(doc);
+
     store.fetchBalances();
   }
 
