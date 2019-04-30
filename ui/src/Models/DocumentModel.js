@@ -110,6 +110,7 @@ class DocumentModel extends NavigationTargetModel {
     const entry = new EntryModel(this, init);
     this.addEntry(entry);
     await entry.save();
+    this.period.addEntry(entry);
 
     return entry;
   }

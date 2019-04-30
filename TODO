@@ -44,7 +44,7 @@ FUTURE FEATURES
 [ ] Propose description of the previous entry in the same document by default (or set it straight when creating new).
 [ ] Automatically embed all tags entered to all entries.
 [ ] Dim the screen while running network operation.
-[ ] Verify if you create new period that initial transactions are within period (check original Tilitin balance report).
+[ ] Ensure that if you create new period that initial transactions are within period (check original Tilitin balance report).
 [ ] TODO cleanup.
 
 0.8

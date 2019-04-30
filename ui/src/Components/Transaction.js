@@ -62,15 +62,11 @@ class Transaction extends Component {
       if (account.vat_percentage) {
         if (document.entries.filter(e => e.account_id === vatAccount.id).length === 0) {
           const vat = new EntryModel(document, {
-            account_id: vatAccount.id,
-            amount: Math.round(account.vat_percentage * entry.amount / 100),
-            debit,
-            row_number: document.entries.length + 1
+            id: vatAccount.id,
+            amount: debit ? Math.round(account.vat_percentage * entry.amount / 100)
+              : Math.round(-account.vat_percentage * entry.amount / 100)
           });
-          // TODO: This should be separate API call.
-          document.addEntry(vat);
-          document.period.addEntry(vat);
-          vat.save();
+          document.createEntry(vat);
         }
       }
     };
