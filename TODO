@@ -11,6 +11,7 @@ BUGS
 [X] Document closes after editing date.
 [ ] After changing date, the cursor may be on wrong row.
 [ ] Changing the account number of document does not show it on another account without refresh.
+[ ]   API call for simple transaction creation and auto-updating relevant balances.
 [X] Auto-created VAT is not removable.
 [X] Browsing long list is slow.
 [X] Sort transactions according to date, not number.

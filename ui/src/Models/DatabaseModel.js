@@ -1,8 +1,6 @@
 import { observable } from 'mobx';
 import Model from './Model';
 import PeriodModel from './PeriodModel';
-import DocumentModel from './DocumentModel';
-import EntryModel from './EntryModel';
 
 class DatabaseModel extends Model {
 
@@ -113,7 +111,7 @@ class DatabaseModel extends Model {
         case 'ASSET':
         case 'LIABILITY':
         case 'EQUITY':
-          if (balance.total) {
+          if (Math.abs(balance.total) > 0.0001) {
             balances.push({id: acc.id, number: acc.number, balance: balance.total});
           }
           break;
@@ -132,30 +130,22 @@ class DatabaseModel extends Model {
     await period.save();
     this.addPeriod(period);
 
-    // Create document.
-    const doc = new DocumentModel(period, {number: 0, date: startDate});
-    period.addDocument(doc);
-    await doc.save();
-
     // Prepare profit entry.
     if (profit) {
       balances.push({id: profitAcc.id, number: profitAcc.number, balance: profit});
     }
-
-    // Create entries.
-    // TODO: Use Store API.
     balances.sort((a, b) => (a.number > b.number ? 1 : (a.number < b.number ? -1 : 0)));
-    for (const balance of balances) {
-      const entry = new EntryModel(doc, {
-        account_id: balance.id,
-        amount: Math.abs(balance.balance),
-        debit: balance.balance > 0 ? 1 : 0,
-        row_number: doc.entries.length + 1,
+
+    // Create initialization document and its entries.
+    await period.createDocument({
+      number: 0,
+      date: startDate,
+      entries: balances.map((balance) => ({
+        id: balance.id,
+        amount: balance.balance,
         description: initText
-      });
-      doc.addEntry(entry);
-      await entry.save();
-    }
+      }))
+    });
   }
 
   /**

@@ -1,5 +1,6 @@
 import { computed, observable } from 'mobx';
 import ReportModel from './ReportModel';
+import DocumentModel from './DocumentModel';
 import Model from './Model';
 
 class PeriodModel extends Model {
@@ -31,6 +32,33 @@ class PeriodModel extends Model {
 
   getSortKey() {
     return this.start_date;
+  }
+
+  /**
+   * Create a document from the JSON-structure and append to this period.
+   * @param {Object} data
+   *
+   * Data needs to be in the format
+   * ```
+   * {
+   *   number: 123,
+   *   date: "yyyy-mm-dd",
+   *   entries: [{...}, ....]
+   * }
+   * ```
+   * where entries are in the format required by `DocumentModel.createEntry()`.
+   */
+  async createDocument(data) {
+    // Create document.
+    const entries = data.entries || [];
+    delete data.entries;
+    const doc = new DocumentModel(this, {...data, period_id: this.id});
+    this.addDocument(doc);
+    await doc.save();
+    // Create entries.
+    for (const entry of entries) {
+      await doc.createEntry(entry);
+    }
   }
 
   /**

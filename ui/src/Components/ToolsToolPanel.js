@@ -180,7 +180,6 @@ class ToolsToolPanel extends Component {
     if (!store.token) {
       return '';
     }
-
     let buttons, label;
     let startDate, endDate;
     const VAT = this.props.store.period ? this.props.store.period.VATSummary : {sales: 0, purchases: 0};

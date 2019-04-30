@@ -81,6 +81,33 @@ class DocumentModel extends NavigationTargetModel {
   }
 
   /**
+   * Create an entry based on JSON-data.
+   * @param {Object} data
+   * Data format is
+   * ```
+   * {
+   *   id: 123, /* For account ID. Alternatively `number` for account number.
+   *   amount: 1000,
+   *   description: "[Tag1][Tag2] This is text."
+   * }
+   * ```
+   */
+  async createEntry(data) {
+    if (data.number) {
+      data.id = this.period.getAccountByNumber(data.number).id;
+    }
+    const entry = new EntryModel(this, {
+      account_id: data.id,
+      amount: Math.abs(data.amount),
+      debit: data.amount > 0 ? 1 : 0,
+      row_number: this.entries.length + 1,
+      description: data.description
+    });
+    this.addEntry(entry);
+    await entry.save();
+  }
+
+  /**
    * Add an entry to this document.
    * @param {EntryModel} entry
    */
