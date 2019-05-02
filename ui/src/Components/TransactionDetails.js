@@ -31,7 +31,7 @@ class TransactionDetails extends Component {
           .then(() => target.save())
           .then(() => target.store.fetchBalances())
           .then(() => target.turnEditorOff(this.props.cursor))
-          .then(() => this.props.onComplete && this.props.onComplete())}
+          .then(() => this.props.onComplete && this.props.onComplete(target))}
         onCancel={() => target.turnEditorOff(this.props.cursor)}
       />);
     }
