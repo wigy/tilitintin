@@ -231,7 +231,7 @@ class EntryModel extends NavigationTargetModel {
     }
   }
   ['proposal.debit'](value) {
-    if (value === ' ') {
+    if (value === '') {
       let miss = this.document.imbalance() + (this.debit ? -this.amount : this.amount);
       return miss < 0 ? sprintf('%.2f', -miss / 100) : null;
     }
@@ -256,7 +256,7 @@ class EntryModel extends NavigationTargetModel {
     }
   }
   ['proposal.credit'](value) {
-    if (value === ' ') {
+    if (value === '') {
       let miss = this.document.imbalance() + (this.debit ? -this.amount : this.amount);
       return miss > 0 ? sprintf('%.2f', miss / 100) : null;
     }
