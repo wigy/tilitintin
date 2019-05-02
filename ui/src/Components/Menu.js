@@ -123,7 +123,7 @@ class Menu extends Component {
             </NavItem>
           </Nav>
           <Nav bsStyle="tabs" pullRight activeKey="5" onSelect={() => this.handleSelect('account')}>
-            <NavItem eventKey="5" disabled={!db || !periodId || notLoggedIn}>
+            <NavItem eventKey="5" disabled={!db || notLoggedIn}>
               <Trans>Accounts</Trans>
             </NavItem>
           </Nav>

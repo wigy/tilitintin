@@ -72,6 +72,7 @@ class App extends Component {
           <Route exact path="/:db" component={Menu}/>
           <Route exact path="/:db/txs/:periodId" component={Menu}/>
           <Route exact path="/:db/txs/:periodId/:accountId" component={Menu}/>
+          <Route exact path="/:db/account" component={Menu}/>
           <Route exact path="/:db/account/:periodId" component={Menu}/>
           <Route exact path="/:db/account/:periodId/:accountId" component={Menu}/>
           <Route exact path="/:db/report/:periodId" component={Menu}/>
@@ -93,7 +94,7 @@ class App extends Component {
         <div className="MainTopPanel Panel">
           <div className="Frame">
             <Route path="/:db/txs/:periodId/:accountId" component={TransactionToolPanel}/>
-            <Route path="/:db/account/:periodId" component={AccountsToolPanel}/>
+            <Route path="/:db/account/:periodId?" component={AccountsToolPanel}/>
             <Route path="/:db/report/:periodId/:accountId?/:format?" component={ReportToolPanel}/>
             <Route exact path="/:db/tools/:periodId?/:accountId?/:tool?" component={ToolsToolPanel}/>
             <Route exact path="/:db/tools/:periodId//:tool?" component={ToolsToolPanel}/>
@@ -102,7 +103,7 @@ class App extends Component {
         <div className="MainPanel Panel">
           <div className="Frame">
             <Route path="/:db/txs/:periodId/:accountId" component={AccountTransactions}/>
-            <Route path="/:db/account/:periodId" component={Accounts}/>
+            <Route path="/:db/account/:periodId?" component={Accounts}/>
             <Route path="/:db/report/:periodId//:format" component={Report}/>
             <Route path="/:db/report/:periodId/:accountId/:format" component={Report}/>
             <Route exact path="/:db/tools/:periodId?/:accountId?/:tool?" component={Tools}/>
