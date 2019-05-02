@@ -12,6 +12,7 @@ class TextEdit extends Component {
     this.state = {
       value: props.value || '',
       proposal: null,
+      currentProposal: null,
       error: null
     };
   }
@@ -19,6 +20,7 @@ class TextEdit extends Component {
   componentDidMount() {
     this.inputRef.focus();
     this.inputRef.select();
+    this.updateProposal(this.state.value);
   }
 
   onKeyPress(event) {
@@ -59,10 +61,40 @@ class TextEdit extends Component {
     const value = event.target.value;
     this.props.onChange && this.props.onChange(value);
     this.setState({value, error: null});
+    this.updateProposal(value);
+  }
+
+  /**
+   * Update the proposal according to the value.
+   * @param {String} value
+   */
+  updateProposal(value) {
     if (this.props.proposal) {
       this.props.proposal(value)
-        .then((proposal) => this.setState({proposal}));
+        .then((proposal) => {
+          if (typeof proposal === 'string') {
+            proposal = [proposal];
+          }
+          let currentProposal = proposal && proposal.length ? 0 : null;
+          this.setState({proposal, currentProposal});
+        });
     }
+  }
+
+  renderProposal() {
+    if (this.state.proposal === null) {
+      return '';
+    }
+
+    return <div className="proposal-container">
+      <div className="proposal">
+        {this.state.proposal.map(
+          (item, index) => <div key={index} className={'item' + (this.state.currentProposal === index ? ' current' : '')}>
+            {item}
+          </div>
+        )}
+      </div>
+    </div>;
   }
 
   render() {
@@ -77,7 +109,7 @@ class TextEdit extends Component {
           onKeyUp={event => this.onKeyUp(event)}
           onKeyDown={event => this.onKeyDown(event)}
         />
-        <div className="proposal">{this.state.proposal}</div>
+        {this.renderProposal()}
       </div>);
   }
 }

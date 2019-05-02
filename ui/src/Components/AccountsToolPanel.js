@@ -19,7 +19,6 @@ class AccountsToolPanel extends Component {
     return (
       <div className="ToolPanel">
         <h1><Trans>Accounts</Trans></h1>
-
       </div>
     );
   }

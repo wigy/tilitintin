@@ -2,10 +2,30 @@
   color: black;
   font-weight: normal;
   width: 100%;
+  position: relative;
 }
 
-.TextEdit .proposal {
+.TextEdit .proposal-container {
+  position: fixed;
+  z-index: 99999;
+}
+
+.TextEdit .proposal-container .proposal {
+  border: 1px solid #000;
+  overflow: visible;
+  background-color: white;
+  padding: 5px;
+}
+
+.TextEdit .proposal-container .proposal .item {
   color: gray;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.TextEdit .proposal-container .proposal .item.current {
+  color: white;
+  background-color: black;
 }
 
 .TextEdit .error {
