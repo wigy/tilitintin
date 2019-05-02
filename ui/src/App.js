@@ -14,6 +14,7 @@ import Menu from './Components/Menu';
 import ReportToolPanel from './Components/ReportToolPanel';
 import TransactionToolPanel from './Components/TransactionToolPanel';
 import ToolsToolPanel from './Components/ToolsToolPanel';
+import AccountsToolPanel from './Components/AccountsToolPanel';
 import ToolsList from './Components/ToolsList';
 import Tools from './Components/Tools';
 import Login from './Components/Login';
@@ -92,6 +93,7 @@ class App extends Component {
         <div className="MainTopPanel Panel">
           <div className="Frame">
             <Route path="/:db/txs/:periodId/:accountId" component={TransactionToolPanel}/>
+            <Route path="/:db/account/:periodId" component={AccountsToolPanel}/>
             <Route path="/:db/report/:periodId/:accountId?/:format?" component={ReportToolPanel}/>
             <Route exact path="/:db/tools/:periodId?/:accountId?/:tool?" component={ToolsToolPanel}/>
             <Route exact path="/:db/tools/:periodId//:tool?" component={ToolsToolPanel}/>

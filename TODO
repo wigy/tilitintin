@@ -22,7 +22,6 @@ FUTURE FEATURES
 [ ] Filtering tool for full account list: Assets, Income, Expense, Other
 [ ] Filtering favorite accounts.
 [ ] Displaying and marking an account favorite (with star etc.)
-[ ] Creating tx when there is not a single account listed.
 [ ] Account search.
 [ ] TODO cleanup.
 
@@ -30,6 +29,7 @@ FUTURE FEATURES
 [ ] Create database.
 [ ] Create new period.
 [ ] Creating accounts.
+[ ] Creating tx when there is not a single account listed.
 [ ] TODO cleanup.
 
 1.0
