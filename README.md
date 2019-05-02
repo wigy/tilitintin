@@ -65,6 +65,11 @@ In UI you can do filtering using the categories defined.
 
 ## Version History
 
+### 0.6
+  * Tools page for VAT handling, document renumbering, period locking.
+  * Closing and creating new period.
+  * Show tags as well on opened transaction.
+
 ### 0.5
   * Editing tags in description.
   * Income report sorted by tag.
