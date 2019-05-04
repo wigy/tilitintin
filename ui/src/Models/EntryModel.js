@@ -277,11 +277,30 @@ class EntryModel extends NavigationTargetModel {
   }
   ['validate.account'](value) {
     const INVALID_ACCOUNT = <Trans>No such account found.</Trans>;
-    return this.store.accounts.filter(a => a.number === value).length ? null : INVALID_ACCOUNT;
+    return this.store.accounts.filter(a => a.number === value || a.name === value || `${a.number} ${a.name}` === value).length ? null : INVALID_ACCOUNT;
   }
   ['change.account'](value) {
-    const account = this.store.accounts.filter(a => a.number === value);
+    const account = this.store.accounts.filter(a => a.number === value || a.name === value || `${a.number} ${a.name}` === value);
     this.account_id = account[0].id;
+  }
+  ['proposal.account'](value) {
+    let ret = [];
+    if (value === '') {
+      return ret;
+    }
+    this.store.accounts.forEach((a) => {
+      if (a.number.startsWith(value) || a.name.toLowerCase().startsWith(value.toLowerCase())) {
+        ret.push(`${a.number} ${a.name}`);
+      }
+    });
+    if (ret.length === 0) {
+      this.store.accounts.forEach((a) => {
+        if (a.name.toLowerCase().indexOf(value.toLowerCase()) > 0) {
+          ret.push(`${a.number} ${a.name}`);
+        }
+      });
+    }
+    return ret;
   }
 
   /**

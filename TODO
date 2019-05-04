@@ -7,12 +7,10 @@ FUTURE FEATURES
 
 0.7
 [ ] Check what can be removed from backend/src/lib that is in libfyffe.
-[ ] Support for array of proposals and navigation for them.
-[ ]   Partial filling when pressing left.
-[ ]   Offer tags in the beginning of the line.
-[ ] Proposals for account number by looking for account last used with the text given in previous entry.
-[ ] Proposals for accounts, when typing partial name of it.
+[X] Support for array of proposals and navigation for them.
+[X] Proposals for accounts, when typing partial name or number of it.
 [ ] Propose description of the previous entry in the same document by default (or set it straight when creating new).
+[ ] Propose debit and credit based on the description and account from history.
 [ ] Automatically embed all tags entered to all entries.
 [ ] Dim the screen while running network operation.
 [ ] Ensure that if you create new period that initial transactions are within period (check original Tilitin balance report).

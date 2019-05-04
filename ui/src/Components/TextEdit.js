@@ -48,12 +48,18 @@ class TextEdit extends Component {
       this.onKeyPress(event);
     } else if (event.key === 'ArrowDown') {
       if (this.state.proposal && this.state.proposal.length) {
-        let currentProposal = this.state.currentProposal + 1;
+        let currentProposal;
+        if (this.state.currentProposal === null) {
+          currentProposal = 0;
+        } else {
+          currentProposal = this.state.currentProposal + 1;
+        }
         if (currentProposal >= this.state.proposal.length) {
           currentProposal = this.state.proposal.length - 1;
         }
         event.preventDefault();
         this.setState({ currentProposal });
+        this.scrollToView();
       }
     } else if (event.key === 'ArrowUp') {
       if (this.state.proposal && this.state.proposal.length) {
@@ -63,6 +69,7 @@ class TextEdit extends Component {
         }
         event.preventDefault();
         this.setState({ currentProposal });
+        this.scrollToView();
       }
     }
   }
@@ -108,7 +115,18 @@ class TextEdit extends Component {
             }
           }
           this.setState({proposal, currentProposal});
+          this.scrollToView();
         });
+    }
+  }
+
+  scrollToView() {
+    if (this.state.currentProposal === null) {
+      return;
+    }
+    const el = document.getElementById(`proposal${this.state.currentProposal}`);
+    if (el) {
+      el.scrollIntoView({block: 'center', inline: 'center'});
     }
   }
 
@@ -120,7 +138,7 @@ class TextEdit extends Component {
     return <div className="proposal-container">
       <div className="proposal">
         {this.state.proposal.map(
-          (item, index) => <div key={index} className={'item' + (current === index ? ' current' : '')}>
+          (item, index) => <div id={`proposal${index}`} key={index} className={'item' + (current === index ? ' current' : '')}>
             {item}
           </div>
         )}

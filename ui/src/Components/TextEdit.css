@@ -14,9 +14,10 @@
   border-left: 1px solid black;
   border-bottom: 1px solid black;
   border-right: 1px solid black;
-  overflow: visible;
+  overflow: auto;
   background-color: white;
   padding: 5px;
+  max-height: 200px;
 }
 
 .TextEdit .proposal-container .proposal .item {
