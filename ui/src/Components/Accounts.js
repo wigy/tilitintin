@@ -5,7 +5,6 @@ import { translate, Trans } from 'react-i18next';
 import AccountTable from '../Components/AccountTable';
 import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
-import TextEdit from './TextEdit';
 
 @translate('translations')
 @inject('store')
@@ -24,12 +23,6 @@ class Accounts extends Component {
     return (
       <div className="Accounts">
         <h1><Trans>Account scheme</Trans></h1>
-        <TextEdit value="xyzzy" proposal={async () => [
-          'Ahjkshdkjsa hksadasd',
-          'Ahjkshda hksadasd',
-          'Ahjksha hksadasd',
-          'Ahjkshadasd'
-        ]}></TextEdit>
         <AccountTable accounts={this.props.store.accounts} headings={this.props.store.headings} />
       </div>
     );

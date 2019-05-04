@@ -11,7 +11,9 @@
 }
 
 .TextEdit .proposal-container .proposal {
-  border: 1px solid #000;
+  border-left: 1px solid black;
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
   overflow: visible;
   background-color: white;
   padding: 5px;

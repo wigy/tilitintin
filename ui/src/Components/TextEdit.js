@@ -25,11 +25,11 @@ class TextEdit extends Component {
 
   onKeyPress(event) {
     if (event.key === 'Enter' || event.key === 'Tab') {
-      const value = this.state.proposal || this.state.value;
+      const value = this.state.currentProposal !== null ? this.state.proposal[this.state.currentProposal] : this.state.value;
       const error = this.props.validate && this.props.validate(value);
       if (error) {
         this.setState({error});
-      } else {
+      } else if (this.props.onComplete) {
         const complete = this.props.onComplete(value);
         if (complete.catch) {
           complete.catch(err => {
@@ -46,6 +46,24 @@ class TextEdit extends Component {
       // Has to prevent here or otherwise it is too late and tab also executes normal action.
       event.preventDefault();
       this.onKeyPress(event);
+    } else if (event.key === 'ArrowDown') {
+      if (this.state.proposal && this.state.proposal.length) {
+        let currentProposal = this.state.currentProposal + 1;
+        if (currentProposal >= this.state.proposal.length) {
+          currentProposal = this.state.proposal.length - 1;
+        }
+        event.preventDefault();
+        this.setState({ currentProposal });
+      }
+    } else if (event.key === 'ArrowUp') {
+      if (this.state.proposal && this.state.proposal.length) {
+        let currentProposal = this.state.currentProposal - 1;
+        if (currentProposal < 0) {
+          currentProposal = null;
+        }
+        event.preventDefault();
+        this.setState({ currentProposal });
+      }
     }
   }
 
@@ -72,24 +90,37 @@ class TextEdit extends Component {
     if (this.props.proposal) {
       this.props.proposal(value)
         .then((proposal) => {
-          if (typeof proposal === 'string') {
+          let currentProposal = null;
+          if (!proposal) {
+            proposal = null;
+          } else if (typeof proposal === 'string') {
             proposal = [proposal];
+          } else {
+            currentProposal = this.state.currentProposal;
+            if (proposal && proposal.length) {
+              if (currentProposal === null) {
+                currentProposal = 0;
+              } else if (currentProposal >= proposal.length) {
+                currentProposal = proposal.length - 1;
+              }
+            } else {
+              currentProposal = null;
+            }
           }
-          let currentProposal = proposal && proposal.length ? 0 : null;
           this.setState({proposal, currentProposal});
         });
     }
   }
 
   renderProposal() {
-    if (this.state.proposal === null) {
+    if (this.state.proposal === null || this.state.proposal.length === 0) {
       return '';
     }
-
+    const current = this.state.currentProposal > this.state.proposal.length ? this.state.proposal.length - 1 : this.state.currentProposal;
     return <div className="proposal-container">
       <div className="proposal">
         {this.state.proposal.map(
-          (item, index) => <div key={index} className={'item' + (this.state.currentProposal === index ? ' current' : '')}>
+          (item, index) => <div key={index} className={'item' + (current === index ? ' current' : '')}>
             {item}
           </div>
         )}
