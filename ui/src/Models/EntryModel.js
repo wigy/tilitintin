@@ -163,40 +163,20 @@ class EntryModel extends NavigationTargetModel {
     this.period.refreshTags();
   }
   ['proposal.description'](value) {
-    // Find the first text that matches.
     const texts = new Set();
-
-    // Helper to look the fist match.
-    const lookForText = () => {
-      const candidates = [...texts].sort();
-      value = value.trim();
-      for (let i = 0; i < candidates.length; i++) {
-        if (candidates[i].startsWith(value)) {
-          return candidates[i];
-        }
-      }
-    };
-
-    // Check other entries in the same document.
-    for (let i = 0; i < this.document.entries.length; i++) {
-      texts.add(this.document.entries[i].description);
-    }
-    const inTheSameDoc = lookForText();
-    if (inTheSameDoc) {
-      return inTheSameDoc;
-    }
-
     // Check transactions of the current account.
     this.store.transactions.forEach((tx) => {
       for (let i = 0; i < tx.document.entries.length; i++) {
-        if (tx.document.entries[i].account_id === this.account_id && tx.document.entries[i].id !== this.id) {
-          texts.add(tx.document.entries[i].description);
+        if (tx.document.entries[i].account_id === this.account_id) {
+          if (value !== '' && tx.document.entries[i].description.toLowerCase().indexOf(value.toLowerCase()) < 0) {
+            continue;
+          }
+          texts.add(tx.document.entries[i].text);
         }
       }
     });
 
-    // Get the first match.
-    return lookForText();
+    return [...texts].sort();
   }
 
   /**
