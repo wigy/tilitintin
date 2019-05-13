@@ -66,7 +66,7 @@ class App extends Component {
     }
 
     return (
-      <div className="App">
+      <div className={'App' + (this.props.store.loading ? ' busy' : '')}>
         <div className="TopPanel Panel">
           <Route exact path="/" component={Menu}/>
           <Route exact path="/:db" component={Menu}/>

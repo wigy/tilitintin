@@ -93,6 +93,7 @@ const debug = (...args) => DEBUG && console.log.apply(console, args);
 class Store {
 
   @observable db = null;
+  @observable loading = false;
   @observable messages = [];
   @observable periodId = null;
   @observable accountId = null;
@@ -135,9 +136,11 @@ class Store {
     debug('  Request:', method, config.API_URL + path, data || '');
 
     this.messages.replace([]);
+    this.loading = true;
     return fetch(config.API_URL + path, options)
       .then(res => {
         this.changed = true;
+        this.loading = false;
         if ([200, 201, 202, 204].includes(res.status)) {
           debug('    OK:', method, config.API_URL + path, data || '');
           return res.status === 200 ? res.json() : null;

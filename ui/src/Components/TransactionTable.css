@@ -6,3 +6,6 @@ table.TransactionTable {
 table.TransactionTable tr {
   cursor: pointer;
 }
+.App.busy table.TransactionTable tr {
+  cursor: inherit;
+}

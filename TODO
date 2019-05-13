@@ -11,7 +11,7 @@ FUTURE FEATURES
 [X] Proposals for accounts, when typing partial name or number of it.
 [X] Propose description of the previous entry in the same document by default.
 [ ] Propose debit and credit based on the description and account from history.
-[ ] Dim the screen while running network operation.
+[X] Change cursor while running network operation.
 [ ] Ensure that if you create new period that initial transactions are within period (check original Tilitin balance report).
 [ ] TODO cleanup.
 

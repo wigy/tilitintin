@@ -116,3 +116,7 @@
   white-space: nowrap;
   font-size: 13pt;
 }
+
+.App.busy {
+  cursor: wait !important;
+}
