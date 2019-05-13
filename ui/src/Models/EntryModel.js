@@ -164,7 +164,7 @@ class EntryModel extends NavigationTargetModel {
   }
   ['proposal.description'](value) {
     const texts = new Set();
-    // Check transactions of the current account.
+    // Check transactions of the current account and select substring matches.
     this.store.transactions.forEach((tx) => {
       for (let i = 0; i < tx.document.entries.length; i++) {
         if (tx.document.entries[i].account_id === this.account_id) {

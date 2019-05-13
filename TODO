@@ -9,9 +9,8 @@ FUTURE FEATURES
 [X] Check what can be removed from backend/src/lib that is in libfyffe.
 [X] Support for array of proposals and navigation for them.
 [X] Proposals for accounts, when typing partial name or number of it.
-[ ] Propose description of the previous entry in the same document by default.
+[X] Propose description of the previous entry in the same document by default.
 [ ] Propose debit and credit based on the description and account from history.
-[ ] Automatically embed all tags entered to all entries.
 [ ] Dim the screen while running network operation.
 [ ] Ensure that if you create new period that initial transactions are within period (check original Tilitin balance report).
 [ ] TODO cleanup.
