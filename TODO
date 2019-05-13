@@ -6,7 +6,7 @@ FUTURE FEATURES
 ===============
 
 0.7
-[ ] Check what can be removed from backend/src/lib that is in libfyffe.
+[X] Check what can be removed from backend/src/lib that is in libfyffe.
 [X] Support for array of proposals and navigation for them.
 [X] Proposals for accounts, when typing partial name or number of it.
 [ ] Propose description of the previous entry in the same document by default (or set it straight when creating new).

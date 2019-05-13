@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const dump = require('neat-dump');
+const tags = require('libfyffe').data.tilitintin.tags;
 const data = require('../lib/data');
-const tags = require('../lib/tags');
 const knex = require('../lib/knex');
 
 router.get('/', (req, res) => {
-  tags.isReady(req.db)
+  tags.isReady(knex.db(req.db))
     .then((ready) => {
       if (!ready) {
         return res.send([]);
@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-  tags.isReady(req.db)
+  tags.isReady(knex.db(req.db))
     .then((ready) => {
       if (!ready) {
         return res.send({});
@@ -30,7 +30,7 @@ router.get('/:id', (req, res) => {
 });
 
 router.get('/:id/view', (req, res) => {
-  tags.isReady(req.db)
+  tags.isReady(knex.db(req.db))
     .then((ready) => {
       if (!ready) {
         return res.send('');

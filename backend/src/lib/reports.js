@@ -1,6 +1,6 @@
 const moment = require('moment');
 const knex = require('./knex');
-const tags = require('./tags');
+const tags = require('libfyffe').data.tilitintin.tags;
 const settings = require('./settings');
 
 /**
@@ -567,7 +567,7 @@ async function create(db, periodIds, formatName, format, query = {}) {
 
   if (query.byTags) {
     const tagTypes = await settings.get(db, 'income-statement-tag-types', []);
-    reportSettings.tags = await tags.getByTypes(db, tagTypes);
+    reportSettings.tags = await tags.getByTypes(knex.db(db), tagTypes);
   }
 
   const periods = await knex.db(db).select('*').from('period').whereIn('period.id', periodIds);

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const promiseSeq = require('promise-sequential');
+const tags = require('libfyffe').data.tilitintin.tags;
 const knex = require('../src/lib/knex');
-const tags = require('../src/lib/tags');
 const { util: { cli } } = require('libfyffe');
 const USER = process.env.FYFFE_USER || 'user';
 
@@ -19,10 +19,10 @@ async function main() {
       cli.arg_('picture', 'an url for the picture');
       cli.arg_('type', 'a category of the tag');
       cli.arg('order', 'an order number of the tag', parseInt);
-      return tags.add(cli.db, cli.tag, cli.name, cli.picture, cli.type, cli.order);
+      return tags.add(knex.db(cli.db), cli.tag, cli.name, cli.picture, cli.type, cli.order);
 
     case 'ls':
-      return tags.getAll(cli.db)
+      return tags.getAll(knex.db(cli.db))
         .then((tags) => {
           console.log(tags);
         });
@@ -36,7 +36,7 @@ async function main() {
           let changers = [];
           data.forEach((entry) => {
             let id = entry.id;
-            let desc = entry.description.replace(/^(\[[A-Za-z0-9]+\])+\s*/, '')
+            let desc = entry.description.replace(/^(\[[A-Za-z0-9]+\])+\s*/, '');
             console.log('Trimming description to `' + desc + '` for', id);
             changers.push(() => knex.db(cli.db)('entry').where({id: id}).update({description: desc}));
           });
@@ -48,4 +48,4 @@ async function main() {
 
 main()
   .then(() => process.exit())
-  .catch((err) => {console.error(err); process.exit()});
+  .catch((err) => { console.error(err); process.exit(); });
