@@ -105,9 +105,7 @@ class TextEdit extends Component {
           } else {
             currentProposal = this.state.currentProposal;
             if (proposal && proposal.length) {
-              if (currentProposal === null) {
-                currentProposal = 0;
-              } else if (currentProposal >= proposal.length) {
+              if (currentProposal >= proposal.length) {
                 currentProposal = proposal.length - 1;
               }
             } else {

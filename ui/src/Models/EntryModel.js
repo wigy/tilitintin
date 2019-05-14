@@ -211,10 +211,36 @@ class EntryModel extends NavigationTargetModel {
     }
   }
   ['proposal.debit'](value) {
-    if (value === '') {
-      let miss = this.document.imbalance() + (this.debit ? -this.amount : this.amount);
-      return miss < 0 ? sprintf('%.2f', -miss / 100) : null;
+    const amounts = new Set();
+    let imbalance = [];
+    // Add always imbalance as proposal.
+    let miss = this.document.imbalance() + (this.debit ? -this.amount : this.amount);
+    if (miss < 0) {
+      imbalance.push(sprintf('%.2f', -miss / 100));
     }
+    // Add old values that match.
+    value = value.trim();
+    this.store.transactions.forEach((tx) => {
+      for (let i = 0; i < tx.document.entries.length; i++) {
+        if (tx.document.entries[i].account_id === this.account_id && tx.document.entries[i].debit) {
+          if (value !== '') {
+            const [base, decimals] = sprintf('%.2f', tx.document.entries[i].amount / 100).split('.');
+            const [valueBase, valueDecimals] = value.split(/[^0-9]/);
+            if (!base.startsWith(valueBase)) {
+              continue;
+            }
+            if (valueDecimals !== undefined && !decimals.startsWith(valueDecimals)) {
+              continue;
+            }
+          }
+          amounts.add(tx.document.entries[i].amount);
+        }
+      }
+    });
+    // Sort and combine.
+    amounts.delete(-miss);
+    const others = [...amounts].sort((a, b) => a - b).map((a) => sprintf('%.2f', a / 100));
+    return imbalance.concat(others);
   }
 
   /**
@@ -236,10 +262,36 @@ class EntryModel extends NavigationTargetModel {
     }
   }
   ['proposal.credit'](value) {
-    if (value === '') {
-      let miss = this.document.imbalance() + (this.debit ? -this.amount : this.amount);
-      return miss > 0 ? sprintf('%.2f', miss / 100) : null;
+    const amounts = new Set();
+    let imbalance = [];
+    // Add always imbalance as proposal.
+    let miss = this.document.imbalance() + (this.debit ? -this.amount : this.amount);
+    if (miss > 0) {
+      imbalance.push(sprintf('%.2f', miss / 100));
     }
+    // Add old values that match.
+    value = value.trim();
+    this.store.transactions.forEach((tx) => {
+      for (let i = 0; i < tx.document.entries.length; i++) {
+        if (tx.document.entries[i].account_id === this.account_id && !tx.document.entries[i].debit) {
+          if (value !== '') {
+            const [base, decimals] = sprintf('%.2f', tx.document.entries[i].amount / 100).split('.');
+            const [valueBase, valueDecimals] = value.split(/[^0-9]/);
+            if (!base.startsWith(valueBase)) {
+              continue;
+            }
+            if (valueDecimals !== undefined && !decimals.startsWith(valueDecimals)) {
+              continue;
+            }
+          }
+          amounts.add(tx.document.entries[i].amount);
+        }
+      }
+    });
+    // Sort and combine.
+    amounts.delete(miss);
+    const others = [...amounts].sort((a, b) => a - b).map((a) => sprintf('%.2f', a / 100));
+    return imbalance.concat(others);
   }
 
   /**
