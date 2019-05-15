@@ -20,10 +20,14 @@ class Accounts extends Component {
     if (!this.props.store.token) {
       return '';
     }
+    let accounts = this.props.store.accounts;
+    if (this.props.store.tools.accounts.favorite) {
+      accounts = accounts.filter((acc) => acc.FAVORITE);
+    }
     return (
       <div className="Accounts">
         <h1><Trans>Account scheme</Trans></h1>
-        <AccountTable accounts={this.props.store.accounts} headings={this.props.store.headings} />
+        <AccountTable accounts={accounts} headings={this.props.store.headings} />
       </div>
     );
   }

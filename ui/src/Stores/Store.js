@@ -103,7 +103,7 @@ class Store {
   @observable report = null;
   @observable tags = {};
   @observable token = localStorage.getItem('token');
-  @observable tools = { tagDisabled: {} };
+  @observable tools = { tagDisabled: {}, accounts: {} };
 
   // A hack to keep document open when `filteredTransactions` recalculation happens after adding new entries.
   keepDocumentIdOpen = null;

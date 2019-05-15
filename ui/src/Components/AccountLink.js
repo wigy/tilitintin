@@ -5,7 +5,12 @@ import AccountModel from '../Models/AccountModel';
 
 const AccountLink = (props) => {
   const dst = '/' + props.db + '/account/' + props.period + '/' + props.account.id;
-  return (<Link to={dst}>{props.account.toString()}</Link>);
+  const fav = props.account.FAVORITE;
+  // TODO: Slow DOM. Use colors.
+  return (<>
+    <span>{fav ? <i className="fas fa-star"></i> : <i className="far fa-star"></i>} </span>
+    <Link to={dst}>{props.account.toString()}</Link>
+    </>);
 };
 
 AccountLink.propTypes = {

@@ -61,6 +61,26 @@ class AccountModel extends Model {
     return this.tagsByTag[tag] || null;
   }
 
+  /**
+   * Set or clear a flag.
+   * @param {String} name
+   * @param {Boolean} value
+   */
+  setFlag(name, value) {
+    if (value) {
+      this.flags = this.flags | AccountModel.FLAGS[name];
+    } else {
+      this.flags = this.flags & ~AccountModel.FLAGS[name];
+    }
+  }
+  /**
+   * Get a value of a flag.
+   * @param {String} name
+   */
+  getFlag(name) {
+    return !!(this.flags & AccountModel.FLAGS[name]);
+  }
+
   get store() {
     return this.parent.parent;
   }
@@ -72,6 +92,9 @@ class AccountModel extends Model {
   get tags() {
     return Object.values(this.tagsByTag).sort(TagModel.sorter());
   }
+
+  get FAVORITE() { return this.getFlag('FAVORITE'); }
+  set FAVORITE(value) { this.setFlag('FAVORITE', value); }
 }
 
 export default AccountModel;

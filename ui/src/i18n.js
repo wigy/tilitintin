@@ -69,6 +69,7 @@ i18n.init({
 
         'icon-disable-all': 'Piilota kaikki',
         'icon-download-csv': 'Lataa CSV-tiedostona',
+        'icon-favorite': 'Suosikit',
         'icon-fix-vat-descriptions': 'Korjaa puuttuvat kuvaukset',
         'icon-option-byTags': 'Tägeittäin',
         'icon-option-compact': 'Tiivistetympi esitysmuoto',
