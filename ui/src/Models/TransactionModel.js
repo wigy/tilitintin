@@ -1,4 +1,3 @@
-import { runInAction } from 'mobx';
 import moment from 'moment';
 import NavigationTargetModel from './NavigationTargetModel';
 import EntryModel from './EntryModel';
@@ -106,18 +105,16 @@ class TransactionModel extends NavigationTargetModel {
       });
       document.save()
         .then(() => {
-          runInAction(() => {
-            // TODO: Use Store API to create this.
-            const oldId = this.store.accountId;
-            const entry = new EntryModel(document, {document_id: document.id, row_number: 1, account_id: this.store.accountId});
-            document.addEntry(entry);
-            this.store.keepDocumentIdOpen = document.id;
-            // TODO: Why this does not trigger computed property `transactions` recalculation without forcing it by modifying accountId?
-            this.period.addDocument(document);
-            this.store.accountId = null;
-            this.store.accountId = oldId;
-            cursor.setIndex(this.store.filteredTransactions.length - 1);
-          });
+          // TODO: Use Store API to create this.
+          const oldId = this.store.accountId;
+          const entry = new EntryModel(document, {document_id: document.id, row_number: 1, account_id: this.store.accountId});
+          document.addEntry(entry);
+          this.store.keepDocumentIdOpen = document.id;
+          // TODO: Why this does not trigger computed property `transactions` recalculation without forcing it by modifying accountId?
+          this.period.addDocument(document);
+          this.store.accountId = null;
+          this.store.accountId = oldId;
+          cursor.setIndex(this.store.filteredTransactions.length - 1);
         });
     } else {
       this.store.keepDocumentIdOpen = this.document.id;
