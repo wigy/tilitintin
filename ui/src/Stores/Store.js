@@ -358,10 +358,6 @@ class Store {
     }
     return this.request('/db/' + db + '/account')
       .then((accounts) => {
-        // TODO: Hmm, maybe not good solution for unwanted tag reset but...
-        if (this.dbsByName[db].hasAccounts()) {
-          return;
-        }
         runInAction(() => {
           accounts.forEach((data) => {
             const account = new AccountModel(this.dbsByName[db], data);
