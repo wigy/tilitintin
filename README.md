@@ -65,6 +65,10 @@ In UI you can do filtering using the categories defined.
 
 ## Version History
 
+### 0.7
+  * Automatically offered proposals for transaction editing.
+  * Change cursor while running network operation.
+
 ### 0.6
   * Tools page for VAT handling, document renumbering, period locking.
   * Closing and creating new period.

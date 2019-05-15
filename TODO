@@ -5,16 +5,6 @@ BUGS
 FUTURE FEATURES
 ===============
 
-0.7
-[X] Check what can be removed from backend/src/lib that is in libfyffe.
-[X] Support for array of proposals and navigation for them.
-[X] Proposals for accounts, when typing partial name or number of it.
-[X] Propose description of the previous entry in the same document by default.
-[X] Propose debit and credit based on the description and account from history.
-[X] Change cursor while running network operation.
-[X] Ensure that if you create new period that initial transactions are within period (check original Tilitin balance report).
-[ ] TODO cleanup.
-
 0.8
 [ ] Filtering tool for full account list: Assets, Income, Expense, Other
 [ ] Filtering favorite accounts.
