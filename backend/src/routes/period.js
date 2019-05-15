@@ -15,6 +15,8 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', async (req, res) => {
+  req.body.start_date += 'T00:00:00';
+  req.body.end_date += 'T23:59:59.999';
   return data.createOne(req.db, 'period', req.body)
     .then((data) => res.send(data));
 });

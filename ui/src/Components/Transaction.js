@@ -58,6 +58,9 @@ class Transaction extends Component {
       const document = this.props.tx.document;
       const entry = document.entries[row];
       const account = entry.account;
+      if (!account) {
+        return;
+      }
       const vatAccount = this.props.store.database.getAccountByNumber(VATAccount);
       if (account.vat_percentage) {
         if (document.entries.filter(e => e.account_id === vatAccount.id).length === 0) {

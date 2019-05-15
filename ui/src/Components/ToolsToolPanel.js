@@ -204,7 +204,6 @@ class ToolsToolPanel extends Component {
         label = 'Unknown';
         buttons = [];
     }
-
     return (
       <div className="ToolPanel">
         <h1><Trans>{label}</Trans></h1>
