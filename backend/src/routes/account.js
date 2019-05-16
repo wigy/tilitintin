@@ -25,4 +25,10 @@ router.get('/:id/:period', (req, res) => {
     });
 });
 
+router.patch('/:id', async (req, res) => {
+  let obj = req.body;
+  data.updateOne(req.db, 'account', req.params.id, obj)
+    .then((code) => res.status(code).send());
+});
+
 module.exports = router;

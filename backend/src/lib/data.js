@@ -71,10 +71,18 @@ const fields = {
   }
 };
 
+//                      0        1            2         3          4          5              6
+const ACCOUNT_TYPES = ['ASSET', 'LIABILITY', 'EQUITY', 'REVENUE', 'EXPENSE', 'PROFIT_PREV', 'PROFIT'];
 const transformer = {
   'account': (acc) => {
-    //           0        1            2         3          4          5              6
-    acc.type = ['ASSET', 'LIABILITY', 'EQUITY', 'REVENUE', 'EXPENSE', 'PROFIT_PREV', 'PROFIT'][acc.type];
+    acc.type = ACCOUNT_TYPES[acc.type];
+    return acc;
+  }
+};
+
+const reverseTransformer = {
+  'account': (acc) => {
+    acc.type = ACCOUNT_TYPES.indexOf(acc.type);
     return acc;
   }
 };
@@ -184,6 +192,9 @@ async function updateOne(db, className, id, data) {
       data[d] = new Date(data[d]).getTime();
     }
   });
+  if (reverseTransformer[className]) {
+    data = reverseTransformer[className](data);
+  }
   return knex.db(db)(className).where({'id': id}).update(data)
     .then(() => 204)
     .catch((err) => {

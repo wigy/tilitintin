@@ -513,6 +513,21 @@ class Store {
   }
 
   /**
+   * Save account data.
+   * @param {AccountModel} account
+   */
+  async saveAccount(account) {
+    return this.request('/db/' + this.db + '/account/' + (account.id || ''), account.id ? 'PATCH' : 'POST', account.toJSON())
+      .then((res) => {
+        runInAction(() => {
+          if (!account.id) {
+            account.id = res.id;
+          }
+        });
+      });
+  }
+
+  /**
    * Save period content.
    * @param {PeriodModel} period
    */

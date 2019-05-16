@@ -1,5 +1,6 @@
 import Model from './Model';
 import TagModel from './TagModel';
+import { observable } from 'mobx';
 
 class AccountModel extends Model {
 
@@ -7,6 +8,9 @@ class AccountModel extends Model {
     // If set, this is a favorite account.
     FAVORITE: 1
   };
+
+  // Tags found from transactions of this account.
+  @observable tagsByTag = {};
 
   constructor(parent, init = {}) {
     super(parent, {
@@ -20,9 +24,7 @@ class AccountModel extends Model {
       // Combined flags.
       flags: 0,
       // VAT percentage used for the account.
-      vat_percentage: 0,
-      // Tags found from transactions of this account.
-      tagsByTag: {}
+      vat_percentage: 0
     }, init);
   }
 

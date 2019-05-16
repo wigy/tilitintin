@@ -1,22 +1,54 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { translate } from 'react-i18next';
 import AccountModel from '../Models/AccountModel';
+import './AccountLink.css';
 
-const AccountLink = (props) => {
-  const dst = '/' + props.db + '/account/' + props.period + '/' + props.account.id;
-  const fav = props.account.FAVORITE;
-  // TODO: Slow DOM. Use colors.
-  return (<>
-    <span>{fav ? <i className="fas fa-star"></i> : <i className="far fa-star"></i>} </span>
-    <Link to={dst}>{props.account.toString()}</Link>
-    </>);
-};
+@translate('translations')
+class AccountLink extends Component {
+
+  state = {
+    hasHovered: false,
+    showStar: false
+  };
+
+  onToggleFavorite() {
+    this.props.account.FAVORITE = !this.props.account.FAVORITE;
+    this.setState({});
+    this.props.account.save();
+  }
+
+  render() {
+    const dst = '/' + this.props.db + '/account/' + this.props.period + '/' + this.props.account.id;
+    const fav = this.props.account.FAVORITE;
+    return (
+      <div
+        className={'AccountLink' + (fav ? ' favorite' : '')}
+        onMouseEnter={() => this.setState({hasHovered: true, showStar: true})}
+        onMouseLeave={() => this.setState({showStar: false})}>
+        <Link to={dst}>{this.props.account.toString()}</Link>
+        {
+          this.state.hasHovered &&
+            <span className={this.state.showStar ? 'show-star' : 'hide-star'} onClick={() => this.onToggleFavorite()}>
+              &nbsp;&nbsp;
+              {
+                this.props.account.FAVORITE
+                  ? <i className="fas fa-star" title={this.props.t('Remove favorite status')}></i>
+                  : <i className="far fa-star" title={this.props.t('Mark as a favorite')}></i>
+              }
+            </span>
+        }
+      </div>
+    );
+  }
+}
 
 AccountLink.propTypes = {
   account: PropTypes.instanceOf(AccountModel),
   db: PropTypes.string,
-  period: PropTypes.number
+  period: PropTypes.number,
+  t: PropTypes.any
 };
 
 export default AccountLink;
