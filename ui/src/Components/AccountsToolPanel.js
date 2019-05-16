@@ -21,7 +21,7 @@ class AccountsToolPanel extends Component {
     return (
       <div className="ToolPanel">
         <h1><Trans>Accounts</Trans></h1>
-        <IconButton key="button-favorite" title="favorite" icon="fa-star"
+        <IconButton key="button-favorite" title="favorite" icon="far fa-star"
           toggle={store.tools.accounts.favorite}
           onClick={() => (store.tools.accounts.favorite = !store.tools.accounts.favorite)}
         />

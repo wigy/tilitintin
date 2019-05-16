@@ -22,6 +22,7 @@ class AccountLink extends Component {
   render() {
     const dst = '/' + this.props.db + '/account/' + this.props.period + '/' + this.props.account.id;
     const fav = this.props.account.FAVORITE;
+    const title = fav ? this.props.t('Remove favorite status') : this.props.t('Mark as a favorite');
     return (
       <div
         className={'AccountLink' + (fav ? ' favorite' : '')}
@@ -30,13 +31,8 @@ class AccountLink extends Component {
         <Link to={dst}>{this.props.account.toString()}</Link>
         {
           this.state.hasHovered &&
-            <span className={this.state.showStar ? 'show-star' : 'hide-star'} onClick={() => this.onToggleFavorite()}>
-              &nbsp;&nbsp;
-              {
-                this.props.account.FAVORITE
-                  ? <i className="fas fa-star" title={this.props.t('Remove favorite status')}></i>
-                  : <i className="far fa-star" title={this.props.t('Mark as a favorite')}></i>
-              }
+            <span title={title} className={this.state.showStar ? 'show-star' : 'hide-star'} onClick={() => this.onToggleFavorite()}>
+              &nbsp;<i className="far fa-star"></i>
             </span>
         }
       </div>
