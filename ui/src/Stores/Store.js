@@ -298,6 +298,8 @@ class Store {
     this.accountId = null;
     this.tools = {
       tagDisabled: {
+      },
+      accounts: {
       }
     };
   }

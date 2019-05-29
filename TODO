@@ -2,28 +2,28 @@
 BUGS
 ====
 
-[ ] Changing account to favorite and back: star is not updated correctly.
 
 FUTURE FEATURES
 ===============
 
 0.8
 [ ] Filtering tool for full account list: Assets, Income, Expense, Other
-[ ] Filtering favorite accounts.
-[ ] Displaying and marking an account favorite (with star etc.)
+[X] Filtering favorite accounts.
+[X] Displaying and marking an account favorite (with star etc.)
+[ ] Quick filtering all/none.
 [ ] Account search.
+[ ] Creating accounts.
+[ ] Content for left side panel in accounts page (name, number. type, balances per period?).
 [ ] TODO cleanup.
 
 0.9
-[ ] Create database.
-[ ] Create new period.
-[ ] Creating accounts.
-[ ] Creating tx when there is not a single account listed.
-[ ] TODO cleanup.
-
-1.0
 [ ] User management.
+[ ] Create database.
+[ ] Creating tx when there is not a single account listed.
 [ ] Database locking (perhaps create random `<32-letter-code>.lock` file which is stored in browser and removed
     automatically if secret name is known, also removed on logout).
 [ ] Replace old menus with self made and integrated to keyboard control.
+[ ] TODO cleanup.
+
+1.0
 [ ] Scan all TODOs and make fix or fix plan.

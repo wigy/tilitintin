@@ -20,10 +20,20 @@ class Accounts extends Component {
     if (!this.props.store.token) {
       return '';
     }
-    let accounts = this.props.store.accounts;
-    if (this.props.store.tools.accounts.favorite) {
-      accounts = accounts.filter((acc) => acc.FAVORITE);
-    }
+    const { favorite, asset, liability, equity, revenue, expense, profit } = this.props.store.tools.accounts;
+    const types = []
+      .concat(!asset ? ['ASSET'] : [])
+      .concat(!liability ? ['LIABILITY'] : [])
+      .concat(!equity ? ['EQUITY'] : [])
+      .concat(!revenue ? ['REVENUE'] : [])
+      .concat(!expense ? ['EXPENSE'] : [])
+      .concat(!profit ? ['PROFIT_PREV', 'PROFIT'] : []);
+
+    let accounts = this.props.store.accounts.filter(acc => (
+      (!favorite || acc.FAVORITE) &&
+      (types.includes(acc.type))
+    ));
+
     return (
       <div className="Accounts">
         <h1><Trans>Account scheme</Trans></h1>

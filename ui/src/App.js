@@ -73,7 +73,7 @@ class App extends Component {
           <Route exact path="/:db/txs/:periodId" component={Menu}/>
           <Route exact path="/:db/txs/:periodId/:accountId" component={Menu}/>
           <Route exact path="/:db/account" component={Menu}/>
-          <Route exact path="/:db/account/:periodId" component={Menu}/>
+          <Route exact path="/:db/account/:periodId?" component={Menu}/>
           <Route exact path="/:db/account/:periodId/:accountId" component={Menu}/>
           <Route exact path="/:db/report/:periodId" component={Menu}/>
           <Route exact path="/:db/report/:periodId/:accountId" component={Menu}/>
@@ -89,6 +89,7 @@ class App extends Component {
             <Route path="/:db/report/:periodId" component={ReportsList}/>
             <Route exact path="/:db/tools/:periodId?/:accountId?/:tool?" component={ToolsList}/>
             <Route exact path="/:db/tools/:periodId//:tool?" component={ToolsList}/>
+            <Route exact path="/:db/tools///:tool?" component={ToolsList}/>
           </div>
         </div>
         <div className="MainTopPanel Panel">
@@ -98,6 +99,7 @@ class App extends Component {
             <Route path="/:db/report/:periodId/:accountId?/:format?" component={ReportToolPanel}/>
             <Route exact path="/:db/tools/:periodId?/:accountId?/:tool?" component={ToolsToolPanel}/>
             <Route exact path="/:db/tools/:periodId//:tool?" component={ToolsToolPanel}/>
+            <Route exact path="/:db/tools///:tool?" component={ToolsToolPanel}/>
           </div>
         </div>
         <div className="MainPanel Panel">
@@ -108,6 +110,7 @@ class App extends Component {
             <Route path="/:db/report/:periodId/:accountId/:format" component={Report}/>
             <Route exact path="/:db/tools/:periodId?/:accountId?/:tool?" component={Tools}/>
             <Route exact path="/:db/tools/:periodId//:tool?" component={Tools}/>
+            <Route exact path="/:db/tools///:tool?" component={Tools}/>
             <Login />
           </div>
         </div>
