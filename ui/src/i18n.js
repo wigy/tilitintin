@@ -86,6 +86,12 @@ i18n.init({
         'icon-unlock-period': 'Poista tilikauden lukitus',
         'icon-create-period': 'Aloita uusi tilikausi',
         'icon-sort-documents': 'Järjestä tositenumerot päivämääräjän mukaan',
+        'icon-asset': 'Varat',
+        'icon-liability': 'Velat',
+        'icon-equity': 'Pääoma',
+        'icon-revenue': 'Tulot',
+        'icon-expense': 'Menot',
+        'icon-profit': 'Voitto',
 
         'column-account-number': 'Nro',
         'column-balance': 'Saldo',
