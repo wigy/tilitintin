@@ -7,24 +7,49 @@ import Cursor from '../Stores/Cursor';
 import IconButton from './IconButton';
 import IconSpacer from './IconSpacer';
 import './ToolPanel.css';
+import './AccountsToolPanel.css';
 
 @inject('store')
 @inject('cursor')
 @observer
 class AccountsToolPanel extends Component {
 
+  state = {
+    search: ''
+  };
+
+  componentDidMount() {
+    this.setState({search: this.props.store.tools.accounts.search || ''});
+  }
+
   render() {
     const store = this.props.store;
     if (!store.token) {
       return '';
     }
+
+    const enableAll = () => {
+      const favorite = store.tools.accounts.favorite;
+      const search = store.tools.accounts.search;
+      store.tools.accounts = {favorite, search};
+    };
+
+    const disableAll = () => {
+      const favorite = store.tools.accounts.favorite;
+      const search = store.tools.accounts.search;
+      store.tools.accounts = {favorite, search, asset: true, liability: true, equity: true, revenue: true, expense: true, profit: true};
+    };
+
     return ( // ASSET/LIABILITY/EQUITY/REVENUE/EXPENSE/PROFIT_PREV/PROFIT
-      <div className="ToolPanel">
+      <div className="ToolPanel AccountsToolPanel">
         <h1><Trans>Accounts</Trans></h1>
         <IconButton key="button-favorite" title="favorite" icon="far fa-star"
           toggle={store.tools.accounts.favorite}
           onClick={() => (store.tools.accounts.favorite = !store.tools.accounts.favorite)}
         />
+        <IconSpacer/>
+        <IconButton onClick={enableAll} title="all-account-types" icon="fas fa-clone"></IconButton>
+        <IconButton onClick={disableAll} title="none-account-types" icon="far fa-clone"></IconButton>
         <IconSpacer/>
         <IconButton key="button-asset" title="asset" icon="fas fa-coins"
           toggle={!store.tools.accounts.asset}
@@ -50,6 +75,8 @@ class AccountsToolPanel extends Component {
           toggle={!store.tools.accounts.profit}
           onClick={() => (store.tools.accounts.profit = !store.tools.accounts.profit)}
         />
+        <IconSpacer/>
+        <input value={this.state.search} onChange={e => { this.setState({search: e.target.value}); store.tools.accounts.search = e.target.value; }}/>
       </div>
     );
   }

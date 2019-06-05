@@ -69,10 +69,12 @@ i18n.init({
         'report-income-statement-detailed': 'Tuloslaskelma tilierittelyin',
         'report-income-statement': 'Tuloslaskelma',
 
+        'icon-all-account-types': 'Valitse kaikki tyyppivalinnat',
         'icon-disable-all': 'Piilota kaikki',
         'icon-download-csv': 'Lataa CSV-tiedostona',
         'icon-favorite': 'Suosikit',
         'icon-fix-vat-descriptions': 'Korjaa puuttuvat kuvaukset',
+        'icon-none-account-types': 'Poista kaikki tyyppivalinnat',
         'icon-option-byTags': 'Tägeittäin',
         'icon-option-compact': 'Tiivistetympi esitysmuoto',
         'icon-option-full': 'Koko vuosi',

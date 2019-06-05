@@ -7,13 +7,14 @@ FUTURE FEATURES
 ===============
 
 0.8
-[ ] Filtering tool for full account list: Assets, Income, Expense, Other
+[X] Filtering tool for full account list: Assets, Income, Expense, Other
 [X] Filtering favorite accounts.
 [X] Displaying and marking an account favorite (with star etc.)
-[ ] Quick filtering all/none.
-[ ] Account search.
+[X] Quick filtering all/none.
+[X] Account search.
 [ ] Creating accounts.
 [ ] Content for left side panel in accounts page (name, number. type, balances per period?).
+[ ] Fetch old texts as well when looking for proposals for descriptions.
 [ ] TODO cleanup.
 
 0.9
