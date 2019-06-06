@@ -3,7 +3,11 @@ const router = express.Router();
 const data = require('../lib/data');
 
 router.get('/', (req, res) => {
-  data.listAll(req.db, 'entry', null, ['id'])
+  let where = null;
+  if (req.query.account_id) {
+    where = {account_id: parseInt(req.query.account_id)};
+  }
+  data.listAll(req.db, 'entry', where, ['id'])
     .then(entries => res.send(entries));
 });
 

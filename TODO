@@ -12,9 +12,10 @@ FUTURE FEATURES
 [X] Displaying and marking an account favorite (with star etc.)
 [X] Quick filtering all/none.
 [X] Account search.
+[ ] Account navigation.
 [ ] Creating accounts.
-[ ] Content for left side panel in accounts page (name, number. type, balances per period?).
-[ ] Fetch old texts as well when looking for proposals for descriptions.
+[ ] Content for left side panel in accounts page (name, number, type, balances per period?).
+[X] Fetch old texts as well when looking for proposals for descriptions.
 [ ] TODO cleanup.
 
 0.9
@@ -22,7 +23,7 @@ FUTURE FEATURES
 [ ] Create database.
 [ ] Creating tx when there is not a single account listed.
 [ ] Database locking (perhaps create random `<32-letter-code>.lock` file which is stored in browser and removed
-    automatically if secret name is known, also removed on logout).
+    automatically on logout).
 [ ] Replace old menus with self made and integrated to keyboard control.
 [ ] TODO cleanup.
 

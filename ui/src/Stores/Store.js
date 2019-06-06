@@ -107,6 +107,8 @@ class Store {
 
   // A hack to keep document open when `filteredTransactions` recalculation happens after adding new entries.
   keepDocumentIdOpen = null;
+  // Cache for account descriptions list.
+  entryDescriptions = {};
 
   constructor(settings) {
     this.settings = settings;
@@ -370,6 +372,29 @@ class Store {
   }
 
   /**
+   * Fetch all historical descriptions given for entries of the given account.
+   * @param {String} db
+   * @param {Number} accountId
+   * @return {String[]}
+   */
+  fetchEntryDescriptions(db, accountId) {
+    if (!this.token) {
+      return;
+    }
+    if (this.entryDescriptions[db] && this.entryDescriptions[db][accountId]) {
+      return this.entryDescriptions[db][accountId];
+    }
+    return this.request('/db/' + db + '/entry?account_id=' + accountId)
+      .then((entries) => {
+        const ret = [...new Set(entries.map(e => e.description))];
+        this.entryDescriptions[db] = this.entryDescriptions[db] || {};
+        this.entryDescriptions[db][accountId] = ret;
+        return ret;
+      });
+
+  }
+
+  /**
    * Collect all account headings.
    */
   async fetchHeadings(db) {
@@ -567,6 +592,9 @@ class Store {
    * @param {EntryModel} entry
    */
   async saveEntry(entry) {
+    if (this.entryDescriptions[this.db] && this.entryDescriptions[this.db][entry.account_id]) {
+      delete this.entryDescriptions[this.db][entry.account_id];
+    }
     return this.request('/db/' + this.db + '/entry/' + (entry.id || ''), entry.id ? 'PATCH' : 'POST', entry.toJSON())
       .then((res) => {
         runInAction(() => {

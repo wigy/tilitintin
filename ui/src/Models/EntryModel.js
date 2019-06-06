@@ -162,21 +162,10 @@ class EntryModel extends NavigationTargetModel {
     this.tagNames.replace(tags);
     this.period.refreshTags();
   }
-  ['proposal.description'](value) {
-    const texts = new Set();
-    // Check transactions of the current account and select substring matches.
-    this.store.transactions.forEach((tx) => {
-      for (let i = 0; i < tx.document.entries.length; i++) {
-        if (tx.document.entries[i].account_id === this.account_id) {
-          if (value !== '' && tx.document.entries[i].description.toLowerCase().indexOf(value.toLowerCase()) < 0) {
-            continue;
-          }
-          texts.add(tx.document.entries[i].text);
-        }
-      }
-    });
-
-    return [...texts].sort();
+  async ['proposal.description'](value) {
+    const texts = await this.store.fetchEntryDescriptions(this.database.name, this.account_id);
+    value = value.toLowerCase();
+    return texts.filter(t => value === '' || t.toLowerCase().indexOf(value) >= 0).sort();
   }
 
   /**

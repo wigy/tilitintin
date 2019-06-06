@@ -23,7 +23,7 @@ router.post('/auth', (req, res) => {
 function checkToken(req, res, next) {
 
   if (config.AUTO_LOGIN_USER) {
-    req.user = 'user';
+    req.user = config.AUTO_LOGIN_USER;
     next();
     return;
   }
