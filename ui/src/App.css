@@ -115,6 +115,15 @@
   overflow: hidden;
   white-space: nowrap;
   font-size: 13pt;
+  font-weight: bold;
+}
+
+.Frame h2 {
+  padding: 0;
+  margin: 1.5ex 0;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 13pt;
 }
 
 .App.busy {

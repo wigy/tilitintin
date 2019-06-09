@@ -7,7 +7,7 @@ router.get('/', (req, res) => {
     .then(data => res.send(data));
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   data.getOne(req.db, 'account', req.params.id)
     .then(account => {
       res.send(account);

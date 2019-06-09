@@ -377,7 +377,7 @@ class Store {
    * @param {Number} accountId
    * @return {String[]}
    */
-  fetchEntryDescriptions(db, accountId) {
+  async fetchEntryDescriptions(db, accountId) {
     if (!this.token) {
       return;
     }

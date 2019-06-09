@@ -1,0 +1,9 @@
+.Account .summary {
+  font-size: 13pt;
+  font-style: italic;
+  padding: 0.5ex;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 0.4ex;
+  margin-top: 1ex;
+  margin-bottom: 1ex;
+}

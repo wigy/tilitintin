@@ -6,6 +6,10 @@ i18n.init({
       translations: {
         'Account Balances': 'Tilien saldot',
         'Account scheme': 'Tilikartta',
+        'Account': 'Tili',
+        'Account Name': 'Tilin nimi',
+        'Account Number': 'Tilin numero',
+        'Account Type': 'Tilin laji',
         'Accounts': 'Tilit',
         'All documents are correctly numbered.': 'Kaikki tositteet on numeroitu oikein.',
         'Cancel': 'Peru',
@@ -101,7 +105,15 @@ i18n.init({
         'column-date-and-accounts': 'Päiväys ja tilit',
         'column-debit': 'Debet',
         'column-document-number': 'Nro',
-        'column-name-or-date': 'Tili / Päiväys'
+        'column-name-or-date': 'Tili / Päiväys',
+
+        'ASSET': 'Varat ja saatavat',
+        'LIABILITY': 'Velka',
+        'EQUITY': 'Pääoma',
+        'REVENUE': 'Tulo',
+        'EXPENSE': 'Meno',
+        'PROFIT_PREV': 'Edellisten tilikausien voitto',
+        'PROFIT': 'Voitto'
       }
     }
   },

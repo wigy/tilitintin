@@ -7,6 +7,7 @@ import keydown from 'react-keydown';
 import './App.css';
 import Balances from './Components/Balances';
 import AccountTransactions from './Components/AccountTransactions';
+import Account from './Components/Account';
 import Accounts from './Components/Accounts';
 import ReportsList from './Components/ReportsList';
 import Report from './Components/Report';
@@ -86,6 +87,7 @@ class App extends Component {
         <div className="SidePanel Panel">
           <div className="Frame">
             <Route path="/:db/txs/:periodId" component={Balances}/>
+            <Route path="/:db/account/:periodId?/:accountId?" component={Account}/>
             <Route path="/:db/report/:periodId" component={ReportsList}/>
             <Route exact path="/:db/tools/:periodId?/:accountId?/:tool?" component={ToolsList}/>
             <Route exact path="/:db/tools/:periodId//:tool?" component={ToolsList}/>
