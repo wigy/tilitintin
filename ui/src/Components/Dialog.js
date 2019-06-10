@@ -38,11 +38,11 @@ class DialogContent extends Component {
           <Modal.Title>{this.props.title}</Modal.Title>
         </Modal.Header>
 
-        <Modal.Body>{this.props.children}</Modal.Body>
+        <Modal.Body><div className={this.props.className}>{this.props.children}</div></Modal.Body>
 
         <Modal.Footer>
           <Button onClick={this.keyEscape}><Trans>Cancel</Trans></Button>
-          <Button onClick={this.keyEnter} bsStyle="primary"><Trans>Confirm</Trans></Button>
+          <Button onClick={this.keyEnter} disabled={this.props.isValid && !this.props.isValid()} bsStyle="primary"><Trans>Confirm</Trans></Button>
         </Modal.Footer>
       </Modal.Dialog>
     );
@@ -50,6 +50,8 @@ class DialogContent extends Component {
 }
 
 DialogContent.propTypes = {
+  isValid: PropTypes.func,
+  className: PropTypes.string,
   cursor: PropTypes.instanceOf(Cursor),
   title: PropTypes.any,
   onClose: PropTypes.func,
@@ -69,13 +71,22 @@ class Dialog extends Component {
     }
 
     return (
-      <DialogContent title={this.props.title} onClose={this.props.onClose} onConfirm={this.props.onConfirm}>{this.props.children}</DialogContent>
+      <DialogContent
+        title={this.props.title}
+        isValid={this.props.isValid}
+        className={this.props.className}
+        onClose={this.props.onClose}
+        onConfirm={this.props.onConfirm}>
+        {this.props.children}
+      </DialogContent>
     );
   }
 }
 
 Dialog.propTypes = {
   isVisible: PropTypes.bool,
+  isValid: PropTypes.func,
+  className: PropTypes.string,
   title: PropTypes.any,
   onClose: PropTypes.func,
   onConfirm: PropTypes.func,

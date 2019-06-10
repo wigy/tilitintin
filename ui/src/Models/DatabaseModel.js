@@ -184,6 +184,15 @@ class DatabaseModel extends Model {
   }
 
   /**
+   * Check if there is an account with the given number.
+   * @param {Number} number
+   * @return {Boolean}
+   */
+  hasAccount(number) {
+    return this.getAccountByNumber(number.toString()) !== null;
+  }
+
+  /**
    * Check if this database has accounts loaded.
    * @return {Boolean}
    */

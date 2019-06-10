@@ -12,8 +12,8 @@ FUTURE FEATURES
 [X] Displaying and marking an account favorite (with star etc.)
 [X] Quick filtering all/none.
 [X] Account search.
-[ ] Account navigation.
 [ ] Creating accounts.
+[ ] Deleting accounts.
 [X] Content for left side panel in accounts page (name, number, type).
 [X] Fetch old texts as well when looking for proposals for descriptions.
 [ ] TODO cleanup.

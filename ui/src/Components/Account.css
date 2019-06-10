@@ -7,3 +7,19 @@
   margin-top: 1ex;
   margin-bottom: 1ex;
 }
+
+.Account button.create-new {
+  margin-top: 1ex;
+}
+
+.Account .dialog input.number {
+  width: 6em;
+}
+
+.Account .dialog input.name {
+  width: 95%;
+}
+
+.Account .dialog .error {
+  color: red;
+}
