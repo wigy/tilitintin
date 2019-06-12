@@ -242,6 +242,9 @@ async function createOne(db, className, data) {
       data[d] = new Date(data[d]).getTime();
     }
   });
+  if (reverseTransformer[className]) {
+    data = reverseTransformer[className](data);
+  }
   return knex.db(db)(className).insert(data)
     .then((data) => {
       return knex.db(db)(className).where({id: data[0]}).first()
@@ -557,6 +560,18 @@ async function isLocked(db, what, id) {
   }
 }
 
+/**
+ * Count entry count and collect period information for an account.
+ */
+async function getAccountTransactionCountByPeriod(db, id) {
+  return knex.db(db).select('period.*', knex.db(db).raw('COUNT(*) AS entries')).from('entry')
+    .leftJoin('document', 'entry.document_id', 'document.id')
+    .leftJoin('period', 'document.period_id', 'period.id')
+    .where({account_id: id})
+    .orderBy('period.id')
+    .groupBy('period.id');
+}
+
 module.exports = {
   fillEntries,
   listAll,
@@ -574,6 +589,7 @@ module.exports = {
   getAccountTransactions,
   getAccountTransactionsWithEntries,
   getAccountTransactionsByNumber,
+  getAccountTransactionCountByPeriod,
   getPeriodTransactionsWithEntries,
   getSettings,
   getNextDocument,

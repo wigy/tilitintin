@@ -12,10 +12,12 @@ FUTURE FEATURES
 [X] Displaying and marking an account favorite (with star etc.)
 [X] Quick filtering all/none.
 [X] Account search.
-[ ] Creating accounts.
-[ ] Deleting accounts.
+[X] Creating accounts.
+[X] Deleting accounts.
+[X] Account page: list periods and number of entries for an account and if period is locked.
 [X] Content for left side panel in accounts page (name, number, type).
 [X] Fetch old texts as well when looking for proposals for descriptions.
+[ ] Crash after deleting account (avoid null in accountId).
 [ ] TODO cleanup.
 
 0.9

@@ -175,6 +175,14 @@ class DatabaseModel extends Model {
   }
 
   /**
+   * Clear all accounts.
+   */
+  deleteAccounts() {
+    this.accountsById = {};
+    this.accountsByNumber = {};
+  }
+
+  /**
    * Get the account by its number.
    * @param {Number} number
    * @return {null|AccountModel}

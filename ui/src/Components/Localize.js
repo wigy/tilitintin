@@ -40,7 +40,7 @@ class Localize extends Component {
 
 Localize.propTypes = {
   t: PropTypes.func,
-  date: PropTypes.string,
+  date: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   children: PropTypes.any,
   i18n: PropTypes.instanceOf(I18n)
 };

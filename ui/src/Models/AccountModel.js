@@ -9,6 +9,22 @@ class AccountModel extends Model {
     FAVORITE: 1
   };
 
+  // Currently unused.
+  static VAT_CODES = [
+    null,
+    null,
+    null,
+    null,
+    'Verollinen myynti',
+    'Verolliset ostot',
+    'Veroton myynti',
+    'Verottomat ostot',
+    'Yhteisömyynti',
+    'Yhteisöostot',
+    'Rakentamispalvelun myynti',
+    'Rakentamispalvelun ostot'
+  ];
+
   // Tags found from transactions of this account.
   @observable tagsByTag = {};
 
@@ -24,7 +40,11 @@ class AccountModel extends Model {
       // Combined flags.
       flags: 0,
       // VAT percentage used for the account.
-      vat_percentage: 0
+      vat_percentage: 0,
+      // VAT code (index to the table above).
+      vat_code: 0,
+      // Period statistics for this account (if loaded).
+      periods: []
     }, init);
   }
 

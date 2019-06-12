@@ -264,8 +264,15 @@ class Store {
       return;
     }
     await this.setPeriod(db, periodId);
-    this.accountId = accountId;
-    debug('SetAccount:', db, periodId, accountId, 'Done');
+    // Fetch additional data for an account.
+    return this.request('/db/' + db + '/account/' + accountId)
+      .then((account) => {
+        runInAction(() => {
+          this.accountId = accountId;
+          this.account.periods.replace(account.periods);
+          debug('SetAccount:', db, periodId, accountId, 'Done');
+        });
+      });
   }
 
   /**
@@ -363,6 +370,7 @@ class Store {
     return this.request('/db/' + db + '/account')
       .then((accounts) => {
         runInAction(() => {
+          this.dbsByName[db].deleteAccounts();
           accounts.forEach((data) => {
             const account = new AccountModel(this.dbsByName[db], data);
             this.dbsByName[db].addAccount(account);
@@ -551,6 +559,7 @@ class Store {
             account.id = res.id;
           }
         });
+        return res;
       });
   }
 
@@ -566,6 +575,7 @@ class Store {
             period.id = res.id;
           }
         });
+        return res;
       });
   }
 
@@ -583,6 +593,7 @@ class Store {
           if (!doc.number) {
             doc.number = res.number;
           }
+          return res;
         });
       });
   }
@@ -602,12 +613,25 @@ class Store {
             entry.id = res.id;
           }
         });
+        return res;
+      });
+  }
+
+  /**
+   * Remove an account.
+   * @param {AccountModel} account
+   */
+  async deleteAccount(account) {
+    const path = '/db/' + this.db + '/account/' + account.id;
+    return this.request(path, 'DELETE')
+      .then(() => {
+        return this.fetchAccounts(this.db);
       });
   }
 
   /**
    * Remove an entry.
-   * @param {Object} entry
+   * @param {EntryModel} entry
    */
   async deleteEntry(entry) {
     if (!entry.id) {
@@ -626,7 +650,7 @@ class Store {
 
   /**
    * Remove a document and all of its entries from the system.
-   * @param {Object} doc
+   * @param {DocumentModel} doc
    */
   async deleteDocument(doc) {
     const path = '/db/' + this.db + '/document/' + doc.id;

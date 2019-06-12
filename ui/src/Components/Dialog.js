@@ -56,7 +56,7 @@ DialogContent.propTypes = {
   title: PropTypes.any,
   onClose: PropTypes.func,
   onConfirm: PropTypes.func,
-  children: PropTypes.array
+  children: PropTypes.oneOfType([PropTypes.array, PropTypes.object])
 };
 
 /**
@@ -90,7 +90,7 @@ Dialog.propTypes = {
   title: PropTypes.any,
   onClose: PropTypes.func,
   onConfirm: PropTypes.func,
-  children: PropTypes.array
+  children: PropTypes.oneOfType([PropTypes.array, PropTypes.object])
 };
 
 export default Dialog;
