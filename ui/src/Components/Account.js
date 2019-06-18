@@ -26,7 +26,11 @@ class Account extends Component {
 
   componentDidMount() {
     const {db, periodId, accountId} = this.props.match.params;
-    this.props.store.setAccount(db, periodId, accountId);
+    if (accountId) {
+      this.props.store.setAccount(db, periodId, accountId);
+    } else if (periodId) {
+      this.props.store.setPeriod(db, periodId);
+    }
   }
 
   componentDidUpdate() {
