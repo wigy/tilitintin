@@ -4,7 +4,7 @@
 //
 /* eslint quotes: off, comma-dangle: off */
 const config = {
-  VERSION: "0.8β",
+  VERSION: "0.8",
   API_URL: "http://localhost:3101",
 };
 export default config;
