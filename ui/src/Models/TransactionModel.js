@@ -91,7 +91,7 @@ class TransactionModel extends NavigationTargetModel {
   }
 
   /**
-   * Mark either document or entry for deletion.
+   * Insert either a document or an entry.
    * @param {Cursor} cursor
    */
   keyInsert(cursor) {
@@ -105,7 +105,6 @@ class TransactionModel extends NavigationTargetModel {
       });
       document.save()
         .then(() => {
-          // TODO: Use Store API to create this.
           const oldId = this.store.accountId;
           const entry = new EntryModel(document, {document_id: document.id, row_number: 1, account_id: this.store.accountId});
           document.addEntry(entry);
