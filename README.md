@@ -65,6 +65,13 @@ In UI you can do filtering using the categories defined.
 
 ## Version History
 
+### 0.8
+  * Account listing and filtering.
+  * Toggling account favorite status.
+  * Account search.
+  * Creating and deleting accounts.
+  * Improved description proposals digging from historical values.
+
 ### 0.7
   * Automatically offered proposals for transaction editing.
   * Change cursor while running network operation.
