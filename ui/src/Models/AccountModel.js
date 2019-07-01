@@ -27,6 +27,8 @@ class AccountModel extends Model {
 
   // Tags found from transactions of this account.
   @observable tagsByTag = {};
+  // Period statistics for this account (if loaded).
+  @observable periods = [];
 
   constructor(parent, init = {}) {
     super(parent, {
@@ -42,9 +44,7 @@ class AccountModel extends Model {
       // VAT percentage used for the account.
       vat_percentage: 0,
       // VAT code (index to the table above).
-      vat_code: 0,
-      // Period statistics for this account (if loaded).
-      periods: []
+      vat_code: 0
     }, init);
   }
 

@@ -170,7 +170,8 @@ class ToolsToolPanel extends Component {
     if (!store.token) {
       return '';
     }
-    let buttons, label;
+    let buttons = [];
+    let label;
     let startDate, endDate;
     const VAT = this.props.store.period ? this.props.store.period.VATSummary : {sales: 0, purchases: 0};
 
@@ -185,9 +186,12 @@ class ToolsToolPanel extends Component {
 
       case 'periods':
         label = 'Periods';
-        buttons = [
-          <IconButton key="button-new" onClick={() => this.setState({askNewPeriod: true})} title="create-period" icon="fa-calendar-plus"></IconButton>
-        ];
+        if (this.props.store.db) {
+          buttons.push(
+            <IconButton key="button-new" onClick={() => this.setState({askNewPeriod: true})} title="create-period" icon="fa-calendar-plus"></IconButton>
+          );
+
+        }
         startDate = store.database && moment(store.database.periods[store.database.periods.length - 1].end_date).add(1, 'day').format('YYYY-MM-DD');
         endDate = store.database && moment(store.database.periods[store.database.periods.length - 1].end_date).add(1, 'year').format('YYYY-MM-DD');
         break;

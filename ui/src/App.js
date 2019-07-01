@@ -5,22 +5,24 @@ import { Route, withRouter } from 'react-router-dom';
 import { inject } from 'mobx-react';
 import keydown from 'react-keydown';
 import './App.css';
-import Balances from './Components/Balances';
-import AccountTransactions from './Components/AccountTransactions';
 import Account from './Components/Account';
 import Accounts from './Components/Accounts';
-import ReportsList from './Components/ReportsList';
-import Report from './Components/Report';
-import Menu from './Components/Menu';
-import ReportToolPanel from './Components/ReportToolPanel';
-import TransactionToolPanel from './Components/TransactionToolPanel';
-import ToolsToolPanel from './Components/ToolsToolPanel';
 import AccountsToolPanel from './Components/AccountsToolPanel';
-import ToolsList from './Components/ToolsList';
-import Tools from './Components/Tools';
-import Login from './Components/Login';
+import AccountTransactions from './Components/AccountTransactions';
+import Balances from './Components/Balances';
 import Cursor from './Stores/Cursor';
+import DatabaseList from './Components/DatabaseList';
+import Dashboard from './Components/Dashboard';
+import Login from './Components/Login';
+import Menu from './Components/Menu';
+import Report from './Components/Report';
+import ReportsList from './Components/ReportsList';
+import ReportToolPanel from './Components/ReportToolPanel';
 import Store from './Stores/Store';
+import Tools from './Components/Tools';
+import ToolsList from './Components/ToolsList';
+import ToolsToolPanel from './Components/ToolsToolPanel';
+import TransactionToolPanel from './Components/TransactionToolPanel';
 
 @withRouter
 @keydown
@@ -86,6 +88,8 @@ class App extends Component {
         </div>
         <div className="SidePanel Panel">
           <div className="Frame">
+            <Route exact path="/" component={DatabaseList}/>
+            <Route exact path="/:db" component={DatabaseList}/>
             <Route path="/:db/txs/:periodId" component={Balances}/>
             <Route path="/:db/account/:periodId?/:accountId?" component={Account}/>
             <Route path="/:db/report/:periodId" component={ReportsList}/>
@@ -106,6 +110,8 @@ class App extends Component {
         </div>
         <div className="MainPanel Panel">
           <div className="Frame">
+            <Route exact path="/" component={Dashboard}/>
+            <Route exact path="/:db" component={Dashboard}/>
             <Route path="/:db/txs/:periodId/:accountId" component={AccountTransactions}/>
             <Route path="/:db/account/:periodId?" component={Accounts}/>
             <Route path="/:db/report/:periodId//:format" component={Report}/>

@@ -27,6 +27,7 @@ i18n.init({
         'Cumulated VAT from sales': 'Kertynyt ALV myynnistä',
         'Current VAT payable': 'Nykyiset ALV velat',
         'Current VAT receivable': 'Nykyiset ALV saatavat',
+        'Databases': 'Tietokannat',
         'Date is incorrect.': 'Virheellinen päivämäärä.',
         'Date': 'Päiväys',
         'Debit and credit do not match': 'Debet ja kredit ei täsmää',

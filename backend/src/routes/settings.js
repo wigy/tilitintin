@@ -2,10 +2,11 @@ const express = require('express');
 const router = express.Router();
 const knex = require('../lib/knex');
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
+  const generic = await knex.db(req.db)('settings').select('*').first();
   knex.db(req.db)('fyffe_settings').select('*')
     .then((data) => {
-      let ret = {};
+      let ret = generic;
       data.forEach((setting) => {
         ret[setting.name] = setting.value;
       });
