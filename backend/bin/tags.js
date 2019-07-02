@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 const promiseSeq = require('promise-sequential');
+const rp = require('request-promise');
+const path = require('path');
+const fs = require('fs');
 const tags = require('libfyffe').data.tilitintin.tags;
 const knex = require('../src/lib/knex');
 const { util: { cli } } = require('libfyffe');
@@ -7,7 +10,7 @@ const USER = process.env.FYFFE_USER || 'user';
 
 knex.setUser(USER);
 cli.arg_('db', knex.dbs(USER));
-cli.arg('operation', ['ls', 'add', 'remove-all']);
+cli.arg('operation', ['ls', 'add', 'remove-all', 'store-local']);
 
 async function main() {
 
@@ -25,6 +28,34 @@ async function main() {
       return tags.getAll(knex.db(cli.db))
         .then((tags) => {
           console.log(tags);
+        });
+
+    case 'store-local':
+      return knex.db(cli.db)
+        .select('*')
+        .from('tags')
+        .then(async (data) => {
+          const dir = path.join(__dirname, '..', 'databases', USER);
+          for await (tag of data) {
+            if (!fs.existsSync(`${dir}/${tag.tag}.jpg`) && !fs.existsSync(`${dir}/${tag.tag}.png`)) {
+              console.log(`Fetching ${tag.name} from ${tag.picture}`);
+              await rp.get(tag.picture)
+                .then((bin) => {
+                  const filePath = new URL(tag.picture).pathname;
+                  if (/\.jp?g$/i.test(filePath)) {
+                    fs.writeFileSync(`${dir}/${tag.tag}.jpg`);
+                  } else if (/\.png$/i.test(filePath)) {
+                    fs.writeFileSync(`${dir}/${tag.tag}.png`);
+                  } else {
+                    fs.writeFileSync(`${dir}/${tag.tag}.unknown`);
+                    console.log(`Cannot figure out file type. Check and rename ${dir}/${tag.tag}.unknown`);
+                  }
+                })
+                .catch((err) => {
+                  console.log(`Failed to fetch ${tag.picture}`);
+                });
+            }
+          }
         });
 
     case 'remove-all':
