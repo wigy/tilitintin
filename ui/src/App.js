@@ -73,6 +73,8 @@ class App extends Component {
         <div className="TopPanel Panel">
           <Route exact path="/" component={Menu}/>
           <Route exact path="/:db" component={Menu}/>
+          <Route exact path="/:db/dashboard/:periodId?" component={Menu}/>
+          <Route exact path="/:db/dashboard/:periodId/:accountId?" component={Menu}/>
           <Route exact path="/:db/txs/:periodId" component={Menu}/>
           <Route exact path="/:db/txs/:periodId/:accountId" component={Menu}/>
           <Route exact path="/:db/account" component={Menu}/>
@@ -90,6 +92,8 @@ class App extends Component {
           <div className="Frame">
             <Route exact path="/" component={DatabaseList}/>
             <Route exact path="/:db" component={DatabaseList}/>
+            <Route exact path="/:db/dashboard/:periodId?" component={DatabaseList}/>
+            <Route exact path="/:db/dashboard/:periodId/:accountId" component={DatabaseList}/>
             <Route path="/:db/txs/:periodId" component={Balances}/>
             <Route path="/:db/account/:periodId?/:accountId?" component={Account}/>
             <Route path="/:db/report/:periodId" component={ReportsList}/>
@@ -112,6 +116,8 @@ class App extends Component {
           <div className="Frame">
             <Route exact path="/" component={Dashboard}/>
             <Route exact path="/:db" component={Dashboard}/>
+            <Route exact path="/:db/dashboard/:periodId" component={Dashboard}/>
+            <Route exact path="/:db/dashboard/:periodId/:accountId" component={Dashboard}/>
             <Route path="/:db/txs/:periodId/:accountId" component={AccountTransactions}/>
             <Route path="/:db/account/:periodId?" component={Accounts}/>
             <Route path="/:db/report/:periodId//:format" component={Report}/>
