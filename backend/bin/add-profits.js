@@ -5,6 +5,7 @@
 const promiseSeq = require('promise-sequential');
 const { util: {num, cli} } = require('libfyffe');
 const knex = require('../src/lib/knex');
+const USER = process.env.FYFFE_USER || 'user';
 
 cli.opt('debug', false, 'To turn dry-run on.');
 cli.opt('target', 1549, 'Number of an account for storing target amount changes.');
@@ -17,6 +18,7 @@ cli.arg('target', 'Trading code of the target like ETH or BTC.');
 let avgPrice = 0;
 let accountIdByNumber = {};
 
+knex.setUser(USER);
 knex.db(cli.db)
   .from('account')
   .select('id', 'number')
