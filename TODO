@@ -2,6 +2,11 @@
 BUGS
 ====
 
+[ ] Account lookup does not work.
+[ ] Clicking another account right after entering entry, is not updated.
+[ ] Account search does not find by number.
+[ ] After editing, all other documents are closed.
+[ ] Account is lost if you visit home from transactions page.
 
 FUTURE FEATURES
 ===============
@@ -12,7 +17,7 @@ FUTURE FEATURES
 [ ] Creating tx when there is not a single account listed.
 [ ] Database locking (perhaps create random `<32-letter-code>.lock` file which is stored in browser and removed
     automatically on logout).
-[ ] Replace old menus with self made and integrated to keyboard control.
+[X] Replace old menus with home page.
 [ ] TODO cleanup.
 
 1.0

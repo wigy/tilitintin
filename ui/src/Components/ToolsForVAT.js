@@ -8,6 +8,7 @@ import Settings from '../Stores/Settings';
 import Money from './Money';
 import Localize from './Localize';
 import SubPanel from './SubPanel';
+import Tag from './Tag';
 
 @translate('translations')
 @inject('store')
@@ -43,6 +44,32 @@ class ToolsForVAT extends Component {
 
     const payable = this.props.store.period.getBalanceByNumber(VAT_PAYABLE_ACCOUNT);
     const receivable = this.props.store.period.getBalanceByNumber(VAT_RECEIVABLE_ACCOUNT);
+    const openVATDocuments = this.props.store.period ? this.props.store.period.openVATDocuments : [];
+
+    // Split by tags.
+    const vatByTag = {};
+    let vatByNoTag = null;
+    let hasTags = false;
+    const addVatByTags = (tags, amount) => {
+      if (!tags.length) {
+        vatByNoTag = (vatByNoTag || 0) + amount;
+        return;
+      }
+      hasTags = true;
+      const share = (amount >= 0 ? Math.ceil(amount / tags.length) : Math.floor(amount / tags.length));
+      tags.forEach((tag) => {
+        const delta = (amount >= 0 ? Math.min(amount, share) : Math.max(amount, share));
+        vatByTag[tag] = (vatByTag[tag] || 0) + delta;
+        amount -= delta;
+      });
+    };
+    for (const doc of openVATDocuments) {
+      for (const entry of doc.entries) {
+        if (entry.account_id === vatSalesAccount.id || entry.account_id === vatPurchasesAccount.id) {
+          addVatByTags(entry.tagNames, entry.total);
+        }
+      }
+    }
 
     return (
       <div className="Tools">
@@ -68,7 +95,28 @@ class ToolsForVAT extends Component {
             <Trans>{VAT.sales + VAT.purchases < 0 ? 'Payable to add' : 'Receivable to add'}</Trans>: <Money cents={VAT.sales + VAT.purchases} currency="€"></Money><br/>
           </b>
         </SubPanel>
-        {this.props.store.period && this.props.store.period.openVATDocuments.map((doc) => {
+        { hasTags &&
+          <SubPanel>
+            <b><Trans>Cumulated VAT by tags</Trans>:</b>
+            <table>
+              <tbody>
+                {Object.entries(vatByTag).map(([tag, amount]) => <tr key={tag}>
+                  <td width="48px"><Tag size="x2" tag={this.props.store.database.getTag(tag)} /></td>
+                  <td width="48px">{tag}</td>
+                  <td>{this.props.store.database.getTag(tag).name}</td>
+                  <td><Money cents={amount} currency="€"></Money></td>
+                </tr>)}
+                {vatByNoTag && <tr>
+                  <td></td>
+                  <td></td>
+                  <td><Trans>Entries that has no tags</Trans></td>
+                  <td><Money cents={vatByNoTag} currency="€"></Money></td>
+                </tr>}
+              </tbody>
+            </table>
+          </SubPanel>
+        }
+        {openVATDocuments.map((doc) => {
           return <div key={doc.id}>
             <Localize>{`{${doc.date}}`}</Localize>
             <br/>

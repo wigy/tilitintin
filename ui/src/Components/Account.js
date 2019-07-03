@@ -8,6 +8,7 @@ import Store from '../Stores/Store';
 import AccountModel from '../Models/AccountModel';
 import Dialog from './Dialog';
 import Localize from './Localize';
+import SubPanel from './SubPanel';
 import './Account.css';
 
 @translate('translations')
@@ -134,7 +135,7 @@ class Account extends Component {
         <h1><Trans>Account</Trans></h1>
         {
           account &&
-          <>
+          <SubPanel>
             <div className="summary">
               <Trans>Account Name</Trans>: {account.name}<br/>
               <Trans>Account Number</Trans>: {account.number}<br/>
@@ -142,7 +143,7 @@ class Account extends Component {
             </div>
             <Button className="delete" disabled={!canDelete()} onClick={() => this.setState({deleteIsOpen: true})}><Trans>Delete Account</Trans></Button><br/>
             {this.renderDeleteDialog()}
-          </>
+          </SubPanel>
         }
         <Button className="create-new" onClick={() => this.setState({createNewIsOpen: true})}><Trans>Create New Account</Trans></Button>
         {this.renderCreateNewDialog()}
