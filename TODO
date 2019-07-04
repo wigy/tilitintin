@@ -2,11 +2,9 @@
 BUGS
 ====
 
-[ ] Account lookup does not work.
 [ ] Clicking another account right after entering entry, is not updated.
-[ ] Account search does not find by number.
 [ ] After editing, all other documents are closed.
-[ ] Account is lost if you visit home from transactions page.
+[ ] If period selected and you change db, all menus are still usable.
 
 FUTURE FEATURES
 ===============
@@ -16,8 +14,11 @@ FUTURE FEATURES
 [ ] Create database.
 [ ] Creating tx when there is not a single account listed.
 [ ] Database locking (perhaps create random `<32-letter-code>.lock` file which is stored in browser and removed
-    automatically on logout).
+    automatically on logout). Or does sqlite have one?
 [X] Replace old menus with home page.
+[X] Keyboard shortcuts to swap between screens.
+[ ] Display current db and period in navbar.
+[ ] Rename account.
 [ ] TODO cleanup.
 
 1.0

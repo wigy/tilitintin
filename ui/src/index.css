@@ -68,7 +68,7 @@ table tr.alt:nth-child(odd) {
   outline-offset: -1px;
 }
 
-.disabled-link {
+.disabled-link, .disabled-link a, a .disabled-link {
   pointer-events: none;
   user-select: none;
   color: gray !important;

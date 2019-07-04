@@ -13,7 +13,7 @@ import Cursor from '../Stores/Cursor';
 class Accounts extends Component {
 
   componentDidMount() {
-    this.props.cursor.selectPage('Accounts');
+    this.props.cursor.selectPage('Accounts', this);
   }
 
   render() {

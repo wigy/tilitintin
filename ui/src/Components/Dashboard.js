@@ -6,7 +6,6 @@ import { inject, observer } from 'mobx-react';
 import { translate, Trans } from 'react-i18next';
 import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
-import './Dashboard.css';
 
 @translate('translations')
 @inject('cursor')
@@ -14,16 +13,42 @@ import './Dashboard.css';
 @observer
 class Dashboard extends Component {
 
-  componentDidMount() {
-    this.props.cursor.selectPage('Dashboard');
-  }
-
   componentDidUpdate() {
     if (!this.props.store.database) {
       return;
     }
     if (this.props.store.database.name !== this.props.match.params.db) {
       this.props.store.setDb(this.props.match.params.db);
+    }
+  }
+
+  componentDidMount() {
+    this.props.cursor.selectPage('Dashboard', this);
+  }
+
+  selectDb(num) {
+    const { dbs } = this.props.store;
+    num--;
+    if (num < dbs.length) {
+      this.props.history.push(`/${dbs[num].name}`);
+    }
+  }
+
+  selectPeriod(num) {
+    const periods = this.props.store.database.periods.reverse();
+    num--;
+    if (num < periods.length) {
+      this.props.history.push(`/${this.props.store.db}/dashboard/${periods[num].id}`);
+    }
+  }
+
+  keyText(cursor, key) {
+    if (key >= '1' && key <= '9') {
+      this.selectPeriod(parseInt(key));
+    }
+    key = key.toUpperCase();
+    if (key >= 'A' && key <= 'Z') {
+      this.selectDb(key.charCodeAt(0) - 64);
     }
   }
 
@@ -43,11 +68,14 @@ class Dashboard extends Component {
         <b><Trans>Business name</Trans>: {this.props.store.settings.BUSINESS_NAME}</b><br />
         <b><Trans>Business ID</Trans>: {this.props.store.settings.BUSINESS_ID}</b><br />
         <h2><Trans>Periods</Trans></h2>
-        {this.props.store.database.periods.reverse().map((period) => <div key={period.id} className={parseInt(periodId) === period.id ? 'period current' : 'period'}>
-          <Link to={`/${this.props.store.db}/dashboard/${period.id}`}>
-            <Localize date={period.start_date} /> &mdash; <Localize date={period.end_date} />
-          </Link>
-        </div>)}
+        <ul className="menu">
+          {this.props.store.database.periods.reverse().map((period, index) => <li key={period.id} className={parseInt(periodId) === period.id ? 'period current' : 'period'}>
+            <Link to={`/${this.props.store.db}/dashboard/${period.id}`}>
+              <code>{index}</code>&nbsp;
+              <Localize date={period.start_date} /> &mdash; <Localize date={period.end_date} />
+            </Link>
+          </li>)}
+        </ul>
       </div>
     );
   }

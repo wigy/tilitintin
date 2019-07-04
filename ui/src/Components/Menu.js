@@ -24,12 +24,38 @@ class Menu extends Component {
   }
 
   componentDidMount() {
+    this.props.cursor.registerMenu(this);
     this.props.store.fetchDatabases();
     this.update(this.props.match.params);
   }
 
   componentDidUpdate() {
     this.update(this.props.match.params);
+  }
+
+  keyCtrlSpace() {
+    this.handleSelect('dashboard');
+    return {preventDefault: true};
+  }
+
+  keyCtrlX() {
+    this.handleSelect('txs');
+    return {preventDefault: true};
+  }
+
+  keyCtrlR() {
+    this.handleSelect('report');
+    return {preventDefault: true};
+  }
+
+  keyCtrlA() {
+    this.handleSelect('account');
+    return {preventDefault: true};
+  }
+
+  keyCtrlO() {
+    this.handleSelect('tools');
+    return {preventDefault: true};
   }
 
   handleSelect(key, ...args) {
@@ -75,7 +101,7 @@ class Menu extends Component {
 
           <Nav bsStyle="tabs" activeKey="1" onSelect={() => this.handleSelect('dashboard')}>
             <NavItem eventKey="1" disabled={notLoggedIn}>
-              <Trans>Home</Trans><span className="fa-icon"> <i className="fas fa-home"></i></span>
+              <code>Ctrl+Space</code> <Trans>Home</Trans><span className="fa-icon"> <i className="fas fa-home"></i></span>
             </NavItem>
           </Nav>
 
@@ -87,22 +113,22 @@ class Menu extends Component {
 
           <Nav bsStyle="tabs" pullRight activeKey="4" onSelect={() => this.handleSelect('tools')}>
             <NavItem eventKey="4">
-              <Trans>Tools</Trans>
+              <code>Ctrl+O</code> <Trans>Tools</Trans>
             </NavItem>
           </Nav>
           <Nav bsStyle="tabs" pullRight activeKey="5" onSelect={() => this.handleSelect('account')}>
             <NavItem eventKey="5" disabled={!db || notLoggedIn}>
-              <Trans>Accounts</Trans>
+              <code>Ctrl+A</code> <Trans>Accounts</Trans>
             </NavItem>
           </Nav>
           <Nav bsStyle="tabs" pullRight activeKey="6" onSelect={() => this.handleSelect('report')}>
             <NavItem eventKey="6" disabled={!db || !periodId || notLoggedIn}>
-              <Trans>Reports</Trans>
+              <code>Ctrl+R</code> <Trans>Reports</Trans>
             </NavItem>
           </Nav>
           <Nav bsStyle="tabs" pullRight activeKey="7" onSelect={() => this.handleSelect('txs')}>
             <NavItem eventKey="7" disabled={!db || !periodId || notLoggedIn}>
-              <Trans>Transactions</Trans>
+              <code>Ctrl+X</code> <Trans>Transactions</Trans>
             </NavItem>
           </Nav>
 

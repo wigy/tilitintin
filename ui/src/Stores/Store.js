@@ -438,7 +438,7 @@ class Store {
   }
 
   /**
-   * Get the list of report formats available for the current DB.
+   * Get the report data.
    */
   async fetchReport(db, periodId, format) {
     await this.setPeriod(db, periodId);
@@ -450,6 +450,7 @@ class Store {
     if (this.report && this.report.url === url) {
       return;
     }
+    this.report = null;
     runInAction(() => {
       report.setData(url, []);
     });

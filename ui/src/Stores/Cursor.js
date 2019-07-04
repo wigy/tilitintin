@@ -26,6 +26,10 @@ class Cursor {
   savedPages = {};
   // Screen setup function returning topology as 2-dimensional array `topology[row][column]`.
   topology = null;
+  // Component that has selected the page last time.
+  currentPageComponent = null;
+  // Menu component of the system.
+  menuComponent = null;
 
   constructor(store) {
     this.store = store;
@@ -40,11 +44,18 @@ class Cursor {
   handle(key) {
     let result;
     const keyName = (key.length === 1 ? 'Text' : key);
-    const fn = 'key' + keyName.replace(/\+/g, '');
+    const parts = keyName.split('+');
+    if (parts.length > 1 && parts[parts.length - 1].length === 1) {
+      parts[parts.length - 1] = parts[parts.length - 1].toUpperCase();
+    }
+    if (parts[parts.length - 1] === ' ') {
+      parts[parts.length - 1] = 'Space';
+    }
+    const fn = 'key' + parts.join('');
 
     // Try active modal handler.
     if (!result && this.activeModal && this.activeModal[fn]) {
-      result = this.activeModal[fn]();
+      result = this.activeModal[fn](this, key);
       if (result && KEY_DEBUG) {
         console.log('Modal:', fn, ':', result);
       }
@@ -53,9 +64,25 @@ class Cursor {
     // Try model handler.
     const model = this.getModel();
     if (!result && model && model[fn]) {
-      result = model[fn](this);
+      result = model[fn](this, key);
       if (result && KEY_DEBUG) {
         console.log('Model:', fn, ':', result);
+      }
+    }
+
+    // Try page component handler.
+    if (!result && this.currentPageComponent && this.currentPageComponent[fn]) {
+      result = this.currentPageComponent[fn](this, key);
+      if (result && KEY_DEBUG) {
+        console.log('Page component:', fn, ':', result);
+      }
+    }
+
+    // Try menu handler.
+    if (!result && this.menuComponent && this.menuComponent[fn]) {
+      result = this.menuComponent[fn](this, key);
+      if (result && KEY_DEBUG) {
+        console.log('Menu component:', fn, ':', result);
       }
     }
 
@@ -72,18 +99,30 @@ class Cursor {
     }
 
     if (KEY_DEBUG) {
-      console.log(`No handler for key '${key}'.`);
+      console.log(`No handler ${fn} for key '${key}'.`);
     }
 
     return null;
   }
 
   /**
+   *
+   * @param {Component} component
+   */
+  registerMenu(component) {
+    this.menuComponent = component;
+  }
+
+  /**
    * Set up the topology for the page.
    * @param {String} name
+   * @param {Component} component
    */
   @action.bound
-  selectPage(page) {
+  selectPage(page, component) {
+
+    this.currentPageComponent = component;
+
     switch (page) {
       case 'Balances':
         this.setTopology(page, () => [

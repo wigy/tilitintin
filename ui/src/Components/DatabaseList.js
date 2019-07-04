@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ReactRouterPropTypes from 'react-router-prop-types';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { translate, Trans } from 'react-i18next';
@@ -12,20 +13,17 @@ import Cursor from '../Stores/Cursor';
 @observer
 class DatabaseList extends Component {
 
-  componentDidMount() {
-    this.props.cursor.selectPage('Dashboard');
-  }
-
   render() {
     if (!this.props.store.token) {
       return '';
     }
+    const current = this.props.store.db;
     return (
       <div className="DatabaseList">
         <h1><Trans>Databases</Trans></h1>
-        <ul>
-          {this.props.store.dbs.map((db) => <li key={db.name}>
-            <Link to={`/${db.name}`}>{db.name}</Link>
+        <ul className="menu">
+          {this.props.store.dbs.map((db, index) => <li key={db.name} className={current === db.name ? 'current' : ''}>
+            <Link to={`/${db.name}`}><code>{'ABCDEFGHIJKLMNOPQRSTUVWZ'[index]}</code> {db.name}</Link>
           </li>)}
         </ul>
       </div>
@@ -35,6 +33,7 @@ class DatabaseList extends Component {
 
 DatabaseList.propTypes = {
   store: PropTypes.instanceOf(Store),
+  history: ReactRouterPropTypes.history.isRequired,
   cursor: PropTypes.instanceOf(Cursor)
 };
 

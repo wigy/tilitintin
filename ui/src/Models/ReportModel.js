@@ -87,6 +87,10 @@ class ReportModel extends Model {
     this.data = data.data || [];
   }
 
+  clear() {
+    this.setData(null, {});
+  }
+
   /**
    * Get the period this document belongs to.
    */

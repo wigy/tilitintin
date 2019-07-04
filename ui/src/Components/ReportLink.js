@@ -10,12 +10,13 @@ class ReportLink extends Component {
     const { t, report } = this.props;
     const dst = '/' + report.database.name + '/report/' + report.period.id + '/' + (report.store.accountId || '') + '/' + report.format;
 
-    return <Link to={dst}>{t('report-' + report.format)}</Link>;
+    return <Link to={dst}><code>{this.props.shortcut}</code> {t('report-' + report.format)}</Link>;
   }
 }
 
 ReportLink.propTypes = {
   t: PropTypes.func,
+  shortcut: PropTypes.string,
   report: PropTypes.instanceOf(ReportModel)
 };
 

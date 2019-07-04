@@ -310,7 +310,7 @@ class EntryModel extends NavigationTargetModel {
       return ret;
     }
     this.store.accounts.forEach((a) => {
-      if (a.number.startsWith(value) || a.name.toLowerCase().startsWith(value.toLowerCase())) {
+      if (a.number.startsWith(value) || a.name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
         ret.push(`${a.number} ${a.name}`);
       }
     });
