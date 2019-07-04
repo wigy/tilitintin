@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ReactRouterPropTypes from 'react-router-prop-types';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { translate, Trans } from 'react-i18next';
@@ -33,7 +32,6 @@ class DatabaseList extends Component {
 
 DatabaseList.propTypes = {
   store: PropTypes.instanceOf(Store),
-  history: ReactRouterPropTypes.history.isRequired,
   cursor: PropTypes.instanceOf(Cursor)
 };
 

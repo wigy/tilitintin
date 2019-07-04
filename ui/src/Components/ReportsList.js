@@ -30,15 +30,11 @@ class ReportsList extends Component {
     return {preventDefault: true};
   }
 
-  keyCtrl1 = () => this.selectReport(1);
-  keyCtrl2 = () => this.selectReport(2);
-  keyCtrl3 = () => this.selectReport(3);
-  keyCtrl4 = () => this.selectReport(4);
-  keyCtrl5 = () => this.selectReport(5);
-  keyCtrl6 = () => this.selectReport(6);
-  keyCtrl7 = () => this.selectReport(7);
-  keyCtrl8 = () => this.selectReport(8);
-  keyCtrl9 = () => this.selectReport(9);
+  keyText(cursor, key) {
+    if (key >= '1' && key <= '9') {
+      this.selectReport(parseInt(key));
+    }
+  }
 
   render() {
     if (!this.props.store.token) {
@@ -50,7 +46,7 @@ class ReportsList extends Component {
         <h1><Trans>Reports</Trans></h1>
         <ul className="menu">
           {this.props.store.reports.map((report, index) => <li key={report.format}>
-            <ReportLink shortcut={`Ctrl+${index + 1}`} report={report}/>
+            <ReportLink shortcut={index + 1} report={report}/>
           </li>)}
         </ul>
       </div>

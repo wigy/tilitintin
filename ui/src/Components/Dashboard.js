@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ReactRouterPropTypes from 'react-router-prop-types';
 import { Link } from 'react-router-dom';
 import Localize from './Localize';
 import { inject, observer } from 'mobx-react';
@@ -71,7 +72,7 @@ class Dashboard extends Component {
         <ul className="menu">
           {this.props.store.database.periods.reverse().map((period, index) => <li key={period.id} className={parseInt(periodId) === period.id ? 'period current' : 'period'}>
             <Link to={`/${this.props.store.db}/dashboard/${period.id}`}>
-              <code>{index}</code>&nbsp;
+              <code>{index + 1}</code>&nbsp;
               <Localize date={period.start_date} /> &mdash; <Localize date={period.end_date} />
             </Link>
           </li>)}
@@ -83,6 +84,7 @@ class Dashboard extends Component {
 
 Dashboard.propTypes = {
   match: PropTypes.object,
+  history: ReactRouterPropTypes.history.isRequired,
   store: PropTypes.instanceOf(Store),
   cursor: PropTypes.instanceOf(Cursor)
 };
