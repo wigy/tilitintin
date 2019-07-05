@@ -5,6 +5,8 @@ BUGS
 [ ] Clicking another account right after entering entry, is not updated.
 [ ] After editing, all other documents are closed.
 [ ] If period selected and you change db, all menus are still usable.
+[ ] Manual switching of DB and returning to txs page does not update screen.
+[ ] Docker launch is not working.
 
 FUTURE FEATURES
 ===============
@@ -17,9 +19,19 @@ FUTURE FEATURES
     automatically on logout). Or does sqlite have one?
 [X] Replace old menus with home page.
 [X] Keyboard shortcuts to swap between screens.
-[ ] Display current db and period in navbar.
+[ ] Display current db.
+[ ] Display period in navbar with ability to change period.
 [ ] Rename account.
+[ ] Fix tools shortcuts.
+[ ] Support for tool-panel shortcuts similar to menu.
 [ ] TODO cleanup.
 
 1.0
+[ ] Rewrite away current TransactionModel and use directly list of EntryModels.
 [ ] Scan all TODOs and make fix.
+
+2.0
+[ ] Tags management.
+
+3.0
+[ ] Import management in UI.

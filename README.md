@@ -44,7 +44,7 @@ be added in the beginning of the description in square brackets, for example
 `[DepartmentA][Sports]`. Then they must be defined in the database. You can do that by
 ```
 cd backend
-bin/tags.js add <database> <tag> <name> <picture> <type> <order>
+bin/tags.js <database> add <tag> <name> <picture> <type> <order>
 ```
 Here *database* is the name of your database without `.sqlite` postfix, *tag* is the tag text
 itself consisting of `[A-Za-z0-9]`, *name* is longer description of the tag, *picture* is URI
@@ -53,12 +53,14 @@ is numeric sorting order.
 
 For example, to categorize sales by departments and sales persons can be done using
 ```
-bin/tags.js add mydb Sport "Sport and outdoor" http://mysite.example.com/pics/sport.jpg Department 101
-bin/tags.js add mydb Mobile "Phones and acessories" http://mysite.example.com/pics/phone.jpg Department 102
-bin/tags.js add mydb IT "Computers and office equipment" http://mysite.example.com/pics/sport.jpg Department 103
+bin/tags.js mydb add Sport "Sport and outdoor" http://mysite.example.com/pics/sport.jpg Department 101
+bin/tags.js mydb add Mobile "Phones and acessories" http://mysite.example.com/pics/phone.jpg Department 102
+bin/tags.js mydb add IT "Computers and office equipment" http://mysite.example.com/pics/sport.jpg Department 103
 
-bin/tags.js add mydb NE "Neil Example" http://mysite.example.com/persons/neil.jpg 'Sales Person' 201
-bin/tags.js add mydb ME "Michel Example" http://mysite.example.com/persons/michel.jpg 'Sales Person' 202
+bin/tags.js mydb add NE "Neil Example" http://mysite.example.com/persons/neil.jpg 'Sales Person' 201
+bin/tags.js mydb add ME "Michel Example" http://mysite.example.com/persons/michel.jpg 'Sales Person' 202
+
+bin/tags.js mydb store-local
 ```
 
 In UI you can do filtering using the categories defined.

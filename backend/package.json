@@ -20,7 +20,7 @@
     "json2csv": "^4.5.1",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.15.2",
-    "libfyffe": "^0.1.0",
+    "libfyffe": "^0.2.0",
     "moment": "^2.24.0",
     "neat-dump": "^1.0.17",
     "nodemon": "^1.19.1",

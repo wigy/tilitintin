@@ -38,22 +38,22 @@ class Menu extends Component {
     return {preventDefault: true};
   }
 
-  keyCtrlX() {
+  keyAltX() {
     this.handleSelect('txs');
     return {preventDefault: true};
   }
 
-  keyCtrlR() {
+  keyAltR() {
     this.handleSelect('report');
     return {preventDefault: true};
   }
 
-  keyCtrlA() {
+  keyAltA() {
     this.handleSelect('account');
     return {preventDefault: true};
   }
 
-  keyCtrlO() {
+  keyAltT() {
     this.handleSelect('tools');
     return {preventDefault: true};
   }
@@ -112,23 +112,23 @@ class Menu extends Component {
           </Nav>
 
           <Nav bsStyle="tabs" pullRight activeKey="4" onSelect={() => this.handleSelect('tools')}>
-            <NavItem eventKey="4">
-              <code>Ctrl+O</code> <Trans>Tools</Trans>
+            <NavItem eventKey="4" disabled={notLoggedIn}>
+              <code>Alt+T</code> <Trans>Tools</Trans>
             </NavItem>
           </Nav>
           <Nav bsStyle="tabs" pullRight activeKey="5" onSelect={() => this.handleSelect('account')}>
             <NavItem eventKey="5" disabled={!db || notLoggedIn}>
-              <code>Ctrl+A</code> <Trans>Accounts</Trans>
+              <code>Alt+A</code> <Trans>Accounts</Trans>
             </NavItem>
           </Nav>
           <Nav bsStyle="tabs" pullRight activeKey="6" onSelect={() => this.handleSelect('report')}>
             <NavItem eventKey="6" disabled={!db || !periodId || notLoggedIn}>
-              <code>Ctrl+R</code> <Trans>Reports</Trans>
+              <code>Alt+R</code> <Trans>Reports</Trans>
             </NavItem>
           </Nav>
           <Nav bsStyle="tabs" pullRight activeKey="7" onSelect={() => this.handleSelect('txs')}>
             <NavItem eventKey="7" disabled={!db || !periodId || notLoggedIn}>
-              <code>Ctrl+X</code> <Trans>Transactions</Trans>
+              <code>Alt+X</code> <Trans>Transactions</Trans>
             </NavItem>
           </Nav>
 
