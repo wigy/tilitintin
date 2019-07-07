@@ -22,19 +22,19 @@ class ToolsList extends Component {
     return '/' + (store.db || '_') + '/tools/' + (store.periodId || '') + '/' + ((store.account && store.account.id) || '') + '/' + page;
   }
 
-  keyCtrlP() {
-    this.props.history.push(this.url('periods'));
-    return {preventDefault: true};
-  }
-
-  keyCtrlD() {
-    this.props.history.push(this.url('documents'));
-    return {preventDefault: true};
-  }
-
-  keyCtrlV() {
-    this.props.history.push(this.url('vat'));
-    return {preventDefault: true};
+  keyText(cursor, key) {
+    if (key === '1') {
+      this.props.history.push(this.url('periods'));
+      return {preventDefault: true};
+    }
+    if (key === '2') {
+      this.props.history.push(this.url('documents'));
+      return {preventDefault: true};
+    }
+    if (key === '3') {
+      this.props.history.push(this.url('vat'));
+      return {preventDefault: true};
+    }
   }
 
   render() {
@@ -47,9 +47,9 @@ class ToolsList extends Component {
       <div>
         <h1><Trans>Tools</Trans></h1>
         <ul className="menu">
-          <li className={store.db ? '' : 'disabled-link'}><Link to={this.url('periods')}><code>Ctrl+P</code> <Trans>Periods</Trans></Link></li>
-          <li className={store.db ? '' : 'disabled-link'}><Link to={this.url('documents')}><code>Ctrl+D</code> <Trans>Documents</Trans></Link></li>
-          <li className={store.periodId ? '' : 'disabled-link'}><Link to={this.url('vat')}><code>Ctrl+V</code> <Trans>Value Added Tax</Trans></Link></li>
+          <li className={store.db ? '' : 'disabled-link'}><Link to={this.url('periods')}><code>1</code> <Trans>Periods</Trans></Link></li>
+          <li className={store.db ? '' : 'disabled-link'}><Link to={this.url('documents')}><code>2</code> <Trans>Documents</Trans></Link></li>
+          <li className={store.periodId ? '' : 'disabled-link'}><Link to={this.url('vat')}><code>3</code> <Trans>Value Added Tax</Trans></Link></li>
         </ul>
       </div>
     );
