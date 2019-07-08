@@ -5,13 +5,14 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "nodemon src/server.js",
+    "dev": "nodemon -w src/ src/server.js",
     "lint": "eslint src",
     "lint-fix": "eslint --fix src"
   },
   "author": "",
   "license": "GPL-3.0",
   "dependencies": {
+    "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
     "clone": "^2.1.2",
     "cors": "^2.8.5",

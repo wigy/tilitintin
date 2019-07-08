@@ -60,6 +60,7 @@ i18n.init({
         'Numeric value incorrect.': 'Virheellinen numeroarvo.',
         'Other': 'Muu',
         'Password': 'Salasana',
+        'Passwords do not match.': 'Salasanat ei täsmää.',
         'Payable to add': 'Lisättävä velkaa',
         'period {{period}}': 'tilikausi {{period}}',
         'Periods': 'Tilikaudet',

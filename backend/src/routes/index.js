@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const config = require('../config');
 const knex = require('../lib/knex');
+const users = require('../lib/users');
 
 /**
  * Authenticate against fixed credentials and construct a token.
@@ -55,6 +56,33 @@ function checkToken(req, res, next) {
   });
   next();
 }
+
+/**
+ * Get the readiness status of the application.
+ */
+router.get('/status', (req, res) => {
+  res.send({hasAdminUser: users.hasAdminUser()});
+});
+
+/**
+ * Create new user.
+ */
+router.post('/register', async (req, res) => {
+  const {user, password, admin} = req.body;
+  if (admin) {
+    if (users.hasAdminUser()) {
+      res.sendStatus(400);
+    } else {
+      if (!await users.registerAdmin(user, password)) {
+        res.sendStatus(500);
+      } else {
+        res.sendStatus(204);
+      }
+    }
+  } else {
+    res.send({user, password, admin});
+  }
+});
 
 router.get('/', checkToken, (req, res) => {
   res.send({
