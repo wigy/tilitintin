@@ -49,15 +49,18 @@ function hasAdminUser() {
 async function verifyPassword(path, user, password) {
   return new Promise((resolve, reject) => {
     const json = JSON.parse(fs.readFileSync(path));
-    bcrypt.compare(password, json.password, function(err, res) {
-      if (err) {
-        console.log(err);
-        resolve(false);
-      } else {
-        console.log('ok');
-        resolve(res);
-      }
-    });
+    if (json.user !== user) {
+      resolve(false);
+    } else {
+      bcrypt.compare(password, json.password, function(err, isMatch) {
+        if (err) {
+          console.error(err);
+          resolve(false);
+        } else {
+          resolve(isMatch);
+        }
+      });
+    }
   });
 }
 
@@ -66,16 +69,49 @@ async function verifyPassword(path, user, password) {
  */
 async function login(user, password) {
   let token = null;
-  if (hasAdminUser()) {
-    if (await verifyPassword(path.join(config.DBPATH, 'auth.json'), user, password)) {
+  if (fs.existsSync(path.join(config.DBPATH, user, 'auth.json'))) {
+    if (await verifyPassword(path.join(config.DBPATH, user, 'auth.json'), user, password)) {
       token = jwt.sign({service: 'Tilitintin', user: user}, config.SECRET);
+    }
+  }
+  if (!token && hasAdminUser()) {
+    if (await verifyPassword(path.join(config.DBPATH, 'auth.json'), user, password)) {
+      token = jwt.sign({service: 'Tilitintin', user: user, isAdmin: true}, config.SECRET);
     }
   }
   return token;
 }
 
+/**
+ * Check that token is properly signed.
+ * @param {String} token
+ * @return {Promise<Null|Object>}
+ */
+async function verifyToken(token) {
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, config.SECRET, (err, decoded) => {
+      if (err) {
+        resolve(null);
+      } else if (decoded.service !== 'Tilitintin') {
+        resolve(null);
+      }
+      resolve(decoded);
+    });
+  });
+}
+
+/**
+ * Sign a token for a user.
+ * @param {String} user
+ */
+function signToken(user) {
+  return jwt.sign({service: 'Tilitintin', user}, config.SECRET);
+}
+
 module.exports = {
   hasAdminUser,
   login,
-  registerAdmin
+  registerAdmin,
+  signToken,
+  verifyToken
 };

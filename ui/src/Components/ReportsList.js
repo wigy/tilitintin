@@ -46,7 +46,7 @@ class ReportsList extends Component {
         <h1><Trans>Reports</Trans></h1>
         <ul className="menu">
           {this.props.store.reports.map((report, index) => <li key={report.format}>
-            <ReportLink shortcut={index + 1} report={report}/>
+            <ReportLink shortcut={'' + (index + 1)} report={report}/>
           </li>)}
         </ul>
       </div>

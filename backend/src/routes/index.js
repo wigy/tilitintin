@@ -1,5 +1,4 @@
 const express = require('express');
-const jwt = require('jsonwebtoken');
 const router = express.Router();
 const config = require('../config');
 const knex = require('../lib/knex');
@@ -8,20 +7,19 @@ const users = require('../lib/users');
 /**
  * Authenticate against fixed credentials and construct a token.
  */
-router.post('/auth', (req, res) => {
+router.post('/auth', async (req, res) => {
   const {user, password} = req.body;
-  if (user === config.TILITIN_USER && password === config.TILITIN_PASSWORD) {
-    const token = jwt.sign({service: 'Tilitintin', user: user}, config.SECRET);
-    res.send({token: token});
+  if (await users.login(user, password)) {
+    res.send({token: users.signToken(user)});
   } else {
     res.status(401).send('Invalid user or password.');
   }
 });
 
 /**
- * Check the token and `user` to the request, if valid.
+ * Check the token and set `user` to the request, if valid.
  */
-function checkToken(req, res, next) {
+async function checkToken(req, res, next) {
 
   if (config.AUTO_LOGIN_USER) {
     req.user = config.AUTO_LOGIN_USER;
@@ -43,17 +41,13 @@ function checkToken(req, res, next) {
     return;
   }
 
-  jwt.verify(token, config.SECRET, (err, decoded) => {
-    if (err) {
-      res.status(403).send('Unauthorized.');
-      return;
-    }
-    if (decoded.service !== 'Tilitintin') {
-      res.status(403).send('Unauthorized.');
-      return;
-    }
-    req.user = decoded.user;
-  });
+  const user = await users.verifyToken(token);
+  if (!user) {
+    res.status(403).send('Unauthorized.');
+    return;
+  }
+
+  req.user = user.user;
   next();
 }
 

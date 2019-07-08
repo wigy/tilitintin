@@ -5,7 +5,5 @@ module.exports = {
   BASEURL: process.env.BASEURL || 'http://localhost:' + (process.env.PORT || '3101'),
   DBPATH: process.env.DBPATH || path.resolve(process.cwd(), 'databases'),
   SECRET: process.env.SECRET || 'oGBtRQBWIVUjnqw0nbmvbJ7zsd&67rtyr/r5fyft62',
-  AUTO_LOGIN_USER: process.env.AUTO_LOGIN_USER || null,
-  TILITIN_USER: process.env.TILITIN_USER || 'user',
-  TILITIN_PASSWORD: process.env.TILITIN_PASSWORD || 'pass'
+  AUTO_LOGIN_USER: process.env.AUTO_LOGIN_USER || null
 };
