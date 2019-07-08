@@ -8,8 +8,6 @@ services:
       context: backend
     ports:
       - 3101:3101
-    env_file:
-      - .env
     volumes:
       - ./backend/databases:/var/app/databases
       - ./backend/src:/var/app/src
