@@ -33,29 +33,29 @@ class Menu extends Component {
     this.update(this.props.match.params);
   }
 
-  keyCtrlSpace() {
-    this.handleSelect('dashboard');
-    return {preventDefault: true};
-  }
-
-  keyAltX() {
-    this.handleSelect('txs');
-    return {preventDefault: true};
-  }
-
-  keyAltR() {
-    this.handleSelect('report');
-    return {preventDefault: true};
-  }
-
-  keyAltA() {
-    this.handleSelect('account');
-    return {preventDefault: true};
-  }
-
-  keyAltT() {
-    this.handleSelect('tools');
-    return {preventDefault: true};
+  keyText(cursor, key) {
+    switch (key) {
+      case ' ':
+        this.handleSelect('dashboard');
+        return {preventDefault: true};
+      case 'r':
+      case 'R':
+        this.handleSelect('report');
+        return {preventDefault: true};
+      case 'y':
+      case 'Y':
+        this.handleSelect('account');
+        return {preventDefault: true};
+      case 't':
+      case 'T':
+        this.handleSelect('tools');
+        return {preventDefault: true};
+      case 'x':
+      case 'X':
+        this.handleSelect('txs');
+        return {preventDefault: true};
+      default:
+    }
   }
 
   handleSelect(key, ...args) {
@@ -101,7 +101,7 @@ class Menu extends Component {
 
           <Nav bsStyle="tabs" activeKey="1" onSelect={() => this.handleSelect('dashboard')}>
             <NavItem eventKey="1" disabled={notLoggedIn}>
-              <code>Ctrl+Space</code> <Trans>Home</Trans><span className="fa-icon"> <i className="fas fa-home"></i></span>
+              <code>Space</code> <Trans>Home</Trans><span className="fa-icon"> <i className="fas fa-home"></i></span>
             </NavItem>
           </Nav>
 
@@ -113,22 +113,22 @@ class Menu extends Component {
 
           <Nav bsStyle="tabs" pullRight activeKey="4" onSelect={() => this.handleSelect('tools')}>
             <NavItem eventKey="4" disabled={notLoggedIn}>
-              <code>Alt+T</code> <Trans>Tools</Trans>
+              <code>T</code> <Trans>Tools</Trans>
             </NavItem>
           </Nav>
           <Nav bsStyle="tabs" pullRight activeKey="5" onSelect={() => this.handleSelect('account')}>
             <NavItem eventKey="5" disabled={!db || notLoggedIn}>
-              <code>Alt+A</code> <Trans>Accounts</Trans>
+              <code>Y</code> <Trans>Accounts</Trans>
             </NavItem>
           </Nav>
           <Nav bsStyle="tabs" pullRight activeKey="6" onSelect={() => this.handleSelect('report')}>
             <NavItem eventKey="6" disabled={!db || !periodId || notLoggedIn}>
-              <code>Alt+R</code> <Trans>Reports</Trans>
+              <code>R</code> <Trans>Reports</Trans>
             </NavItem>
           </Nav>
           <Nav bsStyle="tabs" pullRight activeKey="7" onSelect={() => this.handleSelect('txs')}>
             <NavItem eventKey="7" disabled={!db || !periodId || notLoggedIn}>
-              <code>Alt+X</code> <Trans>Transactions</Trans>
+              <code>X</code> <Trans>Transactions</Trans>
             </NavItem>
           </Nav>
 
