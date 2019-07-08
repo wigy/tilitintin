@@ -4,7 +4,6 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 import { Route, withRouter } from 'react-router-dom';
 import { inject } from 'mobx-react';
 import keydown from 'react-keydown';
-import './App.css';
 import Account from './Components/Account';
 import Accounts from './Components/Accounts';
 import AccountsToolPanel from './Components/AccountsToolPanel';
@@ -23,6 +22,8 @@ import Tools from './Components/Tools';
 import ToolsList from './Components/ToolsList';
 import ToolsToolPanel from './Components/ToolsToolPanel';
 import TransactionToolPanel from './Components/TransactionToolPanel';
+
+import './App.css';
 
 @withRouter
 @keydown
