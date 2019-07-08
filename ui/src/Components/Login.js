@@ -17,6 +17,7 @@ class Login extends Component {
   state = {
     appState: null,
     user: '',
+    email: '',
     password: '',
     passwordAgain: ''
   }
@@ -79,6 +80,8 @@ class Login extends Component {
           <FormGroup>
             <ControlLabel><Trans>Username</Trans></ControlLabel>
             <FormControl type="text" onChange={(event) => (this.setState({user: event.target.value}))}/>
+            <ControlLabel><Trans>Email</Trans></ControlLabel>
+            <FormControl type="text" onChange={(event) => (this.setState({email: event.target.value}))}/>
             <ControlLabel><Trans>Password</Trans></ControlLabel>
             <FormControl type="password" onChange={(event) => (this.setState({password: event.target.value}))}/>
             <ControlLabel><Trans>Password Again</Trans></ControlLabel>

@@ -8,6 +8,8 @@ import Account from './Components/Account';
 import Accounts from './Components/Accounts';
 import AccountsToolPanel from './Components/AccountsToolPanel';
 import AccountTransactions from './Components/AccountTransactions';
+import Admin from './Components/Admin';
+import AdminToolPanel from './Components/AdminToolPanel';
 import Balances from './Components/Balances';
 import Cursor from './Stores/Cursor';
 import DatabaseList from './Components/DatabaseList';
@@ -22,6 +24,7 @@ import Tools from './Components/Tools';
 import ToolsList from './Components/ToolsList';
 import ToolsToolPanel from './Components/ToolsToolPanel';
 import TransactionToolPanel from './Components/TransactionToolPanel';
+import UserList from './Components/UserList';
 
 import './App.css';
 
@@ -93,7 +96,7 @@ class App extends Component {
         <div className="SidePanel Panel">
           <div className="Frame">
             <Route exact path="/" component={DatabaseList}/>
-            <Route exact path="/_/admin" render={() => 'Admin'}/>
+            <Route exact path="/_/admin" component={UserList}/>
             <Route exact path="/:db" component={DatabaseList}/>
             <Route exact path="/:db/dashboard/:periodId?" component={DatabaseList}/>
             <Route exact path="/:db/dashboard/:periodId/:accountId" component={DatabaseList}/>
@@ -107,7 +110,7 @@ class App extends Component {
         </div>
         <div className="MainTopPanel Panel">
           <div className="Frame">
-            <Route exact path="/_/admin" render={() => 'Admin'}/>
+            <Route exact path="/_/admin" component={AdminToolPanel}/>
             <Route path="/:db/txs/:periodId/:accountId" component={TransactionToolPanel}/>
             <Route path="/:db/account/:periodId?" component={AccountsToolPanel}/>
             <Route path="/:db/report/:periodId/:accountId?/:format?" component={ReportToolPanel}/>
@@ -120,7 +123,7 @@ class App extends Component {
           <div className="Frame">
             <Route exact path="/" component={Dashboard}/>
             <Route exact path="/" component={Login}/>
-            <Route exact path="/_/admin" render={() => 'Admin'}/>
+            <Route exact path="/_/admin" component={Admin}/>
             <Route exact path="/:db" component={Dashboard}/>
             <Route exact path="/:db/dashboard/:periodId" component={Dashboard}/>
             <Route exact path="/:db/dashboard/:periodId/:accountId" component={Dashboard}/>
