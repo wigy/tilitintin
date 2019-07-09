@@ -1,0 +1,15 @@
+.UserList .user {
+  background-color: var(--bg-color-light);
+  border: 1px solid var(--border-color-dark);
+  padding: 0.5em;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.UserList .user .name {
+  font-weight: bold;
+}
+
+.UserList .user .email {
+  padding-left: 1em;
+}

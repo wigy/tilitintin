@@ -4,8 +4,9 @@ import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import { inject, observer } from 'mobx-react';
 import { translate, Trans } from 'react-i18next';
-import { Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 import Store from '../Stores/Store';
+import LoginForm from './LoginForm';
+import RegisterForm from './RegisterForm';
 import './Login.css';
 
 @translate('translations')
@@ -15,11 +16,7 @@ import './Login.css';
 class Login extends Component {
 
   state = {
-    appState: null,
-    user: '',
-    email: '',
-    password: '',
-    passwordAgain: ''
+    appState: null
   }
 
   componentDidMount() {
@@ -53,19 +50,21 @@ class Login extends Component {
 
     const { store } = this.props;
 
-    const onLogin = () => {
-      store.login(this.state.user, this.state.password)
-        .then(() => this.props.history.push('/'));
+    const onLogin = ({ user, password }) => {
+      store.login(user, password)
+        .then(() => {
+          if (this.props.store.isAdmin) {
+            this.props.history.push('/_/admin');
+          } else {
+            this.props.history.push('/');
+          }
+        });
     };
 
-    const onRegister = () => {
-      if (this.state.password !== this.state.passwordAgain) {
-        store.messages.push(this.props.t('Passwords do not match.'));
-        return;
-      }
-      return store.request('/register', 'POST', {admin: true, user: this.state.user, password: this.state.password})
+    const onRegisterAdmin = ({ user, name, password, email }) => {
+      return store.request('/admin/user', 'POST', {admin: true, user, name, password, email})
         .then(() => {
-          store.login(this.state.user, this.state.password)
+          store.login(user, password)
             .then(() => {
               this.props.history.push('/_/admin');
             });
@@ -76,37 +75,13 @@ class Login extends Component {
       return <div className="Login">
         <h1><Trans>This system has no admin user</Trans></h1>
         <h2><Trans>Please register an admin user</Trans></h2>
-        <form>
-          <FormGroup>
-            <ControlLabel><Trans>Username</Trans></ControlLabel>
-            <FormControl type="text" onChange={(event) => (this.setState({user: event.target.value}))}/>
-            <ControlLabel><Trans>Email</Trans></ControlLabel>
-            <FormControl type="text" onChange={(event) => (this.setState({email: event.target.value}))}/>
-            <ControlLabel><Trans>Password</Trans></ControlLabel>
-            <FormControl type="password" onChange={(event) => (this.setState({password: event.target.value}))}/>
-            <ControlLabel><Trans>Password Again</Trans></ControlLabel>
-            <FormControl type="password" onChange={(event) => (this.setState({passwordAgain: event.target.value}))}/>
-            <br/>
-            <Button onClick={onRegister}><Trans>Register</Trans></Button>
-          </FormGroup>
-          {store.messages.map((msg, idx) => <div key={idx} className="message">{msg}</div>)}
-        </form>
+        <RegisterForm onRegister={onRegisterAdmin}/>
       </div>;
     }
 
     if (this.state.appState === 'NOT_LOGGED_IN') {
       return <div className="Login">
-        <form>
-          <FormGroup>
-            <ControlLabel><Trans>Username</Trans></ControlLabel>
-            <FormControl type="text" onChange={(event) => (this.setState({user: event.target.value}))}/>
-            <ControlLabel><Trans>Password</Trans></ControlLabel>
-            <FormControl type="password" onChange={(event) => (this.setState({password: event.target.value}))}/>
-            <br/>
-            <Button onClick={onLogin}><Trans>Login</Trans></Button>
-          </FormGroup>
-          {store.messages.map((msg, idx) => <div key={idx} className="message">{msg}</div>)}
-        </form>
+        <LoginForm onLogin={onLogin}/>
       </div>;
     }
 

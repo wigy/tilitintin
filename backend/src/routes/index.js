@@ -9,8 +9,9 @@ const users = require('../lib/users');
  */
 router.post('/auth', async (req, res) => {
   const {user, password} = req.body;
-  if (await users.login(user, password)) {
-    res.send({token: users.signToken(user)});
+  const token = await users.login(user, password);
+  if (token) {
+    res.send({token});
   } else {
     res.status(401).send('Invalid user or password.');
   }
@@ -52,6 +53,35 @@ async function checkToken(req, res, next) {
 }
 
 /**
+ * Check the token and that is for admin and set `user` to the request, if valid.
+ */
+async function checkAdminToken(req, res, next) {
+
+  let token;
+
+  const { authorization } = req.headers;
+  if (authorization && authorization.substr(0, 7) === 'Bearer ') {
+    token = authorization.substr(7, authorization.length - 7);
+  } else if (req.query.token) {
+    token = req.query.token;
+  }
+
+  if (!token) {
+    res.status(403).send('Unauthorized.');
+    return;
+  }
+
+  const user = await users.verifyToken(token, true);
+  if (!user || !user.isAdmin) {
+    res.status(403).send('Unauthorized.');
+    return;
+  }
+
+  req.user = user.user;
+  next();
+}
+
+/**
  * Get the readiness status of the application.
  */
 router.get('/status', (req, res) => {
@@ -59,22 +89,23 @@ router.get('/status', (req, res) => {
 });
 
 /**
- * Create new user.
+ * Create new admin user.
  */
 router.post('/register', async (req, res) => {
-  const {user, password, admin} = req.body;
+  const {user, name, email, password, admin} = req.body;
+  // TODO: Validate as in form.
   if (admin) {
     if (users.hasAdminUser()) {
       res.sendStatus(400);
     } else {
-      if (!await users.registerAdmin(user, password)) {
+      if (!await users.registerUser({user, name, email, password, admin})) {
         res.sendStatus(500);
       } else {
         res.sendStatus(204);
       }
     }
   } else {
-    res.send({user, password, admin});
+    res.sendStatus(400);
   }
 });
 
@@ -124,5 +155,6 @@ router.use('/db/:db/heading', checkToken, checkDb, require('./heading'));
 router.use('/db/:db/tags', checkToken, checkDb, require('./tags'));
 router.use('/db/:db/report', checkToken, checkDb, require('./report'));
 router.use('/db/:db/settings', checkToken, checkDb, require('./settings'));
+router.use('/admin/user', checkAdminToken, require('./user'));
 
 module.exports = router;

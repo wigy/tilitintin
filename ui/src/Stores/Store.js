@@ -11,6 +11,7 @@ import HeadingModel from '../Models/HeadingModel';
 import ReportModel from '../Models/ReportModel';
 import TransactionModel from '../Models/TransactionModel';
 import i18n from '../i18n';
+import jwtDecode from 'jwt-decode';
 
 const DEBUG = false;
 
@@ -528,6 +529,7 @@ class Store {
         if (resp && resp.token) {
           runInAction(() => {
             this.token = resp.token;
+            console.log(resp.token);
             localStorage.setItem('token', resp.token);
             this.fetchDatabases();
           });
@@ -827,6 +829,14 @@ class Store {
   @computed
   get documents() {
     return this.period ? this.period.getDocuments() : [];
+  }
+
+  /**
+   * Check if the current user is administrator.
+   */
+  @computed
+  get isAdmin() {
+    return this.token && !!jwtDecode(this.token).isAdmin;
   }
 }
 

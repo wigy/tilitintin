@@ -1,5 +1,6 @@
 :root {
   --bg-color: #d3d3d3;
+  --bg-color-light: #e3e3e3;
   --fg-color: rgb(0,0,93);
   --fg-color-light: rgba(0,0,93,0.7);
   --marking-bg-color: white;

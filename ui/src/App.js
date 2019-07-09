@@ -76,7 +76,7 @@ class App extends Component {
       <div className={'App' + (this.props.store.loading ? ' busy' : '')}>
         <div className="TopPanel Panel">
           <Route exact path="/" component={Menu}/>
-          <Route exact path="/_/admin" component={Menu}/>
+          <Route exact path="/_/admin/:arg?" component={Menu}/>
           <Route exact path="/:db" component={Menu}/>
           <Route exact path="/:db/dashboard/:periodId?" component={Menu}/>
           <Route exact path="/:db/dashboard/:periodId/:accountId?" component={Menu}/>
@@ -96,7 +96,7 @@ class App extends Component {
         <div className="SidePanel Panel">
           <div className="Frame">
             <Route exact path="/" component={DatabaseList}/>
-            <Route exact path="/_/admin" component={UserList}/>
+            <Route exact path="/_/admin/:arg?" component={UserList}/>
             <Route exact path="/:db" component={DatabaseList}/>
             <Route exact path="/:db/dashboard/:periodId?" component={DatabaseList}/>
             <Route exact path="/:db/dashboard/:periodId/:accountId" component={DatabaseList}/>
@@ -110,7 +110,7 @@ class App extends Component {
         </div>
         <div className="MainTopPanel Panel">
           <div className="Frame">
-            <Route exact path="/_/admin" component={AdminToolPanel}/>
+            <Route exact path="/_/admin/:arg?" component={AdminToolPanel}/>
             <Route path="/:db/txs/:periodId/:accountId" component={TransactionToolPanel}/>
             <Route path="/:db/account/:periodId?" component={AccountsToolPanel}/>
             <Route path="/:db/report/:periodId/:accountId?/:format?" component={ReportToolPanel}/>
@@ -123,7 +123,7 @@ class App extends Component {
           <div className="Frame">
             <Route exact path="/" component={Dashboard}/>
             <Route exact path="/" component={Login}/>
-            <Route exact path="/_/admin" component={Admin}/>
+            <Route exact path="/_/admin/:arg?" component={Admin}/>
             <Route exact path="/:db" component={Dashboard}/>
             <Route exact path="/:db/dashboard/:periodId" component={Dashboard}/>
             <Route exact path="/:db/dashboard/:periodId/:accountId" component={Dashboard}/>

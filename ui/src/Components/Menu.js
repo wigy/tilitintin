@@ -34,6 +34,9 @@ class Menu extends Component {
   }
 
   keyText(cursor, key) {
+    if (this.props.store.isAdmin) {
+      return;
+    }
     switch (key) {
       case ' ':
         this.handleSelect('dashboard');
@@ -87,7 +90,7 @@ class Menu extends Component {
   }
 
   render() {
-    const {db, periodId} = this.props.store;
+    const {db, periodId, isAdmin} = this.props.store;
     const notLoggedIn = !this.props.store.token;
 
     return (
@@ -100,7 +103,7 @@ class Menu extends Component {
           </Navbar.Header>
 
           <Nav bsStyle="tabs" activeKey="1" onSelect={() => this.handleSelect('dashboard')}>
-            <NavItem eventKey="1" disabled={notLoggedIn}>
+            <NavItem eventKey="1" disabled={notLoggedIn || isAdmin}>
               <code>Space</code> <Trans>Home</Trans><span className="fa-icon"> <i className="fas fa-home"></i></span>
             </NavItem>
           </Nav>
@@ -112,7 +115,7 @@ class Menu extends Component {
           </Nav>
 
           <Nav bsStyle="tabs" pullRight activeKey="4" onSelect={() => this.handleSelect('tools')}>
-            <NavItem eventKey="4" disabled={notLoggedIn}>
+            <NavItem eventKey="4" disabled={notLoggedIn || isAdmin}>
               <code>T</code> <Trans>Tools</Trans>
             </NavItem>
           </Nav>

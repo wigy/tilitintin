@@ -180,3 +180,9 @@
 .App.busy {
   cursor: wait !important;
 }
+
+.error {
+  font-weight: bold;
+  font-size: 110%;
+  color: red;
+}

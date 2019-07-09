@@ -7,6 +7,7 @@ BUGS
 [ ] If period selected and you change db, all menus are still usable.
 [ ] Manual switching of DB and returning to txs page does not update screen.
 [ ] Docker launch is not working.
+[ ] After login mouse pointer does not change back to normal.
 
 FUTURE FEATURES
 ===============
