@@ -529,7 +529,6 @@ class Store {
         if (resp && resp.token) {
           runInAction(() => {
             this.token = resp.token;
-            console.log(resp.token);
             localStorage.setItem('token', resp.token);
             this.fetchDatabases();
           });

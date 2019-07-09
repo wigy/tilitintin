@@ -19,10 +19,14 @@ router.get('/:user', (req, res) => {
 router.post('/', async (req, res) => {
   // TODO: Validate as in form.
   const {user, name, password, email} = req.body;
-  users.registerUser({user, name, password, email})
-    .then((data) => {
-      res.send(data);
-    });
+  if (users.hasUser(user)) {
+    res.sendStatus(400);
+  } else {
+    users.registerUser({user, name, password, email})
+      .then((data) => {
+        res.send(data);
+      });
+  }
 });
 
 router.patch('/:user', async (req, res) => {

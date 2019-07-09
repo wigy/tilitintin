@@ -42,6 +42,9 @@ class Admin extends Component {
     return this.props.store.request('/admin/user', 'POST', {user, name, password, email})
       .then(() => {
         this.props.history.push('/_/admin');
+      })
+      .catch(() => {
+        this.props.store.messages.push(this.props.t('User creation failed.'));
       });
   }
 
@@ -77,7 +80,8 @@ Admin.propTypes = {
   cursor: PropTypes.instanceOf(Cursor),
   history: ReactRouterPropTypes.history.isRequired,
   match: PropTypes.object,
-  store: PropTypes.instanceOf(Store)
+  store: PropTypes.instanceOf(Store),
+  t: PropTypes.func
 };
 
 export default Admin;

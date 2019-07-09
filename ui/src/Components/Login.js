@@ -62,7 +62,7 @@ class Login extends Component {
     };
 
     const onRegisterAdmin = ({ user, name, password, email }) => {
-      return store.request('/admin/user', 'POST', {admin: true, user, name, password, email})
+      return store.request('/register', 'POST', {admin: true, user, name, password, email})
         .then(() => {
           store.login(user, password)
             .then(() => {

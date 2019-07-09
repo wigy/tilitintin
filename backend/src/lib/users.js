@@ -44,6 +44,14 @@ function hasAdminUser() {
 }
 
 /**
+ * Check if the user has been created.
+ * @return {Boolean}
+ */
+function hasUser(user) {
+  return fs.existsSync(path.join(config.DBPATH, user, 'auth.json'));
+}
+
+/**
  * Check if the user password pair matches to the given authorization json-file content.
  * @param {String} path
  * @param {String} user
@@ -156,6 +164,7 @@ module.exports = {
   getAll,
   getOne,
   hasAdminUser,
+  hasUser,
   login,
   registerUser,
   verifyToken

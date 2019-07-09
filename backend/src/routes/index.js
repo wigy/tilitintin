@@ -56,7 +56,7 @@ async function checkToken(req, res, next) {
  * Check the token and that is for admin and set `user` to the request, if valid.
  */
 async function checkAdminToken(req, res, next) {
-
+  // TODO: DRY checkToken()
   let token;
 
   const { authorization } = req.headers;
@@ -72,6 +72,7 @@ async function checkAdminToken(req, res, next) {
   }
 
   const user = await users.verifyToken(token, true);
+
   if (!user || !user.isAdmin) {
     res.status(403).send('Unauthorized.');
     return;
