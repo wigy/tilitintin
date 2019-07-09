@@ -8,6 +8,7 @@ BUGS
 [ ] Manual switching of DB and returning to txs page does not update screen.
 [ ] Docker launch is not working.
 [ ] After login mouse pointer does not change back to normal.
+[ ] Tools can be activated from keys when not enabled.
 
 FUTURE FEATURES
 ===============
@@ -30,6 +31,7 @@ FUTURE FEATURES
 
 1.0
 [ ] Rewrite away current TransactionModel and use directly list of EntryModels.
+[ ] Logo with icon.
 [ ] Scan all TODOs and make fix.
 
 2.0

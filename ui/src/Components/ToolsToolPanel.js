@@ -165,7 +165,7 @@ class ToolsToolPanel extends Component {
 
   render() {
     const store = this.props.store;
-    const tool = this.props.match.params.tool || 'periods';
+    const tool = this.props.match.params.tool;
 
     if (!store.token) {
       return '';
@@ -205,12 +205,16 @@ class ToolsToolPanel extends Component {
         break;
 
       default:
-        label = 'Unknown';
-        buttons = [];
+        label = 'Database Management';
+        buttons.push(
+          <IconButton key="button-upload" onClick={() => this.setState({askUpload: true})} title="upload-database" icon="fa-upload"></IconButton>
+        );
+        break;
     }
+
     return (
       <div className="ToolPanel">
-        <h1><Trans>{label}</Trans></h1>
+        {label && <h1><Trans>{label}</Trans></h1>}
         {buttons}
         <Dialog key="dialog"
           title={<Trans>Start new period?</Trans>}

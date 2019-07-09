@@ -34,6 +34,7 @@ i18n.init({
         'Current VAT payable': 'Nykyiset ALV velat',
         'Current VAT receivable': 'Nykyiset ALV saatavat',
         'Database': 'Tietokanta',
+        'Database Management': 'Tietokantojen hallinta',
         'Databases': 'Tietokannat',
         'Date is incorrect.': 'Virheellinen päivämäärä.',
         'Date': 'Päiväys',
@@ -134,6 +135,7 @@ i18n.init({
         'icon-sort-documents': 'Järjestä tositenumerot päivämääräjän mukaan',
         'icon-summarize-vat-period': 'Kerää ALV velat/saatavat',
         'icon-unlock-period': 'Poista tilikauden lukitus',
+        'icon-upload-database': 'Lähetä palvelimelle vanha Tilitin tiedosto',
 
         'column-account-number': 'Nro',
         'column-balance': 'Saldo',

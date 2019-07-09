@@ -7,6 +7,7 @@ import Settings from '../Stores/Settings';
 import ToolsForVAT from './ToolsForVAT';
 import ToolsForPeriods from './ToolsForPeriods';
 import ToolsForDocuments from './ToolsForDocuments';
+import ToolsForDatabases from './ToolsForDatabases';
 
 @translate('translations')
 @inject('store')
@@ -25,8 +26,10 @@ class Tools extends Component {
       return <ToolsForVAT db={db} periodId={periodId}/>;
     } else if (tool === 'documents') {
       return <ToolsForDocuments db={db} periodId={periodId}/>;
-    } else {
+    } else if (tool === 'periods') {
       return <ToolsForPeriods db={db}/>;
+    } else {
+      return <ToolsForDatabases />;
     }
   }
 }
