@@ -2,6 +2,11 @@ import i18n from 'i18next';
 
 i18n.init({
   resources: {
+    en: {
+      translations: {
+
+      }
+    },
     fi: {
       translations: {
         '{{count}} transactions': '{{count}} tapahtumaa',
@@ -160,7 +165,7 @@ i18n.init({
     }
   },
 
-  fallbackLng: 'fi',
+  fallbackLng: 'en',
   debug: false,
 
   ns: ['translations'],

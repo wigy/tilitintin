@@ -11,6 +11,8 @@ export function date2str(date) {
   const lang = i18n.language;
   // Note: Date(date).toLocaleDateString(lang) is too slow compared to this.
   switch (lang) {
+    case 'en':
+      return moment(date).format('YYYY-MM-DD');
     case 'fi':
       return moment(date).format('DD.MM.YYYY');
     default:
@@ -27,6 +29,9 @@ export function str2date(str, sample) {
   const lang = i18n.language;
   let year, month, day;
   switch (lang) {
+    case 'en':
+      [year, month, day] = str.split('-');
+      break;
     case 'fi':
       [day, month, year] = str.split('.');
       break;
