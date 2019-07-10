@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { action } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { translate, I18n, Trans } from 'react-i18next';
-import { Form, FormControl, ControlLabel, Button } from 'react-bootstrap';
+import { Form, FormControl, ControlLabel } from 'react-bootstrap';
 import Store from '../Stores/Store';
 import Settings from '../Stores/Settings';
 import IconButton from './IconButton';
