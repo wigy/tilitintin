@@ -125,6 +125,7 @@ class App extends Component {
             <Route exact path="/" component={Login}/>
             <Route exact path="/_/admin/:arg?" component={Admin}/>
             <Route exact path="/:db" component={Dashboard}/>
+            <Route exact path="/:db/dashboard" component={Dashboard}/>
             <Route exact path="/:db/dashboard/:periodId" component={Dashboard}/>
             <Route exact path="/:db/dashboard/:periodId/:accountId" component={Dashboard}/>
             <Route path="/:db/txs/:periodId/:accountId" component={AccountTransactions}/>

@@ -9,12 +9,13 @@ BUGS
 [ ] Docker launch is not working.
 [ ] After login mouse pointer does not change back to normal.
 [ ] Tools can be activated from keys when not enabled.
+[ ] Do not accept menu shortcuts when not allowed.
 
 FUTURE FEATURES
 ===============
 
 0.9
-[ ] User management.
+[X] User management.
 [ ] Create database.
 [ ] Refine tag image handling.
 [ ] Creating tx when there is not a single account listed.
@@ -25,8 +26,7 @@ FUTURE FEATURES
 [ ] Display current db.
 [ ] Display period in navbar with ability to change period.
 [ ] Rename account.
-[ ] Fix tools shortcuts.
-[ ] Support for tool-panel shortcuts similar to menu.
+[X] Support for tool-panel shortcuts similar to menu.
 [ ] TODO cleanup.
 
 1.0

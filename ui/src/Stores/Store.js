@@ -120,8 +120,9 @@ class Store {
    * @param {String} path
    * @param {String} method
    * @param {Object|null|undefined} data
+   * @param {File} file
    */
-  async request(path, method = 'GET', data = null) {
+  async request(path, method = 'GET', data = null, file = null) {
     let options = {
       method: method,
       headers: {
@@ -134,6 +135,12 @@ class Store {
     }
     if (data !== null) {
       options.body = JSON.stringify(data);
+    }
+    if (file !== null) {
+      delete options.headers['Accept'];
+      delete options.headers['Content-Type'];
+      options.body = new FormData();
+      options.body.set('file', file);
     }
 
     debug('  Request:', method, config.API_URL + path, data || '');
@@ -162,11 +169,11 @@ class Store {
   /**
    * Get the list of available databases.
    */
-  async fetchDatabases() {
+  async fetchDatabases(force = false) {
     if (!this.token) {
       return;
     }
-    if (Object.keys(this.dbsByName).length) {
+    if (!force && Object.keys(this.dbsByName).length) {
       return;
     }
     if (!this.dbsFetch) {

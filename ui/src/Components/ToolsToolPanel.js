@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { action } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { translate, I18n, Trans } from 'react-i18next';
+import { Form, FormControl, ControlLabel, Button } from 'react-bootstrap';
 import Store from '../Stores/Store';
 import Settings from '../Stores/Settings';
 import IconButton from './IconButton';
@@ -19,7 +20,14 @@ import moment from 'moment';
 class ToolsToolPanel extends Component {
 
   state = {
-    askNewPeriod: false
+    askNewPeriod: false,
+    askUpload: false,
+    askNew: false,
+    databaseName: null,
+    companyName: null,
+    changed: false,
+    code: null,
+    files: []
   };
 
   /**
@@ -163,8 +171,22 @@ class ToolsToolPanel extends Component {
     }
   }
 
+  /**
+   * Upload selected file.
+   */
+  @action.bound
+  uploadFile() {
+    if (this.state.files[0]) {
+      this.props.store.request('/db', 'POST', null, this.state.files[0])
+        .then(() => {
+          this.setState({askUpload: false});
+          this.props.store.fetchDatabases(true);
+        });
+    }
+  }
+
   render() {
-    const store = this.props.store;
+    const { t, store } = this.props;
     const tool = this.props.match.params.tool;
 
     if (!store.token) {
@@ -207,6 +229,9 @@ class ToolsToolPanel extends Component {
       default:
         label = 'Database Management';
         buttons.push(
+          <IconButton key="button-new-database" onClick={() => this.setState({askNew: true})} title="new-database" icon="fa-database"></IconButton>
+        );
+        buttons.push(
           <IconButton key="button-upload" onClick={() => this.setState({askUpload: true})} title="upload-database" icon="fa-upload"></IconButton>
         );
         break;
@@ -216,12 +241,44 @@ class ToolsToolPanel extends Component {
       <div className="ToolPanel">
         {label && <h1><Trans>{label}</Trans></h1>}
         {buttons}
-        <Dialog key="dialog"
+        <Dialog
           title={<Trans>Start new period?</Trans>}
           isVisible={this.state.askNewPeriod}
           onClose={() => { this.setState({askNewPeriod: false}); }}
           onConfirm={() => this.createPeriod(startDate, endDate)}>
           <Localize date={startDate} /> - <Localize date={endDate} />
+        </Dialog>
+
+        <Dialog
+          title={<Trans>Upload Database</Trans>}
+          isVisible={this.state.askUpload}
+          onClose={() => { this.setState({askUpload: false}); }}
+          onConfirm={() => this.uploadFile()}>
+          <h2><Trans>You can upload old Tilitin file here.</Trans></h2>
+          <input type="file" accept=".sqlite" onChange={(e) => this.setState({files: e.target.files})} />
+          <br />
+          <Trans>Note that a database with the same name is overridden automatically.</Trans>
+        </Dialog>
+
+        <Dialog
+          title={<Trans>Create New Database</Trans>}
+          isVisible={this.state.askNew}
+          onClose={() => { this.setState({askNew: false}); }}
+          onConfirm={() => this.onCreateNew()}>
+          <Form>
+            <ControlLabel><Trans>Database Name</Trans>:</ControlLabel>
+            <div className="error">{this.state.changed && (
+              this.state.databaseName ? '' : t('Database name is required.') // TODO: Validate name here and in back-end.
+            )}</div>
+            <FormControl type="text" className="name" value={this.state.databaseName} onChange={(e) => this.setState({changed: true, databaseName: e.target.value})}></FormControl>
+            <ControlLabel><Trans>Company Name</Trans>:</ControlLabel>
+            <div className="error">{this.state.changed && (
+              this.state.companyName ? '' : t('Company name is required.')
+            )}</div>
+            <FormControl type="text" className="company" value={this.state.companyName} onChange={(e) => this.setState({changed: true, companyName: e.target.value})}></FormControl>
+            <ControlLabel><Trans>Company Registration Number</Trans>:</ControlLabel>
+            <FormControl type="text" className="code" value={this.state.companyCode} onChange={(e) => this.setState({changed: true, companyCode: e.target.value})}></FormControl>
+          </Form>
         </Dialog>
       </div>
     );

@@ -1,4 +1,5 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const router = express.Router();
 const config = require('../config');
 const knex = require('../lib/knex');
@@ -7,7 +8,7 @@ const users = require('../lib/users');
 /**
  * Authenticate against fixed credentials and construct a token.
  */
-router.post('/auth', async (req, res) => {
+router.post('/auth', bodyParser(), async (req, res) => {
   const {user, password} = req.body;
   const token = await users.login(user, password);
   if (token) {
@@ -92,7 +93,7 @@ router.get('/status', (req, res) => {
 /**
  * Create new admin user.
  */
-router.post('/register', async (req, res) => {
+router.post('/register', bodyParser(), async (req, res) => {
   const {user, name, email, password, admin} = req.body;
   // TODO: Validate as in form.
   if (admin) {
@@ -117,7 +118,7 @@ router.get('/', checkToken, (req, res) => {
     }});
 });
 
-router.get('/db/', checkToken, (req, res) => {
+router.get('/db', checkToken, (req, res) => {
   res.send(knex.dbs(req.user).map(db => {
     return {name: db, links: {view: config.BASEURL + '/db/' + db}};
   }));
@@ -125,7 +126,7 @@ router.get('/db/', checkToken, (req, res) => {
 
 function checkDb(req, res, next) {
   const {db} = req.params;
-  if (!knex.isDb(req.user, db)) {
+  if (!req.user || !knex.isDb(req.user, db)) {
     res.status(404).send('Database not found.');
   } else {
     req.db = db;
@@ -148,14 +149,15 @@ router.get('/db/:db', checkToken, checkDb, (req, res) => {
     }});
 });
 
-router.use('/db/:db/period', checkToken, checkDb, require('./period'));
-router.use('/db/:db/account', checkToken, checkDb, require('./account'));
-router.use('/db/:db/document', checkToken, checkDb, require('./document'));
-router.use('/db/:db/entry', checkToken, checkDb, require('./entry'));
-router.use('/db/:db/heading', checkToken, checkDb, require('./heading'));
-router.use('/db/:db/tags', checkToken, checkDb, require('./tags'));
-router.use('/db/:db/report', checkToken, checkDb, require('./report'));
-router.use('/db/:db/settings', checkToken, checkDb, require('./settings'));
-router.use('/admin/user', checkAdminToken, require('./user'));
+router.use('/db/:db/period', bodyParser(), checkToken, checkDb, require('./period'));
+router.use('/db/:db/account', bodyParser(), checkToken, checkDb, require('./account'));
+router.use('/db/:db/document', bodyParser(), checkToken, checkDb, require('./document'));
+router.use('/db/:db/entry', bodyParser(), checkToken, checkDb, require('./entry'));
+router.use('/db/:db/heading', bodyParser(), checkToken, checkDb, require('./heading'));
+router.use('/db/:db/tags', bodyParser(), checkToken, checkDb, require('./tags'));
+router.use('/db/:db/report', bodyParser(), checkToken, checkDb, require('./report'));
+router.use('/db/:db/settings', bodyParser(), checkToken, checkDb, require('./settings'));
+router.use('/admin/user', bodyParser(), checkAdminToken, require('./user'));
+router.use('/db', bodyParser.urlencoded({extended: true}), checkToken, require('./db'));
 
 module.exports = router;

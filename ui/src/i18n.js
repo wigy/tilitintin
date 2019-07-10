@@ -101,6 +101,9 @@ i18n.init({
         'VAT from sales': 'ALV myynnistä',
         'VAT update': 'ALV päivitys',
         'Yes': 'Kyllä',
+        'You can upload old or create new databases in Tools-page.': 'Työkalut-sivulla void luoda uusia tai lähettää palvelimelle olemassaolevia tietokantoja.',
+        'You can upload old Tilitin file here.': 'Voit lähettää tästä olemassaolevan Tilitin-tiedoston.',
+        'Note that a database with the same name is overridden automatically.': 'Huomaa, että jos samanniminen tietokanta on jo olemassa, se ylikirjoitetaan automaattisesti.',
 
         'report-balance-sheet-detailed': 'Tase tilierittelyin',
         'report-balance-sheet': 'Tase',
@@ -136,6 +139,7 @@ i18n.init({
         'icon-summarize-vat-period': 'Kerää ALV velat/saatavat',
         'icon-unlock-period': 'Poista tilikauden lukitus',
         'icon-upload-database': 'Lähetä palvelimelle vanha Tilitin tiedosto',
+        'icon-new-database': 'Luo uusi tietokanta',
 
         'column-account-number': 'Nro',
         'column-balance': 'Saldo',

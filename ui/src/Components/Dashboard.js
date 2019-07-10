@@ -58,7 +58,12 @@ class Dashboard extends Component {
       return '';
     }
     if (!this.props.store.db) {
-      return <h1><Trans>No Database Selected</Trans></h1>;
+      return <>
+        <h1><Trans>No Database Selected</Trans></h1>
+        {this.props.store.dbs.length === 0 &&
+          <Link to="/_/tools"><Trans>You can upload old or create new databases in Tools-page.</Trans></Link>
+        }
+      </>;
     }
     const {periodId} = this.props.match.params;
 

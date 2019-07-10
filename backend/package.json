@@ -23,6 +23,7 @@
     "knex": "^0.15.2",
     "libfyffe": "^0.2.0",
     "moment": "^2.24.0",
+    "multer": "^1.4.1",
     "neat-dump": "^1.0.17",
     "nodemon": "^1.19.1",
     "promise-sequential": "^1.1.1",

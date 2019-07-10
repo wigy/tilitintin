@@ -18,6 +18,7 @@ class ToolsForDatabases extends Component {
     return (
       <div className="Tools">
         <h1><Trans>Databases</Trans></h1>
+        {this.props.store.dbs.map((db, index) => <h2 key={db.name}>{db.name}</h2>)}
       </div>
     );
   }
