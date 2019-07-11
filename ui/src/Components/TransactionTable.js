@@ -41,6 +41,7 @@ class TransactionTable extends Component {
           document.addEntry(entry);
           store.keepDocumentIdOpen = document.id;
           store.period.addDocument(document);
+          document.open = true;
           if (cursor.componentX === 0) {
             cursor.keyArrowRight();
           }

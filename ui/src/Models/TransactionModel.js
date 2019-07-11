@@ -99,32 +99,15 @@ class TransactionModel extends NavigationTargetModel {
       return;
     }
     // TODO: Combine with keyInsert() in TransactionTable.
-    if (cursor.row === null) {
-      const document = new DocumentModel(this.document, {
-        period_id: this.period.id,
-        date: this.store.lastDate || moment().format('YYYY-MM-DD')
-      });
-      document.save()
-        .then(() => {
-          const oldId = this.store.accountId;
-          const entry = new EntryModel(document, {document_id: document.id, row_number: 1, account_id: this.store.accountId});
-          document.addEntry(entry);
-          this.store.keepDocumentIdOpen = document.id;
-          // TODO: Why this does not trigger computed property `transactions` recalculation without forcing it by modifying accountId?
-          this.period.addDocument(document);
-          this.store.accountId = null;
-          this.store.accountId = oldId;
-          cursor.setIndex(this.store.filteredTransactions.length - 1);
-        });
-    } else {
+    if (cursor.row !== null) {
       this.store.keepDocumentIdOpen = this.document.id;
       const rowNumber = this.document.entries.reduce((prev, cur) => Math.max(prev, cur.row_number), 0) + 1;
       const description = this.document.entries.length ? this.document.entries[this.document.entries.length - 1].text : '';
       const entry = new EntryModel(this.document, {document_id: this.document.id, row_number: rowNumber, description});
       this.document.addEntry(entry);
       cursor.setCell(0, this.document.entries.length - 1);
+      return {preventDefault: true};
     }
-    return {preventDefault: true};
   }
 
   /**
