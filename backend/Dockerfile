@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:10.8.0
 
 WORKDIR /var/app
 

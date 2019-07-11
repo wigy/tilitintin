@@ -52,9 +52,9 @@ class ToolsList extends Component {
         <h1><Trans>Tools</Trans></h1>
         <ul className="menu">
           <li className={''}><Link to={this.url('databases')}><code>1</code> <Trans>Databases</Trans></Link></li>
-          <li className={store.db ? '' : 'disabled-link'}><Link to={this.url('periods')}><code>1</code> <Trans>Periods</Trans></Link></li>
-          <li className={store.db ? '' : 'disabled-link'}><Link to={this.url('documents')}><code>2</code> <Trans>Documents</Trans></Link></li>
-          <li className={store.periodId ? '' : 'disabled-link'}><Link to={this.url('vat')}><code>3</code> <Trans>Value Added Tax</Trans></Link></li>
+          <li className={store.db ? '' : 'disabled-link'}><Link to={this.url('periods')}><code>2</code> <Trans>Periods</Trans></Link></li>
+          <li className={store.db ? '' : 'disabled-link'}><Link to={this.url('documents')}><code>3</code> <Trans>Documents</Trans></Link></li>
+          <li className={store.periodId ? '' : 'disabled-link'}><Link to={this.url('vat')}><code>4</code> <Trans>Value Added Tax</Trans></Link></li>
         </ul>
       </div>
     );

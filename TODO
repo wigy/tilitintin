@@ -10,6 +10,7 @@ BUGS
 [ ] After login mouse pointer does not change back to normal.
 [ ] Tools can be activated from keys when not enabled.
 [ ] Do not accept menu shortcuts when not allowed.
+[ ] Switching between period and document tools: icon is not updated.
 
 FUTURE FEATURES
 ===============
@@ -28,6 +29,7 @@ FUTURE FEATURES
 [ ] Rename account.
 [X] Support for tool-panel shortcuts similar to menu.
 [ ] Changing the language from the front page.
+[ ] Upgrade Node and some packages.
 [ ] TODO cleanup.
 
 1.0

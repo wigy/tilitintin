@@ -8,7 +8,7 @@ const users = require('../lib/users');
 /**
  * Authenticate against fixed credentials and construct a token.
  */
-router.post('/auth', bodyParser(), async (req, res) => {
+router.post('/auth', bodyParser.json(), async (req, res) => {
   const {user, password} = req.body;
   const token = await users.login(user, password);
   if (token) {
@@ -93,7 +93,7 @@ router.get('/status', (req, res) => {
 /**
  * Create new admin user.
  */
-router.post('/register', bodyParser(), async (req, res) => {
+router.post('/register', bodyParser.json(), async (req, res) => {
   const {user, name, email, password, admin} = req.body;
   // TODO: Validate as in form.
   if (admin) {
@@ -149,15 +149,15 @@ router.get('/db/:db', checkToken, checkDb, (req, res) => {
     }});
 });
 
-router.use('/db/:db/period', bodyParser(), checkToken, checkDb, require('./period'));
-router.use('/db/:db/account', bodyParser(), checkToken, checkDb, require('./account'));
-router.use('/db/:db/document', bodyParser(), checkToken, checkDb, require('./document'));
-router.use('/db/:db/entry', bodyParser(), checkToken, checkDb, require('./entry'));
-router.use('/db/:db/heading', bodyParser(), checkToken, checkDb, require('./heading'));
-router.use('/db/:db/tags', bodyParser(), checkToken, checkDb, require('./tags'));
-router.use('/db/:db/report', bodyParser(), checkToken, checkDb, require('./report'));
-router.use('/db/:db/settings', bodyParser(), checkToken, checkDb, require('./settings'));
-router.use('/admin/user', bodyParser(), checkAdminToken, require('./user'));
+router.use('/db/:db/period', bodyParser.json(), checkToken, checkDb, require('./period'));
+router.use('/db/:db/account', bodyParser.json(), checkToken, checkDb, require('./account'));
+router.use('/db/:db/document', bodyParser.json(), checkToken, checkDb, require('./document'));
+router.use('/db/:db/entry', bodyParser.json(), checkToken, checkDb, require('./entry'));
+router.use('/db/:db/heading', bodyParser.json(), checkToken, checkDb, require('./heading'));
+router.use('/db/:db/tags', bodyParser.json(), checkToken, checkDb, require('./tags'));
+router.use('/db/:db/report', bodyParser.json(), checkToken, checkDb, require('./report'));
+router.use('/db/:db/settings', bodyParser.json(), checkToken, checkDb, require('./settings'));
+router.use('/admin/user', bodyParser.json(), checkAdminToken, require('./user'));
 router.use('/db', bodyParser.urlencoded({extended: true}), checkToken, require('./db'));
 
 module.exports = router;

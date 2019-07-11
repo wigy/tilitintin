@@ -106,7 +106,6 @@ i18n.init({
         'VAT from sales': 'ALV myynnistä',
         'VAT update': 'ALV päivitys',
         'Yes': 'Kyllä',
-        'You can upload old or create new databases in Tools-page.': 'Työkalut-sivulla void luoda uusia tai lähettää palvelimelle olemassaolevia tietokantoja.',
         'You can upload old Tilitin file here.': 'Voit lähettää tästä olemassaolevan Tilitin-tiedoston.',
         'Note that a database with the same name is overridden automatically.': 'Huomaa, että jos samanniminen tietokanta on jo olemassa, se ylikirjoitetaan automaattisesti.',
 
