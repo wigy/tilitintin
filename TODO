@@ -19,7 +19,7 @@ FUTURE FEATURES
 [X] User management.
 [ ] Create database.
 [ ] Refine tag image handling.
-[ ] Creating tx when there is not a single account listed.
+[X] Creating tx when there is not a single account listed.
 [ ] Database locking (perhaps create random `<32-letter-code>.lock` file which is stored in browser and removed
     automatically on logout). Or does sqlite have one?
 [X] Replace old menus with home page.

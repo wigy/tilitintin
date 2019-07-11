@@ -2,11 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import { translate, Trans } from 'react-i18next';
+import moment from 'moment';
 import Dialog from './Dialog';
 import Money from './Money';
 import Transaction from './Transaction';
 import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
+import EntryModel from '../Models/EntryModel';
+import DocumentModel from '../Models/DocumentModel';
 import './TransactionTable.css';
 
 @translate('translations')
@@ -17,6 +20,37 @@ class TransactionTable extends Component {
 
   // Store for transaction waiting for deletion confirmation.
   txToDelete = null;
+
+  componentDidMount() {
+    this.props.cursor.selectPage('Balances', this);
+  }
+
+  keyInsert(cursor) {
+    const { store } = this.props;
+    if (store.period.locked) {
+      return;
+    }
+    if (cursor.row === null) {
+      const document = new DocumentModel(store.period, {
+        period_id: store.period.id,
+        date: store.lastDate || moment().format('YYYY-MM-DD')
+      });
+      document.save()
+        .then(() => {
+          const entry = new EntryModel(document, {document_id: document.id, row_number: 1, account_id: store.accountId});
+          document.addEntry(entry);
+          store.keepDocumentIdOpen = document.id;
+          store.period.addDocument(document);
+          if (cursor.componentX === 0) {
+            cursor.keyArrowRight();
+          }
+          // TODO: Look for correct index.
+          cursor.setIndex(store.filteredTransactions.length - 1);
+        });
+
+      return {preventDefault: true};
+    }
+  }
 
   /**
    * Remove a document and all of its entries from the system.

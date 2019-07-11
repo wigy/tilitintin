@@ -98,6 +98,7 @@ class TransactionModel extends NavigationTargetModel {
     if (this.period.locked) {
       return;
     }
+    // TODO: Combine with keyInsert() in TransactionTable.
     if (cursor.row === null) {
       const document = new DocumentModel(this.document, {
         period_id: this.period.id,
