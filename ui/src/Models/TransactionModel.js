@@ -1,7 +1,5 @@
-import moment from 'moment';
 import NavigationTargetModel from './NavigationTargetModel';
 import EntryModel from './EntryModel';
-import DocumentModel from './DocumentModel';
 
 /**
  * Temporary model to arrange entries of the one account as a pairs of its document and the entry itself.

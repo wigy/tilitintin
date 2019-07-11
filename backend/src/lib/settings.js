@@ -50,4 +50,20 @@ async function get(db, variable, def = undefined) {
     .then(res => res ? JSON.parse(res.value) : def);
 }
 
-module.exports = { get, set };
+/**
+ * Get all settings as an object.
+ * @param {String} db
+ */
+async function getAll(db) {
+  await ensure(db);
+  return knex.db(db)('fyffe_settings').select('*')
+    .then((data) => {
+      const ret = {};
+      data.forEach((setting) => {
+        ret[setting.name] = setting.value;
+      });
+      return ret;
+    });
+}
+
+module.exports = { get, set, getAll };
