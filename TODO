@@ -6,7 +6,6 @@ BUGS
 [ ] After editing, all other documents are closed.
 [ ] If period selected and you change db, all menus are still usable.
 [ ] Manual switching of DB and returning to txs page does not update screen.
-[ ] Docker launch is not working.
 [ ] After login mouse pointer does not change back to normal without pressing a key.
 [ ] Tools can be activated from keys when not enabled.
 [ ] Do not accept menu shortcuts when not allowed.
@@ -29,13 +28,13 @@ FUTURE FEATURES
 [ ] Display period in navbar with ability to change period.
 [ ] Rename account.
 [X] Support for tool-panel shortcuts similar to menu.
-[ ] Changing the language from the front page.
 [ ] Upgrade Node and some packages.
 [ ] TODO cleanup.
 
 1.0
 [ ] Rewrite away current TransactionModel and use directly list of EntryModels.
 [ ] Logo with icon.
+[ ] Changing the language from the front page.
 [ ] Scan all TODOs and make fix.
 
 2.0
