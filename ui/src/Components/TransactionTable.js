@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
-import { translate, Trans } from 'react-i18next';
+import { Trans, withTranslation } from 'react-i18next';
 import { FormControl, ControlLabel } from 'react-bootstrap';
 import moment from 'moment';
 import Dialog from './Dialog';
@@ -13,7 +13,7 @@ import EntryModel from '../Models/EntryModel';
 import DocumentModel from '../Models/DocumentModel';
 import './TransactionTable.css';
 
-@translate('translations')
+@withTranslation('translations')
 @inject('store')
 @inject('cursor')
 @observer

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import { action } from 'mobx';
-import { translate, Trans, I18n } from 'react-i18next';
+import { Trans, withTranslation } from 'react-i18next';
 import { Form, FormControl, ControlLabel, Button } from 'react-bootstrap';
 import Store from '../Stores/Store';
 import AccountModel from '../Models/AccountModel';
@@ -11,7 +11,7 @@ import Localize from './Localize';
 import SubPanel from './SubPanel';
 import './Account.css';
 
-@translate('translations')
+@withTranslation('translations')
 @inject('store')
 @observer
 class Account extends Component {
@@ -204,7 +204,6 @@ class Account extends Component {
 }
 
 Account.propTypes = {
-  i18n: PropTypes.instanceOf(I18n),
   t: PropTypes.func,
   history: PropTypes.object.isRequired,
   match: PropTypes.object,

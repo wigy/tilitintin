@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { translate } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import ReportModel from '../Models/ReportModel';
 
-@translate('translations')
+@withTranslation('translations')
 class ReportLink extends Component {
   render() {
     const { t, report } = this.props;

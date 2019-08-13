@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { translate } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import AccountModel from '../Models/AccountModel';
 import './AccountLink.css';
 
-@translate('translations')
+@withTranslation('translations')
 class AccountLink extends Component {
 
   state = {

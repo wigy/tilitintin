@@ -4,11 +4,11 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 import { Link } from 'react-router-dom';
 import Localize from './Localize';
 import { inject, observer } from 'mobx-react';
-import { translate, Trans } from 'react-i18next';
+import { withTranslation, Trans } from 'react-i18next';
 import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
 
-@translate('translations')
+@withTranslation('translations')
 @inject('cursor')
 @inject('store')
 @observer

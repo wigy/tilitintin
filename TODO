@@ -24,7 +24,7 @@ FUTURE FEATURES
 [X] Edit account.
 [X] Support for tool-panel shortcuts similar to menu.
 [X] Rewrite menu.
-[ ] Update i18-next. Some fixes see: e1cc81ef6ec7c6dd4a08d5ba04b5a4ac4593aa9d
+[X] Update i18-next.
 [ ] TODO cleanup.
 
 1.0

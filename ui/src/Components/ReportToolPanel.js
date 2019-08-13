@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
-import { translate, I18n } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import Store from '../Stores/Store';
 import IconButton from './IconButton';
 import IconSpacer from './IconSpacer';
 import Configuration from '../Configuration';
+import i18n from '../i18n';
 import './ToolPanel.css';
 
 const ICONS = {
@@ -17,14 +18,14 @@ const ICONS = {
   'option-byTags': 'fa-tag'
 };
 
-@translate('translations')
+@withTranslation('translations')
 @inject('store')
 @observer
 class ReportToolPanel extends Component {
 
   render() {
     const store = this.props.store;
-    const lang = this.props.i18n.language;
+    const lang = i18n.language;
 
     if (!store.token || !store.report) {
       return '';
@@ -115,7 +116,6 @@ class ReportToolPanel extends Component {
 
 ReportToolPanel.propTypes = {
   t: PropTypes.func,
-  i18n: PropTypes.instanceOf(I18n),
   store: PropTypes.instanceOf(Store)
 };
 

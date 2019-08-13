@@ -28,6 +28,7 @@
     "fork-ts-checker-webpack-plugin-alt": "0.4.14",
     "fs-extra": "7.0.0",
     "html-webpack-plugin": "4.0.0-alpha.2",
+    "i18next": "^17.0.14",
     "identity-obj-proxy": "3.0.0",
     "jest": "^24.8.0",
     "jest-pnp-resolver": "1.0.1",

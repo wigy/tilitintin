@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { action } from 'mobx';
 import { inject, observer } from 'mobx-react';
-import { translate, I18n, Trans } from 'react-i18next';
+import { Trans, withTranslation } from 'react-i18next';
 import { withRouter } from 'react-router-dom';
 import { Form, FormControl, ControlLabel } from 'react-bootstrap';
 import Store from '../Stores/Store';
@@ -15,7 +15,7 @@ import './ToolPanel.css';
 import moment from 'moment';
 
 @withRouter
-@translate('translations')
+@withTranslation('translations')
 @inject('store')
 @inject('settings')
 @observer
@@ -316,7 +316,6 @@ ToolsToolPanel.propTypes = {
   t: PropTypes.func,
   history: PropTypes.any,
   match: PropTypes.object,
-  i18n: PropTypes.instanceOf(I18n),
   settings: PropTypes.instanceOf(Settings),
   store: PropTypes.instanceOf(Store)
 };

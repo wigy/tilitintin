@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { observer } from 'mobx-react';
-import { translate, I18n } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import ReportLine from './ReportLine';
 import Localize from './Localize';
 import './ReportDisplay.css';
 import ReportModel from '../Models/ReportModel';
+import i18n from '../i18n';
 
-@translate('translations')
+@withTranslation('translations')
 @observer
 class ReportHeader extends Component {
 
@@ -18,7 +19,7 @@ class ReportHeader extends Component {
       return '';
     }
 
-    const lang = this.props.i18n.language;
+    const lang = i18n.language;
     const columns = report.columns.length;
 
     return [
@@ -45,8 +46,7 @@ class ReportHeader extends Component {
 
 ReportHeader.propTypes = {
   report: PropTypes.instanceOf(ReportModel),
-  t: PropTypes.func,
-  i18n: PropTypes.instanceOf(I18n)
+  t: PropTypes.func
 };
 
 @observer

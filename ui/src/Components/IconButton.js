@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { translate } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import './IconButton.css';
 
-@translate('translations')
+@withTranslation('translations')
 class ToolPanel extends Component {
 
   render() {

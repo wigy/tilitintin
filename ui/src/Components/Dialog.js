@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { Modal, Button } from 'react-bootstrap';
-import { translate, Trans } from 'react-i18next';
+import { withTranslation, Trans } from 'react-i18next';
 import Cursor from '../Stores/Cursor';
 
 /**
  * Dialog content implementation.
  */
 @inject('cursor')
-@translate('translations')
+@withTranslation('translations')
 class DialogContent extends Component {
 
   componentDidMount = () => {

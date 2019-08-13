@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { translate, Trans } from 'react-i18next';
+import { Trans, withTranslation } from 'react-i18next';
 import { Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 import Store from '../Stores/Store';
 import { inject } from 'mobx-react';
 import './Login.css';
 
 @inject('store')
-@translate('translations')
+@withTranslation('translations')
 class RegisterForm extends Component {
 
   state = {

@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import { inject, observer } from 'mobx-react';
-import { translate, Trans } from 'react-i18next';
+import { Trans, withTranslation } from 'react-i18next';
 import Store from '../Stores/Store';
 import Localize from './Localize';
 import Cursor from '../Stores/Cursor';
 import Configuration from '../Configuration';
 import './Menu.css';
 
-@translate('translations')
+@withTranslation('translations')
 @inject('store')
 @inject('cursor')
 @observer

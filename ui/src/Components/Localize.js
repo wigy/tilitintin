@@ -1,9 +1,9 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { translate, I18n } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { date2str } from '../Util';
 
-@translate('translations')
+@withTranslation('translations')
 class Localize extends Component {
 
   localize(text) {
@@ -41,8 +41,7 @@ class Localize extends Component {
 Localize.propTypes = {
   t: PropTypes.func,
   date: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  children: PropTypes.any,
-  i18n: PropTypes.instanceOf(I18n)
+  children: PropTypes.any
 };
 
 export default Localize;

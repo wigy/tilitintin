@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
-import { translate } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import TextEdit from './TextEdit';
 import Store from '../Stores/Store';
 import EntryModel from '../Models/EntryModel';
@@ -10,7 +10,7 @@ import Cursor from '../Stores/Cursor';
 
 import './TransactionDetails.css';
 
-@translate('translations')
+@withTranslation('translations')
 @inject('store')
 @inject('cursor')
 @observer

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { translate, Trans } from 'react-i18next';
+import { withTranslation, Trans } from 'react-i18next';
 import Model from '../Models/Model';
 import './TextEdit.css';
 
-@translate('translations')
+@withTranslation('translations')
 class TextEdit extends Component {
 
   constructor(props) {

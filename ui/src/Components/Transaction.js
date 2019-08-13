@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import { action } from 'mobx';
-import { translate, Trans } from 'react-i18next';
+import { withTranslation, Trans } from 'react-i18next';
 import Dialog from './Dialog';
 import Money from './Money';
 import Tags from './Tags';
@@ -14,7 +14,7 @@ import TransactionModel from '../Models/TransactionModel';
 import EntryModel from '../Models/EntryModel';
 import './Transaction.css';
 
-@translate('translations')
+@withTranslation('translations')
 @inject('store')
 @inject('settings')
 @inject('cursor')
