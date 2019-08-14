@@ -19,6 +19,22 @@
   text-shadow: 2px 2px rgba(0,0,0,0.3);
 }
 
+.Menu .database, .Menu .period {
+  display: inline-block;
+  color: var(--fg-color);
+  font-stretch: extra-condensed;
+  font-family: Times;
+  font-size: 20px;
+  font-weight: bold;
+  padding-top: 3px;
+  padding-left: 16px;
+  padding-right: 16px;
+  height: 34px;
+  border-radius: 8px;
+  background-color: var(--bg-color-light);
+  border: 1px solid var(--border-color-light);
+}
+
 .Menu .entry {
 }
 

@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import { inject, observer } from 'mobx-react';
 import { translate, Trans } from 'react-i18next';
-import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import Store from '../Stores/Store';
+import Localize from './Localize';
 import Cursor from '../Stores/Cursor';
 import Configuration from '../Configuration';
 import './Menu.css';
@@ -133,6 +133,27 @@ class Menu extends Component {
       <div className="Menu">
         <span className="spacer"></span>
         <a href="/" className="brand">Tilitintin v{Configuration.VERSION}</a>
+        <span className="spacer"></span>
+        <span className="spacer"></span>
+        <span className="spacer"></span>
+        <span className="database">
+          <span className="fa-icon"><i className="fa fa-database"></i></span> {this.props.store.db || <>&nbsp;&nbsp;&mdash;</>}
+        </span>
+        <span className="spacer"></span>
+        <span className="period">
+          <span className="fa-icon"><i className="fa fa-calendar"></i></span> {
+            this.props.store.period &&
+            <>
+              <Localize date={this.props.store.period.start_date}/>
+              &nbsp;&mdash;&nbsp;
+              <Localize date={this.props.store.period.end_date}/>
+            </>
+          }{ !this.props.store.period &&
+            <>&nbsp;&nbsp;&mdash;</>
+          }
+        </span>
+        <span className="spacer"></span>
+        <span className="spacer"></span>
         <span className="spacer"></span>
         {this.menu.map(entry => this.renderMenu(entry))}
       </div>

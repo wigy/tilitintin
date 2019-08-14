@@ -24,7 +24,7 @@ FUTURE FEATURES
     automatically on logout). Or does sqlite have one?
 [X] Replace old menus with home page.
 [X] Keyboard shortcuts to swap between screens.
-[ ] Display current db.
+[X] Display current db.
 [ ] Display period in navbar with ability to change period.
 [ ] Rename account.
 [X] Support for tool-panel shortcuts similar to menu.
