@@ -5,10 +5,10 @@ BUGS
 [ ] Clicking another account right after entering entry, is not updated.
 [ ] After editing, all other documents are closed.
 [ ] If period selected and you change db, all menus are still usable.
-[ ] Manual switching of DB and returning to txs page does not update screen.
+[ ] Keyboard switching of DB and returning to txs page does not update screen.
 [ ] After login mouse pointer does not change back to normal without pressing a key.
 [ ] Tools can be activated from keys when not enabled.
-[ ] Do not accept menu shortcuts when not allowed.
+[X] Do not accept menu shortcuts when not allowed.
 [ ] Switching between period and document tools: icon is not updated.
 [ ] Periods are wrong when created with Tilitin.
 
@@ -28,6 +28,7 @@ FUTURE FEATURES
 [ ] Display period in navbar with ability to change period.
 [ ] Rename account.
 [X] Support for tool-panel shortcuts similar to menu.
+[X] Rewrite menu.
 [ ] TODO cleanup.
 
 1.0

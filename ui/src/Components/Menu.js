@@ -15,7 +15,46 @@ import './Menu.css';
 @observer
 class Menu extends Component {
 
-  update({db, periodId}) {
+  menu = [
+    {
+      title: 'Home',
+      icon: 'fas fa-home',
+      shortcut: ' ',
+      disabled: ({ notLoggedIn, isAdmin }) => notLoggedIn || isAdmin,
+      action: () => this.handleSelect('dashboard')
+    },
+    {
+      title: 'Transactions',
+      shortcut: 'X',
+      disabled: ({ db, periodId, notLoggedIn }) => !db || !periodId || notLoggedIn,
+      action: () => this.handleSelect('txs')
+    },
+    {
+      title: 'Reports',
+      shortcut: 'R',
+      disabled: ({ db, periodId, notLoggedIn }) => !db || !periodId || notLoggedIn,
+      action: () => this.handleSelect('account')
+    },
+    {
+      title: 'Accounts',
+      shortcut: 'Y',
+      disabled: ({ db, notLoggedIn }) => !db || notLoggedIn,
+      action: () => this.handleSelect('account')
+    },
+    {
+      title: 'Tools',
+      shortcut: 'T',
+      disabled: ({ notLoggedIn, isAdmin }) => notLoggedIn || isAdmin,
+      action: () => this.handleSelect('tools')
+    },
+    {
+      title: 'Logout',
+      disabled: ({ notLoggedIn }) => notLoggedIn,
+      action: () => this.handleSelect('logout')
+    }
+  ];
+
+  update({ db, periodId }) {
     if (db === '_') {
       db = null;
     }
@@ -34,30 +73,14 @@ class Menu extends Component {
   }
 
   keyText(cursor, key) {
-    if (this.props.store.isAdmin) {
-      return;
-    }
-    switch (key) {
-      case ' ':
-        this.handleSelect('dashboard');
-        return {preventDefault: true};
-      case 'r':
-      case 'R':
-        this.handleSelect('report');
-        return {preventDefault: true};
-      case 'y':
-      case 'Y':
-        this.handleSelect('account');
-        return {preventDefault: true};
-      case 't':
-      case 'T':
-        this.handleSelect('tools');
-        return {preventDefault: true};
-      case 'x':
-      case 'X':
-        this.handleSelect('txs');
-        return {preventDefault: true};
-      default:
+    key = key.toUpperCase();
+    const entry = this.menu.filter(e => e.shortcut === key);
+    if (entry.length) {
+      if (!this.isEnabled(entry[0])) {
+        return;
+      }
+      entry[0].action();
+      return { preventDefault: true };
     }
   }
 
@@ -89,53 +112,29 @@ class Menu extends Component {
     }
   }
 
-  render() {
-    const {db, periodId, isAdmin} = this.props.store;
+  isEnabled(entry) {
+    const { db, periodId, isAdmin } = this.props.store;
     const notLoggedIn = !this.props.store.token;
+    return !entry.disabled({ db, periodId, isAdmin, notLoggedIn });
+  }
 
+  renderMenu(entry) {
+    return <span key={entry.title} className={this.isEnabled(entry) ? 'entry' : 'entry disabled'}>
+      <span className="spacer"/>
+      {entry.shortcut && <code>{entry.shortcut === ' ' ? 'Space' : entry.shortcut}</code>}
+      <span> <Trans>{entry.title}</Trans></span>
+      {entry.icon && <span className="fa-icon"> <i className={entry.icon}></i></span>}
+      <span className="spacer"/>
+    </span>;
+  }
+
+  render() {
     return (
       <div className="Menu">
-        <Navbar fluid>
-          <Navbar.Header>
-            <Navbar.Brand>
-              <a href="/" className="brand">Tilitintin v{Configuration.VERSION}</a>
-            </Navbar.Brand>
-          </Navbar.Header>
-
-          <Nav bsStyle="tabs" activeKey="1" onSelect={() => this.handleSelect('dashboard')}>
-            <NavItem eventKey="1" disabled={notLoggedIn || isAdmin}>
-              <code>Space</code> <Trans>Home</Trans><span className="fa-icon"> <i className="fas fa-home"></i></span>
-            </NavItem>
-          </Nav>
-
-          <Nav bsStyle="tabs" pullRight activeKey="3" onSelect={() => this.handleSelect('logout')}>
-            <NavItem eventKey="3" disabled={notLoggedIn}>
-              <Trans>Logout</Trans>
-            </NavItem>
-          </Nav>
-
-          <Nav bsStyle="tabs" pullRight activeKey="4" onSelect={() => this.handleSelect('tools')}>
-            <NavItem eventKey="4" disabled={notLoggedIn || isAdmin}>
-              <code>T</code> <Trans>Tools</Trans>
-            </NavItem>
-          </Nav>
-          <Nav bsStyle="tabs" pullRight activeKey="5" onSelect={() => this.handleSelect('account')}>
-            <NavItem eventKey="5" disabled={!db || notLoggedIn}>
-              <code>Y</code> <Trans>Accounts</Trans>
-            </NavItem>
-          </Nav>
-          <Nav bsStyle="tabs" pullRight activeKey="6" onSelect={() => this.handleSelect('report')}>
-            <NavItem eventKey="6" disabled={!db || !periodId || notLoggedIn}>
-              <code>R</code> <Trans>Reports</Trans>
-            </NavItem>
-          </Nav>
-          <Nav bsStyle="tabs" pullRight activeKey="7" onSelect={() => this.handleSelect('txs')}>
-            <NavItem eventKey="7" disabled={!db || !periodId || notLoggedIn}>
-              <code>X</code> <Trans>Transactions</Trans>
-            </NavItem>
-          </Nav>
-
-        </Navbar>
+        <span className="spacer"></span>
+        <a href="/" className="brand">Tilitintin v{Configuration.VERSION}</a>
+        <span className="spacer"></span>
+        {this.menu.map(entry => this.renderMenu(entry))}
       </div>
     );
   }
