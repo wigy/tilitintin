@@ -557,6 +557,15 @@ class Store {
   }
 
   /**
+   * Create new database.
+   * @param info.databaseName
+   * @param info.companyName
+   */
+  createDatabase(info) {
+    return this.request('/db', 'POST', info);
+  }
+
+  /**
    * Save account data.
    * @param {AccountModel} account
    */

@@ -177,7 +177,7 @@ class ToolsToolPanel extends Component {
   @action.bound
   uploadFile() {
     if (this.state.files[0]) {
-      this.props.store.request('/db', 'POST', null, this.state.files[0])
+      this.props.store.request('/db/upload', 'POST', null, this.state.files[0])
         .then(() => {
           this.setState({askUpload: false});
           this.props.store.fetchDatabases(true);
@@ -190,6 +190,13 @@ class ToolsToolPanel extends Component {
    */
   @action.bound
   onCreateNewDb() {
+    if (this.state.databaseName) {
+      this.props.store.createDatabase({ databaseName: this.state.databaseName, companyName: this.state.companyName })
+        .then(() => {
+          this.setState({ askNew: false });
+          // TODO: Redirect.
+        });
+    }
   }
 
   render() {
@@ -236,7 +243,8 @@ class ToolsToolPanel extends Component {
       default:
         label = 'Database Management';
         buttons.push(
-          <IconButton key="button-new-database" onClick={() => this.setState({askNew: true})} title="new-database" icon="fa-database"></IconButton>
+          // <IconButton key="button-new-database" onClick={() => this.setState({ askNew: true })} title="new-database" icon="fa-database"></IconButton>
+          <IconButton key="button-new-database" onClick={() => this.setState({ databaseName: 'normaali', companyName: 'Reitti Oy' }) || this.onCreateNew()} title="new-database" icon="fa-database"></IconButton>
         );
         buttons.push(
           <IconButton key="button-upload" onClick={() => this.setState({askUpload: true})} title="upload-database" icon="fa-upload"></IconButton>

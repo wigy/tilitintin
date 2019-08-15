@@ -3,9 +3,15 @@ const fs = require('fs');
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
+const bodyParser = require('body-parser');
 const config = require('../config');
 
-router.post('/', async (req, res) => {
+router.post('/', bodyParser.json(), async (req, res) => {
+  const {databaseName, companyName} = req.body;
+  // TODO: Create DB.
+});
+
+router.post('/upload', async (req, res) => {
   const PATH = path.join(config.DBPATH, req.user);
   const upload = multer({ dest: PATH });
   upload.single('file')(req, res, function(err) {

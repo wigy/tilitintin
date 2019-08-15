@@ -11,6 +11,7 @@ BUGS
 [X] Do not accept menu shortcuts when not allowed.
 [ ] Switching between period and document tools: icon is not updated.
 [ ] Periods are wrong when created with Tilitin.
+[ ] All dialogs are hidden inside their panels.
 
 FUTURE FEATURES
 ===============
