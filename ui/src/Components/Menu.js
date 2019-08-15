@@ -119,7 +119,7 @@ class Menu extends Component {
   }
 
   renderMenu(entry) {
-    return <span key={entry.title} className={this.isEnabled(entry) ? 'entry' : 'entry disabled'}>
+    return <span key={entry.title} className={this.isEnabled(entry) ? 'entry' : 'entry disabled'} onClick={() => entry.action()}>
       <span className="spacer"/>
       {entry.shortcut && <code>{entry.shortcut === ' ' ? 'Space' : entry.shortcut}</code>}
       <span> <Trans>{entry.title}</Trans></span>
