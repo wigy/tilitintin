@@ -23,19 +23,20 @@ class ToolsList extends Component {
   }
 
   keyText(cursor, key) {
+    const { store } = this.props;
     if (key === '1') {
       this.props.history.push(this.url('databases'));
       return {preventDefault: true};
     }
-    if (key === '2') {
+    if (key === '2' && store.db) {
       this.props.history.push(this.url('periods'));
       return {preventDefault: true};
     }
-    if (key === '3') {
+    if (key === '3' && store.periodId) {
       this.props.history.push(this.url('documents'));
       return {preventDefault: true};
     }
-    if (key === '4') {
+    if (key === '4' && store.periodId) {
       this.props.history.push(this.url('vat'));
       return {preventDefault: true};
     }
@@ -53,7 +54,7 @@ class ToolsList extends Component {
         <ul className="menu">
           <li className={''}><Link to={this.url('databases')}><code>1</code> <Trans>Databases</Trans></Link></li>
           <li className={store.db ? '' : 'disabled-link'}><Link to={this.url('periods')}><code>2</code> <Trans>Periods</Trans></Link></li>
-          <li className={store.db ? '' : 'disabled-link'}><Link to={this.url('documents')}><code>3</code> <Trans>Documents</Trans></Link></li>
+          <li className={store.periodId ? '' : 'disabled-link'}><Link to={this.url('documents')}><code>3</code> <Trans>Documents</Trans></Link></li>
           <li className={store.periodId ? '' : 'disabled-link'}><Link to={this.url('vat')}><code>4</code> <Trans>Value Added Tax</Trans></Link></li>
         </ul>
       </div>

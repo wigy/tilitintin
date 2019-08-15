@@ -7,7 +7,7 @@ BUGS
 [ ] If period selected and you change db, all menus are still usable.
 [ ] Keyboard switching of DB and returning to txs page does not update screen.
 [ ] After login mouse pointer does not change back to normal without pressing a key.
-[ ] Tools can be activated from keys when not enabled.
+[X] Tools can be activated from keys when not enabled.
 [X] Do not accept menu shortcuts when not allowed.
 [ ] Switching between period and document tools: icon is not updated.
 [ ] Periods are wrong when created with Tilitin.
