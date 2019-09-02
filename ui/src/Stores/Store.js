@@ -240,6 +240,7 @@ class Store {
     }
     await this.setDb(db);
     if (!periodId) {
+      this.periodId = null;
       return;
     }
     if (!this.periodFetch) {
