@@ -23,8 +23,8 @@ class ToolsToolPanel extends Component {
     askNewPeriod: false,
     askUpload: false,
     askNew: false,
-    databaseName: null,
-    companyName: null,
+    databaseName: '',
+    companyName: '',
     changed: false,
     code: null,
     files: []
@@ -185,6 +185,13 @@ class ToolsToolPanel extends Component {
     }
   }
 
+  /**
+   * Create new database.
+   */
+  @action.bound
+  onCreateNewDb() {
+  }
+
   render() {
     const { t, store } = this.props;
     const tool = this.props.match.params.tool;
@@ -264,7 +271,7 @@ class ToolsToolPanel extends Component {
           title={<Trans>Create New Database</Trans>}
           isVisible={this.state.askNew}
           onClose={() => { this.setState({askNew: false}); }}
-          onConfirm={() => this.onCreateNew()}>
+          onConfirm={() => this.onCreateNewDb()}>
           <Form>
             <ControlLabel><Trans>Database Name</Trans>:</ControlLabel>
             <div className="error">{this.state.changed && (
