@@ -11,7 +11,6 @@ BUGS
 [X] Do not accept menu shortcuts when not allowed.
 [ ] Switching between period and document tools: icon is not updated.
 [ ] Periods are wrong when created with Tilitin.
-[ ] All dialogs are hidden inside their panels.
 
 FUTURE FEATURES
 ===============
@@ -21,13 +20,11 @@ FUTURE FEATURES
 [ ] Create database.
 [ ] Refine tag image handling.
 [X] Creating tx when there is not a single account listed.
-[ ] Database locking (perhaps create random `<32-letter-code>.lock` file which is stored in browser and removed
-    automatically on logout). Or does sqlite have one?
 [X] Replace old menus with home page.
 [X] Keyboard shortcuts to swap between screens.
 [X] Display current db.
 [X] Display period in navbar.
-[ ] Rename account.
+[ ] Edit account.
 [X] Support for tool-panel shortcuts similar to menu.
 [X] Rewrite menu.
 [ ] TODO cleanup.
