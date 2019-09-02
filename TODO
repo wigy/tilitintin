@@ -28,7 +28,6 @@ FUTURE FEATURES
 [ ] Display period in navbar with ability to change period.
 [ ] Rename account.
 [X] Support for tool-panel shortcuts similar to menu.
-[ ] Upgrade Node and some packages.
 [ ] TODO cleanup.
 
 1.0
@@ -36,6 +35,7 @@ FUTURE FEATURES
 [ ] Logo with icon.
 [ ] Changing the language from the front page.
 [ ] Scan all TODOs and make fix.
+[ ] Update i18-next. Some fixes see: e1cc81ef6ec7c6dd4a08d5ba04b5a4ac4593aa9d
 
 2.0
 [ ] Tags management.
