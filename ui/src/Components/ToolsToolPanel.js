@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { action } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { translate, I18n, Trans } from 'react-i18next';
+import { withRouter } from 'react-router-dom';
 import { Form, FormControl, ControlLabel } from 'react-bootstrap';
 import Store from '../Stores/Store';
 import Settings from '../Stores/Settings';
@@ -17,6 +18,7 @@ import moment from 'moment';
 @inject('store')
 @inject('settings')
 @observer
+@withRouter
 class ToolsToolPanel extends Component {
 
   state = {
@@ -25,6 +27,7 @@ class ToolsToolPanel extends Component {
     askNew: false,
     databaseName: '',
     companyName: '',
+    companyCode: '',
     changed: false,
     code: null,
     files: []
@@ -191,10 +194,14 @@ class ToolsToolPanel extends Component {
   @action.bound
   onCreateNewDb() {
     if (this.state.databaseName) {
-      this.props.store.createDatabase({ databaseName: this.state.databaseName, companyName: this.state.companyName })
+      this.props.store.createDatabase({
+        databaseName: this.state.databaseName,
+        companyName: this.state.companyName,
+        companyCode: this.state.companyCode }
+      )
         .then(() => {
           this.setState({ askNew: false });
-          // TODO: Redirect.
+          this.props.history.push(`/${this.state.databaseName}/txs/1`);
         });
     }
   }
@@ -244,7 +251,7 @@ class ToolsToolPanel extends Component {
         label = 'Database Management';
         buttons.push(
           // <IconButton key="button-new-database" onClick={() => this.setState({ askNew: true })} title="new-database" icon="fa-database"></IconButton>
-          <IconButton key="button-new-database" onClick={() => this.setState({ databaseName: 'normaali', companyName: 'Reitti Oy' }) || this.onCreateNew()} title="new-database" icon="fa-database"></IconButton>
+          <IconButton key="button-new-database" onClick={() => this.setState({ databaseName: 'normaali', companyName: 'Reitti Oy', companyCode: '12345678-9' }) || this.onCreateNewDb()} title="new-database" icon="fa-database"></IconButton>
         );
         buttons.push(
           <IconButton key="button-upload" onClick={() => this.setState({askUpload: true})} title="upload-database" icon="fa-upload"></IconButton>
@@ -302,6 +309,7 @@ class ToolsToolPanel extends Component {
 
 ToolsToolPanel.propTypes = {
   t: PropTypes.func,
+  history: PropTypes.any,
   match: PropTypes.object,
   i18n: PropTypes.instanceOf(I18n),
   settings: PropTypes.instanceOf(Settings),
