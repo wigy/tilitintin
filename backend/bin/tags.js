@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 const promiseSeq = require('promise-sequential');
-const rp = require('request-promise');
 const path = require('path');
 const fs = require('fs');
 const tags = require('libfyffe').data.tilitintin.tags;
@@ -37,23 +36,19 @@ async function main() {
         .then(async (data) => {
           const dir = path.join(__dirname, '..', 'databases', USER);
           for await (tag of data) {
-            if (!fs.existsSync(`${dir}/${tag.tag}.jpg`) && !fs.existsSync(`${dir}/${tag.tag}.png`)) {
-              console.log(`Fetching ${tag.name} from ${tag.picture}`);
-              await rp.get(tag.picture)
-                .then((bin) => {
-                  const filePath = new URL(tag.picture).pathname;
-                  if (/\.jp?g$/i.test(filePath)) {
-                    fs.writeFileSync(`${dir}/${tag.tag}.jpg`);
-                  } else if (/\.png$/i.test(filePath)) {
-                    fs.writeFileSync(`${dir}/${tag.tag}.png`);
-                  } else {
-                    fs.writeFileSync(`${dir}/${tag.tag}.unknown`);
-                    console.log(`Cannot figure out file type. Check and rename ${dir}/${tag.tag}.unknown`);
-                  }
-                })
-                .catch((err) => {
-                  console.log(`Failed to fetch ${tag.picture}`);
-                });
+            let mime, img;
+            if (fs.existsSync(`${dir}/${tag.tag}.jpg`)) {
+              mime = 'image/jpeg';
+              img = `${dir}/${tag.tag}.jpg`;
+            }
+            if (fs.existsSync(`${dir}/${tag.tag}.png`)) {
+              mime = 'image/png';
+              img = `${dir}/${tag.tag}.png`;
+            }
+            if (mime) {
+              console.log(`Saving #${tag.id} ${tag.name} from ${img} as ${mime}`);
+              const pic = fs.readFileSync(img);
+              await knex.db(cli.db)('tags').update({mime, picture: pic}).where({id: tag.id});
             }
           }
         });

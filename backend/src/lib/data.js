@@ -28,6 +28,7 @@ const fields = {
     'tag': true,
     'name': true,
     'picture': true,
+    'mime': true,
     'type': true,
     'order': true
   },

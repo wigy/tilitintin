@@ -37,18 +37,8 @@ router.get('/:id/view', (req, res) => {
       }
       data.getOne(req.db, 'tags', req.params.id)
         .then(tag => {
-          const jpg = knex.userFile(tag.tag + '.jpg');
-          if (jpg) {
-            res.sendFile(jpg);
-          } else {
-            const png = knex.userFile(tag.tag + '.png');
-            if (png) {
-              res.sendFile(png);
-            } else {
-              dump.warning('Tag', tag.tag, 'uses directly', tag.picture);
-              res.redirect(tag.picture);
-            }
-          }
+          res.header('Content-Type', tag.mime);
+          res.send(tag.picture);
         });
     });
 });
