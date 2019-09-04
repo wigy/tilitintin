@@ -563,7 +563,11 @@ class Store {
    * @param info.companyName
    */
   createDatabase(info) {
-    return this.request('/db', 'POST', info);
+    return this.request('/db', 'POST', info)
+      .then(async (res) => {
+        await this.fetchDatabases(true);
+        return res;
+      });
   }
 
   /**
