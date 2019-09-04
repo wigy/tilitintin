@@ -111,7 +111,7 @@ class App extends Component {
         <div className="MainTopPanel Panel">
           <div className="Frame">
             <Route exact path="/_/admin/:arg?" component={AdminToolPanel}/>
-            <Route path="/:db/txs/:periodId/:accountId" component={TransactionToolPanel}/>
+            <Route path="/:db/txs/:periodId/:accountId?" component={TransactionToolPanel}/>
             <Route path="/:db/account/:periodId?" component={AccountsToolPanel}/>
             <Route path="/:db/report/:periodId/:accountId?/:format?" component={ReportToolPanel}/>
             <Route exact path="/:db/tools/:periodId?/:accountId?/:tool?" component={ToolsToolPanel}/>
@@ -128,7 +128,7 @@ class App extends Component {
             <Route exact path="/:db/dashboard" component={Dashboard}/>
             <Route exact path="/:db/dashboard/:periodId" component={Dashboard}/>
             <Route exact path="/:db/dashboard/:periodId/:accountId" component={Dashboard}/>
-            <Route path="/:db/txs/:periodId/:accountId" component={AccountTransactions}/>
+            <Route path="/:db/txs/:periodId/:accountId?" component={AccountTransactions}/>
             <Route path="/:db/account/:periodId?" component={Accounts}/>
             <Route path="/:db/report/:periodId//:format" component={Report}/>
             <Route path="/:db/report/:periodId/:accountId/:format" component={Report}/>

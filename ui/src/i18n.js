@@ -78,6 +78,7 @@ i18n.init({
         'Passwords do not match.': 'Salasanat ei täsmää.',
         'Payable to add': 'Lisättävä velkaa',
         'period {{period}}': 'tilikausi {{period}}',
+        'Please select an account': 'Ole hyvä ja valitse tili',
         'Periods': 'Tilikaudet',
         'Receivable to add': 'Lisättävä saatavia',
         'Remove favorite status': 'Poista suosikeista',

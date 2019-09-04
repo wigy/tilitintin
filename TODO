@@ -17,7 +17,7 @@ FUTURE FEATURES
 
 0.9
 [X] User management.
-[ ] Create database.
+[X] Create database.
 [ ] Refine tag image handling.
 [X] Creating tx when there is not a single account listed.
 [X] Replace old menus with home page.
@@ -38,6 +38,7 @@ FUTURE FEATURES
 
 2.0
 [ ] Tags management.
+[ ] Material UI.
 
 3.0
 [ ] Import management in UI.

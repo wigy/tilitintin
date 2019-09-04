@@ -22,7 +22,7 @@ class TransactionToolPanel extends Component {
       return '';
     }
 
-    const tools = this.props.store.tools;
+    const { account, tools } = this.props.store;
 
     const toggle = (tag) => {
       this.props.cursor.leaveComponent();
@@ -35,7 +35,7 @@ class TransactionToolPanel extends Component {
       this.props.cursor.leaveComponent();
       this.props.cursor.resetSelected();
       tools.tagDisabled = {};
-      this.props.store.account.tags.forEach((tag) => (tools.tagDisabled[tag.tag] = true));
+      account.tags.forEach((tag) => (tools.tagDisabled[tag.tag] = true));
       this.props.cursor.enterComponent();
     };
 
@@ -48,18 +48,14 @@ class TransactionToolPanel extends Component {
 
     let last = null;
 
-    if (!this.props.store.account) {
-      return '';
-    }
-
     return (
       <div className="ToolPanel">
-        <h1>{this.props.store.account.toString()}</h1>
+        <h1>{account ? account.toString() : 'No account selected'}</h1>
 
         <IconButton onClick={enableAll} title="reset" icon="fas fa-clone"></IconButton>
         <IconButton onClick={disableAll} title="disable-all" icon="far fa-clone"></IconButton>
 
-        {this.props.store.account.tags.map((tag) => {
+        {account && account.tags.map((tag) => {
           const spacer = (tag.type !== last);
           const className = (tools.tagDisabled[tag.tag] ? 'IconButton off' : 'IconButton');
           last = tag.type;

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import { translate, Trans } from 'react-i18next';
+import { FormControl, ControlLabel } from 'react-bootstrap';
 import moment from 'moment';
 import Dialog from './Dialog';
 import Money from './Money';
@@ -18,6 +19,10 @@ import './TransactionTable.css';
 @observer
 class TransactionTable extends Component {
 
+  state = {
+    showAccountDropdown: false
+  };
+
   // Store for transaction waiting for deletion confirmation.
   txToDelete = null;
 
@@ -28,6 +33,10 @@ class TransactionTable extends Component {
   keyInsert(cursor) {
     const { store } = this.props;
     if (store.period.locked) {
+      return;
+    }
+    if (!store.accountId) {
+      this.setState({ showAccountDropdown: true });
       return;
     }
     if (cursor.row === null) {
@@ -62,6 +71,17 @@ class TransactionTable extends Component {
       .then(() => this.props.cursor.changeIndexBy(-1));
   }
 
+  /**
+   * Select the initial account on empty table.
+   */
+  async onSelectAccount(id) {
+    if (!id) {
+      return;
+    }
+    await this.props.store.setAccount(this.props.store.db, this.props.store.periodId, id);
+    this.keyInsert(this.props.cursor);
+  }
+
   render() {
 
     if (!this.props.store.transactions) {
@@ -81,6 +101,20 @@ class TransactionTable extends Component {
         </div>
       )}<br/>
     </Dialog>);
+
+    const accountDialog = (
+      <Dialog key="dialog2"
+        title={<Trans>Please select an account</Trans>}
+        isVisible={this.state.showAccountDropdown}
+        onClose={() => this.setState({ showAccountDropdown: false })}
+        onConfirm={() => this.onSelectAccount(this.state.account)}>
+        <ControlLabel><Trans>Account</Trans>:</ControlLabel>
+        <FormControl componentClass="select" value={this.state.account} onChange={(e) => this.setState({ account: e.target.value })}>
+          <option value=""></option>
+          {this.props.store.accounts.map(a => <option value={a.id} key={a.id}>{a.toString()}</option>)}
+        </FormControl>
+      </Dialog>
+    );
 
     let sum = 0;
     let seen = {};
@@ -126,6 +160,10 @@ class TransactionTable extends Component {
 
     if (this.txToDelete) {
       ret.push(deleteDialog(this.txToDelete));
+    }
+
+    if (this.state.showAccountDropdown) {
+      ret.push(accountDialog);
     }
 
     return ret;
