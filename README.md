@@ -59,8 +59,6 @@ bin/tags.js mydb add IT "Computers and office equipment" http://mysite.example.c
 
 bin/tags.js mydb add NE "Neil Example" http://mysite.example.com/persons/neil.jpg 'Sales Person' 201
 bin/tags.js mydb add ME "Michel Example" http://mysite.example.com/persons/michel.jpg 'Sales Person' 202
-
-bin/tags.js mydb store-local
 ```
 
 In UI you can do filtering using the categories defined.

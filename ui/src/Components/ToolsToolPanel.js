@@ -14,11 +14,11 @@ import EntryModel from '../Models/EntryModel';
 import './ToolPanel.css';
 import moment from 'moment';
 
+@withRouter
 @translate('translations')
 @inject('store')
 @inject('settings')
 @observer
-@withRouter
 class ToolsToolPanel extends Component {
 
   state = {

@@ -9,10 +9,10 @@ import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
 import './Login.css';
 
+@withRouter
 @translate('translations')
 @inject('store')
 @observer
-@withRouter
 class Login extends Component {
 
   state = {

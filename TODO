@@ -18,7 +18,7 @@ FUTURE FEATURES
 0.9
 [X] User management.
 [X] Create database.
-[ ] Refine tag image handling.
+[X] Refine tag image handling.
 [X] Creating tx when there is not a single account listed.
 [X] Replace old menus with home page.
 [X] Keyboard shortcuts to swap between screens.
