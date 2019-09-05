@@ -17,9 +17,10 @@ import './Account.css';
 class Account extends Component {
 
   state = {
-    createNewIsOpen: false,
+    editDialogIsOpen: false,
     deleteIsOpen: false,
     changed: false,
+    new: null,
     accountName: '',
     accountNumber: '',
     accountType: ''
@@ -39,15 +40,23 @@ class Account extends Component {
   }
 
   @action.bound
-  onCreateAccount() {
-    const model = new AccountModel(this.props.store.database, {
-      name: this.state.accountName,
-      number: this.state.accountNumber,
-      type: this.state.accountType
-    });
+  onSubmitAccount() {
+    let model;
+    if (this.state.new) {
+      model = new AccountModel(this.props.store.database, {
+        name: this.state.accountName,
+        number: this.state.accountNumber,
+        type: this.state.accountType
+      });
+    } else {
+      model = this.props.store.account;
+      model.name = this.state.accountName;
+      model.number = this.state.accountNumber;
+      model.type = this.state.accountType;
+    }
     model.save()
       .then(() => {
-        this.setState({createNewIsOpen: false, accountName: '', accountNumber: '', accountType: ''});
+        this.setState({editDialogIsOpen: false, accountName: '', accountNumber: '', accountType: ''});
         this.props.store.fetchAccounts(this.props.store.database.name);
       });
   }
@@ -68,36 +77,30 @@ class Account extends Component {
       onClose={() => this.setState({deleteIsOpen: false})}
       onConfirm={() => this.onDeleteAccount()}>
       <i>{account.number} {account.name}</i><br/>
-
     </Dialog>;
   }
 
-  renderCreateNewDialog() {
+  renderEditDialog() {
     const t = this.props.t;
-    const account = this.props.store.account;
     const database = this.props.store.database;
-    const nextNumber = (number) => {
-      if (!account.database.hasAccount(number)) {
-        return number;
-      }
-      return nextNumber((parseInt(number) + 1).toString());
-    };
-    const number = account ? nextNumber(account.number) : null;
-    const isValid = () => this.state.accountNumber && this.state.accountName && this.state.accountType && database && !database.hasAccount(this.state.accountNumber);
+    const isValid = () => this.state.accountNumber &&
+      this.state.accountName &&
+      this.state.accountType &&
+      (!this.state.new || (database && !database.hasAccount(this.state.accountNumber)));
 
     return <Dialog
       isValid={() => isValid()}
       className="dialog"
       title={<Trans>Create New Account</Trans>}
-      isVisible={this.state.createNewIsOpen}
-      onClose={() => this.setState({createNewIsOpen: false})}
-      onConfirm={() => this.onCreateAccount()}>
+      isVisible={this.state.editDialogIsOpen}
+      onClose={() => this.setState({editDialogIsOpen: false})}
+      onConfirm={() => this.onSubmitAccount()}>
       <Form>
         <ControlLabel><Trans>Account Number</Trans>:</ControlLabel>
-        <div className="error">{this.state.changed && (
+        <div className="error">{this.state.changed && this.state.new && (
           this.state.accountNumber ? (database.hasAccount(this.state.accountNumber) ? t('Account number exists.') : '') : t('Account number is required.')
         )}</div>
-        <FormControl type="text" className="number" value={this.state.accountNumber} onChange={(e) => this.setState({changed: true, accountNumber: e.target.value})} placeholder={number}/>
+        <FormControl type="text" className="number" value={this.state.accountNumber} onChange={(e) => this.setState({changed: true, accountNumber: e.target.value})}/>
 
         <ControlLabel><Trans>Account Name</Trans>:</ControlLabel>
         <div className="error">{this.state.changed && (
@@ -118,12 +121,39 @@ class Account extends Component {
     </Dialog>;
   }
 
+  onClickCreateNew() {
+    const account = this.props.store.account;
+    const nextNumber = (number) => {
+      if (!account.database.hasAccount(number)) {
+        return number;
+      }
+      return nextNumber((parseInt(number) + 1).toString());
+    };
+    const number = account ? nextNumber(account.number) : '';
+    this.setState({
+      editDialogIsOpen: true,
+      new: true,
+      accountName: '',
+      accountNumber: number,
+      accountType: ''});
+  }
+
+  onClickEdit() {
+    const account = this.props.store.account;
+    this.setState({
+      editDialogIsOpen: true,
+      new: false,
+      accountName: account.name,
+      accountNumber: account.number,
+      accountType: account.type});
+  }
+
   render() {
     if (!this.props.store.token) {
       return '';
     }
     const account = this.props.store.account;
-    const canDelete = () => {
+    const canChange = () => {
       if (!account || !account.periods) {
         return false;
       }
@@ -141,12 +171,15 @@ class Account extends Component {
               <Trans>Account Number</Trans>: {account.number}<br/>
               <Trans>Account Type</Trans>: <Trans>{account.type}</Trans><br/>
             </div>
-            <Button className="delete" disabled={!canDelete()} onClick={() => this.setState({deleteIsOpen: true})}><Trans>Delete Account</Trans></Button><br/>
+            <div className="buttons">
+              <Button className="delete" disabled={!canChange()} onClick={() => this.setState({deleteIsOpen: true})}><Trans>Delete Account</Trans></Button><br/>
+              <Button className="edit" disabled={!canChange()} onClick={() => this.onClickEdit()}><Trans>Edit Account</Trans></Button><br/>
+            </div>
             {this.renderDeleteDialog()}
           </SubPanel>
         }
-        <Button className="create-new" onClick={() => this.setState({createNewIsOpen: true})}><Trans>Create New Account</Trans></Button>
-        {this.renderCreateNewDialog()}
+        <Button className="create-new" onClick={() => this.onClickCreateNew()}><Trans>Create New Account</Trans></Button>
+        {this.renderEditDialog()}
         <div className="periods">
           {
             account && account.periods && account.periods.length > 0 &&

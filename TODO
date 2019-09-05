@@ -33,8 +33,8 @@ FUTURE FEATURES
 [ ] Rewrite away current TransactionModel and use directly list of EntryModels.
 [ ] Logo with icon.
 [ ] Changing the language from the front page.
-[ ] Scan all TODOs and make fix.
 [ ] Update i18-next. Some fixes see: e1cc81ef6ec7c6dd4a08d5ba04b5a4ac4593aa9d
+[ ] Scan all TODOs and make fix.
 
 2.0
 [ ] Tags management.

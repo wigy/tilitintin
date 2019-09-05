@@ -11,6 +11,14 @@
 .Account button.create-new {
   margin-top: 1ex;
 }
+.Account button.delete {
+  float: right;
+}
+.Account button.edit {
+  float: right;
+  margin-right: 1em;
+  transform: translateY(-20px);
+}
 
 .Account .dialog input.number {
   width: 6em;
