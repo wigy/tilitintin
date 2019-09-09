@@ -11,13 +11,10 @@ const { checkToken } = require('../lib/middleware');
 
 router.post('/', checkToken, bodyParser.json(), async (req, res) => {
   const { databaseName, companyName, companyCode } = req.body;
-  /*
-  TODO: Enable.
   if (knex.dbs(req.user).includes(databaseName)) {
     console.error(`Database ${databaseName} exists.`);
     return res.sendStatus(400);
   }
-  */
   const src = path.join(__dirname, '..', 'data', 'empty.sqlite');
   const dst = knex.userPath(`${databaseName}.sqlite`);
   fs.copyFileSync(src, dst);

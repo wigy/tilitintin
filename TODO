@@ -24,7 +24,7 @@ FUTURE FEATURES
 [X] Keyboard shortcuts to swap between screens.
 [X] Display current db.
 [X] Display period in navbar.
-[ ] Edit account.
+[X] Edit account.
 [X] Support for tool-panel shortcuts similar to menu.
 [X] Rewrite menu.
 [ ] TODO cleanup.

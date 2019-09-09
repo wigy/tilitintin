@@ -251,7 +251,6 @@ class ToolsToolPanel extends Component {
         label = 'Database Management';
         buttons.push(
           <IconButton key="button-new-database" onClick={() => this.setState({ askNew: true })} title="new-database" icon="fa-database"></IconButton>
-          // TODO: Drop. Just testing. <IconButton key="button-new-database" onClick={() => this.setState({ databaseName: 'normaali', companyName: 'Reitti Oy', companyCode: '12345678-9' }) || this.onCreateNewDb()} title="new-database" icon="fa-database"></IconButton>
         );
         buttons.push(
           <IconButton key="button-upload" onClick={() => this.setState({askUpload: true})} title="upload-database" icon="fa-upload"></IconButton>
