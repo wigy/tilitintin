@@ -54,8 +54,8 @@ class TransactionTable extends Component {
           if (cursor.componentX === 0) {
             cursor.keyArrowRight();
           }
-          // TODO: Look for correct index.
-          cursor.setIndex(store.filteredTransactions.length - 1);
+          const index = store.filteredTransactions.findIndex(tx => document.id === tx.document.id);
+          cursor.setIndex(index >= 0 ? index : store.filteredTransactions.length - 1);
         });
 
       return {preventDefault: true};
