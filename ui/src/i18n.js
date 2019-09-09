@@ -61,6 +61,7 @@ i18n.init({
         'Home': 'Alkuun',
         'Initial balance': 'Alkusaldo',
         'Invalid credentials.': 'Kirjautuminen epäonnistui.',
+        'Invalid database name.': 'Tietokannan nimi ei kelpaa.',
         'Locked': 'Lukittu',
         'Login': 'Kirjaudu',
         'Logout': 'Poistu',

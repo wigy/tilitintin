@@ -193,7 +193,7 @@ class ToolsToolPanel extends Component {
    */
   @action.bound
   onCreateNewDb() {
-    if (this.state.databaseName) {
+    if (this.validDbName(this.state.databaseName)) {
       this.props.store.createDatabase({
         databaseName: this.state.databaseName,
         companyName: this.state.companyName,
@@ -204,6 +204,10 @@ class ToolsToolPanel extends Component {
           this.props.history.push(`/${this.state.databaseName}/txs/1`);
         });
     }
+  }
+
+  validDbName(name) {
+    return /^[0-9a-z-_]+$/.test(name);
   }
 
   render() {
@@ -284,12 +288,14 @@ class ToolsToolPanel extends Component {
         <Dialog
           title={<Trans>Create New Database</Trans>}
           isVisible={this.state.askNew}
+          isValid={() => this.validDbName(this.state.databaseName) && this.state.companyName}
           onClose={() => { this.setState({askNew: false}); }}
           onConfirm={() => this.onCreateNewDb()}>
           <Form>
             <ControlLabel><Trans>Database Name</Trans>:</ControlLabel>
             <div className="error">{this.state.changed && (
-              this.state.databaseName ? '' : t('Database name is required.') // TODO: Validate name here and in back-end.
+              !this.state.databaseName ? t('Database name is required.')
+                : (!this.validDbName(this.state.databaseName) ? t('Invalid database name.') : '')
             )}</div>
             <FormControl type="text" className="name" value={this.state.databaseName} onChange={(e) => this.setState({changed: true, databaseName: e.target.value})}></FormControl>
             <ControlLabel><Trans>Company Name</Trans>:</ControlLabel>

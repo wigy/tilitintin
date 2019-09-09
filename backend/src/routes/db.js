@@ -11,6 +11,12 @@ const { checkToken } = require('../lib/middleware');
 
 router.post('/', checkToken, bodyParser.json(), async (req, res) => {
   const { databaseName, companyName, companyCode } = req.body;
+
+  if (!/^[0-9a-z-_]+$/.test(databaseName)) {
+    console.error(`Invalid database name ${databaseName}.`);
+    return res.sendStatus(400);
+  }
+
   if (knex.dbs(req.user).includes(databaseName)) {
     console.error(`Database ${databaseName} exists.`);
     return res.sendStatus(400);
