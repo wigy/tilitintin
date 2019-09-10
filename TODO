@@ -5,11 +5,10 @@ BUGS
 [ ] Clicking another account right after entering entry, is not updated.
 [ ] After editing, all other documents are closed.
 [X] If period selected and you change db, all menus are still usable.
-[ ] Keyboard switching of DB and returning to txs page does not update screen.
-[ ] After login mouse pointer does not change back to normal without pressing a key.
+[X] Keyboard switching of DB and returning to txs page does not update screen.
+[X] After login mouse pointer does not change back to normal without pressing a key.
 [X] Tools can be activated from keys when not enabled.
 [X] Do not accept menu shortcuts when not allowed.
-[ ] Switching between period and document tools: icon is not updated.
 [ ] Periods are wrong when created with Tilitin.
 
 FUTURE FEATURES
@@ -39,6 +38,7 @@ FUTURE FEATURES
 2.0
 [ ] Tags management.
 [ ] Material UI.
+[ ] Switching between period and document tools: icon is not updated (fa-icon problem).
 
 3.0
 [ ] Import management in UI.

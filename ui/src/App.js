@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import { Route, withRouter } from 'react-router-dom';
-import { inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import keydown from 'react-keydown';
 import Account from './Components/Account';
 import Accounts from './Components/Accounts';
@@ -32,6 +32,7 @@ import './App.css';
 @keydown
 @inject('store')
 @inject('cursor')
+@observer
 class App extends Component {
 
   /* eslint camelcase: off */
@@ -96,6 +97,7 @@ class App extends Component {
         </div>
         <div className="SidePanel Panel">
           <div className="Frame">
+            Busy {(this.props.store.loading ? ' busy' : 'not')}
             <Route exact path="/" component={DatabaseList}/>
             <Route exact path="/_/admin/:arg?" component={UserList}/>
             <Route exact path="/:db" component={DatabaseList}/>
