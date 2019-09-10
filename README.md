@@ -65,6 +65,13 @@ In UI you can do filtering using the categories defined.
 
 ## Version History
 
+### 0.9
+  * User management.
+  * Creating and uploading database.
+  * Refine tag image handling.
+  * New navigation system with keyboard shortcuts.
+  * Edit account.
+
 ### 0.8
   * Account listing and filtering.
   * Toggling account favorite status.

@@ -2,33 +2,12 @@
 BUGS
 ====
 
-[X] If period selected and you change db, all menus are still usable.
-[X] Keyboard switching of DB and returning to txs page does not update screen.
-[X] After login mouse pointer does not change back to normal without pressing a key.
-[X] Tools can be activated from keys when not enabled.
-[X] Do not accept menu shortcuts when not allowed.
-[X] Periods are wrong when created with Tilitin.
 
 FUTURE FEATURES
 ===============
 
-0.9
-[X] User management.
-[X] Create database.
-[X] Refine tag image handling.
-[X] Creating tx when there is not a single account listed.
-[X] Replace old menus with home page.
-[X] Keyboard shortcuts to swap between screens.
-[X] Display current db.
-[X] Display period in navbar.
-[X] Edit account.
-[X] Support for tool-panel shortcuts similar to menu.
-[X] Rewrite menu.
-[X] Update i18-next.
-[ ] Change documents so that they have correct date.
-[ ] TODO cleanup.
-
 1.0
+[ ] Change documents so that they have correct date.
 [ ] Rewrite away current TransactionModel and use directly list of EntryModels.
 [ ] Logo with icon.
 [ ] Changing the language from the front page.
