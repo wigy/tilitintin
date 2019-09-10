@@ -1,4 +1,4 @@
 module.exports = {
-  VERSION: '0.9',
+  VERSION: '1.0β',
   API_URL: process.env.API_URL || 'http://localhost:3101'
 };
