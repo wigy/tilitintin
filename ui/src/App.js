@@ -97,7 +97,6 @@ class App extends Component {
         </div>
         <div className="SidePanel Panel">
           <div className="Frame">
-            Busy {(this.props.store.loading ? ' busy' : 'not')}
             <Route exact path="/" component={DatabaseList}/>
             <Route exact path="/_/admin/:arg?" component={UserList}/>
             <Route exact path="/:db" component={DatabaseList}/>

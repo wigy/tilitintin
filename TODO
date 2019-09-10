@@ -7,7 +7,7 @@ BUGS
 [X] After login mouse pointer does not change back to normal without pressing a key.
 [X] Tools can be activated from keys when not enabled.
 [X] Do not accept menu shortcuts when not allowed.
-[ ] Periods are wrong when created with Tilitin.
+[X] Periods are wrong when created with Tilitin.
 
 FUTURE FEATURES
 ===============
@@ -25,6 +25,7 @@ FUTURE FEATURES
 [X] Support for tool-panel shortcuts similar to menu.
 [X] Rewrite menu.
 [X] Update i18-next.
+[ ] Change documents so that they have correct date.
 [ ] TODO cleanup.
 
 1.0
