@@ -49,7 +49,7 @@ function code2item(code) {
  * This function fixes time stamp error for old Tilitin database, which has period 22:00PM Finnish time as period start/end.
  */
 function time2str(timestamp) {
-  return moment(timestamp).add(2, 'hours').format('YYYY-MM-DD');
+  return moment(timestamp).utc().add(2, 'hours').format('YYYY-MM-DD');
 }
 
 /**
