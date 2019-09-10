@@ -2,8 +2,6 @@
 BUGS
 ====
 
-[ ] Clicking another account right after entering entry, is not updated.
-[ ] After editing, all other documents are closed.
 [X] If period selected and you change db, all menus are still usable.
 [X] Keyboard switching of DB and returning to txs page does not update screen.
 [X] After login mouse pointer does not change back to normal without pressing a key.

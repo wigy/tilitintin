@@ -33,7 +33,7 @@ class Menu extends Component {
       title: 'Reports',
       shortcut: 'R',
       disabled: ({ db, periodId, notLoggedIn }) => !db || !periodId || notLoggedIn,
-      action: () => this.handleSelect('account')
+      action: () => this.handleSelect('report')
     },
     {
       title: 'Accounts',
