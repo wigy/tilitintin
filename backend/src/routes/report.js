@@ -1,5 +1,4 @@
 const express = require('express');
-const moment = require('moment');
 const dump = require('neat-dump');
 const router = express.Router();
 const reports = require('../lib/reports');
@@ -29,8 +28,7 @@ router.get('/', (req, res) => {
 router.get('/:format', (req, res) => {
   const {format} = req.params;
   let links = {};
-
-  const dateRange = period => moment(period.start_date).format('YYYY-MM-DD') + ' ' + moment(period.end_date).format('YYYY-MM-DD');
+  const dateRange = period => period.start_date + ' ' + period.end_date;
   data.listAll(req.db, 'period', null, ['start_date', 'desc'])
     .then(periods => {
       periods.forEach((period) => (links[dateRange(period)] = config.BASEURL + '/db/' + req.db + '/report/' + format + '/' + period.id));
