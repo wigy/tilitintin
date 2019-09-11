@@ -89,6 +89,26 @@ const reverseTransformer = {
 };
 
 /**
+ * Convert API date to database format in Tilitin compatible way.
+ * @param {String} date
+ * @return {Number}
+ */
+function dateToDb(date) {
+  const num = moment.utc(date).add(-2, 'hours').unix() * 1000;
+  return num;
+}
+
+/**
+ * Convert database date to API format in Tilitin compatible way.
+ * @param {Number} date
+ * @return {String}
+ */
+function dateFromDb(date) {
+  const str = moment.utc(date).add(2, 'hours').format('YYYY-MM-DD');
+  return str;
+}
+
+/**
  * Fill in some additional information for the entries already fetched from the database.
  * @param {String} db
  * @param {Array} entries
@@ -97,7 +117,7 @@ const reverseTransformer = {
  */
 function fillEntries (db, entries, className, joinClass) {
   return entries.map(e => {
-    dateFields[className].forEach(d => (e[d] = moment(e[d]).format('YYYY-MM-DD')));
+    dateFields[className].forEach(d => (e[d] = dateFromDb(e[d])));
     e.class = className;
     e.db = db;
     if (e.id) {
@@ -190,7 +210,7 @@ async function updateOne(db, className, id, data) {
   }
   dateFields[className].forEach(d => {
     if (d in data) {
-      data[d] = new Date(data[d]).getTime();
+      data[d] = dateToDb(data[d]);
     }
   });
   if (reverseTransformer[className]) {
@@ -240,7 +260,7 @@ async function deleteMany(db, className, where) {
 async function createOne(db, className, data) {
   dateFields[className].forEach(d => {
     if (d in data) {
-      data[d] = new Date(data[d]).getTime();
+      data[d] = dateToDb(data[d]);
     }
   });
   if (reverseTransformer[className]) {
@@ -250,7 +270,7 @@ async function createOne(db, className, data) {
     .then((data) => {
       return knex.db(db)(className).where({id: data[0]}).first()
         .then((res) => {
-          dateFields[className].forEach(d => (res[d] = moment(res[d]).format('YYYY-MM-DD')));
+          dateFields[className].forEach(d => (res[d] = dateFromDb(res[d])));
           return res;
         });
     })
@@ -574,25 +594,27 @@ async function getAccountTransactionCountByPeriod(db, id) {
 }
 
 module.exports = {
-  fillEntries,
-  listAll,
-  getOne,
-  deleteOne,
-  deleteMany,
   createOne,
-  updateOne,
-  getPeriodAccounts,
-  getPeriodBalances,
+  dateFromDb,
+  dateToDb,
+  deleteMany,
+  deleteOne,
+  fillEntries,
   getAccountId,
+  getAccountNamesByNumber,
   getAccountsById,
   getAccountsByNumber,
-  getAccountNamesByNumber,
-  getAccountTransactions,
-  getAccountTransactionsWithEntries,
-  getAccountTransactionsByNumber,
   getAccountTransactionCountByPeriod,
+  getAccountTransactions,
+  getAccountTransactionsByNumber,
+  getAccountTransactionsWithEntries,
+  getNextDocument,
+  getOne,
+  getPeriodAccounts,
+  getPeriodBalances,
   getPeriodTransactionsWithEntries,
   getSettings,
-  getNextDocument,
-  isLocked
+  isLocked,
+  listAll,
+  updateOne
 };

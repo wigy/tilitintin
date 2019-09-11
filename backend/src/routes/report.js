@@ -30,6 +30,7 @@ router.get('/:format', (req, res) => {
   const {format} = req.params;
   let links = {};
 
+  // TODO: Dates correct?
   const dateRange = period => moment(period.start_date).format('YYYY-MM-DD') + ' ' + moment(period.end_date).format('YYYY-MM-DD');
   data.listAll(req.db, 'period', null, ['start_date', 'desc'])
     .then(periods => {

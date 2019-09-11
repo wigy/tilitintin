@@ -7,6 +7,7 @@ const multer = require('multer');
 const bodyParser = require('body-parser');
 const config = require('../config');
 const knex = require('../lib/knex');
+const data = require('../lib/data');
 const { checkToken } = require('../lib/middleware');
 
 router.post('/', checkToken, bodyParser.json(), async (req, res) => {
@@ -32,11 +33,11 @@ router.post('/', checkToken, bodyParser.json(), async (req, res) => {
 
   const year = moment().format('Y');
   // Note: Using Tilitin compatible time-zone offsets.
-  const start = moment(`${year}-01-01T00:00:00+02:00`).unix();
-  const end = moment(`${year}-12-31T00:00:00+02:00`).unix();
-  const lastYear = moment(`${year - 1}-12-31T00:00:00+02:00`).unix();
-  await db('period').insert({ id: 1, start_date: start * 1000, end_date: end * 1000, locked: false });
-  await db('document').insert({ id: 1, number: 0, period_id: 1, date: lastYear * 1000 });
+  const start = data.dateToDb(`${year}-01-01`);
+  const end = data.dateToDb(`${year}-12-31`);
+  const lastYear = data.dateToDb(`${year - 1}-12-31`);
+  await db('period').insert({ id: 1, start_date: start, end_date: end, locked: false });
+  await db('document').insert({ id: 1, number: 0, period_id: 1, date: lastYear });
 
   res.sendStatus(204);
 });
