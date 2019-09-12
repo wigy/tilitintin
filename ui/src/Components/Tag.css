@@ -8,9 +8,6 @@
   cursor: default;
   background-color: white;
 }
-.App.busy .Tag {
-  cursor: inherit;
-}
 
 .Tag.x2 {
   height: 4.3ex;
