@@ -65,6 +65,11 @@ In UI you can do filtering using the categories defined.
 
 ## Version History
 
+### 0.9.1
+  * Refine date handling to be Tilitin compatible.
+  * Changing language.
+  * Loading indicator.
+
 ### 0.9
   * User management.
   * Creating and uploading database.

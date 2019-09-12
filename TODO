@@ -6,12 +6,6 @@ BUGS
 FUTURE FEATURES
 ===============
 
-0.9.1
-[X] Change documents so that they have correct date.
-[X] Compare and verify old reports.
-[X] Changing the language from menu.
-[X] App.js: Use `shouldComponentUpdate` in an `observer` based component breaks the behavior of `observer` and might lead to unexpected results. Manually implementing `sCU` should not be needed when using mobx-react.
-
 1.0
 [ ] Rewrite away current TransactionModel and use directly list of EntryModels.
 [ ] Logo with icon.
