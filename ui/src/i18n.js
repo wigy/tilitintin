@@ -4,7 +4,57 @@ i18n.init({
   resources: {
     en: {
       translations: {
+        'report-balance-sheet-detailed': 'Detailed balance sheet',
+        'report-balance-sheet': 'Balance sheet',
+        'report-general-journal': 'General journal',
+        'report-general-ledger': 'General ledger',
+        'report-income-statement-detailed': 'Detailed income statement',
+        'report-income-statement': 'Income statement',
 
+        'icon-all-account-types': 'Choose all types',
+        'icon-asset': 'Assets',
+        'icon-create-period': 'Create new period',
+        'icon-create-user': 'Create new user',
+        'icon-disable-all': 'Hide all',
+        'icon-download-csv': 'Download as CSV',
+        'icon-equity': 'Equity',
+        'icon-expense': 'Expense',
+        'icon-favorite': 'Favourite',
+        'icon-fix-vat-descriptions': 'Fix missing descriptions',
+        'icon-liability': 'Liabilities',
+        'icon-lock-period': 'Lock period',
+        'icon-none-account-types': 'Remove all type selections',
+        'icon-option-byTags': 'By tags',
+        'icon-option-compact': 'Compact presentation',
+        'icon-option-full': 'Whole year',
+        'icon-option-quarter1': 'First quarter',
+        'icon-option-quarter2': 'First half year',
+        'icon-option-quarter3': 'First three quarters',
+        'icon-print': 'Print',
+        'icon-profit': 'Profit',
+        'icon-reset': 'Show all',
+        'icon-revenue': 'Revenue',
+        'icon-sort-documents': 'Re-order document numbers by date',
+        'icon-summarize-vat-period': 'Collect VAT payable/receivable',
+        'icon-unlock-period': 'Remove period locking',
+        'icon-upload-database': 'Upload Tilitin file',
+        'icon-new-database': 'Create new database',
+
+        'column-account-number': 'Num',
+        'column-balance': 'Balance',
+        'column-credit': 'Credit',
+        'column-date-and-accounts': 'Date and accounts',
+        'column-debit': 'Debit',
+        'column-document-number': 'Num',
+        'column-name-or-date': 'Account / Date',
+
+        'ASSET': 'Assets',
+        'LIABILITY': 'Liabilities',
+        'EQUITY': 'Equity',
+        'REVENUE': 'Revenue',
+        'EXPENSE': 'Expenses',
+        'PROFIT_PREV': 'Profit from previous periods',
+        'PROFIT': 'Profit'
       }
     },
     fi: {
@@ -184,6 +234,6 @@ i18n.init({
   }
 });
 
-i18n.changeLanguage('fi');
+i18n.changeLanguage(localStorage.getItem('language') || 'fi');
 
 export default i18n;
