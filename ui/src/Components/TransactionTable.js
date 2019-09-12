@@ -7,6 +7,7 @@ import moment from 'moment';
 import Dialog from './Dialog';
 import Money from './Money';
 import Transaction from './Transaction';
+import Loading from './Loading';
 import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
 import EntryModel from '../Models/EntryModel';
@@ -151,6 +152,7 @@ class TransactionTable extends Component {
       </table>
     ];
 
+    ret.push(<Loading />);
     /*
     Cursor debug helper.
     ret.push(<div key="my">Index {JSON.stringify(this.props.cursor.index)}</div>);

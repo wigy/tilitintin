@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import Store from '../Stores/Store';
 import ReportDisplay from './ReportDisplay';
+import Loading from './Loading';
 
 @inject('store')
 @observer
@@ -25,7 +26,7 @@ class Report extends Component {
     }
 
     if (!this.props.store.report) {
-      return '';
+      return <Loading always/>;
     }
 
     return (
