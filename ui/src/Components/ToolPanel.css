@@ -4,6 +4,3 @@
   border: none;
   cursor: pointer;
 }
-.App.busy .ToolPanel .IconButton .Tag {
-  cursor: inherit;
-}

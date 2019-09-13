@@ -6,14 +6,9 @@ BUGS
 FUTURE FEATURES
 ===============
 
-0.9.1
-[X] Change documents so that they have correct date.
-[ ] Compare and verify old reports.
-
 1.0
 [ ] Rewrite away current TransactionModel and use directly list of EntryModels.
 [ ] Logo with icon.
-[ ] Changing the language from the front page.
 [ ] Scan all TODOs and make fix.
 
 2.0

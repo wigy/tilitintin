@@ -7,6 +7,7 @@ import Store from '../Stores/Store';
 import Localize from './Localize';
 import Cursor from '../Stores/Cursor';
 import Configuration from '../Configuration';
+import LanguageSelector from './LanguageSelector';
 import './Menu.css';
 
 @withTranslation('translations')
@@ -156,6 +157,7 @@ class Menu extends Component {
         <span className="spacer"></span>
         <span className="spacer"></span>
         {this.menu.map(entry => this.renderMenu(entry))}
+        <LanguageSelector />
       </div>
     );
   }

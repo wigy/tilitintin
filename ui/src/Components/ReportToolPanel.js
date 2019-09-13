@@ -5,6 +5,7 @@ import { withTranslation } from 'react-i18next';
 import Store from '../Stores/Store';
 import IconButton from './IconButton';
 import IconSpacer from './IconSpacer';
+import Loading from './Loading';
 import Configuration from '../Configuration';
 import i18n from '../i18n';
 import './ToolPanel.css';
@@ -27,8 +28,11 @@ class ReportToolPanel extends Component {
     const store = this.props.store;
     const lang = i18n.language;
 
-    if (!store.token || !store.report) {
+    if (!store.token) {
       return '';
+    }
+    if (!store.report) {
+      return <Loading always/>;
     }
 
     const onPrint = () => {
