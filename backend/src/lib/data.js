@@ -93,6 +93,7 @@ const reverseTransformer = {
  * @param {String} date
  * @return {Number}
  */
+// TODO: Duplicate. Use from libfyffe.
 function dateToDb(date) {
   const num = moment.utc(date).add(-2, 'hours').unix() * 1000;
   return num;
@@ -103,6 +104,7 @@ function dateToDb(date) {
  * @param {Number} date
  * @return {String}
  */
+// TODO: Duplicate. Use from libfyffe.
 function dateFromDb(date) {
   const str = moment.utc(date).add(2, 'hours').format('YYYY-MM-DD');
   return str;
