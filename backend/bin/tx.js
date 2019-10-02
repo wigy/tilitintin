@@ -15,11 +15,12 @@ config.loadIni();
 const db = knex.db(cli.db);
 
 async function main() {
-  const text = cli.text.trim().replace(/\\n/g, '\n'); // Handle also literal \n as new line.
+  // Handle also literal \n as new line. Handle different minus sign.
+  const text = cli.text.trim().replace(/\\n/g, '\n').replace(/−/g, '-');
   const entries = [];
   let date;
   for (const line of text.split('\n')) {
-    const [, date_, account, amount, description] = /^\s*(?:(\d\d\d\d-\d\d-\d\d|\d\d?\.\d\d?\.\d\d\d\d)\s+)?(\d+)\s+(-?[0-9.]+)\s+(.*?)\s*$/.exec(line);
+    const [, date_, account, amount, description] = /^\s*(?:(\d\d\d\d-\d\d-\d\d|\d\d?\.\d\d?\.\d\d\d\d)\s+)?(\d+)\s+(-?[0-9.,]+)\s+(.*?)\s*$/.exec(line);
     if (/^\d\d?\.\d\d?\.\d\d\d\d$/.test(date_)) {
       const [, d, m, y] = /^(\d\d?)\.(\d\d?)\.(\d\d\d\d)$/.exec(date_);
       date = sprintf('%04d-%02d-%02d', parseInt(y), parseInt(m), parseInt(d));
