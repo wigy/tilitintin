@@ -26,7 +26,7 @@ async function main() {
     }
     entries.push({
       number: account,
-      amount: parseFloat(amount),
+      amount: parseFloat(amount.replace(',', '.')),
       description
     });
     date = date || date_;
