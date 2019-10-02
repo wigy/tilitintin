@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+const sprintf = require('sprintf');
 const knex = require('../src/lib/knex');
 const { config, util: {cli} } = require('libfyffe');
 const USER = process.env.FYFFE_USER || 'user';
@@ -18,7 +19,11 @@ async function main() {
   const entries = [];
   let date;
   for (const line of text.split('\n')) {
-    const [, date_, account, amount, description] = /^\s*(?:(\d\d\d\d-\d\d-\d\d)\s+)?(\d+)\s+(-?[0-9.]+)\s+(.*?)\s*$/.exec(line);
+    const [, date_, account, amount, description] = /^\s*(?:(\d\d\d\d-\d\d-\d\d|\d\d?\.\d\d?\.\d\d\d\d)\s+)?(\d+)\s+(-?[0-9.]+)\s+(.*?)\s*$/.exec(line);
+    if (/^\d\d?\.\d\d?\.\d\d\d\d$/.test(date_)) {
+      const [, d, m, y] = /^(\d\d?)\.(\d\d?)\.(\d\d\d\d)$/.exec(date_);
+      date = sprintf('%04d-%02d-%02d', parseInt(y), parseInt(m), parseInt(d));
+    }
     entries.push({
       number: account,
       amount: parseFloat(amount),
