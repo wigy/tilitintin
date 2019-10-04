@@ -1,10 +1,10 @@
 /**
  * A collection of data fetching functions.
  */
-const moment = require('moment');
 const dump = require('neat-dump');
 const config = require('../config');
 const knex = require('./knex');
+const { dateFromDb, dateToDb } = require('libfyffe').data.tilitintin.utils;
 
 const dateFields = {
   tags: [],
@@ -87,28 +87,6 @@ const reverseTransformer = {
     return acc;
   }
 };
-
-/**
- * Convert API date to database format in Tilitin compatible way.
- * @param {String} date
- * @return {Number}
- */
-// TODO: Duplicate. Use from libfyffe.
-function dateToDb(date) {
-  const num = moment.utc(date).add(-2, 'hours').unix() * 1000;
-  return num;
-}
-
-/**
- * Convert database date to API format in Tilitin compatible way.
- * @param {Number} date
- * @return {String}
- */
-// TODO: Duplicate. Use from libfyffe.
-function dateFromDb(date) {
-  const str = moment.utc(date).add(2, 'hours').format('YYYY-MM-DD');
-  return str;
-}
 
 /**
  * Fill in some additional information for the entries already fetched from the database.
@@ -597,8 +575,6 @@ async function getAccountTransactionCountByPeriod(db, id) {
 
 module.exports = {
   createOne,
-  dateFromDb,
-  dateToDb,
   deleteMany,
   deleteOne,
   fillEntries,
