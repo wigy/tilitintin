@@ -152,7 +152,7 @@ class TransactionTable extends Component {
       </table>
     ];
 
-    ret.push(<Loading />);
+    ret.push(<Loading key="loading-indicator"/>);
     /*
     Cursor debug helper.
     ret.push(<div key="my">Index {JSON.stringify(this.props.cursor.index)}</div>);

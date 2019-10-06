@@ -5,22 +5,26 @@ const USER = process.env.FYFFE_USER || 'user';
 
 knex.setUser(USER);
 
+cli.opt('add-currencies', null, 'Add converted foreign currency amounts, where applicable.');
 cli.opt('avg', null, 'Set explicit averages `SERVICE1:ETH=123,SERVICE2:ETH=122`.');
-cli.opt('debug', null, 'To turn dry-run on and display entries.');
 cli.opt('debug-stock', null, 'Display stock and average changes in detail.');
+cli.opt('debug', null, 'To turn dry-run on and display entries.');
 cli.opt('dry-run', null, 'To turn dry-run on.');
 cli.opt('force', null, 'Import even if the entries are found already.');
-cli.opt('no-profit', null, 'Turn off profit and losses calculations (to be calculated later).');
-cli.opt('trade-profit', null, 'Turn on profit and losses calculations on every trade (needs Harvest).');
-cli.opt('service', null, 'Set explicit name for the service instead of the automatic recognition.');
-cli.opt('show-stock', null, 'Display stock before and after.');
-cli.opt('show-balances', null, 'Display account balances before and after.');
-cli.opt('start-date', null, 'Ignore all transactions before this date.');
-cli.opt('skip-errors', null, 'If import fails, just print and skip the failed transaction.');
-cli.opt('stop-on-error', null, 'If import fails, stop there but continue with successful entries.');
 cli.opt('import-errors', null, 'If import fails, create move transaction to imbalance account.');
+cli.opt('no-deposit', null, 'Ignore deposit transactions.');
+cli.opt('no-profit', null, 'Turn off profit and losses calculations (to be calculated later).');
+cli.opt('no-withdrawal', null, 'Ignore withdrawal transactions.');
+cli.opt('service', null, 'Set explicit name for the service instead of the automatic recognition.');
+cli.opt('show-balances', null, 'Display account balances before and after.');
+cli.opt('show-stock', null, 'Display stock before and after.');
+cli.opt('skip-errors', null, 'If import fails, just print and skip the failed transaction.');
+cli.opt('start-date', null, 'Ignore all transactions before this date.');
 cli.opt('stock', null, 'Set explicit stocks `SERVICE1:ETH=0.12,SERVICE2:ETH=1.22`.');
+cli.opt('stop-on-error', null, 'If import fails, stop there but continue with successful entries.');
+cli.opt('trade-profit', null, 'Turn on profit and losses calculations on every trade (needs Harvest).');
 cli.opt('zero-moves', null, 'Do not add to the stock commodities moved in.');
+
 cli.arg_('db', knex.dbs(USER));
 cli.args('csv-files', 'transaction log as CSV file(s)');
 
@@ -28,6 +32,7 @@ config.loadIni();
 
 config.set({
   flags: {
+    addCurrencies: cli.options['add-currencies'],
     debug: cli.options.debug,
     debugStock: cli.options['debug-stock'],
     dryRun: cli.options['dry-run'] || cli.options.debug,
@@ -46,6 +51,7 @@ config.set({
 
 let avg = {};
 let stock = {};
+let ignore = new Set();
 
 if (cli.options.avg) {
   cli.options.avg.split(',').forEach((str) => {
@@ -61,12 +67,18 @@ if (cli.options.stock) {
     stock[eq[0]] = parseFloat(eq[1]);
   });
 }
+if (cli.options['no-withdrawal']) {
+  ignore.add('withdrawal');
+}
+if (cli.options['no-deposit']) {
+  ignore.add('deposit');
+}
 
 async function main() {
   fyffe.setDb('tilitintin', knex.db(cli.db));
   fyffe.setAverages(avg);
   fyffe.setStock(stock);
-  await fyffe.import(cli['csv-files'], {dbName: 'tilitintin', service: cli.options.service});
+  await fyffe.import(cli['csv-files'], {dbName: 'tilitintin', service: cli.options.service, ignore});
   await fyffe.export('tilitintin', {dbName: 'tilitintin'});
 }
 
