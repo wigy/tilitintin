@@ -17,16 +17,32 @@ router.get('/:user', (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  // TODO: Validate as in form.
   const {user, name, password, email} = req.body;
-  if (users.hasUser(user)) {
-    res.sendStatus(400);
-  } else {
-    users.registerUser({user, name, password, email})
-      .then((data) => {
-        res.send(data);
-      });
+  if (!user || !/^[a-z0-9]+$/.test(user)) {
+    console.error(`User name ${user} is not valid (lower case letters and numbers only).`);
+    return res.sendStatus(400);
   }
+  if (password.length < 4) {
+    console.error(`Password is too short.`);
+    return res.sendStatus(400);
+  }
+  if (!email) {
+    console.error(`Email is required.`);
+    return res.sendStatus(400);
+  }
+  if (!name) {
+    console.error(`Full name is required.`);
+    return res.sendStatus(400);
+  }
+  if (users.hasUser(user)) {
+    console.error(`User '${user}' exists.`);
+    return res.sendStatus(400);
+  }
+
+  users.registerUser({user, name, password, email})
+    .then((data) => {
+      res.send(data);
+    });
 });
 
 router.patch('/:user', async (req, res) => {

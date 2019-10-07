@@ -44,11 +44,20 @@ function hasAdminUser() {
 }
 
 /**
+ * Get the name of the admin user.
+ */
+function adminUser() {
+  if (hasAdminUser()) {
+    return require(path.join(config.DBPATH, 'auth.json')).user;
+  }
+}
+
+/**
  * Check if the user has been created.
  * @return {Boolean}
  */
 function hasUser(user) {
-  return fs.existsSync(path.join(config.DBPATH, user, 'auth.json'));
+  return user === adminUser() || fs.existsSync(path.join(config.DBPATH, user, 'auth.json'));
 }
 
 /**
