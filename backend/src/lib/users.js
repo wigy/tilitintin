@@ -6,6 +6,33 @@ const jwt = require('jsonwebtoken');
 const config = require('../config');
 
 /**
+ * Validate new user data.
+ * @param {String} user
+ * @param {String} name
+ * @param {String} password
+ * @param {String} email
+ * @returns {true|String}
+ */
+function validateUser(user, name, password, email) {
+  if (!user || !/^[a-z0-9]+$/.test(user)) {
+    return `User name ${user} is not valid (lower case letters and numbers only).`;
+  }
+  if (password.length < 4) {
+    return `Password is too short.`;
+  }
+  if (!email) {
+    return `Email is required.`;
+  }
+  if (!name) {
+    return `Full name is required.`;
+  }
+  if (hasUser(user)) {
+    return `User '${user}' exists.`;
+  }
+  return true;
+}
+
+/**
  * Create new user.
  * @return {Promise<Boolean>}
  */
@@ -176,5 +203,6 @@ module.exports = {
   hasUser,
   login,
   registerUser,
+  validateUser,
   verifyToken
 };

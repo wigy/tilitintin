@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const router = express.Router();
+const dump = require('neat-dump');
 const config = require('../config');
 const knex = require('../lib/knex');
 const users = require('../lib/users');
@@ -31,12 +32,15 @@ router.get('/status', (req, res) => {
  */
 router.post('/register', bodyParser.json(), async (req, res) => {
   const {user, name, email, password, admin} = req.body;
-  // TODO: Validate as in form.
   if (admin) {
     if (users.hasAdminUser()) {
       res.sendStatus(400);
     } else {
-      if (!await users.registerUser({user, name, email, password, admin})) {
+      const err = users.validateUser(user, name, password, email);
+      if (err !== true) {
+        dump.error(err);
+        res.sendStatus(400);
+      } else if (!await users.registerUser({user, name, email, password, admin})) {
         res.sendStatus(500);
       } else {
         res.sendStatus(204);

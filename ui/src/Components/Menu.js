@@ -133,6 +133,8 @@ class Menu extends Component {
     return (
       <div className="Menu">
         <span className="spacer"></span>
+        <img className="logo" alt="logo" src="/logo.png"/>
+        <span className="spacer"></span>
         <a href="/" className="brand">Tilitintin v{Configuration.VERSION}</a>
         <span className="spacer"></span>
         <span className="spacer"></span>

@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const dump = require('neat-dump');
 const users = require('../lib/users');
 
 router.get('/', (req, res) => {
@@ -18,24 +19,9 @@ router.get('/:user', (req, res) => {
 
 router.post('/', async (req, res) => {
   const {user, name, password, email} = req.body;
-  if (!user || !/^[a-z0-9]+$/.test(user)) {
-    console.error(`User name ${user} is not valid (lower case letters and numbers only).`);
-    return res.sendStatus(400);
-  }
-  if (password.length < 4) {
-    console.error(`Password is too short.`);
-    return res.sendStatus(400);
-  }
-  if (!email) {
-    console.error(`Email is required.`);
-    return res.sendStatus(400);
-  }
-  if (!name) {
-    console.error(`Full name is required.`);
-    return res.sendStatus(400);
-  }
-  if (users.hasUser(user)) {
-    console.error(`User '${user}' exists.`);
+  const err = users.validateUser(user, name, password, email);
+  if (err !== true) {
+    dump.error(err);
     return res.sendStatus(400);
   }
 

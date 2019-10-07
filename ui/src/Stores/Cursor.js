@@ -528,7 +528,9 @@ class Cursor {
     const component = this.getComponent();
     const {subitemExitUp, subitemExitDown, entryColumn, subitemUpStopOnNull} = component || {};
     const model = this.getModel();
-    if (model && model.open && dy >= 0) {
+
+    // Helper to adjust cursor inside 2-dimensional box.
+    const tryBoxUpdate = () => {
       const [columns, rows] = model.geometry();
       const oldRow = this.row;
       const oldColumn = this.column;
@@ -537,6 +539,10 @@ class Cursor {
         component.moveBox(oldIndex, this.index, oldColumn, oldRow, this.column, this.row);
         return {preventDefault: true};
       }
+    };
+
+    if (model && model.open && dy >= 0) {
+      return tryBoxUpdate();
     } else if (dy < 0) {
       if (this.row === null) {
         const index = (this.index + dy + component.length) % component.length;
@@ -546,15 +552,7 @@ class Cursor {
           return this.setCell(entryColumn || 0, rows - 1);
         }
       } else {
-        // TODO: DRY
-        const [columns, rows] = model.geometry();
-        const oldRow = this.row;
-        const oldColumn = this.column;
-        const oldIndex = this.index;
-        if (this.boxUpdate(columns, rows, dx, dy, {subitemExitUp, subitemExitDown, entryColumn, subitemUpStopOnNull})) {
-          component.moveBox(oldIndex, this.index, oldColumn, oldRow, this.column, this.row);
-          return {preventDefault: true};
-        }
+        return tryBoxUpdate();
       }
     }
   }

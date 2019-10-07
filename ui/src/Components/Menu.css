@@ -3,6 +3,14 @@
   height: 47px;
 }
 
+.Menu .logo {
+  display: inline-block;
+  height: 40px;
+  margin-top: -8px;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
 .Menu .spacer {
   display: inline-block;
   width: 10px;
@@ -33,9 +41,6 @@
   border-radius: 8px;
   background-color: var(--bg-color-light);
   border: 1px solid var(--border-color-light);
-}
-
-.Menu .entry {
 }
 
 .Menu .entry.disabled {
