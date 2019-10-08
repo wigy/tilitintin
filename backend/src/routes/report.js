@@ -2,7 +2,7 @@ const express = require('express');
 const dump = require('neat-dump');
 const router = express.Router();
 const reports = require('../lib/reports');
-const data = require('../lib/data');
+const data = require('libfyffe').data.tilitintin.data;
 const conversions = require('../lib/conversions');
 const knex = require('../lib/knex');
 const config = require('../config');
@@ -17,7 +17,7 @@ const options = () => {
 
 router.get('/', (req, res) => {
   let links = {};
-  data.listAll(req.db, 'report_structure', null, ['id'])
+  data.listAll(knex.db(req.db), 'report_structure', null, ['id'])
     .then((results) => {
       results = reports.customReports().concat(results);
       results.forEach((report) => (links[report.id] = config.BASEURL + '/db/' + req.db + '/report/' + report.id));
@@ -29,7 +29,7 @@ router.get('/:format', (req, res) => {
   const {format} = req.params;
   let links = {};
   const dateRange = period => period.start_date + ' ' + period.end_date;
-  data.listAll(req.db, 'period', null, ['start_date', 'desc'])
+  data.listAll(knex.db(req.db), 'period', null, ['start_date', 'desc'])
     .then(periods => {
       periods.forEach((period) => (links[dateRange(period)] = config.BASEURL + '/db/' + req.db + '/report/' + format + '/' + period.id));
       res.send({links, options: options()});
@@ -80,7 +80,7 @@ router.get('/:format/:period', (req, res) => {
         return;
       }
 
-      data.getOne(req.db, 'report_structure', format)
+      data.getOne(knex.db(req.db), 'report_structure', format)
         .then((reportStructure) => reports.create(req.db, periods, format, reportStructure.data, query))
         .then((report) => {
           res.send(convert(report, query));
