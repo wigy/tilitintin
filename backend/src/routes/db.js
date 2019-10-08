@@ -9,6 +9,7 @@ const config = require('../config');
 const knex = require('../lib/knex');
 const { checkToken } = require('../lib/middleware');
 const { dateToDb } = require('libfyffe').data.tilitintin.utils;
+const { empty } = require('libfyffe').data.tilitintin.db;
 
 router.post('/', checkToken, bodyParser.json(), async (req, res) => {
   const { databaseName, companyName, companyCode } = req.body;
@@ -22,9 +23,9 @@ router.post('/', checkToken, bodyParser.json(), async (req, res) => {
     console.error(`Database ${databaseName} exists.`);
     return res.sendStatus(400);
   }
-  const src = path.join(__dirname, '..', 'data', 'empty.sqlite');
+
   const dst = knex.userPath(`${databaseName}.sqlite`);
-  fs.copyFileSync(src, dst);
+  fs.writeFileSync(dst, empty());
 
   // Initialize database.
   const db = knex.db(databaseName);
@@ -41,11 +42,6 @@ router.post('/', checkToken, bodyParser.json(), async (req, res) => {
 
   res.sendStatus(204);
 });
-
-// sqlite> select * from period;
-// 1|1546293600000|1577743200000|0
-// sqlite> select * from document;
-// 1|0|1|1546293600000
 
 router.post('/upload', async (req, res) => {
   const PATH = path.join(config.DBPATH, req.user);
