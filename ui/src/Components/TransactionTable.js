@@ -31,6 +31,17 @@ class TransactionTable extends Component {
     this.props.cursor.selectPage('Balances', this);
   }
 
+  keyEscape(cursor) {
+    if (cursor.index === null) {
+      this.props.store.filteredTransactions.forEach(tx => {
+        if (tx.open) {
+          tx.toggleOpen();
+        }
+      });
+      return {preventDefault: true};
+    }
+  }
+
   keyInsert(cursor) {
     const { store } = this.props;
     if (store.period.locked) {
