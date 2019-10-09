@@ -132,6 +132,43 @@ class EntryModel extends NavigationTargetModel {
   }
 
   /**
+   * Turn editor on, if this is opened.
+   * @param {Cursor} cursor
+   */
+  keyEnter(cursor) {
+    if (this.document.open && cursor.row !== null) {
+      this.turnEditorOn(cursor);
+      return {preventDefault: true};
+    }
+  }
+
+  /**
+   * Turn the correct entry into edit mode.
+   * @param {Cursor} cursor
+   */
+  turnEditorOn(cursor) {
+    if (cursor.row !== null && cursor.row < this.document.entries.length) {
+      const entry = this.document.entries[cursor.row];
+      if (entry.canEdit()) {
+        entry.edit = true;
+        cursor.editTarget = entry;
+      }
+    }
+  }
+
+  /**
+   * Turn edit mode off.
+   * @param {Cursor} cursor
+   */
+  turnEditorOff(cursor) {
+    if (cursor.row !== null && cursor.row < this.document.entries.length) {
+      const entry = this.document.entries[cursor.row];
+      entry.edit = false;
+      cursor.editTarget = null;
+    }
+  }
+
+  /**
    * Split a string starting with tags to list of tags and the rest of the string.
    * @param {String} value
    * @return [String[], String|null]

@@ -99,17 +99,6 @@ class TransactionModel extends NavigationTargetModel {
   }
 
   /**
-   * Turn editor on, if this is opened.
-   * @param {Cursor} cursor
-   */
-  keyEnter(cursor) {
-    if (this.open && cursor.row !== null) {
-      this.turnEditorOn(cursor);
-      return {preventDefault: true};
-    }
-  }
-
-  /**
    * Turn editor on for entry or document, if this is opened.
    * @param {Cursor} cursor
    */
@@ -122,18 +111,6 @@ class TransactionModel extends NavigationTargetModel {
         this.turnEditorOn(cursor);
         return {preventDefault: false};
       }
-    }
-  }
-
-  turnEditorOn(cursor) {
-    if (cursor.row !== null && cursor.row < this.document.entries.length) {
-      this.document.entries[cursor.row].turnEditorOn(cursor);
-    }
-  }
-
-  turnEditorOff(cursor) {
-    if (cursor.row !== null && cursor.row < this.document.entries.length) {
-      this.document.entries[cursor.row].turnEditorOff(cursor);
     }
   }
 }
