@@ -141,8 +141,7 @@ class Transaction extends Component {
 
   // Render an entry for opened document.
   renderEntry(idx, tx) {
-    const {duplicate} = this.props;
-    const classes = 'TransactionEntry alt open' + (duplicate ? ' duplicate' : '');
+    const classes = 'TransactionEntry alt open';
     const entry = tx.document.entries[idx];
 
     return (
@@ -229,7 +228,7 @@ class Transaction extends Component {
     ];
 
     // Render entries, if opened.
-    if (tx.document.open) {
+    if (tx.document.open && !this.props.duplicate) {
       tx.document.entries.forEach((_, idx) => {
         ret.push(this.renderEntry(idx, tx));
       });
