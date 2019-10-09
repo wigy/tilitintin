@@ -67,6 +67,10 @@ class EntryModel extends NavigationTargetModel {
     return ['account', 'description', 'debit', 'credit'];
   }
 
+  getId() {
+    return 'Entry' + this.id;
+  }
+
   /**
    * Check if the cell is currently selected.
    * @param {Number} column

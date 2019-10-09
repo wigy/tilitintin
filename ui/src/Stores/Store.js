@@ -715,15 +715,7 @@ class Store {
       return txs.filter((tx) => visible(tx));
     };
 
-    console.log([...this.transactions]);
-    return [];
-    /*
-    TODO: Implement.
-    return filter(this.transactions).map((entry, index) => {
-      const tx = new TransactionModel(entry.parent.parent, {entry, document: entry.parent, index});
-      return tx;
-    });
-    */
+    return filter(this.transactions);
   }
 
   /**

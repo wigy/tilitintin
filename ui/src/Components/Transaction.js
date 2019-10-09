@@ -99,7 +99,7 @@ class Transaction extends Component {
   renderMainTx(classes) {
     const {tx} = this.props;
 
-    const money = (<Money cents={tx.entry.amount} currency="EUR" />);
+    const money = (<Money cents={tx.amount} currency="EUR" />);
     const total = (<Money cents={this.props.total} currency="EUR" />);
 
     return (
@@ -122,17 +122,17 @@ class Transaction extends Component {
             }}
           />
         </td>
-        <td className="tags" style={{width: (tx.entry.tags.length) * 2.6 + 'ex'}}>
-          <Tags tags={tx.entry.tags}></Tags>
+        <td className="tags" style={{width: (tx.tags.length) * 2.6 + 'ex'}}>
+          <Tags tags={tx.tags}></Tags>
         </td>
         <td className="description">
-          <span className="summary">{tx.entry.description}&nbsp;</span>
+          <span className="summary">{tx.description}&nbsp;</span>
         </td>
         <td className="debit">
-          <span className="summary">&nbsp;{tx.entry.debit ? money : ''}</span>
+          <span className="summary">&nbsp;{tx.debit ? money : ''}</span>
         </td>
         <td className="credit">
-          <span className="summary">&nbsp;{tx.entry.debit ? '' : money}</span>
+          <span className="summary">&nbsp;{tx.debit ? '' : money}</span>
         </td>
         <td className="total">
           {total}
