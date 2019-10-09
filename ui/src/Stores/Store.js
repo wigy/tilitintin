@@ -105,8 +105,6 @@ class Store {
   @observable token = localStorage.getItem('token');
   @observable tools = { tagDisabled: {}, accounts: {} };
 
-  // A hack to keep document open when `filteredTransactions` recalculation happens after adding new entries.
-  keepDocumentIdOpen = null;
   // Cache for account descriptions list.
   entryDescriptions = {};
 
@@ -717,16 +715,12 @@ class Store {
       return txs.filter((tx) => visible(tx));
     };
 
+    console.log([...this.transactions]);
     return [];
     /*
     TODO: Implement.
     return filter(this.transactions).map((entry, index) => {
       const tx = new TransactionModel(entry.parent.parent, {entry, document: entry.parent, index});
-      if (tx.document.id === this.keepDocumentIdOpen) {
-        this.keepDocumentIdOpen = null;
-        tx.toggleOpen();
-        tx.selected = true;
-      }
       return tx;
     });
     */

@@ -105,14 +105,6 @@ class EntryModel extends NavigationTargetModel {
   }
 
   /**
-   * Force keeping document open when making changes in entries.
-   */
-  async change(field, value) {
-    this.store.keepDocumentIdOpen = this.document.id;
-    return super.change(field, value);
-  }
-
-  /**
    * Split a string starting with tags to list of tags and the rest of the string.
    * @param {String} value
    * @return [String[], String|null]

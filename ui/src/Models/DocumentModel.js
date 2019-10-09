@@ -42,14 +42,6 @@ class DocumentModel extends NavigationTargetModel {
   }
 
   /**
-   * Force keeping document open when making changes in entries.
-   */
-  async change(field, value) {
-    this.store.keepDocumentIdOpen = this.id;
-    return super.change(field, value);
-  }
-
-  /**
    * Use localized date.
    */
   ['get.date']() {

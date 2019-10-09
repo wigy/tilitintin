@@ -49,7 +49,6 @@ class TransactionTable extends Component {
         .then(() => {
           const entry = new EntryModel(document, {document_id: document.id, row_number: 1, account_id: store.accountId});
           document.addEntry(entry);
-          store.keepDocumentIdOpen = document.id;
           store.period.addDocument(document);
           document.open = true;
           if (cursor.componentX === 0) {
