@@ -3,6 +3,8 @@ import EntryModel from './EntryModel';
 
 /**
  * Temporary model to arrange entries of the one account as a pairs of its document and the entry itself.
+ *
+ * TODO: Remove once functionality copied elsewhere.
  */
 class TransactionModel extends NavigationTargetModel {
 

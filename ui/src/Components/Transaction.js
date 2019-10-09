@@ -10,7 +10,6 @@ import TransactionDetails from './TransactionDetails';
 import Store from '../Stores/Store';
 import Settings from '../Stores/Settings';
 import Cursor from '../Stores/Cursor';
-import TransactionModel from '../Models/TransactionModel';
 import EntryModel from '../Models/EntryModel';
 import './Transaction.css';
 
@@ -283,7 +282,7 @@ Transaction.propTypes = {
   store: PropTypes.instanceOf(Store),
   settings: PropTypes.instanceOf(Settings),
   cursor: PropTypes.instanceOf(Cursor),
-  tx: PropTypes.instanceOf(TransactionModel),
+  tx: PropTypes.instanceOf(EntryModel),
   index: PropTypes.number,
   duplicate: PropTypes.bool,
   total: PropTypes.number

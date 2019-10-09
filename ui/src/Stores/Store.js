@@ -9,7 +9,6 @@ import BalanceModel from '../Models/BalanceModel';
 import TagModel from '../Models/TagModel';
 import HeadingModel from '../Models/HeadingModel';
 import ReportModel from '../Models/ReportModel';
-import TransactionModel from '../Models/TransactionModel';
 import i18n from '../i18n';
 import jwtDecode from 'jwt-decode';
 
@@ -718,6 +717,9 @@ class Store {
       return txs.filter((tx) => visible(tx));
     };
 
+    return [];
+    /*
+    TODO: Implement.
     return filter(this.transactions).map((entry, index) => {
       const tx = new TransactionModel(entry.parent.parent, {entry, document: entry.parent, index});
       if (tx.document.id === this.keepDocumentIdOpen) {
@@ -727,6 +729,7 @@ class Store {
       }
       return tx;
     });
+    */
   }
 
   /**
