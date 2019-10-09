@@ -9,8 +9,8 @@ FUTURE FEATURES
 ===============
 
 1.0
-[ ] Rewrite away current TransactionModel and use directly list of EntryModels.
-[ ] Logo with icon.
+[X] Rewrite away current TransactionModel and use directly list of EntryModels.
+[X] Logo with icon.
 [ ] Scan all TODOs and make fix.
 
 2.0
