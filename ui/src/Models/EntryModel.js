@@ -188,6 +188,22 @@ class EntryModel extends NavigationTargetModel {
   }
 
   /**
+   * Turn editor on for entry or document, if this is opened.
+   * @param {Cursor} cursor
+   */
+  keyText(cursor) {
+    if (this.document.open) {
+      if (cursor.row === null) {
+        this.document.turnEditorOn(cursor);
+        return {preventDefault: false};
+      } else {
+        this.turnEditorOn(cursor);
+        return {preventDefault: false};
+      }
+    }
+  }
+
+  /**
    * Split a string starting with tags to list of tags and the rest of the string.
    * @param {String} value
    * @return [String[], String|null]

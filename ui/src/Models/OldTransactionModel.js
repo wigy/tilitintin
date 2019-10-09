@@ -67,22 +67,6 @@ class TransactionModel extends NavigationTargetModel {
       return {preventDefault: true};
     }
   }
-
-  /**
-   * Turn editor on for entry or document, if this is opened.
-   * @param {Cursor} cursor
-   */
-  keyText(cursor) {
-    if (this.open) {
-      if (cursor.row === null) {
-        this.document.turnEditorOn(cursor);
-        return {preventDefault: false};
-      } else {
-        this.turnEditorOn(cursor);
-        return {preventDefault: false};
-      }
-    }
-  }
 }
 
 export default TransactionModel;
