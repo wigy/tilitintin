@@ -29,7 +29,6 @@ class Transaction extends Component {
     this.props.store.deleteEntry(this.entryToDelete)
       .then(() => {
         this.props.cursor.setIndex(index);
-        this.props.cursor.keyEnter();
         this.props.cursor.setCell(column, row);
       });
   }
