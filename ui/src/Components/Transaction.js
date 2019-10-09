@@ -111,7 +111,6 @@ class Transaction extends Component {
           <TransactionDetails
             index={this.props.index}
             field="date"
-            classNames={tx.open && tx.selected && this.props.cursor.row === null ? 'sub-selected' : ''}
             document={tx.document}
             onComplete={(doc) => {
               // Find the new row after order by date has been changed.
@@ -220,7 +219,7 @@ class Transaction extends Component {
     const error = !!imbalance || missingAccount;
 
     // Set up CSS classes.
-    const classes = tx.getClasses() +
+    const classes = tx.document.getClasses() +
       (error ? ' error' : '') +
       (mismatchingAccount ? ' mismatch' : '') +
       (this.props.duplicate ? ' duplicate' : '');
@@ -231,7 +230,7 @@ class Transaction extends Component {
     ];
 
     // Render entries, if opened.
-    if (tx.open) {
+    if (tx.document.open) {
       tx.document.entries.forEach((_, idx) => {
         ret.push(this.renderEntry(idx, tx));
       });
@@ -257,7 +256,7 @@ class Transaction extends Component {
     }
 
     // Render imbalance
-    if (imbalance && this.props.tx.open) {
+    if (imbalance && this.props.tx.document.open) {
       ret.push(
         <tr key="imbalance" className={'alt error TransactionEntry'} onClick={() => this.onClick()}>
           <td className="account" colSpan={3}></td>

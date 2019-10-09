@@ -71,22 +71,45 @@ class EntryModel extends NavigationTargetModel {
     return 'Entry' + this.id;
   }
 
+  rows() {
+    return this.document.entries;
+  }
+
+  /**
+   * Cursor has entered document this entry belongs.
+   */
+  enter() {
+    this.document.selected = true;
+  }
+
+  /**
+   * Cursor has left this document this entry belongs.
+   */
+  leave() {
+    this.document.selected = false;
+  }
+
+  /**
+   * Open the parent document.
+   */
+  toggleOpen() {
+    this.document.open = !this.document.open;
+    this.open = !this.open;
+  }
+
   /**
    * Check if the cell is currently selected.
    * @param {Number} column
    * @param {Number} row
    */
   isSubSelected(column, row) {
-    if (
+    return (
+      this.document.selected &&
       row !== null &&
       this.document.entries.indexOf(this) === row &&
       column !== null &&
       this.columns()[column] === this.column
-    ) {
-      const txs = this.store.filteredTransactions.filter(tx => tx.selected);
-      return (txs.length && txs[0].document === this.document);
-    }
-    return false;
+    );
   }
 
   /**

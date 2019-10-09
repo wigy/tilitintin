@@ -42,13 +42,6 @@ class TransactionDetails extends Component {
       (this.props.error ? ' error' : '') +
       (this.props.classNames ? ' ' + this.props.classNames : '');
 
-    // Currently we cannot determine if the selected entry belongs to the selected document in the model
-    // level. Thus we remove sub-selection flags in case that they are not on the exact selected document
-    // copy. Multiple instances of the same document is visible on the screen.
-    if (this.props.cursor.index !== this.props.index) {
-      className = className.replace(/ sub-selected/, '');
-    }
-
     return (
       <div className={className}>{target.getView(this.props.field)}&nbsp;</div>
     );
