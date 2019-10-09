@@ -551,7 +551,7 @@ class Cursor {
           const [, rows] = model.geometry();
           return this.setCell(entryColumn || 0, rows - 1);
         }
-      } else {
+      } else if (model) {
         return tryBoxUpdate();
       }
     }
