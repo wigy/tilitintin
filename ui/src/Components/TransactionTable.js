@@ -40,6 +40,8 @@ class TransactionTable extends Component {
       this.setState({ showAccountDropdown: true });
       return;
     }
+
+    // Insert new document.
     if (cursor.row === null) {
       const document = new DocumentModel(store.period, {
         period_id: store.period.id,
@@ -60,6 +62,15 @@ class TransactionTable extends Component {
 
       return {preventDefault: true};
     }
+
+    // Insert entry.
+    const currentDoc = store.filteredTransactions[cursor.index].document;
+    const rowNumber = currentDoc.entries.reduce((prev, cur) => Math.max(prev, cur.row_number), 0) + 1;
+    const description = currentDoc.entries.length ? currentDoc.entries[currentDoc.entries.length - 1].text : '';
+    const entry = new EntryModel(currentDoc, {document_id: currentDoc.id, row_number: rowNumber, description});
+    currentDoc.addEntry(entry);
+    cursor.setCell(0, currentDoc.entries.length - 1);
+    return {preventDefault: true};
   }
 
   /**

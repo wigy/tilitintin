@@ -1,5 +1,4 @@
 import NavigationTargetModel from './NavigationTargetModel';
-import EntryModel from './EntryModel';
 
 /**
  * Temporary model to arrange entries of the one account as a pairs of its document and the entry itself.
@@ -45,26 +44,6 @@ class TransactionModel extends NavigationTargetModel {
       } else {
         return cursor.setCell(null, null);
       }
-    }
-  }
-
-  /**
-   * Insert either a document or an entry.
-   * @param {Cursor} cursor
-   */
-  keyInsert(cursor) {
-    if (this.period.locked) {
-      return;
-    }
-    // TODO: Combine with keyInsert() in TransactionTable.
-    if (cursor.row !== null) {
-      this.store.keepDocumentIdOpen = this.document.id;
-      const rowNumber = this.document.entries.reduce((prev, cur) => Math.max(prev, cur.row_number), 0) + 1;
-      const description = this.document.entries.length ? this.document.entries[this.document.entries.length - 1].text : '';
-      const entry = new EntryModel(this.document, {document_id: this.document.id, row_number: rowNumber, description});
-      this.document.addEntry(entry);
-      cursor.setCell(0, this.document.entries.length - 1);
-      return {preventDefault: true};
     }
   }
 }
