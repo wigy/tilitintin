@@ -4,6 +4,7 @@ BUGS
 
 [ ] Create new DB and press Insert: Cannot read property 'toString' of null
 [ ] Can't access newly created document entries.
+[ ] Pressing an account link leads to misbehaving cursor.
 
 FUTURE FEATURES
 ===============
