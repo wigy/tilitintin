@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ReactRouterPropTypes from 'react-router-prop-types';
 import { inject, observer } from 'mobx-react';
 import { Trans, withTranslation } from 'react-i18next';
 import { FormControl, ControlLabel } from 'react-bootstrap';
@@ -13,8 +14,10 @@ import Cursor from '../Stores/Cursor';
 import EntryModel from '../Models/EntryModel';
 import DocumentModel from '../Models/DocumentModel';
 import './TransactionTable.css';
+import { withRouter } from 'react-router-dom';
 
 @withTranslation('translations')
+@withRouter
 @inject('store')
 @inject('cursor')
 @observer
@@ -31,13 +34,26 @@ class TransactionTable extends Component {
     this.props.cursor.selectPage('Balances', this);
   }
 
+  componentDidUpdate(oldProps) {
+    const eid = new URLSearchParams(this.props.location.search).get('entry');
+    if (eid) {
+      this.props.cursor.setIndex(null);
+      this.closeAll();
+      this.props.history.push(this.props.location.pathname);
+    }
+  }
+
+  closeAll() {
+    this.props.store.filteredTransactions.forEach(tx => {
+      if (tx.open) {
+        tx.toggleOpen();
+      }
+    });
+  }
+
   keyEscape(cursor) {
     if (cursor.index === null) {
-      this.props.store.filteredTransactions.forEach(tx => {
-        if (tx.open) {
-          tx.toggleOpen();
-        }
-      });
+      this.closeAll();
       return {preventDefault: true};
     }
   }
@@ -195,6 +211,8 @@ class TransactionTable extends Component {
 
 TransactionTable.propTypes = {
   cursor: PropTypes.instanceOf(Cursor),
+  location: PropTypes.object,
+  history: ReactRouterPropTypes.history,
   store: PropTypes.instanceOf(Store)
 };
 

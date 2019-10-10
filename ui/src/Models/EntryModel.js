@@ -419,7 +419,7 @@ class EntryModel extends NavigationTargetModel {
     if (!this.account_id) {
       return '';
     }
-    let url = '/' + this.database.name + '/txs/' + this.period.id + '/' + this.account_id;
+    let url = '/' + this.database.name + '/txs/' + this.period.id + '/' + this.account_id + '?entry=' + this.id;
     return <Link to={url}>{this.account.toString()}</Link>;
   }
   ['get.edit.account']() {
