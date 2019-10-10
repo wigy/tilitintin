@@ -15,7 +15,7 @@
   text-decoration: line-through;
 }
 
-.Transaction .number {
+.Document .number {
   width: 5%;
 }
 
@@ -29,7 +29,7 @@
   outline: inherit !important;
 }
 
-.Transaction .date {
+.Document .date {
   text-align: center;
   width: 10%;
 }
@@ -38,7 +38,7 @@
   color: transparent;
 }
 
-.Transaction .tags {
+.Document .tags {
   width: 5%;
 }
 
@@ -46,17 +46,17 @@
   width: 25%;
 }
 
-.Transaction .tags .Tag {
+.Document .tags .Tag {
   vertical-align: middle;
   margin-right: 1px;
   vertical-align: middle;
 }
 
-.Transaction .tags .Tag img {
+.Document .tags .Tag img {
   margin-top: -1.5ex;
 }
 
-.Transaction .debit, .TransactionEntry .debit {
+.Document .debit, .TransactionEntry .debit {
   text-align: right;
   width: 8%;
 }
@@ -66,7 +66,7 @@
   font-weight: bold;
 }
 
-.Transaction .credit, .TransactionEntry .credit {
+.Document .credit, .TransactionEntry .credit {
   text-align: right;
   width: 8%;
 }
@@ -76,7 +76,7 @@
   font-weight: bold;
 }
 
-.Transaction .total {
+.Document .total {
   text-align: right;
   width: 8%;
 }

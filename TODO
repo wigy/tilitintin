@@ -5,7 +5,7 @@ BUGS
 [ ] Create new DB and press Insert: Cannot read property 'toString' of null
 [ ] Can't access newly created document entries.
 [X] Pressing an account link leads to misbehaving cursor.
-[ ] Tags are off in tx table.
+[X] Tags are off in tx table.
 
 FUTURE FEATURES
 ===============
