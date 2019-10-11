@@ -121,9 +121,8 @@ class TransactionTable extends Component {
   }
 
   render() {
-
-    if (!this.props.store.transactions) {
-      return '';
+    if (!this.props.store.transactions.length) {
+      return <Trans>Press Insert to create a transaction.</Trans>;
     }
 
     const deleteDialog = (tx) => (<Dialog key="dialog"

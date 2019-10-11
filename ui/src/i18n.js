@@ -131,6 +131,7 @@ i18n.init({
         'period {{period}}': 'tilikausi {{period}}',
         'Please select an account': 'Ole hyvä ja valitse tili',
         'Periods': 'Tilikaudet',
+        'Press Insert to create a transaction.': 'Voit luoda tapahtuman painamalla Insert.',
         'Receivable to add': 'Lisättävä saatavia',
         'Remove favorite status': 'Poista suosikeista',
         'Reports': 'Raportit',
