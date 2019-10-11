@@ -18,8 +18,7 @@ docker-compose up
 
 ### Using Node
 
-In this case you can just add symbolic links pointing to your *Tilitin* sqlite-databases to
-the directory `backend/databases/user`. Then you launch the backend
+First launch the backend
 ```
 cd backend
 npm start
@@ -30,10 +29,6 @@ In addition, the frontend is needed. Add an other console and launch
 cd ui
 npm start
 ```
-
-## Default user
-
-Default user is `user` and password is `pass`.
 
 ## Features
 
@@ -64,6 +59,10 @@ bin/tags.js mydb add ME "Michel Example" http://mysite.example.com/persons/miche
 In UI you can do filtering using the categories defined.
 
 ## Version History
+
+### 1.0
+  * Rewritten transaction model.
+  * Logo.
 
 ### 0.9.1
   * Refine date handling to be Tilitin compatible.

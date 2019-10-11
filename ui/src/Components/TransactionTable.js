@@ -79,7 +79,7 @@ class TransactionTable extends Component {
           const entry = new EntryModel(document, {document_id: document.id, row_number: 1, account_id: store.accountId});
           document.addEntry(entry);
           store.period.addDocument(document);
-          document.open = true;
+          entry.toggleOpen();
           if (cursor.componentX === 0) {
             cursor.keyArrowRight();
           }

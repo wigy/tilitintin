@@ -2,18 +2,9 @@
 BUGS
 ====
 
-[ ] Create new DB and press Insert: Cannot read property 'toString' of null
-[ ] Can't access newly created document entries.
-[X] Pressing an account link leads to misbehaving cursor.
-[X] Tags are off in tx table.
 
 FUTURE FEATURES
 ===============
-
-1.0
-[X] Rewrite away current TransactionModel and use directly list of EntryModels.
-[X] Logo with icon.
-[X] Scan all TODOs and make fix.
 
 2.0
 [ ] Tags management.
@@ -22,6 +13,3 @@ FUTURE FEATURES
 
 3.0
 [ ] Import management in UI.
-
-
-CREATE TABLE `tags` (`id` integer not null primary key autoincrement, `tag` varchar(16) not null, `name` varchar(256) null, `mime` varchar(256) null, `picture` blob null, `type` varchar(16) null, `order` integer);
