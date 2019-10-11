@@ -558,11 +558,13 @@ class Store {
    * Create new database.
    * @param info.databaseName
    * @param info.companyName
+   * @param info.companyCode
    */
   createDatabase(info) {
     return this.request('/db', 'POST', info)
       .then(async (res) => {
         await this.fetchDatabases(true);
+        this.clearAccount();
         return res;
       });
   }

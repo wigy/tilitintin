@@ -183,6 +183,7 @@ class ToolsToolPanel extends Component {
       this.props.store.request('/db/upload', 'POST', null, this.state.files[0])
         .then(() => {
           this.setState({askUpload: false});
+          this.props.store.clearAccount();
           this.props.store.fetchDatabases(true);
         });
     }
