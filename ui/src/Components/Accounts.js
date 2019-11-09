@@ -32,7 +32,7 @@ class Accounts extends Component {
     let accounts = this.props.store.accounts.filter(acc => (
       (!favorite || acc.FAVORITE) &&
       (types.includes(acc.type)) &&
-      (!s || acc.name.toUpperCase().indexOf(s) >= 0)
+      (!s || acc.name.toUpperCase().indexOf(s) >= 0 || acc.number === s)
     ));
 
     return (
