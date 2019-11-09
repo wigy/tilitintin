@@ -11,11 +11,12 @@ cli.opt('debug-stock', null, 'Display stock and average changes in detail.');
 cli.opt('debug', null, 'To turn dry-run on and display entries.');
 cli.opt('dry-run', null, 'To turn dry-run on.');
 cli.opt('force', null, 'Import even if the entries are found already.');
+cli.opt('fund', null, 'Set name for the fund.');
 cli.opt('import-errors', null, 'If import fails, create move transaction to imbalance account.');
 cli.opt('no-deposit', null, 'Ignore deposit transactions.');
 cli.opt('no-profit', null, 'Turn off profit and losses calculations (to be calculated later).');
 cli.opt('no-withdrawal', null, 'Ignore withdrawal transactions.');
-cli.opt('service', null, 'Set explicit name for the service instead of the automatic recognition.');
+cli.opt('service', null, 'Set name for the service.');
 cli.opt('show-balances', null, 'Display account balances before and after.');
 cli.opt('show-stock', null, 'Display stock before and after.');
 cli.opt('skip-errors', null, 'If import fails, just print and skip the failed transaction.');
@@ -74,11 +75,23 @@ if (cli.options['no-deposit']) {
   ignore.add('deposit');
 }
 
+if (!cli.options.service) {
+  throw new Error(`Option --service is required.`);
+}
+if (!cli.options.fund) {
+  throw new Error(`Option --fund is required.`);
+}
+
 async function main() {
   fyffe.setDb('tilitintin', knex.db(cli.db));
   fyffe.setAverages(avg);
   fyffe.setStock(stock);
-  await fyffe.import(cli['csv-files'], {dbName: 'tilitintin', service: cli.options.service, ignore});
+  await fyffe.import(cli['csv-files'], {
+    dbName: 'tilitintin',
+    service: cli.options.service,
+    fund: cli.options.fund,
+    ignore
+  });
   await fyffe.export('tilitintin', {dbName: 'tilitintin'});
 }
 
