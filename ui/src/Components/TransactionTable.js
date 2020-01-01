@@ -121,8 +121,28 @@ class TransactionTable extends Component {
   }
 
   render() {
+    let ret = [];
+
+    if (this.state.showAccountDropdown) {
+      const accountDialog = (
+        <Dialog key="dialog2"
+          title={<Trans>Please select an account</Trans>}
+          isVisible={this.state.showAccountDropdown}
+          onClose={() => this.setState({ showAccountDropdown: false })}
+          onConfirm={() => this.onSelectAccount(this.state.account)}>
+          <ControlLabel><Trans>Account</Trans>:</ControlLabel>
+          <FormControl componentClass="select" value={this.state.account} onChange={(e) => this.setState({ account: e.target.value })}>
+            <option value=""></option>
+            {this.props.store.accounts.map(a => <option value={a.id} key={a.id}>{a.toString()}</option>)}
+          </FormControl>
+        </Dialog>
+      );
+      ret.push(accountDialog);
+    }
+
     if (!this.props.store.transactions.length) {
-      return <Trans>Press Insert to create a transaction.</Trans>;
+      ret.push(<Trans key="insert">Press Insert to create a transaction.</Trans>);
+      return ret;
     }
 
     const deleteDialog = (tx) => (<Dialog key="dialog"
@@ -139,23 +159,9 @@ class TransactionTable extends Component {
       )}<br/>
     </Dialog>);
 
-    const accountDialog = (
-      <Dialog key="dialog2"
-        title={<Trans>Please select an account</Trans>}
-        isVisible={this.state.showAccountDropdown}
-        onClose={() => this.setState({ showAccountDropdown: false })}
-        onConfirm={() => this.onSelectAccount(this.state.account)}>
-        <ControlLabel><Trans>Account</Trans>:</ControlLabel>
-        <FormControl componentClass="select" value={this.state.account} onChange={(e) => this.setState({ account: e.target.value })}>
-          <option value=""></option>
-          {this.props.store.accounts.map(a => <option value={a.id} key={a.id}>{a.toString()}</option>)}
-        </FormControl>
-      </Dialog>
-    );
-
     let sum = 0;
     let seen = {};
-    let ret = [
+    ret = [
       <table key="table" className="TransactionTable">
         <thead>
           <tr className="Transaction heading">
@@ -198,10 +204,6 @@ class TransactionTable extends Component {
 
     if (this.txToDelete) {
       ret.push(deleteDialog(this.txToDelete));
-    }
-
-    if (this.state.showAccountDropdown) {
-      ret.push(accountDialog);
     }
 
     return ret;
