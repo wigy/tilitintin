@@ -21,7 +21,7 @@ class Balances extends Component {
     return (
       <div className="Period">
         <h1><Trans>Account Balances</Trans></h1>
-        <Loading />
+        <Loading visible={this.props.store.loading}/>
         <BalanceTable balances={this.props.store.balances}/>
       </div>
     );

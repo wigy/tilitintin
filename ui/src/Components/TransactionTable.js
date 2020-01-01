@@ -123,6 +123,8 @@ class TransactionTable extends Component {
   render() {
     let ret = [];
 
+    ret.push(<Loading visible={this.props.store.loading} key="loading-indicator"/>);
+
     if (this.state.showAccountDropdown) {
       const accountDialog = (
         <Dialog key="dialog2"
@@ -161,7 +163,7 @@ class TransactionTable extends Component {
 
     let sum = 0;
     let seen = {};
-    ret = [
+    ret.push(
       <table key="table" className="TransactionTable">
         <thead>
           <tr className="Transaction heading">
@@ -192,9 +194,8 @@ class TransactionTable extends Component {
           })}
         </tbody>
       </table>
-    ];
+    );
 
-    ret.push(<Loading key="loading-indicator"/>);
     /*
     Cursor debug helper.
     ret.push(<div key="my">Index {JSON.stringify(this.props.cursor.index)}</div>);

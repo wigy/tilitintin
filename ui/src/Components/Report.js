@@ -25,13 +25,10 @@ class Report extends Component {
       return '';
     }
 
-    if (!this.props.store.report) {
-      return <Loading always/>;
-    }
-
     return (
       <div className="Report">
-        <ReportDisplay report={this.props.store.report}></ReportDisplay>
+        <Loading visible={!this.props.store.report} />
+        {this.props.store.report && <ReportDisplay report={this.props.store.report}></ReportDisplay>}
       </div>
     );
   }

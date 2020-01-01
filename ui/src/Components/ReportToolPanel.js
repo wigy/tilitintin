@@ -31,9 +31,6 @@ class ReportToolPanel extends Component {
     if (!store.token) {
       return '';
     }
-    if (!store.report) {
-      return <Loading always/>;
-    }
 
     const onPrint = () => {
       window.print();
@@ -65,7 +62,7 @@ class ReportToolPanel extends Component {
       store.fetchReport(store.db, store.periodId, store.report.format);
     };
 
-    const options = Object.keys({...store.report.options});
+    const options = store.report ? Object.keys({...store.report.options}) : [];
 
     let buttons = [
       <IconButton key="button-print" onClick={onPrint} title="print" icon="fa-print"></IconButton>,
@@ -111,8 +108,9 @@ class ReportToolPanel extends Component {
 
     return (
       <div className="ToolPanel">
-        <h1>{this.props.t('report-' + store.report.format)}</h1>
-        {buttons}
+        <h1>{store.report && this.props.t('report-' + store.report.format)}</h1>
+        <Loading visible={!store.report} />
+        {store.report && buttons}
       </div>
     );
   }

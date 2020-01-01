@@ -9,12 +9,13 @@ import Store from '../Stores/Store';
 class Loading extends Component {
 
   render() {
-    return <Loader type="ThreeDots" visible={this.props.always || this.props.store.loading} width={50} height={50} timeout={5000} color="rgb(0,0,93)" />;
+    return <Loader type="ThreeDots" visible={this.props.visible} width={50} height={50} timeout={1000} color="rgb(0,0,93)" />;
   }
 }
 
 Loading.propTypes = {
   always: PropTypes.bool,
+  visible: PropTypes.bool,
   store: PropTypes.instanceOf(Store)
 };
 
