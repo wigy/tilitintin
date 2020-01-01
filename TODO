@@ -2,12 +2,6 @@
 BUGS
 ====
 
-[X] Cannot create first transaction.
-[X] Tab does not insert row.
-[X] index.js:1446 Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
-    in Loader (at Loading.js:12)
-    in Loading (created by inject-Loading-with-store)
-    in inject-Loading-with-store (at ReportToolPanel.js:35)
 
 FUTURE FEATURES
 ===============

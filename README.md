@@ -60,6 +60,11 @@ In UI you can do filtering using the categories defined.
 
 ## Version History
 
+### 1.0.1
+  * Fix unmounted component error.
+  * Add back creation of first transaction.
+  * Restore automatic row insertion when pressing tab on last cell.
+
 ### 1.0
   * Rewritten transaction model.
   * Logo.
