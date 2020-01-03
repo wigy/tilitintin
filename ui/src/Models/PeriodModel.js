@@ -53,8 +53,8 @@ class PeriodModel extends Model {
     const entries = data.entries || [];
     delete data.entries;
     const doc = new DocumentModel(this, {...data, period_id: this.id});
-    this.addDocument(doc);
     await doc.save();
+    this.addDocument(doc);
     // Create entries.
     for (const entry of entries) {
       await doc.createEntry(entry);
