@@ -19,6 +19,8 @@ services:
       context: ui
     ports:
       - 3102:3102
+    environment:
+      PORT: 3102
     volumes:
       - ./ui/src:/var/app/src
     command: npm run dev
