@@ -138,7 +138,6 @@ class Store {
       delete options.headers['Content-Type'];
       options.body = new FormData();
       options.body.set('file', file);
-      options.mode = 'no-cors';
     }
 
     debug('  Request:', method, config.API_URL + path, data || '');

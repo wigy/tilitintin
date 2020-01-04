@@ -6,7 +6,7 @@ BUGS
 [ ] If you change account on tx, it does not show when viewing that account.
 [ ] Report not updated after creating an entry without refresh (Tuloslaskelma tilierittelyin)
 [X] Password too short on empty system.
-[ ] CORS problem.
+[ ] CORS problem with file uploading.
 [ ] Build leaves webpack socket connection.
 
 SMALL IMPROVEMENTS

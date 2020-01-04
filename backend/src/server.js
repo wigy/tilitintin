@@ -6,6 +6,7 @@ const dump = require('neat-dump');
 
 app.use(dump.middleware());
 app.use(cors());
+app.options('*', cors());
 app.use('/', require('./routes/index'));
 
 app.listen(config.PORT, function () {
