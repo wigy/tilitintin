@@ -19,6 +19,7 @@ cli.opt('no-withdrawal', null, 'Ignore withdrawal transactions.');
 cli.opt('service', null, 'Set name for the service.');
 cli.opt('show-balances', null, 'Display account balances before and after.');
 cli.opt('show-stock', null, 'Display stock before and after.');
+cli.opt('single-loan-update', null, 'Add loan update only at the end of the import.');
 cli.opt('skip-errors', null, 'If import fails, just print and skip the failed transaction.');
 cli.opt('start-date', null, 'Ignore all transactions before this date.');
 cli.opt('stock', null, 'Set explicit stocks `SERVICE1:ETH=0.12,SERVICE2:ETH=1.22`.');
@@ -42,6 +43,7 @@ config.set({
     tradeProfit: cli.options['trade-profit'],
     showBalances: cli.options['show-balances'],
     showStock: cli.options['show-stock'],
+    singleLoanUpdate: cli.options['single-loan-update'],
     startDate: cli.options['start-date'],
     skipErrors: cli.options['skip-errors'],
     stopOnError: cli.options['stop-on-error'],
