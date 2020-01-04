@@ -44,7 +44,7 @@ class RegisterForm extends Component {
       return;
     }
 
-    this.props.onRegister({ user, name, password: 'x', email });
+    this.props.onRegister({ user, name, password, email });
   }
 
   render() {
