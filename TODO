@@ -5,6 +5,7 @@ BUGS
 [X] Crash after automatically creating documents like VAT.
 [ ] If you change account on tx, it does not show when viewing that account.
 [ ] Report not updated after creating an entry without refresh (Tuloslaskelma tilierittelyin)
+[ ] Password too short on empty system.
 
 SMALL IMPROVEMENTS
 ==================
