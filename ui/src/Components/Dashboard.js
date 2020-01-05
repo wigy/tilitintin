@@ -36,6 +36,9 @@ class Dashboard extends Component {
   }
 
   selectPeriod(num) {
+    if (!this.props.store.database) {
+      return;
+    }
     const periods = this.props.store.database.periods.reverse();
     num--;
     if (num < periods.length) {

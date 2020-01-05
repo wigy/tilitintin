@@ -8,7 +8,7 @@ BUGS
 [X] Password too short on empty system.
 [X] CORS problem with file uploading.
 [X] Build leaves webpack socket connection.
-[ ] In home screen pressing A and 1 quickly causes crash.
+[X] In home screen pressing A and 1 quickly causes crash.
 
 SMALL IMPROVEMENTS
 ==================
