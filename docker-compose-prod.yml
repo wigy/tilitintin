@@ -10,7 +10,6 @@ services:
       - 3101:3101
     volumes:
       - ./backend/databases:/var/app/databases
-      - ./backend/src:/var/app/src
 
   ui:
     container_name: tilitintin-ui
@@ -20,6 +19,3 @@ services:
       - 3102:3102
     environment:
       PORT: 3102
-    volumes:
-      - ./ui/src:/var/app/src
-    command: npm run dev
