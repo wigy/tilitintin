@@ -8,11 +8,13 @@ BUGS
 [X] Password too short on empty system.
 [ ] CORS problem with file uploading.
 [ ] Build leaves webpack socket connection.
+[ ] In home screen pressing A and 1 quickly causes crash.
 
 SMALL IMPROVEMENTS
 ==================
 
 [ ] Copy and paste for document and its entries.
+[ ] Calculate sum of debit and credit.
 
 FUTURE FEATURES
 ===============
