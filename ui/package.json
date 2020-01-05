@@ -69,7 +69,7 @@
     "workbox-webpack-plugin": "3.6.3"
   },
   "scripts": {
-    "start": "bin/build_config.js && PORT=3102 npx serve -l tcp://0.0.0.0:3102 -s build",
+    "start": "bin/build_config.js && npm run build && PORT=3102 npx serve -l tcp://0.0.0.0:3102 -s build",
     "dev": "bin/build_config.js && PORT=3102 BROWSER=none node scripts/start.js",
     "lint": "eslint src",
     "lint-fix": "eslint --fix src",

@@ -6,7 +6,6 @@ ADD package.json .
 ADD package-lock.json .
 RUN npm install
 ADD . .
-RUN npm run build
 
 EXPOSE 3102
 CMD ["npm", "start"]
