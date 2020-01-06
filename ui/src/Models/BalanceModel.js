@@ -23,6 +23,10 @@ class BalanceModel extends NavigationTargetModel {
     return 'Balance' + this.account_id;
   }
 
+  getObjectType() {
+    return 'Balance';
+  }
+
   getUrl() {
     return '/' + this.database.name + '/txs/' + this.period.id + '/' + this.account_id;
   }
