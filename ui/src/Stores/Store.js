@@ -571,6 +571,15 @@ class Store {
   }
 
   /**
+   * Remove the report, since it may not be valid anymore.
+   */
+  invalidateReport() {
+    if (this.report) {
+      this.report = null;
+    }
+  }
+
+  /**
    * Save account data.
    * @param {AccountModel} account
    */
@@ -582,6 +591,7 @@ class Store {
             account.id = res.id;
           }
         });
+        this.invalidateReport();
         return res;
       });
   }
@@ -598,6 +608,7 @@ class Store {
             period.id = res.id;
           }
         });
+        this.invalidateReport();
         return res;
       });
   }
@@ -616,6 +627,7 @@ class Store {
           if (!doc.number) {
             doc.number = res.number;
           }
+          this.invalidateReport();
           return res;
         });
       });
@@ -643,6 +655,7 @@ class Store {
             entry.id = res.id;
           }
         });
+        this.invalidateReport();
         return res;
       });
   }
@@ -655,6 +668,7 @@ class Store {
     const path = '/db/' + this.db + '/account/' + account.id;
     return this.request(path, 'DELETE')
       .then(() => {
+        this.invalidateReport();
         return this.fetchAccounts(this.db);
       });
   }
@@ -674,6 +688,7 @@ class Store {
         runInAction(() => {
           this.period.deleteEntry(entry);
         });
+        this.invalidateReport();
         return this.fetchBalances(this.db, this.periodId);
       });
   }
@@ -689,6 +704,7 @@ class Store {
         runInAction(() => {
           this.period.deleteDocument(doc);
         });
+        this.invalidateReport();
         return this.fetchBalances(this.db, this.periodId);
       });
   }
