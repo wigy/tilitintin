@@ -29,6 +29,10 @@ class ReportModel extends Model {
     return this.order;
   }
 
+  getObjectType() {
+    return 'Report';
+  }
+
   /**
    * Recommended file name for the report.
    */

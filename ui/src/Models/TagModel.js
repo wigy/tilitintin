@@ -23,6 +23,10 @@ class TagModel extends Model {
     return this.order;
   }
 
+  getObjectType() {
+    return 'Tag';
+  }
+
   /**
    * Construct URL for API image viewer.
    */

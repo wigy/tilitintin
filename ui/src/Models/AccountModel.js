@@ -60,6 +60,10 @@ class AccountModel extends Model {
     return '/' + this.database.name + '/txs/' + this.store.period.id + '/' + this.id;
   }
 
+  getObjectType() {
+    return 'Account';
+  }
+
   /**
    * Set tags for this account.
    * @param {String[]} tags

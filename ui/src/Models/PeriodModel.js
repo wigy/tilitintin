@@ -34,6 +34,10 @@ class PeriodModel extends Model {
     return this.start_date;
   }
 
+  getObjectType() {
+    return 'Period';
+  }
+
   /**
    * Create a document from the JSON-structure and append to this period.
    * @param {Object} data

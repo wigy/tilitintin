@@ -30,7 +30,7 @@ class Model {
    * Get the name of class without 'Model' postfix.
    */
   getObjectType() {
-    return this.constructor.name.replace(/Model$/, '');
+    throw new Error(`Model does not implement getObjectType().`);
   }
 
   /**

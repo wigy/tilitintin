@@ -71,6 +71,10 @@ class EntryModel extends NavigationTargetModel {
     return 'Entry' + this.id;
   }
 
+  getObjectType() {
+    return 'Entry';
+  }
+
   rows() {
     return this.document.entries;
   }

@@ -20,6 +20,10 @@ class HeadingModel extends Model {
   get database() {
     return this.parent;
   }
+
+  getObjectType() {
+    return 'Heading';
+  }
 }
 
 export default HeadingModel;

@@ -30,6 +30,10 @@ class DatabaseModel extends Model {
     return this.name;
   }
 
+  getObjectType() {
+    return 'Database';
+  }
+
   /**
    * Add new or override old period for this database.
    * @param {PeriodModel} period

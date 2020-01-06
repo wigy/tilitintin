@@ -34,6 +34,10 @@ class DocumentModel extends NavigationTargetModel {
     return 'Document' + this.id;
   }
 
+  getObjectType() {
+    return 'Document';
+  }
+
   /**
    * This is editable if period not locked.
    */
