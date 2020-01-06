@@ -15,6 +15,15 @@ class ReportsList extends Component {
 
   componentDidMount() {
     this.props.cursor.selectPage('Reports', this);
+    const {format} = this.props.match.params;
+    if (!format && this.props.store.report) {
+      this.selectReportFormat(this.props.store.report);
+    }
+  }
+
+  selectReportFormat(report) {
+    const url = '/' + report.database.name + '/report/' + report.period.id + '/' + (report.store.accountId || '') + '/' + report.format;
+    this.props.history.push(url);
   }
 
   selectReport(num) {
@@ -24,15 +33,14 @@ class ReportsList extends Component {
       return;
     }
     const report = reports[num];
-    const url = '/' + report.database.name + '/report/' + report.period.id + '/' + (report.store.accountId || '') + '/' + report.format;
-    this.props.history.push(url);
+    this.selectReportFormat(report);
 
     return {preventDefault: true};
   }
 
   keyText(cursor, key) {
     if (key >= '1' && key <= '9') {
-      this.selectReport(parseInt(key));
+      return this.selectReport(parseInt(key));
     }
   }
 
@@ -57,6 +65,7 @@ class ReportsList extends Component {
 ReportsList.propTypes = {
   cursor: PropTypes.instanceOf(Cursor),
   history: ReactRouterPropTypes.history.isRequired,
+  match: PropTypes.object,
   store: PropTypes.instanceOf(Store)
 };
 

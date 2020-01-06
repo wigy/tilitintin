@@ -9,6 +9,7 @@ BUGS
 [X] CORS problem with file uploading.
 [X] Build leaves webpack socket connection.
 [X] In home screen pressing A and 1 quickly causes crash.
+[ ] Update on unmounted loading component when switching between reports and transactions.
 
 SMALL IMPROVEMENTS
 ==================
