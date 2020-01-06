@@ -2,13 +2,6 @@
 BUGS
 ====
 
-[X] Crash after automatically creating documents like VAT.
-[X] If you change account on tx, it does not show when viewing that account.
-[X] Report not updated after creating an entry without refresh.
-[X] Password too short on empty system.
-[X] CORS problem with file uploading.
-[X] Build leaves webpack socket connection.
-[X] In home screen pressing A and 1 quickly causes crash.
 [ ] Update on unmounted loading component when switching between reports and transactions.
 
 SMALL IMPROVEMENTS

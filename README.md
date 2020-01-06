@@ -60,6 +60,15 @@ In UI you can do filtering using the categories defined.
 
 ## Version History
 
+### 1.0.2
+  * Fix crash after automatically creating documents like VAT.
+  * If you change account on tx, update document views correctly.
+  * Report now invalidated after creating an entry without refresh.
+  * Fix `password too short` error.
+  * CORS problem with file uploading fixed.
+  * Production build.
+  * Fix crash when at home screen pressing `A` and `1` quickly.
+
 ### 1.0.1
   * Fix unmounted component error.
   * Add back creation of first transaction.
