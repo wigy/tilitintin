@@ -629,6 +629,13 @@ class Store {
     if (this.entryDescriptions[this.db] && this.entryDescriptions[this.db][entry.account_id]) {
       delete this.entryDescriptions[this.db][entry.account_id];
     }
+    // Remove from old account, if changed.
+    if (entry.id) {
+      const old = await this.request('/db/' + this.db + '/entry/' + entry.id);
+      if (old.account_id !== entry.account_id) {
+        entry.document.period.changeAccount(entry.document_id, old.account_id, entry.account_id);
+      }
+    }
     return this.request('/db/' + this.db + '/entry/' + (entry.id || ''), entry.id ? 'PATCH' : 'POST', entry.toJSON())
       .then((res) => {
         runInAction(() => {

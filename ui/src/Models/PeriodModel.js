@@ -92,9 +92,7 @@ class PeriodModel extends Model {
    * @param {DocumentModel} doc
    */
   deleteDocument(doc) {
-    const accounts = new Set();
     doc.entries.forEach((entry) => {
-      accounts.add(entry.account_id);
       if (this.documentsByAccountId[entry.account_id]) {
         this.documentsByAccountId[entry.account_id].delete(doc.id);
       }
@@ -112,6 +110,17 @@ class PeriodModel extends Model {
         this.getDocument(docId).deleteEntry(entry);
       }
     }
+  }
+
+  /**
+   * Transfer an entry from one account to another account.
+   * @param {Number} documentId
+   * @param {Number} oldAccountId
+   * @param {Number} accountId
+   */
+  changeAccount(documentId, oldAccountId, accountId) {
+    this.documentsByAccountId[oldAccountId].delete(documentId);
+    this.documentsByAccountId[accountId].add(documentId);
   }
 
   /**
