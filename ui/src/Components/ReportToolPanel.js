@@ -108,7 +108,7 @@ class ReportToolPanel extends Component {
 
     return (
       <div className="ToolPanel">
-        <h1>{store.report && this.props.t('report-' + store.report.format)}</h1>
+        {store.report && <h1>{this.props.t('report-' + store.report.format)}</h1>}
         <Loading visible={!store.report} />
         {store.report && buttons}
       </div>

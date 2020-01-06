@@ -104,6 +104,7 @@ class App extends Component {
             <Route path="/:db/txs/:periodId" component={Balances}/>
             <Route path="/:db/account/:periodId?/:accountId?" component={Account}/>
             <Route exact path="/:db/report/:periodId" component={ReportsList}/>
+            <Route exact path="/:db/report/:periodId/:accountId" component={ReportsList}/>
             <Route path="/:db/report/:periodId//:format" component={ReportsList}/>
             <Route path="/:db/report/:periodId/:accountId/:format" component={ReportsList}/>
             <Route exact path="/:db/tools/:periodId?/:accountId?/:tool?" component={ToolsList}/>
