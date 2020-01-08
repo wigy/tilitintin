@@ -10,6 +10,7 @@ cli.opt('avg', null, 'Set explicit averages `SERVICE1:ETH=123,SERVICE2:ETH=122`.
 cli.opt('debug-stock', null, 'Display stock and average changes in detail.');
 cli.opt('debug', null, 'To turn dry-run on and display entries.');
 cli.opt('dry-run', null, 'To turn dry-run on.');
+cli.opt('encoding', null, 'Force encoding of import files.');
 cli.opt('force', null, 'Import even if the entries are found already.');
 cli.opt('fund', null, 'Set name for the fund.');
 cli.opt('import-errors', null, 'If import fails, create move transaction to imbalance account.');
@@ -33,6 +34,7 @@ cli.args('csv-files', 'transaction log as CSV file(s)');
 config.loadIni();
 
 config.set({
+  encoding: cli.options.encoding,
   flags: {
     addCurrencies: cli.options['add-currencies'],
     debug: cli.options.debug,
