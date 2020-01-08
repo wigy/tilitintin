@@ -207,9 +207,8 @@ class EntryModel extends NavigationTargetModel {
         return cursor.setCell(cursor.column + 1, cursor.row);
       } else if (cursor.row < rows - 1) {
         return cursor.setCell(0, cursor.row + 1);
-      } else {
-        cursor.handle('Insert');
       }
+      // On last row and column, pass to the other handler.
     }
   }
 
