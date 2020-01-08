@@ -124,6 +124,7 @@ class PeriodModel extends Model {
    */
   changeAccount(documentId, oldAccountId, accountId) {
     this.documentsByAccountId[oldAccountId].delete(documentId);
+    this.documentsByAccountId[accountId] = this.documentsByAccountId[accountId] || new Set();
     this.documentsByAccountId[accountId].add(documentId);
   }
 
