@@ -63,6 +63,9 @@ class TransactionTable extends Component {
     if (store.period.locked) {
       return;
     }
+    if (cursor.componentX !== 1) {
+      return;
+    }
     // Insert entry.
     const currentDoc = store.filteredTransactions[cursor.index].document;
     const rowNumber = currentDoc.entries.reduce((prev, cur) => Math.max(prev, cur.row_number), 0) + 1;
@@ -103,6 +106,29 @@ class TransactionTable extends Component {
       });
 
     return {preventDefault: true};
+  }
+
+  /**
+   * Collect current transaction.
+   */
+  keyCtrlC(cursor) {
+    if (cursor.index === null) {
+      return;
+    }
+    if (cursor.componentX !== 1) {
+      return;
+    }
+    if (cursor.row !== null) {
+      // TODO: Copy one cell.
+      return;
+    }
+    const { store } = this.props;
+    const doc = store.filteredTransactions[cursor.index].document;
+    let text = `${doc.number}\t${doc.date}\n`;
+    doc.entries.forEach(e => {
+      text += [e.account.toString(), e.description, e.debit ? e.amount : '', e.debit ? '' : e.amount].join('\t') + '\n';
+    });
+    navigator.clipboard.writeText(text);
   }
 
   /**

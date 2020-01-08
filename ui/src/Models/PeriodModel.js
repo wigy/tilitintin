@@ -225,6 +225,10 @@ class PeriodModel extends Model {
     const tags = {};
     Object.values(this.documents).forEach((doc) => {
       doc.entries.forEach((entry) => {
+        // Skip new or broken entries.
+        if (!entry.account_id) {
+          return;
+        }
         tags[entry.account_id] = tags[entry.account_id] || new Set();
         entry.tagNames.forEach((tag) => tags[entry.account_id].add(tag));
       });

@@ -4,6 +4,7 @@ BUGS
 
 [ ] Update on unmounted loading component when switching between reports and transactions.
 [X] Fix crash when editing and changing to account that has no entries yet.
+[X] If there is just created empty row and one edits old row, saving fails.
 
 SMALL IMPROVEMENTS
 ==================
