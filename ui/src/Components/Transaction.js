@@ -110,6 +110,7 @@ class Transaction extends Component {
           <TransactionDetails
             index={this.props.index}
             field="date"
+            classNames={tx.open && this.props.index === this.props.cursor.index && this.props.cursor.row === null ? 'sub-selected' : ''}
             document={tx.document}
             onComplete={(doc) => {
               // Find the new row after order by date has been changed.
