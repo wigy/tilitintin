@@ -7,6 +7,7 @@ BUGS
 SMALL IMPROVEMENTS
 ==================
 
+[ ] Insert should always create new document.
 [ ] Copy and paste for document and its entries.
 [ ] Calculate sum of debit and credit.
 
