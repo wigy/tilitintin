@@ -45,7 +45,7 @@ class PeriodModel extends Model {
    * Data needs to be in the format
    * ```
    * {
-   *   number: 123,
+   *   number: 123, // Optional
    *   date: "yyyy-mm-dd",
    *   entries: [{...}, ....]
    * }
@@ -123,6 +123,7 @@ class PeriodModel extends Model {
    * @param {Number} accountId
    */
   changeAccount(documentId, oldAccountId, accountId) {
+    this.documentsByAccountId[oldAccountId] = this.documentsByAccountId[oldAccountId] || new Set();
     this.documentsByAccountId[oldAccountId].delete(documentId);
     this.documentsByAccountId[accountId] = this.documentsByAccountId[accountId] || new Set();
     this.documentsByAccountId[accountId].add(documentId);

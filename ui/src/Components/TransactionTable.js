@@ -5,6 +5,7 @@ import { inject, observer } from 'mobx-react';
 import { Trans, withTranslation } from 'react-i18next';
 import { FormControl, ControlLabel } from 'react-bootstrap';
 import moment from 'moment';
+import { sprintf } from 'sprintf-js';
 import Dialog from './Dialog';
 import Money from './Money';
 import Transaction from './Transaction';
@@ -118,17 +119,105 @@ class TransactionTable extends Component {
     if (cursor.componentX !== 1) {
       return;
     }
-    if (cursor.row !== null) {
-      // TODO: Copy one cell.
-      return;
-    }
+
     const { store } = this.props;
     const doc = store.filteredTransactions[cursor.index].document;
+
+    if (cursor.row !== null) {
+      // Copy one cell.
+      const entry = doc.entries[cursor.row];
+      const column = entry.column;
+      let text;
+      switch (column) {
+        case 'account':
+          text = entry.account.toString();
+          break;
+        case 'description':
+          text = entry[column];
+          break;
+        case 'debit':
+          text = entry.debit ? sprintf('%.2f', entry.amount / 100) : '';
+          break;
+        case 'credit':
+          text = entry.debit ? '' : sprintf('%.2f', entry.amount / 100) + '';
+          break;
+        default:
+      }
+      navigator.clipboard.writeText(text);
+      return;
+    }
+
+    // Copy entire document with entries.
     let text = `${doc.number}\t${doc.date}\n`;
     doc.entries.forEach(e => {
       text += [e.account.toString(), e.description, e.debit ? e.amount : '', e.debit ? '' : e.amount].join('\t') + '\n';
     });
     navigator.clipboard.writeText(text);
+  }
+
+  /**
+   * Create new document if valid clipboard.
+   * @param {Cursor} cursor
+   */
+  keyCtrlV(cursor) {
+    if (cursor.index === null) {
+      return;
+    }
+    if (cursor.componentX !== 1) {
+      return;
+    }
+    if (cursor.row !== null) {
+      // Copy one cell.
+      const doc = this.props.store.filteredTransactions[cursor.index].document;
+      const entry = doc.entries[cursor.row];
+      const column = entry.column;
+      navigator.clipboard.readText().then(text => {
+        if (entry[`validate.${column}`](text) === null) {
+          entry[`change.${column}`](text);
+          entry.save();
+        }
+      });
+      return;
+    }
+
+    // Copy entire document.
+    navigator.clipboard.readText().then(text => {
+      // Verify the correct format and construct document.
+      if (text.endsWith('\n')) {
+        text = text.substr(0, text.length - 1);
+        const lines = text.split('\n');
+        if (lines.length >= 2) {
+          const head = lines[0].split('\t');
+          if (head.length === 2 && /^\d+$/.test(head[0]) && /^\d\d\d\d-\d\d-\d\d$/.test(head[1])) {
+            const [, date] = head;
+            const entries = [];
+            let i;
+            for (i = 1; i < lines.length; i++) {
+              const [acc, description, debit, credit] = lines[i].split('\t');
+              if (/^\d+ /.test(acc) && (/^\d+$/.test(debit) || /^\d+$/.test(credit))) {
+                entries.push({
+                  description,
+                  number: parseInt(acc),
+                  amount: debit === '' ? -parseInt(credit) : parseInt(debit)
+                });
+              } else {
+                break;
+              }
+            }
+            // Not all valid. Skip.
+            if (i < lines.length) {
+              return;
+            }
+            // Create new document.
+            const { store } = this.props;
+            store.period.createDocument({
+              date,
+              entries
+            });
+          }
+        }
+      }
+    });
   }
 
   /**

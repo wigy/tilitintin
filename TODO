@@ -11,8 +11,9 @@ SMALL IMPROVEMENTS
 
 [X] Insert should always create new document.
 [X] More visible selection marker for date cell.
-[ ] Copy and paste for document and its entries.
+[X] Copy and paste for document.
 [ ] Calculate sum of debit and credit.
+[X] Copy and paste for entry cells.
 
 FUTURE FEATURES
 ===============
