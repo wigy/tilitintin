@@ -60,6 +60,9 @@ In UI you can do filtering using the categories defined.
 
 ## Version History
 
+### 1.1.1
+  * Fix broken build.
+
 ### 1.1.0
   * Copy paste support.
   * Insert always creates new document and tab new entry.

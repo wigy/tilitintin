@@ -99,6 +99,7 @@ class AccountModel extends Model {
       this.flags = this.flags & ~AccountModel.FLAGS[name];
     }
   }
+
   /**
    * Get a value of a flag.
    * @param {String} name
