@@ -19,7 +19,7 @@ class AccountsToolPanel extends Component {
   };
 
   componentDidMount() {
-    this.setState({search: this.props.store.tools.accounts.search || ''});
+    this.setState({ search: this.props.store.tools.accounts.search || '' });
   }
 
   render() {
@@ -31,13 +31,13 @@ class AccountsToolPanel extends Component {
     const enableAll = () => {
       const favorite = store.tools.accounts.favorite;
       const search = store.tools.accounts.search;
-      store.tools.accounts = {favorite, search};
+      store.tools.accounts = { favorite, search };
     };
 
     const disableAll = () => {
       const favorite = store.tools.accounts.favorite;
       const search = store.tools.accounts.search;
-      store.tools.accounts = {favorite, search, asset: true, liability: true, equity: true, revenue: true, expense: true, profit: true};
+      store.tools.accounts = { favorite, search, asset: true, liability: true, equity: true, revenue: true, expense: true, profit: true };
     };
 
     return ( // ASSET/LIABILITY/EQUITY/REVENUE/EXPENSE/PROFIT_PREV/PROFIT
@@ -76,7 +76,7 @@ class AccountsToolPanel extends Component {
           onClick={() => (store.tools.accounts.profit = !store.tools.accounts.profit)}
         />
         <IconSpacer/>
-        <input value={this.state.search} onChange={e => { this.setState({search: e.target.value}); store.tools.accounts.search = e.target.value; }}/>
+        <input value={this.state.search} onChange={e => { this.setState({ search: e.target.value }); store.tools.accounts.search = e.target.value; }}/>
       </div>
     );
   }

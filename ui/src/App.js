@@ -38,13 +38,13 @@ class App extends Component {
   UNSAFE_componentWillReceiveProps(nextProps) {
     const { keydown: { event } } = nextProps;
     if (event) {
-      let keyName = (
+      const keyName = (
         (event.key.length > 1 && event.shiftKey ? 'Shift+' : '') +
         (event.ctrlKey ? 'Ctrl+' : '') +
         (event.altKey ? 'Alt+' : '') +
         event.key);
 
-      let keyResult = this.props.cursor.handle(keyName);
+      const keyResult = this.props.cursor.handle(keyName);
 
       if (keyResult) {
         this.props.store.changed = true;

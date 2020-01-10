@@ -42,7 +42,7 @@ class EntryModel extends NavigationTargetModel {
    * Combine tags to description.
    */
   toJSON() {
-    let ret = super.toJSON();
+    const ret = super.toJSON();
     if (ret.tagNames.length) {
       ret.description = '[' + ret.tagNames.join('][') + '] ' + ret.description;
     }
@@ -56,7 +56,7 @@ class EntryModel extends NavigationTargetModel {
    */
   initialize(data) {
     const [description, tagNames] = TagModel.desc2tags(data.description || '');
-    return {...data, description, tagNames};
+    return { ...data, description, tagNames };
   }
 
   getSortKey() {
@@ -142,7 +142,7 @@ class EntryModel extends NavigationTargetModel {
   keyEnter(cursor) {
     if (this.document.open && cursor.row !== null) {
       this.turnEditorOn(cursor);
-      return {preventDefault: true};
+      return { preventDefault: true };
     }
   }
 
@@ -188,7 +188,7 @@ class EntryModel extends NavigationTargetModel {
       }
       this.document.entries[cursor.row].markForDeletion();
     }
-    return {preventDefault: true};
+    return { preventDefault: true };
   }
 
   /**
@@ -238,10 +238,10 @@ class EntryModel extends NavigationTargetModel {
     if (this.document.open) {
       if (cursor.row === null) {
         this.document.turnEditorOn(cursor);
-        return {preventDefault: false};
+        return { preventDefault: false };
       } else {
         this.turnEditorOn(cursor);
-        return {preventDefault: false};
+        return { preventDefault: false };
       }
     }
   }
@@ -282,20 +282,24 @@ class EntryModel extends NavigationTargetModel {
     }
     return value ? null : REQUIRED;
   }
+
   ['get.edit.description']() {
     const tags = this.tagNames.length ? '[' + this.tagNames.map(t => t).join('][') + '] ' : '';
     return tags + this.description;
   }
+
   ['get.description']() {
     const tags = this.tagNames.length ? '[' + this.tagNames.map(t => t).join('][') + '] ' : '';
     return tags + this.description;
   }
+
   ['change.description'](value) {
     const [tags, newValue] = this.extractTags(value);
     this.description = newValue;
     this.tagNames.replace(tags);
     this.period.refreshTags();
   }
+
   async ['proposal.description'](value) {
     const texts = await this.store.fetchEntryDescriptions(this.database.name, this.account_id);
     value = value.toLowerCase();
@@ -308,9 +312,11 @@ class EntryModel extends NavigationTargetModel {
   ['get.debit']() {
     return this.debit && this.amount !== '' ? (<Money cents={this.amount} currency="EUR" />) : <span className="filler">-</span>;
   }
+
   ['get.edit.debit']() {
     return this.debit ? sprintf('%.2f', this.amount / 100) : '';
   }
+
   ['validate.debit'](value) {
     const INVALID_NUMBER = <Trans>Numeric value incorrect.</Trans>;
     const NO_NEGATIVE = <Trans>Cannot be negative.</Trans>;
@@ -327,17 +333,19 @@ class EntryModel extends NavigationTargetModel {
     }
     return null;
   }
+
   ['change.debit'](value) {
     if (value !== '') {
       this.debit = 1;
       this.amount = Math.round(str2num(value) * 100);
     }
   }
+
   ['proposal.debit'](value) {
     const amounts = new Set();
-    let imbalance = [];
+    const imbalance = [];
     // Add always imbalance as proposal.
-    let miss = this.document.imbalance() + (this.debit ? -this.amount : this.amount);
+    const miss = this.document.imbalance() + (this.debit ? -this.amount : this.amount);
     if (miss < 0) {
       imbalance.push(sprintf('%.2f', -miss / 100));
     }
@@ -372,23 +380,27 @@ class EntryModel extends NavigationTargetModel {
   ['get.credit']() {
     return !this.debit && this.amount !== '' ? (<Money cents={this.amount} currency="EUR" />) : <span className="filler">-</span>;
   }
+
   ['get.edit.credit']() {
     return !this.debit ? sprintf('%.2f', this.amount / 100) : '';
   }
+
   ['validate.credit'](value) {
     return this['validate.debit'](value);
   }
+
   ['change.credit'](value) {
     if (value !== '') {
       this.debit = 0;
       this.amount = Math.round(str2num(value) * 100);
     }
   }
+
   ['proposal.credit'](value) {
     const amounts = new Set();
-    let imbalance = [];
+    const imbalance = [];
     // Add always imbalance as proposal.
-    let miss = this.document.imbalance() + (this.debit ? -this.amount : this.amount);
+    const miss = this.document.imbalance() + (this.debit ? -this.amount : this.amount);
     if (miss > 0) {
       imbalance.push(sprintf('%.2f', miss / 100));
     }
@@ -424,22 +436,26 @@ class EntryModel extends NavigationTargetModel {
     if (!this.account_id) {
       return '';
     }
-    let url = '/' + this.database.name + '/txs/' + this.period.id + '/' + this.account_id + '?entry=' + this.id;
+    const url = '/' + this.database.name + '/txs/' + this.period.id + '/' + this.account_id + '?entry=' + this.id;
     return <Link to={url}>{this.account.toString()}</Link>;
   }
+
   ['get.edit.account']() {
     return this.account_id ? this.account.number : '';
   }
+
   ['validate.account'](value) {
     const INVALID_ACCOUNT = <Trans>No such account found.</Trans>;
     return this.store.accounts.filter(a => a.number === value || a.name === value || `${a.number} ${a.name}` === value).length ? null : INVALID_ACCOUNT;
   }
+
   ['change.account'](value) {
     const account = this.store.accounts.filter(a => a.number === value || a.name === value || `${a.number} ${a.name}` === value);
     this.account_id = account[0].id;
   }
+
   ['proposal.account'](value) {
-    let ret = [];
+    const ret = [];
     if (value === '') {
       return ret;
     }
@@ -537,6 +553,7 @@ class EntryModel extends NavigationTargetModel {
       this.flags = this.flags & ~EntryModel.FLAGS[name];
     }
   }
+
   /**
    * Get a value of a flag.
    * @param {String} name

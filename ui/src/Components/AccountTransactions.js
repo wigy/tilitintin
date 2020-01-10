@@ -9,7 +9,7 @@ import Store from '../Stores/Store';
 class AccountTransactions extends Component {
 
   componentDidMount() {
-    const {db, periodId, accountId} = this.props.match.params;
+    const { db, periodId, accountId } = this.props.match.params;
     if (accountId) {
       this.props.store.setAccount(db, periodId, accountId);
     } else {
@@ -18,7 +18,7 @@ class AccountTransactions extends Component {
   }
 
   componentDidUpdate() {
-    const {db, periodId, accountId} = this.props.match.params;
+    const { db, periodId, accountId } = this.props.match.params;
     if (accountId) {
       this.props.store.setAccount(db, periodId, accountId);
     } else {

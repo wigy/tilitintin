@@ -26,19 +26,19 @@ class ToolsList extends Component {
     const { store } = this.props;
     if (key === '1') {
       this.props.history.push(this.url('databases'));
-      return {preventDefault: true};
+      return { preventDefault: true };
     }
     if (key === '2' && store.db) {
       this.props.history.push(this.url('periods'));
-      return {preventDefault: true};
+      return { preventDefault: true };
     }
     if (key === '3' && store.periodId) {
       this.props.history.push(this.url('documents'));
-      return {preventDefault: true};
+      return { preventDefault: true };
     }
     if (key === '4' && store.periodId) {
       this.props.history.push(this.url('vat'));
-      return {preventDefault: true};
+      return { preventDefault: true };
     }
   }
 

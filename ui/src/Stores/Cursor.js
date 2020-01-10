@@ -171,10 +171,11 @@ class Cursor {
    * Disable focus change using tab-key.
    */
   keyTab() {
-    return {preventDefault: true};
+    return { preventDefault: true };
   }
+
   keyShiftTab() {
-    return {preventDefault: true};
+    return { preventDefault: true };
   }
 
   /**
@@ -251,7 +252,7 @@ class Cursor {
   keyArrowDown() {
     if (this.index === null && this.getComponent()) {
       this.enterComponent(this.getComponent());
-      return {preventDefault: true};
+      return { preventDefault: true };
     }
     const model = this.getModel();
     if (model && model.open) {
@@ -269,7 +270,7 @@ class Cursor {
   keyArrowUp() {
     if (this.index === null && this.getComponent()) {
       this.enterComponent(this.getComponent());
-      return {preventDefault: true};
+      return { preventDefault: true };
     }
     const model = this.getModel();
     if (model) {
@@ -297,7 +298,7 @@ class Cursor {
       this.componentX--;
       this.enterComponent();
     }
-    return {preventDefault: true};
+    return { preventDefault: true };
   }
 
   /**
@@ -317,7 +318,7 @@ class Cursor {
       this.componentX++;
       this.enterComponent();
     }
-    return {preventDefault: true};
+    return { preventDefault: true };
   }
 
   /**
@@ -360,7 +361,7 @@ class Cursor {
         this.row = null;
         this.getComponent().moveBox(null, null);
       }
-      return {preventDefault: true};
+      return { preventDefault: true };
     }
   }
 
@@ -378,7 +379,7 @@ class Cursor {
     } else {
       this.setIndex(null);
     }
-    return {preventDefault: true};
+    return { preventDefault: true };
   }
 
   /**
@@ -471,7 +472,7 @@ class Cursor {
       this.leaveComponent();
       this.index = null;
       component && component.moveIndex(oldIndex, null, options);
-      return {preventDefault: true};
+      return { preventDefault: true };
     }
     if (component) {
       if (index < 0) {
@@ -481,7 +482,7 @@ class Cursor {
         this.index = index;
         component.moveIndex(oldIndex, this.index, options);
       }
-      return {preventDefault: true};
+      return { preventDefault: true };
     }
   }
 
@@ -516,7 +517,7 @@ class Cursor {
     } else {
       this.changeBoxBy(column - this.column, row - this.row);
     }
-    return {preventDefault: true};
+    return { preventDefault: true };
   }
 
   /**
@@ -526,7 +527,7 @@ class Cursor {
    */
   changeBoxBy(dx, dy) {
     const component = this.getComponent();
-    const {subitemExitUp, subitemExitDown, entryColumn, subitemUpStopOnNull} = component || {};
+    const { subitemExitUp, subitemExitDown, entryColumn, subitemUpStopOnNull } = component || {};
     const model = this.getModel();
 
     // Helper to adjust cursor inside 2-dimensional box.
@@ -535,9 +536,9 @@ class Cursor {
       const oldRow = this.row;
       const oldColumn = this.column;
       const oldIndex = this.index;
-      if (this.boxUpdate(columns, rows, dx, dy, {subitemExitUp, subitemExitDown, entryColumn, subitemUpStopOnNull})) {
+      if (this.boxUpdate(columns, rows, dx, dy, { subitemExitUp, subitemExitDown, entryColumn, subitemUpStopOnNull })) {
         component.moveBox(oldIndex, this.index, oldColumn, oldRow, this.column, this.row);
-        return {preventDefault: true};
+        return { preventDefault: true };
       }
     };
 

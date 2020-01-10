@@ -26,13 +26,13 @@ class ReportHeader extends Component {
       <tr key="1" className="heading1">
         <th colSpan={columns}>
           <span className="report-title">{this.props.t('report-' + report.format)}</span>
-          <span style={{float: 'right'}}>{report.meta.businessName}</span>
+          <span style={{ float: 'right' }}>{report.meta.businessName}</span>
         </th>
       </tr>,
       <tr key="2" className="heading2">
         <th colSpan={columns}>
           <span>{new Date().toLocaleDateString(lang)}</span>
-          <span style={{float: 'right'}}>{report.meta.businessId}</span>
+          <span style={{ float: 'right' }}>{report.meta.businessId}</span>
         </th>
       </tr>,
       <tr key="3" className="columns">

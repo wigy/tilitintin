@@ -26,8 +26,8 @@ class AccountLink extends Component {
     return (
       <div
         className={'AccountLink' + (fav ? ' favorite' : '')}
-        onMouseEnter={() => this.setState({hasHovered: true, showStar: true})}
-        onMouseLeave={() => this.setState({showStar: false})}>
+        onMouseEnter={() => this.setState({ hasHovered: true, showStar: true })}
+        onMouseLeave={() => this.setState({ showStar: false })}>
         <Link to={dst}>{this.props.account.toString()}</Link>
         {
           this.state.hasHovered &&

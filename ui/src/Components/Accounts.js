@@ -29,7 +29,7 @@ class Accounts extends Component {
       .concat(!expense ? ['EXPENSE'] : [])
       .concat(!profit ? ['PROFIT_PREV', 'PROFIT'] : []);
     const s = search && search.toUpperCase();
-    let accounts = this.props.store.accounts.filter(acc => (
+    const accounts = this.props.store.accounts.filter(acc => (
       (!favorite || acc.FAVORITE) &&
       (types.includes(acc.type)) &&
       (!s || acc.name.toUpperCase().indexOf(s) >= 0 || acc.number === s)

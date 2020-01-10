@@ -41,7 +41,7 @@ class ReportToolPanel extends Component {
       fetch(url, {
         method: 'GET',
         headers: new Headers({
-          'Authorization': 'Bearer ' + store.token
+          Authorization: 'Bearer ' + store.token
         })
       })
         .then(response => response.blob())
@@ -62,9 +62,9 @@ class ReportToolPanel extends Component {
       store.fetchReport(store.db, store.periodId, store.report.format);
     };
 
-    const options = store.report ? Object.keys({...store.report.options}) : [];
+    const options = store.report ? Object.keys({ ...store.report.options }) : [];
 
-    let buttons = [
+    const buttons = [
       <IconButton key="button-print" onClick={onPrint} title="print" icon="fa-print"></IconButton>,
       <IconButton key="button-download" onClick={onDownload} title="download-csv" icon="fa-download"></IconButton>
     ];

@@ -25,7 +25,7 @@ class Transaction extends Component {
 
   @action.bound
   deleteEntry() {
-    const {index, column, row} = this.props.cursor;
+    const { index, column, row } = this.props.cursor;
     this.props.store.deleteEntry(this.entryToDelete)
       .then(() => {
         this.props.cursor.setIndex(index);
@@ -96,7 +96,7 @@ class Transaction extends Component {
 
   // Render the main row of the document, i.e. the entry having the current account and data from document it belongs to.
   renderMainTx(classes) {
-    const {tx} = this.props;
+    const { tx } = this.props;
 
     const money = (<Money cents={tx.amount} currency="EUR" />);
     const total = (<Money cents={this.props.total} currency="EUR" />);
@@ -121,7 +121,7 @@ class Transaction extends Component {
             }}
           />
         </td>
-        <td className="tags" style={{width: (tx.tags.length) * 2.6 + 'ex'}}>
+        <td className="tags" style={{ width: (tx.tags.length) * 2.6 + 'ex' }}>
           <Tags tags={tx.tags}></Tags>
         </td>
         <td className="description">
@@ -224,7 +224,7 @@ class Transaction extends Component {
       (this.props.duplicate ? ' duplicate' : '');
 
     // Render main transaction.
-    let ret = [
+    const ret = [
       this.renderMainTx(classes)
     ];
 

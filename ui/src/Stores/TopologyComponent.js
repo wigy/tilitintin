@@ -32,12 +32,12 @@ class TopologyComponent {
     if (index !== null && this.data[index]) {
       if (!(this.data[index] instanceof NavigationTargetModel)) {
         console.error(this.data[index]);
-        throw new Error(`Invalid navigation target not inherited from NavigationTargetModel.`);
+        throw new Error('Invalid navigation target not inherited from NavigationTargetModel.');
       }
       this.data[index].enter();
       const el = document.getElementById(this.data[index].getId());
       if (el && !options.noScroll) {
-        el.scrollIntoView({block: 'center', inline: 'center'});
+        el.scrollIntoView({ block: 'center', inline: 'center' });
       }
     }
   }

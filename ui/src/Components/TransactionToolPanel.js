@@ -70,7 +70,7 @@ class TransactionToolPanel extends Component {
               </div>
             </div>);
         })}
-        <div style={{clear: 'both'}}></div>
+        <div style={{ clear: 'both' }}></div>
       </div>
     );
   }

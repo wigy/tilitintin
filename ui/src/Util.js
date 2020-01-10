@@ -56,7 +56,7 @@ export function str2date(str, sample) {
 export function str2num(str) {
   str = str.replace(',', '.').replace(/[$€£]/g, '').replace(/\s/g, '');
   try {
-    return safeEval(str, {navigator: window.navigator});
+    return safeEval(str, { navigator: window.navigator });
   } catch (err) {
     return NaN;
   }

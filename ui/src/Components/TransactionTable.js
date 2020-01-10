@@ -55,7 +55,7 @@ class TransactionTable extends Component {
   keyEscape(cursor) {
     if (cursor.index === null) {
       this.closeAll();
-      return {preventDefault: true};
+      return { preventDefault: true };
     }
   }
 
@@ -71,11 +71,11 @@ class TransactionTable extends Component {
     const currentDoc = store.filteredTransactions[cursor.index].document;
     const rowNumber = currentDoc.entries.reduce((prev, cur) => Math.max(prev, cur.row_number), 0) + 1;
     const description = currentDoc.entries.length ? currentDoc.entries[currentDoc.entries.length - 1].text : '';
-    const entry = new EntryModel(currentDoc, {document_id: currentDoc.id, row_number: rowNumber, description});
+    const entry = new EntryModel(currentDoc, { document_id: currentDoc.id, row_number: rowNumber, description });
     currentDoc.addEntry(entry);
     cursor.setCell(0, currentDoc.entries.length - 1);
 
-    return {preventDefault: true};
+    return { preventDefault: true };
   }
 
   keyInsert(cursor) {
@@ -95,7 +95,7 @@ class TransactionTable extends Component {
     });
     document.save()
       .then(() => {
-        const entry = new EntryModel(document, {document_id: document.id, row_number: 1, account_id: store.accountId});
+        const entry = new EntryModel(document, { document_id: document.id, row_number: 1, account_id: store.accountId });
         document.addEntry(entry);
         store.period.addDocument(document);
         entry.toggleOpen();
@@ -106,7 +106,7 @@ class TransactionTable extends Component {
         cursor.setIndex(index >= 0 ? index : store.filteredTransactions.length - 1);
       });
 
-    return {preventDefault: true};
+    return { preventDefault: true };
   }
 
   /**
@@ -241,7 +241,7 @@ class TransactionTable extends Component {
   }
 
   render() {
-    let ret = [];
+    const ret = [];
 
     ret.push(<Loading visible={this.props.store.loading} key="loading-indicator"/>);
 
@@ -282,7 +282,7 @@ class TransactionTable extends Component {
     </Dialog>);
 
     let sum = 0;
-    let seen = {};
+    const seen = {};
     ret.push(
       <table key="table" className="TransactionTable">
         <thead>

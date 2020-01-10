@@ -7,15 +7,19 @@ class NavigationTargetModel extends Model {
   @observable
   selected =false;
   // If set, this object is extended to show its details (if applicable).
+
   @observable
   open = false;
   // If set, then this object is now in editing mode (if applicable).
+
   @observable
   edit = false;
   // If set, the named sub-item column is currently selected.
+
   @observable
   column = null;
   // If set, this model is marked for deletion.
+
   @observable
   askForDelete = false;
 

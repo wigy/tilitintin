@@ -11,12 +11,12 @@ import './AccountTable.css';
 class AccountTable extends Component {
 
   render() {
-    const {accounts, headings} = this.props;
-    const {db, periodId} = this.props.store;
+    const { accounts, headings } = this.props;
+    const { db, periodId } = this.props.store;
     let level = 0;
     let titles;
     const headingNumbers = Object.keys(headings);
-    let headingLevels = [null, null, null, null, null, null, null, null, null, null];
+    const headingLevels = [null, null, null, null, null, null, null, null, null, null];
     let nextHeading = 0;
 
     return (

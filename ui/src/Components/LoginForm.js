@@ -26,9 +26,9 @@ class RegisterForm extends Component {
     return <form>
       <FormGroup>
         <ControlLabel><Trans>Username</Trans></ControlLabel>
-        <FormControl type="text" onChange={(event) => (this.setState({user: event.target.value}))}/>
+        <FormControl type="text" onChange={(event) => (this.setState({ user: event.target.value }))}/>
         <ControlLabel><Trans>Password</Trans></ControlLabel>
-        <FormControl type="password" onChange={(event) => (this.setState({password: event.target.value}))}/>
+        <FormControl type="password" onChange={(event) => (this.setState({ password: event.target.value }))}/>
         <br/>
         <Button onClick={() => this.onLogin()}><Trans>Login</Trans></Button>
       </FormGroup>

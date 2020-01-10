@@ -9,8 +9,10 @@ import './ReportLine.css';
 class ReportLine extends Component {
 
   render() {
-    let { id, name, number, amounts, bold, italic, hideTotal, tab, pageBreak,
-      isAccount, fullWidth, needLocalization, useRemainingColumns, bigger } = this.props.line;
+    let {
+      id, name, number, amounts, bold, italic, hideTotal, tab, pageBreak,
+      isAccount, fullWidth, needLocalization, useRemainingColumns, bigger
+    } = this.props.line;
 
     const columns = this.props.columns;
     if (isAccount) {
@@ -43,7 +45,7 @@ class ReportLine extends Component {
       // ID of the entry.
       id: (column, extras = {}) => td(column, decor(id)),
       // Name of the entry.
-      name: (column, extras = {}) => td(column, decor(needLocalization ? <Localize>{name}</Localize> : name), {...extras, className: 'tab' + (tab || 0)}),
+      name: (column, extras = {}) => td(column, decor(needLocalization ? <Localize>{name}</Localize> : name), { ...extras, className: 'tab' + (tab || 0) }),
       // Render currency value.
       numeric: (column, extras = {}) => td(column,
         amounts && !hideTotal && amounts[column.name] !== '' ? (
@@ -61,7 +63,7 @@ class ReportLine extends Component {
     }
 
     if (useRemainingColumns !== undefined) {
-      let ret = [];
+      const ret = [];
       for (let i = 0; i <= useRemainingColumns; i++) {
         ret.push(columns[i].type && render[columns[i].type] && render[columns[i].type](columns[i], {
           colSpan: i === useRemainingColumns ? columns.length - useRemainingColumns : 1

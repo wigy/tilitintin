@@ -7,14 +7,18 @@ class DatabaseModel extends Model {
   // All periods of this database.
   @observable
   periodsById = {};
+
   // All accounts of this database.
   @observable
   accountsById = {};
+
   @observable
   accountsByNumber = {};
+
   // All tags of this database.
   @observable
   tagsByTag = {};
+
   // All headings of this database.
   @observable
   headingsByNumber = {};
@@ -108,7 +112,7 @@ class DatabaseModel extends Model {
     // Collect the balances from the previous period.
     await this.store.fetchBalances(this.name, lastPeriod.id);
     let profit = 0;
-    let balances = [];
+    const balances = [];
     Object.values(lastPeriod.balances).forEach((balance) => {
       const acc = this.accountsById[balance.account_id];
       switch (acc.type) {
@@ -116,7 +120,7 @@ class DatabaseModel extends Model {
         case 'LIABILITY':
         case 'EQUITY':
           if (Math.abs(balance.total) > 0.0001) {
-            balances.push({id: acc.id, number: acc.number, balance: balance.total});
+            balances.push({ id: acc.id, number: acc.number, balance: balance.total });
           }
           break;
         case 'REVENUE':
@@ -130,13 +134,13 @@ class DatabaseModel extends Model {
     });
 
     // Create period.
-    const period = new PeriodModel(this, {start_date: startDate, end_date: endDate});
+    const period = new PeriodModel(this, { start_date: startDate, end_date: endDate });
     await period.save();
     this.addPeriod(period);
 
     // Prepare profit entry.
     if (profit) {
-      balances.push({id: profitAcc.id, number: profitAcc.number, balance: profit});
+      balances.push({ id: profitAcc.id, number: profitAcc.number, balance: profit });
     }
     balances.sort((a, b) => (a.number > b.number ? 1 : (a.number < b.number ? -1 : 0)));
 

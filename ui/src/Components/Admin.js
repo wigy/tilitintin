@@ -34,12 +34,12 @@ class Admin extends Component {
     }
     this.props.store.request(`/admin/user/${user}`)
       .then((user) => {
-        this.setState({user});
+        this.setState({ user });
       });
   }
 
   onRegister({ user, name, password, email }) {
-    return this.props.store.request('/admin/user', 'POST', {user, name, password, email})
+    return this.props.store.request('/admin/user', 'POST', { user, name, password, email })
       .then(() => {
         this.props.history.push('/_/admin');
       })

@@ -20,7 +20,7 @@ class Tools extends Component {
     if (!this.props.store.token) {
       return '';
     }
-    const {db, periodId, tool} = this.props.match.params;
+    const { db, periodId, tool } = this.props.match.params;
 
     if (tool === 'vat') {
       return <ToolsForVAT db={db} periodId={periodId}/>;

@@ -27,7 +27,7 @@ class Account extends Component {
   };
 
   componentDidMount() {
-    const {db, periodId, accountId} = this.props.match.params;
+    const { db, periodId, accountId } = this.props.match.params;
     if (accountId) {
       this.props.store.setAccount(db, periodId, accountId);
     } else if (periodId) {
@@ -56,14 +56,14 @@ class Account extends Component {
     }
     model.save()
       .then(() => {
-        this.setState({editDialogIsOpen: false, accountName: '', accountNumber: '', accountType: ''});
+        this.setState({ editDialogIsOpen: false, accountName: '', accountNumber: '', accountType: '' });
         this.props.store.fetchAccounts(this.props.store.database.name);
       });
   }
 
   @action.bound
   onDeleteAccount() {
-    const {db, periodId} = this.props.match.params;
+    const { db, periodId } = this.props.match.params;
     this.props.store.deleteAccount(this.props.store.account)
       .then(() => this.props.history.push(`/${db}/account/${periodId || ''}`));
   }
@@ -74,7 +74,7 @@ class Account extends Component {
       className="dialog"
       title={<Trans>Delete this account?</Trans>}
       isVisible={this.state.deleteIsOpen}
-      onClose={() => this.setState({deleteIsOpen: false})}
+      onClose={() => this.setState({ deleteIsOpen: false })}
       onConfirm={() => this.onDeleteAccount()}>
       <i>{account.number} {account.name}</i><br/>
     </Dialog>;
@@ -93,27 +93,27 @@ class Account extends Component {
       className="dialog"
       title={<Trans>Create New Account</Trans>}
       isVisible={this.state.editDialogIsOpen}
-      onClose={() => this.setState({editDialogIsOpen: false})}
+      onClose={() => this.setState({ editDialogIsOpen: false })}
       onConfirm={() => this.onSubmitAccount()}>
       <Form>
         <ControlLabel><Trans>Account Number</Trans>:</ControlLabel>
         <div className="error">{this.state.changed && this.state.new && (
           this.state.accountNumber ? (database.hasAccount(this.state.accountNumber) ? t('Account number exists.') : '') : t('Account number is required.')
         )}</div>
-        <FormControl type="text" className="number" value={this.state.accountNumber} onChange={(e) => this.setState({changed: true, accountNumber: e.target.value})}/>
+        <FormControl type="text" className="number" value={this.state.accountNumber} onChange={(e) => this.setState({ changed: true, accountNumber: e.target.value })}/>
 
         <ControlLabel><Trans>Account Name</Trans>:</ControlLabel>
         <div className="error">{this.state.changed && (
           this.state.accountName ? '' : t('Account name is required.')
         )}</div>
-        <FormControl type="text" className="name" value={this.state.accountName} onChange={(e) => this.setState({changed: true, accountName: e.target.value})}></FormControl>
+        <FormControl type="text" className="name" value={this.state.accountName} onChange={(e) => this.setState({ changed: true, accountName: e.target.value })}></FormControl>
 
         <ControlLabel><Trans>Account Type</Trans>:</ControlLabel>
         <br/>
         <div className="error">{this.state.changed && (
           this.state.accountType ? '' : t('Account type is required.')
         )}</div>
-        <FormControl componentClass="select" value={this.state.accountType} onChange={(e) => this.setState({changed: true, accountType: e.target.value})}>
+        <FormControl componentClass="select" value={this.state.accountType} onChange={(e) => this.setState({ changed: true, accountType: e.target.value })}>
           <option></option>
           {['ASSET', 'LIABILITY', 'EQUITY', 'REVENUE', 'EXPENSE'].map(o => <option value={o} key={o}>{t(o)}</option>)}
         </FormControl>
@@ -135,7 +135,8 @@ class Account extends Component {
       new: true,
       accountName: '',
       accountNumber: number,
-      accountType: ''});
+      accountType: ''
+    });
   }
 
   onClickEdit() {
@@ -145,7 +146,8 @@ class Account extends Component {
       new: false,
       accountName: account.name,
       accountNumber: account.number,
-      accountType: account.type});
+      accountType: account.type
+    });
   }
 
   render() {
@@ -172,7 +174,7 @@ class Account extends Component {
               <Trans>Account Type</Trans>: <Trans>{account.type}</Trans><br/>
             </div>
             <div className="buttons">
-              <Button className="delete" disabled={!canChange()} onClick={() => this.setState({deleteIsOpen: true})}><Trans>Delete Account</Trans></Button><br/>
+              <Button className="delete" disabled={!canChange()} onClick={() => this.setState({ deleteIsOpen: true })}><Trans>Delete Account</Trans></Button><br/>
               <Button className="edit" disabled={!canChange()} onClick={() => this.onClickEdit()}><Trans>Edit Account</Trans></Button><br/>
             </div>
             {this.renderDeleteDialog()}
@@ -189,9 +191,9 @@ class Account extends Component {
                 account.periods.map((period) => <div key={period.id}>
                   <Localize date={period.start_date}/> - <Localize date={period.end_date}/>{period.locked && <b> <Trans>Locked</Trans></b>}<br/>
                   &nbsp;&nbsp;&nbsp;{
-                    period.entries === 0 ? this.props.t('no transactions', {num: period.entries})
-                      : period.entries === 1 ? this.props.t('1 transaction', {num: period.entries})
-                        : this.props.t('{{count}} transactions', {count: period.entries})
+                    period.entries === 0 ? this.props.t('no transactions', { num: period.entries })
+                      : period.entries === 1 ? this.props.t('1 transaction', { num: period.entries })
+                        : this.props.t('{{count}} transactions', { count: period.entries })
                   }
                 </div>)
               }

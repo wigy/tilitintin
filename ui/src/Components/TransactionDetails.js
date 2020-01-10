@@ -17,7 +17,7 @@ import './TransactionDetails.css';
 class TransactionDetails extends Component {
 
   render() {
-    let target = this.props.field === 'date' ? this.props.document : this.props.entry;
+    const target = this.props.field === 'date' ? this.props.document : this.props.entry;
 
     if ((this.props.document.edit && this.props.field === 'date') ||
       (this.props.entry && this.props.entry.edit && this.props.entry.column === this.props.field)) {
@@ -37,7 +37,7 @@ class TransactionDetails extends Component {
     }
 
     const column = this.props.entry ? this.props.entry.columns().indexOf(this.props.field) : null;
-    let className = 'TransactionDetails ' +
+    const className = 'TransactionDetails ' +
       target.getClasses(column, this.props.cursor.row) +
       (this.props.error ? ' error' : '') +
       (this.props.classNames ? ' ' + this.props.classNames : '');

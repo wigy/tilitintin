@@ -120,10 +120,10 @@ class Store {
    * @param {File} file
    */
   async request(path, method = 'GET', data = null, file = null) {
-    let options = {
+    const options = {
       method: method,
       headers: {
-        'Accept': 'application/json',
+        Accept: 'application/json',
         'Content-Type': 'application/json'
       }
     };
@@ -134,7 +134,7 @@ class Store {
       options.body = JSON.stringify(data);
     }
     if (file !== null) {
-      delete options.headers['Accept'];
+      delete options.headers.Accept;
       delete options.headers['Content-Type'];
       options.body = new FormData();
       options.body.set('file', file);
@@ -437,7 +437,7 @@ class Store {
       .then((reports) => {
         runInAction(() => {
           Object.keys(reports.links).forEach((format, idx) => {
-            const opts = {format, order: idx, options: reports.options[format] || {}};
+            const opts = { format, order: idx, options: reports.options[format] || {} };
             this.dbsByName[db].periods.forEach((period) => period.addReport(new ReportModel(period, opts)));
           });
         });
@@ -489,7 +489,7 @@ class Store {
           const period = this.dbsByName[db].getPeriod(periodId);
           period.balances = {};
           balances.balances.forEach((data) => {
-            period.addBalance(new BalanceModel(period, {account_id: data.id, ...data}));
+            period.addBalance(new BalanceModel(period, { account_id: data.id, ...data }));
           });
         });
       });
@@ -530,7 +530,7 @@ class Store {
    */
   async login(user, password) {
     this.token = null;
-    return this.request('/auth', 'POST', {user: user, password: password})
+    return this.request('/auth', 'POST', { user: user, password: password })
       .then((resp) => {
         if (resp && resp.token) {
           runInAction(() => {

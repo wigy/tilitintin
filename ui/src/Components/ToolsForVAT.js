@@ -123,7 +123,7 @@ class ToolsForVAT extends Component {
             { doc.entries.map((entry) => {
               return <div key={entry.id}>
                 <b> {entry.account.toString()} </b>
-                {entry.text || <span style={{color: 'red'}}><Trans>Description missing</Trans></span>}
+                {entry.text || <span style={{ color: 'red' }}><Trans>Description missing</Trans></span>}
                 <span> </span><Money cents={entry.total} currency="€"></Money>
               </div>;
             })

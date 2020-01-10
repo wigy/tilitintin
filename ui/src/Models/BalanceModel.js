@@ -37,7 +37,7 @@ class BalanceModel extends NavigationTargetModel {
   keyEnter(cursor) {
     const el = this.getElement();
     el.children[0].children[0].click();
-    return {preventDefault: true};
+    return { preventDefault: true };
   }
 
   /**

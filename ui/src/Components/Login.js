@@ -21,14 +21,14 @@ class Login extends Component {
 
   componentDidMount() {
     if (this.props.store.token) {
-      this.setState({appState: 'LOGGED_IN'});
+      this.setState({ appState: 'LOGGED_IN' });
     } else {
       this.props.store.request('/status')
         .then((data) => {
           if (data.hasAdminUser) {
-            this.setState({appState: 'NOT_LOGGED_IN'});
+            this.setState({ appState: 'NOT_LOGGED_IN' });
           } else {
-            this.setState({appState: 'NO_ROOT'});
+            this.setState({ appState: 'NO_ROOT' });
           }
         });
     }
@@ -37,11 +37,11 @@ class Login extends Component {
   componentDidUpdate() {
     if (this.props.store.token) {
       if (this.state.appState !== 'LOGGED_IN') {
-        this.setState({appState: 'LOGGED_IN'});
+        this.setState({ appState: 'LOGGED_IN' });
       }
     } else {
       if (this.state.appState === 'LOGGED_IN') {
-        this.setState({appState: 'NOT_LOGGED_IN'});
+        this.setState({ appState: 'NOT_LOGGED_IN' });
       }
     }
   }
@@ -62,7 +62,7 @@ class Login extends Component {
     };
 
     const onRegisterAdmin = ({ user, name, password, email }) => {
-      return store.request('/register', 'POST', {admin: true, user, name, password, email})
+      return store.request('/register', 'POST', { admin: true, user, name, password, email })
         .then(() => {
           store.login(user, password)
             .then(() => {

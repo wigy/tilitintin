@@ -22,13 +22,13 @@ class DialogContent extends Component {
 
   keyEscape = () => {
     this.props.onClose(false);
-    return {preventDefault: true};
+    return { preventDefault: true };
   };
 
   keyEnter = () => {
     this.props.onClose(true);
     this.props.onConfirm();
-    return {preventDefault: true};
+    return { preventDefault: true };
   };
 
   render() {

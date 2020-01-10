@@ -87,7 +87,7 @@ class Menu extends Component {
 
   handleSelect(key, ...args) {
     let url;
-    const [ , db, , periodId, accountId ] = this.props.history.location.pathname.split('/');
+    const [, db, , periodId, accountId] = this.props.history.location.pathname.split('/');
     switch (key) {
       case 'logout':
         this.props.store.logout();

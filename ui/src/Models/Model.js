@@ -21,7 +21,7 @@ class Model {
    * Construct a JSON-object compatible with DB format.
    */
   toJSON() {
-    let ret = {};
+    const ret = {};
     this.variables.forEach((k) => (ret[k] = this[k]));
     return ret;
   }
@@ -30,7 +30,7 @@ class Model {
    * Get the name of class without 'Model' postfix.
    */
   getObjectType() {
-    throw new Error(`Model does not implement getObjectType().`);
+    throw new Error('Model does not implement getObjectType().');
   }
 
   /**
@@ -162,7 +162,7 @@ class Model {
       if (aKey instanceof Array && bKey instanceof Array) {
         const N = Math.max(aKey.length, bKey.length);
         for (let i = 0; i < N; i++) {
-          let res = cmp(aKey[i], bKey[i]);
+          const res = cmp(aKey[i], bKey[i]);
           if (res) {
             return res;
           }

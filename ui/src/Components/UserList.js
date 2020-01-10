@@ -29,7 +29,7 @@ class ToolsList extends Component {
   getUsers() {
     this.props.store.request('/admin/user')
       .then((users) => {
-        this.setState({users});
+        this.setState({ users });
       });
   }
 

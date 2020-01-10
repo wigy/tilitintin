@@ -17,7 +17,7 @@ class BalanceLine extends Component {
   @action.bound
   onClick() {
     this.props.cursor.setComponent('Balances.balances');
-    this.props.cursor.setIndex(this.props.index, {noScroll: true});
+    this.props.cursor.setIndex(this.props.index, { noScroll: true });
   }
 
   render() {

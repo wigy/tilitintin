@@ -28,13 +28,13 @@ class TextEdit extends Component {
       const value = this.state.currentProposal !== null ? this.state.proposal[this.state.currentProposal] : this.state.value;
       const error = this.props.validate && this.props.validate(value);
       if (error) {
-        this.setState({error});
+        this.setState({ error });
       } else if (this.props.onComplete) {
         const complete = this.props.onComplete(value);
         if (complete.catch) {
           complete.catch(err => {
             console.error(err);
-            this.setState({error: <Trans>Saving failed.</Trans>});
+            this.setState({ error: <Trans>Saving failed.</Trans> });
           });
         }
       }
@@ -85,7 +85,7 @@ class TextEdit extends Component {
   onChange(event) {
     const value = event.target.value;
     this.props.onChange && this.props.onChange(value);
-    this.setState({value, error: null});
+    this.setState({ value, error: null });
     this.updateProposal(value);
   }
 
@@ -112,7 +112,7 @@ class TextEdit extends Component {
               currentProposal = null;
             }
           }
-          this.setState({proposal, currentProposal});
+          this.setState({ proposal, currentProposal });
           this.scrollToView();
         });
     }
@@ -124,7 +124,7 @@ class TextEdit extends Component {
     }
     const el = document.getElementById(`proposal${this.state.currentProposal}`);
     if (el) {
-      el.scrollIntoView({block: 'center', inline: 'center'});
+      el.scrollIntoView({ block: 'center', inline: 'center' });
     }
   }
 

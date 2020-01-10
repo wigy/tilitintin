@@ -8,12 +8,15 @@ class PeriodModel extends Model {
   // All documents of this period.
   @observable
   documentsByAccountId = {};
+
   // All known account balances of the period.
   @observable
   balances = {};
+
   // All known documents of the period.
   @observable
   documents = {};
+
   // All reports for the period.
   @observable
   reportsByFormat = {};
@@ -56,7 +59,7 @@ class PeriodModel extends Model {
     // Create document.
     const entries = data.entries || [];
     delete data.entries;
-    const doc = new DocumentModel(this, {...data, period_id: this.id});
+    const doc = new DocumentModel(this, { ...data, period_id: this.id });
     await doc.save();
     this.addDocument(doc);
     // Create entries.
@@ -110,7 +113,7 @@ class PeriodModel extends Model {
    */
   deleteEntry(entry) {
     if (entry.account_id) {
-      for (let docId of this.documentsByAccountId[entry.account_id]) {
+      for (const docId of this.documentsByAccountId[entry.account_id]) {
         this.getDocument(docId).deleteEntry(entry);
       }
     }
@@ -205,7 +208,7 @@ class PeriodModel extends Model {
    * @return {DocumentModel[]}
    */
   getDocuments(accounts = null, filter = null) {
-    let docs = Object.values({...this.documents});
+    let docs = Object.values({ ...this.documents });
     if (accounts !== null) {
       docs = docs.filter((doc) => {
         for (const entry of doc.entries) {
@@ -243,7 +246,7 @@ class PeriodModel extends Model {
    * Lock the period.
    */
   lock() {
-    this.store.request(`/db/${this.database.name}/period/${this.id}`, 'PATCH', {locked: 1})
+    this.store.request(`/db/${this.database.name}/period/${this.id}`, 'PATCH', { locked: 1 })
       .then(() => {
         this.locked = 1;
       });
@@ -253,7 +256,7 @@ class PeriodModel extends Model {
    * Unlock the period.
    */
   unlock() {
-    this.store.request(`/db/${this.database.name}/period/${this.id}`, 'PATCH', {locked: 0})
+    this.store.request(`/db/${this.database.name}/period/${this.id}`, 'PATCH', { locked: 0 })
       .then(() => {
         this.locked = 0;
       });
@@ -280,7 +283,7 @@ class PeriodModel extends Model {
         }
       });
     });
-    return {sales, purchases};
+    return { sales, purchases };
   }
 
   /**

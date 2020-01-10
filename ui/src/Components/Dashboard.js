@@ -67,7 +67,7 @@ class Dashboard extends Component {
         <h1><Trans>No Database Selected</Trans></h1>
       </>;
     }
-    const {periodId} = this.props.match.params;
+    const { periodId } = this.props.match.params;
 
     return (
       <div className="Dashboard">

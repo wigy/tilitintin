@@ -40,7 +40,7 @@ class TagModel extends Model {
    * @return [String, String[]] Description and list of tags.
    */
   static desc2tags(desc) {
-    let ret = [desc, []];
+    const ret = [desc, []];
     const regex = /^((\[[a-zA-Z0-9]+\])+)\s*(.*)/.exec(desc);
     if (regex && regex[1]) {
       ret[0] = regex[3];

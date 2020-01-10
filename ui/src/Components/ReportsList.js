@@ -15,7 +15,7 @@ class ReportsList extends Component {
 
   componentDidMount() {
     this.props.cursor.selectPage('Reports', this);
-    const {format} = this.props.match.params;
+    const { format } = this.props.match.params;
     if (!format && this.props.store.report) {
       this.selectReportFormat(this.props.store.report);
     }
@@ -35,7 +35,7 @@ class ReportsList extends Component {
     const report = reports[num];
     this.selectReportFormat(report);
 
-    return {preventDefault: true};
+    return { preventDefault: true };
   }
 
   keyText(cursor, key) {

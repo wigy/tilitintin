@@ -107,7 +107,7 @@ class ToolsToolPanel extends Component {
       date = store.period.end_date;
     }
 
-    const doc = {date, entries: []};
+    const doc = { date, entries: [] };
 
     if (sales) {
       doc.entries.push({
@@ -182,7 +182,7 @@ class ToolsToolPanel extends Component {
     if (this.state.files[0]) {
       this.props.store.request('/db/upload', 'POST', null, this.state.files[0])
         .then(() => {
-          this.setState({askUpload: false});
+          this.setState({ askUpload: false });
           this.props.store.clearAccount();
           this.props.store.fetchDatabases(true);
         });
@@ -198,7 +198,8 @@ class ToolsToolPanel extends Component {
       this.props.store.createDatabase({
         databaseName: this.state.databaseName,
         companyName: this.state.companyName,
-        companyCode: this.state.companyCode }
+        companyCode: this.state.companyCode
+      }
       )
         .then(() => {
           this.setState({ askNew: false });
@@ -221,7 +222,8 @@ class ToolsToolPanel extends Component {
     let buttons = [];
     let label;
     let startDate, endDate;
-    const VAT = this.props.store.period ? this.props.store.period.VATSummary : {sales: 0, purchases: 0};
+    let toRenumber;
+    const VAT = this.props.store.period ? this.props.store.period.VATSummary : { sales: 0, purchases: 0 };
 
     switch (tool) {
       case 'vat':
@@ -236,7 +238,7 @@ class ToolsToolPanel extends Component {
         label = 'Periods';
         if (this.props.store.db) {
           buttons.push(
-            <IconButton key="button-new" onClick={() => this.setState({askNewPeriod: true})} title="create-period" icon="fa-calendar-plus"></IconButton>
+            <IconButton key="button-new" onClick={() => this.setState({ askNewPeriod: true })} title="create-period" icon="fa-calendar-plus"></IconButton>
           );
 
         }
@@ -246,7 +248,7 @@ class ToolsToolPanel extends Component {
 
       case 'documents':
         label = 'Documents';
-        const toRenumber = store.period ? store.period.incorrectlyNumberedDocuments : [];
+        toRenumber = store.period ? store.period.incorrectlyNumberedDocuments : [];
         buttons = [
           <IconButton key="button-new" disabled={!toRenumber.length} onClick={() => this.renumberDocuments(this.props.store.db, this.props.store.periodId)} title="sort-documents" icon="fas fa-sort-numeric-up"></IconButton>
         ];
@@ -258,7 +260,7 @@ class ToolsToolPanel extends Component {
           <IconButton key="button-new-database" onClick={() => this.setState({ askNew: true })} title="new-database" icon="fa-database"></IconButton>
         );
         buttons.push(
-          <IconButton key="button-upload" onClick={() => this.setState({askUpload: true})} title="upload-database" icon="fa-upload"></IconButton>
+          <IconButton key="button-upload" onClick={() => this.setState({ askUpload: true })} title="upload-database" icon="fa-upload"></IconButton>
         );
         break;
     }
@@ -270,7 +272,7 @@ class ToolsToolPanel extends Component {
         <Dialog
           title={<Trans>Start new period?</Trans>}
           isVisible={this.state.askNewPeriod}
-          onClose={() => { this.setState({askNewPeriod: false}); }}
+          onClose={() => { this.setState({ askNewPeriod: false }); }}
           onConfirm={() => this.createPeriod(startDate, endDate)}>
           <Localize date={startDate} /> - <Localize date={endDate} />
         </Dialog>
@@ -278,10 +280,10 @@ class ToolsToolPanel extends Component {
         <Dialog
           title={<Trans>Upload Database</Trans>}
           isVisible={this.state.askUpload}
-          onClose={() => { this.setState({askUpload: false}); }}
+          onClose={() => { this.setState({ askUpload: false }); }}
           onConfirm={() => this.uploadFile()}>
           <h2><Trans>You can upload old Tilitin file here.</Trans></h2>
-          <input type="file" accept=".sqlite" onChange={(e) => this.setState({files: e.target.files})} />
+          <input type="file" accept=".sqlite" onChange={(e) => this.setState({ files: e.target.files })} />
           <br />
           <Trans>Note that a database with the same name is overridden automatically.</Trans>
         </Dialog>
@@ -290,7 +292,7 @@ class ToolsToolPanel extends Component {
           title={<Trans>Create New Database</Trans>}
           isVisible={this.state.askNew}
           isValid={() => this.validDbName(this.state.databaseName) && this.state.companyName}
-          onClose={() => { this.setState({askNew: false}); }}
+          onClose={() => { this.setState({ askNew: false }); }}
           onConfirm={() => this.onCreateNewDb()}>
           <Form>
             <ControlLabel><Trans>Database Name</Trans>:</ControlLabel>
@@ -298,14 +300,14 @@ class ToolsToolPanel extends Component {
               !this.state.databaseName ? t('Database name is required.')
                 : (!this.validDbName(this.state.databaseName) ? t('Invalid database name.') : '')
             )}</div>
-            <FormControl type="text" className="name" value={this.state.databaseName} onChange={(e) => this.setState({changed: true, databaseName: e.target.value})}></FormControl>
+            <FormControl type="text" className="name" value={this.state.databaseName} onChange={(e) => this.setState({ changed: true, databaseName: e.target.value })}></FormControl>
             <ControlLabel><Trans>Company Name</Trans>:</ControlLabel>
             <div className="error">{this.state.changed && (
               this.state.companyName ? '' : t('Company name is required.')
             )}</div>
-            <FormControl type="text" className="company" value={this.state.companyName} onChange={(e) => this.setState({changed: true, companyName: e.target.value})}></FormControl>
+            <FormControl type="text" className="company" value={this.state.companyName} onChange={(e) => this.setState({ changed: true, companyName: e.target.value })}></FormControl>
             <ControlLabel><Trans>Company Registration Number</Trans>:</ControlLabel>
-            <FormControl type="text" className="code" value={this.state.companyCode} onChange={(e) => this.setState({changed: true, companyCode: e.target.value})}></FormControl>
+            <FormControl type="text" className="code" value={this.state.companyCode} onChange={(e) => this.setState({ changed: true, companyCode: e.target.value })}></FormControl>
           </Form>
         </Dialog>
       </div>

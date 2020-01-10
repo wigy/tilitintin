@@ -21,7 +21,7 @@ class DocumentModel extends NavigationTargetModel {
   }
 
   toJSON() {
-    let ret = super.toJSON();
+    const ret = super.toJSON();
     delete ret.entries;
     return ret;
   }
@@ -51,10 +51,12 @@ class DocumentModel extends NavigationTargetModel {
   ['get.date']() {
     return date2str(this.date);
   }
+
   ['validate.date'](value) {
     const INVALID_DATE = <Trans>Date is incorrect.</Trans>;
     return str2date(value, this.store.lastDate) ? null : INVALID_DATE;
   }
+
   ['change.date'](value) {
     this.date = str2date(value, this.store.lastDate);
     this.store.lastDate = this.date;
@@ -65,7 +67,7 @@ class DocumentModel extends NavigationTargetModel {
    * @param {Object} data
    */
   initialize(data) {
-    return {...data, entries: (data.entries || []).map((e) => new EntryModel(this, e))};
+    return { ...data, entries: (data.entries || []).map((e) => new EntryModel(this, e)) };
   }
 
   /**
