@@ -3,17 +3,11 @@ BUGS
 ====
 
 [ ] Update on unmounted loading component when switching between reports and transactions.
-[X] Fix crash when editing and changing to account that has no entries yet.
-[X] If there is just created empty row and one edits old row, saving fails.
 
 SMALL IMPROVEMENTS
 ==================
 
-[X] Insert should always create new document.
-[X] More visible selection marker for date cell.
-[X] Copy and paste for document.
 [ ] Calculate sum of debit and credit.
-[X] Copy and paste for entry cells.
 
 FUTURE FEATURES
 ===============

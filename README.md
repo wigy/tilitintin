@@ -60,6 +60,13 @@ In UI you can do filtering using the categories defined.
 
 ## Version History
 
+### 1.1.0
+  * Copy paste support.
+  * Insert always creates new document and tab new entry.
+  * More visible selection marker for date cell.
+  * Fix crash when editing and changing to account that has no entries yet.
+  * Fix when just created empty row and one edits old row, saving does not fail anymore.
+
 ### 1.0.2
   * Fix crash after automatically creating documents like VAT.
   * If you change account on tx, update document views correctly.
