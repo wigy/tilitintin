@@ -3,6 +3,8 @@ BUGS
 ====
 
 [ ] Update on unmounted loading component when switching between reports and transactions.
+[ ] Pressing insert while previous date is early in order, produced 2 selected lines.
+[ ] Copy paste may not work. Avoid error if clipboard is not defined.
 
 SMALL IMPROVEMENTS
 ==================
