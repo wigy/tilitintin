@@ -1,8 +1,18 @@
-table.TransactionTable {
+.TransactionTable {
   width: 100%;
   table-layout: auto;
 }
 
-table.TransactionTable tr {
+.TransactionTable tr {
   cursor: pointer;
+}
+
+.TransactionTable tr.totals {
+  background-color: rgba(255, 255, 255, 0.1);
+  font-weight: bold;
+  font-size: 105%;
+}
+
+.TransactionTable tr.totals td.debit, .TransactionTable tr.totals td.credit {
+  text-align: right;
 }

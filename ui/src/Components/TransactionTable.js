@@ -282,6 +282,8 @@ class TransactionTable extends Component {
     </Dialog>);
 
     let sum = 0;
+    let debit = null;
+    let credit = null;
     const seen = {};
     ret.push(
       <table key="table" className="TransactionTable">
@@ -304,6 +306,11 @@ class TransactionTable extends Component {
             const duplicate = seen[tx.document.number];
             seen[tx.document.number] = true;
             sum += tx.total;
+            if (tx.debit) {
+              debit += tx.amount;
+            } else {
+              credit += tx.amount;
+            }
             return <Transaction
               key={idx}
               index={idx}
@@ -312,6 +319,15 @@ class TransactionTable extends Component {
               total={sum}
             />;
           })}
+        <tr className="totals">
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td className="debit">{debit !== null && <Money cents={debit} currency="EUR" />}</td>
+          <td className="credit">{credit !== null && <Money cents={credit} currency="EUR" />}</td>
+          <td></td>
+        </tr>
         </tbody>
       </table>
     );
