@@ -119,6 +119,9 @@ class TransactionTable extends Component {
     if (cursor.componentX !== 1) {
       return;
     }
+    if (!navigator.clipboard) {
+      return;
+    }
 
     const { store } = this.props;
     const doc = store.filteredTransactions[cursor.index].document;
@@ -164,6 +167,9 @@ class TransactionTable extends Component {
       return;
     }
     if (cursor.componentX !== 1) {
+      return;
+    }
+    if (!navigator.clipboard) {
       return;
     }
     if (cursor.row !== null) {
