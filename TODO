@@ -5,12 +5,17 @@ BUGS
 [ ] Update on unmounted loading component when switching between reports and transactions.
 [ ] Pressing insert while previous date is early in order, produced 2 selected lines.
 [X] Copy paste may not work. Avoid error if clipboard is not defined.
+[ ] Mouse does not work on proposals.
 [ ] 2020 not working.
+[ ] When inserting new entries on the bottom, it does not scroll.
+[ ] When opening proposals on the bottom, it does not scroll.
 
 SMALL IMPROVEMENTS
 ==================
 
 [X] Calculate sum of debit and credit.
+[ ] When selecting proposed text, insert new account entry as well based on history.
+[ ] When selecting proposed text and no debit/credit, it could jump to the previously used debit/credit.
 
 FUTURE FEATURES
 ===============
