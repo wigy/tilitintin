@@ -6,7 +6,7 @@ BUGS
 [ ] Pressing insert while previous date is early in order, produced 2 selected lines.
 [X] Copy paste may not work. Avoid error if clipboard is not defined.
 [ ] Mouse does not work on proposals.
-[ ] 2020 not working.
+[ ] 2020 not working (2624).
 [ ] When inserting new entries on the bottom, it does not scroll.
 [ ] When opening proposals on the bottom, it does not scroll.
 
