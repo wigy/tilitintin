@@ -7,6 +7,7 @@ knex.setUser(USER);
 
 cli.opt('add-currencies', null, 'Add converted foreign currency amounts, where applicable.');
 cli.opt('avg', null, 'Set explicit averages `SERVICE1:ETH=123,SERVICE2:ETH=122`.');
+cli.opt('config', null, 'Load the given config file instead of default.');
 cli.opt('debug-stock', null, 'Display stock and average changes in detail.');
 cli.opt('debug', null, 'To turn dry-run on and display entries.');
 cli.opt('dry-run', null, 'To turn dry-run on.');
@@ -20,6 +21,7 @@ cli.opt('no-withdrawal', null, 'Ignore withdrawal transactions.');
 cli.opt('service', null, 'Set name for the service.');
 cli.opt('show-balances', null, 'Display account balances before and after.');
 cli.opt('show-stock', null, 'Display stock before and after.');
+cli.opt('simple', null, 'Use simplified import.');
 cli.opt('single-loan-update', null, 'Add loan update only at the end of the import.');
 cli.opt('skip-errors', null, 'If import fails, just print and skip the failed transaction.');
 cli.opt('start-date', null, 'Ignore all transactions before this date.');
@@ -31,7 +33,7 @@ cli.opt('zero-moves', null, 'Do not add to the stock commodities moved in.');
 cli.arg_('db', knex.dbs(USER));
 cli.args('csv-files', 'transaction log as CSV file(s)');
 
-config.loadIni();
+config.loadIni(cli.options.config || null);
 
 config.set({
   encoding: cli.options.encoding,
@@ -45,6 +47,7 @@ config.set({
     tradeProfit: cli.options['trade-profit'],
     showBalances: cli.options['show-balances'],
     showStock: cli.options['show-stock'],
+    simple: cli.options['simple'],
     singleLoanUpdate: cli.options['single-loan-update'],
     startDate: cli.options['start-date'],
     skipErrors: cli.options['skip-errors'],
@@ -79,10 +82,10 @@ if (cli.options['no-deposit']) {
   ignore.add('deposit');
 }
 
-if (!cli.options.service) {
+if (!cli.options.simple && !cli.options.service) {
   throw new Error(`Option --service is required.`);
 }
-if (!cli.options.fund) {
+if (!cli.options.simple && !cli.options.fund) {
   throw new Error(`Option --fund is required.`);
 }
 
