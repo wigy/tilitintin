@@ -529,6 +529,16 @@ class Store {
   }
 
   /**
+   * Get a single document raw data without caching.
+   */
+  async fetchRawDocument(documentId) {
+    if (!this.token) {
+      return;
+    }
+    return this.request('/db/' + this.db + '/document/' + documentId);
+  }
+
+  /**
    * Login to the back-end.
    * @param {String} user
    * @param {String} password

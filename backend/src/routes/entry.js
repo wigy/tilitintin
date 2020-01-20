@@ -8,7 +8,7 @@ router.get('/', (req, res) => {
   if (req.query.account_id) {
     where = {account_id: parseInt(req.query.account_id)};
   }
-  data.listAll(knex.db(req.db), 'entry', where, ['id'])
+  data.listAll(knex.db(req.db), 'entry', where, ['document_id', 'id'])
     .then(entries => res.send(entries));
 });
 

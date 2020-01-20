@@ -49,8 +49,7 @@ class Transaction extends Component {
 
   // Handle finalizing editing of a cell.
   @action.bound
-  onComplete(column, row) {
-
+  async onComplete(column, row, proposal) {
     // Helper to create VAT entry, if needed.
     const checkAndAddVat = (VATAccount, debit) => {
       const document = this.props.tx.document;
@@ -72,12 +71,40 @@ class Transaction extends Component {
       }
     };
 
+    // If proposal used, do some additional preparation based on that.
+    if (column === 1 && proposal !== null) {
+      const store = this.props.store;
+      const document = this.props.tx.document;
+      const entry = document.entries[row];
+      const account = entry.account;
+      if (document.entries.length === 1 && document.entries[0].amount === 0 && account) {
+        let proposals = await store.fetchEntryProposals(store.db, account.id);
+        proposals = proposals
+          .filter(p => p.description === proposal && p.credit !== 0 && p.debit !== 0)
+          .sort((a, b) => b.documentId - a.documentId);
+        if (proposals.length > 0) {
+          const { documentId } = proposals[0];
+          const old = await store.fetchRawDocument(documentId);
+          for (const e of old.entries) {
+            if (e.account_id !== account.id) {
+              await document.createEntry({
+                id: e.account_id,
+                amount: e.debit ? e.amount : -e.amount,
+                description: e.description
+              });
+            } else {
+              entry.amount = e.amount;
+              entry.debit = e.debit;
+              await entry.save();
+            }
+          }
+        }
+      }
     // Automatically add VAT entry for purchases.
-    if (column === 2) {
+    } else if (column === 2) {
       checkAndAddVat(this.props.settings.VAT_PURCHASES_ACCOUNT, 1);
-    }
     // Automatically add VAT entry for sales.
-    if (column === 3) {
+    } else if (column === 3) {
       checkAndAddVat(this.props.settings.VAT_SALES_ACCOUNT, 0);
     }
 
@@ -112,7 +139,7 @@ class Transaction extends Component {
             field="date"
             classNames={tx.open && this.props.index === this.props.cursor.index && this.props.cursor.row === null ? 'sub-selected' : ''}
             document={tx.document}
-            onComplete={(doc) => {
+            onComplete={(doc, proposal) => {
               // Find the new row after order by date has been changed.
               const numbers = this.props.store.filteredTransactions.map(tx => tx.document.number);
               const index = numbers.indexOf(doc.number);
@@ -154,7 +181,7 @@ class Transaction extends Component {
             field="account"
             document={entry.document}
             entry={entry}
-            onComplete={() => this.onComplete(0, idx)}
+            onComplete={(_, proposal) => this.onComplete(0, idx, proposal)}
           />
         </td>
         <td className="description" onClick={() => this.onClickDetail(1, idx)}>
@@ -163,7 +190,7 @@ class Transaction extends Component {
             field="description"
             document={entry.document}
             entry={entry}
-            onComplete={() => this.onComplete(1, idx)}
+            onComplete={(_, proposal) => this.onComplete(1, idx, proposal)}
             onClick={() => this.onClickDetail(1, idx)}
           />
         </td>
@@ -174,7 +201,7 @@ class Transaction extends Component {
             document={entry.document}
             entry={entry}
             onClick={() => this.onClickDetail()}
-            onComplete={() => this.onComplete(2, idx)}
+            onComplete={(_, proposal) => this.onComplete(2, idx, proposal)}
           />
         </td>
         <td className="credit" onClick={() => this.onClickDetail(3, idx)}>
@@ -184,7 +211,7 @@ class Transaction extends Component {
             document={entry.document}
             entry={entry}
             onClick={() => this.onClickDetail()}
-            onComplete={() => this.onComplete(3, idx)}
+            onComplete={(_, proposal) => this.onComplete(3, idx, proposal)}
           />
         </td>
         <td className="empty">

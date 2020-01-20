@@ -27,11 +27,11 @@ class TransactionDetails extends Component {
         target={target}
         validate={value => target.validate(this.props.field, value)}
         proposal={value => target.proposal(this.props.field, value)}
-        onComplete={value => target.change(this.props.field, value)
+        onComplete={(value, proposal) => target.change(this.props.field, value)
           .then(() => target.save())
           .then(() => target.store.fetchBalances())
           .then(() => target.turnEditorOff(this.props.cursor))
-          .then(() => this.props.onComplete && this.props.onComplete(target))}
+          .then(() => this.props.onComplete && this.props.onComplete(target, proposal))}
         onCancel={() => target.turnEditorOff(this.props.cursor)}
       />);
     }

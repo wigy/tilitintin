@@ -22,7 +22,6 @@
     "eslint-loader": "3.0.3",
     "eslint-plugin-flowtype": "4.5.3",
     "eslint-plugin-jsx-a11y": "6.2.3",
-    "eslint-plugin-react": "7.17.0",
     "eslint-plugin-react-hooks": "^2.3.0",
     "file-loader": "5.0.2",
     "fork-ts-checker-webpack-plugin-alt": "0.4.14",
@@ -143,6 +142,7 @@
     "eslint-plugin-mocha": "^6.2.2",
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-react": "^7.18.0",
     "eslint-plugin-standard": "^4.0.1"
   }
 }

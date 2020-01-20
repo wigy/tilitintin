@@ -9,12 +9,13 @@ BUGS
 [ ] 2020 not working (2624).
 [ ] When inserting new entries on the bottom, it does not scroll.
 [ ] When opening proposals on the bottom, it does not scroll.
+[ ] Eslint setup not working.
 
 SMALL IMPROVEMENTS
 ==================
 
 [X] Calculate sum of debit and credit.
-[ ] When selecting proposed text, insert new account entry as well based on history.
+[X] When selecting proposed text, insert new account entry as well based on history.
 [ ] When selecting proposed text and no debit/credit, it could jump to the previously used debit/credit.
 
 FUTURE FEATURES
