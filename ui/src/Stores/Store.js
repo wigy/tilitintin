@@ -392,7 +392,7 @@ class Store {
    * @param {Number} accountId
    * @return {String[]}
    */
-  async fetchEntryDescriptions(db, accountId) {
+  async fetchEntryProposals(db, accountId) {
     if (!this.token) {
       return;
     }
@@ -401,7 +401,12 @@ class Store {
     }
     return this.request('/db/' + db + '/entry?account_id=' + accountId)
       .then((entries) => {
-        const ret = [...new Set(entries.map(e => e.description))];
+        const ret = entries.map(e => ({
+          documentId: e.document_id,
+          description: e.description,
+          debit: e.debit ? e.amount : null,
+          credit: e.debit ? null : e.amount
+        }));
         this.entryDescriptions[db] = this.entryDescriptions[db] || {};
         this.entryDescriptions[db][accountId] = ret;
         return ret;

@@ -301,7 +301,8 @@ class EntryModel extends NavigationTargetModel {
   }
 
   async ['proposal.description'](value) {
-    const texts = await this.store.fetchEntryDescriptions(this.database.name, this.account_id);
+    const entries = await this.store.fetchEntryProposals(this.database.name, this.account_id);
+    const texts = [...new Set([...entries.map(e => e.description)])];
     value = value.toLowerCase();
     return texts.filter(t => value === '' || t.toLowerCase().indexOf(value) >= 0).sort();
   }
