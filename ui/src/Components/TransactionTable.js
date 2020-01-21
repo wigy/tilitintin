@@ -359,7 +359,7 @@ class TransactionTable extends Component {
       const id = `tx${doc.id}-row${doc.entries.length - 1}`;
       const el = document.getElementById(id);
       if (el) {
-        el.scrollIntoView({ block: 'center', inline: 'center' });
+        el.scrollIntoView({ block: 'nearest', inline: 'nearest' });
       }
     }, 0);
     return ret;

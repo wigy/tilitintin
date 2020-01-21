@@ -1,6 +1,7 @@
 .TransactionTable {
   width: 100%;
   table-layout: auto;
+  background-color: transparent;
 }
 
 .TransactionTable tr {

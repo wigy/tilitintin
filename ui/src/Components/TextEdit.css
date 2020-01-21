@@ -6,7 +6,7 @@
 }
 
 .TextEdit .proposal-container {
-  position: fixed;
+  position: relative;
   z-index: 99999;
 }
 
