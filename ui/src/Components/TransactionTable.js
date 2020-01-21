@@ -349,6 +349,19 @@ class TransactionTable extends Component {
       ret.push(deleteDialog(this.txToDelete));
     }
 
+    setTimeout(() => {
+      const { index } = this.props.cursor;
+      const txs = this.props.store.filteredTransactions;
+      if (index === null || index >= txs.length) {
+        return;
+      }
+      const doc = txs[index].document;
+      const id = `tx${doc.id}-row${doc.entries.length - 1}`;
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ block: 'center', inline: 'center' });
+      }
+    }, 0);
     return ret;
   }
 }

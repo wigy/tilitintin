@@ -170,10 +170,11 @@ class Transaction extends Component {
   // Render an entry for opened document.
   renderEntry(idx, tx) {
     const classes = 'TransactionEntry alt open';
+    const id = `tx${tx.document.id}-row${idx}`;
     const entry = tx.document.entries[idx];
 
     return (
-      <tr key={idx} className={classes}>
+      <tr id={id} key={idx} className={classes}>
         <td className="account" colSpan={3} onClick={() => this.onClickDetail(0, idx)}>
           <TransactionDetails
             index={this.props.index}

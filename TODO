@@ -17,6 +17,7 @@ SMALL IMPROVEMENTS
 [X] Calculate sum of debit and credit.
 [X] When selecting proposed text, insert new account entry as well based on history.
 [ ] When selecting proposed text and no debit/credit, it could jump to the previously used debit/credit.
+[ ] After editing date, jump to description.
 
 FUTURE FEATURES
 ===============
