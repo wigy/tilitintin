@@ -1,8 +1,7 @@
 {
   "extends": [
-    "semistandard",
-    "plugin:react/recommended",
-    "react-app"
+    "eslint:recommended",
+    "plugin:react/recommended"
   ],
   "env": {
     "browser": true
