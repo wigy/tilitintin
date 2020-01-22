@@ -350,13 +350,13 @@ class TransactionTable extends Component {
     }
 
     setTimeout(() => {
-      const { index } = this.props.cursor;
+      const { index, row } = this.props.cursor;
       const txs = this.props.store.filteredTransactions;
       if (index === null || index >= txs.length) {
         return;
       }
       const doc = txs[index].document;
-      const id = `tx${doc.id}-row${doc.entries.length - 1}`;
+      const id = txs.length > 5 ? `tx${doc.id}-row${doc.entries.length - 1}` : `tx${doc.id}-row${row}`;
       const el = document.getElementById(id);
       if (el) {
         el.scrollIntoView({ block: 'nearest', inline: 'nearest' });
