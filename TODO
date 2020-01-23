@@ -11,8 +11,8 @@ BUGS
 [X] When opening proposals on the bottom, it does not scroll.
 [ ] Eslint setup not working.
 [ ] Reports list is blank after you create new period and switch to it.
-[ ] Cannot get report of older period.
 [ ] Changing the account of the entry having current account, keeps the selection in new screen.
+[ ] Docker launch does not work.
 
 SMALL IMPROVEMENTS
 ==================

@@ -11,6 +11,7 @@ services:
     volumes:
       - ./backend/databases:/var/app/databases
       - ./backend/src:/var/app/src
+    command: npm run dev
 
   ui:
     container_name: tilitintin-ui
