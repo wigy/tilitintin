@@ -9,7 +9,7 @@ BUGS
 [X] Fix rounding error in balance calculations.
 [X] When inserting new entries on the bottom, it does not scroll.
 [X] When opening proposals on the bottom, it does not scroll.
-[ ] Eslint setup not working.
+[X] Eslint setup not working.
 [ ] Reports list is blank after you create new period and switch to it.
 [ ] Changing the account of the entry having current account, keeps the selection in new screen.
 [ ] Docker launch does not work.
