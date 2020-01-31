@@ -3,17 +3,26 @@ const users = require('../lib/users');
 const knex = require('./knex');
 
 /**
- * Helper to verify token.
+ * Parse token from the request.
+ * @param {Request} req
  */
-async function _checkToken(needAdmin, req, res, next) {
+function getToken(req) {
+  const { authorization } = req.headers;
   let token;
 
-  const { authorization } = req.headers;
   if (authorization && authorization.substr(0, 7) === 'Bearer ') {
     token = authorization.substr(7, authorization.length - 7);
   } else if (req.query.token) {
     token = req.query.token;
   }
+  return token;
+}
+
+/**
+ * Helper to verify token.
+ */
+async function _checkToken(needAdmin, req, res, next) {
+  const token = getToken(req);
 
   if (!token) {
     res.status(403).send('Unauthorized.');
@@ -55,6 +64,7 @@ async function checkAdminToken(req, res, next) {
 }
 
 module.exports = {
+  getToken,
   checkToken,
   checkAdminToken
 };

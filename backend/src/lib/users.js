@@ -18,13 +18,13 @@ function validateUser(user, name, password, email) {
     return `User name ${user} is not valid (lower case letters and numbers only).`;
   }
   if (password.length < 4) {
-    return `Password is too short.`;
+    return 'Password is too short.';
   }
   if (!email) {
-    return `Email is required.`;
+    return 'Email is required.';
   }
   if (!name) {
-    return `Full name is required.`;
+    return 'Full name is required.';
   }
   if (hasUser(user)) {
     return `User '${user}' exists.`;
@@ -36,7 +36,7 @@ function validateUser(user, name, password, email) {
  * Create new user.
  * @return {Promise<Boolean>}
  */
-async function registerUser({user, name, email, password, admin}) {
+async function registerUser({ user, name, email, password, admin }) {
   return new Promise((resolve, reject) => {
     bcrypt.genSalt(10, function(err, salt) {
       if (err) {
@@ -53,7 +53,7 @@ async function registerUser({user, name, email, password, admin}) {
             if (!fs.existsSync(authDir)) {
               fs.mkdirSync(authDir);
             }
-            fs.writeFileSync(authPath, JSON.stringify({user, name, email, password: hash}));
+            fs.writeFileSync(authPath, JSON.stringify({ user, name, email, password: hash }));
             resolve(true);
           }
         });
@@ -122,12 +122,12 @@ async function login(user, password) {
   }
   if (fs.existsSync(path.join(config.DBPATH, user, 'auth.json'))) {
     if (await verifyPassword(path.join(config.DBPATH, user, 'auth.json'), user, password)) {
-      token = jwt.sign({service: 'Tilitintin', user: user}, config.SECRET);
+      token = jwt.sign({ service: 'Tilitintin', user: user, login: true }, config.SECRET);
     }
   }
   if (!token && hasAdminUser()) {
     if (await verifyPassword(path.join(config.DBPATH, 'auth.json'), user, password)) {
-      token = jwt.sign({service: 'Tilitintin', user: user, isAdmin: true}, config.SECRET);
+      token = jwt.sign({ service: 'Tilitintin', user: user, login: true, isAdmin: true }, config.SECRET);
     }
   }
   return token;
@@ -138,12 +138,12 @@ async function login(user, password) {
  * @param {String} token
  * @return {Promise<Null|Object>}
  */
-async function verifyToken(token, needAdmin = false) {
+async function verifyToken(token, needAdmin = false, needLogin = true) {
   return new Promise((resolve, reject) => {
     jwt.verify(token, config.SECRET, (err, decoded) => {
       if (err) {
         resolve(null);
-      } else if (decoded.service !== 'Tilitintin') {
+      } else if (decoded.service !== 'Tilitintin' || (needLogin && !decoded.login)) {
         resolve(null);
       }
       if (needAdmin && !decoded.isAdmin) {
