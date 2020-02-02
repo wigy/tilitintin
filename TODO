@@ -13,6 +13,7 @@ BUGS
 [ ] Reports list is blank after you create new period and switch to it.
 [ ] Changing the account of the entry having current account, keeps the selection in new screen.
 [ ] Docker launch does not work.
+[ ] "Edit Account" translation.
 
 SMALL IMPROVEMENTS
 ==================
