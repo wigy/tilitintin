@@ -4,30 +4,15 @@ BUGS
 
 [ ] Update on unmounted loading component when switching between reports and transactions.
 [ ] Pressing insert while previous date is early in order, produced 2 selected lines.
-[X] Copy paste may not work. Avoid error if clipboard is not defined.
 [ ] Mouse does not work on proposals.
-[X] Fix rounding error in balance calculations.
-[X] When inserting new entries on the bottom, it does not scroll.
-[X] When opening proposals on the bottom, it does not scroll.
-[X] Eslint setup not working.
-[X] Reports link resets period.
 [ ] Changing the account of the entry having current account, keeps the selection in new screen.
-[?] Docker launch does not work.
-[X] "Edit Account" translation.
-[X] Cannot edit account name if it has transactions.
-[X] Copy paste for description with tags loses tags.
 [ ] Page up/down is not practical on opened transaction, which has lot of entries.
-[X] Renumbering tool is enabled for locked periods.
 
 SMALL IMPROVEMENTS
 ==================
 
-[X] Calculate sum of debit and credit.
-[X] When selecting proposed text, insert new account entry as well based on history.
 [ ] When selecting proposed text and no debit/credit, it could jump to the previously used debit/credit.
 [ ] After editing date, jump to description (if only one entry).
-[X] Quick switch for periods.
-[X] Tool to remove empty entries.
 [ ] Check and fix configured VAT handling.
 
 FUTURE FEATURES

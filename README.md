@@ -59,6 +59,19 @@ In UI you can do filtering using the categories defined.
 
 ## Version History
 
+### 1.1.2
+  * Calculate sum of debit and credit.
+  * When selecting proposed text, set account entry as well based on history.
+  * Keyboard shortcuts for switching between periods.
+  * Tool to remove empty entries.
+  * Avoid crash if clipboard not supported.
+  * Fix rounding error in balance calculations.
+  * Fix some scrolling issues when editing near bottom of the screen.
+  * Fix problems with report period when switching between periods.
+  * Allow editing account name and number even if it has transactions.
+  * Copy paste for description now includes tags.
+  * Renumbering tool is not enabled locked periods (back-end already refused to change anything).
+
 ### 1.1.1
   * Fix broken build.
 
