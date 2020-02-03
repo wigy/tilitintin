@@ -175,6 +175,18 @@ class ToolsToolPanel extends Component {
   }
 
   /**
+   * Delete all documents without entries.
+   */
+  @action.bound
+  async dropEmptyDocuments(db, periodId) {
+    const { period } = this.props.store;
+    const toDrop = period.emptyDocuments;
+    for (const doc of toDrop) {
+      await this.props.store.deleteDocument(doc);
+    }
+  }
+
+  /**
    * Upload selected file.
    */
   @action.bound
@@ -223,6 +235,7 @@ class ToolsToolPanel extends Component {
     let label;
     let startDate, endDate;
     let toRenumber;
+    let toDelete;
     const VAT = this.props.store.period ? this.props.store.period.VATSummary : { sales: 0, purchases: 0 };
 
     switch (tool) {
@@ -248,9 +261,11 @@ class ToolsToolPanel extends Component {
 
       case 'documents':
         label = 'Documents';
-        toRenumber = store.period ? store.period.incorrectlyNumberedDocuments : [];
+        toRenumber = store.period && !store.period.locked ? store.period.incorrectlyNumberedDocuments : [];
+        toDelete = store.period && !store.period.locked ? store.period.emptyDocuments : [];
         buttons = [
-          <IconButton key="button-new" disabled={!toRenumber.length} onClick={() => this.renumberDocuments(this.props.store.db, this.props.store.periodId)} title="sort-documents" icon="fas fa-sort-numeric-up"></IconButton>
+          <IconButton key="button-new" disabled={!toRenumber.length} onClick={() => this.renumberDocuments(this.props.store.db, this.props.store.periodId)} title="sort-documents" icon="fas fa-sort-numeric-up"></IconButton>,
+          <IconButton key="button-clean" disabled={!toDelete.length} onClick={() => this.dropEmptyDocuments(this.props.store.db, this.props.store.periodId)} title="drop-empty-documents" icon="fas fa-trash"></IconButton>
         ];
         break;
 

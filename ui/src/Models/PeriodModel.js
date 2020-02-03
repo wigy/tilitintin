@@ -318,6 +318,14 @@ class PeriodModel extends Model {
   }
 
   /**
+   * Gather a list of documents having no entries.
+   */
+  @computed
+  get emptyDocuments() {
+    return Object.values(this.documents).filter(doc => doc.entries.length === 0 && doc.number);
+  }
+
+  /**
    * Get the database this period belongs to.
    */
   get database() {

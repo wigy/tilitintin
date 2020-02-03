@@ -22,6 +22,7 @@ class ToolsForPeriods extends Component {
     }
 
     const toRenumber = this.props.store.period.incorrectlyNumberedDocuments;
+    const toDelete = this.props.store.period.emptyDocuments;
 
     return (
       <div className="Tools">
@@ -32,6 +33,14 @@ class ToolsForPeriods extends Component {
               <b><Localize date={c.date}></Localize></b> #{c.number} {'->'} #{c.newNumber}
             </div>)
             : <Trans>All documents are correctly numbered.</Trans>
+        }
+        <h1><Trans>Documents having no entries</Trans></h1>
+        {
+          toDelete.length
+            ? toDelete.map((d) => <div key={d.id}><b>
+              <Localize date={d.date}></Localize></b> #{d.number}
+            </div>)
+            : <Trans>No empty documents.</Trans>
         }
       </div>
     );

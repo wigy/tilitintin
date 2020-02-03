@@ -17,6 +17,7 @@ BUGS
 [X] Cannot edit account name if it has transactions.
 [X] Copy paste for description with tags loses tags.
 [ ] Page up/down is not practical on opened transaction, which has lot of entries.
+[X] Renumbering tool is enabled for locked periods.
 
 SMALL IMPROVEMENTS
 ==================
@@ -24,9 +25,9 @@ SMALL IMPROVEMENTS
 [X] Calculate sum of debit and credit.
 [X] When selecting proposed text, insert new account entry as well based on history.
 [ ] When selecting proposed text and no debit/credit, it could jump to the previously used debit/credit.
-[ ] After editing date, jump to description.
-[ ] Quick switch for periods.
-[ ] Tool to remove empty entries.
+[ ] After editing date, jump to description (if only one entry).
+[X] Quick switch for periods.
+[X] Tool to remove empty entries.
 [ ] Check and fix configured VAT handling.
 
 FUTURE FEATURES

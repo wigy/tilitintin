@@ -95,7 +95,7 @@ class Menu extends Component {
     const { store, history, cursor } = this.props;
     const periods = store.periods;
     let url;
-    const [, db, tool, periodId, accountId] = this.props.history.location.pathname.split('/');
+    const [, db, tool, periodId, accountId, extras] = this.props.history.location.pathname.split('/');
     switch (key) {
       case 'logout':
         store.logout();
@@ -133,6 +133,12 @@ class Menu extends Component {
           url = '/' + db + '/' + tool + '/' + periods[index].id;
           if (accountId) {
             url += '/' + accountId;
+          }
+          if (extras) {
+            if (!accountId) {
+              url += '/';
+            }
+            url += '/' + extras;
           }
           cursor.resetSelected();
           history.push(url);
