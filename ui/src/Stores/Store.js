@@ -53,36 +53,15 @@ const debug = (...args) => DEBUG && console.log.apply(console, args);
  *           "text": "Vastaavaa",
  *           "level": 0
  *         },...]
- *       },
- *       reportsByFormat: {
- *         "general-ledger": {
- *            format: 'general-ledger',
- *            meta: {
- *              businessName: "Name of the business",
- *              businessId: "12121212-3"
- *            },
- *            'options': {
- *              compact: 'boolean'
- *            },
- *            'config': {
- *              compact: 'true'
- *            },
- *            columns: [{name, title, ...}, ...],
- *            data: []
- *         },
- *       },
- *     },
- *     bar: {
- *       name: "bar",
- *       ...
+ *       }
  *     }
  *   },
- *   db: 'foo',               // Currently selected db
- *   periodId: 1,             // Currently selected period
- *   accountId: 123,          // Currently selected account
- *   report: {...},           // Latest report fetched
- *   lastDate: "2018-01-01",  // Latest date entered by user.
- *   tools: {                 // Tool panel selections.
+ *   db: 'foo',                // Currently selected db
+ *   periodId: 1,              // Currently selected period
+ *   accountId: 123,           // Currently selected account
+ *   report: ReportModel(...), // Latest report fetched
+ *   lastDate: "2018-01-01",   // Latest date entered by user.
+ *   tools: {                  // Tool panel selections.
  *     tagDisabled: {
  *       Tag1: true,
  *       Tag2: false
@@ -243,6 +222,7 @@ class Store {
     }
     if (!this.periodFetch) {
       debug('SetPeriod:', db, periodId, 'fetching...');
+      this.invalidateReport();
       this.periodFetch = this.fetchBalances(db, periodId)
         .then(() => (this.periodId = periodId))
         .then(() => this.fetchDocuments(db, periodId))
