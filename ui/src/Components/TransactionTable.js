@@ -136,7 +136,7 @@ class TransactionTable extends Component {
           text = entry.account.toString();
           break;
         case 'description':
-          text = entry[column];
+          text = entry['get.description']();
           break;
         case 'debit':
           text = entry.debit ? sprintf('%.2f', entry.amount / 100) : '';

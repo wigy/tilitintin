@@ -15,7 +15,7 @@ BUGS
 [?] Docker launch does not work.
 [X] "Edit Account" translation.
 [X] Cannot edit account name if it has transactions.
-[ ] Copy paste for description with tags loses tags.
+[X] Copy paste for description with tags loses tags.
 [ ] Page up/down does not work on opened transaction, which has lot of entries.
 
 SMALL IMPROVEMENTS
