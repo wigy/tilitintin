@@ -102,6 +102,7 @@ i18n.init({
         Description: 'Kuvaus',
         'Documents that need renumbering': 'Uudelleennumerointia vaativat tositteet',
         Documents: 'Tositteet',
+        'Edit Account': 'Muokkaa tiliä',
         'Email is required.': 'Email puuttuu.',
         Email: 'Email',
         'End Date': 'Loppuu',

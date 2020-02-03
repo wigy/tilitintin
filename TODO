@@ -12,9 +12,11 @@ BUGS
 [X] Eslint setup not working.
 [ ] Reports list is blank after you create new period and switch to it.
 [ ] Changing the account of the entry having current account, keeps the selection in new screen.
-[ ] Docker launch does not work.
-[ ] "Edit Account" translation.
-[ ] Cannot edit account name if it has transactions.
+[?] Docker launch does not work.
+[X] "Edit Account" translation.
+[X] Cannot edit account name if it has transactions.
+[ ] Copy paste for description with tags loses tags.
+[ ] Page up/down does not work on opened transaction, which has lot of entries.
 
 SMALL IMPROVEMENTS
 ==================
@@ -24,6 +26,7 @@ SMALL IMPROVEMENTS
 [ ] When selecting proposed text and no debit/credit, it could jump to the previously used debit/credit.
 [ ] After editing date, jump to description.
 [ ] Quick switch for periods.
+[ ] Tool to remove empty entries.
 
 FUTURE FEATURES
 ===============

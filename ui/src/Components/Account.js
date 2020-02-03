@@ -113,7 +113,7 @@ class Account extends Component {
         <div className="error">{this.state.changed && (
           this.state.accountType ? '' : t('Account type is required.')
         )}</div>
-        <FormControl componentClass="select" value={this.state.accountType} onChange={(e) => this.setState({ changed: true, accountType: e.target.value })}>
+        <FormControl disabled={!this.canChange()} componentClass="select" value={this.state.accountType} onChange={(e) => this.setState({ changed: true, accountType: e.target.value })}>
           <option></option>
           {['ASSET', 'LIABILITY', 'EQUITY', 'REVENUE', 'EXPENSE'].map(o => <option value={o} key={o}>{t(o)}</option>)}
         </FormControl>
@@ -150,17 +150,19 @@ class Account extends Component {
     });
   }
 
+  canChange() {
+    const account = this.props.store.account;
+    if (!account || !account.periods) {
+      return false;
+    }
+    return account.periods.reduce((prev, cur) => prev && !cur.locked && !cur.entries, true);
+  }
+
   render() {
     if (!this.props.store.token) {
       return '';
     }
     const account = this.props.store.account;
-    const canChange = () => {
-      if (!account || !account.periods) {
-        return false;
-      }
-      return account.periods.reduce((prev, cur) => prev && !cur.locked && !cur.entries, true);
-    };
 
     return (
       <div className="Account">
@@ -174,8 +176,8 @@ class Account extends Component {
               <Trans>Account Type</Trans>: <Trans>{account.type}</Trans><br/>
             </div>
             <div className="buttons">
-              <Button className="delete" disabled={!canChange()} onClick={() => this.setState({ deleteIsOpen: true })}><Trans>Delete Account</Trans></Button><br/>
-              <Button className="edit" disabled={!canChange()} onClick={() => this.onClickEdit()}><Trans>Edit Account</Trans></Button><br/>
+              <Button className="delete" disabled={!this.canChange()} onClick={() => this.setState({ deleteIsOpen: true })}><Trans>Delete Account</Trans></Button><br/>
+              <Button className="edit" onClick={() => this.onClickEdit()}><Trans>Edit Account</Trans></Button><br/>
             </div>
             {this.renderDeleteDialog()}
           </SubPanel>
