@@ -33,13 +33,13 @@ router.get('/:id/:period', (req, res) => {
 });
 
 router.patch('/:id', async (req, res) => {
-  let obj = req.body;
+  const obj = req.body;
   data.updateOne(knex.db(req.db), 'account', req.params.id, obj)
     .then((code) => res.status(code).send());
 });
 
 router.post('/', async (req, res) => {
-  let obj = req.body;
+  const obj = req.body;
   data.createOne(knex.db(req.db), 'account', obj)
     .then(entry => entry ? res.send(entry) : res.sendStatus(400));
 });

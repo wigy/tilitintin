@@ -21,7 +21,7 @@ router.post('/', async (req, res) => {
 });
 
 router.patch('/:id', (req, res) => {
-  let obj = req.body;
+  const obj = req.body;
   data.updateOne(knex.db(req.db), 'period', req.params.id, obj)
     .then((code) => res.status(code).send());
 });

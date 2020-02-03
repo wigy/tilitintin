@@ -16,7 +16,7 @@ BUGS
 [X] "Edit Account" translation.
 [X] Cannot edit account name if it has transactions.
 [X] Copy paste for description with tags loses tags.
-[ ] Page up/down does not work on opened transaction, which has lot of entries.
+[ ] Page up/down is not practical on opened transaction, which has lot of entries.
 
 SMALL IMPROVEMENTS
 ==================
@@ -27,6 +27,7 @@ SMALL IMPROVEMENTS
 [ ] After editing date, jump to description.
 [ ] Quick switch for periods.
 [ ] Tool to remove empty entries.
+[ ] Check and fix configured VAT handling.
 
 FUTURE FEATURES
 ===============

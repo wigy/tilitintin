@@ -16,30 +16,30 @@ const options = () => {
 };
 
 router.get('/', (req, res) => {
-  let links = {};
+  const links = {};
   data.listAll(knex.db(req.db), 'report_structure', null, ['id'])
     .then((results) => {
       results = reports.customReports().concat(results);
       results.forEach((report) => (links[report.id] = config.BASEURL + '/db/' + req.db + '/report/' + report.id));
-      res.send({links, options: options()});
+      res.send({ links, options: options() });
     });
 });
 
 router.get('/:format', (req, res) => {
-  const {format} = req.params;
-  let links = {};
+  const { format } = req.params;
+  const links = {};
   const dateRange = period => period.start_date + ' ' + period.end_date;
   data.listAll(knex.db(req.db), 'period', null, ['start_date', 'desc'])
     .then(periods => {
       periods.forEach((period) => (links[dateRange(period)] = config.BASEURL + '/db/' + req.db + '/report/' + format + '/' + period.id));
-      res.send({links, options: options()});
+      res.send({ links, options: options() });
     });
 });
 
 router.get('/:format/:period', (req, res) => {
-  const {format, period} = req.params;
+  const { format, period } = req.params;
   const periodId = parseInt(period);
-  let periods = [periodId];
+  const periods = [periodId];
 
   // Construct query options.
   const query = {

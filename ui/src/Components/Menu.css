@@ -50,6 +50,7 @@
 .Menu .entry:hover, .Menu .entry:hover code {
   cursor: pointer;
   color: white;
+  user-select: none;
 }
 
 .Menu .entry.disabled:hover, .Menu .entry.disabled:hover code {

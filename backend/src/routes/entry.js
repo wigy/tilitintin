@@ -6,7 +6,7 @@ const knex = require('../lib/knex');
 router.get('/', (req, res) => {
   let where = null;
   if (req.query.account_id) {
-    where = {account_id: parseInt(req.query.account_id)};
+    where = { account_id: parseInt(req.query.account_id) };
   }
   data.listAll(knex.db(req.db), 'entry', where, ['document_id', 'id'])
     .then(entries => res.send(entries));
@@ -18,7 +18,7 @@ router.post('/', async (req, res) => {
     res.sendStatus(403);
     return;
   }
-  let obj = req.body;
+  const obj = req.body;
   if ('amount' in obj) {
     obj.amount /= 100;
   }
@@ -37,7 +37,7 @@ router.patch('/:id', async (req, res) => {
     res.sendStatus(403);
     return;
   }
-  let obj = req.body;
+  const obj = req.body;
   if ('amount' in obj) {
     obj.amount /= 100;
   }

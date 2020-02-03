@@ -83,15 +83,23 @@ class Menu extends Component {
       entry[0].action();
       return { preventDefault: true };
     }
+    if (key === '<') {
+      this.handleSelect('previous-period');
+    }
+    if (key === '>') {
+      this.handleSelect('next-period');
+    }
   }
 
-  handleSelect(key, ...args) {
+  handleSelect(key) {
+    const { store, history, cursor } = this.props;
+    const periods = store.periods;
     let url;
-    const [, db, , periodId, accountId] = this.props.history.location.pathname.split('/');
+    const [, db, tool, periodId, accountId] = this.props.history.location.pathname.split('/');
     switch (key) {
       case 'logout':
-        this.props.store.logout();
-        this.props.history.push('/');
+        store.logout();
+        history.push('/');
         break;
       case 'dashboard':
       case 'txs':
@@ -105,11 +113,33 @@ class Menu extends Component {
         if (accountId) {
           url += '/' + accountId;
         }
-        this.props.cursor.resetSelected();
-        this.props.history.push(url);
+        cursor.resetSelected();
+        history.push(url);
+        break;
+      case 'next-period':
+      case 'previous-period':
+        if (db && periods && periods.length) {
+          let index = periods.findIndex(p => p.id === parseInt(periodId));
+          if (index < 0) {
+            return;
+          }
+          if (index > 0 && key === 'next-period') {
+            index--;
+          } else if (index < periods.length - 1 && key === 'previous-period') {
+            index++;
+          } else {
+            return;
+          }
+          url = '/' + db + '/' + tool + '/' + periods[index].id;
+          if (accountId) {
+            url += '/' + accountId;
+          }
+          cursor.resetSelected();
+          history.push(url);
+        }
         break;
       default:
-        console.log('No idea how to handle', key, args);
+        console.log('No idea how to handle', key);
     }
   }
 
@@ -147,9 +177,11 @@ class Menu extends Component {
           <span className="fa-icon"><i className="fa fa-calendar"></i></span> {
             this.props.store.period &&
             <>
+              <code className="entry" onClick={() => this.handleSelect('previous-period')}>&lt;</code>&nbsp;
               <Localize date={this.props.store.period.start_date}/>
               &nbsp;&mdash;&nbsp;
               <Localize date={this.props.store.period.end_date}/>
+              &nbsp;<code className="entry" onClick={() => this.handleSelect('next-period')}>&gt;</code>
             </>
           }{ !this.props.store.period &&
             <>&nbsp;&nbsp;&mdash;</>
