@@ -8,7 +8,7 @@ const settings = require('./settings');
  * @param {String} code
  */
 function code2item(code) {
-  let ret = {
+  const ret = {
     tab: parseInt(code[2])
   };
 
@@ -59,17 +59,17 @@ function time2str(timestamp) {
  * @param {Object} settings
  */
 function columnTitle(formatName, period, settings) {
-  let start = time2str(period.start_date);
+  const start = time2str(period.start_date);
   let end;
   if (settings.query.quarter1) {
     const year = moment(period.start_date + 3 * 60 * 60 * 1000).utc().year();
-    end = moment({year, month: 3, date: 1}).subtract(1, 'day').format('YYYY-MM-DD');
+    end = moment({ year, month: 3, date: 1 }).subtract(1, 'day').format('YYYY-MM-DD');
   } else if (settings.query.quarter2) {
     const year = moment(period.start_date + 3 * 60 * 60 * 1000).utc().year();
-    end = moment({year, month: 6, date: 1}).subtract(1, 'day').format('YYYY-MM-DD');
+    end = moment({ year, month: 6, date: 1 }).subtract(1, 'day').format('YYYY-MM-DD');
   } else if (settings.query.quarter3) {
     const year = moment(period.start_date + 3 * 60 * 60 * 1000).utc().year();
-    end = moment({year, month: 9, date: 1}).subtract(1, 'day').format('YYYY-MM-DD');
+    end = moment({ year, month: 9, date: 1 }).subtract(1, 'day').format('YYYY-MM-DD');
   } else {
     end = time2str(period.end_date);
   }
@@ -87,7 +87,7 @@ function columnTitle(formatName, period, settings) {
  */
 processEntries.GeneralJournal = (entries, periods, formatName, format, settings) => {
 
-  let columns = [{
+  const columns = [{
     type: 'id',
     name: 'id',
     title: '{column-document-number}'
@@ -131,7 +131,7 @@ processEntries.GeneralJournal = (entries, periods, formatName, format, settings)
   // Helper to construct a list of descriptions.
   const descriptions = (lines) => {
     let texts = new Set();
-    let accountNumbers = new Map();
+    const accountNumbers = new Map();
 
     lines.forEach((line) => {
       const text = line.description.replace(/^(\[.+?\])+\s*/, '');
@@ -154,7 +154,7 @@ processEntries.GeneralJournal = (entries, periods, formatName, format, settings)
 
   // Construct lines for each document.
   const docIds = [...docs.keys()].sort((a, b) => parseInt(a) - parseInt(b));
-  let data = [];
+  const data = [];
   docIds.forEach((docId) => {
     const lines = docs.get(docId);
     data.push({
@@ -199,7 +199,7 @@ processEntries.GeneralJournal = (entries, periods, formatName, format, settings)
  */
 processEntries.GeneralLedger = (entries, periods, formatName, format, settings) => {
 
-  let columns = [{
+  const columns = [{
     type: 'id',
     name: 'account',
     title: '{column-account-number}'
@@ -249,7 +249,7 @@ processEntries.GeneralLedger = (entries, periods, formatName, format, settings) 
   });
 
   const accountNumbers = [...accounts.keys()].sort();
-  let data = [];
+  const data = [];
   accountNumbers.forEach((number) => {
     const lines = accounts.get(number);
     data.push({
@@ -319,24 +319,24 @@ function parseAndCombineReport(accountNumbers, accountNames, columnNames, format
 
   // Parse report and construct format.
   const allAccounts = [...accountNumbers].sort();
-  let ret = [];
+  const ret = [];
   format.split('\n').forEach((line) => {
     line = line.trim();
     if (line === '') {
       return;
     }
     if (line === '--') {
-      ret.push({pageBreak: true});
+      ret.push({ pageBreak: true });
       return;
     }
 
     // Split the line and reset variables.
     const [code, ...parts] = line.split(';');
     const name = parts.pop();
-    let amounts = {};
+    const amounts = {};
     columnNames.forEach((column) => (amounts[column] = null));
     let unused = true;
-    let item = code2item(code);
+    const item = code2item(code);
 
     // Collect all totals inside any of the account number ranges.
     for (let i = 0; i < parts.length; i += 2) {
@@ -370,7 +370,7 @@ function parseAndCombineReport(accountNumbers, accountNames, columnNames, format
         const to = parts[i + 1];
         allAccounts.forEach((number) => {
           if (number >= from && number < to) {
-            let item = code2item(code);
+            const item = code2item(code);
             item.isAccount = true;
             delete item.accountDetails;
             item.name = accountNames[number];
@@ -457,7 +457,7 @@ processEntries.Default = (entries, periods, formatName, format, settings) => {
   }
 
   // Construct meta data for columns.
-  let columns = periods.map((period) => {
+  const columns = periods.map((period) => {
     return {
       type: 'numeric',
       name: 'period' + period.id,
@@ -600,13 +600,13 @@ function customReports() {
     id: 'general-journal',
     data: null,
     options: {
-      'compact': 'boolean'
+      compact: 'boolean:true'
     }
   }, {
     id: 'general-ledger',
     data: null,
     options: {
-      'compact': 'boolean'
+      compact: 'boolean:true'
     }
   }];
 }
@@ -618,36 +618,36 @@ function standardOptions() {
   return [{
     id: 'income-statement',
     options: {
-      'quarter1': 'radio:1',
-      'quarter2': 'radio:1',
-      'quarter3': 'radio:1',
-      'full': 'radio:1:default',
-      'byTags': 'boolean'
+      quarter1: 'radio:1',
+      quarter2: 'radio:1',
+      quarter3: 'radio:1',
+      full: 'radio:1:default',
+      byTags: 'boolean'
     }
   }, {
     id: 'income-statement-detailed',
     options: {
-      'quarter1': 'radio:1',
-      'quarter2': 'radio:1',
-      'quarter3': 'radio:1',
-      'full': 'radio:1:default',
-      'byTags': 'boolean'
+      quarter1: 'radio:1',
+      quarter2: 'radio:1',
+      quarter3: 'radio:1',
+      full: 'radio:1:default',
+      byTags: 'boolean'
     }
   }, {
     id: 'balance-sheet',
     options: {
-      'quarter1': 'radio:1',
-      'quarter2': 'radio:1',
-      'quarter3': 'radio:1',
-      'full': 'radio:1:default'
+      quarter1: 'radio:1',
+      quarter2: 'radio:1',
+      quarter3: 'radio:1',
+      full: 'radio:1:default'
     }
   }, {
     id: 'balance-sheet-detailed',
     options: {
-      'quarter1': 'radio:1',
-      'quarter2': 'radio:1',
-      'quarter3': 'radio:1',
-      'full': 'radio:1:default'
+      quarter1: 'radio:1',
+      quarter2: 'radio:1',
+      quarter3: 'radio:1',
+      full: 'radio:1:default'
     }
   }];
 }

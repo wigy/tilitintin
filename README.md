@@ -70,7 +70,7 @@ In UI you can do filtering using the categories defined.
   * Fix problems with report period when switching between periods.
   * Allow editing account name and number even if it has transactions.
   * Copy paste for description now includes tags.
-  * Renumbering tool is not enabled locked periods (back-end already refused to change anything).
+  * Renumbering tool is not enabled for locked periods (back-end already refused to change anything).
 
 ### 1.1.1
   * Fix broken build.
