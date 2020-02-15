@@ -15,6 +15,7 @@ SMALL IMPROVEMENTS
 [ ] After editing date, jump to description (if only one entry).
 [ ] Check and fix configured VAT handling.
 [X] Compact view by default.
+[ ] Maybe add some space on the bottom of the transaction list.
 
 FUTURE FEATURES
 ===============
