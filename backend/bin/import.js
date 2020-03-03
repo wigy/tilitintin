@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const knex = require('../src/lib/knex');
-const { config, util: {cli}, core: {fyffe} } = require('libfyffe');
+const { config, util: { cli }, core: { fyffe } } = require('libfyffe');
 const USER = process.env.FYFFE_USER || 'user';
 
 knex.setUser(USER);
@@ -47,7 +47,7 @@ config.set({
     tradeProfit: cli.options['trade-profit'],
     showBalances: cli.options['show-balances'],
     showStock: cli.options['show-stock'],
-    simple: cli.options['simple'],
+    simple: cli.options.simple,
     singleLoanUpdate: cli.options['single-loan-update'],
     startDate: cli.options['start-date'],
     skipErrors: cli.options['skip-errors'],
@@ -59,7 +59,7 @@ config.set({
 
 let avg = {};
 let stock = {};
-let ignore = new Set();
+const ignore = new Set();
 
 if (cli.options.avg) {
   cli.options.avg.split(',').forEach((str) => {
@@ -83,10 +83,10 @@ if (cli.options['no-deposit']) {
 }
 
 if (!cli.options.simple && !cli.options.service) {
-  throw new Error(`Option --service is required.`);
+  throw new Error('Option --service is required.');
 }
 if (!cli.options.simple && !cli.options.fund) {
-  throw new Error(`Option --fund is required.`);
+  throw new Error('Option --fund is required.');
 }
 
 async function main() {
@@ -99,7 +99,7 @@ async function main() {
     fund: cli.options.fund,
     ignore
   });
-  await fyffe.export('tilitintin', {dbName: 'tilitintin'});
+  await fyffe.export('tilitintin', { dbName: 'tilitintin' });
 }
 
 main()
