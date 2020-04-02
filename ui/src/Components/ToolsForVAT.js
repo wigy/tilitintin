@@ -47,10 +47,20 @@ class ToolsForVAT extends Component {
     const openVATDocuments = this.props.store.period ? this.props.store.period.openVATDocuments : [];
 
     // Split by tags.
+    const VAT_TAG_TYPES = ['Osakas', 'Rahasto']; // TODO: Get from configuration or mark in tag model.
+    const validTags = new Set(
+      Object.values(this.props.store.database.tagsByTag)
+        .filter(tag => VAT_TAG_TYPES.includes(tag.type))
+        .map(tag => tag.tag)
+    );
+
+    console.log(validTags);
     const vatByTag = {};
     let vatByNoTag = null;
     let hasTags = false;
+
     const addVatByTags = (tags, amount) => {
+      tags = tags.filter(tag => validTags.has(tag));
       if (!tags.length) {
         vatByNoTag = (vatByNoTag || 0) + amount;
         return;
