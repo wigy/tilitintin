@@ -12,6 +12,7 @@ cli.opt('debug-stock', null, 'Display stock and average changes in detail.');
 cli.opt('debug', null, 'To turn dry-run on and display entries.');
 cli.opt('dry-run', null, 'To turn dry-run on.');
 cli.opt('encoding', null, 'Force encoding of import files.');
+cli.opt('end-date', null, 'Ignore all transactions after this date.');
 cli.opt('force', null, 'Import even if the entries are found already.');
 cli.opt('fund', null, 'Set name for the fund.');
 cli.opt('import-errors', null, 'If import fails, create move transaction to imbalance account.');
@@ -49,12 +50,13 @@ config.set({
     showStock: cli.options['show-stock'],
     simple: cli.options.simple,
     singleLoanUpdate: cli.options['single-loan-update'],
-    startDate: cli.options['start-date'],
     skipErrors: cli.options['skip-errors'],
     stopOnError: cli.options['stop-on-error'],
     zeroMoves: cli.options['zero-moves'],
     importErrors: cli.options['import-errors']
-  }
+  },
+  endDate: cli.options['end-date'],
+  startDate: cli.options['start-date']
 });
 
 let avg = {};
