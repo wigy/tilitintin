@@ -18,14 +18,14 @@ router.get('/:user', (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const {user, name, password, email} = req.body;
+  const { user, name, password, email } = req.body;
   const err = users.validateUser(user, name, password, email);
   if (err !== true) {
     dump.error(err);
     return res.sendStatus(400);
   }
 
-  users.registerUser({user, name, password, email})
+  users.registerUser({ user, name, password, email })
     .then((data) => {
       res.send(data);
     });

@@ -17,7 +17,7 @@ function identical(report, options = {}) {
  * @param {String} options.lang Localize number using this language.
  */
 function csv(report, options = {}) {
-  let csv = [];
+  const csv = [];
 
   const render = {
     id: (column, entry) => entry.id,

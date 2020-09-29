@@ -34,10 +34,10 @@ async function ensure(db) {
  */
 async function set(db, variable, value) {
   await ensure(db);
-  return knex.db(db)('fyffe_settings').select('name').where({name: variable}).first()
+  return knex.db(db)('fyffe_settings').select('name').where({ name: variable }).first()
     .then(res => {
-      return res ? knex.db(db)('fyffe_settings').update({value: JSON.stringify(value)}).where({name: variable})
-        : knex.db(db)('fyffe_settings').insert({name: variable, value: JSON.stringify(value)});
+      return res ? knex.db(db)('fyffe_settings').update({ value: JSON.stringify(value) }).where({ name: variable })
+        : knex.db(db)('fyffe_settings').insert({ name: variable, value: JSON.stringify(value) });
     });
 }
 
@@ -46,7 +46,7 @@ async function set(db, variable, value) {
  */
 async function get(db, variable, def = undefined) {
   await ensure(db);
-  return knex.db(db)('fyffe_settings').select('value').where({name: variable}).first()
+  return knex.db(db)('fyffe_settings').select('value').where({ name: variable }).first()
     .then(res => res ? JSON.parse(res.value) : def);
 }
 
