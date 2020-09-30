@@ -44,14 +44,15 @@ class App extends Component {
         (event.altKey ? 'Alt+' : '') +
         event.key);
 
-      const keyResult = this.props.cursor.handle(keyName);
-
-      if (keyResult) {
-        this.props.store.changed = true;
-        if (keyResult.preventDefault) {
-          event.preventDefault();
+      setTimeout(() => {
+        const keyResult = this.props.cursor.handle(keyName);
+        if (keyResult) {
+          this.props.store.changed = true;
+          if (keyResult.preventDefault) {
+            event.preventDefault();
+          }
         }
-      }
+      }, 0);
     }
   }
 
