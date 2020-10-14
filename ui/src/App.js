@@ -75,6 +75,7 @@ class App extends Component {
     return (
       <div className="App">
         <div className="TopPanel Panel">
+          { /*
           <Route exact path="/" component={Menu}/>
           <Route exact path="/_/admin/:arg?" component={Menu}/>
           <Route exact path="/:db" component={Menu}/>
@@ -93,9 +94,11 @@ class App extends Component {
           <Route exact path="/:db/tools/:periodId//:tool?" component={Menu}/>
           <Route exact path="/:db/tools//:accountId/:tool?" component={Menu}/>
           <Route exact path="/:db/tools///:tool?" component={Menu}/>
+            */ }
         </div>
         <div className="SidePanel Panel">
           <div className="Frame">
+            { /*
             <Route exact path="/" component={DatabaseList}/>
             <Route exact path="/_/admin/:arg?" component={UserList}/>
             <Route exact path="/:db" component={DatabaseList}/>
@@ -111,10 +114,12 @@ class App extends Component {
             <Route exact path="/:db/tools/:periodId//:tool?" component={ToolsList}/>
             <Route exact path="/:db/tools//:accountId/:tool?" component={ToolsList}/>
             <Route exact path="/:db/tools///:tool?" component={ToolsList}/>
+            */ }
           </div>
         </div>
         <div className="MainTopPanel Panel">
           <div className="Frame">
+            { /*
             <Route exact path="/_/admin/:arg?" component={AdminToolPanel}/>
             <Route path="/:db/txs/:periodId/:accountId?" component={TransactionToolPanel}/>
             <Route path="/:db/account/:periodId?" component={AccountsToolPanel}/>
@@ -123,10 +128,12 @@ class App extends Component {
             <Route exact path="/:db/tools/:periodId//:tool?" component={ToolsToolPanel}/>
             <Route exact path="/:db/tools//:accountId/:tool?" component={ToolsToolPanel}/>
             <Route exact path="/:db/tools///:tool?" component={ToolsToolPanel}/>
+            */ }
           </div>
         </div>
         <div className="MainPanel Panel">
           <div className="Frame">
+            { /*
             <Route exact path="/" component={Dashboard}/>
             <Route exact path="/" component={Login}/>
             <Route exact path="/_/admin/:arg?" component={Admin}/>
@@ -142,6 +149,7 @@ class App extends Component {
             <Route exact path="/:db/tools/:periodId//:tool?" component={Tools}/>
             <Route exact path="/:db/tools//:accountId/:tool?" component={Tools}/>
             <Route exact path="/:db/tools///:tool?" component={Tools}/>
+            */ }
           </div>
         </div>
       </div>
