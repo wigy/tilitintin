@@ -75,7 +75,6 @@ class App extends Component {
     return (
       <div className="App">
         <div className="TopPanel Panel">
-          { /*
           <Route exact path="/" component={Menu}/>
           <Route exact path="/_/admin/:arg?" component={Menu}/>
           <Route exact path="/:db" component={Menu}/>
@@ -94,7 +93,6 @@ class App extends Component {
           <Route exact path="/:db/tools/:periodId//:tool?" component={Menu}/>
           <Route exact path="/:db/tools//:accountId/:tool?" component={Menu}/>
           <Route exact path="/:db/tools///:tool?" component={Menu}/>
-            */ }
         </div>
         <div className="SidePanel Panel">
           <div className="Frame">

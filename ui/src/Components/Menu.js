@@ -9,6 +9,12 @@ import Cursor from '../Stores/Cursor';
 import Configuration from '../Configuration';
 import LanguageSelector from './LanguageSelector';
 import './Menu.css';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import { Icon } from '@material-ui/core';
 
 @withTranslation('translations')
 @inject('store')
@@ -168,17 +174,36 @@ class Menu extends Component {
   render() {
     return (
       <div className="Menu">
-        <span className="spacer"></span>
-        <img className="logo" alt="logo" src="/logo.png"/>
-        <span className="spacer"></span>
-        <a href="/" className="brand">Tilitintin v{Configuration.VERSION}</a>
-        <span className="spacer"></span>
-        <span className="spacer"></span>
-        <span className="spacer"></span>
-        <span className="database">
-          <span className="fa-icon"><i className="fa fa-database"></i></span> {this.props.store.db || <>&nbsp;&nbsp;&mdash;</>}
-        </span>
-        <span className="spacer"></span>
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton edge="start" className="icon" color="inherit" aria-label="menu" onClick={() => (document.location = '/')}>
+              <img className="logo" alt="logo" src="/logo.png"/>
+            </IconButton>
+            <Typography variant="h4" className="title">
+              <span className="brand">Tilitintin v{Configuration.VERSION}</span>
+            </Typography>
+            <span className="database">
+              <Icon className="fa fa-database"/> {this.props.store.db || <>&nbsp;&nbsp;&mdash;</>}
+            </span>
+            <span className="period">
+              <Icon className="fa fa-calendar"/>
+              {
+                this.props.store.period &&
+                <>
+                  &nbsp;
+                  <Localize date={this.props.store.period.start_date}/>
+                  &nbsp;&mdash;&nbsp;
+                  <Localize date={this.props.store.period.end_date}/>
+                </>
+              }
+            </span>
+          </Toolbar>
+        </AppBar>
+      </div>
+    );
+    /*
+    return (
+      <div className="Menu">
         <span className="period">
           <span className="fa-icon"><i className="fa fa-calendar"></i></span> {
             this.props.store.period &&
@@ -200,6 +225,7 @@ class Menu extends Component {
         <LanguageSelector />
       </div>
     );
+    */
   }
 }
 

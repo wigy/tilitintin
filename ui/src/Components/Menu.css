@@ -1,47 +1,31 @@
-.Menu {
-  background-color: transparent;
-  height: 47px;
-}
-
 .Menu .logo {
-  display: inline-block;
   height: 40px;
-  margin-top: -8px;
   border: 1px solid black;
   border-radius: 5px;
 }
 
-.Menu .spacer {
-  display: inline-block;
-  width: 10px;
-}
-
 .Menu .brand {
   display: inline-block;
-  color: var(--fg-color);
+  color: white;
   font-stretch: extra-condensed;
   font-family: Times;
-  font-size: 25px;
+  font-size: 2.4rem;
   font-weight: bold;
-  padding-top: 6px;
   text-shadow: 2px 2px rgba(0,0,0,0.3);
 }
 
 .Menu .database, .Menu .period {
   display: inline-block;
-  color: var(--fg-color);
+  margin-left: 2rem;
+  padding: 0.2rem 1rem;
   font-stretch: extra-condensed;
   font-family: Times;
-  font-size: 20px;
-  font-weight: bold;
-  padding-top: 3px;
-  padding-left: 16px;
-  padding-right: 16px;
-  height: 34px;
-  border-radius: 8px;
-  background-color: var(--bg-color-light);
-  border: 1px solid var(--border-color-light);
+  font-size: 2rem;
+  border-radius: 4px;
+  border: 1px solid rgba(255,255,255,0.5);
+  background-color: rgba(0,0,0,0.2);;
 }
+/*
 
 .Menu .entry.disabled {
   color: gray;
@@ -57,3 +41,4 @@
   cursor: inherit;
   color: gray;
 }
+*/
