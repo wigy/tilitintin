@@ -140,44 +140,6 @@
   top: -2px;
 }
 
-.Menu code {
-  border: 1px solid var(--border-color-dark);
-  background-color: rgba(0,0,0,0.05);
-  color: var(--fg-color);
-  font-size: 9pt;
-  font-family: "Courier New", Courier, monospace;
-  position: relative;
-  top: -2px;
-}
-
-.Frame ul.menu {
-  font-size: 12pt;
-  line-height: 19pt;
-  list-style: none;
-  padding: 0;
-  margin-top: 1.5ex;
-  margin-bottom: 1.5ex;
-}
-
-.Frame ul.menu li {
-  padding-left: 0px;
-}
-.Frame ul.menu li.current a {
-  font-weight: bold;
-}
-.Frame ul.menu li a {
-  text-decoration: none;
-}
-.Frame ul.menu li code:hover {
-  color: var(--fg-color-light);
-}
-.Frame ul.menu .disabled-link code {
-  color: gray !important;
-}
-.Menu .disabled code {
-  color: gray !important;
-}
-
 .error {
   font-weight: bold;
   font-size: 110%;

@@ -214,17 +214,13 @@ class Menu extends Component {
             {
               this.menu.map(entry => this.renderMenu(entry))
             }
+            <div className="language">
+              <LanguageSelector />
+            </div>
           </Toolbar>
         </AppBar>
       </div>
     );
-    /*
-    return (
-      <div className="Menu">
-        <LanguageSelector />
-      </div>
-    );
-    */
   }
 }
 
