@@ -14,7 +14,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import { Icon } from '@material-ui/core';
+import { ButtonGroup, Icon } from '@material-ui/core';
 
 @withTranslation('translations')
 @inject('store')
@@ -194,6 +194,17 @@ class Menu extends Component {
                   <Localize date={this.props.store.period.start_date}/>
                   &nbsp;&mdash;&nbsp;
                   <Localize date={this.props.store.period.end_date}/>
+                  &nbsp;
+                  <ButtonGroup variant="contained" color="primary">
+                    <Button onClick={() => this.handleSelect('previous-period')}><Icon className="fa fa-minus"/></Button>
+                    <Button onClick={() => this.handleSelect('next-period')}><Icon className="fa fa-plus"/></Button>
+                  </ButtonGroup>
+                </>
+              }
+              {
+                !this.props.store.period &&
+                <>
+                  &nbsp;&nbsp;&mdash;
                 </>
               }
             </span>
@@ -204,23 +215,6 @@ class Menu extends Component {
     /*
     return (
       <div className="Menu">
-        <span className="period">
-          <span className="fa-icon"><i className="fa fa-calendar"></i></span> {
-            this.props.store.period &&
-            <>
-              <code className="entry" onClick={() => this.handleSelect('previous-period')}>&lt;</code>&nbsp;
-              <Localize date={this.props.store.period.start_date}/>
-              &nbsp;&mdash;&nbsp;
-              <Localize date={this.props.store.period.end_date}/>
-              &nbsp;<code className="entry" onClick={() => this.handleSelect('next-period')}>&gt;</code>
-            </>
-          }{ !this.props.store.period &&
-            <>&nbsp;&nbsp;&mdash;</>
-          }
-        </span>
-        <span className="spacer"></span>
-        <span className="spacer"></span>
-        <span className="spacer"></span>
         {this.menu.map(entry => this.renderMenu(entry))}
         <LanguageSelector />
       </div>
