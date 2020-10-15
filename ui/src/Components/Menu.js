@@ -25,7 +25,6 @@ class Menu extends Component {
   menu = [
     {
       title: 'Home',
-      icon: 'fas fa-home',
       shortcut: ' ',
       disabled: ({ notLoggedIn, isAdmin }) => notLoggedIn || isAdmin,
       action: () => this.handleSelect('dashboard')
@@ -162,13 +161,17 @@ class Menu extends Component {
   }
 
   renderMenu(entry) {
-    return <span key={entry.title} className={this.isEnabled(entry) ? 'entry' : 'entry disabled'} onClick={() => entry.action()}>
-      <span className="spacer"/>
-      {entry.shortcut && <code>{entry.shortcut === ' ' ? 'Space' : entry.shortcut}</code>}
-      <span> <Trans>{entry.title}</Trans></span>
-      {entry.icon && <span className="fa-icon"> <i className={entry.icon}></i></span>}
-      <span className="spacer"/>
-    </span>;
+    return <Button
+      key={entry.title}
+      className="button"
+      disabled={!this.isEnabled(entry)}
+      color="primary"
+      variant="contained"
+      onClick={() => entry.action()}
+      startIcon={entry.shortcut && <span className="shortcut">{entry.shortcut === ' ' ? 'Space' : entry.shortcut}</span>}
+    >
+      <Trans>{entry.title}</Trans>
+    </Button>;
   }
 
   render() {
@@ -208,6 +211,9 @@ class Menu extends Component {
                 </>
               }
             </span>
+            {
+              this.menu.map(entry => this.renderMenu(entry))
+            }
           </Toolbar>
         </AppBar>
       </div>
@@ -215,7 +221,6 @@ class Menu extends Component {
     /*
     return (
       <div className="Menu">
-        {this.menu.map(entry => this.renderMenu(entry))}
         <LanguageSelector />
       </div>
     );

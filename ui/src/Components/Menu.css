@@ -25,20 +25,14 @@
   border: 1px solid rgba(255,255,255,0.5);
   background-color: rgba(0,0,0,0.2);;
 }
-/*
 
-.Menu .entry.disabled {
-  color: gray;
+.Menu .button {
+  margin-left: 1rem;
 }
 
-.Menu .entry:hover, .Menu .entry:hover code {
-  cursor: pointer;
-  color: white;
-  user-select: none;
+.Menu .button .shortcut {
+  border-radius: 4px;
+  padding: 3px;
+  font-size: 0.7rem;
+  border: 1px solid rgba(255,255,255,0.5);
 }
-
-.Menu .entry.disabled:hover, .Menu .entry.disabled:hover code {
-  cursor: inherit;
-  color: gray;
-}
-*/
