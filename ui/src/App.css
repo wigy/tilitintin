@@ -23,126 +23,36 @@
     border-bottom: none !important;
     border-right: none !important;
   }
-  .Frame {
-    position: initial !important;
-    top: initial !important;
-    left: initial !important;
-    right: initial !important;
-    bottom: initial !important;
-    overflow-y: auto !important;
-    padding: initial !important;
-    border-radius: initial !important;
-    border-top: initial !important;
-    border-left: initial !important;
-    border-bottom: initial !important;
-    border-right: initial !important;
-    background-color: white;
-  }
 }
 
 @page {
   margin: 2cm;
 }
 
-/*
-.Panel {
-  background-color: var(--bg-color);
-  border-top: 1px solid var(--border-color-light);
-  border-left: 1px solid var(--border-color-light);
-  border-bottom: 1px solid var(--border-color-dark);
-  border-right: 1px solid var(--border-color-dark);
+.Page {
+  display: grid;
+  height: calc(100vh - 64px);
+  grid-template-columns: 300px auto;
+  grid-template-rows: 10vh auto;
 }
 
-.TopPanel {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 50px;
-  background: linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.2) 10%, rgba(0,0,0,0.2) 90%, rgba(0,0,0,0.3) 100%);
+.Panel {
+  margin: 3px;
 }
 
 .SidePanel {
-  position: absolute;
-  top: 50px;
-  left: 0px;
-  width: 400px;
-  bottom: 0px;
+  grid-column: 1;
+  grid-row: 1 / 3;
   overflow-y: auto;
-}
-
-.MainTopPanel {
-  position: absolute;
-  top: 50px;
-  left: 400px;
-  right: 0px;
-  height: 115px;
-}
-
-.MainTopPanel .Frame {
-  overflow: hidden;
 }
 
 .MainPanel {
-  position: absolute;
-  top: 165px;
-  left: 400px;
-  right: 0px;
-  bottom: 0px;
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.MainTopPanel {
+  grid-column: 2;
+  grid-row: 1;
   overflow-y: auto;
 }
-
-.Frame {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  right: 10px;
-  bottom: 10px;
-  overflow-y: auto;
-  padding: 10px;
-  border-radius: 2px;
-  border-top: 1px solid var(--border-color-dark);
-  border-left: 1px solid var(--border-color-dark);
-  border-bottom: 1px solid var(--border-color-light);
-  border-right: 1px solid var(--border-color-light);
-  background-color: rgba(255,255,255,0.2);
-}
-
-.Frame h1 {
-  padding: 0;
-  margin: 0;
-  border-bottom: 2px solid var(--fg-color);
-  margin-bottom: 0.5ex;
-  overflow: hidden;
-  white-space: nowrap;
-  font-size: 13pt;
-  font-weight: bold;
-}
-
-.Frame h2 {
-  padding: 0;
-  margin: 1.5ex 0;
-  overflow: hidden;
-  white-space: nowrap;
-  font-size: 13pt;
-}
-
-.Frame code {
-  border-bottom: 1px solid var(--border-color-dark);
-  border-right: 1px solid var(--border-color-dark);
-  border-top: 1px solid var(--border-color-light);
-  border-left: 1px solid var(--border-color-light);
-  background-color: rgba(255,255,255,0.2);
-  color: var(--fg-color);
-  font-size: 9pt;
-  font-family: "Courier New", Courier, monospace;
-  position: relative;
-  top: -2px;
-}
-
-.error {
-  font-weight: bold;
-  font-size: 110%;
-  color: red;
-}
-*/
