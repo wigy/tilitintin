@@ -80,12 +80,13 @@ class App extends Component {
           <Route exact path="/" component={Menu}/>
           <Route exact path="/_/admin/:arg?" component={Menu}/>
           <Route exact path="/:db" component={Menu}/>
-          <Route exact path="/:db/dashboard/:periodId?" component={Menu}/>
-          <Route exact path="/:db/dashboard/:periodId/:accountId?" component={Menu}/>
+          <Route exact path="/:db/dashboard" component={Menu}/>
+          <Route exact path="/:db/dashboard/:periodId" component={Menu}/>
+          <Route exact path="/:db/dashboard/:periodId/:accountId" component={Menu}/>
           <Route exact path="/:db/txs/:periodId" component={Menu}/>
           <Route exact path="/:db/txs/:periodId/:accountId" component={Menu}/>
           <Route exact path="/:db/account" component={Menu}/>
-          <Route exact path="/:db/account/:periodId?" component={Menu}/>
+          <Route exact path="/:db/account/:periodId" component={Menu}/>
           <Route exact path="/:db/account/:periodId/:accountId" component={Menu}/>
           <Route exact path="/:db/report/:periodId" component={Menu}/>
           <Route exact path="/:db/report/:periodId/:accountId" component={Menu}/>
