@@ -6,6 +6,7 @@ import Localize from './Localize';
 import Store from '../Stores/Store';
 
 import './ToolsForPeriods.css';
+import Title from './Title';
 
 @withTranslation('translations')
 @inject('store')
@@ -26,7 +27,7 @@ class ToolsForPeriods extends Component {
 
     return (
       <div className="Tools">
-        <h1><Trans>Documents that need renumbering</Trans></h1>
+        <Title><Trans>Documents that need renumbering</Trans></Title>
         {
           toRenumber.length
             ? toRenumber.map((c) => <div key={c.id}>
@@ -34,7 +35,7 @@ class ToolsForPeriods extends Component {
             </div>)
             : <Trans>All documents are correctly numbered.</Trans>
         }
-        <h1><Trans>Documents having no entries</Trans></h1>
+        <Title><Trans>Documents having no entries</Trans></Title>
         {
           toDelete.length
             ? toDelete.map((d) => <div key={d.id}><b>

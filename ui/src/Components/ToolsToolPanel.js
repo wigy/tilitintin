@@ -13,6 +13,7 @@ import Localize from './Localize';
 import EntryModel from '../Models/EntryModel';
 import './ToolPanel.css';
 import moment from 'moment';
+import Title from './Title';
 
 @withRouter
 @withTranslation('translations')
@@ -282,7 +283,7 @@ class ToolsToolPanel extends Component {
 
     return (
       <div className="ToolPanel">
-        {label && <h1><Trans>{label}</Trans></h1>}
+        {label && <Title><Trans>{label}</Trans></Title>}
         {buttons}
         <Dialog
           title={<Trans>Start new period?</Trans>}

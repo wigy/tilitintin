@@ -5,6 +5,7 @@ import { inject, observer } from 'mobx-react';
 import { withTranslation, Trans } from 'react-i18next';
 import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
+import Title from './Title';
 
 @withTranslation('translations')
 @inject('cursor')
@@ -19,7 +20,7 @@ class DatabaseList extends Component {
     const current = this.props.store.db;
     return (
       <div className="DatabaseList">
-        <h1><Trans>Databases</Trans></h1>
+        <Title>Databases</Title>
         <ul className="menu">
           {this.props.store.dbs.map((db, index) => <li key={db.name} className={current === db.name ? 'current' : ''}>
             <Link to={`/${db.name}`}><code>{'ABCDEFGHIJKLMNOPQRSTUVWZ'[index]}</code> {db.name}</Link>

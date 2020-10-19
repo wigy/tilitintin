@@ -7,6 +7,7 @@ import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
 import SubPanel from './SubPanel';
 import RegisterForm from './RegisterForm';
+import Title from './Title';
 
 @withTranslation('translations')
 @inject('store')
@@ -59,7 +60,7 @@ class Admin extends Component {
 
     return (
       <div>
-        <h1>{this.state.user ? this.state.user.name : (creatingUser ? <Trans>Create New User</Trans> : <Trans>No User Selected</Trans>)}</h1>
+        <Title>{this.state.user ? this.state.user.name : (creatingUser ? <Trans>Create New User</Trans> : <Trans>No User Selected</Trans>)}</Title>
         {
           this.state.user && !creatingUser &&
           <SubPanel>

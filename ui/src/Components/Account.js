@@ -10,6 +10,7 @@ import Dialog from './Dialog';
 import Localize from './Localize';
 import SubPanel from './SubPanel';
 import './Account.css';
+import Title from './Title';
 
 @withTranslation('translations')
 @inject('store')
@@ -166,7 +167,7 @@ class Account extends Component {
 
     return (
       <div className="Account">
-        <h1><Trans>Account</Trans></h1>
+        <Title>Account</Title>
         {
           account &&
           <SubPanel>

@@ -7,6 +7,7 @@ import IconSpacer from './IconSpacer';
 import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
 import './ToolPanel.css';
+import Title from './Title';
 
 @inject('store')
 @inject('cursor')
@@ -50,7 +51,7 @@ class TransactionToolPanel extends Component {
 
     return (
       <div className="ToolPanel">
-        <h1>{account ? account.toString() : 'No account selected'}</h1>
+        <Title>{account ? account.toString() : 'No account selected'}</Title>
 
         <IconButton onClick={enableAll} title="reset" icon="fas fa-clone"></IconButton>
         <IconButton onClick={disableAll} title="disable-all" icon="far fa-clone"></IconButton>

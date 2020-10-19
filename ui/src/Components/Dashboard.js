@@ -8,6 +8,7 @@ import { withTranslation, Trans } from 'react-i18next';
 import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
 import Loading from './Loading';
+import Title from './Title';
 
 @withTranslation('translations')
 @inject('cursor')
@@ -64,14 +65,14 @@ class Dashboard extends Component {
     }
     if (!store.db) {
       return <>
-        <h1><Trans>No Database Selected</Trans></h1>
+        <Title><Trans>No Database Selected</Trans></Title>
       </>;
     }
     const { periodId } = this.props.match.params;
 
     return (
       <div className="Dashboard">
-        <h1><Trans>Database</Trans>: {store.db}</h1>
+        <Title><Trans>Database</Trans>: {store.db}</Title>
         <h2><Trans>Company Info</Trans></h2>
         <b><Trans>Business name</Trans>: {store.settings.BUSINESS_NAME}</b><br />
         <b><Trans>Business ID</Trans>: {store.settings.BUSINESS_ID}</b><br />

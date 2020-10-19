@@ -8,6 +8,7 @@ import Store from '../Stores/Store';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
 import './Login.css';
+import Title from './Title';
 
 @withRouter
 @withTranslation('translations')
@@ -73,7 +74,7 @@ class Login extends Component {
 
     if (this.state.appState === 'NO_ROOT') {
       return <div className="Login">
-        <h1><Trans>This system has no admin user</Trans></h1>
+        <Title>This system has no admin user</Title>
         <h2><Trans>Please register an admin user</Trans></h2>
         <RegisterForm onRegister={onRegisterAdmin}/>
       </div>;

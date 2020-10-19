@@ -9,6 +9,7 @@ import Loading from './Loading';
 import Configuration from '../Configuration';
 import i18n from '../i18n';
 import './ToolPanel.css';
+import Title from './Title';
 
 const ICONS = {
   'option-compact': 'fa-tasks',
@@ -108,7 +109,7 @@ class ReportToolPanel extends Component {
 
     return (
       <div className="ToolPanel">
-        {store.report && <h1>{this.props.t('report-' + store.report.format)}</h1>}
+        {store.report && <Title>{this.props.t('report-' + store.report.format)}</Title>}
         <Loading visible={!store.report} />
         {store.report && buttons}
       </div>

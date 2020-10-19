@@ -6,6 +6,7 @@ import { withTranslation, Trans } from 'react-i18next';
 import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
 import ReportLink from './ReportLink';
+import Title from './Title';
 
 @withTranslation('translations')
 @inject('store')
@@ -51,7 +52,7 @@ class ReportsList extends Component {
 
     return (
       <div>
-        <h1><Trans>Reports</Trans></h1>
+        <Title>Reports</Title>
         <ul className="menu">
           {this.props.store.reports.map((report, index) => <li key={report.format}>
             <ReportLink shortcut={'' + (index + 1)} report={report}/>

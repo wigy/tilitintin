@@ -6,6 +6,7 @@ import { withTranslation, Trans } from 'react-i18next';
 import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
 import './UserList.css';
+import Title from './Title';
 
 @withTranslation('translations')
 @inject('store')
@@ -45,7 +46,7 @@ class ToolsList extends Component {
 
     return (
       <div className="UserList">
-        <h1><Trans>Users</Trans></h1>
+        <Title><Trans>Users</Trans></Title>
         {this.state.users.map((user) => <div key={user.user} className="user" onClick={() => this.onClickUser(user)}>
           <div className="name">{user.name} ({user.user})</div>
           <div className="email">{user.email}</div>

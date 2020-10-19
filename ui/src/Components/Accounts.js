@@ -5,6 +5,7 @@ import { withTranslation, Trans } from 'react-i18next';
 import AccountTable from '../Components/AccountTable';
 import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
+import Title from './Title';
 
 @withTranslation('translations')
 @inject('store')
@@ -37,7 +38,7 @@ class Accounts extends Component {
 
     return (
       <div className="Accounts">
-        <h1><Trans>Account scheme</Trans></h1>
+        <Title>Account scheme</Title>
         <AccountTable accounts={accounts} headings={this.props.store.headings} />
       </div>
     );

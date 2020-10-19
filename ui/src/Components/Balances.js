@@ -6,6 +6,7 @@ import BalanceTable from '../Components/BalanceTable';
 import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
 import Loading from './Loading';
+import Title from './Title';
 
 @withTranslation('translations')
 @inject('store')
@@ -20,7 +21,7 @@ class Balances extends Component {
 
     return (
       <div className="Period">
-        <h1><Trans>Account Balances</Trans></h1>
+        <Title><Trans>Account Balances</Trans></Title>
         <Loading visible={this.props.store.loading}/>
         <BalanceTable balances={this.props.store.balances}/>
       </div>

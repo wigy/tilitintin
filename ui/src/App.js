@@ -99,6 +99,7 @@ class App extends Component {
         </div>
         <div className="Page">
           <Paper className="SidePanel Panel" elevation={4}>
+            <Route path="/:db/txs/:periodId" component={Balances}/>
           </Paper>
           <Paper className="MainTopPanel Panel" elevation={4}>
           </Paper>
@@ -113,7 +114,7 @@ class App extends Component {
             <Route exact path="/:db" component={DatabaseList}/>
             <Route exact path="/:db/dashboard/:periodId?" component={DatabaseList}/>
             <Route exact path="/:db/dashboard/:periodId/:accountId" component={DatabaseList}/>
-            <Route path="/:db/txs/:periodId" component={Balances}/>
+
             <Route path="/:db/account/:periodId?/:accountId?" component={Account}/>
             <Route exact path="/:db/report/:periodId" component={ReportsList}/>
             <Route exact path="/:db/report/:periodId/:accountId" component={ReportsList}/>

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import { withTranslation, Trans } from 'react-i18next';
 import Store from '../Stores/Store';
+import Title from './Title';
 
 @withTranslation('translations')
 @inject('store')
@@ -17,7 +18,7 @@ class ToolsForDatabases extends Component {
 
     return (
       <div className="Tools">
-        <h1><Trans>Databases</Trans></h1>
+        <Title><Trans>Databases</Trans></Title>
         {this.props.store.dbs.map((db, index) => <h2 key={db.name}>{db.name}</h2>)}
       </div>
     );

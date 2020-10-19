@@ -6,6 +6,7 @@ import { withTranslation, Trans } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
+import Title from './Title';
 
 @withTranslation('translations')
 @inject('store')
@@ -50,7 +51,7 @@ class ToolsList extends Component {
 
     return (
       <div>
-        <h1><Trans>Tools</Trans></h1>
+        <Title><Trans>Tools</Trans></Title>
         <ul className="menu">
           <li className={''}><Link to={this.url('databases')}><code>1</code> <Trans>Databases</Trans></Link></li>
           <li className={store.db ? '' : 'disabled-link'}><Link to={this.url('periods')}><code>2</code> <Trans>Periods</Trans></Link></li>

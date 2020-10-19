@@ -8,6 +8,7 @@ import IconButton from './IconButton';
 import IconSpacer from './IconSpacer';
 import './ToolPanel.css';
 import './AccountsToolPanel.css';
+import Title from './Title';
 
 @inject('store')
 @inject('cursor')
@@ -42,7 +43,7 @@ class AccountsToolPanel extends Component {
 
     return ( // ASSET/LIABILITY/EQUITY/REVENUE/EXPENSE/PROFIT_PREV/PROFIT
       <div className="ToolPanel AccountsToolPanel">
-        <h1><Trans>Accounts</Trans></h1>
+        <Title>Accounts</Title>
         <IconButton key="button-favorite" title="favorite" icon="far fa-star"
           toggle={store.tools.accounts.favorite}
           onClick={() => (store.tools.accounts.favorite = !store.tools.accounts.favorite)}
