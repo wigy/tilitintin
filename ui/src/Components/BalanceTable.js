@@ -6,17 +6,12 @@ import { action } from 'mobx';
 import { Link } from 'react-router-dom';
 import Cursor from '../Stores/Cursor';
 import Money from './Money';
+import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
+import { Trans } from 'react-i18next';
 
 @inject('cursor')
 @observer
 class BalanceLine extends Component {
-
-  // Move to the clicked balance line.
-  @action.bound
-  onClick() {
-    this.props.cursor.setComponent('Balances.balances');
-    this.props.cursor.setIndex(this.props.index, { noScroll: true });
-  }
 
   render() {
     const { balance } = this.props;
@@ -37,25 +32,52 @@ BalanceLine.propTypes = {
   index: PropTypes.number
 };
 
+@inject('cursor')
 @observer
 class BalanceTable extends Component {
+
+  @action.bound
+  onClick(idx) {
+    this.props.cursor.setComponent('Balances.balances');
+    this.props.cursor.setIndex(idx, { noScroll: true });
+  }
 
   render() {
 
     return (
-      <table className="BalanceTable">
-        <tbody>
-          {this.props.balances.map((balance, idx) => {
-            return (<BalanceLine key={balance.account_id} index={idx} balance={balance} />);
-          })}
-        </tbody>
-      </table>
+      <TableContainer component={Paper}>
+        <Table className="BalanceTable" size="small" aria-label="a dense table">
+          <TableHead>
+            <TableRow>
+              <TableCell align="center"><Trans>#</Trans></TableCell>
+              <TableCell align="left"><Trans>Name</Trans></TableCell>
+              <TableCell align="right"><Trans>Balance</Trans></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {this.props.balances.map((balance, idx) => (
+              <TableRow key={balance.account_id} id={balance.getId()} className={balance.getClasses()}>
+                <TableCell component="th" scope="row">
+                  <Link onClick={() => this.onClick()} to={balance.getUrl()}>{balance.account.number}</Link>
+                </TableCell>
+                <TableCell align="left">
+                  <Link onClick={() => this.onClick()} to={balance.getUrl()}>{balance.account.name}</Link>
+                </TableCell>
+                <TableCell align="right">
+                  <Link onClick={() => this.onClick(idx)} to={balance.getUrl()}><Money cents={balance.total} currency="EUR"/></Link>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     );
   }
 }
 
 BalanceTable.propTypes = {
-  balances: PropTypes.arrayOf(PropTypes.instanceOf(BalanceModel))
+  balances: PropTypes.arrayOf(PropTypes.instanceOf(BalanceModel)),
+  cursor: PropTypes.instanceOf(Cursor),
 };
 
 export default BalanceTable;

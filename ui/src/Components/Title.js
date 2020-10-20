@@ -7,7 +7,7 @@ const Title = ({ children }) => {
 };
 
 Title.propTypes = {
-  children: PropTypes.instanceOf(Element),
+  children: PropTypes.any,
 };
 
 export default Title;

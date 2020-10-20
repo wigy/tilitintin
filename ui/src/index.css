@@ -1,3 +1,14 @@
+:root {
+  --marking-fg-color: rgb(0,0,93);
+  --selected-bg-color: yellow;
+}
+
+.selected, .sub-selected {
+  background-color: var(--selected-bg-color) !important;
+  outline: 1px solid var(--marking-fg-color) !important;
+  outline-offset: -1px;
+}
+
 /*
 :root {
   --bg-color: #d3d3d3;
@@ -5,10 +16,8 @@
   --fg-color: rgb(0,0,93);
   --fg-color-light: rgba(0,0,93,0.7);
   --marking-bg-color: white;
-  --marking-fg-color: rgb(0,0,93);
   --border-color-light: #eee;
   --border-color-dark: #a0a0a0;
-  --selected-bg-color: yellow;
   --even-color: rgba(255,255,255,0.2);
   --odd-color: rgba(255,255,255,0.5);
   --even-alt-color: rgba(58, 117, 101,0.2);
@@ -62,12 +71,6 @@ table tr.alt:nth-child(even) {
 
 table tr.alt:nth-child(odd) {
   background-color: var(--odd-alt-color);
-}
-
-.selected, .sub-selected {
-  background-color: var(--selected-bg-color) !important;
-  outline: 1px solid var(--marking-fg-color) !important;
-  outline-offset: -1px;
 }
 
 .disabled-link, .disabled-link a, a .disabled-link {
