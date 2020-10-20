@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import { observer, inject } from 'mobx-react';
 import BalanceModel from '../Models/BalanceModel';
 import { action } from 'mobx';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import Cursor from '../Stores/Cursor';
 import Money from './Money';
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
-import { Trans } from 'react-i18next';
+import { Trans, withTranslation } from 'react-i18next';
+import ReactRouterPropTypes from 'react-router-prop-types';
 
 @inject('cursor')
 @observer
@@ -32,39 +33,48 @@ BalanceLine.propTypes = {
   index: PropTypes.number
 };
 
+@withRouter
+@withTranslation('translations')
 @inject('cursor')
 @observer
 class BalanceTable extends Component {
 
   @action.bound
-  onClick(idx) {
+  onClick(idx, url) {
     this.props.cursor.setComponent('Balances.balances');
     this.props.cursor.setIndex(idx, { noScroll: true });
+    this.props.history.push(url);
   }
 
   render() {
 
     return (
       <TableContainer component={Paper}>
-        <Table className="BalanceTable" size="small" aria-label="a dense table">
+        <Table className="BalanceTable" stickyHeader size="medium" padding="none">
           <TableHead>
             <TableRow>
-              <TableCell align="center"><Trans>#</Trans></TableCell>
-              <TableCell align="left"><Trans>Name</Trans></TableCell>
-              <TableCell align="right"><Trans>Balance</Trans></TableCell>
+              <TableCell variant="head" align="center"><Trans>#</Trans></TableCell>
+              <TableCell variant="head" align="left"><Trans>Name</Trans></TableCell>
+              <TableCell variant="head" align="right"><Trans>Balance</Trans></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {this.props.balances.map((balance, idx) => (
-              <TableRow key={balance.account_id} id={balance.getId()} className={balance.getClasses()}>
+              <TableRow
+                key={balance.account_id}
+                id={balance.getId()}
+                hover
+                className={balance.getClasses()}
+                onClick={() => this.onClick(idx, balance.getUrl())}
+              >
                 <TableCell component="th" scope="row">
-                  <Link onClick={() => this.onClick()} to={balance.getUrl()}>{balance.account.number}</Link>
+                  {balance.account.number}
                 </TableCell>
                 <TableCell align="left">
-                  <Link onClick={() => this.onClick()} to={balance.getUrl()}>{balance.account.name}</Link>
+                  {balance.account.name}
                 </TableCell>
                 <TableCell align="right">
-                  <Link onClick={() => this.onClick(idx)} to={balance.getUrl()}><Money cents={balance.total} currency="EUR"/></Link>
+                  <Money cents={balance.total} currency="EUR"/>
                 </TableCell>
               </TableRow>
             ))}
@@ -78,6 +88,7 @@ class BalanceTable extends Component {
 BalanceTable.propTypes = {
   balances: PropTypes.arrayOf(PropTypes.instanceOf(BalanceModel)),
   cursor: PropTypes.instanceOf(Cursor),
+  history: ReactRouterPropTypes.history,
 };
 
 export default BalanceTable;

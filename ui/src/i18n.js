@@ -75,6 +75,7 @@ i18n.init({
         Accounts: 'Tilit',
         'Admin Tools': 'Ylläpitotyökalut',
         'All documents are correctly numbered.': 'Kaikki tositteet on numeroitu oikein.',
+        Balance: 'Saldo',
         'Business ID': 'Y-tunnus',
         'Business name': 'Yrityksen nimi',
         Cancel: 'Peru',
