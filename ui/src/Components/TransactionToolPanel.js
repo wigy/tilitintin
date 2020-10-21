@@ -8,6 +8,7 @@ import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
 import Title from './Title';
 import './ToolPanel.css';
+import { Trans } from 'react-i18next';
 
 @inject('store')
 @inject('cursor')
@@ -51,7 +52,7 @@ class TransactionToolPanel extends Component {
 
     return (
       <div className="ToolPanel">
-        <Title>{account ? account.toString() : 'No account selected'}</Title>
+        <Title>{account ? account.toString() : <Trans>No account selected</Trans>}</Title>
 
         <IconButton onClick={enableAll} title="reset" icon="fas fa-clone"></IconButton>
         <IconButton onClick={disableAll} title="disable-all" icon="far fa-clone"></IconButton>

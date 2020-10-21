@@ -121,6 +121,7 @@ i18n.init({
         Logout: 'Poistu',
         'Mark as a favorite': 'Merkise suosikiksi',
         Name: 'Nimi',
+        'No account selected': 'Ei valittua tiliä',
         'No Database Selected': 'Ei valittua tietokantaa',
         'No empty documents.': 'Ei tyhjiä tositteita',
         'No such account found.': 'Tiliä ei ole olemassa.',
