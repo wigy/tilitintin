@@ -6,8 +6,8 @@ import IconButton from './IconButton';
 import IconSpacer from './IconSpacer';
 import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
-import './ToolPanel.css';
 import Title from './Title';
+import './ToolPanel.css';
 
 @inject('store')
 @inject('cursor')
