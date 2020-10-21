@@ -2,14 +2,23 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TagModel from '../Models/TagModel';
 import './Tag.css';
+import { Avatar, Chip } from '@material-ui/core';
+import { RadioButtonChecked, RadioButtonUnchecked } from '@material-ui/icons';
 
 const Tag = (props) => {
-  let classes = 'Tag';
-  if (props.size) {
-    classes += ' ' + props.size;
-  }
+  const { disabled, onClick, tag: { name, url } } = props;
+
   return (
-    <div className={classes} title={props.tag.type + ': ' + props.tag.name}><img alt={props.tag.name} src={props.tag.url} /></div>
+    <Chip
+      avatar={<Avatar src={url}></Avatar>}
+      label={name}
+      deleteIcon={disabled ? <RadioButtonUnchecked/> : <RadioButtonChecked/>}
+      color="secondary"
+      variant="outlined"
+      clickable
+      onDelete={() => {}}
+      onClick={() => onClick() }
+    />
   );
 };
 

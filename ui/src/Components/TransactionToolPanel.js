@@ -58,21 +58,15 @@ class TransactionToolPanel extends Component {
         <IconButton onClick={disableAll} title="disable-all" icon="far fa-clone"></IconButton>
 
         {account && account.tags.map((tag) => {
-          const spacer = (tag.type !== last);
-          const className = (tools.tagDisabled[tag.tag] ? 'IconButton off' : 'IconButton');
+          const needSpacer = last && (tag.type !== last);
           last = tag.type;
           return (
-            <div key={tag.tag}>
-              {spacer
-                ? <IconSpacer key={`space-${tag.tag}`}/>
-                : (<span></span>)
-              }
-              <div className={className} onClick={() => toggle(tag.tag)}>
-                <Tag size="x2" tag={tag}/>
-              </div>
-            </div>);
+            <>
+              {needSpacer && <IconSpacer key={`space-${tag.tag}`}/>}
+              <Tag onClick={() => toggle(tag.tag)} disabled={!!tools.tagDisabled[tag.tag]} key={tag.tag} tag={tag}/>
+            </>
+          );
         })}
-        <div style={{ clear: 'both' }}></div>
       </div>
     );
   }

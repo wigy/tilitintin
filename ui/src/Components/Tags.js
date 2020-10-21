@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react';
 import Tag from './Tag';
 import Store from '../Stores/Store';
 import TagModel from '../Models/TagModel';
+import { Avatar } from '@material-ui/core';
 
 @inject('store')
 @observer
@@ -12,7 +13,9 @@ class Tags extends Component {
   render() {
     return (
       <div className="Tags">
-        {this.props.tags.map((tag) => (<Tag key={tag.tag} tag={tag}/>))}
+        {this.props.tags.map((tag) => (
+          <Avatar variant="rounded" key={tag.tag} src={tag.url}/>
+        ))}
       </div>
     );
   }
