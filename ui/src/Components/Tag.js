@@ -12,7 +12,6 @@ const Tag = (props) => {
       avatar={<Avatar src={url}></Avatar>}
       label={name}
       deleteIcon={disabled ? <RadioButtonUnchecked/> : <RadioButtonChecked/>}
-      color="secondary"
       variant="outlined"
       clickable
       onDelete={() => {}}

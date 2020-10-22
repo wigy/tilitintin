@@ -8,6 +8,7 @@ import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
 import Title from './Title';
 import { Trans } from 'react-i18next';
+import './TransactionToolPanel.css';
 
 @inject('store')
 @inject('cursor')
@@ -50,22 +51,28 @@ class TransactionToolPanel extends Component {
     let last = null;
 
     return (
-      <div className="ToolPanel">
+      <div className="TransactionToolPanel">
         <Title>{account ? account.toString() : <Trans>No account selected</Trans>}</Title>
 
-        <IconButton onClick={enableAll} title="reset" icon="fas fa-clone"></IconButton>
-        <IconButton onClick={disableAll} title="disable-all" icon="far fa-clone"></IconButton>
+        <div className="icons">
+          <div className="buttons">
+            <IconButton onClick={enableAll} title="reset" icon="fas fa-clone"></IconButton>
+            <IconButton onClick={disableAll} title="disable-all" icon="far fa-clone"></IconButton>
+          </div>
 
-        {account && account.tags.map((tag) => {
-          const needSpacer = last && (tag.type !== last);
-          last = tag.type;
-          return (
-            <>
-              {needSpacer && <IconSpacer key={`space-${tag.tag}`}/>}
-              <Tag onClick={() => toggle(tag.tag)} disabled={!!tools.tagDisabled[tag.tag]} key={tag.tag} tag={tag}/>
-            </>
-          );
-        })}
+          <div className="tags">
+            {account && account.tags.map((tag) => {
+              const needSpacer = last && (tag.type !== last);
+              last = tag.type;
+              return (
+                <>
+                  {needSpacer && <IconSpacer key={`space-${tag.tag}`}/>}
+                  <Tag onClick={() => toggle(tag.tag)} disabled={!!tools.tagDisabled[tag.tag]} key={tag.tag} tag={tag}/>
+                </>
+              );
+            })}
+          </div>
+        </div>
       </div>
     );
   }

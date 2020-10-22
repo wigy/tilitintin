@@ -33,7 +33,7 @@
   display: grid;
   height: calc(100vh - 90px);
   grid-template-columns: 450px auto;
-  grid-template-rows: 150px auto;
+  grid-template-rows: 154px auto;
 }
 
 .Panel {
