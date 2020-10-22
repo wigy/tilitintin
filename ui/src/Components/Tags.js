@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
-import Tag from './Tag';
 import Store from '../Stores/Store';
 import TagModel from '../Models/TagModel';
 import { Avatar } from '@material-ui/core';
@@ -14,7 +13,7 @@ class Tags extends Component {
     return (
       <div className="Tags">
         {this.props.tags.map((tag) => (
-          <Avatar variant="rounded" key={tag.tag} src={tag.url}/>
+          <Avatar style={{ height: '24px', width: '24px' }} variant="rounded" key={tag.tag} src={tag.url}/>
         ))}
       </div>
     );

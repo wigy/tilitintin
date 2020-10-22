@@ -31,7 +31,7 @@
 
 .Page {
   display: grid;
-  height: calc(100vh - 100px);
+  height: calc(100vh - 90px);
   grid-template-columns: 450px auto;
   grid-template-rows: 150px auto;
 }
@@ -55,5 +55,5 @@
 .MainTopPanel {
   grid-column: 2;
   grid-row: 1;
-  overflow: hidden;
+  overflow-y: auto;
 }
