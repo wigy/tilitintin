@@ -50,7 +50,7 @@ class BalanceTable extends Component {
 
     return (
       <TableContainer component={Paper}>
-        <Table className="BalanceTable" stickyHeader size="medium" padding="none">
+        <Table className="BalanceTable" size="medium" padding="none">
           <TableHead>
             <TableRow>
               <TableCell variant="head" align="center"><Trans>#</Trans></TableCell>
