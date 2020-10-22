@@ -8,7 +8,6 @@ import IconSpacer from './IconSpacer';
 import Loading from './Loading';
 import Configuration from '../Configuration';
 import i18n from '../i18n';
-import './ToolPanel.css';
 import Title from './Title';
 
 const ICONS = {

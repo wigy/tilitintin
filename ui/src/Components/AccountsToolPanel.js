@@ -6,7 +6,6 @@ import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
 import IconButton from './IconButton';
 import IconSpacer from './IconSpacer';
-import './ToolPanel.css';
 import './AccountsToolPanel.css';
 import Title from './Title';
 

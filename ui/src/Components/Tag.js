@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import TagModel from '../Models/TagModel';
-import './Tag.css';
 import { Avatar, Chip } from '@material-ui/core';
 import { RadioButtonChecked, RadioButtonUnchecked } from '@material-ui/icons';
 
@@ -23,6 +22,8 @@ const Tag = (props) => {
 };
 
 Tag.propTypes = {
+  disabled: PropTypes.bool,
+  onClick: PropTypes.func,
   size: PropTypes.string,
   tag: PropTypes.instanceOf(TagModel)
 };

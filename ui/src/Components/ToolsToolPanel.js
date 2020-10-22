@@ -11,7 +11,6 @@ import IconButton from './IconButton';
 import Dialog from './Dialog';
 import Localize from './Localize';
 import EntryModel from '../Models/EntryModel';
-import './ToolPanel.css';
 import moment from 'moment';
 import Title from './Title';
 

@@ -7,7 +7,6 @@ import IconSpacer from './IconSpacer';
 import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
 import Title from './Title';
-import './ToolPanel.css';
 import { Trans } from 'react-i18next';
 
 @inject('store')
