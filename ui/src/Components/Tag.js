@@ -13,6 +13,7 @@ const Tag = (props) => {
       label={name}
       deleteIcon={disabled ? <RadioButtonUnchecked/> : <RadioButtonChecked/>}
       variant="outlined"
+      color="primary"
       clickable
       onDelete={() => {}}
       onClick={() => onClick() }
