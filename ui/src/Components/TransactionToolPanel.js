@@ -65,10 +65,10 @@ class TransactionToolPanel extends Component {
               const needSpacer = last && (tag.type !== last);
               last = tag.type;
               return (
-                <>
-                  {needSpacer && <IconSpacer key={`space-${tag.tag}`}/>}
-                  <Tag onClick={() => toggle(tag.tag)} disabled={!!tools.tagDisabled[tag.tag]} key={tag.tag} tag={tag}/>
-                </>
+                <React.Fragment key={tag.tag}>
+                  {needSpacer && <IconSpacer/>}
+                  <Tag onClick={() => toggle(tag.tag)} disabled={!!tools.tagDisabled[tag.tag]} tag={tag}/>
+                </React.Fragment>
               );
             })}
           </div>
