@@ -264,14 +264,11 @@ class Transaction extends Component {
       });
     }
 
-    /*
-    TODO: Handle.
-
     // Render delete dialog in the dummy row.
     if (this.entryToDelete) {
       ret.push(
-        <tr key="delete">
-          <td colSpan={7}>
+        <TableRow key="delete">
+          <TableCell colSpan={7}>
             <Dialog
               title={<Trans>Delete this transaction?</Trans>}
               isVisible={this.entryToDelete.askForDelete}
@@ -281,10 +278,13 @@ class Transaction extends Component {
               {this.entryToDelete.description}<br/>
               <b>{this.entryToDelete.debit ? '+' : '-'}<Money currency="EUR" cents={this.entryToDelete.amount}></Money></b>
             </Dialog>
-          </td>
-        </tr>
+          </TableCell>
+        </TableRow>
       );
     }
+
+    /*
+    TODO: Handle.
 
     // Render imbalance
     if (imbalance && this.props.tx.document.open) {
