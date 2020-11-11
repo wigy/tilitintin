@@ -12,6 +12,7 @@ import Settings from '../Stores/Settings';
 import Cursor from '../Stores/Cursor';
 import EntryModel from '../Models/EntryModel';
 import './Transaction.css';
+import { TableRow, TableCell } from '@material-ui/core';
 
 @withTranslation('translations')
 @inject('store')
@@ -129,11 +130,11 @@ class Transaction extends Component {
     const total = (<Money cents={this.props.total} currency="EUR" />);
 
     return (
-      <tr id={tx.getId()} key="title" className={classes} onClick={() => this.onClick()}>
-        <td className="number">
+      <TableRow id={tx.getId()} key="title" className={classes} onClick={() => this.onClick()}>
+        <TableCell>
           {tx.document.number}
-        </td>
-        <td className="date">
+        </TableCell>
+        <TableCell>
           <TransactionDetails
             index={this.props.index}
             field="date"
@@ -147,23 +148,23 @@ class Transaction extends Component {
               this.props.cursor.setCell(0, 0);
             }}
           />
-        </td>
-        <td className="tags" style={{ width: (tx.tags.length) * 2.6 + 'ex' }}>
+        </TableCell>
+        <TableCell>
           <Tags tags={tx.tags}></Tags>
-        </td>
-        <td className="description">
-          <span className="summary">{tx.description}&nbsp;</span>
-        </td>
-        <td className="debit">
-          <span className="summary">&nbsp;{tx.debit ? money : ''}</span>
-        </td>
-        <td className="credit">
-          <span className="summary">&nbsp;{tx.debit ? '' : money}</span>
-        </td>
-        <td className="total">
+        </TableCell>
+        <TableCell>
+          {tx.description}
+        </TableCell>
+        <TableCell align="right">
+          {tx.debit ? money : ''}
+        </TableCell>
+        <TableCell align="right">
+          {tx.debit ? '' : money}
+        </TableCell>
+        <TableCell align="right">
           {total}
-        </td>
-      </tr>
+        </TableCell>
+      </TableRow>
     );
   }
 
@@ -246,6 +247,7 @@ class Transaction extends Component {
     const error = !!imbalance || missingAccount;
 
     // Set up CSS classes.
+    // TODO: Sort out classes and use material ui where possible (like 'selected').
     const classes = tx.document.getClasses() +
       (error ? ' error' : '') +
       (mismatchingAccount ? ' mismatch' : '') +
@@ -255,6 +257,9 @@ class Transaction extends Component {
     const ret = [
       this.renderMainTx(classes)
     ];
+
+    /*
+    TODO: Handle.
 
     // Render entries, if opened.
     if (tx.document.open && !this.props.duplicate) {
@@ -299,6 +304,7 @@ class Transaction extends Component {
           <td className="empty"></td>
         </tr>);
     }
+    */
 
     return ret;
   }

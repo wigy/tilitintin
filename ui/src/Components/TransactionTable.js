@@ -14,8 +14,8 @@ import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
 import EntryModel from '../Models/EntryModel';
 import DocumentModel from '../Models/DocumentModel';
-import './TransactionTable.css';
 import { withRouter } from 'react-router-dom';
+import { TableContainer, Table, TableHead, TableCell, TableRow, TableBody } from '@material-ui/core';
 
 @withTranslation('translations')
 @withRouter
@@ -288,50 +288,57 @@ class TransactionTable extends Component {
     let credit = null;
     const seen = {};
     ret.push(
-      <table key="table" className="TransactionTable">
-        <thead>
-          <tr className="Transaction heading">
-            <th className="number">#</th>
-            <th className="date"><Trans>Date</Trans></th>
-            <th className="tags"></th>
-            <th className="description"><Trans>Description</Trans></th>
-            <th className="debit"><Trans>Debit</Trans></th>
-            <th className="credit"><Trans>Credit</Trans></th>
-            <th className="total"><Trans>Total</Trans></th>
-          </tr>
-        </thead>
-        <tbody>{
-          this.props.store.filteredTransactions.map((tx, idx) => {
-            if (tx.document.askForDelete) {
-              this.txToDelete = tx;
-            }
-            const duplicate = seen[tx.document.number];
-            seen[tx.document.number] = true;
-            sum += tx.total;
-            if (tx.debit) {
-              debit += tx.amount;
-            } else {
-              credit += tx.amount;
-            }
-            return <Transaction
-              key={idx}
-              index={idx}
-              duplicate={duplicate}
-              tx={tx}
-              total={sum}
-            />;
-          })}
-        <tr className="totals">
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td className="debit">{debit !== null && <Money cents={debit} currency="EUR" />}</td>
-          <td className="credit">{credit !== null && <Money cents={credit} currency="EUR" />}</td>
-          <td></td>
-        </tr>
-        </tbody>
-      </table>
+      <TableContainer key="totals">
+        <Table className="TransactionTable" size="medium" padding="none">
+          <TableHead>
+            <TableRow>
+              <TableCell variant="head" align="center"><Trans>#</Trans></TableCell>
+              <TableCell variant="head" align="left"><Trans>Date</Trans></TableCell>
+              <TableCell variant="head" align="left"></TableCell>
+              <TableCell variant="head" align="left"><Trans>Description</Trans></TableCell>
+              <TableCell variant="head" align="right"><Trans>Debit</Trans></TableCell>
+              <TableCell variant="head" align="right"><Trans>Credit</Trans></TableCell>
+              <TableCell variant="head" align="right"><Trans>Total</Trans></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {
+              this.props.store.filteredTransactions.map((tx, idx) => {
+                if (tx.document.askForDelete) {
+                  this.txToDelete = tx;
+                }
+                const duplicate = seen[tx.document.number];
+                seen[tx.document.number] = true;
+                sum += tx.total;
+                if (tx.debit) {
+                  debit += tx.amount;
+                } else {
+                  credit += tx.amount;
+                }
+                return <Transaction
+                  key={idx}
+                  index={idx}
+                  duplicate={duplicate}
+                  tx={tx}
+                  total={sum}
+                />;
+              })}
+            <TableRow className="totals">
+              <TableCell/>
+              <TableCell/>
+              <TableCell/>
+              <TableCell/>
+              <TableCell align="right" style={{ fontWeight: 'bold' }}>
+                {debit !== null && <Money cents={debit} currency="EUR"/>}
+              </TableCell>
+              <TableCell align="right" style={{ fontWeight: 'bold' }}>
+                {credit !== null && <Money cents={credit} currency="EUR"/>}
+              </TableCell>
+              <TableCell/>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
     );
 
     /*
@@ -358,6 +365,7 @@ class TransactionTable extends Component {
         el.scrollIntoView({ block: 'nearest', inline: 'nearest' });
       }
     }, 0);
+
     return ret;
   }
 }

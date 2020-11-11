@@ -64,7 +64,7 @@ class BalanceTable extends Component {
                 key={balance.account_id}
                 id={balance.getId()}
                 hover
-                className={balance.getClasses()}
+                className={balance.getClasses() /* TODO: Use material ui `selected` attribute */}
                 onClick={() => this.onClick(idx, balance.getUrl())}
               >
                 <TableCell component="th" scope="row">
