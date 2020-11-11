@@ -56,8 +56,8 @@ class TransactionToolPanel extends Component {
 
         <div className="icons">
           <div className="buttons">
-            <IconButton onClick={enableAll} title="reset" icon="fas fa-clone"></IconButton>
-            <IconButton onClick={disableAll} title="disable-all" icon="far fa-clone"></IconButton>
+            <IconButton onClick={enableAll} title="reset" icon="far fa-check-circle"></IconButton>
+            <IconButton onClick={disableAll} title="disable-all" icon="far fa-circle"></IconButton>
           </div>
 
           <div className="tags">
