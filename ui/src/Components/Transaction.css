@@ -1,3 +1,6 @@
+.TransactionEntry.error, .Document.error {
+  background-color: rgba(255,0,0,0.1) !important;
+}
 /*
 .Document.open .TransactionEntry td {
   background-color: white;
@@ -6,10 +9,6 @@
 .TransactionEntry.error, .Document.error, .Document.open.error .credit .summary, .Document.open.error .debit .summary {
   color: red;
   font-weight: inherit;
-}
-
-.TransactionEntry.error, .Document.error {
-  background-color: rgba(255,0,0,0.1) !important;
 }
 
 .Document.mismatch {

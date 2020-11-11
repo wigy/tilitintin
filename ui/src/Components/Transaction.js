@@ -12,7 +12,7 @@ import Settings from '../Stores/Settings';
 import Cursor from '../Stores/Cursor';
 import EntryModel from '../Models/EntryModel';
 import './Transaction.css';
-import { TableRow, TableCell } from '@material-ui/core';
+import { TableRow, TableCell, Typography } from '@material-ui/core';
 
 @withTranslation('translations')
 @inject('store')
@@ -283,27 +283,29 @@ class Transaction extends Component {
       );
     }
 
-    /*
-    TODO: Handle.
-
     // Render imbalance
     if (imbalance && this.props.tx.document.open) {
       ret.push(
-        <tr key="imbalance" className={'alt error TransactionEntry'} onClick={() => this.onClick()}>
-          <td className="account" colSpan={3}></td>
-          <td className="description">
-            <Trans>Debit and credit do not match</Trans>
-          </td>
-          <td className="debit">
-            {imbalance < 0 ? <Money cents={imbalance} currency="€"/> : ''}
-          </td>
-          <td className="credit">
-            {imbalance > 0 ? <Money cents={imbalance} currency="€"/> : ''}
-          </td>
-          <td className="empty"></td>
-        </tr>);
+        <TableRow key="imbalance" className={'alt error TransactionEntry'} onClick={() => this.onClick()}>
+          <TableCell colSpan={3} />
+          <TableCell>
+            <Typography color="error">
+              <Trans>Debit and credit do not match</Trans>
+            </Typography>
+          </TableCell>
+          <TableCell align="right">
+            <Typography color="error">
+              {imbalance < 0 ? <Money cents={imbalance} currency="€"/> : ''}
+            </Typography>
+          </TableCell>
+          <TableCell align="right">
+            <Typography color="error">
+              {imbalance > 0 ? <Money cents={imbalance} currency="€"/> : ''}
+            </Typography>
+          </TableCell>
+          <TableCell/>
+        </TableRow>);
     }
-    */
 
     return ret;
   }
