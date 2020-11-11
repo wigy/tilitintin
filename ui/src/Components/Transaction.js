@@ -175,8 +175,9 @@ class Transaction extends Component {
     const entry = tx.document.entries[idx];
 
     return (
-      <tr id={id} key={idx} className={classes}>
-        <td className="account" colSpan={3} onClick={() => this.onClickDetail(0, idx)}>
+      <TableRow id={id} key={idx} className={classes}>
+        <TableCell />
+        <TableCell colSpan={2} onClick={() => this.onClickDetail(0, idx)}>
           <TransactionDetails
             index={this.props.index}
             error={!entry.account_id}
@@ -185,8 +186,8 @@ class Transaction extends Component {
             entry={entry}
             onComplete={(_, proposal) => this.onComplete(0, idx, proposal)}
           />
-        </td>
-        <td className="description" onClick={() => this.onClickDetail(1, idx)}>
+        </TableCell>
+        <TableCell onClick={() => this.onClickDetail(1, idx)}>
           <TransactionDetails
             index={this.props.index}
             field="description"
@@ -195,8 +196,8 @@ class Transaction extends Component {
             onComplete={(_, proposal) => this.onComplete(1, idx, proposal)}
             onClick={() => this.onClickDetail(1, idx)}
           />
-        </td>
-        <td className="debit" onClick={() => this.onClickDetail(2, idx)}>
+        </TableCell>
+        <TableCell onClick={() => this.onClickDetail(2, idx)} align="right">
           <TransactionDetails
             index={this.props.index}
             field="debit"
@@ -205,8 +206,8 @@ class Transaction extends Component {
             onClick={() => this.onClickDetail()}
             onComplete={(_, proposal) => this.onComplete(2, idx, proposal)}
           />
-        </td>
-        <td className="credit" onClick={() => this.onClickDetail(3, idx)}>
+        </TableCell>
+        <TableCell onClick={() => this.onClickDetail(3, idx)} align="right">
           <TransactionDetails
             index={this.props.index}
             field="credit"
@@ -215,11 +216,9 @@ class Transaction extends Component {
             onClick={() => this.onClickDetail()}
             onComplete={(_, proposal) => this.onComplete(3, idx, proposal)}
           />
-        </td>
-        <td className="empty">
-          &nbsp;
-        </td>
-      </tr>
+        </TableCell>
+        <TableCell />
+      </TableRow>
     );
   }
 
@@ -258,15 +257,15 @@ class Transaction extends Component {
       this.renderMainTx(classes)
     ];
 
-    /*
-    TODO: Handle.
-
     // Render entries, if opened.
     if (tx.document.open && !this.props.duplicate) {
       tx.document.entries.forEach((_, idx) => {
         ret.push(this.renderEntry(idx, tx));
       });
     }
+
+    /*
+    TODO: Handle.
 
     // Render delete dialog in the dummy row.
     if (this.entryToDelete) {
