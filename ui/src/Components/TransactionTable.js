@@ -15,7 +15,7 @@ import Cursor from '../Stores/Cursor';
 import EntryModel from '../Models/EntryModel';
 import DocumentModel from '../Models/DocumentModel';
 import { withRouter } from 'react-router-dom';
-import { TableContainer, Table, TableHead, TableCell, TableRow, TableBody } from '@material-ui/core';
+import { TableContainer, Table, TableHead, TableCell, TableRow, TableBody, Typography } from '@material-ui/core';
 
 @withTranslation('translations')
 @withRouter
@@ -265,7 +265,7 @@ class TransactionTable extends Component {
     }
 
     if (!this.props.store.transactions.length) {
-      ret.push(<Trans key="insert">Press Insert to create a transaction.</Trans>);
+      ret.push(<Typography key="insert" color="primary"><Trans>Press Insert to create a transaction.</Trans></Typography>);
       return ret;
     }
 
@@ -292,9 +292,9 @@ class TransactionTable extends Component {
         <Table className="TransactionTable" size="medium" padding="none">
           <TableHead>
             <TableRow>
-              <TableCell variant="head" align="center"><Trans>#</Trans></TableCell>
-              <TableCell variant="head" align="left"><Trans>Date</Trans></TableCell>
-              <TableCell variant="head" align="left"></TableCell>
+              <TableCell style={{ width: '3rem' }} variant="head" align="left"><Trans>#</Trans></TableCell>
+              <TableCell style={{ width: '7rem' }} variant="head" align="left"><Trans>Date</Trans></TableCell>
+              <TableCell style={{ width: '10rem' }} variant="head" align="left"></TableCell>
               <TableCell variant="head" align="left"><Trans>Description</Trans></TableCell>
               <TableCell variant="head" align="right"><Trans>Debit</Trans></TableCell>
               <TableCell variant="head" align="right"><Trans>Credit</Trans></TableCell>
