@@ -9,18 +9,13 @@ import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody
 import { Trans, withTranslation } from 'react-i18next';
 import ReactRouterPropTypes from 'react-router-prop-types';
 
-@withRouter
-@inject('cursor')
-@observer
-class BalanceLine extends Component {
-
-  render() {
-    const { balance, index } = this.props;
+const BalanceLine = withRouter(inject('cursor')(observer(
+  ({ history, cursor, balance, index }) => {
 
     const onClick = (idx, url) => {
-      this.props.cursor.setComponent('Balances.balances');
-      this.props.cursor.setIndex(idx, { noScroll: true });
-      this.props.history.push(url);
+      cursor.setComponent('Balances.balances');
+      cursor.setIndex(idx, { noScroll: true });
+      history.push(url);
     };
 
     return (
@@ -38,12 +33,12 @@ class BalanceLine extends Component {
           {balance.account.name}
         </TableCell>
         <TableCell align="right">
-          <Money cents={balance.total} currency="EUR"/>
+          <Money cents={balance.total} currency="EUR" />
         </TableCell>
       </TableRow>
     );
   }
-}
+)));
 
 BalanceLine.propTypes = {
   balance: PropTypes.instanceOf(BalanceModel),
