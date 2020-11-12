@@ -15,10 +15,6 @@
   text-decoration: line-through;
 }
 
-.Document .number {
-  width: 5%;
-}
-
 .Document.duplicate .number {
   font-style: italic;
   color: rgba(0,0,0,0.5);
@@ -29,59 +25,12 @@
   outline: inherit !important;
 }
 
-.Document .date {
-  text-align: center;
-  width: 10%;
-}
-
 .Document.duplicate .date .TransactionDetails {
   color: transparent;
-}
-
-.Document .tags {
-  width: 5%;
-}
-
-.TransactionEntry.open .account {
-  width: 25%;
-}
-
-.Document .tags .Tag {
-  vertical-align: middle;
-  margin-right: 1px;
-  vertical-align: middle;
-}
-
-.Document .tags .Tag img {
-  margin-top: -1.5ex;
-}
-
-.Document .debit, .TransactionEntry .debit {
-  text-align: right;
-  width: 8%;
-}
-
-.Document.open .debit .summary {
-  color: var(--fg-color-light);
-  font-weight: bold;
-}
-
-.Document .credit, .TransactionEntry .credit {
-  text-align: right;
-  width: 8%;
 }
 
 .Document.open .credit .summary {
   color: var(--fg-color-light);
   font-weight: bold;
-}
-
-.Document .total {
-  text-align: right;
-  width: 8%;
-}
-
-.TransactionEntry .empty {
-  background-color: var(--bg-color);
 }
 */
