@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withTranslation, Trans } from 'react-i18next';
 import Model from '../Models/Model';
 import './TextEdit.css';
+import { TextField } from '@material-ui/core';
 
 @withTranslation('translations')
 class TextEdit extends Component {
@@ -18,8 +19,6 @@ class TextEdit extends Component {
   }
 
   componentDidMount() {
-    this.inputRef.focus();
-    this.inputRef.select();
     this.updateProposal(this.state.value);
   }
 
@@ -130,6 +129,7 @@ class TextEdit extends Component {
   }
 
   renderProposal() {
+    // TODO: Set up Autocomplete component instead.
     if (this.state.proposal === null || this.state.proposal.length === 0) {
       return '';
     }
@@ -148,17 +148,22 @@ class TextEdit extends Component {
   render() {
     return (
       <div className="TextEdit">
-        <div className="error">{this.state.error}</div>
-        <input
+        <TextField
           value={this.state.value}
-          ref={(input) => { this.inputRef = input; }}
+          error={!!this.state.error}
+          helperText={this.state.error || ''}
+          variant="outlined"
+          size="small"
+          autoFocus
+          fullWidth
           onChange={event => this.onChange(event)}
           onKeyPress={event => this.onKeyPress(event)}
           onKeyUp={event => this.onKeyUp(event)}
           onKeyDown={event => this.onKeyDown(event)}
         />
         {this.renderProposal()}
-      </div>);
+      </div>
+    );
   }
 }
 

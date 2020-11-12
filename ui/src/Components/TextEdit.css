@@ -1,10 +1,3 @@
-.TextEdit input {
-  color: black;
-  font-weight: normal;
-  width: 100%;
-  position: relative;
-}
-
 .TextEdit .proposal-container {
   position: relative;
   z-index: 99999;
@@ -29,8 +22,4 @@
 .TextEdit .proposal-container .proposal .item.current {
   color: white;
   background-color: black;
-}
-
-.TextEdit .error {
-  color: red;
 }
