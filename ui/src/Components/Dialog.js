@@ -3,31 +3,7 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { withTranslation, Trans } from 'react-i18next';
 import Cursor from '../Stores/Cursor';
-import { Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/core';
-import { Button } from 'react-bootstrap';
-
-/**
- * Dialog content implementation.
- */
-class XDialogContent extends Component {
-
-  render() {
-    return (
-      <Modal.Dialog>
-        <Modal.Header>
-          <Modal.Title>{this.props.title}</Modal.Title>
-        </Modal.Header>
-
-        <Modal.Body><div className={this.props.className}>{this.props.children}</div></Modal.Body>
-
-        <Modal.Footer>
-          <Button onClick={this.keyEscape}><Trans>Cancel</Trans></Button>
-          <Button onClick={this.keyEnter} disabled={this.props.isValid && !this.props.isValid()} bsStyle="primary"><Trans>Confirm</Trans></Button>
-        </Modal.Footer>
-      </Modal.Dialog>
-    );
-  }
-}
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/core';
 
 /**
  * A dialog.
@@ -57,34 +33,22 @@ class TilitinDialog extends Component {
 
   render() {
 
-    const { isVisible, isValid, title, onClose, onConfirm, children } = this.props;
+    const { isVisible, isValid, title, onClose, children } = this.props;
 
     return (
       <Dialog open={isVisible} onClose={() => onClose()}>
-        <DialogTitle id="customized-dialog-title" onClose={() => onClose()}>
-          Modal title
+        <DialogTitle onClose={() => onClose()}>
+          {title}
         </DialogTitle>
         <DialogContent dividers>
           {children}
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={() => 1} color="primary">
-            Save changes
-          </Button>
+          <Button variant="outlined" onClick={this.keyEscape}><Trans>Cancel</Trans></Button>
+          <Button variant="outlined" onClick={this.keyEnter} disabled={isValid && !isValid()} color="primary"><Trans>Confirm</Trans></Button>
         </DialogActions>
       </Dialog>
     );
-    /*
-    return (
-      <DialogContent
-        title={title}
-        isValid={isValid}
-        onClose={onClose}
-        onConfirm={onConfirm}>
-        {children}
-      </DialogContent>
-    );
-    */
   }
 }
 
