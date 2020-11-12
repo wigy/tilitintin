@@ -2,27 +2,45 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { observer, inject } from 'mobx-react';
 import BalanceModel from '../Models/BalanceModel';
-import { action } from 'mobx';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import Cursor from '../Stores/Cursor';
 import Money from './Money';
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
 import { Trans, withTranslation } from 'react-i18next';
 import ReactRouterPropTypes from 'react-router-prop-types';
 
+@withRouter
 @inject('cursor')
 @observer
 class BalanceLine extends Component {
 
   render() {
-    const { balance } = this.props;
-    const dst = balance.getUrl();
+    const { balance, index } = this.props;
+
+    const onClick = (idx, url) => {
+      this.props.cursor.setComponent('Balances.balances');
+      this.props.cursor.setIndex(idx, { noScroll: true });
+      this.props.history.push(url);
+    };
+
     return (
-      <tr id={balance.getId()} className={balance.getClasses()}>
-        <td className="number"><Link onClick={() => this.onClick()} to={dst}>{balance.account && balance.account.number}</Link></td>
-        <td className="name"><Link onClick={() => this.onClick()} to={dst}>{balance.account && balance.account.name}</Link></td>
-        <td className="balance"><Link onClick={() => this.onClick()} to={dst}><Money cents={balance.total} currency="EUR"/></Link></td>
-      </tr>
+      <TableRow
+        key={balance.account_id}
+        id={balance.getId()}
+        hover
+        className={balance.getClasses() /* TODO: Use material ui `selected` attribute */}
+        onClick={() => onClick(index, balance.getUrl())}
+      >
+        <TableCell>
+          {balance.account.number}
+        </TableCell>
+        <TableCell align="left">
+          {balance.account.name}
+        </TableCell>
+        <TableCell align="right">
+          <Money cents={balance.total} currency="EUR"/>
+        </TableCell>
+      </TableRow>
     );
   }
 }
@@ -30,21 +48,13 @@ class BalanceLine extends Component {
 BalanceLine.propTypes = {
   balance: PropTypes.instanceOf(BalanceModel),
   cursor: PropTypes.instanceOf(Cursor),
-  index: PropTypes.number
+  history: ReactRouterPropTypes.history,
+  index: PropTypes.number,
 };
 
-@withRouter
 @withTranslation('translations')
-@inject('cursor')
 @observer
 class BalanceTable extends Component {
-
-  @action.bound
-  onClick(idx, url) {
-    this.props.cursor.setComponent('Balances.balances');
-    this.props.cursor.setIndex(idx, { noScroll: true });
-    this.props.history.push(url);
-  }
 
   render() {
 
@@ -59,25 +69,7 @@ class BalanceTable extends Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {this.props.balances.map((balance, idx) => (
-              <TableRow
-                key={balance.account_id}
-                id={balance.getId()}
-                hover
-                className={balance.getClasses() /* TODO: Use material ui `selected` attribute */}
-                onClick={() => this.onClick(idx, balance.getUrl())}
-              >
-                <TableCell component="th" scope="row">
-                  {balance.account.number}
-                </TableCell>
-                <TableCell align="left">
-                  {balance.account.name}
-                </TableCell>
-                <TableCell align="right">
-                  <Money cents={balance.total} currency="EUR"/>
-                </TableCell>
-              </TableRow>
-            ))}
+            {this.props.balances.map((balance, idx) => <BalanceLine key={balance.account_id} index={idx} balance={balance} />)}
           </TableBody>
         </Table>
       </TableContainer>
@@ -87,8 +79,6 @@ class BalanceTable extends Component {
 
 BalanceTable.propTypes = {
   balances: PropTypes.arrayOf(PropTypes.instanceOf(BalanceModel)),
-  cursor: PropTypes.instanceOf(Cursor),
-  history: ReactRouterPropTypes.history,
 };
 
 export default BalanceTable;
