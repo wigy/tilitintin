@@ -294,7 +294,7 @@ class TransactionTable extends Component {
             <TableRow>
               <TableCell style={{ width: '3rem' }} variant="head" align="left"><Trans>#</Trans></TableCell>
               <TableCell style={{ width: '7rem' }} variant="head" align="left"><Trans>Date</Trans></TableCell>
-              <TableCell style={{ width: '10rem' }} variant="head" align="left"></TableCell>
+              <TableCell style={{ width: '6rem' }} variant="head" align="left"></TableCell>
               <TableCell variant="head" align="left"><Trans>Description</Trans></TableCell>
               <TableCell style={{ width: '9rem' }} variant="head" align="right"><Trans>Debit</Trans></TableCell>
               <TableCell style={{ width: '9rem' }} variant="head" align="right"><Trans>Credit</Trans></TableCell>
