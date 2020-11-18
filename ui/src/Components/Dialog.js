@@ -13,11 +13,11 @@ import Cursor from '../Stores/Cursor';
 class DialogContent extends Component {
 
   componentDidMount = () => {
-    this.props.cursor.activeModal = this;
+    this.props.cursor.setModal(this);
   }
 
   componentWillUnmount = () => {
-    this.props.cursor.activeModal = null;
+    this.props.cursor.unsetModal();
   }
 
   keyEscape = () => {

@@ -47,6 +47,22 @@ class Cursor {
   }
 
   /**
+   * Select the current modal.
+   * @param {Component} modal
+   */
+  setModal(modal) {
+    this.activeModal = modal;
+  }
+
+  /**
+   * Turn the current modal off.
+   * @param {Component|null} modal
+   */
+  unsetModal(modal) {
+    this.activeModal = null;
+  }
+
+  /**
    * Update navigation structures in the store based on the key pressed.
    * @param {String} key
    * @return {Object}
@@ -65,7 +81,10 @@ class Cursor {
     const fn = 'key' + parts.join('');
 
     // Try active modal handler.
-    if (!result && this.activeModal && this.activeModal[fn]) {
+    if (!result && this.activeModal) {
+      if (!this.activeModal[fn]) {
+        return null;
+      }
       result = this.activeModal[fn](this, key);
       if (result && KEY_DEBUG) {
         console.log('Modal:', fn, ':', result);
