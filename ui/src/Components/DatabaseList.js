@@ -6,7 +6,10 @@ import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
 import Title from './Title';
 import { Avatar, Link, List, ListItem, ListItemAvatar, ListItemText } from '@material-ui/core';
+import { withRouter } from 'react-router-dom';
+import ReactRouterPropTypes from 'react-router-prop-types';
 
+@withRouter
 @withTranslation('translations')
 @inject('cursor')
 @inject('store')
@@ -18,18 +21,19 @@ class DatabaseList extends Component {
       return '';
     }
 
+    const current = this.props.store.db;
+
     return (
       <div className="DatabaseList">
         <Title><Trans>Databases</Trans></Title>
         <List>
           {this.props.store.dbs.map((db, index) => (
-            <ListItem key={db.name}>
+            <ListItem key={db.name} selected={current === db.name} onClick={() => this.props.history.push(`/${db.name}`)}>
               <ListItemAvatar color="primary">
                 <Avatar>{'ABCDEFGHIJKLMNOPQRSTUVWZ'[index]}</Avatar>
               </ListItemAvatar>
               <ListItemText
-                secondary={''}
-                primary={<Link underline="hover" href={`/${db.name}`} >{db.name}</Link>}
+                primary={db.name}
               />
             </ListItem>
           ))}
@@ -41,7 +45,8 @@ class DatabaseList extends Component {
 
 DatabaseList.propTypes = {
   store: PropTypes.instanceOf(Store),
-  cursor: PropTypes.instanceOf(Cursor)
+  cursor: PropTypes.instanceOf(Cursor),
+  history: ReactRouterPropTypes.history,
 };
 
 export default DatabaseList;
