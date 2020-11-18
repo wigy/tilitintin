@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { withTranslation, Trans } from 'react-i18next';
 import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
 import Title from './Title';
+import { Avatar, Link, List, ListItem, ListItemAvatar, ListItemText } from '@material-ui/core';
 
 @withTranslation('translations')
 @inject('cursor')
@@ -17,15 +17,23 @@ class DatabaseList extends Component {
     if (!this.props.store.token) {
       return '';
     }
-    const current = this.props.store.db;
+
     return (
       <div className="DatabaseList">
-        <Title>Databases</Title>
-        <ul className="menu">
-          {this.props.store.dbs.map((db, index) => <li key={db.name} className={current === db.name ? 'current' : ''}>
-            <Link to={`/${db.name}`}><code>{'ABCDEFGHIJKLMNOPQRSTUVWZ'[index]}</code> {db.name}</Link>
-          </li>)}
-        </ul>
+        <Title><Trans>Databases</Trans></Title>
+        <List>
+          {this.props.store.dbs.map((db, index) => (
+            <ListItem key={db.name}>
+              <ListItemAvatar color="primary">
+                <Avatar>{'ABCDEFGHIJKLMNOPQRSTUVWZ'[index]}</Avatar>
+              </ListItemAvatar>
+              <ListItemText
+                secondary={''}
+                primary={<Link underline="hover" href={`/${db.name}`} >{db.name}</Link>}
+              />
+            </ListItem>
+          ))}
+        </List>
       </div>
     );
   }
