@@ -4,7 +4,10 @@ import { withTranslation, Trans } from 'react-i18next';
 import Model from '../Models/Model';
 import './TextEdit.css';
 import { TextField } from '@material-ui/core';
+import { inject } from 'mobx-react';
+import Cursor from '../Stores/Cursor';
 
+@inject('cursor')
 @withTranslation('translations')
 class TextEdit extends Component {
 
@@ -20,6 +23,11 @@ class TextEdit extends Component {
 
   componentDidMount() {
     this.updateProposal(this.state.value);
+    this.props.cursor.disableHandler();
+  }
+
+  componentWillUnmount = () => {
+    this.props.cursor.enableHandler();
   }
 
   onKeyPress(event) {
@@ -174,7 +182,8 @@ TextEdit.propTypes = {
   validate: PropTypes.func,
   value: PropTypes.string,
   target: PropTypes.instanceOf(Model),
-  proposal: PropTypes.func
+  proposal: PropTypes.func,
+  cursor: PropTypes.instanceOf(Cursor),
 };
 
 export default TextEdit;

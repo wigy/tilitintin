@@ -19,6 +19,8 @@ class Cursor {
   @observable activeModal = null;
   // When editing is active, this points to the model edited.
   @observable editTarget = null;
+  // If set, key handler is disabled.
+  @observable disabled = false;
 
   // Storage for cursor locations for inactive components.
   savedComponents = {};
@@ -34,6 +36,9 @@ class Cursor {
   constructor(store) {
     this.store = store;
     document.addEventListener('keydown', (event) => {
+      if (this.disabled) {
+        return;
+      }
       const keyName = (
         (event.key.length > 1 && event.shiftKey ? 'Shift+' : '') +
         (event.ctrlKey ? 'Ctrl+' : '') +
@@ -60,6 +65,20 @@ class Cursor {
    */
   unsetModal(modal) {
     this.activeModal = null;
+  }
+
+  /**
+   * Turn off handler.
+   */
+  disableHandler() {
+    this.disabled = true;
+  }
+
+  /**
+   * Turn on handler.
+   */
+  enableHandler() {
+    this.disabled = false;
   }
 
   /**
