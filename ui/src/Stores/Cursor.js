@@ -33,6 +33,17 @@ class Cursor {
 
   constructor(store) {
     this.store = store;
+    document.addEventListener('keydown', (event) => {
+      const keyName = (
+        (event.key.length > 1 && event.shiftKey ? 'Shift+' : '') +
+        (event.ctrlKey ? 'Ctrl+' : '') +
+        (event.altKey ? 'Alt+' : '') +
+        event.key);
+      const keyResult = this.handle(keyName);
+      if (keyResult && keyResult.preventDefault) {
+        event.preventDefault();
+      }
+    });
   }
 
   /**
