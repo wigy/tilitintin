@@ -126,7 +126,6 @@ class Store {
     this.loading = true;
     return fetch(config.API_URL + path, options)
       .then(res => {
-        this.changed = true;
         this.loading = false;
         if ([200, 201, 202, 204].includes(res.status)) {
           debug('    OK:', method, config.API_URL + path, data || '');
@@ -266,7 +265,6 @@ class Store {
    * Clear DB data.
    */
   clearDb() {
-    this.changed = true;
 
     this.db = null;
     this.report = null;
@@ -278,7 +276,6 @@ class Store {
    * Clear period data.
    */
   clearPeriod() {
-    this.changed = true;
 
     this.periodId = null;
     this.report = null;
@@ -289,7 +286,6 @@ class Store {
    * Clear period data.
    */
   clearAccount() {
-    this.changed = true;
 
     this.accountId = null;
     this.tools = {
@@ -546,7 +542,6 @@ class Store {
     this.dbsByName = {};
     this.db = null;
     this.periodId = null;
-    this.changed = true;
     this.clearDb();
   }
 
@@ -702,15 +697,6 @@ class Store {
         this.invalidateReport();
         return this.fetchBalances(this.db, this.periodId);
       });
-  }
-
-  /**
-   * Check if there are changes and reset the flag.
-   */
-  hasChanged() {
-    const ret = this.changed;
-    this.changed = false;
-    return ret;
   }
 
   /**
