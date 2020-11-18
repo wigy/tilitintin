@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import { Route, withRouter } from 'react-router-dom';
 import { inject } from 'mobx-react';
-import keydown from 'react-keydown';
 import Account from './Components/Account';
 import Accounts from './Components/Accounts';
 import AccountsToolPanel from './Components/AccountsToolPanel';
@@ -31,38 +30,9 @@ import { Grid } from 'react-bootstrap';
 import { Container, Paper } from '@material-ui/core';
 
 @withRouter
-@keydown
 @inject('store')
 @inject('cursor')
 class App extends Component {
-
-  /* eslint camelcase: off */
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    const { keydown: { event } } = nextProps;
-    if (event) {
-      const keyName = (
-        (event.key.length > 1 && event.shiftKey ? 'Shift+' : '') +
-        (event.ctrlKey ? 'Ctrl+' : '') +
-        (event.altKey ? 'Alt+' : '') +
-        event.key);
-
-      const keyResult = this.props.cursor.handle(keyName);
-
-      if (keyResult) {
-        this.props.store.changed = true;
-        if (keyResult.preventDefault) {
-          event.preventDefault();
-        }
-      }
-    }
-  }
-
-  shouldComponentUpdate(nextProps) {
-    if (nextProps.keydown.event) {
-      return this.props.store.hasChanged();
-    }
-    return true;
-  }
 
   render() {
     const [,, page] = this.props.history.location.pathname.split('/');
@@ -168,7 +138,6 @@ class App extends Component {
 App.propTypes = {
   cursor: PropTypes.instanceOf(Cursor),
   store: PropTypes.instanceOf(Store),
-  keydown: PropTypes.any,
   history: ReactRouterPropTypes.history
 };
 
