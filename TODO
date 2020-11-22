@@ -2,6 +2,8 @@
 BUGS
 ====
 
+[ ] Report labeled version leaves unmatched cents as "Other".
+
 [ ] Update on unmounted loading component when switching between reports and transactions.
 [ ] Pressing insert while previous date is early in order, produced 2 selected lines.
 [ ] Mouse does not work on proposals.
