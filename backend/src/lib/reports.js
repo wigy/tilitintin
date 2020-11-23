@@ -427,7 +427,7 @@ processEntries.DefaultByTags = (entries, periods, formatName, format, settings) 
     }
     let amount = entry.amount;
     if (shares.length) {
-      // Share the amount so that rounding errors are put to other.
+      // Share the amount so that rounding errors are split.
       const piece = amount < 0 ? Math.ceil(amount / shares.length) : Math.floor(amount / shares.length);
       shares.forEach((tag) => {
         const column = `tag-${tag}`;
@@ -435,6 +435,18 @@ processEntries.DefaultByTags = (entries, periods, formatName, format, settings) 
         totals[column][entry.number] += piece;
         amount -= piece;
       });
+      if (amount) {
+        // Make semi-random starting point and distribute cents.
+        let i = (entry.periodId) % shares.length;
+        const delta = amount < 0 ? -1 : 1;
+        for (let count = Math.abs(amount); count > 0; count--) {
+          const column = `tag-${shares[i]}`;
+          totals[column][entry.number] += delta;
+          console.log(column, delta);
+          amount -= delta;
+          i = (i + 1) % shares.length;
+        }
+      }
     }
     if (amount) {
       totals.other[entry.number] = totals.other[entry.number] || 0;

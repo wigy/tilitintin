@@ -178,7 +178,7 @@ TextEdit.propTypes = {
   value: PropTypes.string,
   target: PropTypes.instanceOf(Model),
   proposal: PropTypes.func,
-  cursor: PropTypes.instanceOf(Cursor),
+  cursor: PropTypes.instanceOf(Cursor)
 };
 
 export default TextEdit;
