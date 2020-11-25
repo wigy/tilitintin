@@ -133,6 +133,7 @@ i18n.init({
         Other: 'Muu',
         'Password is too short.': 'Salasana on liian lyhyt.',
         Password: 'Salasana',
+        'Password Again': 'Salasana uudelleen',
         'Passwords do not match.': 'Salasanat ei täsmää.',
         'Payable to add': 'Lisättävä velkaa',
         'period {{period}}': 'tilikausi {{period}}',

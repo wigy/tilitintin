@@ -46,6 +46,7 @@ class RegisterForm extends Component {
         <br/>
         <br/>
         <TextField
+          type="password"
           style={{ width: '50%' }}
           label={<Trans>Password</Trans>}
           onChange={(event) => (this.setState({ password: event.target.value }))}
