@@ -24,7 +24,7 @@ class DatabaseList extends Component {
     const current = this.props.store.db;
 
     return (
-      <div className="DatabaseList">
+      <div>
         <Title><Trans>Databases</Trans></Title>
         <List>
           {this.props.store.dbs.map((db, index) => (
