@@ -84,9 +84,12 @@ class Login extends Component {
     }
 
     if (this.state.appState === 'NOT_LOGGED_IN') {
-      return <div className="Login">
-        <LoginForm onLogin={onLogin}/>
-      </div>;
+      return (
+        <div className="Login">
+          <Title><Trans>Login to Tilitintin</Trans></Title>
+          <LoginForm onLogin={onLogin}/>
+        </div>
+      );
     }
 
     return '';

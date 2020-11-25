@@ -5,7 +5,7 @@ import { PropTypes } from 'prop-types';
 const Panel = ({ children, title }) => (
   <Card style={{ margin: '1rem' }}>
     {
-      title && <CardHeader title={<Typography color="textSecondary">{title}</Typography>} />
+      title && <CardHeader title={<Typography color="textPrimary">{title}</Typography>} />
     }
     <CardContent>
       {children}

@@ -34,7 +34,7 @@ class RegisterForm extends Component {
     const { store } = this.props;
 
     return (
-      <Panel title={<Trans>Login to Tilitintin</Trans>}>
+      <Panel>
         <FormHelperText error>
           {store.messages.map((msg, idx) => <React.Fragment key={idx}>{msg}<br/></React.Fragment>)}
         </FormHelperText>
