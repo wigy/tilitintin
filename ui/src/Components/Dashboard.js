@@ -9,6 +9,7 @@ import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
 import Loading from './Loading';
 import Title from './Title';
+import { Card, CardActions, CardContent, Button, Typography, Avatar, List, ListItem } from '@material-ui/core';
 
 @withTranslation('translations')
 @inject('cursor')
@@ -73,19 +74,25 @@ class Dashboard extends Component {
     return (
       <div className="Dashboard">
         <Title><Trans>Database</Trans>: {store.db}</Title>
-        <h2><Trans>Company Info</Trans></h2>
-        <b><Trans>Business name</Trans>: {store.settings.BUSINESS_NAME}</b><br />
-        <b><Trans>Business ID</Trans>: {store.settings.BUSINESS_ID}</b><br />
-        <h2><Trans>Periods</Trans></h2>
-        <Loading visible={store.loading} />
-        <ul className="menu">
-          {store.database.periods.reverse().map((period, index) => <li key={period.id} className={parseInt(periodId) === period.id ? 'period current' : 'period'}>
-            <Link to={`/${store.db}/dashboard/${period.id}`}>
-              <code>{index + 1}</code>&nbsp;
-              <Localize date={period.start_date} /> &mdash; <Localize date={period.end_date} />
-            </Link>
-          </li>)}
-        </ul>
+        <Card>
+          <CardContent>
+            <Typography variant="h4" color="textSecondary"><Trans>Company Info</Trans></Typography>
+            <Trans>Business name</Trans>: {store.settings.BUSINESS_NAME}<br />
+            <Trans>Business ID</Trans>: {store.settings.BUSINESS_ID}<br />
+            <Typography variant="h4" color="textSecondary"><Trans>Periods</Trans></Typography>
+            <Loading visible={store.loading} />
+            <List>
+              {store.database.periods.reverse().map((period, index) => (
+                <ListItem key={period.id} selected={parseInt(periodId) === period.id}>
+                  <Button onClick={() => this.props.history.push(`/${store.db}/dashboard/${period.id}`)}>
+                    <Avatar>{index + 1}</Avatar>&nbsp;
+                    <Localize date={period.start_date} /> &mdash; <Localize date={period.end_date} />
+                  </Button>
+                </ListItem>
+              ))}
+            </List>
+          </CardContent>
+        </Card>
       </div>
     );
   }

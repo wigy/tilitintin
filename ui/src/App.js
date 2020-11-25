@@ -79,6 +79,11 @@ class App extends Component {
             <Route path="/:db/txs/:periodId/:accountId?" component={TransactionToolPanel}/>
           </Paper>
           <Paper className="MainPanel Panel" elevation={4}>
+            <Route exact path="/" component={Dashboard}/>
+            <Route exact path="/:db" component={Dashboard}/>
+            <Route exact path="/:db/dashboard" component={Dashboard}/>
+            <Route exact path="/:db/dashboard/:periodId" component={Dashboard}/>
+            <Route exact path="/:db/dashboard/:periodId/:accountId" component={Dashboard}/>
             <Route path="/:db/txs/:periodId/:accountId?" component={AccountTransactions}/>
           </Paper>
         </div>
@@ -112,13 +117,8 @@ class App extends Component {
         </div>
         <div className="MainPanel Panel">
           <div className="Frame">
-            <Route exact path="/" component={Dashboard}/>
             <Route exact path="/" component={Login}/>
             <Route exact path="/_/admin/:arg?" component={Admin}/>
-            <Route exact path="/:db" component={Dashboard}/>
-            <Route exact path="/:db/dashboard" component={Dashboard}/>
-            <Route exact path="/:db/dashboard/:periodId" component={Dashboard}/>
-            <Route exact path="/:db/dashboard/:periodId/:accountId" component={Dashboard}/>
 
             <Route path="/:db/account/:periodId?" component={Accounts}/>
             <Route path="/:db/report/:periodId//:format" component={Report}/>
