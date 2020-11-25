@@ -24,10 +24,9 @@ import ToolsList from './Components/ToolsList';
 import ToolsToolPanel from './Components/ToolsToolPanel';
 import TransactionToolPanel from './Components/TransactionToolPanel';
 import UserList from './Components/UserList';
+import { Paper } from '@material-ui/core';
 
 import './App.css';
-import { Grid } from 'react-bootstrap';
-import { Container, Paper } from '@material-ui/core';
 
 @withRouter
 @inject('store')
@@ -79,6 +78,7 @@ class App extends Component {
             <Route path="/:db/txs/:periodId/:accountId?" component={TransactionToolPanel}/>
           </Paper>
           <Paper className="MainPanel Panel" elevation={4}>
+            <Route exact path="/" component={Login}/>
             <Route exact path="/" component={Dashboard}/>
             <Route exact path="/:db" component={Dashboard}/>
             <Route exact path="/:db/dashboard" component={Dashboard}/>
@@ -117,7 +117,6 @@ class App extends Component {
         </div>
         <div className="MainPanel Panel">
           <div className="Frame">
-            <Route exact path="/" component={Login}/>
             <Route exact path="/_/admin/:arg?" component={Admin}/>
 
             <Route path="/:db/account/:periodId?" component={Accounts}/>
