@@ -7,8 +7,8 @@ import { Trans, withTranslation } from 'react-i18next';
 import Store from '../Stores/Store';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
-import './Login.css';
 import Title from './Title';
+import Panel from './Panel';
 
 @withRouter
 @withTranslation('translations')
@@ -73,11 +73,14 @@ class Login extends Component {
     };
 
     if (this.state.appState === 'NO_ROOT') {
-      return <div className="Login">
-        <Title>This system has no admin user</Title>
-        <h2><Trans>Please register an admin user</Trans></h2>
-        <RegisterForm onRegister={onRegisterAdmin}/>
-      </div>;
+      return (
+        <div>
+          <Title>This system has no admin user</Title>
+          <Panel title={<Trans>Please register an admin user</Trans>}>
+            <RegisterForm onRegister={onRegisterAdmin}/>
+          </Panel>
+        </div>
+      );
     }
 
     if (this.state.appState === 'NOT_LOGGED_IN') {

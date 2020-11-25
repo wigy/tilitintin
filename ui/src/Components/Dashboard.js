@@ -74,8 +74,7 @@ class Dashboard extends Component {
     return (
       <div className="Dashboard">
         <Title><Trans>Database</Trans>: {store.db}</Title>
-        <Panel>
-          <Typography variant="h4" color="textSecondary"><Trans>Company Info</Trans></Typography>
+        <Panel title={<Trans>Company Info</Trans>}>
           <Trans>Business name</Trans>: {store.settings.BUSINESS_NAME}<br />
           <Trans>Business ID</Trans>: {store.settings.BUSINESS_ID}<br />
           <Typography variant="h4" color="textSecondary"><Trans>Periods</Trans></Typography>

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Trans, withTranslation } from 'react-i18next';
-import { Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 import Store from '../Stores/Store';
 import { inject } from 'mobx-react';
-import './Login.css';
+import Panel from './Panel';
+import { TextField, Button, FormHelperText } from '@material-ui/core';
 
 @inject('store')
 @withTranslation('translations')
@@ -23,17 +23,26 @@ class RegisterForm extends Component {
 
     const { store } = this.props;
 
-    return <form>
-      <FormGroup>
-        <ControlLabel><Trans>Username</Trans></ControlLabel>
-        <FormControl type="text" onChange={(event) => (this.setState({ user: event.target.value }))}/>
-        <ControlLabel><Trans>Password</Trans></ControlLabel>
-        <FormControl type="password" onChange={(event) => (this.setState({ password: event.target.value }))}/>
+    return (
+      <Panel title={<Trans>Login to Tilitintin</Trans>}>
+        {store.messages.map((msg, idx) => <div className="error" key={idx}>{msg}</div>)}
+        <TextField
+          style={{ width: '50%' }}
+          label={<Trans>Username</Trans>}
+          onChange={(event) => (this.setState({ user: event.target.value }))}
+        />
         <br/>
-        <Button onClick={() => this.onLogin()}><Trans>Login</Trans></Button>
-      </FormGroup>
-      {store.messages.map((msg, idx) => <div key={idx} className="message">{msg}</div>)}
-    </form>;
+        <br/>
+        <TextField
+          style={{ width: '50%' }}
+          label={<Trans>Password</Trans>}
+          onChange={(event) => (this.setState({ password: event.target.value }))}
+        />
+        <br/>
+        <br/>
+        <Button variant="outlined" onClick={() => this.onLogin()}><Trans>Login</Trans></Button>
+      </Panel>
+    );
   }
 }
 

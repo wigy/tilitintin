@@ -1,9 +1,12 @@
 import React from 'react';
-import { Card, CardContent } from '@material-ui/core';
+import { Card, CardContent, CardHeader, Typography } from '@material-ui/core';
 import { PropTypes } from 'prop-types';
 
-const Panel = ({ children }) => (
+const Panel = ({ children, title }) => (
   <Card style={{ margin: '1rem' }}>
+    {
+      title && <CardHeader title={<Typography color="textSecondary">{title}</Typography>} />
+    }
     <CardContent>
       {children}
     </CardContent>
@@ -12,6 +15,7 @@ const Panel = ({ children }) => (
 
 Panel.propTypes = {
   children: PropTypes.node,
+  title: PropTypes.node,
 };
 
 export default Panel;

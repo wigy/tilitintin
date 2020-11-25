@@ -36,7 +36,7 @@ class Cursor {
   constructor(store) {
     this.store = store;
     document.addEventListener('keydown', (event) => {
-      if (this.disabled) {
+      if (this.disabled || !event || !event.key) {
         return;
       }
       const keyName = (

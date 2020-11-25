@@ -4,7 +4,6 @@ import { inject, observer } from 'mobx-react';
 import { Trans, withTranslation } from 'react-i18next';
 import { Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 import Store from '../Stores/Store';
-import './Login.css';
 
 @inject('store')
 @withTranslation('translations')
