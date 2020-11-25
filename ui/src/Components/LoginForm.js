@@ -5,14 +5,24 @@ import Store from '../Stores/Store';
 import { inject } from 'mobx-react';
 import Panel from './Panel';
 import { TextField, Button, FormHelperText } from '@material-ui/core';
+import Cursor from '../Stores/Cursor';
 
 @inject('store')
+@inject('cursor')
 @withTranslation('translations')
 class RegisterForm extends Component {
 
   state = {
     user: '',
     password: ''
+  }
+
+  componentDidMount() {
+    this.props.cursor.disableHandler();
+  }
+
+  componentWillUnmount = () => {
+    this.props.cursor.enableHandler();
   }
 
   onLogin() {
@@ -25,7 +35,9 @@ class RegisterForm extends Component {
 
     return (
       <Panel title={<Trans>Login to Tilitintin</Trans>}>
-        {store.messages.map((msg, idx) => <div className="error" key={idx}>{msg}</div>)}
+        <FormHelperText error>
+          {store.messages.map((msg, idx) => <React.Fragment key={idx}>{msg}<br/></React.Fragment>)}
+        </FormHelperText>
         <TextField
           style={{ width: '50%' }}
           label={<Trans>Username</Trans>}
@@ -49,7 +61,8 @@ class RegisterForm extends Component {
 RegisterForm.propTypes = {
   store: PropTypes.instanceOf(Store),
   onLogin: PropTypes.func,
-  t: PropTypes.func
+  t: PropTypes.func,
+  cursor: PropTypes.instanceOf(Cursor)
 };
 
 export default RegisterForm;

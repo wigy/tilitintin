@@ -118,6 +118,7 @@ i18n.init({
         'Invalid database name.': 'Tietokannan nimi ei kelpaa.',
         Locked: 'Lukittu',
         Login: 'Kirjaudu',
+        'Login to Tilitintin': 'Kirjaudu Tilitinttiin',
         Logout: 'Poistu',
         'Mark as a favorite': 'Merkise suosikiksi',
         Name: 'Nimi',
