@@ -442,7 +442,6 @@ processEntries.DefaultByTags = (entries, periods, formatName, format, settings) 
         for (let count = Math.abs(amount); count > 0; count--) {
           const column = `tag-${shares[i]}`;
           totals[column][entry.number] += delta;
-          console.log(column, delta);
           amount -= delta;
           i = (i + 1) % shares.length;
         }
