@@ -59,7 +59,7 @@ class ReportDisplay extends Component {
     }
     return (
       <div className="ReportDisplay">
-        <table className="ReportDisplay">
+        <table className="ReportDisplayTable">
           <tbody>
             <ReportHeader report={this.props.report}></ReportHeader>
             {report.data.map((line, idx) => <ReportLine key={idx} line={line} columns={report.columns}></ReportLine>)}

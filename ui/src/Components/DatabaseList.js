@@ -5,7 +5,7 @@ import { withTranslation, Trans } from 'react-i18next';
 import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
 import Title from './Title';
-import { Avatar, Link, List, ListItem, ListItemAvatar, ListItemText } from '@material-ui/core';
+import { Avatar, List, ListItem, ListItemAvatar, ListItemText } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import ReactRouterPropTypes from 'react-router-prop-types';
 

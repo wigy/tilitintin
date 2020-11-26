@@ -1,36 +1,40 @@
-table.ReportDisplay {
+.ReportDisplay {
+  margin: 2rem 4rem;
+ }
+
+.ReportDisplayTable {
  max-width: 8in;
  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
-table.ReportDisplay tr {
+.ReportDisplayTable tr {
   background-color: transparent !important;
 }
 
-table.ReportDisplay tr td {
+.ReportDisplayTable tr td {
   border: none !important;
   padding: 0 1em;
 }
 
-table.ReportDisplay tr.columns {
+.ReportDisplayTable tr.columns {
   height: 2.2em;
   border-top: 4px solid var(--fg-color);
 }
 
-.print table.ReportDisplay tr.columns {
+.print .ReportDisplayTable tr.columns {
   border-color: black;
 }
 
-table.ReportDisplay .report-title {
+.ReportDisplayTable .report-title {
   font-size: 140%;
 }
 
-table.ReportDisplay .name {
+.ReportDisplayTable .name {
   max-width: 5in;
   text-align: left;
 }
 
-table.ReportDisplay .numeric {
+.ReportDisplayTable .numeric {
   width: 1in;
   text-align: right;
 }
