@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import Money from './Money';
 import Localize from './Localize';
 import './ReportLine.css';
+import { TableRow, TableCell } from '@material-ui/core';
 
 @observer
 class ReportLine extends Component {
@@ -34,10 +35,10 @@ class ReportLine extends Component {
     const td = (column, content, extras = {}) => {
       const classNames = column.type + (extras.className ? ' ' + extras.className : '');
 
-      return <td
+      return <TableCell
         key={column.name}
         colSpan={extras.colSpan !== undefined ? extras.colSpan : (fullWidth === undefined ? 1 : columns.length)}
-        className={classNames}>{content}</td>;
+        className={classNames}>{content}</TableCell>;
     };
 
     // Rendering functions per type.
@@ -57,9 +58,9 @@ class ReportLine extends Component {
     const classNames = 'ReportLine' + (pageBreak ? ' pageBreak' : '') + (bigger ? ' bigger' : '');
 
     if (fullWidth !== undefined) {
-      return <tr className={classNames}>
+      return <TableRow className={classNames}>
         {columns[fullWidth].type && render[columns[fullWidth].type] && render[columns[fullWidth].type](columns[fullWidth])}
-      </tr>;
+      </TableRow>;
     }
 
     if (useRemainingColumns !== undefined) {
@@ -69,12 +70,12 @@ class ReportLine extends Component {
           colSpan: i === useRemainingColumns ? columns.length - useRemainingColumns : 1
         }));
       }
-      return <tr className={classNames}>{ret}</tr>;
+      return <TableRow className={classNames}>{ret}</TableRow>;
     }
 
-    return <tr className={classNames}>
+    return <TableRow className={classNames}>
       {columns.map((column) => column.type && render[column.type] && render[column.type](column))}
-    </tr>;
+    </TableRow>;
   }
 }
 
