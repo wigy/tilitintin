@@ -43,7 +43,7 @@ class ToolsList extends Component {
     if (!store.token) {
       return '';
     }
-    console.log(this.props.match.params.arg);
+
     return (
       <div>
         <Title><Trans>Users</Trans></Title>
