@@ -49,7 +49,7 @@ class ToolsList extends Component {
         <Title><Trans>Users</Trans></Title>
         <List>
           {this.state.users.map((user) => (
-            <ListItem key={user.user} selected={match.params.arg === user.user} onClick={() => this.onClickUser(user)}>
+            <ListItem key={user.user} button selected={match.params.arg === user.user} onClick={() => this.onClickUser(user)}>
               <ListItemText primary={`${user.name} (${user.user})`} secondary={user.email} />
             </ListItem>
           ))}

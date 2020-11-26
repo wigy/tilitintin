@@ -28,7 +28,7 @@ class DatabaseList extends Component {
         <Title><Trans>Databases</Trans></Title>
         <List>
           {this.props.store.dbs.map((db, index) => (
-            <ListItem key={db.name} selected={current === db.name} onClick={() => this.props.history.push(`/${db.name}`)}>
+            <ListItem key={db.name} button selected={current === db.name} onClick={() => this.props.history.push(`/${db.name}`)}>
               <ListItemAvatar color="primary">
                 <Avatar>{'ABCDEFGHIJKLMNOPQRSTUVWZ'[index]}</Avatar>
               </ListItemAvatar>

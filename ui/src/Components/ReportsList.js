@@ -56,7 +56,7 @@ class ReportsList extends Component {
         <Title>Reports</Title>
         <List>
           {this.props.store.reports.map((report, index) => (
-            <ListItem key={report.format} selected={report.format === match.params.format} onClick={() => this.selectReportFormat(report)}>
+            <ListItem key={report.format} button selected={report.format === match.params.format} onClick={() => this.selectReportFormat(report)}>
               <ListItemAvatar color="primary">
                 <Avatar>{index + 1}</Avatar>
               </ListItemAvatar>

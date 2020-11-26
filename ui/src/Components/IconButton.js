@@ -4,20 +4,23 @@ import { withTranslation } from 'react-i18next';
 import { Icon, IconButton } from '@material-ui/core';
 
 @withTranslation('translations')
-class ToolPanel extends Component {
+class TilitintinIconButton extends Component {
 
   render() {
-    const { t } = this.props;
-
+    const { t, disabled, title, onClick, icon, toggle } = this.props;
+    let color = 'secondary';
+    if (toggle !== undefined) {
+      color = toggle ? 'secondary' : 'disabled';
+    }
     return (
-      <IconButton color="secondary" title={t('icon-' + this.props.title)} disabled={this.props.disabled} onClick={() => this.props.onClick()}>
-        <Icon className={this.props.icon} style={{ fontSize: 30 }}/>
+      <IconButton color={color} title={t('icon-' + title)} disabled={disabled} onClick={() => onClick()}>
+        <Icon className={icon} style={{ fontSize: 30 }}/>
       </IconButton>
     );
   }
 }
 
-ToolPanel.propTypes = {
+TilitintinIconButton.propTypes = {
   onClick: PropTypes.func,
   t: PropTypes.func,
   icon: PropTypes.string,
@@ -26,4 +29,4 @@ ToolPanel.propTypes = {
   disabled: PropTypes.bool
 };
 
-export default ToolPanel;
+export default TilitintinIconButton;

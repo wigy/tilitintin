@@ -11,12 +11,12 @@ import i18n from '../i18n';
 import Title from './Title';
 
 const ICONS = {
-  'option-compact': 'fa-tasks',
-  'option-quarter1': 'fa-thermometer-quarter',
-  'option-quarter2': 'fa-thermometer-half',
-  'option-quarter3': 'fa-thermometer-three-quarters',
-  'option-full': 'fa-thermometer-full',
-  'option-byTags': 'fa-tag'
+  'option-compact': 'fas fa-tasks',
+  'option-quarter1': 'fas fa-thermometer-quarter',
+  'option-quarter2': 'fas fa-thermometer-half',
+  'option-quarter3': 'fas fa-thermometer-three-quarters',
+  'option-full': 'fas fa-thermometer-full',
+  'option-byTags': 'fas fa-tag'
 };
 
 @withTranslation('translations')
@@ -65,8 +65,8 @@ class ReportToolPanel extends Component {
     const options = store.report ? Object.keys({ ...store.report.options }) : [];
 
     const buttons = [
-      <IconButton key="button-print" onClick={onPrint} title="print" icon="fa-print"></IconButton>,
-      <IconButton key="button-download" onClick={onDownload} title="download-csv" icon="fa-download"></IconButton>
+      <IconButton key="button-print" onClick={onPrint} title="print" icon="fas fa-print"></IconButton>,
+      <IconButton key="button-download" onClick={onDownload} title="download-csv" icon="fas fa-download"></IconButton>
     ];
 
     if (options.length) {
@@ -81,7 +81,7 @@ class ReportToolPanel extends Component {
               toggle={store.report.config[option]}
               onClick={() => onToggle(option)}
               title={name}
-              icon={ICONS[name] || 'fa-cog'}>
+              icon={ICONS[name] || 'fas fa-cog'}>
             </IconButton>);
             break;
           case 'radio':
@@ -97,7 +97,7 @@ class ReportToolPanel extends Component {
                 onToggle(option);
               }}
               title={name}
-              icon={ICONS[name] || 'fa-cog'}>
+              icon={ICONS[name] || 'fas fa-cog'}>
             </IconButton>);
             break;
           default:
