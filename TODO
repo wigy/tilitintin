@@ -24,9 +24,12 @@ FUTURE FEATURES
 ===============
 
 2.0
-[ ] Tags management.
+[ ] Clean up empty columns from tagged income statement.
 [ ] Material UI.
 [ ] Switching between period and document tools: icon is not updated (fa-icon problem).
 
 3.0
+[ ] Tags management.
+
+4.0
 [ ] Import management in UI.
