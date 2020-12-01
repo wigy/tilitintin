@@ -13,7 +13,7 @@ const Labeled = (props) => {
 };
 
 Labeled.propTypes = {
-  title: PropTypes.string,
+  title: PropTypes.node,
   children: PropTypes.node,
 };
 

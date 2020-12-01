@@ -10,9 +10,10 @@ import Dialog from './Dialog';
 import Localize from './Localize';
 import SubPanel from './SubPanel';
 import Title from './Title';
-import { Button, Icon } from '@material-ui/core';
+import { Button, Icon, MenuItem, TextField } from '@material-ui/core';
 import Labeled from './Labeled';
 import SubTitle from './SubTitle';
+import Panel from './Panel';
 
 @withTranslation('translations')
 @inject('store')
@@ -91,36 +92,48 @@ class Account extends Component {
       this.state.accountType &&
       (!this.state.new || (database && !database.hasAccount(this.state.accountNumber)));
 
+    const numberAlreadyExists = !!(this.state.changed && this.state.new && this.state.accountNumber && database.hasAccount(this.state.accountNumber));
+    const numberMissing = (this.state.changed && !this.state.accountNumber);
+    const nameMissing = (this.state.changed && !this.state.accountName);
+    const typeMissing = (this.state.changed && !this.state.accountType);
+
     return <Dialog
       isValid={() => isValid()}
       className="dialog"
-      title={<Trans>Create New Account</Trans>}
+      title={this.state.new ? <Trans>Create New Account</Trans> : <Trans>Edit Account</Trans>}
       isVisible={this.state.editDialogIsOpen}
       onClose={() => this.setState({ editDialogIsOpen: false })}
       onConfirm={() => this.onSubmitAccount()}>
-      <Form>
-        <ControlLabel><Trans>Account Number</Trans>:</ControlLabel>
-        <div className="error">{this.state.changed && this.state.new && (
-          this.state.accountNumber ? (database.hasAccount(this.state.accountNumber) ? t('Account number exists.') : '') : t('Account number is required.')
-        )}</div>
-        <FormControl type="text" className="number" value={this.state.accountNumber} onChange={(e) => this.setState({ changed: true, accountNumber: e.target.value })}/>
-
-        <ControlLabel><Trans>Account Name</Trans>:</ControlLabel>
-        <div className="error">{this.state.changed && (
-          this.state.accountName ? '' : t('Account name is required.')
-        )}</div>
-        <FormControl type="text" className="name" value={this.state.accountName} onChange={(e) => this.setState({ changed: true, accountName: e.target.value })}></FormControl>
-
-        <ControlLabel><Trans>Account Type</Trans>:</ControlLabel>
-        <br/>
-        <div className="error">{this.state.changed && (
-          this.state.accountType ? '' : t('Account type is required.')
-        )}</div>
-        <FormControl disabled={!this.canChange()} componentClass="select" value={this.state.accountType} onChange={(e) => this.setState({ changed: true, accountType: e.target.value })}>
-          <option></option>
-          {['ASSET', 'LIABILITY', 'EQUITY', 'REVENUE', 'EXPENSE'].map(o => <option value={o} key={o}>{t(o)}</option>)}
-        </FormControl>
-      </Form>
+      <form>
+        <TextField
+          style={{ width: '100%' }}
+          label={<Trans>Account Number</Trans>}
+          error={numberAlreadyExists || numberMissing}
+          helperText={numberAlreadyExists ? t('Account number exists.') : (numberMissing ? t('Account number is required.') : '')}
+          value={this.state.accountNumber}
+          onChange={(e) => this.setState({ changed: true, accountNumber: e.target.value })}
+        />
+        <TextField
+          style={{ width: '100%' }}
+          label={<Trans>Account Name</Trans>}
+          error={nameMissing}
+          helperText={nameMissing ? t('Account name is required.') : ''}
+          value={this.state.accountName}
+          onChange={(e) => this.setState({ changed: true, accountName: e.target.value })}
+        />
+        <TextField
+          select
+          style={{ width: '100%' }}
+          label={<Trans>Account Type</Trans>}
+          error={typeMissing}
+          value={this.state.accountType}
+          onChange={(e) => this.setState({ changed: true, accountType: e.target.value })}
+          helperText={typeMissing ? t('Account type is required.') : ''}
+        >
+          <MenuItem>&nbsp;</MenuItem>
+          {['ASSET', 'LIABILITY', 'EQUITY', 'REVENUE', 'EXPENSE'].map(o => <MenuItem value={o} key={o}>{t(o)}</MenuItem>)}
+        </TextField>
+      </form>
     </Dialog>;
   }
 
@@ -136,6 +149,7 @@ class Account extends Component {
     this.setState({
       editDialogIsOpen: true,
       new: true,
+      changed: false,
       accountName: '',
       accountNumber: number,
       accountType: ''
@@ -147,6 +161,7 @@ class Account extends Component {
     this.setState({
       editDialogIsOpen: true,
       new: false,
+      changed: false,
       accountName: account.name,
       accountNumber: account.number,
       accountType: account.type
