@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import { action } from 'mobx';
 import { Trans, withTranslation } from 'react-i18next';
-import { Form, FormControl, ControlLabel, Button } from 'react-bootstrap';
+import { Form, FormControl, ControlLabel } from 'react-bootstrap';
 import Store from '../Stores/Store';
 import AccountModel from '../Models/AccountModel';
 import Dialog from './Dialog';
 import Localize from './Localize';
 import SubPanel from './SubPanel';
-import './Account.css';
 import Title from './Title';
+import { Typography, Button } from '@material-ui/core';
 
 @withTranslation('translations')
 @inject('store')
@@ -167,19 +167,21 @@ class Account extends Component {
 
     return (
       <div className="Account">
-        <Title>Account</Title>
+        <Title><Trans>Account</Trans></Title>
         {
           account &&
           <SubPanel>
-            <div className="summary">
-              <Trans>Account Name</Trans>: {account.name}<br/>
-              <Trans>Account Number</Trans>: {account.number}<br/>
-              <Trans>Account Type</Trans>: <Trans>{account.type}</Trans><br/>
-            </div>
-            <div className="buttons">
-              <Button className="delete" disabled={!this.canChange()} onClick={() => this.setState({ deleteIsOpen: true })}><Trans>Delete Account</Trans></Button><br/>
-              <Button className="edit" onClick={() => this.onClickEdit()}><Trans>Edit Account</Trans></Button><br/>
-            </div>
+            <Typography color="primary" variant="subtitle1"><Trans>Account Name</Trans></Typography>
+            {account.name}
+            <Typography color="primary" variant="subtitle1"><Trans>Account Number</Trans></Typography>
+            {account.number}
+            <Typography color="primary" variant="subtitle1"><Trans>Account Type</Trans></Typography>
+            <Trans>{account.type}</Trans>
+            <br/>
+            <br/>
+            <Button variant="outlined" color="secondary" disabled={!this.canChange()} onClick={() => this.setState({ deleteIsOpen: true })}><Trans>Delete Account</Trans></Button>
+            &nbsp;
+            <Button variant="outlined" color="secondary" onClick={() => this.onClickEdit()}><Trans>Edit Account</Trans></Button>
             {this.renderDeleteDialog()}
           </SubPanel>
         }
