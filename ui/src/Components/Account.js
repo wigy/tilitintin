@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import { action } from 'mobx';
 import { Trans, withTranslation } from 'react-i18next';
-import { Form, FormControl, ControlLabel } from 'react-bootstrap';
 import Store from '../Stores/Store';
 import AccountModel from '../Models/AccountModel';
 import Dialog from './Dialog';
@@ -13,7 +12,6 @@ import Title from './Title';
 import { Button, Icon, MenuItem, TextField } from '@material-ui/core';
 import Labeled from './Labeled';
 import SubTitle from './SubTitle';
-import Panel from './Panel';
 
 @withTranslation('translations')
 @inject('store')
