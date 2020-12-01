@@ -13,11 +13,11 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mate
 class TilitinDialog extends Component {
 
   componentDidMount = () => {
-    this.props.cursor.setModal(this);
+    this.props.cursor.addModal(this);
   }
 
   componentWillUnmount = () => {
-    this.props.cursor.unsetModal();
+    this.props.cursor.removeModal(this);
   }
 
   keyEscape = () => {
