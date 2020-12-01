@@ -21,10 +21,6 @@
   border-top: 4px solid var(--fg-color);
 }
 
-.print .ReportDisplayTable tr.columns {
-  border-color: black;
-}
-
 .ReportDisplayTable .report-title {
   font-size: 140%;
 }

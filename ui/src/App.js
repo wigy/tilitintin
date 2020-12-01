@@ -36,7 +36,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <div>
+        <div className="TopPanel Panel">
           <Route exact path="/" component={Menu}/>
           <Route exact path="/_/admin/:arg?" component={Menu}/>
           <Route exact path="/:db" component={Menu}/>
