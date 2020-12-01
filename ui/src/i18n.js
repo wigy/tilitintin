@@ -157,6 +157,7 @@ i18n.init({
         'Please register an admin user': 'Ole hyvä ja syötä pääkäyttäjän tiedot',
         Transactions: 'Tapahtumat',
         'Undefined tag.': 'Tägiä ei ole määritelty.',
+        Unlocked: 'Auki',
         'User name is not valid (lower case letters and numbers only).': 'Käyttäjätunnus ei kelpaa (vain pienet kirjaimet ja numerot sallitaan)',
         User: 'Käyttäjä',
         'User creation failed.': 'Käyttäjän luonti epäonnistui.',

@@ -10,7 +10,9 @@ import Dialog from './Dialog';
 import Localize from './Localize';
 import SubPanel from './SubPanel';
 import Title from './Title';
-import { Typography, Button } from '@material-ui/core';
+import { Button, Icon } from '@material-ui/core';
+import Labeled from './Labeled';
+import SubTitle from './SubTitle';
 
 @withTranslation('translations')
 @inject('store')
@@ -168,15 +170,15 @@ class Account extends Component {
     return (
       <div className="Account">
         <Title><Trans>Account</Trans></Title>
+        <SubPanel>
+          <Button variant="outlined" color="secondary" onClick={() => this.onClickCreateNew()}><Trans>Create New Account</Trans></Button>
+        </SubPanel>
         {
           account &&
           <SubPanel>
-            <Typography color="primary" variant="subtitle1"><Trans>Account Name</Trans></Typography>
-            {account.name}
-            <Typography color="primary" variant="subtitle1"><Trans>Account Number</Trans></Typography>
-            {account.number}
-            <Typography color="primary" variant="subtitle1"><Trans>Account Type</Trans></Typography>
-            <Trans>{account.type}</Trans>
+            <Labeled title={<Trans>Account Name</Trans>}>{account.name}</Labeled>
+            <Labeled title={<Trans>Account Number</Trans>}>{account.number}</Labeled>
+            <Labeled title={<Trans>Account Type</Trans>}><Trans>{account.type}</Trans></Labeled>
             <br/>
             <br/>
             <Button variant="outlined" color="secondary" disabled={!this.canChange()} onClick={() => this.setState({ deleteIsOpen: true })}><Trans>Delete Account</Trans></Button>
@@ -185,26 +187,32 @@ class Account extends Component {
             {this.renderDeleteDialog()}
           </SubPanel>
         }
-        <Button className="create-new" onClick={() => this.onClickCreateNew()}><Trans>Create New Account</Trans></Button>
-        {this.renderEditDialog()}
-        <div className="periods">
-          {
-            account && account.periods && account.periods.length > 0 &&
+        <SubPanel>
+          {this.renderEditDialog()}
+          <div className="periods">
+            {
+              account && account.periods && account.periods.length > 0 &&
             <>
-              <h2><Trans>Periods</Trans></h2>
+              <SubTitle><Trans>Periods</Trans></SubTitle>
               {
                 account.periods.map((period) => <div key={period.id}>
-                  <Localize date={period.start_date}/> - <Localize date={period.end_date}/>{period.locked && <b> <Trans>Locked</Trans></b>}<br/>
-                  &nbsp;&nbsp;&nbsp;{
-                    period.entries === 0 ? this.props.t('no transactions', { num: period.entries })
-                      : period.entries === 1 ? this.props.t('1 transaction', { num: period.entries })
-                        : this.props.t('{{count}} transactions', { count: period.entries })
-                  }
+                  <Labeled title={<>
+                    <Localize date={period.start_date}/> - <Localize date={period.end_date}/>
+                    &nbsp;
+                    {period.locked ? <Icon className="fas fa-lock"/> : <Icon className="fas fa-lock-open"/>}
+                  </>}>
+                    {
+                      period.entries === 0 ? this.props.t('no transactions', { num: period.entries })
+                        : period.entries === 1 ? this.props.t('1 transaction', { num: period.entries })
+                          : this.props.t('{{count}} transactions', { count: period.entries })
+                    }
+                  </Labeled>
                 </div>)
               }
             </>
-          }
-        </div>
+            }
+          </div>
+        </SubPanel>
       </div>
     );
   }
