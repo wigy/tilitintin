@@ -34,15 +34,6 @@ import './App.css';
 class App extends Component {
 
   render() {
-    const [,, page] = this.props.history.location.pathname.split('/');
-    if (page === 'print') {
-      return (
-        <div className="App print">
-          <Route path="/:db/print/:periodId/:accountId/:format" component={Report}/>
-        </div>
-      );
-    }
-
     return (
       <div className="App">
         <div>
