@@ -1,8 +1,0 @@
-.AccountLink.favorite a {
-  color: darkgreen !important;
-}
-
-.AccountLink .hide-star {
-  border-bottom: 1px solid red;
-  display: none;
-}

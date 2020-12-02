@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import AccountModel from '../Models/AccountModel';
-import './AccountLink.css';
-import { Link } from '@material-ui/core';
+import { Icon, Link, Typography } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import ReactRouterPropTypes from 'react-router-prop-types';
 
@@ -12,7 +11,6 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 class AccountLink extends Component {
 
   state = {
-    hasHovered: false,
     showStar: false
   };
 
@@ -23,19 +21,22 @@ class AccountLink extends Component {
   }
 
   render() {
-    const dst = '/' + this.props.db + '/account/' + this.props.period + '/' + this.props.account.id;
-    const fav = this.props.account.FAVORITE;
-    const title = fav ? this.props.t('Remove favorite status') : this.props.t('Mark as a favorite');
+    const { account } = this.props;
+    const dst = '/' + this.props.db + '/account/' + this.props.period + '/' + account.id;
+    const title = account.FAVORITE ? this.props.t('Remove favorite status') : this.props.t('Mark as a favorite');
     return (
       <div
-        className={'AccountLink' + (fav ? ' favorite' : '')}
-        onMouseEnter={() => this.setState({ hasHovered: true, showStar: true })}
+        onMouseEnter={() => this.setState({ showStar: true })}
         onMouseLeave={() => this.setState({ showStar: false })}>
-        <Link href="#" onClick={() => this.props.history.push(dst)}>{this.props.account.toString()}</Link>
+        <Link href="#" onClick={() => this.props.history.push(dst)}>
+          <Typography display="inline" color={account.FAVORITE ? 'secondary' : 'primary'}>
+            {account.toString()}
+          </Typography>
+        </Link>
         {
-          this.state.hasHovered &&
-            <span title={title} className={this.state.showStar ? 'show-star' : 'hide-star'} onClick={() => this.onToggleFavorite()}>
-              &nbsp;<i className="far fa-star"></i>
+          this.state.showStar &&
+            <span title={title} onClick={() => this.onToggleFavorite()}>
+              &nbsp;<Icon style={{ fontSize: '90%' }} className="far fa-heart" />
             </span>
         }
       </div>
