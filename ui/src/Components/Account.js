@@ -181,8 +181,8 @@ class Account extends Component {
     const account = this.props.store.account;
 
     return (
-      <div className="Account">
-        <Title><Trans>Account</Trans></Title>
+      <div>
+        <Title><Trans>Accounts</Trans></Title>
         <SubPanel>
           <Button variant="outlined" color="secondary" onClick={() => this.onClickCreateNew()}><Trans>Create New Account</Trans></Button>
         </SubPanel>
@@ -200,32 +200,28 @@ class Account extends Component {
             {this.renderDeleteDialog()}
           </SubPanel>
         }
-        <SubPanel>
-          {this.renderEditDialog()}
-          <div className="periods">
-            {
-              account && account.periods && account.periods.length > 0 &&
-            <>
-              <SubTitle><Trans>Periods</Trans></SubTitle>
-              {
-                account.periods.map((period) => <div key={period.id}>
-                  <Labeled title={<>
-                    <Localize date={period.start_date}/> - <Localize date={period.end_date}/>
+        {
+          account && account.periods && account.periods.length > 0 &&
+              <SubPanel>
+                {this.renderEditDialog()}
+                <SubTitle><Trans>Periods</Trans></SubTitle>
+                {
+                  account.periods.map((period) => <div key={period.id}>
+                    <Labeled title={<>
+                      <Localize date={period.start_date}/> - <Localize date={period.end_date}/>
                     &nbsp;
-                    {period.locked ? <Icon className="fas fa-lock"/> : <Icon className="fas fa-lock-open"/>}
-                  </>}>
-                    {
-                      period.entries === 0 ? this.props.t('no transactions', { num: period.entries })
-                        : period.entries === 1 ? this.props.t('1 transaction', { num: period.entries })
-                          : this.props.t('{{count}} transactions', { count: period.entries })
-                    }
-                  </Labeled>
-                </div>)
-              }
-            </>
-            }
-          </div>
-        </SubPanel>
+                      {period.locked ? <Icon className="fas fa-lock"/> : <Icon className="fas fa-lock-open"/>}
+                    </>}>
+                      {
+                        period.entries === 0 ? this.props.t('no transactions', { num: period.entries })
+                          : period.entries === 1 ? this.props.t('1 transaction', { num: period.entries })
+                            : this.props.t('{{count}} transactions', { count: period.entries })
+                      }
+                    </Labeled>
+                  </div>)
+                }
+              </SubPanel>
+        }
       </div>
     );
   }
