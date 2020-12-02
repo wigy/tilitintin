@@ -5,15 +5,15 @@ import AccountLink from '../Components/AccountLink';
 import Store from '../Stores/Store';
 import AccountModel from '../Models/AccountModel';
 import './AccountTable.css';
-import { Table, TableBody, TableContainer, TableRow, TableCell, Paper } from '@material-ui/core';
+import { Table, TableBody, TableContainer, TableRow, TableCell } from '@material-ui/core';
 
 @inject('store')
 @observer
 class AccountTable extends Component {
 
   render() {
-    const { accounts, headings } = this.props;
-    const { db, periodId } = this.props.store;
+    const { accounts, headings, store } = this.props;
+    const { db, periodId } = store;
     let level = 0;
     let titles;
     const headingNumbers = Object.keys(headings);
@@ -41,17 +41,18 @@ class AccountTable extends Component {
                 if (title) {
                   level = i;
                   titles.push(
-                    <TableRow>
-                      <TableCell key={title.id} className={'title level' + level}>{title.text}</TableCell>
+                    <TableRow key={`title${title.id}`}>
+                      <TableCell className={'title level' + level}>{title.text}</TableCell>
                     </TableRow>
                   );
                 }
               }
-              return (<>
-                {titles}
-                <TableRow key={account.id}>
-                  <TableCell hover className={'account level' + level}><AccountLink db={db} period={periodId} account={account}/></TableCell>
-                </TableRow></>);
+              titles.push(
+                <TableRow key={account.id} hover selected={store.account && store.account.id === account.id}>
+                  <TableCell className={'account level' + level}><AccountLink db={db} period={periodId} account={account}/></TableCell>
+                </TableRow>
+              );
+              return titles;
             })}
           </TableBody>
         </Table>

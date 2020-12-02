@@ -4,7 +4,10 @@ import { withTranslation } from 'react-i18next';
 import AccountModel from '../Models/AccountModel';
 import './AccountLink.css';
 import { Link } from '@material-ui/core';
+import { withRouter } from 'react-router-dom';
+import ReactRouterPropTypes from 'react-router-prop-types';
 
+@withRouter
 @withTranslation('translations')
 class AccountLink extends Component {
 
@@ -28,7 +31,7 @@ class AccountLink extends Component {
         className={'AccountLink' + (fav ? ' favorite' : '')}
         onMouseEnter={() => this.setState({ hasHovered: true, showStar: true })}
         onMouseLeave={() => this.setState({ showStar: false })}>
-        <Link to={dst}>{this.props.account.toString()}</Link>
+        <Link href="#" onClick={() => this.props.history.push(dst)}>{this.props.account.toString()}</Link>
         {
           this.state.hasHovered &&
             <span title={title} className={this.state.showStar ? 'show-star' : 'hide-star'} onClick={() => this.onToggleFavorite()}>
@@ -44,6 +47,7 @@ AccountLink.propTypes = {
   account: PropTypes.instanceOf(AccountModel),
   db: PropTypes.string,
   period: PropTypes.number,
+  history: ReactRouterPropTypes.history,
   t: PropTypes.any
 };
 
