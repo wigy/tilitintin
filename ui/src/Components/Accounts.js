@@ -37,8 +37,8 @@ class Accounts extends Component {
     ));
 
     return (
-      <div className="Accounts">
-        <Title>Account scheme</Title>
+      <div>
+        <Title><Trans>Account scheme</Trans></Title>
         <AccountTable accounts={accounts} headings={this.props.store.headings} />
       </div>
     );

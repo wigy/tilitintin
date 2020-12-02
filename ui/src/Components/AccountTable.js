@@ -5,6 +5,7 @@ import AccountLink from '../Components/AccountLink';
 import Store from '../Stores/Store';
 import AccountModel from '../Models/AccountModel';
 import './AccountTable.css';
+import { Table, TableBody, TableContainer, TableRow, TableCell, Paper } from '@material-ui/core';
 
 @inject('store')
 @observer
@@ -20,33 +21,41 @@ class AccountTable extends Component {
     let nextHeading = 0;
 
     return (
-      <div className="AccountTable">
-        {accounts.map(account => {
-          while (headingNumbers[nextHeading] <= account.number) {
-            headings[headingNumbers[nextHeading]].forEach((heading) => {
-              headingLevels[heading.level] = heading;
-              for (let j = heading.level + 1; j < headingLevels.length; j++) {
-                headingLevels[j] = null;
+      <TableContainer className="AccountTable">
+        <Table size="medium" padding="none">
+          <TableBody>
+            {accounts.map(account => {
+              while (headingNumbers[nextHeading] <= account.number) {
+                headings[headingNumbers[nextHeading]].forEach((heading) => {
+                  headingLevels[heading.level] = heading;
+                  for (let j = heading.level + 1; j < headingLevels.length; j++) {
+                    headingLevels[j] = null;
+                  }
+                });
+                nextHeading++;
               }
-            });
-            nextHeading++;
-          }
-          titles = [];
-          for (let i = 0; i < headingLevels.length; i++) {
-            const title = headingLevels[i];
-            headingLevels[i] = null;
-            if (title) {
-              level = i;
-              titles.push(<div key={title.id} className={'title level' + level}>{title.text}</div>);
-            }
-          }
-          return (
-            <div key={account.id}>
-              {titles}
-              <div className={'account level' + level}><AccountLink db={db} period={periodId} account={account}/></div>
-            </div>);
-        })}
-      </div>
+              titles = [];
+              for (let i = 0; i < headingLevels.length; i++) {
+                const title = headingLevels[i];
+                headingLevels[i] = null;
+                if (title) {
+                  level = i;
+                  titles.push(
+                    <TableRow>
+                      <TableCell key={title.id} className={'title level' + level}>{title.text}</TableCell>
+                    </TableRow>
+                  );
+                }
+              }
+              return (<>
+                {titles}
+                <TableRow key={account.id}>
+                  <TableCell hover className={'account level' + level}><AccountLink db={db} period={periodId} account={account}/></TableCell>
+                </TableRow></>);
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
     );
   }
 }

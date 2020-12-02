@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { withTranslation } from 'react-i18next';
 import AccountModel from '../Models/AccountModel';
 import './AccountLink.css';
+import { Link } from '@material-ui/core';
 
 @withTranslation('translations')
 class AccountLink extends Component {
