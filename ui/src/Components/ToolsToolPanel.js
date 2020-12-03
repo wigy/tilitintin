@@ -13,6 +13,7 @@ import Localize from './Localize';
 import EntryModel from '../Models/EntryModel';
 import moment from 'moment';
 import Title from './Title';
+import { TextField } from '@material-ui/core';
 
 @withRouter
 @withTranslation('translations')
@@ -242,8 +243,8 @@ class ToolsToolPanel extends Component {
       case 'vat':
         label = 'Value Added Tax';
         buttons = [
-          <IconButton key="button-fix" disabled={!this.emptyEntries().size} onClick={() => this.fixDescriptions()} title="fix-vat-descriptions" icon="fa-paperclip"></IconButton>,
-          <IconButton key="button-vat" disabled={!VAT.sales && !VAT.purchases} onClick={() => this.createVATEntry()} title="summarize-vat-period" icon="fa-balance-scale"></IconButton>
+          <IconButton key="button-fix" disabled={!this.emptyEntries().size} onClick={() => this.fixDescriptions()} title="fix-vat-descriptions" icon="fas fa-paperclip"></IconButton>,
+          <IconButton key="button-vat" disabled={!VAT.sales && !VAT.purchases} onClick={() => this.createVATEntry()} title="summarize-vat-period" icon="fas fa-balance-scale"></IconButton>
         ];
         break;
 
@@ -251,7 +252,7 @@ class ToolsToolPanel extends Component {
         label = 'Periods';
         if (this.props.store.db) {
           buttons.push(
-            <IconButton key="button-new" onClick={() => this.setState({ askNewPeriod: true })} title="create-period" icon="fa-calendar-plus"></IconButton>
+            <IconButton key="button-new" onClick={() => this.setState({ askNewPeriod: true })} title="create-period" icon="fas fa-calendar-plus"></IconButton>
           );
 
         }
@@ -272,16 +273,18 @@ class ToolsToolPanel extends Component {
       default:
         label = 'Database Management';
         buttons.push(
-          <IconButton key="button-new-database" onClick={() => this.setState({ askNew: true })} title="new-database" icon="fa-database"></IconButton>
+          <IconButton key="button-new-database" onClick={() => this.setState({ askNew: true })} title="new-database" icon="fas fa-database"></IconButton>
         );
         buttons.push(
-          <IconButton key="button-upload" onClick={() => this.setState({ askUpload: true })} title="upload-database" icon="fa-upload"></IconButton>
+          <IconButton key="button-upload" onClick={() => this.setState({ askUpload: true })} title="upload-database" icon="fas fa-upload"></IconButton>
         );
         break;
     }
 
+    // TODO: Upgrade dialogs to MUI.
+
     return (
-      <div className="ToolPanel">
+      <div>
         {label && <Title><Trans>{label}</Trans></Title>}
         {buttons}
         <Dialog
@@ -297,8 +300,9 @@ class ToolsToolPanel extends Component {
           isVisible={this.state.askUpload}
           onClose={() => { this.setState({ askUpload: false }); }}
           onConfirm={() => this.uploadFile()}>
-          <h2><Trans>You can upload old Tilitin file here.</Trans></h2>
-          <input type="file" accept=".sqlite" onChange={(e) => this.setState({ files: e.target.files })} />
+          <Trans>You can upload old Tilitin file here.</Trans>
+          <TextField type="file" onChange={(e) => this.setState({ files: e.target.files })}/>
+          <br />
           <br />
           <Trans>Note that a database with the same name is overridden automatically.</Trans>
         </Dialog>

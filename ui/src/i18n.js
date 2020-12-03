@@ -159,6 +159,7 @@ i18n.init({
         Transactions: 'Tapahtumat',
         'Undefined tag.': 'Tägiä ei ole määritelty.',
         Unlocked: 'Auki',
+        'Upload Database': 'Lähetä tiedosto',
         'User name is not valid (lower case letters and numbers only).': 'Käyttäjätunnus ei kelpaa (vain pienet kirjaimet ja numerot sallitaan)',
         User: 'Käyttäjä',
         'User creation failed.': 'Käyttäjän luonti epäonnistui.',
