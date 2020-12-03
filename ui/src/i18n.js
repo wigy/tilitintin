@@ -144,6 +144,7 @@ i18n.init({
         'Remove favorite status': 'Poista suosikeista',
         Reports: 'Raportit',
         'Saving failed.': 'Tallennus epäonnistui.',
+        Search: 'Etsi',
         'Select database': 'Valitse kanta',
         'Select period': 'Valitse tilikausi',
         'Start Date': 'Alkaa',

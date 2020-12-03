@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
-import { Trans } from 'react-i18next';
 import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
 import IconButton from './IconButton';
 import IconSpacer from './IconSpacer';
 import './AccountsToolPanel.css';
 import Title from './Title';
+import { TextField } from '@material-ui/core';
+import { Trans } from 'react-i18next';
 
 @inject('store')
 @inject('cursor')
@@ -23,7 +24,7 @@ class AccountsToolPanel extends Component {
   }
 
   render() {
-    const store = this.props.store;
+    const { store, cursor } = this.props;
     if (!store.token) {
       return '';
     }
@@ -76,7 +77,18 @@ class AccountsToolPanel extends Component {
           onClick={() => (store.tools.accounts.profit = !store.tools.accounts.profit)}
         />
         <IconSpacer/>
-        <input value={this.state.search} onChange={e => { this.setState({ search: e.target.value }); store.tools.accounts.search = e.target.value; }}/>
+        <TextField
+          label={<Trans>Search</Trans>}
+          value={this.state.search}
+          onChange={e => { this.setState({ search: e.target.value }); }}
+          onKeyPress={e => {
+            if (e.key === 'Enter') {
+              store.tools.accounts.search = e.target.value;
+            }
+          }}
+          onFocus={() => cursor.disableHandler()}
+          onBlur={() => cursor.enableHandler()}
+        />
       </div>
     );
   }

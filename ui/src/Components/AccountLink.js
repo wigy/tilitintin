@@ -36,7 +36,7 @@ class AccountLink extends Component {
         {
           this.state.showStar &&
             <span title={title} onClick={() => this.onToggleFavorite()}>
-              &nbsp;<Icon style={{ fontSize: '90%' }} className="far fa-heart" />
+              &nbsp;<Icon style={{ fontSize: '90%' }} className="fas fa-heart" />
             </span>
         }
       </div>

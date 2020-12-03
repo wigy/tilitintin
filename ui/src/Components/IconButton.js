@@ -10,7 +10,7 @@ class TilitintinIconButton extends Component {
     const { t, disabled, title, onClick, icon, toggle } = this.props;
     let color = 'secondary';
     if (toggle !== undefined) {
-      color = toggle ? 'secondary' : 'disabled';
+      color = toggle ? 'secondary' : undefined;
     }
     return (
       <IconButton color={color} title={t('icon-' + title)} disabled={disabled} onClick={() => onClick()}>
