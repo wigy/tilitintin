@@ -70,6 +70,10 @@ class App extends Component {
             <Route path="/:db/report/:periodId//:format" component={ReportsList}/>
             <Route path="/:db/report/:periodId/:accountId/:format" component={ReportsList}/>
             <Route path="/:db/account/:periodId?/:accountId?" component={Account}/>
+            <Route exact path="/:db/tools/:periodId?/:accountId?/:tool?" component={ToolsList}/>
+            <Route exact path="/:db/tools/:periodId//:tool?" component={ToolsList}/>
+            <Route exact path="/:db/tools//:accountId/:tool?" component={ToolsList}/>
+            <Route exact path="/:db/tools///:tool?" component={ToolsList}/>
           </Paper>
           <Paper className="MainTopPanel Panel" elevation={4}>
             <Route path="/:db/txs/:periodId/:accountId?" component={TransactionToolPanel}/>
@@ -90,14 +94,6 @@ class App extends Component {
           </Paper>
         </div>
         { /*
-        <div className="SidePanel Panel">
-          <div className="Frame">
-            <Route exact path="/:db/tools/:periodId?/:accountId?/:tool?" component={ToolsList}/>
-            <Route exact path="/:db/tools/:periodId//:tool?" component={ToolsList}/>
-            <Route exact path="/:db/tools//:accountId/:tool?" component={ToolsList}/>
-            <Route exact path="/:db/tools///:tool?" component={ToolsList}/>
-          </div>
-        </div>
         <div className="MainTopPanel Panel">
           <div className="Frame">
             <Route exact path="/_/admin/:arg?" component={AdminToolPanel}/>
