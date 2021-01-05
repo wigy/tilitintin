@@ -32,7 +32,7 @@ cli.opt('trade-profit', null, 'Turn on profit and losses calculations on every t
 cli.opt('zero-moves', null, 'Do not add to the stock commodities moved in.');
 
 cli.arg_('db', knex.dbs(USER));
-cli.args('csv-files', 'transaction log as CSV file(s)');
+cli.args_('csv-files', 'transaction log as CSV file(s)');
 
 config.loadIni(cli.options.config || null);
 
