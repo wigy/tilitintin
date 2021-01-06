@@ -329,7 +329,7 @@ class TransactionTable extends Component {
           <td></td>
           <td></td>
           <td></td>
-          <td></td>
+          <td><Trans>Total lines</Trans> {this.props.store.filteredTransactions.length}</td>
           <td className="debit">{debit !== null && <Money cents={debit} currency="EUR" />}</td>
           <td className="credit">{credit !== null && <Money cents={credit} currency="EUR" />}</td>
           <td></td>

@@ -103,7 +103,7 @@ class ToolsForVAT extends Component {
             {
               receivableDelayed &&
               <Link to={vatReceivableAccount.getUrl()}>
-                (<Trans>delayed</Trans>: <Money cents={receivableDelayed.total} currency="€"></Money>)
+                (<Trans>Delayed VAT</Trans>: <Money cents={receivableDelayed.total} currency="€"></Money>)
               </Link>
             }
             <br/>
@@ -114,7 +114,7 @@ class ToolsForVAT extends Component {
             {
               payableDelayed &&
               <Link to={vatDelayedPayableAccount.getUrl()}>
-                (<Trans>delayed</Trans>: <Money cents={payableDelayed.total} currency="€"></Money>)
+                (<Trans>Delayed VAT</Trans>: <Money cents={payableDelayed.total} currency="€"></Money>)
               </Link>
             }
             <br/>
