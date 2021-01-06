@@ -19,7 +19,7 @@ SMALL IMPROVEMENTS
 [ ] Check and fix configured VAT handling.
 [X] Compact view by default.
 [ ] Maybe add some space on the bottom of the transaction list.
-[ ] Display postponed VAT accounts as well in VAT screen.
+[X] Display postponed VAT accounts as well in VAT screen.
 
 FUTURE FEATURES
 ===============
