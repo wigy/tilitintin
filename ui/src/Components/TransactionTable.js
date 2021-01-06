@@ -327,7 +327,9 @@ class TransactionTable extends Component {
               <TableCell/>
               <TableCell/>
               <TableCell/>
-              <TableCell/>
+              <TableCell style={{ fontWeight: 'bold' }}>
+                <Trans>Total lines</Trans> {this.props.store.filteredTransactions.length}
+              </TableCell>
               <TableCell align="right" style={{ fontWeight: 'bold' }}>
                 {debit !== null && <Money cents={debit} currency="EUR"/>}
               </TableCell>

@@ -26,12 +26,21 @@ class ToolsForVAT extends Component {
     }
 
     const VAT = this.props.store.period.VATSummary;
-    const { VAT_SALES_ACCOUNT, VAT_PURCHASES_ACCOUNT, VAT_RECEIVABLE_ACCOUNT, VAT_PAYABLE_ACCOUNT } = this.props.settings;
+    const {
+      VAT_SALES_ACCOUNT,
+      VAT_PURCHASES_ACCOUNT,
+      VAT_RECEIVABLE_ACCOUNT,
+      VAT_PAYABLE_ACCOUNT,
+      VAT_DELAYED_RECEIVABLE_ACCOUNT,
+      VAT_DELAYED_PAYABLE_ACCOUNT
+    } = this.props.settings;
 
     const vatSalesAccount = this.props.store.database.getAccountByNumber(VAT_SALES_ACCOUNT);
     const vatPurchasesAccount = this.props.store.database.getAccountByNumber(VAT_PURCHASES_ACCOUNT);
     const vatPayableAccount = this.props.store.database.getAccountByNumber(VAT_PAYABLE_ACCOUNT);
     const vatReceivableAccount = this.props.store.database.getAccountByNumber(VAT_RECEIVABLE_ACCOUNT);
+    const vatDelayedPayableAccount = this.props.store.database.getAccountByNumber(VAT_DELAYED_PAYABLE_ACCOUNT);
+    const vatDelayedReceivableAccount = this.props.store.database.getAccountByNumber(VAT_DELAYED_RECEIVABLE_ACCOUNT);
 
     if (!vatSalesAccount || !vatPurchasesAccount || !vatPayableAccount || !vatReceivableAccount) {
       return (
@@ -44,6 +53,8 @@ class ToolsForVAT extends Component {
 
     const payable = this.props.store.period.getBalanceByNumber(VAT_PAYABLE_ACCOUNT);
     const receivable = this.props.store.period.getBalanceByNumber(VAT_RECEIVABLE_ACCOUNT);
+    const payableDelayed = this.props.store.period.getBalanceByNumber(VAT_DELAYED_PAYABLE_ACCOUNT);
+    const receivableDelayed = this.props.store.period.getBalanceByNumber(VAT_DELAYED_RECEIVABLE_ACCOUNT);
     const openVATDocuments = this.props.store.period ? this.props.store.period.openVATDocuments : [];
 
     // Split by tags.
@@ -88,10 +99,24 @@ class ToolsForVAT extends Component {
             <Link to={vatReceivableAccount.getUrl()}>
               <Trans>Current VAT receivable</Trans>: <Money cents={receivable ? receivable.total : 0} currency="€"></Money>
             </Link>
+            &nbsp;
+            {
+              receivableDelayed &&
+              <Link to={vatReceivableAccount.getUrl()}>
+                (<Trans>Delayed VAT</Trans>: <Money cents={receivableDelayed.total} currency="€"></Money>)
+              </Link>
+            }
             <br/>
             <Link to={vatPayableAccount.getUrl()}>
               <Trans>Current VAT payable</Trans>: <Money cents={payable ? payable.total : 0} currency="€"></Money>
             </Link>
+            &nbsp;
+            {
+              payableDelayed &&
+              <Link to={vatDelayedPayableAccount.getUrl()}>
+                (<Trans>Delayed VAT</Trans>: <Money cents={payableDelayed.total} currency="€"></Money>)
+              </Link>
+            }
             <br/>
             <br/>
             <Link to={vatPurchasesAccount.getUrl()}>
