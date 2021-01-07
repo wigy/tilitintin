@@ -20,6 +20,7 @@ SMALL IMPROVEMENTS
 [X] Compact view by default.
 [ ] Maybe add some space on the bottom of the transaction list.
 [X] Display postponed VAT accounts as well in VAT screen.
+[ ] Download current account as CSV.
 
 FUTURE FEATURES
 ===============
