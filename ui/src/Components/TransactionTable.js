@@ -287,6 +287,13 @@ class TransactionTable extends Component {
     let debit = null;
     let credit = null;
     const seen = {};
+    const txs = this.props.store.filteredTransactions;
+
+    let delta = null;
+    if (txs.length && txs[0].document.number === 0) {
+      delta = txs[0].total;
+    }
+
     ret.push(
       <TableContainer key="totals">
         <Table className="TransactionTable" size="medium" padding="none">
@@ -303,7 +310,7 @@ class TransactionTable extends Component {
           </TableHead>
           <TableBody>
             {
-              this.props.store.filteredTransactions.map((tx, idx) => {
+              txs.map((tx, idx) => {
                 if (tx.document.askForDelete) {
                   this.txToDelete = tx;
                 }
@@ -328,7 +335,7 @@ class TransactionTable extends Component {
               <TableCell/>
               <TableCell/>
               <TableCell style={{ fontWeight: 'bold' }}>
-                <Trans>Total lines</Trans> {this.props.store.filteredTransactions.length}
+                <Trans>Total lines</Trans> {txs.length}
               </TableCell>
               <TableCell align="right" style={{ fontWeight: 'bold' }}>
                 {debit !== null && <Money cents={debit} currency="EUR"/>}
@@ -336,7 +343,9 @@ class TransactionTable extends Component {
               <TableCell align="right" style={{ fontWeight: 'bold' }}>
                 {credit !== null && <Money cents={credit} currency="EUR"/>}
               </TableCell>
-              <TableCell/>
+              <TableCell align="right" style={{ fontWeight: 'bold' }}>
+                {delta !== null && <>Δ <Money cents={sum - delta} currency="EUR" /></>}
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
