@@ -294,7 +294,7 @@ class TransactionTable extends Component {
     const txs = this.props.store.filteredTransactions;
 
     let delta = null;
-    if (txs.length && txs[0].document.number === 0) {
+    if (txs.length && (txs[0].document.number === 0 || txs[0].document.number === 1)) {
       delta = txs[0].total;
     }
 
