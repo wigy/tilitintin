@@ -91,7 +91,7 @@ class Account extends Component {
     return <Dialog
       isValid={() => isValid()}
       className="dialog"
-      title={<Trans>Create New Account</Trans>}
+      title={this.state.new ? <Trans>Create New Account</Trans> : <Trans>Edit Account</Trans>}
       isVisible={this.state.editDialogIsOpen}
       onClose={() => this.setState({ editDialogIsOpen: false })}
       onConfirm={() => this.onSubmitAccount()}>
@@ -151,6 +151,9 @@ class Account extends Component {
   }
 
   canChange() {
+    if (this.state.new) {
+      return true;
+    }
     const account = this.props.store.account;
     if (!account || !account.periods) {
       return false;
