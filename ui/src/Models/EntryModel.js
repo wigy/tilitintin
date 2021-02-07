@@ -308,6 +308,28 @@ class EntryModel extends NavigationTargetModel {
   }
 
   /**
+   * Helper to calculate debet or credit field value.
+   * @param {String} str
+   */
+  evalFormula(str) {
+    const variables = { T: 0, D: 0, K: 0 };
+    for (const e of this.document.entries) {
+      if (e.debit) {
+        variables.D += e.amount;
+        variables.T += e.amount;
+      } else {
+        variables.K += e.amount;
+        variables.T -= e.amount;
+      }
+    }
+    variables.T = Math.abs(variables.T);
+    variables.d = variables.D;
+    variables.k = variables.K;
+    variables.t = variables.T;
+    return str2num(str, variables);
+  }
+
+  /**
    * Format as money, if this is debit entry.
    */
   ['get.debit']() {
@@ -325,7 +347,7 @@ class EntryModel extends NavigationTargetModel {
     if (value === '') {
       return null;
     }
-    const num = str2num(value);
+    const num = this.evalFormula(value);
     if (isNaN(num)) {
       return INVALID_NUMBER;
     }
@@ -338,7 +360,7 @@ class EntryModel extends NavigationTargetModel {
   ['change.debit'](value) {
     if (value !== '') {
       this.debit = 1;
-      this.amount = Math.round(str2num(value) * 100);
+      this.amount = Math.round(this.evalFormula(value));
     }
   }
 
@@ -393,7 +415,7 @@ class EntryModel extends NavigationTargetModel {
   ['change.credit'](value) {
     if (value !== '') {
       this.debit = 0;
-      this.amount = Math.round(str2num(value) * 100);
+      this.amount = Math.round(this.evalFormula(value));
     }
   }
 

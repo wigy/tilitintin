@@ -53,8 +53,11 @@ export function str2date(str, sample) {
  * @param {String} str
  * @return {NaN|Number}
  */
-export function str2num(str) {
+export function str2num(str, variables = {}) {
   str = str.replace(',', '.').replace(/[$€£]/g, '').replace(/\s/g, '');
+  for (const [k, v] of Object.entries(variables)) {
+    str = str.replace(new RegExp(k, 'g'), v);
+  }
   try {
     return safeEval(str, { navigator: window.navigator });
   } catch (err) {
