@@ -308,7 +308,7 @@ class EntryModel extends NavigationTargetModel {
   }
 
   /**
-   * Helper to calculate debet or credit field value.
+   * Helper to calculate debit or credit field value.
    * @param {String} str
    */
   evalFormula(str) {
@@ -323,10 +323,13 @@ class EntryModel extends NavigationTargetModel {
       }
     }
     variables.T = Math.abs(variables.T);
+    variables.D /= 100;
+    variables.K /= 100;
+    variables.T /= 100;
     variables.d = variables.D;
     variables.k = variables.K;
     variables.t = variables.T;
-    return str2num(str, variables);
+    return str2num(str, variables) * 100;
   }
 
   /**
