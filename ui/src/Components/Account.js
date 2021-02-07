@@ -167,6 +167,9 @@ class Account extends Component {
   }
 
   canChange() {
+    if (this.state.new) {
+      return true;
+    }
     const account = this.props.store.account;
     if (!account || !account.periods) {
       return false;
