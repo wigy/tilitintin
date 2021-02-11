@@ -104,7 +104,7 @@ class Account extends Component {
       onConfirm={() => this.onSubmitAccount()}>
       <form>
         <TextField
-          style={{ width: '100%' }}
+          fullWidth
           label={<Trans>Account Number</Trans>}
           error={numberAlreadyExists || numberMissing}
           helperText={numberAlreadyExists ? t('Account number exists.') : (numberMissing ? t('Account number is required.') : '')}
@@ -112,7 +112,7 @@ class Account extends Component {
           onChange={(e) => this.setState({ changed: true, accountNumber: e.target.value })}
         />
         <TextField
-          style={{ width: '100%' }}
+          fullWidth
           label={<Trans>Account Name</Trans>}
           error={nameMissing}
           helperText={nameMissing ? t('Account name is required.') : ''}
@@ -121,7 +121,7 @@ class Account extends Component {
         />
         <TextField
           select
-          style={{ width: '100%' }}
+          fullWidth
           label={<Trans>Account Type</Trans>}
           error={typeMissing}
           value={this.state.accountType}
