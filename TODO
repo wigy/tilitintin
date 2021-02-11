@@ -21,6 +21,7 @@ SMALL IMPROVEMENTS
 [ ] Maybe add some space on the bottom of the transaction list.
 [X] Display postponed VAT accounts as well in VAT screen.
 [ ] Download current account as CSV.
+[ ] A tool to scan for documents with only one entry.
 
 FUTURE FEATURES
 ===============
