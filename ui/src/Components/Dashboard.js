@@ -77,7 +77,8 @@ class Dashboard extends Component {
         <Panel title={<Trans>Company Info</Trans>}>
           <Trans>Business name</Trans>: {store.settings.BUSINESS_NAME}<br />
           <Trans>Business ID</Trans>: {store.settings.BUSINESS_ID}<br />
-          <Typography variant="h4" color="textSecondary"><Trans>Periods</Trans></Typography>
+          <br />
+          <Typography variant="h5" color="textSecondary"><Trans>Periods</Trans></Typography>
           <Loading visible={store.loading} />
           <List>
             {store.database.periods.reverse().map((period, index) => (
