@@ -4,7 +4,6 @@ import { action } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { Trans, withTranslation } from 'react-i18next';
 import { withRouter } from 'react-router-dom';
-import { Form, FormControl, ControlLabel } from 'react-bootstrap';
 import Store from '../Stores/Store';
 import Settings from '../Stores/Settings';
 import IconButton from './IconButton';
