@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import { inject, observer } from 'mobx-react';
 import { Trans, withTranslation } from 'react-i18next';
-import { FormControl, ControlLabel } from 'react-bootstrap';
 import moment from 'moment';
 import { sprintf } from 'sprintf-js';
 import Dialog from './Dialog';
@@ -15,7 +14,7 @@ import Cursor from '../Stores/Cursor';
 import EntryModel from '../Models/EntryModel';
 import DocumentModel from '../Models/DocumentModel';
 import { withRouter } from 'react-router-dom';
-import { TableContainer, Table, TableHead, TableCell, TableRow, TableBody, Typography } from '@material-ui/core';
+import { TableContainer, Table, TableHead, TableCell, TableRow, TableBody, Typography, TextField, MenuItem } from '@material-ui/core';
 
 @withTranslation('translations')
 @withRouter
@@ -250,15 +249,22 @@ class TransactionTable extends Component {
     if (this.state.showAccountDropdown) {
       const accountDialog = (
         <Dialog key="dialog2"
+          wider
           title={<Trans>Please select an account</Trans>}
           isVisible={this.state.showAccountDropdown}
           onClose={() => this.setState({ showAccountDropdown: false })}
           onConfirm={() => this.onSelectAccount(this.state.account)}>
-          <ControlLabel><Trans>Account</Trans>:</ControlLabel>
-          <FormControl componentClass="select" value={this.state.account} onChange={(e) => this.setState({ account: e.target.value })}>
-            <option value=""></option>
-            {this.props.store.accounts.map(a => <option value={a.id} key={a.id}>{a.toString()}</option>)}
-          </FormControl>
+
+          <TextField
+            select
+            fullWidth
+            label={<Trans>Account</Trans>}
+            value={this.state.account}
+            onChange={(e) => this.setState({ account: e.target.value })}
+          >
+            <MenuItem>&nbsp;</MenuItem>
+            {this.props.store.accounts.map(a => <MenuItem value={a.id} key={a.id}>{a.toString()}</MenuItem>)}
+          </TextField>
         </Dialog>
       );
       ret.push(accountDialog);
