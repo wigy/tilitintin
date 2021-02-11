@@ -203,10 +203,10 @@ class Account extends Component {
             {this.renderDeleteDialog()}
           </SubPanel>
         }
+        {this.renderEditDialog()}
         {
           account && account.periods && account.periods.length > 0 &&
               <SubPanel>
-                {this.renderEditDialog()}
                 <SubTitle><Trans>Periods</Trans></SubTitle>
                 {
                   account.periods.map((period) => <div key={period.id}>
