@@ -31,7 +31,7 @@ class AccountTransactions extends Component {
       return '';
     }
     return (
-      <div className="AccountTransactions">
+      <div style={{ margin: '1rem' }}>
         <TransactionTable/>
       </div>
     );
