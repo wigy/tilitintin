@@ -33,10 +33,10 @@ class TilitinDialog extends Component {
 
   render() {
 
-    const { isVisible, isValid, title, onClose, children } = this.props;
+    const { isVisible, isValid, title, onClose, children, wider } = this.props;
 
     return (
-      <Dialog open={isVisible} onClose={() => onClose()}>
+      <Dialog open={isVisible} onClose={() => onClose()} fullWidth={wider} maxWidth={wider ? 'sm' : undefined}>
         <DialogTitle onClose={() => onClose()}>
           {title}
         </DialogTitle>
@@ -56,6 +56,7 @@ TilitinDialog.propTypes = {
   isVisible: PropTypes.bool,
   isValid: PropTypes.func,
   className: PropTypes.string,
+  wider: PropTypes.bool,
   title: PropTypes.any,
   onClose: PropTypes.func,
   onConfirm: PropTypes.func,

@@ -281,8 +281,6 @@ class ToolsToolPanel extends Component {
         break;
     }
 
-    // TODO: Upgrade dialogs to MUI.
-
     return (
       <div>
         {label && <Title><Trans>{label}</Trans></Title>}
@@ -308,26 +306,41 @@ class ToolsToolPanel extends Component {
         </Dialog>
 
         <Dialog
+          wider
           title={<Trans>Create New Database</Trans>}
           isVisible={this.state.askNew}
           isValid={() => this.validDbName(this.state.databaseName) && this.state.companyName}
           onClose={() => { this.setState({ askNew: false }); }}
           onConfirm={() => this.onCreateNewDb()}>
-          <Form>
-            <ControlLabel><Trans>Database Name</Trans>:</ControlLabel>
-            <div className="error">{this.state.changed && (
-              !this.state.databaseName ? t('Database name is required.')
-                : (!this.validDbName(this.state.databaseName) ? t('Invalid database name.') : '')
-            )}</div>
-            <FormControl type="text" className="name" value={this.state.databaseName} onChange={(e) => this.setState({ changed: true, databaseName: e.target.value })}></FormControl>
-            <ControlLabel><Trans>Company Name</Trans>:</ControlLabel>
-            <div className="error">{this.state.changed && (
-              this.state.companyName ? '' : t('Company name is required.')
-            )}</div>
-            <FormControl type="text" className="company" value={this.state.companyName} onChange={(e) => this.setState({ changed: true, companyName: e.target.value })}></FormControl>
-            <ControlLabel><Trans>Company Registration Number</Trans>:</ControlLabel>
-            <FormControl type="text" className="code" value={this.state.companyCode} onChange={(e) => this.setState({ changed: true, companyCode: e.target.value })}></FormControl>
-          </Form>
+          <div>
+            <TextField
+              fullWidth
+              label={<Trans>Database Name</Trans>}
+              value={this.state.databaseName}
+              onChange={(e) => this.setState({ changed: true, databaseName: e.target.value })}
+              error={this.state.changed && (!this.state.databaseName || !this.validDbName(this.state.databaseName))}
+              helperText={this.state.changed && (
+                !this.state.databaseName ? t('Database name is required.')
+                  : (!this.validDbName(this.state.databaseName) ? t('Invalid database name.') : '')
+              )}
+            />
+            <br/>
+            <TextField
+              fullWidth
+              label={<Trans>Company Name</Trans>}
+              value={this.state.companyName}
+              onChange={(e) => this.setState({ changed: true, companyName: e.target.value })}
+              error={this.state.changed && !this.state.companyName}
+              helperText={this.state.changed && !this.state.companyName ? t('Company name is required.') : ''}
+            />
+            <br/>
+            <TextField
+              fullWidth
+              label={<Trans>Company Registration Number</Trans>}
+              value={this.state.companyCode}
+              onChange={(e) => this.setState({ changed: true, companyCode: e.target.value })}
+            />
+          </div>
         </Dialog>
       </div>
     );

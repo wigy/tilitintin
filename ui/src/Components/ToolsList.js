@@ -55,7 +55,7 @@ class ToolsList extends Component {
       <div>
         <Title><Trans>Tools</Trans></Title>
         <List>
-          <ListItem button selected={match.params.tool === 'databases'} onClick={() => history.push(this.url('databases'))}>
+          <ListItem button selected={!match.params.tool || match.params.tool === 'databases'} onClick={() => history.push(this.url('databases'))}>
             <ListItemAvatar color="primary">
               <Avatar>1</Avatar>
             </ListItemAvatar>
