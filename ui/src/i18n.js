@@ -123,6 +123,7 @@ i18n.init({
         'Invalid credentials.': 'Kirjautuminen epäonnistui.',
         'Invalid database name.': 'Tietokannan nimi ei kelpaa.',
         'Total lines': 'Rivejä yhteensä',
+        Locking: 'Lukitus',
         Locked: 'Lukittu',
         Login: 'Kirjaudu',
         'Login to Tilitintin': 'Kirjaudu Tilitinttiin',

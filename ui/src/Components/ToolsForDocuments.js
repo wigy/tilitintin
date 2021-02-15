@@ -4,8 +4,6 @@ import { inject, observer } from 'mobx-react';
 import { withTranslation, Trans } from 'react-i18next';
 import Localize from './Localize';
 import Store from '../Stores/Store';
-
-import './ToolsForPeriods.css';
 import Title from './Title';
 
 @withTranslation('translations')

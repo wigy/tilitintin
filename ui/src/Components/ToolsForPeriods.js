@@ -5,8 +5,17 @@ import { withTranslation, Trans } from 'react-i18next';
 import Store from '../Stores/Store';
 import IconButton from './IconButton';
 import Localize from './Localize';
+import { Table, TableContainer, TableBody, TableCell, TableRow, TableHead, Chip, Avatar } from '@material-ui/core';
+import LockOpenIcon from '@material-ui/icons/LockOpen';
+import LockIcon from '@material-ui/icons/Lock';
 
-import './ToolsForPeriods.css';
+const Locked = ({ lock }) => lock
+  ? <Chip color="primary" avatar={<Avatar><LockIcon/></Avatar>} label={<Trans>Locked</Trans>} />
+  : <Chip color="secondary" avatar={<Avatar><LockOpenIcon/></Avatar>} label={<Trans>Unlocked</Trans>} />;
+
+Locked.propTypes = {
+  lock: PropTypes.bool
+};
 
 @withTranslation('translations')
 @inject('store')
@@ -23,39 +32,35 @@ class ToolsForPeriods extends Component {
     }
 
     return (
-      <div className="Tools">
-        <table className="ToolsForPeriods">
-          <tbody>
-            <tr>
-              <th>#</th>
-              <th><Trans>Start Date</Trans></th>
-              <th><Trans>End Date</Trans></th>
-              <th><Trans>Locked</Trans></th>
-              <th></th>
-            </tr>
-            {this.props.store.database.periods.reverse().map((period) =>
-              <tr key={period.id}>
-                <td>
-                  {period.id}
-                </td>
-                <td>
-                  <Localize date={period.start_date} />
-                </td>
-                <td>
-                  <Localize date={period.end_date} />
-                </td>
-                <td>
-                  <Trans>{period.locked ? 'Yes' : 'No'}</Trans>
-                </td>
-                <td>
+      <TableContainer>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell variant="head"><Trans>#</Trans></TableCell>
+              <TableCell variant="head"><Trans>Start Date</Trans></TableCell>
+              <TableCell variant="head"><Trans>End Date</Trans></TableCell>
+              <TableCell variant="head"><Trans>Locking</Trans></TableCell>
+              <TableCell variant="head"></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {this.props.store.database.periods.reverse().map((period) => (
+              <TableRow key={period.id}>
+                <TableCell>{period.id}</TableCell>
+                <TableCell><Localize date={period.start_date} /></TableCell>
+                <TableCell><Localize date={period.end_date} /></TableCell>
+                <TableCell>
+                  <Locked lock={!!period.locked} />
+                </TableCell>
+                <TableCell>
                   <IconButton toggle={!!period.locked} onClick={() => period.lock()} title="lock-period" icon="fa fa-lock"></IconButton>
                   <IconButton toggle={!period.locked} onClick={() => period.unlock()} title="unlock-period" icon="fa fa-unlock"></IconButton>
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     );
   }
 }
