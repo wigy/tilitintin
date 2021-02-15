@@ -176,6 +176,7 @@ i18n.init({
         'VAT from purchases': 'ALV ostoista',
         'VAT from sales': 'ALV myynnistä',
         'VAT update': 'ALV päivitys',
+        View: 'Katso',
         Yes: 'Kyllä',
         'You can upload old Tilitin file here.': 'Voit lähettää tästä olemassaolevan Tilitin-tiedoston.',
         'Note that a database with the same name is overridden automatically.': 'Huomaa, että jos samanniminen tietokanta on jo olemassa, se ylikirjoitetaan automaattisesti.',

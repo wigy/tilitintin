@@ -96,19 +96,13 @@ class App extends Component {
             <Route path="/:db/txs/:periodId/:accountId?" component={AccountTransactions}/>
             <Route path="/:db/report/:periodId//:format" component={Report}/>
             <Route path="/:db/report/:periodId/:accountId/:format" component={Report}/>
-            <Route path="/:db/account/:periodId?" component={Accounts}/>
-          </Paper>
-        </div>
-        { /*
-        <div className="MainPanel Panel">
-          <div className="Frame">
             <Route exact path="/:db/tools/:periodId?/:accountId?/:tool?" component={Tools}/>
             <Route exact path="/:db/tools/:periodId//:tool?" component={Tools}/>
             <Route exact path="/:db/tools//:accountId/:tool?" component={Tools}/>
             <Route exact path="/:db/tools///:tool?" component={Tools}/>
-          </div>
+            <Route path="/:db/account/:periodId?" component={Accounts}/>
+          </Paper>
         </div>
-       */ }
       </div>
     );
   }

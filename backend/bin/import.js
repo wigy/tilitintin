@@ -14,6 +14,7 @@ cli.opt('dry-run', null, 'To turn dry-run on.');
 cli.opt('encoding', null, 'Force encoding of import files.');
 cli.opt('end-date', null, 'Ignore all transactions after this date.');
 cli.opt('force', null, 'Import even if the entries are found already.');
+cli.opt('fallback', null, 'Set name for the fallback service to query prices.');
 cli.opt('fund', null, 'Set name for the fund.');
 cli.opt('import-errors', null, 'If import fails, create move transaction to imbalance account.');
 cli.opt('no-deposit', null, 'Ignore deposit transactions.');
@@ -38,6 +39,7 @@ config.loadIni(cli.options.config || null);
 
 config.set({
   encoding: cli.options.encoding,
+  fallbackService: cli.options.fallback || null,
   flags: {
     addCurrencies: cli.options['add-currencies'],
     debug: cli.options.debug,
