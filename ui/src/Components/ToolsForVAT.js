@@ -65,7 +65,6 @@ class ToolsForVAT extends Component {
         .map(tag => tag.tag)
     );
 
-    console.log(validTags);
     const vatByTag = {};
     let vatByNoTag = null;
     let hasTags = false;
