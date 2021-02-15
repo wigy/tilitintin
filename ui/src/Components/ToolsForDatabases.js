@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { withTranslation, Trans } from 'react-i18next';
 import Store from '../Stores/Store';
 import Title from './Title';
-import { Card, CardActions, CardContent, Button, Typography, Icon, CardHeader } from '@material-ui/core';
+import { Card, CardActions, CardContent, Button, Icon, CardHeader } from '@material-ui/core';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import { withRouter } from 'react-router-dom';
 
@@ -21,7 +21,7 @@ class ToolsForDatabases extends Component {
     }
 
     const goto = (db) => {
-      this.props.history.push(`/${db}`);
+      this.props.history.push(`/${db.name}`);
     };
 
     return (
@@ -34,7 +34,7 @@ class ToolsForDatabases extends Component {
               <CardContent>
               </CardContent>
               <CardActions>
-                <Button variant="outlined" color="primary" size="small" onClick={() => goto(db.name)}><Trans>View</Trans></Button>
+                <Button variant="outlined" color="primary" size="small" onClick={() => goto(db)}><Trans>View</Trans></Button>
               </CardActions>
             </Card>
           ))}

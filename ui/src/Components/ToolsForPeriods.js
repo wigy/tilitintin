@@ -5,9 +5,11 @@ import { withTranslation, Trans } from 'react-i18next';
 import Store from '../Stores/Store';
 import IconButton from './IconButton';
 import Localize from './Localize';
-import { Table, TableContainer, TableBody, TableCell, TableRow, TableHead, Chip, Avatar } from '@material-ui/core';
+import { Table, TableContainer, TableBody, TableCell, TableRow, TableHead, Chip, Avatar, Button } from '@material-ui/core';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import LockIcon from '@material-ui/icons/Lock';
+import ReactRouterPropTypes from 'react-router-prop-types';
+import { withRouter } from 'react-router-dom';
 
 const Locked = ({ lock }) => lock
   ? <Chip color="primary" avatar={<Avatar><LockIcon/></Avatar>} label={<Trans>Locked</Trans>} />
@@ -17,6 +19,7 @@ Locked.propTypes = {
   lock: PropTypes.bool
 };
 
+@withRouter
 @withTranslation('translations')
 @inject('store')
 @observer
@@ -30,6 +33,9 @@ class ToolsForPeriods extends Component {
     if (!this.props.store.database) {
       return '';
     }
+    const goto = (period) => {
+      this.props.history.push(`/${this.props.store.database.name}/txs/${period.id}`);
+    };
 
     return (
       <TableContainer>
@@ -40,6 +46,7 @@ class ToolsForPeriods extends Component {
               <TableCell variant="head"><Trans>Start Date</Trans></TableCell>
               <TableCell variant="head"><Trans>End Date</Trans></TableCell>
               <TableCell variant="head"><Trans>Locking</Trans></TableCell>
+              <TableCell variant="head"></TableCell>
               <TableCell variant="head"></TableCell>
             </TableRow>
           </TableHead>
@@ -56,6 +63,9 @@ class ToolsForPeriods extends Component {
                   <IconButton toggle={!!period.locked} onClick={() => period.lock()} title="lock-period" icon="fa fa-lock"></IconButton>
                   <IconButton toggle={!period.locked} onClick={() => period.unlock()} title="unlock-period" icon="fa fa-unlock"></IconButton>
                 </TableCell>
+                <TableCell>
+                  <Button variant="outlined" color="primary" size="small" onClick={() => goto(period)}><Trans>View</Trans></Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -67,6 +77,7 @@ class ToolsForPeriods extends Component {
 
 ToolsForPeriods.propTypes = {
   db: PropTypes.string,
-  store: PropTypes.instanceOf(Store)
+  store: PropTypes.instanceOf(Store),
+  history: ReactRouterPropTypes.history,
 };
 export default ToolsForPeriods;
