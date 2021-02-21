@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import Tag from './Tag';
-import IconButton from './IconButton';
 import IconSpacer from './IconSpacer';
 import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
 import Title from './Title';
 import { Trans } from 'react-i18next';
 import './TransactionToolPanel.css';
+import { Button } from '@material-ui/core';
 
 @inject('store')
 @inject('cursor')
@@ -48,6 +48,22 @@ class TransactionToolPanel extends Component {
       this.props.cursor.enterComponent();
     };
 
+    const openAll = () => {
+      this.props.store.transactions.forEach(tx => {
+        if (!tx.open && tx.document.number > 1) {
+          tx.toggleOpen();
+        }
+      });
+    };
+
+    const closeAll = () => {
+      this.props.store.transactions.forEach(tx => {
+        if (tx.open) {
+          tx.toggleOpen();
+        }
+      });
+    };
+
     let last = null;
 
     return (
@@ -56,13 +72,15 @@ class TransactionToolPanel extends Component {
 
         <div className="icons">
           <div className="buttons">
-            <IconButton onClick={enableAll} title="reset" icon="far fa-check-circle"></IconButton>
-            <IconButton onClick={disableAll} title="disable-all" icon="far fa-circle"></IconButton>
+            <Button onClick={openAll} variant="contained" color="primary"><Trans>Show Details</Trans></Button>
+            <Button onClick={closeAll} variant="contained" color="primary"><Trans>Hide Details</Trans></Button>
+            <Button onClick={enableAll} variant="contained" color="primary"><Trans>Show All</Trans></Button>
+            <Button onClick={disableAll} variant="contained" color="primary"><Trans>Hide All</Trans></Button>
           </div>
 
           <div className="tags">
             {account && account.tags.map((tag) => {
-              const needSpacer = last && (tag.type !== last);
+              const needSpacer = (tag.type !== last);
               last = tag.type;
               return (
                 <React.Fragment key={tag.tag}>
