@@ -459,6 +459,52 @@ processEntries.DefaultByTags = (entries, periods, formatName, format, settings) 
   return { columns, data: parseAndCombineReport(accountNumbers, accountNames, columnNames, format, totals) };
 };
 
+processEntries.Account = (entries, periods, formatName, format, settings) => {
+  const columns = [{
+    type: 'id',
+    name: 'id',
+    title: '{column-document-number}'
+  }, {
+    type: 'text',
+    name: 'date',
+    title: '{column-date}'
+  }, {
+    type: 'text',
+    name: 'description',
+    title: '{column-description}'
+  }, {
+    type: 'numeric',
+    name: 'debit',
+    title: '{column-debit}'
+  }, {
+    type: 'numeric',
+    name: 'credit',
+    title: '{column-credit}'
+  }, {
+    type: 'numeric',
+    name: 'balance',
+    title: '{column-balance}'
+  }];
+
+  const data = [];
+  let total = 0;
+  entries.forEach((entry) => {
+    total += entry.amount;
+    data.push({
+      id: entry.documentId,
+      description: entry.description,
+      date: moment(entry.date).format('YYYY-MM-DD'),
+      amounts: {
+        debit: entry.amount >= 0 ? entry.amount : null,
+        credit: entry.amount < 0 ? -entry.amount : null,
+        balance: total
+      }
+    });
+  });
+
+  return { columns, data };
+};
+
 /**
  * General purpose processor.
  */
@@ -583,7 +629,7 @@ async function create(db, periodIds, formatName, format, query = {}) {
 
   const periods = await knex.db(db).select('*').from('period').whereIn('period.id', periodIds);
 
-  return knex.db(db).select(
+  let knexQuery = knex.db(db).select(
     knex.db(db).raw('document.period_id AS periodId'),
     'document.number AS documentId',
     'document.date',
@@ -596,11 +642,19 @@ async function create(db, periodIds, formatName, format, query = {}) {
     .from('entry')
     .leftJoin('account', 'account.id', 'entry.account_id')
     .leftJoin('document', 'document.id', 'entry.document_id')
-    .whereIn('document.period_id', periodIds)
+    .whereIn('document.period_id', periodIds);
+
+  if (query.accountId) {
+    knexQuery = knexQuery.andWhere('account.id', '=', query.accountId);
+  }
+
+  knexQuery = (knexQuery
     .orderBy('document.date')
     .orderBy('document.id')
-    .orderBy('entry.row_number')
-    .then((entries) => processEntries(entries, periods, formatName, format, reportSettings));
+    .orderBy('entry.row_number'));
+
+  const entries = await knexQuery;
+  return processEntries(entries, periods, formatName, format, reportSettings);
 }
 
 /**

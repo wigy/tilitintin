@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Configuration from '../Configuration';
 import { inject, observer } from 'mobx-react';
 import Tag from './Tag';
 import IconSpacer from './IconSpacer';
@@ -9,6 +10,8 @@ import Title from './Title';
 import { Trans } from 'react-i18next';
 import './TransactionToolPanel.css';
 import { Button } from '@material-ui/core';
+import i18n from '../i18n';
+import IconButton from './IconButton';
 
 @inject('store')
 @inject('cursor')
@@ -19,12 +22,36 @@ class TransactionToolPanel extends Component {
     this.props.store.tools.tagDisabled = {};
   }
 
+  onDownload = (db, periodId, accountId) => {
+    const store = this.props.store;
+    const lang = i18n.language;
+    const url = `${Configuration.API_URL}/db/${db}/report/account/${periodId}/${accountId}?csv&lang=${lang}`;
+
+    fetch(url, {
+      method: 'GET',
+      headers: new Headers({
+        Authorization: 'Bearer ' + store.token
+      })
+    })
+      .then(response => response.blob())
+      .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.target = '_blank';
+        a.download = `transactions-${periodId}-${accountId}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      });
+  };
+
   render() {
     if (!this.props.store.token) {
       return '';
     }
 
-    const { account, tools } = this.props.store;
+    const { account, tools, db, periodId, accountId } = this.props.store;
 
     const toggle = (tag) => {
       this.props.cursor.leaveComponent();
@@ -76,6 +103,7 @@ class TransactionToolPanel extends Component {
             <Button onClick={closeAll} variant="contained" color="primary"><Trans>Hide Details</Trans></Button>
             <Button onClick={enableAll} variant="contained" color="primary"><Trans>Show All</Trans></Button>
             <Button onClick={disableAll} variant="contained" color="primary"><Trans>Hide All</Trans></Button>
+            <IconButton onClick={() => this.onDownload(db, periodId, accountId)} title="download-csv" icon="fas fa-download" />
           </div>
 
           <div className="tags">

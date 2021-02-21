@@ -88,4 +88,21 @@ router.get('/:format/:period', (req, res) => {
     });
 });
 
+router.get('/:format/:period/:account', (req, res) => {
+  const { format, period, account } = req.params;
+  const periodId = parseInt(period);
+  const accountId = parseInt(account);
+  const query = req.query;
+  let convert = conversions.identical;
+  if ('csv' in query) {
+    convert = conversions.csv;
+    query.dropTile = true;
+    res.setHeader('Content-Disposition', `attachment; filename=${format}.csv`);
+    res.setHeader('Content-Type', 'application/csv');
+  }
+
+  reports.create(req.db, [periodId], format, null, { accountId })
+    .then(report => res.send(convert(report, query)));
+});
+
 module.exports = router;
