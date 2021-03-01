@@ -30,6 +30,10 @@ class TransactionTable extends Component {
   // Store for transaction waiting for deletion confirmation.
   txToDelete = null;
 
+  componentDidMount() {
+    this.props.cursor.selectPage('Balances', this);
+  }
+
   componentDidUpdate(oldProps) {
     const eid = new URLSearchParams(this.props.location.search).get('entry');
     if (eid) {

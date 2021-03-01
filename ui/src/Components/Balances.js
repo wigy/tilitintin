@@ -14,10 +14,6 @@ import Title from './Title';
 @observer
 class Balances extends Component {
 
-  componentDidMount() {
-    this.props.cursor.selectPage('Balances', this);
-  }
-
   render() {
     if (!this.props.store.token) {
       return '';
