@@ -1,6 +1,12 @@
 .TransactionEntry.error, .Document.error {
   background-color: rgba(255,0,0,0.1) !important;
 }
+
+.Document.duplicate.selected, .Document.duplicate.selected .TransactionDetails {
+  background-color: inherit !important;
+  outline: inherit !important;
+}
+
 /*
 .Document.open .TransactionEntry td {
   background-color: white;
@@ -18,11 +24,6 @@
 .Document.duplicate .number {
   font-style: italic;
   color: rgba(0,0,0,0.5);
-}
-
-.Document.duplicate.selected, .Document.duplicate.selected .TransactionDetails {
-  background-color: inherit !important;
-  outline: inherit !important;
 }
 
 .Document.duplicate .date .TransactionDetails {

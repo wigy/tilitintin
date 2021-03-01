@@ -60,4 +60,10 @@
     grid-row: 1;
     overflow-y: auto;
   }
+
+  .selected, .sub-selected {
+    background-color: yellow !important;
+    outline: 1px solid rgb(0,0,93) !important;
+    outline-offset: -1px;
+  }
 }

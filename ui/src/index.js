@@ -9,7 +9,6 @@ import Store from './Stores/Store';
 import Cursor from './Stores/Cursor';
 import Settings from './Stores/Settings';
 import i18n from './i18n';
-import './index.css';
 import { ThemeProvider } from '@material-ui/core';
 import theme from './theme';
 
