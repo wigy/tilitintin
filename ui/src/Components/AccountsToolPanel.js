@@ -5,7 +5,6 @@ import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
 import IconButton from './IconButton';
 import IconSpacer from './IconSpacer';
-import './AccountsToolPanel.css';
 import Title from './Title';
 import { TextField } from '@material-ui/core';
 import { Trans } from 'react-i18next';
@@ -79,6 +78,7 @@ class AccountsToolPanel extends Component {
         <IconSpacer/>
         <TextField
           label={<Trans>Search</Trans>}
+          style={{ height: '36px', width: '280px', fontSize: '20px' }}
           value={this.state.search}
           onChange={e => { this.setState({ search: e.target.value }); }}
           onKeyPress={e => {
