@@ -18,7 +18,7 @@
 
 .ReportDisplayTable tr.columns {
   height: 2.2em;
-  border-top: 4px solid var(--fg-color);
+  border-top: 2px solid rgb(0,0,93);
 }
 
 .ReportDisplayTable .report-title {
