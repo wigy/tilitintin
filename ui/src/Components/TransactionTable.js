@@ -341,19 +341,19 @@ class TransactionTable extends Component {
                 />;
               })}
             <TableRow className="totals">
-              <TableCell/>
-              <TableCell/>
-              <TableCell/>
-              <TableCell style={{ fontWeight: 'bold' }}>
+              <TableCell variant="footer"/>
+              <TableCell variant="footer"/>
+              <TableCell variant="footer"/>
+              <TableCell variant="footer" style={{ fontWeight: 'bold' }}>
                 <Trans>Total lines</Trans> {txs.length}
               </TableCell>
-              <TableCell align="right" style={{ fontWeight: 'bold' }}>
+              <TableCell variant="footer" align="right" style={{ fontWeight: 'bold' }}>
                 {debit !== null && <Money cents={debit} currency="EUR"/>}
               </TableCell>
-              <TableCell align="right" style={{ fontWeight: 'bold' }}>
+              <TableCell variant="footer" align="right" style={{ fontWeight: 'bold' }}>
                 {credit !== null && <Money cents={credit} currency="EUR"/>}
               </TableCell>
-              <TableCell align="right" style={{ fontWeight: 'bold' }}>
+              <TableCell variant="footer" align="right" style={{ fontWeight: 'bold' }}>
                 {delta !== null && <>Δ <Money cents={sum - delta} currency="EUR" /></>}
               </TableCell>
             </TableRow>
