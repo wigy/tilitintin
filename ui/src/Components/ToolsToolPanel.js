@@ -242,8 +242,8 @@ class ToolsToolPanel extends Component {
       case 'vat':
         label = 'Value Added Tax';
         buttons = [
-          <IconButton key="button-fix" disabled={!this.emptyEntries().size} onClick={() => this.fixDescriptions()} title="fix-vat-descriptions" icon="fas fa-paperclip"></IconButton>,
-          <IconButton key="button-vat" disabled={!VAT.sales && !VAT.purchases} onClick={() => this.createVATEntry()} title="summarize-vat-period" icon="fas fa-balance-scale"></IconButton>
+          <IconButton key="button-fix" disabled={!this.emptyEntries().size} onClick={() => this.fixDescriptions()} title="fix-vat-descriptions" icon="paperclip"></IconButton>,
+          <IconButton key="button-vat" disabled={!VAT.sales && !VAT.purchases} onClick={() => this.createVATEntry()} title="summarize-vat-period" icon="summarize"></IconButton>
         ];
         break;
 
@@ -251,7 +251,7 @@ class ToolsToolPanel extends Component {
         label = 'Periods';
         if (this.props.store.db) {
           buttons.push(
-            <IconButton key="button-new" onClick={() => this.setState({ askNewPeriod: true })} title="create-period" icon="fas fa-calendar-plus"></IconButton>
+            <IconButton key="button-new" onClick={() => this.setState({ askNewPeriod: true })} title="create-period" icon="calendar-plus"></IconButton>
           );
 
         }
@@ -264,18 +264,18 @@ class ToolsToolPanel extends Component {
         toRenumber = store.period && !store.period.locked ? store.period.incorrectlyNumberedDocuments : [];
         toDelete = store.period && !store.period.locked ? store.period.emptyDocuments : [];
         buttons = [
-          <IconButton key="button-new" disabled={!toRenumber.length} onClick={() => this.renumberDocuments(this.props.store.db, this.props.store.periodId)} title="sort-documents" icon="fas fa-sort-numeric-up"></IconButton>,
-          <IconButton key="button-clean" disabled={!toDelete.length} onClick={() => this.dropEmptyDocuments(this.props.store.db, this.props.store.periodId)} title="drop-empty-documents" icon="fas fa-trash"></IconButton>
+          <IconButton key="button-new" disabled={!toRenumber.length} onClick={() => this.renumberDocuments(this.props.store.db, this.props.store.periodId)} title="sort-documents" icon="sort-up"></IconButton>,
+          <IconButton key="button-clean" disabled={!toDelete.length} onClick={() => this.dropEmptyDocuments(this.props.store.db, this.props.store.periodId)} title="drop-empty-documents" icon="trash"></IconButton>
         ];
         break;
 
       default:
         label = 'Database Management';
         buttons.push(
-          <IconButton key="button-new-database" onClick={() => this.setState({ askNew: true })} title="new-database" icon="fas fa-database"></IconButton>
+          <IconButton key="button-new-database" onClick={() => this.setState({ askNew: true })} title="new-database" icon="database"></IconButton>
         );
         buttons.push(
-          <IconButton key="button-upload" onClick={() => this.setState({ askUpload: true })} title="upload-database" icon="fas fa-upload"></IconButton>
+          <IconButton key="button-upload" onClick={() => this.setState({ askUpload: true })} title="upload-database" icon="upload"></IconButton>
         );
         break;
     }

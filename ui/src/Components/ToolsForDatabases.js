@@ -4,9 +4,10 @@ import { inject, observer } from 'mobx-react';
 import { withTranslation, Trans } from 'react-i18next';
 import Store from '../Stores/Store';
 import Title from './Title';
-import { Card, CardActions, CardContent, Button, Icon, CardHeader } from '@material-ui/core';
+import { Card, CardActions, CardContent, Button, CardHeader } from '@material-ui/core';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import { withRouter } from 'react-router-dom';
+import { Storage } from '@material-ui/icons';
 
 @withRouter
 @withTranslation('translations')
@@ -30,7 +31,7 @@ class ToolsForDatabases extends Component {
         <div style={{ display: 'flex' }}>
           {this.props.store.dbs.map((db, index) => (
             <Card key={index} style={{ margin: '1rem', width: '20rem' }}>
-              <CardHeader avatar={<Icon className="fas fa-database"></Icon>} title={<Trans>Database</Trans>} subheader={db.name}/>
+              <CardHeader avatar={<Storage/>} title={<Trans>Database</Trans>} subheader={db.name}/>
               <CardContent>
               </CardContent>
               <CardActions>

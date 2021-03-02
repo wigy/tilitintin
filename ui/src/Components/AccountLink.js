@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import AccountModel from '../Models/AccountModel';
-import { Icon, Link, Typography } from '@material-ui/core';
+import { Link, Typography } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import ReactRouterPropTypes from 'react-router-prop-types';
+import { StarRate } from '@material-ui/icons';
 
 @withRouter
 @withTranslation('translations')
@@ -36,7 +37,7 @@ class AccountLink extends Component {
         {
           this.state.showStar &&
             <span title={title} onClick={() => this.onToggleFavorite()}>
-              &nbsp;<Icon style={{ fontSize: '90%' }} className="fas fa-heart" />
+              &nbsp;<StarRate color="secondary" style={{ fontSize: '110%' }} />
             </span>
         }
       </div>

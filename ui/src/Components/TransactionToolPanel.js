@@ -103,7 +103,7 @@ class TransactionToolPanel extends Component {
             <Button onClick={closeAll} variant="contained" color="primary"><Trans>Hide Details</Trans></Button>
             <Button onClick={enableAll} variant="contained" color="primary"><Trans>Show All</Trans></Button>
             <Button onClick={disableAll} variant="contained" color="primary"><Trans>Hide All</Trans></Button>
-            <IconButton onClick={() => this.onDownload(db, periodId, accountId)} title="download-csv" icon="fas fa-download" />
+            <IconButton onClick={() => this.onDownload(db, periodId, accountId)} title="download-csv" icon="download" />
           </div>
 
           <div className="tags">

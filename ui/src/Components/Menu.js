@@ -14,7 +14,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import { ButtonGroup, Icon } from '@material-ui/core';
+import { ButtonGroup } from '@material-ui/core';
+import { CalendarToday, NavigateBefore, NavigateNext, Storage } from '@material-ui/icons';
 
 @withTranslation('translations')
 @inject('store')
@@ -186,10 +187,10 @@ class Menu extends Component {
               <span className="brand">Tilitintin v{Configuration.VERSION}</span>
             </Typography>
             <span className="database">
-              <Icon className="fa fa-database"/> {this.props.store.db || <>&nbsp;&nbsp;&mdash;</>}
+              <Storage/> {this.props.store.db || <>&nbsp;&nbsp;&mdash;</>}
             </span>
             <span className="period">
-              <Icon className="fa fa-calendar"/>
+              <CalendarToday/>
               {
                 this.props.store.period &&
                 <>
@@ -199,8 +200,8 @@ class Menu extends Component {
                   <Localize date={this.props.store.period.end_date}/>
                   &nbsp;
                   <ButtonGroup variant="contained" color="primary">
-                    <Button onClick={() => this.handleSelect('previous-period')}><Icon className="fa fa-minus"/></Button>
-                    <Button onClick={() => this.handleSelect('next-period')}><Icon className="fa fa-plus"/></Button>
+                    <Button onClick={() => this.handleSelect('previous-period')}><NavigateBefore/></Button>
+                    <Button onClick={() => this.handleSelect('next-period')}><NavigateNext/></Button>
                   </ButtonGroup>
                 </>
               }

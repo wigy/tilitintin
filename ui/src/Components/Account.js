@@ -9,9 +9,10 @@ import Dialog from './Dialog';
 import Localize from './Localize';
 import SubPanel from './SubPanel';
 import Title from './Title';
-import { Button, Icon, MenuItem, TextField } from '@material-ui/core';
+import { Link, Button, MenuItem, TextField } from '@material-ui/core';
 import Labeled from './Labeled';
 import SubTitle from './SubTitle';
+import { Lock, LockOpen } from '@material-ui/icons';
 
 @withTranslation('translations')
 @inject('store')
@@ -181,7 +182,7 @@ class Account extends Component {
     if (!this.props.store.token) {
       return '';
     }
-    const account = this.props.store.account;
+    const { account, db } = this.props.store;
 
     return (
       <div>
@@ -213,13 +214,15 @@ class Account extends Component {
                     <Labeled title={<>
                       <Localize date={period.start_date}/> - <Localize date={period.end_date}/>
                     &nbsp;
-                      {period.locked ? <Icon className="fas fa-lock"/> : <Icon className="fas fa-lock-open"/>}
+                      {period.locked ? <Lock/> : <LockOpen/>}
                     </>}>
-                      {
-                        period.entries === 0 ? this.props.t('no transactions', { num: period.entries })
-                          : period.entries === 1 ? this.props.t('1 transaction', { num: period.entries })
-                            : this.props.t('{{count}} transactions', { count: period.entries })
-                      }
+                      <Link color="inherit" onClick={() => this.props.history.push(`/${db}/txs/${period.id}/${account.id}`)}>
+                        {
+                          period.entries === 0 ? this.props.t('no transactions', { num: period.entries })
+                            : period.entries === 1 ? this.props.t('1 transaction', { num: period.entries })
+                              : this.props.t('{{count}} transactions', { count: period.entries })
+                        }
+                      </Link>
                     </Labeled>
                   </div>)
                 }

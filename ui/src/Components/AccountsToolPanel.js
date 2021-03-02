@@ -43,35 +43,35 @@ class AccountsToolPanel extends Component {
     return ( // ASSET/LIABILITY/EQUITY/REVENUE/EXPENSE/PROFIT_PREV/PROFIT
       <div className="ToolPanel AccountsToolPanel">
         <Title>Accounts</Title>
-        <IconButton onClick={enableAll} title="all-account-types" icon="fas fa-clone"></IconButton>
-        <IconButton onClick={disableAll} title="none-account-types" icon="far fa-clone"></IconButton>
+        <IconButton onClick={enableAll} title="all-account-types" icon="show-all"></IconButton>
+        <IconButton onClick={disableAll} title="none-account-types" icon="hide-all"></IconButton>
         <IconSpacer/>
-        <IconButton key="button-favorite" title="favorite" icon="far fa-star"
-          toggle={store.tools.accounts.favorite}
+        <IconButton key="button-favorite" title="favorite" icon="star"
+          toggle={!!store.tools.accounts.favorite}
           onClick={() => (store.tools.accounts.favorite = !store.tools.accounts.favorite)}
         />
         <IconSpacer/>
-        <IconButton key="button-asset" title="asset" icon="fas fa-coins"
+        <IconButton key="button-asset" title="asset" icon="money"
           toggle={!store.tools.accounts.asset}
           onClick={() => (store.tools.accounts.asset = !store.tools.accounts.asset)}
         />
-        <IconButton key="button-liability" title="liability" icon="far fa-credit-card"
+        <IconButton key="button-liability" title="liability" icon="credit-card"
           toggle={!store.tools.accounts.liability}
           onClick={() => (store.tools.accounts.liability = !store.tools.accounts.liability)}
         />
-        <IconButton key="button-equity" title="equity" icon="fas fa-piggy-bank"
+        <IconButton key="button-equity" title="equity" icon="savings"
           toggle={!store.tools.accounts.equity}
           onClick={() => (store.tools.accounts.equity = !store.tools.accounts.equity)}
         />
-        <IconButton key="button-revenue" title="revenue" icon="fas fa-money-bill"
+        <IconButton key="button-revenue" title="revenue" icon="sales"
           toggle={!store.tools.accounts.revenue}
           onClick={() => (store.tools.accounts.revenue = !store.tools.accounts.revenue)}
         />
-        <IconButton key="button-expense" title="expense" icon="fas fa-shopping-cart"
+        <IconButton key="button-expense" title="expense" icon="shopping-cart"
           toggle={!store.tools.accounts.expense}
           onClick={() => (store.tools.accounts.expense = !store.tools.accounts.expense)}
         />
-        <IconButton key="button-profit" title="profit" icon="fas fa-balance-scale"
+        <IconButton key="button-profit" title="profit" icon="profit"
           toggle={!store.tools.accounts.profit}
           onClick={() => (store.tools.accounts.profit = !store.tools.accounts.profit)}
         />

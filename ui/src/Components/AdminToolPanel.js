@@ -22,7 +22,7 @@ class AdminToolPanel extends Component {
     return (
       <div className="ToolPanel AdminToolPanel">
         <Title><Trans>Admin Tools</Trans></Title>
-        <IconButton onClick={() => this.props.history.push('/_/admin/[create]')} title="create-user" icon="fas fa-user-plus"></IconButton>
+        <IconButton onClick={() => this.props.history.push('/_/admin/[create]')} title="create-user" icon="user-plus"></IconButton>
       </div>
     );
   }

@@ -5,15 +5,13 @@ import { withTranslation, Trans } from 'react-i18next';
 import Store from '../Stores/Store';
 import IconButton from './IconButton';
 import Localize from './Localize';
-import { Table, TableContainer, TableBody, TableCell, TableRow, TableHead, Chip, Avatar, Button } from '@material-ui/core';
-import LockOpenIcon from '@material-ui/icons/LockOpen';
-import LockIcon from '@material-ui/icons/Lock';
+import { Table, TableContainer, TableBody, TableCell, TableRow, TableHead, Chip, Button } from '@material-ui/core';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import { withRouter } from 'react-router-dom';
 
 const Locked = ({ lock }) => lock
-  ? <Chip color="primary" avatar={<Avatar><LockIcon/></Avatar>} label={<Trans>Locked</Trans>} />
-  : <Chip color="secondary" avatar={<Avatar><LockOpenIcon/></Avatar>} label={<Trans>Unlocked</Trans>} />;
+  ? <Chip color="primary" label={<Trans>Locked</Trans>} />
+  : <Chip color="secondary" label={<Trans>Unlocked</Trans>} />;
 
 Locked.propTypes = {
   lock: PropTypes.bool
@@ -60,8 +58,8 @@ class ToolsForPeriods extends Component {
                   <Locked lock={!!period.locked} />
                 </TableCell>
                 <TableCell>
-                  <IconButton toggle={!!period.locked} onClick={() => period.lock()} title="lock-period" icon="fa fa-lock"></IconButton>
-                  <IconButton toggle={!period.locked} onClick={() => period.unlock()} title="unlock-period" icon="fa fa-unlock"></IconButton>
+                  <IconButton toggle={!!period.locked} onClick={() => period.lock()} title="lock-period" icon="lock"></IconButton>
+                  <IconButton toggle={!period.locked} onClick={() => period.unlock()} title="unlock-period" icon="unlock"></IconButton>
                 </TableCell>
                 <TableCell>
                   <Button variant="outlined" color="primary" size="small" onClick={() => goto(period)}><Trans>View</Trans></Button>
