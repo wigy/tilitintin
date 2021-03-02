@@ -75,33 +75,35 @@ class App extends Component {
             <Route exact path="/:db/tools//:accountId/:tool?" component={ToolsList}/>
             <Route exact path="/:db/tools///:tool?" component={ToolsList}/>
           </Paper>
-          <Paper className="MainTopPanel Panel" elevation={4}>
-            <Route exact path="/_/admin/:arg?" component={AdminToolPanel}/>
-            <Route path="/:db/txs/:periodId/:accountId?" component={TransactionToolPanel}/>
-            <Route path="/:db/report/:periodId/:accountId?/:format?" component={ReportToolPanel}/>
-            <Route path="/:db/account/:periodId?" component={AccountsToolPanel}/>
-            <Route exact path="/:db/tools/:periodId?/:accountId?/:tool?" component={ToolsToolPanel}/>
-            <Route exact path="/:db/tools/:periodId//:tool?" component={ToolsToolPanel}/>
-            <Route exact path="/:db/tools//:accountId/:tool?" component={ToolsToolPanel}/>
-            <Route exact path="/:db/tools///:tool?" component={ToolsToolPanel}/>
-          </Paper>
-          <Paper className="MainPanel Panel" elevation={4}>
-            <Route exact path="/" component={Login}/>
-            <Route exact path="/" component={Dashboard}/>
-            <Route exact path="/_/admin/:arg?" component={Admin}/>
-            <Route exact path="/:db" component={Dashboard}/>
-            <Route exact path="/:db/dashboard" component={Dashboard}/>
-            <Route exact path="/:db/dashboard/:periodId" component={Dashboard}/>
-            <Route exact path="/:db/dashboard/:periodId/:accountId" component={Dashboard}/>
-            <Route path="/:db/txs/:periodId/:accountId?" component={AccountTransactions}/>
-            <Route path="/:db/report/:periodId//:format" component={Report}/>
-            <Route path="/:db/report/:periodId/:accountId/:format" component={Report}/>
-            <Route exact path="/:db/tools/:periodId?/:accountId?/:tool?" component={Tools}/>
-            <Route exact path="/:db/tools/:periodId//:tool?" component={Tools}/>
-            <Route exact path="/:db/tools//:accountId/:tool?" component={Tools}/>
-            <Route exact path="/:db/tools///:tool?" component={Tools}/>
-            <Route path="/:db/account/:periodId?" component={Accounts}/>
-          </Paper>
+          <div className="MainArea">
+            <Paper className="MainTopPanel Panel" elevation={4}>
+              <Route exact path="/_/admin/:arg?" component={AdminToolPanel}/>
+              <Route path="/:db/txs/:periodId/:accountId?" component={TransactionToolPanel}/>
+              <Route path="/:db/report/:periodId/:accountId?/:format?" component={ReportToolPanel}/>
+              <Route path="/:db/account/:periodId?" component={AccountsToolPanel}/>
+              <Route exact path="/:db/tools/:periodId?/:accountId?/:tool?" component={ToolsToolPanel}/>
+              <Route exact path="/:db/tools/:periodId//:tool?" component={ToolsToolPanel}/>
+              <Route exact path="/:db/tools//:accountId/:tool?" component={ToolsToolPanel}/>
+              <Route exact path="/:db/tools///:tool?" component={ToolsToolPanel}/>
+            </Paper>
+            <Paper className="MainPanel Panel" elevation={4}>
+              <Route exact path="/" component={Login}/>
+              <Route exact path="/" component={Dashboard}/>
+              <Route exact path="/_/admin/:arg?" component={Admin}/>
+              <Route exact path="/:db" component={Dashboard}/>
+              <Route exact path="/:db/dashboard" component={Dashboard}/>
+              <Route exact path="/:db/dashboard/:periodId" component={Dashboard}/>
+              <Route exact path="/:db/dashboard/:periodId/:accountId" component={Dashboard}/>
+              <Route path="/:db/txs/:periodId/:accountId?" component={AccountTransactions}/>
+              <Route path="/:db/report/:periodId//:format" component={Report}/>
+              <Route path="/:db/report/:periodId/:accountId/:format" component={Report}/>
+              <Route exact path="/:db/tools/:periodId?/:accountId?/:tool?" component={Tools}/>
+              <Route exact path="/:db/tools/:periodId//:tool?" component={Tools}/>
+              <Route exact path="/:db/tools//:accountId/:tool?" component={Tools}/>
+              <Route exact path="/:db/tools///:tool?" component={Tools}/>
+              <Route path="/:db/account/:periodId?" component={Accounts}/>
+            </Paper>
+          </div>
         </div>
       </div>
     );

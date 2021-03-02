@@ -36,7 +36,6 @@
     display: grid;
     height: calc(100vh - 90px);
     grid-template-columns: 450px auto;
-    grid-template-rows: 154px auto;
   }
 
   .Panel {
@@ -44,22 +43,24 @@
   }
 
   .SidePanel {
-    grid-column: 1;
-    grid-row: 1 / 3;
     overflow-y: auto;
+    max-height: calc(100vh - 90px);
   }
 
-  .MainPanel {
-    grid-column: 2;
-    grid-row: 2;
-    overflow-y: auto;
+  .MainArea {
+    display: grid;
+    grid-template-rows: fit-content(100%) auto;
+    height: calc(100vh - 90px);
   }
 
   .MainTopPanel {
-    grid-column: 2;
-    grid-row: 1;
+    height: fit-content;
+  }
+
+  .MainPanel {
     overflow-y: auto;
   }
+
 
   .selected, .sub-selected {
     background-color: yellow !important;
