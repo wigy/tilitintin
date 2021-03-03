@@ -8,7 +8,6 @@ import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
 import Title from './Title';
 import { Trans } from 'react-i18next';
-import './TransactionToolPanel.css';
 import { Button } from '@material-ui/core';
 import i18n from '../i18n';
 import IconButton from './IconButton';
@@ -97,27 +96,25 @@ class TransactionToolPanel extends Component {
       <div className="TransactionToolPanel">
         <Title>{account ? account.toString() : <Trans>No account selected</Trans>}</Title>
 
-        <div className="icons">
-          <div className="buttons">
-            <Button onClick={openAll} variant="contained" color="primary"><Trans>Show Details</Trans></Button>
-            <Button onClick={closeAll} variant="contained" color="primary"><Trans>Hide Details</Trans></Button>
-            <Button onClick={enableAll} variant="contained" color="primary"><Trans>Show All</Trans></Button>
-            <Button onClick={disableAll} variant="contained" color="primary"><Trans>Hide All</Trans></Button>
-            <IconButton onClick={() => this.onDownload(db, periodId, accountId)} title="download-csv" icon="download" />
-          </div>
+        <div>
+          <IconButton onClick={openAll} title="show-details" icon="zoom-in" />
+          <IconButton onClick={closeAll} title="hide-details" icon="zoom-out" />
+          <IconButton onClick={enableAll} title="show-all" icon="show-all" />
+          <IconButton onClick={disableAll} title="hide-all" icon="hide-all" />
+          <IconButton onClick={() => this.onDownload(db, periodId, accountId)} title="download-csv" icon="download" />
+        </div>
 
-          <div className="tags">
-            {account && account.tags.map((tag) => {
-              const needSpacer = (tag.type !== last);
-              last = tag.type;
-              return (
-                <React.Fragment key={tag.tag}>
-                  {needSpacer && <IconSpacer/>}
-                  <Tag onClick={() => toggle(tag.tag)} disabled={!!tools.tagDisabled[tag.tag]} tag={tag}/>
-                </React.Fragment>
-              );
-            })}
-          </div>
+        <div style={{ marginBottom: '1rem', marginLeft: '1rem', marginRight: '1rem' }}>
+          {account && account.tags.map((tag, idx) => {
+            const needSpacer = (idx > 0 && tag.type !== last);
+            last = tag.type;
+            return (
+              <React.Fragment key={tag.tag}>
+                {needSpacer && <div style={{ marginTop: '5px' }}/>}
+                <Tag onClick={() => toggle(tag.tag)} disabled={!!tools.tagDisabled[tag.tag]} tag={tag}/>
+              </React.Fragment>
+            );
+          })}
         </div>
       </div>
     );

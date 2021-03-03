@@ -2,16 +2,18 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import { IconButton } from '@material-ui/core';
-import { HelpOutline, AccountBalance, CheckBox, CheckBoxOutlineBlank, StarRate, AttachMoney, CreditCard, LocalGroceryStore, MoneyRounded, AddShoppingCart, PersonAdd, Print, CloudDownload, FormatIndentDecrease, Filter2, Filter3, Filter1, Filter4, LocalOffer, Lock, LockOpen, AttachFile, Functions, Event, Sort, Delete, Storage, CloudUpload } from '@material-ui/icons';
+import { HelpOutline, AccountBalance, StarRate, AttachMoney, CreditCard, LocalGroceryStore, MoneyRounded, AddShoppingCart, PersonAdd, Print, CloudDownload, FormatIndentDecrease, Filter2, Filter3, Filter1, Filter4, LocalOffer, Lock, LockOpen, AttachFile, Functions, Event, Sort, Delete, Storage, CloudUpload, ZoomIn, ZoomOut, Visibility, VisibilityOff } from '@material-ui/icons';
 
 const ICONS = {
   'calendar-plus': Event,
   'credit-card': CreditCard,
-  'hide-all': CheckBoxOutlineBlank,
+  'hide-all': VisibilityOff,
   'shopping-cart': LocalGroceryStore,
-  'show-all': CheckBox,
+  'show-all': Visibility,
   'sort-up': Sort,
   'user-plus': PersonAdd,
+  'zoom-in': ZoomIn,
+  'zoom-out': ZoomOut,
   compact: FormatIndentDecrease,
   database: Storage,
   download: CloudDownload,

@@ -10,6 +10,7 @@ BUGS
 [ ] Changing the account of the entry having current account, keeps the selection in new screen.
 [ ] Page up/down is not practical on opened transaction, which has lot of entries.
 [ ] Clicking Show All in tx view activates account selector for no reason.
+[ ] Clicking Show Details in tx view on income/expense account activates date for no reason.
 
 SMALL IMPROVEMENTS
 ==================
@@ -26,7 +27,7 @@ FUTURE FEATURES
 [X] Compact view by default.
 [ ] Remove completely empty columns from tagged income statement.
 [ ] Material UI.
-[ ] Switching between period and document tools: icon is not updated (fa-icon problem).
+[X] Switching between period and document tools: icon is not updated (fa-icon problem).
 
 3.0
 [ ] Tags management.
