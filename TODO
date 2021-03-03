@@ -16,7 +16,7 @@ SMALL IMPROVEMENTS
 ==================
 
 [ ] After editing date, jump to description (if only one entry).
-[ ] A tool to scan for documents with only one entry.
+[ ] Display discrepancy in the balance sheet in RED.
 
 FUTURE FEATURES
 ===============
@@ -26,8 +26,9 @@ FUTURE FEATURES
 [X] Download current account as CSV.
 [X] Compact view by default.
 [ ] Remove completely empty columns from tagged income statement.
-[ ] Material UI.
+[X] Material UI.
 [X] Switching between period and document tools: icon is not updated (fa-icon problem).
+[ ] Automatic proposal MUI implementation.
 
 3.0
 [ ] Tags management.

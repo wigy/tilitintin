@@ -156,6 +156,8 @@ class EntryModel extends NavigationTargetModel {
       if (entry.canEdit()) {
         entry.edit = true;
         cursor.editTarget = entry;
+      } else {
+        // TODO: Message for non-editable entry.
       }
     }
   }
