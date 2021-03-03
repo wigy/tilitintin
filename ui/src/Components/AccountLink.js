@@ -29,7 +29,7 @@ class AccountLink extends Component {
       <div
         onMouseEnter={() => this.setState({ showStar: true })}
         onMouseLeave={() => this.setState({ showStar: false })}>
-        <Link href="#" onClick={() => this.props.history.push(dst)}>
+        <Link onClick={() => this.props.history.push(dst)}>
           <Typography display="inline" color={account.FAVORITE ? 'secondary' : 'primary'}>
             {account.toString()}
           </Typography>
