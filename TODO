@@ -29,6 +29,8 @@ FUTURE FEATURES
 [X] Material UI.
 [X] Switching between period and document tools: icon is not updated (fa-icon problem).
 [ ] Automatic proposal MUI implementation.
+[ ] Re-implement store.messages to use snackbar.
+[ ] Change error handling in tx editor to push messages to the store instead.
 
 3.0
 [ ] Tags management.
