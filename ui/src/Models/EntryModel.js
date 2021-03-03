@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import LinkedText from './LinkedText';
 import { sprintf } from 'sprintf-js';
 import { Trans } from 'react-i18next';
 import NavigationTargetModel from './NavigationTargetModel';
@@ -463,7 +463,7 @@ class EntryModel extends NavigationTargetModel {
       return '';
     }
     const url = '/' + this.database.name + '/txs/' + this.period.id + '/' + this.account_id + '?entry=' + this.id;
-    return <Link to={url}>{this.account.toString()}</Link>;
+    return new LinkedText(url, this.account.toString());
   }
 
   ['get.edit.account']() {
