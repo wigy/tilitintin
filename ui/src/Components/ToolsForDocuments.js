@@ -6,6 +6,7 @@ import Localize from './Localize';
 import Store from '../Stores/Store';
 import Title from './Title';
 import { Typography } from '@material-ui/core';
+import SubPanel from './SubPanel';
 
 @withTranslation('translations')
 @inject('store')
@@ -27,33 +28,37 @@ class ToolsForPeriods extends Component {
     return (
       <div>
         <Title><Trans>Documents that need renumbering</Trans></Title>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', marginBottom: '1rem', padding: '1rem' }}>
-          {
-            toRenumber.length
-              ? toRenumber.map((c) => <div key={c.id}>
-                <Typography color="primary">
-                  <Localize date={c.date}></Localize>
+        <SubPanel>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', marginBottom: '1rem', padding: '1rem' }}>
+            {
+              toRenumber.length
+                ? toRenumber.map((c) => <div key={c.id}>
+                  <Typography color="primary">
+                    <Localize date={c.date}></Localize>
                   &nbsp;
                   #{c.number} {'->'} #{c.newNumber}
-                </Typography>
-              </div>)
-              : <Trans>All documents are correctly numbered.</Trans>
-          }
-        </div>
+                  </Typography>
+                </div>)
+                : <Trans>All documents are correctly numbered.</Trans>
+            }
+          </div>
+        </SubPanel>
         <Title><Trans>Documents having no entries</Trans></Title>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', marginBottom: '1rem', padding: '1rem' }}>
-          {
-            toDelete.length
-              ? toDelete.map((d) => <div key={d.id}>
-                <Typography color="primary">
-                  <Localize date={d.date}></Localize>
+        <SubPanel>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', marginBottom: '1rem', padding: '1rem' }}>
+            {
+              toDelete.length
+                ? toDelete.map((d) => <div key={d.id}>
+                  <Typography color="primary">
+                    <Localize date={d.date}></Localize>
                   &nbsp;
                   #{d.number}
-                </Typography>
-              </div>)
-              : <Trans>No empty documents.</Trans>
-          }
-        </div>
+                  </Typography>
+                </div>)
+                : <Trans>No empty documents.</Trans>
+            }
+          </div>
+        </SubPanel>
       </div>
     );
   }

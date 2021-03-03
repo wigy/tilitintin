@@ -103,7 +103,7 @@ class ToolsForVAT extends Component {
             </Link>
             &nbsp;
             {
-              receivableDelayed &&
+              receivableDelayed && receivableDelayed.total !== 0 &&
               <Link onClick={() => this.props.history.push(vatReceivableAccount.getUrl())}>
                 (<Trans>Delayed VAT</Trans>: <Money cents={receivableDelayed.total} currency="€"></Money>)
               </Link>
@@ -114,7 +114,7 @@ class ToolsForVAT extends Component {
             </Link>
             &nbsp;
             {
-              payableDelayed &&
+              payableDelayed && payableDelayed.total !== 0 &&
               <Link onClick={() => this.props.history.push(vatDelayedPayableAccount.getUrl())}>
                 (<Trans>Delayed VAT</Trans>: <Money cents={payableDelayed.total} currency="€"></Money>)
               </Link>

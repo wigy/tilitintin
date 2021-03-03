@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, CardContent } from '@material-ui/core';
+import { Card, CardContent, Typography } from '@material-ui/core';
 
 const SubPanel = (props) => {
   return (
     <Card variant="outlined" style={{ margin: '1rem' }}>
       <CardContent>
-        {props.children}
+        <Typography variant="body1" component="div">
+          {props.children}
+        </Typography>
       </CardContent>
     </Card>
   );
