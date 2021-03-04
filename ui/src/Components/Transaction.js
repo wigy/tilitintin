@@ -124,6 +124,7 @@ class Transaction extends Component {
 
   // Render the main row of the document, i.e. the entry having the current account and data from document it belongs to.
   renderMainTx(classes) {
+    // TODO:: Split classes to flags and use icons, colors, etc explicitly.
     const { tx } = this.props;
 
     const money = (<Money cents={tx.amount} currency="EUR" />);
