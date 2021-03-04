@@ -23,7 +23,7 @@ const BalanceLine = withRouter(inject('cursor')(observer(
         key={balance.account_id}
         id={balance.getId()}
         hover
-        className={balance.getClasses() /* TODO: Use material ui `selected` attribute */}
+        selected={balance.selected}
         onClick={() => onClick(index, balance.getUrl())}
       >
         <TableCell>
