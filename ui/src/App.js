@@ -24,6 +24,7 @@ import ToolsList from './Components/ToolsList';
 import ToolsToolPanel from './Components/ToolsToolPanel';
 import TransactionToolPanel from './Components/TransactionToolPanel';
 import UserList from './Components/UserList';
+import Messages from './Components/Messages';
 import { Paper } from '@material-ui/core';
 
 import './App.css';
@@ -36,6 +37,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <Messages />
         <div className="TopPanel Panel">
           <Route exact path="/" component={Menu}/>
           <Route exact path="/_/admin/:arg?" component={Menu}/>

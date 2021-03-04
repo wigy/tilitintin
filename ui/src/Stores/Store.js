@@ -13,13 +13,17 @@ import i18n from '../i18n';
 import jwtDecode from 'jwt-decode';
 
 const DEBUG = false;
+let NEXT_MESSAGE_ID = 1;
 
 const debug = (...args) => DEBUG && console.log.apply(console, args);
 
 /**
  * The store structure is the following:
  * {
- *   token: null
+ *   token: null,
+ *   messages: [
+ *     { id: 1, text: 'This is alert.' }
+ *   ],
  *   dbsByName: {
  *     foo: {
  *       name: "foo"
@@ -122,7 +126,7 @@ class Store {
 
     debug('  Request:', method, config.API_URL + path, data || '');
 
-    this.messages.replace([]);
+    this.clearMessages();
     this.loading = true;
     return fetch(config.API_URL + path, options)
       .then(res => {
@@ -736,6 +740,31 @@ class Store {
       return [];
     }
     return this.period.getDocuments(accounts, filter);
+  }
+
+  /**
+   * Append an error message to the snackbar.
+   * @param {String} text
+   */
+  addError(text) {
+    const id = NEXT_MESSAGE_ID++;
+    const message = { id, text };
+    this.messages.push(message);
+    setTimeout(() => this.removeMessage(message), 5000);
+  }
+
+  /**
+   * Remove a message from the current list.
+   */
+  removeMessage(message) {
+    this.messages.replace(this.messages.filter(m => m.id !== message.id));
+  }
+
+  /**
+   * Remove all messages.
+   */
+  clearMessages() {
+    this.messages.replace([]);
   }
 
   /**
