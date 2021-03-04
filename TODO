@@ -31,7 +31,7 @@ FUTURE FEATURES
 [X] Material UI.
     [ ] Automatic proposal implementation.
     [X] Re-implement store.messages to use snackbar.
-    [ ] Change error handling in tx editor to push messages to the store instead.
+    [X] Change error handling in tx editor to push messages to the store instead.
 
 3.0
 [ ] Tags management.

@@ -82,6 +82,7 @@ i18n.init({
         'Business name': 'Yrityksen nimi',
         Cancel: 'Peru',
         'Cannot be negative.': 'Ei voi olla negatiivinen.',
+        'Cannot edit this entry. Period locked?': 'Muokkaaminen ei onnistu. Onko kausi lukittu?',
         'Company Info': 'Yrityksen tiedot',
         'Company Name': 'Yrityksen nimi',
         'Company name is required.': 'Yrityksen nimi puuttuu.',

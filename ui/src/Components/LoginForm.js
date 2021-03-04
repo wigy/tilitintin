@@ -4,7 +4,7 @@ import { Trans, withTranslation } from 'react-i18next';
 import Store from '../Stores/Store';
 import { inject } from 'mobx-react';
 import Panel from './Panel';
-import { TextField, Button, FormHelperText } from '@material-ui/core';
+import { TextField, Button } from '@material-ui/core';
 import Cursor from '../Stores/Cursor';
 
 @inject('store')

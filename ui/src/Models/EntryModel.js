@@ -6,6 +6,7 @@ import NavigationTargetModel from './NavigationTargetModel';
 import TagModel from './TagModel';
 import Money from '../Components/Money';
 import { str2num } from '../Util';
+import i18n from '../i18n';
 
 class EntryModel extends NavigationTargetModel {
 
@@ -157,7 +158,7 @@ class EntryModel extends NavigationTargetModel {
         entry.edit = true;
         cursor.editTarget = entry;
       } else {
-        // TODO: Message for non-editable entry.
+        this.store.addError(i18n.t('Cannot edit this entry. Period locked?'));
       }
     }
   }
