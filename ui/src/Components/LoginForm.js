@@ -31,13 +31,8 @@ class RegisterForm extends Component {
 
   render() {
 
-    const { store } = this.props;
-
     return (
       <Panel>
-        <FormHelperText error>
-          {store.messages.map((msg, idx) => <React.Fragment key={idx}>{msg}<br/></React.Fragment>)}
-        </FormHelperText>
         <TextField
           style={{ width: '50%' }}
           label={<Trans>Username</Trans>}

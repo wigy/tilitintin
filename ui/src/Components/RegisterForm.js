@@ -32,22 +32,22 @@ class RegisterForm extends Component {
   onRegister() {
     const { store } = this.props;
     const { user, name, email, password, passwordAgain } = this.state;
-    store.messages.replace([]);
+    store.clearMessages();
 
     if (!user || !/^[a-z0-9]+$/.test(user)) {
-      store.messages.push(this.props.t('User name is not valid (lower case letters and numbers only).'));
+      store.addError(this.props.t('User name is not valid (lower case letters and numbers only).'));
     }
     if (password.length < 4) {
-      store.messages.push(this.props.t('Password is too short.'));
+      store.addError(this.props.t('Password is too short.'));
     }
     if (password !== passwordAgain) {
-      store.messages.push(this.props.t('Passwords do not match.'));
+      store.addError(this.props.t('Passwords do not match.'));
     }
     if (!email) {
-      store.messages.push(this.props.t('Email is required.'));
+      store.addError(this.props.t('Email is required.'));
     }
     if (!name) {
-      store.messages.push(this.props.t('Full name is required.'));
+      store.addError(this.props.t('Full name is required.'));
     }
 
     if (store.messages.length) {
@@ -59,13 +59,8 @@ class RegisterForm extends Component {
 
   render() {
 
-    const { store } = this.props;
-
     return <form>
       <Panel>
-        <FormHelperText error>
-          {store.messages.map((msg, idx) => <React.Fragment key={idx}>{msg}<br/></React.Fragment>)}
-        </FormHelperText>
         <TextField
           style={{ width: '50%' }}
           label={<Trans>Username</Trans>}

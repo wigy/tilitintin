@@ -45,7 +45,7 @@ class Admin extends Component {
         this.props.history.push('/_/admin');
       })
       .catch(() => {
-        this.props.store.messages.push(this.props.t('User creation failed.'));
+        this.props.store.addError(this.props.t('User creation failed.'));
       });
   }
 

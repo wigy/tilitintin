@@ -135,7 +135,7 @@ class Store {
           debug('    OK:', method, config.API_URL + path, data || '');
           return res.status === 200 ? res.json() : null;
         } else if (res.status === 401) {
-          this.messages.push([i18n.t('Invalid credentials.')]);
+          this.addError(i18n.t('Invalid credentials.'));
           this.logout();
         } else if (res.status === 403) {
           return undefined;
