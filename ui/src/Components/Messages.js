@@ -33,10 +33,9 @@ class Messages extends Component {
         <Snackbar
           anchorOrigin={{
             vertical: 'bottom',
-            horizontal: 'left',
+            horizontal: 'right',
           }}
           open={messages.length > 0}
-          color="error"
         >
           <Alert variant="filled" elevation={6} severity="error">
             {messages.map(message => this.renderMessage(message))}

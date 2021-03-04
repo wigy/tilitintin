@@ -1,7 +1,6 @@
 import React from 'react';
 import LinkedText from './LinkedText';
 import { sprintf } from 'sprintf-js';
-import { Trans } from 'react-i18next';
 import NavigationTargetModel from './NavigationTargetModel';
 import TagModel from './TagModel';
 import Money from '../Components/Money';
@@ -276,8 +275,8 @@ class EntryModel extends NavigationTargetModel {
    * @param {String} value
    */
   ['validate.description'](value) {
-    const REQUIRED = <Trans>This field is required.</Trans>;
-    const INVALID_TAG = <Trans>Undefined tag.</Trans>;
+    const REQUIRED = 'This field is required.';
+    const INVALID_TAG = 'Undefined tag.';
 
     const [, newValue] = this.extractTags(value);
     if (newValue === null) {
@@ -347,8 +346,8 @@ class EntryModel extends NavigationTargetModel {
   }
 
   ['validate.debit'](value) {
-    const INVALID_NUMBER = <Trans>Numeric value incorrect.</Trans>;
-    const NO_NEGATIVE = <Trans>Cannot be negative.</Trans>;
+    const INVALID_NUMBER = 'Numeric value incorrect.';
+    const NO_NEGATIVE = 'Cannot be negative.';
 
     if (value === '') {
       return null;
@@ -474,7 +473,7 @@ class EntryModel extends NavigationTargetModel {
   }
 
   ['validate.account'](value) {
-    const INVALID_ACCOUNT = <Trans>No such account found.</Trans>;
+    const INVALID_ACCOUNT = 'No such account found.';
     return this.store.accounts.filter(a => a.number === value || a.name === value || `${a.number} ${a.name}` === value).length ? null : INVALID_ACCOUNT;
   }
 

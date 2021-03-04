@@ -6,8 +6,10 @@ import './TextEdit.css';
 import { TextField } from '@material-ui/core';
 import { inject } from 'mobx-react';
 import Cursor from '../Stores/Cursor';
+import Store from '../Stores/Store';
 
 @inject('cursor')
+@inject('store')
 @withTranslation('translations')
 class TextEdit extends Component {
 
@@ -17,7 +19,7 @@ class TextEdit extends Component {
       value: props.value || '',
       proposal: null,
       currentProposal: null,
-      error: null
+      error: false
     };
   }
 
@@ -36,13 +38,15 @@ class TextEdit extends Component {
       const value = this.state.currentProposal !== null ? proposal : this.state.value;
       const error = this.props.validate && this.props.validate(value);
       if (error) {
-        this.setState({ error });
+        this.setState({ error: true });
+        this.props.store.addError(this.props.t(error));
       } else if (this.props.onComplete) {
         const complete = this.props.onComplete(value, proposal);
         if (complete.catch) {
           complete.catch(err => {
             console.error(err);
-            this.setState({ error: <Trans>Saving failed.</Trans> });
+            this.setState({ error: true });
+            this.props.store.addError(this.props.t('Saving failed.'));
           });
         }
       }
@@ -93,7 +97,7 @@ class TextEdit extends Component {
   onChange(event) {
     const value = event.target.value;
     this.props.onChange && this.props.onChange(value);
-    this.setState({ value, error: null });
+    this.setState({ value, error: false });
     this.updateProposal(value);
   }
 
@@ -158,8 +162,7 @@ class TextEdit extends Component {
       <div className="TextEdit">
         <TextField
           value={this.state.value}
-          error={!!this.state.error}
-          helperText={this.state.error || ''}
+          error={this.state.error}
           variant="outlined"
           size="small"
           autoFocus
@@ -183,7 +186,9 @@ TextEdit.propTypes = {
   value: PropTypes.string,
   target: PropTypes.instanceOf(Model),
   proposal: PropTypes.func,
-  cursor: PropTypes.instanceOf(Cursor)
+  cursor: PropTypes.instanceOf(Cursor),
+  store: PropTypes.instanceOf(Store),
+  t: PropTypes.func,
 };
 
 export default TextEdit;
