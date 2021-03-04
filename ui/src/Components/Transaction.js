@@ -13,6 +13,7 @@ import Cursor from '../Stores/Cursor';
 import EntryModel from '../Models/EntryModel';
 import './Transaction.css';
 import { TableRow, TableCell, Typography } from '@material-ui/core';
+import { Error } from '@material-ui/icons';
 
 @withTranslation('translations')
 @inject('store')
@@ -123,15 +124,14 @@ class Transaction extends Component {
   }
 
   // Render the main row of the document, i.e. the entry having the current account and data from document it belongs to.
-  renderMainTx(classes) {
-    // TODO:: Split classes to flags and use icons, colors, etc explicitly.
+  renderMainTx(error) {
     const { tx } = this.props;
 
     const money = (<Money cents={tx.amount} currency="EUR" />);
     const total = (<Money cents={this.props.total} currency="EUR" />);
 
     return (
-      <TableRow id={tx.getId()} key="title" className={classes} onClick={() => this.onClick()}>
+      <TableRow id={tx.getId()} selected={tx.document.selected} key="title" onClick={() => this.onClick()}>
         <TableCell>
           {tx.document.number}
         </TableCell>
@@ -154,7 +154,10 @@ class Transaction extends Component {
           <Tags tags={tx.tags}></Tags>
         </TableCell>
         <TableCell>
-          {tx.description}
+          <Typography color={error ? 'error' : 'inherit'}>
+            {tx.description}
+            {error && <Error style={{ fontSize: '96%' }}/>}
+          </Typography>
         </TableCell>
         <TableCell align="right">
           {tx.debit ? money : ''}
@@ -225,9 +228,8 @@ class Transaction extends Component {
   render() {
     const tx = this.props.tx;
 
-    // Calculate imbalance, missing accounts, mismatching account, and look for deletion request.
+    // Calculate imbalance, missing accounts, and look for deletion request.
     let missingAccount = false;
-    let mismatchingAccount = false;
 
     tx.document.entries.forEach((entry, idx) => {
       if (entry.askForDelete) {
@@ -235,26 +237,15 @@ class Transaction extends Component {
       }
       if (entry.account_id === 0) { // Null account_id is valid until first save, when it turns to 0.
         missingAccount = true;
-      } else {
-        if (entry.account_id === tx.account_id) {
-          mismatchingAccount = false;
-        }
       }
     });
 
     const imbalance = tx.document.imbalance();
     const error = !!imbalance || missingAccount;
 
-    // Set up CSS classes.
-    // TODO: Sort out classes and use material ui where possible (like 'selected').
-    const classes = tx.document.getClasses() +
-      (error ? ' error' : '') +
-      (mismatchingAccount ? ' mismatch' : '') +
-      (this.props.duplicate ? ' duplicate' : '');
-
     // Render main transaction.
     const ret = [
-      this.renderMainTx(classes)
+      this.renderMainTx(error)
     ];
 
     // Render entries, if opened.
