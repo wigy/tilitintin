@@ -189,7 +189,7 @@ class Cursor {
               name: 'Balances.transactions',
               data: this.store.filteredTransactions,
               vertical: true,
-              entryColumn: 1,
+              entryColumn: 0,
               subitemExitUp: true,
               subitemUpStopOnNull: true,
               subitemExitDown: true

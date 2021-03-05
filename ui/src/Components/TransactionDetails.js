@@ -9,7 +9,6 @@ import DocumentModel from '../Models/DocumentModel';
 import LinkedText from '../Models/LinkedText';
 import Cursor from '../Stores/Cursor';
 import { withRouter } from 'react-router-dom';
-import './TransactionDetails.css';
 import { Link } from '@material-ui/core';
 import ReactRouterPropTypes from 'react-router-prop-types';
 
@@ -41,11 +40,16 @@ class TransactionDetails extends Component {
     }
 
     const column = this.props.entry ? this.props.entry.columns().indexOf(this.props.field) : null;
-    const className = 'TransactionDetails ' +
-      target.getClasses(column, this.props.cursor.row) +
-      (this.props.error ? ' error' : '') +
-      (this.props.classNames ? ' ' + this.props.classNames : '');
+    const row = this.props.cursor.row;
+    const isSubSelected = target.isSubSelected && target.isSubSelected(column, row);
+    const isCurrent = target.account_id && this.props.store.accountId === target.account_id;
+    const className = 'hide-overflow ' +
+      (isSubSelected ? ' sub-selected' : '') +
+      (isCurrent ? ' current' : '') +
+      (this.props.className ? ' ' + this.props.className : '');
+
     const view = target.getView(this.props.field);
+
     if (view instanceof LinkedText) {
       return <div className={className}><Link color="inherit" onClick={() => this.props.history.push(view.url)}>{view.text}</Link></div>;
     }
@@ -56,7 +60,7 @@ class TransactionDetails extends Component {
 }
 
 TransactionDetails.propTypes = {
-  classNames: PropTypes.string,
+  className: PropTypes.string,
   cursor: PropTypes.instanceOf(Cursor),
   document: PropTypes.instanceOf(DocumentModel),
   entry: PropTypes.instanceOf(EntryModel),

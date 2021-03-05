@@ -117,18 +117,6 @@ class EntryModel extends NavigationTargetModel {
   }
 
   /**
-   * Calculate if the account is `current`, `error` situation and if `sub-selected` should be on.
-   * @param {Number|null} column
-   * @param {Number|null} row
-   */
-  getClasses(column = null, row = null) {
-    return super.getClasses(column, row) +
-      (this.store.accountId === this.account_id ? ' current' : '') +
-      (this.isSubSelected(column, row) ? ' sub-selected' : '') +
-      (this.account_id === 0 ? ' error' : '');
-  }
-
-  /**
    * This is editable if period not locked.
    */
   canEdit() {
@@ -338,7 +326,7 @@ class EntryModel extends NavigationTargetModel {
    * Format as money, if this is debit entry.
    */
   ['get.debit']() {
-    return this.debit && this.amount !== '' ? (<Money cents={this.amount} currency="EUR" />) : <span className="filler">-</span>;
+    return this.debit && this.amount !== '' ? (<Money cents={this.amount} currency="EUR" />) : <span>&nbsp;</span>;
   }
 
   ['get.edit.debit']() {
@@ -406,7 +394,7 @@ class EntryModel extends NavigationTargetModel {
    * Format as money, if this is credit entry.
    */
   ['get.credit']() {
-    return !this.debit && this.amount !== '' ? (<Money cents={this.amount} currency="EUR" />) : <span className="filler">-</span>;
+    return !this.debit && this.amount !== '' ? (<Money cents={this.amount} currency="EUR" />) : <span>&nbsp;</span>;
   }
 
   ['get.edit.credit']() {

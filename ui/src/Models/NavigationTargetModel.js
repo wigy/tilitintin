@@ -24,15 +24,6 @@ class NavigationTargetModel extends Model {
   askForDelete = false;
 
   /**
-   * Add classes according to the flags and possibly for the given (column, row) sub-item.
-   */
-  getClasses(column = null, row = null) {
-    return super.getClasses() +
-      (this.selected ? ' selected' : '') +
-      (this.open ? ' open' : '');
-  }
-
-  /**
    * Find the DOM-element corresponding this element.
    */
   getElement() {

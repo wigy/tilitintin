@@ -61,10 +61,19 @@
     overflow-y: auto;
   }
 
-  .selected, .sub-selected {
+  .current {
+    font-weight: bold;
+  }
+
+  .sub-selected {
     background-color: yellow !important;
-    outline: 1px solid rgb(0,0,93) !important;
+    outline: 2px rgba(0,0,0,0.5) dotted !important;
     outline-offset: -1px;
+  }
+
+  .hide-overflow {
+    white-space: nowrap;
+    overflow: hidden;
   }
 
   .MuiTableCell-body {

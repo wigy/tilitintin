@@ -32,8 +32,10 @@ FUTURE FEATURES
     [ ] Automatic proposal implementation.
     [X] Re-implement store.messages to use snackbar.
     [X] Change error handling in tx editor to push messages to the store instead.
-    [ ] Remove all getClasses() calls.
-    [ ] Check for unused CSS because of getClasses() removal.
+    [X] Remove all getClasses() calls.
+    [X] Check for unused CSS because of getClasses() removal.
+    [ ] Get rid of unnecessary CSS files.
+    [ ] Duplikaattien renderöinti ja käyttäytyminen navigoinnissa.
 
 3.0
 [ ] Tags management.

@@ -11,7 +11,6 @@ import Store from '../Stores/Store';
 import Settings from '../Stores/Settings';
 import Cursor from '../Stores/Cursor';
 import EntryModel from '../Models/EntryModel';
-import './Transaction.css';
 import { TableRow, TableCell, Typography } from '@material-ui/core';
 import { Error } from '@material-ui/icons';
 
@@ -139,7 +138,7 @@ class Transaction extends Component {
           <TransactionDetails
             index={this.props.index}
             field="date"
-            classNames={tx.open && this.props.index === this.props.cursor.index && this.props.cursor.row === null ? 'sub-selected' : ''}
+            className={tx.open && this.props.index === this.props.cursor.index && this.props.cursor.row === null ? 'sub-selected' : ''}
             document={tx.document}
             onComplete={(doc, proposal) => {
               // Find the new row after order by date has been changed.
@@ -180,7 +179,7 @@ class Transaction extends Component {
     return (
       <TableRow id={id} key={idx}>
         <TableCell />
-        <TableCell colSpan={2} onClick={() => this.onClickDetail(0, idx)}>
+        <TableCell colSpan={2} onClick={() => this.onClickDetail(0, idx)} align="left">
           <TransactionDetails
             index={this.props.index}
             error={!entry.account_id}
@@ -277,7 +276,7 @@ class Transaction extends Component {
     // Render imbalance
     if (imbalance && this.props.tx.document.open) {
       ret.push(
-        <TableRow key="imbalance" className={'alt error TransactionEntry'} onClick={() => this.onClick()}>
+        <TableRow key="imbalance">
           <TableCell colSpan={3} />
           <TableCell>
             <Typography color="error">
