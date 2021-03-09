@@ -11,6 +11,7 @@ BUGS
 [ ] Clicking Show All in tx view activates account selector for no reason.
 [ ] Clicking Show Details in tx view on income/expense account activates date for no reason.
 [ ] Add entry by pressing tab repeatedly and save without account selected causes crash.
+[ ] Duplicate causes problems on cursor up / down logic.
 
 SMALL IMPROVEMENTS
 ==================
@@ -35,7 +36,7 @@ FUTURE FEATURES
     [X] Remove all getClasses() calls.
     [X] Check for unused CSS because of getClasses() removal.
     [ ] Get rid of unnecessary CSS files.
-    [ ] Duplikaattien renderöinti ja käyttäytyminen navigoinnissa.
+    [X] Duplicate rendering.
 
 3.0
 [ ] Tags management.

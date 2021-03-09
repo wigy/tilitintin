@@ -132,7 +132,7 @@ class Transaction extends Component {
     return (
       <TableRow id={tx.getId()} selected={tx.document.selected} key="title" onClick={() => this.onClick()}>
         <TableCell>
-          {tx.document.number}
+          {this.props.duplicate ? '' : tx.document.number}
         </TableCell>
         <TableCell>
           <TransactionDetails
