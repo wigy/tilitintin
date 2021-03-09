@@ -296,7 +296,7 @@ class TransactionTable extends Component {
     let sum = 0;
     let debit = null;
     let credit = null;
-    const seen = {};
+    const seen = new Set();
     const txs = this.props.store.filteredTransactions;
 
     let delta = null;
@@ -324,8 +324,8 @@ class TransactionTable extends Component {
                 if (tx.document.askForDelete) {
                   this.txToDelete = tx;
                 }
-                const duplicate = seen[tx.document.number];
-                seen[tx.document.number] = true;
+                const duplicate = seen.has(tx.document.number);
+                seen.add(tx.document.number);
                 sum += tx.total;
                 if (tx.debit) {
                   debit += tx.amount;
