@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation, Trans } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import Model from '../Models/Model';
-import './TextEdit.css';
 import { TextField } from '@material-ui/core';
 import { inject } from 'mobx-react';
 import Cursor from '../Stores/Cursor';
