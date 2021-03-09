@@ -35,7 +35,7 @@ FUTURE FEATURES
     [X] Change error handling in tx editor to push messages to the store instead.
     [X] Remove all getClasses() calls.
     [X] Check for unused CSS because of getClasses() removal.
-    [X] Get rid of unnecessary CSS files.
+    [ ] Get rid of unnecessary CSS files.
     [X] Duplicate rendering.
 
 3.0
