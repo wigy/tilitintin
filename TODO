@@ -30,12 +30,12 @@ FUTURE FEATURES
 [ ] Remove completely empty columns from tagged income statement.
 [X] Switching between period and document tools: icon is not updated (fa-icon problem).
 [X] Material UI.
-    [ ] Automatic proposal implementation.
+    [X] Automatic proposal implementation.
     [X] Re-implement store.messages to use snackbar.
     [X] Change error handling in tx editor to push messages to the store instead.
     [X] Remove all getClasses() calls.
     [X] Check for unused CSS because of getClasses() removal.
-    [ ] Get rid of unnecessary CSS files.
+    [X] Get rid of unnecessary CSS files.
     [X] Duplicate rendering.
 
 3.0
