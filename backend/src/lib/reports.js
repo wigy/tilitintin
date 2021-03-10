@@ -447,6 +447,7 @@ processEntries.DefaultByTags = (entries, periods, formatName, format, settings) 
         }
       }
     }
+
     if (amount) {
       totals.other[entry.number] = totals.other[entry.number] || 0;
       totals.other[entry.number] += amount;
@@ -456,7 +457,27 @@ processEntries.DefaultByTags = (entries, periods, formatName, format, settings) 
     accountNumbers.add(entry.number);
   });
 
-  return { columns, data: parseAndCombineReport(accountNumbers, accountNames, columnNames, format, totals) };
+  const data = parseAndCombineReport(accountNumbers, accountNames, columnNames, format, totals);
+
+  // Find empty columns.
+  const found = new Set();
+  for (const line of data) {
+    for (const [k, v] of Object.entries(line.amounts)) {
+      if (v !== null && !isNaN(v)) {
+        found.add(k);
+      }
+    }
+  }
+
+  // Remove empty columns.
+  for (let i = 0; i < columns.length; i++) {
+    if (columns[i].type === 'numeric' && !found.has(columns[i].name)) {
+      columns.splice(i, 1);
+      i--;
+    }
+  }
+
+  return { columns, data };
 };
 
 processEntries.Account = (entries, periods, formatName, format, settings) => {

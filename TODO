@@ -2,7 +2,6 @@
 BUGS
 ====
 
-[ ] Report labeled version leaves unmatched cents as "Other".
 [ ] Update on unmounted loading component when switching between reports and transactions.
 [ ] Pressing insert while previous date is early in order, produced 2 selected lines.
 [ ] Changing the account of the entry having current account, keeps the selection in new screen.
@@ -15,7 +14,6 @@ BUGS
 SMALL IMPROVEMENTS
 ==================
 
-[ ] After editing date, jump to description (if only one entry).
 [ ] Display discrepancy in the balance sheet in RED.
 [ ] Accounts without tags: could disable show/hide buttons.
 
@@ -26,7 +24,7 @@ FUTURE FEATURES
 [X] Display postponed VAT accounts as well in VAT screen.
 [X] Download current account as CSV.
 [X] Compact view by default.
-[ ] Remove completely empty columns from tagged income statement.
+[X] Remove completely empty columns from tagged income statement.
 [X] Switching between period and document tools: icon is not updated (fa-icon problem).
 [X] Material UI.
     [X] Automatic proposal implementation.
@@ -37,6 +35,7 @@ FUTURE FEATURES
     [X] Get rid of unnecessary CSS files.
     [X] Duplicate rendering.
 [X] Mouse does not work on proposals.
+[X] Report labeled version leaves unmatched cents as "Other".
 
 3.0
 [ ] Tags management.
