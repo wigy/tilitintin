@@ -59,6 +59,12 @@ In UI you can do filtering using the categories defined.
 
 ## Version History
 
+### 2.0
+  * Material UI implemented.
+  * Display postponed VAT accounts as well in VAT screen.
+  * Download current account transactions as CSV.
+  * Remove completely empty columns from tagged income statement.
+
 ### 1.1.3
   * Small fixes.
   * Last Bootstrap UI.

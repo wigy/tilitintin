@@ -2,6 +2,16 @@
 BUGS
 ====
 
+
+SMALL IMPROVEMENTS
+==================
+
+
+FUTURE FEATURES
+===============
+
+2.0.1
+[ ] Display discrepancy in the balance sheet in RED.
 [ ] Pressing insert while previous date is early in order, produced 2 selected lines.
 [ ] Changing the account of the entry having current account, keeps the selection in new screen.
 [ ] Page up/down is not practical on opened transaction, which has lot of entries.
@@ -9,32 +19,6 @@ BUGS
 [ ] Clicking Show Details in tx view on income/expense account activates date for no reason.
 [ ] Add entry by pressing tab repeatedly and save without account selected causes crash.
 [ ] Duplicate causes problems on cursor up / down logic.
-
-SMALL IMPROVEMENTS
-==================
-
-[ ] Display discrepancy in the balance sheet in RED.
-
-FUTURE FEATURES
-===============
-
-2.0
-[X] Display postponed VAT accounts as well in VAT screen.
-[X] Download current account as CSV.
-[X] Compact view by default.
-[X] Remove completely empty columns from tagged income statement.
-[X] Switching between period and document tools: icon is not updated (fa-icon problem).
-[X] Material UI.
-    [X] Automatic proposal implementation.
-    [X] Re-implement store.messages to use snackbar.
-    [X] Change error handling in tx editor to push messages to the store instead.
-    [X] Remove all getClasses() calls.
-    [X] Check for unused CSS because of getClasses() removal.
-    [X] Get rid of unnecessary CSS files.
-    [X] Duplicate rendering.
-[X] Mouse does not work on proposals.
-[X] Report labeled version leaves unmatched cents as "Other".
-[X] Accounts without tags: could disable show/hide buttons.
 
 3.0
 [ ] Tags management.
