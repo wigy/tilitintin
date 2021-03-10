@@ -3,10 +3,13 @@ import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import { inject, observer } from 'mobx-react';
 import { withTranslation, Trans } from 'react-i18next';
-import { Link } from 'react-router-dom';
 import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
+import Title from './Title';
+import { List, ListItem, Avatar, ListItemAvatar, ListItemText } from '@material-ui/core';
+import { withRouter } from 'react-router-dom';
 
+@withRouter
 @withTranslation('translations')
 @inject('store')
 @inject('cursor')
@@ -43,20 +46,40 @@ class ToolsList extends Component {
   }
 
   render() {
-    const { store } = this.props;
+    const { store, history, match } = this.props;
     if (!store.token) {
       return '';
     }
 
     return (
       <div>
-        <h1><Trans>Tools</Trans></h1>
-        <ul className="menu">
-          <li className={''}><Link to={this.url('databases')}><code>1</code> <Trans>Databases</Trans></Link></li>
-          <li className={store.db ? '' : 'disabled-link'}><Link to={this.url('periods')}><code>2</code> <Trans>Periods</Trans></Link></li>
-          <li className={store.periodId ? '' : 'disabled-link'}><Link to={this.url('documents')}><code>3</code> <Trans>Documents</Trans></Link></li>
-          <li className={store.periodId ? '' : 'disabled-link'}><Link to={this.url('vat')}><code>4</code> <Trans>Value Added Tax</Trans></Link></li>
-        </ul>
+        <Title><Trans>Tools</Trans></Title>
+        <List>
+          <ListItem button selected={!match.params.tool || match.params.tool === 'databases'} onClick={() => history.push(this.url('databases'))}>
+            <ListItemAvatar color="primary">
+              <Avatar>1</Avatar>
+            </ListItemAvatar>
+            <ListItemText primary={<Trans>Databases</Trans>}/>
+          </ListItem>
+          <ListItem button selected={match.params.tool === 'periods'} disabled={!store.db} onClick={() => history.push(this.url('periods'))}>
+            <ListItemAvatar color="primary">
+              <Avatar>2</Avatar>
+            </ListItemAvatar>
+            <ListItemText primary={<Trans>Periods</Trans>} />
+          </ListItem>
+          <ListItem button selected={match.params.tool === 'documents'} disabled={!store.periodId} onClick={() => history.push(this.url('documents'))}>
+            <ListItemAvatar color="primary">
+              <Avatar>3</Avatar>
+            </ListItemAvatar>
+            <ListItemText primary={<Trans>Documents</Trans>} />
+          </ListItem>
+          <ListItem button selected={match.params.tool === 'vat'} disabled={!store.periodId} onClick={() => history.push(this.url('vat'))}>
+            <ListItemAvatar color="primary">
+              <Avatar>4</Avatar>
+            </ListItemAvatar>
+            <ListItemText primary={<Trans>Value Added Tax</Trans>} />
+          </ListItem>
+        </List>
       </div>
     );
   }
@@ -64,6 +87,7 @@ class ToolsList extends Component {
 
 ToolsList.propTypes = {
   cursor: PropTypes.instanceOf(Cursor),
+  match: PropTypes.object,
   history: ReactRouterPropTypes.history.isRequired,
   store: PropTypes.instanceOf(Store)
 };

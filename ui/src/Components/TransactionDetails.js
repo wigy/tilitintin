@@ -6,10 +6,13 @@ import TextEdit from './TextEdit';
 import Store from '../Stores/Store';
 import EntryModel from '../Models/EntryModel';
 import DocumentModel from '../Models/DocumentModel';
+import LinkedText from '../Models/LinkedText';
 import Cursor from '../Stores/Cursor';
+import { withRouter } from 'react-router-dom';
+import { Link } from '@material-ui/core';
+import ReactRouterPropTypes from 'react-router-prop-types';
 
-import './TransactionDetails.css';
-
+@withRouter
 @withTranslation('translations')
 @inject('store')
 @inject('cursor')
@@ -37,27 +40,36 @@ class TransactionDetails extends Component {
     }
 
     const column = this.props.entry ? this.props.entry.columns().indexOf(this.props.field) : null;
-    const className = 'TransactionDetails ' +
-      target.getClasses(column, this.props.cursor.row) +
-      (this.props.error ? ' error' : '') +
-      (this.props.classNames ? ' ' + this.props.classNames : '');
+    const row = this.props.cursor.row;
+    const isSubSelected = target.isSubSelected && target.isSubSelected(column, row);
+    const isCurrent = target.account_id && this.props.store.accountId === target.account_id;
+    const className = 'hide-overflow ' +
+      (isSubSelected ? ' sub-selected' : '') +
+      (isCurrent ? ' current' : '') +
+      (this.props.className ? ' ' + this.props.className : '');
 
+    const view = target.getView(this.props.field);
+
+    if (view instanceof LinkedText) {
+      return <div className={className}><Link color="inherit" onClick={() => this.props.history.push(view.url)}>{view.text}</Link></div>;
+    }
     return (
-      <div className={className}>{target.getView(this.props.field)}&nbsp;</div>
+      <div className={className}>{view}&nbsp;</div>
     );
   }
 }
 
 TransactionDetails.propTypes = {
+  className: PropTypes.string,
+  cursor: PropTypes.instanceOf(Cursor),
   document: PropTypes.instanceOf(DocumentModel),
   entry: PropTypes.instanceOf(EntryModel),
-  index: PropTypes.number,
-  field: PropTypes.string,
-  classNames: PropTypes.string,
   error: PropTypes.bool,
+  field: PropTypes.string,
+  history: ReactRouterPropTypes.history,
+  index: PropTypes.number,
   onComplete: PropTypes.func,
   store: PropTypes.instanceOf(Store),
-  cursor: PropTypes.instanceOf(Cursor)
 };
 
 export default TransactionDetails;

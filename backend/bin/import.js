@@ -14,6 +14,7 @@ cli.opt('dry-run', null, 'To turn dry-run on.');
 cli.opt('encoding', null, 'Force encoding of import files.');
 cli.opt('end-date', null, 'Ignore all transactions after this date.');
 cli.opt('force', null, 'Import even if the entries are found already.');
+cli.opt('fallback', null, 'Set name for the fallback service to query prices.');
 cli.opt('fund', null, 'Set name for the fund.');
 cli.opt('import-errors', null, 'If import fails, create move transaction to imbalance account.');
 cli.opt('no-deposit', null, 'Ignore deposit transactions.');
@@ -22,6 +23,7 @@ cli.opt('no-withdrawal', null, 'Ignore withdrawal transactions.');
 cli.opt('service', null, 'Set name for the service.');
 cli.opt('show-balances', null, 'Display account balances before and after.');
 cli.opt('show-stock', null, 'Display stock before and after.');
+cli.opt('short-sell', null, 'Allow short selling.');
 cli.opt('simple', null, 'Use simplified import.');
 cli.opt('single-loan-update', null, 'Add loan update only at the end of the import.');
 cli.opt('skip-errors', null, 'If import fails, just print and skip the failed transaction.');
@@ -38,6 +40,7 @@ config.loadIni(cli.options.config || null);
 
 config.set({
   encoding: cli.options.encoding,
+  fallbackService: cli.options.fallback || null,
   flags: {
     addCurrencies: cli.options['add-currencies'],
     debug: cli.options.debug,
@@ -48,6 +51,7 @@ config.set({
     tradeProfit: cli.options['trade-profit'],
     showBalances: cli.options['show-balances'],
     showStock: cli.options['show-stock'],
+    shortSell: cli.options['short-sell'],
     simple: cli.options.simple,
     singleLoanUpdate: cli.options['single-loan-update'],
     skipErrors: cli.options['skip-errors'],

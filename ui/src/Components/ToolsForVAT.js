@@ -2,14 +2,17 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import { withTranslation, Trans } from 'react-i18next';
-import { Link } from 'react-router-dom';
 import Store from '../Stores/Store';
 import Settings from '../Stores/Settings';
 import Money from './Money';
 import Localize from './Localize';
 import SubPanel from './SubPanel';
 import Tag from './Tag';
+import { Link } from '@material-ui/core';
+import { withRouter } from 'react-router-dom';
+import ReactRouterPropTypes from 'react-router-prop-types';
 
+@withRouter
 @withTranslation('translations')
 @inject('store')
 @inject('settings')
@@ -42,7 +45,7 @@ class ToolsForVAT extends Component {
     const vatDelayedPayableAccount = this.props.store.database.getAccountByNumber(VAT_DELAYED_PAYABLE_ACCOUNT);
     const vatDelayedReceivableAccount = this.props.store.database.getAccountByNumber(VAT_DELAYED_RECEIVABLE_ACCOUNT);
 
-    if (!vatSalesAccount || !vatPurchasesAccount || !vatPayableAccount || !vatReceivableAccount) {
+    if (!vatSalesAccount || !vatPurchasesAccount || !vatPayableAccount || !vatReceivableAccount || !vatDelayedReceivableAccount) {
       return (
         <div className="Tools">
           <SubPanel>
@@ -65,7 +68,6 @@ class ToolsForVAT extends Component {
         .map(tag => tag.tag)
     );
 
-    console.log(validTags);
     const vatByTag = {};
     let vatByNoTag = null;
     let hasTags = false;
@@ -96,34 +98,34 @@ class ToolsForVAT extends Component {
       <div className="Tools">
         <SubPanel>
           <b>
-            <Link to={vatReceivableAccount.getUrl()}>
+            <Link onClick={() => this.props.history.push(vatReceivableAccount.getUrl())}>
               <Trans>Current VAT receivable</Trans>: <Money cents={receivable ? receivable.total : 0} currency="€"></Money>
             </Link>
             &nbsp;
             {
-              receivableDelayed &&
-              <Link to={vatReceivableAccount.getUrl()}>
+              receivableDelayed && receivableDelayed.total !== 0 &&
+              <Link onClick={() => this.props.history.push(vatReceivableAccount.getUrl())}>
                 (<Trans>Delayed VAT</Trans>: <Money cents={receivableDelayed.total} currency="€"></Money>)
               </Link>
             }
             <br/>
-            <Link to={vatPayableAccount.getUrl()}>
+            <Link onClick={() => this.props.history.push(vatPayableAccount.getUrl())}>
               <Trans>Current VAT payable</Trans>: <Money cents={payable ? payable.total : 0} currency="€"></Money>
             </Link>
             &nbsp;
             {
-              payableDelayed &&
-              <Link to={vatDelayedPayableAccount.getUrl()}>
+              payableDelayed && payableDelayed.total !== 0 &&
+              <Link onClick={() => this.props.history.push(vatDelayedPayableAccount.getUrl())}>
                 (<Trans>Delayed VAT</Trans>: <Money cents={payableDelayed.total} currency="€"></Money>)
               </Link>
             }
             <br/>
             <br/>
-            <Link to={vatPurchasesAccount.getUrl()}>
+            <Link onClick={() => this.props.history.push(vatPurchasesAccount.getUrl())}>
               <Trans>Cumulated VAT from purchases</Trans>: <Money cents={VAT.purchases} currency="€"></Money>
             </Link>
             <br/>
-            <Link to={vatSalesAccount.getUrl()}>
+            <Link onClick={() => this.props.history.push(vatSalesAccount.getUrl())}>
               <Trans>Cumulated VAT from sales</Trans>: <Money cents={VAT.sales} currency="€"></Money>
             </Link>
             <br/>
@@ -151,21 +153,23 @@ class ToolsForVAT extends Component {
             </table>
           </SubPanel>
         }
-        {openVATDocuments.map((doc) => {
-          return <div key={doc.id}>
-            <Localize>{`{${doc.date}}`}</Localize>
-            <br/>
-            { doc.entries.map((entry) => {
-              return <div key={entry.id}>
-                <b> {entry.account.toString()} </b>
-                {entry.text || <span style={{ color: 'red' }}><Trans>Description missing</Trans></span>}
-                <span> </span><Money cents={entry.total} currency="€"></Money>
-              </div>;
-            })
-            }
-            <br />
-          </div>;
-        })}
+        <SubPanel>
+          {openVATDocuments.map((doc) => {
+            return <div key={doc.id}>
+              <Localize>{`{${doc.date}}`}</Localize>
+              <br/>
+              { doc.entries.map((entry) => {
+                return <div key={entry.id}>
+                  <b> {entry.account.toString()} </b>
+                  {entry.text || <span style={{ color: 'red' }}><Trans>Description missing</Trans></span>}
+                  <span> </span><Money cents={entry.total} currency="€"></Money>
+                </div>;
+              })
+              }
+              <br />
+            </div>;
+          })}
+        </SubPanel>
       </div>
     );
   }
@@ -173,6 +177,7 @@ class ToolsForVAT extends Component {
 
 ToolsForVAT.propTypes = {
   db: PropTypes.string,
+  history: ReactRouterPropTypes.history,
   periodId: PropTypes.string,
   settings: PropTypes.instanceOf(Settings),
   store: PropTypes.instanceOf(Store)

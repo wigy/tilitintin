@@ -1,5 +1,3 @@
-import React from 'react';
-import { Trans } from 'react-i18next';
 import NavigationTargetModel from './NavigationTargetModel';
 import EntryModel from '../Models/EntryModel';
 import { date2str, str2date } from '../Util';
@@ -53,7 +51,7 @@ class DocumentModel extends NavigationTargetModel {
   }
 
   ['validate.date'](value) {
-    const INVALID_DATE = <Trans>Date is incorrect.</Trans>;
+    const INVALID_DATE = 'Date is incorrect.';
     return str2date(value, this.store.lastDate) ? null : INVALID_DATE;
   }
 

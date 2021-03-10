@@ -9,7 +9,8 @@ import Store from './Stores/Store';
 import Cursor from './Stores/Cursor';
 import Settings from './Stores/Settings';
 import i18n from './i18n';
-import './index.css';
+import { ThemeProvider } from '@material-ui/core';
+import theme from './theme';
 
 const settings = new Settings();
 const store = new Store(settings);
@@ -17,11 +18,13 @@ const cursor = new Cursor(store);
 
 ReactDOM.render(
   <I18nextProvider i18n={ i18n }>
-    <Provider store={store} cursor={cursor} settings={settings}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </Provider>
+    <ThemeProvider theme={theme}>
+      <Provider store={store} cursor={cursor} settings={settings}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </Provider>
+    </ThemeProvider>
   </I18nextProvider>,
   document.getElementById('root')
 );

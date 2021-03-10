@@ -6,6 +6,7 @@ import { withTranslation, Trans } from 'react-i18next';
 import IconButton from './IconButton';
 import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
+import Title from './Title';
 
 @withTranslation('translations')
 @inject('store')
@@ -20,8 +21,8 @@ class AdminToolPanel extends Component {
 
     return (
       <div className="ToolPanel AdminToolPanel">
-        <h1><Trans>Admin Tools</Trans></h1>
-        <IconButton onClick={() => this.props.history.push('/_/admin/[create]')} title="create-user" icon="fas fa-user-plus"></IconButton>
+        <Title><Trans>Admin Tools</Trans></Title>
+        <IconButton onClick={() => this.props.history.push('/_/admin/[create]')} title="create-user" icon="user-plus"></IconButton>
       </div>
     );
   }

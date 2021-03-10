@@ -24,6 +24,8 @@ import ToolsList from './Components/ToolsList';
 import ToolsToolPanel from './Components/ToolsToolPanel';
 import TransactionToolPanel from './Components/TransactionToolPanel';
 import UserList from './Components/UserList';
+import Messages from './Components/Messages';
+import { Paper } from '@material-ui/core';
 
 import './App.css';
 
@@ -35,16 +37,18 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <Messages />
         <div className="TopPanel Panel">
           <Route exact path="/" component={Menu}/>
           <Route exact path="/_/admin/:arg?" component={Menu}/>
           <Route exact path="/:db" component={Menu}/>
-          <Route exact path="/:db/dashboard/:periodId?" component={Menu}/>
-          <Route exact path="/:db/dashboard/:periodId/:accountId?" component={Menu}/>
+          <Route exact path="/:db/dashboard" component={Menu}/>
+          <Route exact path="/:db/dashboard/:periodId" component={Menu}/>
+          <Route exact path="/:db/dashboard/:periodId/:accountId" component={Menu}/>
           <Route exact path="/:db/txs/:periodId" component={Menu}/>
           <Route exact path="/:db/txs/:periodId/:accountId" component={Menu}/>
           <Route exact path="/:db/account" component={Menu}/>
-          <Route exact path="/:db/account/:periodId?" component={Menu}/>
+          <Route exact path="/:db/account/:periodId" component={Menu}/>
           <Route exact path="/:db/account/:periodId/:accountId" component={Menu}/>
           <Route exact path="/:db/report/:periodId" component={Menu}/>
           <Route exact path="/:db/report/:periodId/:accountId" component={Menu}/>
@@ -55,54 +59,52 @@ class App extends Component {
           <Route exact path="/:db/tools//:accountId/:tool?" component={Menu}/>
           <Route exact path="/:db/tools///:tool?" component={Menu}/>
         </div>
-        <div className="SidePanel Panel">
-          <div className="Frame">
+        <div className="Page">
+          <Paper className="SidePanel Panel" elevation={4}>
             <Route exact path="/" component={DatabaseList}/>
             <Route exact path="/_/admin/:arg?" component={UserList}/>
             <Route exact path="/:db" component={DatabaseList}/>
             <Route exact path="/:db/dashboard/:periodId?" component={DatabaseList}/>
             <Route exact path="/:db/dashboard/:periodId/:accountId" component={DatabaseList}/>
             <Route path="/:db/txs/:periodId" component={Balances}/>
-            <Route path="/:db/account/:periodId?/:accountId?" component={Account}/>
             <Route exact path="/:db/report/:periodId" component={ReportsList}/>
             <Route exact path="/:db/report/:periodId/:accountId" component={ReportsList}/>
             <Route path="/:db/report/:periodId//:format" component={ReportsList}/>
             <Route path="/:db/report/:periodId/:accountId/:format" component={ReportsList}/>
+            <Route path="/:db/account/:periodId?/:accountId?" component={Account}/>
             <Route exact path="/:db/tools/:periodId?/:accountId?/:tool?" component={ToolsList}/>
             <Route exact path="/:db/tools/:periodId//:tool?" component={ToolsList}/>
             <Route exact path="/:db/tools//:accountId/:tool?" component={ToolsList}/>
             <Route exact path="/:db/tools///:tool?" component={ToolsList}/>
-          </div>
-        </div>
-        <div className="MainTopPanel Panel">
-          <div className="Frame">
-            <Route exact path="/_/admin/:arg?" component={AdminToolPanel}/>
-            <Route path="/:db/txs/:periodId/:accountId?" component={TransactionToolPanel}/>
-            <Route path="/:db/account/:periodId?" component={AccountsToolPanel}/>
-            <Route path="/:db/report/:periodId/:accountId?/:format?" component={ReportToolPanel}/>
-            <Route exact path="/:db/tools/:periodId?/:accountId?/:tool?" component={ToolsToolPanel}/>
-            <Route exact path="/:db/tools/:periodId//:tool?" component={ToolsToolPanel}/>
-            <Route exact path="/:db/tools//:accountId/:tool?" component={ToolsToolPanel}/>
-            <Route exact path="/:db/tools///:tool?" component={ToolsToolPanel}/>
-          </div>
-        </div>
-        <div className="MainPanel Panel">
-          <div className="Frame">
-            <Route exact path="/" component={Dashboard}/>
-            <Route exact path="/" component={Login}/>
-            <Route exact path="/_/admin/:arg?" component={Admin}/>
-            <Route exact path="/:db" component={Dashboard}/>
-            <Route exact path="/:db/dashboard" component={Dashboard}/>
-            <Route exact path="/:db/dashboard/:periodId" component={Dashboard}/>
-            <Route exact path="/:db/dashboard/:periodId/:accountId" component={Dashboard}/>
-            <Route path="/:db/txs/:periodId/:accountId?" component={AccountTransactions}/>
-            <Route path="/:db/account/:periodId?" component={Accounts}/>
-            <Route path="/:db/report/:periodId//:format" component={Report}/>
-            <Route path="/:db/report/:periodId/:accountId/:format" component={Report}/>
-            <Route exact path="/:db/tools/:periodId?/:accountId?/:tool?" component={Tools}/>
-            <Route exact path="/:db/tools/:periodId//:tool?" component={Tools}/>
-            <Route exact path="/:db/tools//:accountId/:tool?" component={Tools}/>
-            <Route exact path="/:db/tools///:tool?" component={Tools}/>
+          </Paper>
+          <div className="MainArea">
+            <Paper className="MainTopPanel Panel" elevation={4}>
+              <Route exact path="/_/admin/:arg?" component={AdminToolPanel}/>
+              <Route path="/:db/txs/:periodId/:accountId?" component={TransactionToolPanel}/>
+              <Route path="/:db/report/:periodId/:accountId?/:format?" component={ReportToolPanel}/>
+              <Route path="/:db/account/:periodId?" component={AccountsToolPanel}/>
+              <Route exact path="/:db/tools/:periodId?/:accountId?/:tool?" component={ToolsToolPanel}/>
+              <Route exact path="/:db/tools/:periodId//:tool?" component={ToolsToolPanel}/>
+              <Route exact path="/:db/tools//:accountId/:tool?" component={ToolsToolPanel}/>
+              <Route exact path="/:db/tools///:tool?" component={ToolsToolPanel}/>
+            </Paper>
+            <Paper className="MainPanel Panel" elevation={4}>
+              <Route exact path="/" component={Login}/>
+              <Route exact path="/" component={Dashboard}/>
+              <Route exact path="/_/admin/:arg?" component={Admin}/>
+              <Route exact path="/:db" component={Dashboard}/>
+              <Route exact path="/:db/dashboard" component={Dashboard}/>
+              <Route exact path="/:db/dashboard/:periodId" component={Dashboard}/>
+              <Route exact path="/:db/dashboard/:periodId/:accountId" component={Dashboard}/>
+              <Route path="/:db/txs/:periodId/:accountId?" component={AccountTransactions}/>
+              <Route path="/:db/report/:periodId//:format" component={Report}/>
+              <Route path="/:db/report/:periodId/:accountId/:format" component={Report}/>
+              <Route exact path="/:db/tools/:periodId?/:accountId?/:tool?" component={Tools}/>
+              <Route exact path="/:db/tools/:periodId//:tool?" component={Tools}/>
+              <Route exact path="/:db/tools//:accountId/:tool?" component={Tools}/>
+              <Route exact path="/:db/tools///:tool?" component={Tools}/>
+              <Route path="/:db/account/:periodId?" component={Accounts}/>
+            </Paper>
           </div>
         </div>
       </div>

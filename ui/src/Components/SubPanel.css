@@ -1,7 +1,0 @@
-.SubPanel {
-  background-color: var(--border-color-light);
-  border: 1px solid var(--fg-color);
-  border-radius: 3px;
-  padding: 6px;
-  margin-bottom: 6px;
-}

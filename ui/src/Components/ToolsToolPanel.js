@@ -4,15 +4,15 @@ import { action } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { Trans, withTranslation } from 'react-i18next';
 import { withRouter } from 'react-router-dom';
-import { Form, FormControl, ControlLabel } from 'react-bootstrap';
 import Store from '../Stores/Store';
 import Settings from '../Stores/Settings';
 import IconButton from './IconButton';
 import Dialog from './Dialog';
 import Localize from './Localize';
 import EntryModel from '../Models/EntryModel';
-import './ToolPanel.css';
 import moment from 'moment';
+import Title from './Title';
+import { TextField } from '@material-ui/core';
 
 @withRouter
 @withTranslation('translations')
@@ -242,8 +242,8 @@ class ToolsToolPanel extends Component {
       case 'vat':
         label = 'Value Added Tax';
         buttons = [
-          <IconButton key="button-fix" disabled={!this.emptyEntries().size} onClick={() => this.fixDescriptions()} title="fix-vat-descriptions" icon="fa-paperclip"></IconButton>,
-          <IconButton key="button-vat" disabled={!VAT.sales && !VAT.purchases} onClick={() => this.createVATEntry()} title="summarize-vat-period" icon="fa-balance-scale"></IconButton>
+          <IconButton key="button-fix" disabled={!this.emptyEntries().size} onClick={() => this.fixDescriptions()} title="fix-vat-descriptions" icon="paperclip"></IconButton>,
+          <IconButton key="button-vat" disabled={!VAT.sales && !VAT.purchases} onClick={() => this.createVATEntry()} title="summarize-vat-period" icon="summarize"></IconButton>
         ];
         break;
 
@@ -251,7 +251,7 @@ class ToolsToolPanel extends Component {
         label = 'Periods';
         if (this.props.store.db) {
           buttons.push(
-            <IconButton key="button-new" onClick={() => this.setState({ askNewPeriod: true })} title="create-period" icon="fa-calendar-plus"></IconButton>
+            <IconButton key="button-new" onClick={() => this.setState({ askNewPeriod: true })} title="create-period" icon="calendar-plus"></IconButton>
           );
 
         }
@@ -264,25 +264,25 @@ class ToolsToolPanel extends Component {
         toRenumber = store.period && !store.period.locked ? store.period.incorrectlyNumberedDocuments : [];
         toDelete = store.period && !store.period.locked ? store.period.emptyDocuments : [];
         buttons = [
-          <IconButton key="button-new" disabled={!toRenumber.length} onClick={() => this.renumberDocuments(this.props.store.db, this.props.store.periodId)} title="sort-documents" icon="fas fa-sort-numeric-up"></IconButton>,
-          <IconButton key="button-clean" disabled={!toDelete.length} onClick={() => this.dropEmptyDocuments(this.props.store.db, this.props.store.periodId)} title="drop-empty-documents" icon="fas fa-trash"></IconButton>
+          <IconButton key="button-new" disabled={!toRenumber.length} onClick={() => this.renumberDocuments(this.props.store.db, this.props.store.periodId)} title="sort-documents" icon="sort-up"></IconButton>,
+          <IconButton key="button-clean" disabled={!toDelete.length} onClick={() => this.dropEmptyDocuments(this.props.store.db, this.props.store.periodId)} title="drop-empty-documents" icon="trash"></IconButton>
         ];
         break;
 
       default:
         label = 'Database Management';
         buttons.push(
-          <IconButton key="button-new-database" onClick={() => this.setState({ askNew: true })} title="new-database" icon="fa-database"></IconButton>
+          <IconButton key="button-new-database" onClick={() => this.setState({ askNew: true })} title="new-database" icon="database"></IconButton>
         );
         buttons.push(
-          <IconButton key="button-upload" onClick={() => this.setState({ askUpload: true })} title="upload-database" icon="fa-upload"></IconButton>
+          <IconButton key="button-upload" onClick={() => this.setState({ askUpload: true })} title="upload-database" icon="upload"></IconButton>
         );
         break;
     }
 
     return (
-      <div className="ToolPanel">
-        {label && <h1><Trans>{label}</Trans></h1>}
+      <div>
+        {label && <Title><Trans>{label}</Trans></Title>}
         {buttons}
         <Dialog
           title={<Trans>Start new period?</Trans>}
@@ -297,33 +297,49 @@ class ToolsToolPanel extends Component {
           isVisible={this.state.askUpload}
           onClose={() => { this.setState({ askUpload: false }); }}
           onConfirm={() => this.uploadFile()}>
-          <h2><Trans>You can upload old Tilitin file here.</Trans></h2>
-          <input type="file" accept=".sqlite" onChange={(e) => this.setState({ files: e.target.files })} />
+          <Trans>You can upload old Tilitin file here.</Trans>
+          <TextField type="file" onChange={(e) => this.setState({ files: e.target.files })}/>
+          <br />
           <br />
           <Trans>Note that a database with the same name is overridden automatically.</Trans>
         </Dialog>
 
         <Dialog
+          wider
           title={<Trans>Create New Database</Trans>}
           isVisible={this.state.askNew}
           isValid={() => this.validDbName(this.state.databaseName) && this.state.companyName}
           onClose={() => { this.setState({ askNew: false }); }}
           onConfirm={() => this.onCreateNewDb()}>
-          <Form>
-            <ControlLabel><Trans>Database Name</Trans>:</ControlLabel>
-            <div className="error">{this.state.changed && (
-              !this.state.databaseName ? t('Database name is required.')
-                : (!this.validDbName(this.state.databaseName) ? t('Invalid database name.') : '')
-            )}</div>
-            <FormControl type="text" className="name" value={this.state.databaseName} onChange={(e) => this.setState({ changed: true, databaseName: e.target.value })}></FormControl>
-            <ControlLabel><Trans>Company Name</Trans>:</ControlLabel>
-            <div className="error">{this.state.changed && (
-              this.state.companyName ? '' : t('Company name is required.')
-            )}</div>
-            <FormControl type="text" className="company" value={this.state.companyName} onChange={(e) => this.setState({ changed: true, companyName: e.target.value })}></FormControl>
-            <ControlLabel><Trans>Company Registration Number</Trans>:</ControlLabel>
-            <FormControl type="text" className="code" value={this.state.companyCode} onChange={(e) => this.setState({ changed: true, companyCode: e.target.value })}></FormControl>
-          </Form>
+          <div>
+            <TextField
+              fullWidth
+              label={<Trans>Database Name</Trans>}
+              value={this.state.databaseName}
+              onChange={(e) => this.setState({ changed: true, databaseName: e.target.value })}
+              error={this.state.changed && (!this.state.databaseName || !this.validDbName(this.state.databaseName))}
+              helperText={this.state.changed && (
+                !this.state.databaseName ? t('Database name is required.')
+                  : (!this.validDbName(this.state.databaseName) ? t('Invalid database name.') : '')
+              )}
+            />
+            <br/>
+            <TextField
+              fullWidth
+              label={<Trans>Company Name</Trans>}
+              value={this.state.companyName}
+              onChange={(e) => this.setState({ changed: true, companyName: e.target.value })}
+              error={this.state.changed && !this.state.companyName}
+              helperText={this.state.changed && !this.state.companyName ? t('Company name is required.') : ''}
+            />
+            <br/>
+            <TextField
+              fullWidth
+              label={<Trans>Company Registration Number</Trans>}
+              value={this.state.companyCode}
+              onChange={(e) => this.setState({ changed: true, companyCode: e.target.value })}
+            />
+          </div>
         </Dialog>
       </div>
     );

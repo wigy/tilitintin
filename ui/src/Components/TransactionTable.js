@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import { inject, observer } from 'mobx-react';
 import { Trans, withTranslation } from 'react-i18next';
-import { FormControl, ControlLabel } from 'react-bootstrap';
 import moment from 'moment';
 import { sprintf } from 'sprintf-js';
 import Dialog from './Dialog';
@@ -14,8 +13,8 @@ import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
 import EntryModel from '../Models/EntryModel';
 import DocumentModel from '../Models/DocumentModel';
-import './TransactionTable.css';
 import { withRouter } from 'react-router-dom';
+import { TableContainer, Table, TableHead, TableCell, TableRow, TableBody, Typography, TextField, MenuItem } from '@material-ui/core';
 
 @withTranslation('translations')
 @withRouter
@@ -254,22 +253,29 @@ class TransactionTable extends Component {
     if (this.state.showAccountDropdown) {
       const accountDialog = (
         <Dialog key="dialog2"
+          wider
           title={<Trans>Please select an account</Trans>}
           isVisible={this.state.showAccountDropdown}
           onClose={() => this.setState({ showAccountDropdown: false })}
           onConfirm={() => this.onSelectAccount(this.state.account)}>
-          <ControlLabel><Trans>Account</Trans>:</ControlLabel>
-          <FormControl componentClass="select" value={this.state.account} onChange={(e) => this.setState({ account: e.target.value })}>
-            <option value=""></option>
-            {this.props.store.accounts.map(a => <option value={a.id} key={a.id}>{a.toString()}</option>)}
-          </FormControl>
+
+          <TextField
+            select
+            fullWidth
+            label={<Trans>Account</Trans>}
+            value={this.state.account}
+            onChange={(e) => this.setState({ account: e.target.value })}
+          >
+            <MenuItem>&nbsp;</MenuItem>
+            {this.props.store.accounts.map(a => <MenuItem value={a.id} key={a.id}>{a.toString()}</MenuItem>)}
+          </TextField>
         </Dialog>
       );
       ret.push(accountDialog);
     }
 
     if (!this.props.store.transactions.length) {
-      ret.push(<Trans key="insert">Press Insert to create a transaction.</Trans>);
+      ret.push(<Typography key="insert" color="primary"><Trans>Press Insert to create a transaction.</Trans></Typography>);
       return ret;
     }
 
@@ -290,7 +296,7 @@ class TransactionTable extends Component {
     let sum = 0;
     let debit = null;
     let credit = null;
-    const seen = {};
+    const seen = new Set();
     const txs = this.props.store.filteredTransactions;
 
     let delta = null;
@@ -299,50 +305,61 @@ class TransactionTable extends Component {
     }
 
     ret.push(
-      <table key="table" className="TransactionTable">
-        <thead>
-          <tr className="Transaction heading">
-            <th className="number">#</th>
-            <th className="date"><Trans>Date</Trans></th>
-            <th className="tags"></th>
-            <th className="description"><Trans>Description</Trans></th>
-            <th className="debit"><Trans>Debit</Trans></th>
-            <th className="credit"><Trans>Credit</Trans></th>
-            <th className="total"><Trans>Total</Trans></th>
-          </tr>
-        </thead>
-        <tbody>{
-          txs.map((tx, idx) => {
-            if (tx.document.askForDelete) {
-              this.txToDelete = tx;
-            }
-            const duplicate = seen[tx.document.number];
-            seen[tx.document.number] = true;
-            sum += tx.total;
-            if (tx.debit) {
-              debit += tx.amount;
-            } else {
-              credit += tx.amount;
-            }
-            return <Transaction
-              key={idx}
-              index={idx}
-              duplicate={duplicate}
-              tx={tx}
-              total={sum}
-            />;
-          })}
-        <tr className="totals">
-          <td></td>
-          <td></td>
-          <td></td>
-          <td><Trans>Total lines</Trans> {txs.length}</td>
-          <td className="debit">{debit !== null && <Money cents={debit} currency="EUR" />}</td>
-          <td className="credit">{credit !== null && <Money cents={credit} currency="EUR" />}</td>
-          <td align="right" className="total">{delta !== null && <>Δ <Money cents={sum - delta} currency="EUR" /></>}</td>
-        </tr>
-        </tbody>
-      </table>
+      <TableContainer key="totals">
+        <Table className="TransactionTable" size="medium" padding="none">
+          <TableHead>
+            <TableRow>
+              <TableCell style={{ width: '3rem' }} variant="head" align="left"><Trans>#</Trans></TableCell>
+              <TableCell style={{ width: '7rem' }} variant="head" align="left"><Trans>Date</Trans></TableCell>
+              <TableCell style={{ width: '6rem' }} variant="head" align="left"></TableCell>
+              <TableCell variant="head" align="left"><Trans>Description</Trans></TableCell>
+              <TableCell style={{ width: '9rem' }} variant="head" align="right"><Trans>Debit</Trans></TableCell>
+              <TableCell style={{ width: '9rem' }} variant="head" align="right"><Trans>Credit</Trans></TableCell>
+              <TableCell style={{ width: '9rem' }} variant="head" align="right"><Trans>Total</Trans></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {
+              txs.map((tx, idx) => {
+                if (tx.document.askForDelete) {
+                  this.txToDelete = tx;
+                }
+                const duplicate = seen.has(tx.document.number);
+                seen.add(tx.document.number);
+                sum += tx.total;
+                if (tx.debit) {
+                  debit += tx.amount;
+                } else {
+                  credit += tx.amount;
+                }
+                return <Transaction
+                  key={idx}
+                  index={idx}
+                  duplicate={duplicate}
+                  tx={tx}
+                  total={sum}
+                />;
+              })}
+            <TableRow className="totals">
+              <TableCell variant="footer"/>
+              <TableCell variant="footer"/>
+              <TableCell variant="footer"/>
+              <TableCell variant="footer" style={{ fontWeight: 'bold' }}>
+                <Trans>Total lines</Trans> {txs.length}
+              </TableCell>
+              <TableCell variant="footer" align="right" style={{ fontWeight: 'bold' }}>
+                {debit !== null && <Money cents={debit} currency="EUR"/>}
+              </TableCell>
+              <TableCell variant="footer" align="right" style={{ fontWeight: 'bold' }}>
+                {credit !== null && <Money cents={credit} currency="EUR"/>}
+              </TableCell>
+              <TableCell variant="footer" align="right" style={{ fontWeight: 'bold' }}>
+                {delta !== null && <>Δ <Money cents={sum - delta} currency="EUR" /></>}
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
     );
 
     /*
@@ -369,6 +386,7 @@ class TransactionTable extends Component {
         el.scrollIntoView({ block: 'nearest', inline: 'nearest' });
       }
     }, 0);
+
     return ret;
   }
 }

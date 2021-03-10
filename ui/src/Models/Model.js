@@ -65,14 +65,6 @@ class Model {
   }
 
   /**
-   * Get CSS-classes for the object.
-   * @return {String}
-   */
-  getClasses() {
-    return this.getObjectType();
-  }
-
-  /**
    * Get visual presentation of the given field: if there is `get.<field>` function, use it, otherwise field value itself.
    * @param {String} field
    */

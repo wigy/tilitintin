@@ -15,8 +15,8 @@ class Cursor {
   @observable column = null;
   @observable row = null;
 
-  // When a modal is active, this is a reference into it.
-  @observable activeModal = null;
+  // List of modals on the page.
+  @observable activeModal = [];
   // When editing is active, this points to the model edited.
   @observable editTarget = null;
   // If set, key handler is disabled.
@@ -55,16 +55,16 @@ class Cursor {
    * Select the current modal.
    * @param {Component} modal
    */
-  setModal(modal) {
-    this.activeModal = modal;
+  addModal(modal) {
+    this.activeModal.push(modal);
   }
 
   /**
    * Turn the current modal off.
    * @param {Component|null} modal
    */
-  unsetModal(modal) {
-    this.activeModal = null;
+  removeModal(modal) {
+    this.activeModal.splice(this.activeModal.indexOf(modal), 1);
   }
 
   /**
@@ -100,13 +100,17 @@ class Cursor {
     const fn = 'key' + parts.join('');
 
     // Try active modal handler.
-    if (!result && this.activeModal) {
-      if (!this.activeModal[fn]) {
-        return null;
-      }
-      result = this.activeModal[fn](this, key);
-      if (result && KEY_DEBUG) {
-        console.log('Modal:', fn, ':', result);
+    if (!result && this.activeModal.length) {
+      for (let i = 0; i < this.activeModal.length; i++) {
+        if (this.activeModal[i].props.isVisible) {
+          if (!this.activeModal[i][fn]) {
+            return null;
+          }
+          result = this.activeModal[i][fn](this, key);
+          if (result && KEY_DEBUG) {
+            console.log('Modal:', fn, ':', result);
+          }
+        }
       }
     }
 
@@ -185,7 +189,7 @@ class Cursor {
               name: 'Balances.transactions',
               data: this.store.filteredTransactions,
               vertical: true,
-              entryColumn: 1,
+              entryColumn: 0,
               subitemExitUp: true,
               subitemUpStopOnNull: true,
               subitemExitDown: true

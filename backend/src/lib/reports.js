@@ -442,12 +442,12 @@ processEntries.DefaultByTags = (entries, periods, formatName, format, settings) 
         for (let count = Math.abs(amount); count > 0; count--) {
           const column = `tag-${shares[i]}`;
           totals[column][entry.number] += delta;
-          console.log(column, delta);
           amount -= delta;
           i = (i + 1) % shares.length;
         }
       }
     }
+
     if (amount) {
       totals.other[entry.number] = totals.other[entry.number] || 0;
       totals.other[entry.number] += amount;
@@ -457,7 +457,73 @@ processEntries.DefaultByTags = (entries, periods, formatName, format, settings) 
     accountNumbers.add(entry.number);
   });
 
-  return { columns, data: parseAndCombineReport(accountNumbers, accountNames, columnNames, format, totals) };
+  const data = parseAndCombineReport(accountNumbers, accountNames, columnNames, format, totals);
+
+  // Find empty columns.
+  const found = new Set();
+  for (const line of data) {
+    for (const [k, v] of Object.entries(line.amounts)) {
+      if (v !== null && !isNaN(v)) {
+        found.add(k);
+      }
+    }
+  }
+
+  // Remove empty columns.
+  for (let i = 0; i < columns.length; i++) {
+    if (columns[i].type === 'numeric' && !found.has(columns[i].name)) {
+      columns.splice(i, 1);
+      i--;
+    }
+  }
+
+  return { columns, data };
+};
+
+processEntries.Account = (entries, periods, formatName, format, settings) => {
+  const columns = [{
+    type: 'id',
+    name: 'id',
+    title: '{column-document-number}'
+  }, {
+    type: 'text',
+    name: 'date',
+    title: '{column-date}'
+  }, {
+    type: 'text',
+    name: 'description',
+    title: '{column-description}'
+  }, {
+    type: 'numeric',
+    name: 'debit',
+    title: '{column-debit}'
+  }, {
+    type: 'numeric',
+    name: 'credit',
+    title: '{column-credit}'
+  }, {
+    type: 'numeric',
+    name: 'balance',
+    title: '{column-balance}'
+  }];
+
+  const data = [];
+  let total = 0;
+  entries.forEach((entry) => {
+    total += entry.amount;
+    data.push({
+      id: entry.documentId,
+      description: entry.description,
+      date: moment(entry.date).format('YYYY-MM-DD'),
+      amounts: {
+        debit: entry.amount >= 0 ? entry.amount : null,
+        credit: entry.amount < 0 ? -entry.amount : null,
+        balance: total
+      }
+    });
+  });
+
+  return { columns, data };
 };
 
 /**
@@ -584,7 +650,7 @@ async function create(db, periodIds, formatName, format, query = {}) {
 
   const periods = await knex.db(db).select('*').from('period').whereIn('period.id', periodIds);
 
-  return knex.db(db).select(
+  let knexQuery = knex.db(db).select(
     knex.db(db).raw('document.period_id AS periodId'),
     'document.number AS documentId',
     'document.date',
@@ -597,11 +663,19 @@ async function create(db, periodIds, formatName, format, query = {}) {
     .from('entry')
     .leftJoin('account', 'account.id', 'entry.account_id')
     .leftJoin('document', 'document.id', 'entry.document_id')
-    .whereIn('document.period_id', periodIds)
+    .whereIn('document.period_id', periodIds);
+
+  if (query.accountId) {
+    knexQuery = knexQuery.andWhere('account.id', '=', query.accountId);
+  }
+
+  knexQuery = (knexQuery
     .orderBy('document.date')
     .orderBy('document.id')
-    .orderBy('entry.row_number')
-    .then((entries) => processEntries(entries, periods, formatName, format, reportSettings));
+    .orderBy('entry.row_number'));
+
+  const entries = await knexQuery;
+  return processEntries(entries, periods, formatName, format, reportSettings);
 }
 
 /**

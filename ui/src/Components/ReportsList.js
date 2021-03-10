@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import { inject, observer } from 'mobx-react';
-import { withTranslation, Trans } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
-import ReportLink from './ReportLink';
+import Title from './Title';
+import { List, ListItem, ListItemText, ListItemAvatar, Avatar } from '@material-ui/core';
 
 @withTranslation('translations')
 @inject('store')
@@ -16,8 +17,14 @@ class ReportsList extends Component {
   componentDidMount() {
     this.props.cursor.selectPage('Reports', this);
     const { format } = this.props.match.params;
-    if (!format && this.props.store.report) {
-      this.selectReportFormat(this.props.store.report);
+    if (!format) {
+      if (this.props.store.report) {
+        this.selectReportFormat(this.props.store.report);
+      } else {
+        const { db, accountId, periodId } = this.props.store;
+        const url = '/' + db + '/report/' + periodId + '/' + (accountId || '') + '/income-statement';
+        this.props.history.push(url);
+      }
     }
   }
 
@@ -48,15 +55,21 @@ class ReportsList extends Component {
     if (!this.props.store.token) {
       return '';
     }
+    const { t, match } = this.props;
 
     return (
       <div>
-        <h1><Trans>Reports</Trans></h1>
-        <ul className="menu">
-          {this.props.store.reports.map((report, index) => <li key={report.format}>
-            <ReportLink shortcut={'' + (index + 1)} report={report}/>
-          </li>)}
-        </ul>
+        <Title>Reports</Title>
+        <List>
+          {this.props.store.reports.map((report, index) => (
+            <ListItem key={report.format} button selected={report.format === match.params.format} onClick={() => this.selectReportFormat(report)}>
+              <ListItemAvatar color="primary">
+                <Avatar>{index + 1}</Avatar>
+              </ListItemAvatar>
+              <ListItemText primary={t('report-' + report.format)} />
+            </ListItem>
+          ))}
+        </List>
       </div>
     );
   }
@@ -66,7 +79,8 @@ ReportsList.propTypes = {
   cursor: PropTypes.instanceOf(Cursor),
   history: ReactRouterPropTypes.history.isRequired,
   match: PropTypes.object,
-  store: PropTypes.instanceOf(Store)
+  store: PropTypes.instanceOf(Store),
+  t: PropTypes.func,
 };
 
 export default ReportsList;

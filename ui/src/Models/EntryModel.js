@@ -1,11 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import LinkedText from './LinkedText';
 import { sprintf } from 'sprintf-js';
-import { Trans } from 'react-i18next';
 import NavigationTargetModel from './NavigationTargetModel';
 import TagModel from './TagModel';
 import Money from '../Components/Money';
 import { str2num } from '../Util';
+import i18n from '../i18n';
 
 class EntryModel extends NavigationTargetModel {
 
@@ -117,18 +117,6 @@ class EntryModel extends NavigationTargetModel {
   }
 
   /**
-   * Calculate if the account is `current`, `error` situation and if `sub-selected` should be on.
-   * @param {Number|null} column
-   * @param {Number|null} row
-   */
-  getClasses(column = null, row = null) {
-    return super.getClasses(column, row) +
-      (this.store.accountId === this.account_id ? ' current' : '') +
-      (this.isSubSelected(column, row) ? ' sub-selected' : '') +
-      (this.account_id === 0 ? ' error' : '');
-  }
-
-  /**
    * This is editable if period not locked.
    */
   canEdit() {
@@ -156,6 +144,8 @@ class EntryModel extends NavigationTargetModel {
       if (entry.canEdit()) {
         entry.edit = true;
         cursor.editTarget = entry;
+      } else {
+        this.store.addError(i18n.t('Cannot edit this entry. Period locked?'));
       }
     }
   }
@@ -273,8 +263,8 @@ class EntryModel extends NavigationTargetModel {
    * @param {String} value
    */
   ['validate.description'](value) {
-    const REQUIRED = <Trans>This field is required.</Trans>;
-    const INVALID_TAG = <Trans>Undefined tag.</Trans>;
+    const REQUIRED = 'This field is required.';
+    const INVALID_TAG = 'Undefined tag.';
 
     const [, newValue] = this.extractTags(value);
     if (newValue === null) {
@@ -336,7 +326,7 @@ class EntryModel extends NavigationTargetModel {
    * Format as money, if this is debit entry.
    */
   ['get.debit']() {
-    return this.debit && this.amount !== '' ? (<Money cents={this.amount} currency="EUR" />) : <span className="filler">-</span>;
+    return this.debit && this.amount !== '' ? (<Money cents={this.amount} currency="EUR" />) : <span>&nbsp;</span>;
   }
 
   ['get.edit.debit']() {
@@ -344,8 +334,8 @@ class EntryModel extends NavigationTargetModel {
   }
 
   ['validate.debit'](value) {
-    const INVALID_NUMBER = <Trans>Numeric value incorrect.</Trans>;
-    const NO_NEGATIVE = <Trans>Cannot be negative.</Trans>;
+    const INVALID_NUMBER = 'Numeric value incorrect.';
+    const NO_NEGATIVE = 'Cannot be negative.';
 
     if (value === '') {
       return null;
@@ -404,7 +394,7 @@ class EntryModel extends NavigationTargetModel {
    * Format as money, if this is credit entry.
    */
   ['get.credit']() {
-    return !this.debit && this.amount !== '' ? (<Money cents={this.amount} currency="EUR" />) : <span className="filler">-</span>;
+    return !this.debit && this.amount !== '' ? (<Money cents={this.amount} currency="EUR" />) : <span>&nbsp;</span>;
   }
 
   ['get.edit.credit']() {
@@ -463,7 +453,7 @@ class EntryModel extends NavigationTargetModel {
       return '';
     }
     const url = '/' + this.database.name + '/txs/' + this.period.id + '/' + this.account_id + '?entry=' + this.id;
-    return <Link to={url}>{this.account.toString()}</Link>;
+    return new LinkedText(url, this.account.toString());
   }
 
   ['get.edit.account']() {
@@ -471,7 +461,7 @@ class EntryModel extends NavigationTargetModel {
   }
 
   ['validate.account'](value) {
-    const INVALID_ACCOUNT = <Trans>No such account found.</Trans>;
+    const INVALID_ACCOUNT = 'No such account found.';
     return this.store.accounts.filter(a => a.number === value || a.name === value || `${a.number} ${a.name}` === value).length ? null : INVALID_ACCOUNT;
   }
 

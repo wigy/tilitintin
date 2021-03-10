@@ -1,23 +1,23 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { Modal, Button } from 'react-bootstrap';
 import { withTranslation, Trans } from 'react-i18next';
 import Cursor from '../Stores/Cursor';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/core';
 
 /**
- * Dialog content implementation.
+ * A dialog.
  */
 @inject('cursor')
 @withTranslation('translations')
-class DialogContent extends Component {
+class TilitinDialog extends Component {
 
   componentDidMount = () => {
-    this.props.cursor.setModal(this);
+    this.props.cursor.addModal(this);
   }
 
   componentWillUnmount = () => {
-    this.props.cursor.unsetModal();
+    this.props.cursor.removeModal(this);
   }
 
   keyEscape = () => {
@@ -32,65 +32,36 @@ class DialogContent extends Component {
   };
 
   render() {
+
+    const { isVisible, isValid, title, onClose, children, wider } = this.props;
+
     return (
-      <Modal.Dialog>
-        <Modal.Header>
-          <Modal.Title>{this.props.title}</Modal.Title>
-        </Modal.Header>
-
-        <Modal.Body><div className={this.props.className}>{this.props.children}</div></Modal.Body>
-
-        <Modal.Footer>
-          <Button onClick={this.keyEscape}><Trans>Cancel</Trans></Button>
-          <Button onClick={this.keyEnter} disabled={this.props.isValid && !this.props.isValid()} bsStyle="primary"><Trans>Confirm</Trans></Button>
-        </Modal.Footer>
-      </Modal.Dialog>
+      <Dialog open={isVisible} onClose={() => onClose()} fullWidth={wider} maxWidth={wider ? 'sm' : undefined}>
+        <DialogTitle onClose={() => onClose()}>
+          {title}
+        </DialogTitle>
+        <DialogContent dividers>
+          {children}
+        </DialogContent>
+        <DialogActions>
+          <Button variant="outlined" onClick={this.keyEscape}><Trans>Cancel</Trans></Button>
+          <Button variant="outlined" onClick={this.keyEnter} disabled={isValid && !isValid()} color="primary"><Trans>Confirm</Trans></Button>
+        </DialogActions>
+      </Dialog>
     );
   }
 }
 
-DialogContent.propTypes = {
-  isValid: PropTypes.func,
-  className: PropTypes.string,
-  cursor: PropTypes.instanceOf(Cursor),
-  title: PropTypes.any,
-  onClose: PropTypes.func,
-  onConfirm: PropTypes.func,
-  children: PropTypes.oneOfType([PropTypes.array, PropTypes.object])
-};
-
-/**
- * Top level wrapper for dialog.
- */
-class Dialog extends Component {
-
-  render() {
-
-    if (!this.props.isVisible) {
-      return '';
-    }
-
-    return (
-      <DialogContent
-        title={this.props.title}
-        isValid={this.props.isValid}
-        className={this.props.className}
-        onClose={this.props.onClose}
-        onConfirm={this.props.onConfirm}>
-        {this.props.children}
-      </DialogContent>
-    );
-  }
-}
-
-Dialog.propTypes = {
+TilitinDialog.propTypes = {
   isVisible: PropTypes.bool,
   isValid: PropTypes.func,
   className: PropTypes.string,
+  wider: PropTypes.bool,
   title: PropTypes.any,
   onClose: PropTypes.func,
   onConfirm: PropTypes.func,
-  children: PropTypes.oneOfType([PropTypes.array, PropTypes.object])
+  children: PropTypes.any,
+  cursor: PropTypes.instanceOf(Cursor),
 };
 
-export default Dialog;
+export default TilitinDialog;

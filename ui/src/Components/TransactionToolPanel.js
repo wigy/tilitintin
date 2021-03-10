@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Configuration from '../Configuration';
 import { inject, observer } from 'mobx-react';
 import Tag from './Tag';
-import IconButton from './IconButton';
 import IconSpacer from './IconSpacer';
 import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
-import './ToolPanel.css';
+import Title from './Title';
+import { Trans } from 'react-i18next';
+import { Button } from '@material-ui/core';
+import i18n from '../i18n';
+import IconButton from './IconButton';
 
 @inject('store')
 @inject('cursor')
@@ -17,12 +21,36 @@ class TransactionToolPanel extends Component {
     this.props.store.tools.tagDisabled = {};
   }
 
+  onDownload = (db, periodId, accountId) => {
+    const store = this.props.store;
+    const lang = i18n.language;
+    const url = `${Configuration.API_URL}/db/${db}/report/account/${periodId}/${accountId}?csv&lang=${lang}`;
+
+    fetch(url, {
+      method: 'GET',
+      headers: new Headers({
+        Authorization: 'Bearer ' + store.token
+      })
+    })
+      .then(response => response.blob())
+      .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.target = '_blank';
+        a.download = `transactions-${periodId}-${accountId}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      });
+  };
+
   render() {
     if (!this.props.store.token) {
       return '';
     }
 
-    const { account, tools } = this.props.store;
+    const { account, tools, db, periodId, accountId } = this.props.store;
 
     const toggle = (tag) => {
       this.props.cursor.leaveComponent();
@@ -46,31 +74,49 @@ class TransactionToolPanel extends Component {
       this.props.cursor.enterComponent();
     };
 
+    const openAll = () => {
+      this.props.store.transactions.forEach(tx => {
+        if (!tx.open && tx.document.number > 1) {
+          tx.toggleOpen();
+        }
+      });
+    };
+
+    const closeAll = () => {
+      this.props.store.transactions.forEach(tx => {
+        if (tx.open) {
+          tx.toggleOpen();
+        }
+      });
+    };
+
+    const hasTags = account && account.tags && account.tags.length;
     let last = null;
 
     return (
-      <div className="ToolPanel">
-        <h1>{account ? account.toString() : 'No account selected'}</h1>
+      <div className="TransactionToolPanel">
+        <Title>{account ? account.toString() : <Trans>No account selected</Trans>}</Title>
 
-        <IconButton onClick={enableAll} title="reset" icon="fas fa-clone"></IconButton>
-        <IconButton onClick={disableAll} title="disable-all" icon="far fa-clone"></IconButton>
+        <div>
+          <IconButton onClick={openAll} title="show-details" icon="zoom-in" />
+          <IconButton onClick={closeAll} title="hide-details" icon="zoom-out" />
+          <IconButton disabled={!hasTags} onClick={enableAll} title="show-all" icon="show-all" />
+          <IconButton disabled={!hasTags} onClick={disableAll} title="hide-all" icon="hide-all" />
+          <IconButton onClick={() => this.onDownload(db, periodId, accountId)} title="download-csv" icon="download" />
+        </div>
 
-        {account && account.tags.map((tag) => {
-          const spacer = (tag.type !== last);
-          const className = (tools.tagDisabled[tag.tag] ? 'IconButton off' : 'IconButton');
-          last = tag.type;
-          return (
-            <div key={tag.tag}>
-              {spacer
-                ? <IconSpacer key={`space-${tag.tag}`}/>
-                : (<span></span>)
-              }
-              <div className={className} onClick={() => toggle(tag.tag)}>
-                <Tag size="x2" tag={tag}/>
-              </div>
-            </div>);
-        })}
-        <div style={{ clear: 'both' }}></div>
+        <div style={{ marginBottom: '1rem', marginLeft: '1rem', marginRight: '1rem' }}>
+          {hasTags && account.tags.map((tag, idx) => {
+            const needSpacer = (idx > 0 && tag.type !== last);
+            last = tag.type;
+            return (
+              <React.Fragment key={tag.tag}>
+                {needSpacer && <div style={{ marginTop: '5px' }}/>}
+                <Tag onClick={() => toggle(tag.tag)} disabled={!!tools.tagDisabled[tag.tag]} tag={tag}/>
+              </React.Fragment>
+            );
+          })}
+        </div>
       </div>
     );
   }

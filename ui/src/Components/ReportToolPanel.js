@@ -8,15 +8,15 @@ import IconSpacer from './IconSpacer';
 import Loading from './Loading';
 import Configuration from '../Configuration';
 import i18n from '../i18n';
-import './ToolPanel.css';
+import Title from './Title';
 
 const ICONS = {
-  'option-compact': 'fa-tasks',
-  'option-quarter1': 'fa-thermometer-quarter',
-  'option-quarter2': 'fa-thermometer-half',
-  'option-quarter3': 'fa-thermometer-three-quarters',
-  'option-full': 'fa-thermometer-full',
-  'option-byTags': 'fa-tag'
+  'option-compact': 'compact',
+  'option-quarter1': 'quarter1',
+  'option-quarter2': 'quarter2',
+  'option-quarter3': 'quarter3',
+  'option-full': 'quarter4',
+  'option-byTags': 'tag'
 };
 
 @withTranslation('translations')
@@ -65,8 +65,8 @@ class ReportToolPanel extends Component {
     const options = store.report ? Object.keys({ ...store.report.options }) : [];
 
     const buttons = [
-      <IconButton key="button-print" onClick={onPrint} title="print" icon="fa-print"></IconButton>,
-      <IconButton key="button-download" onClick={onDownload} title="download-csv" icon="fa-download"></IconButton>
+      <IconButton key="button-print" onClick={onPrint} title="print" icon="print"></IconButton>,
+      <IconButton key="button-download" onClick={onDownload} title="download-csv" icon="download"></IconButton>
     ];
 
     if (options.length) {
@@ -81,7 +81,7 @@ class ReportToolPanel extends Component {
               toggle={store.report.config[option]}
               onClick={() => onToggle(option)}
               title={name}
-              icon={ICONS[name] || 'fa-cog'}>
+              icon={ICONS[name] || 'unknown'}>
             </IconButton>);
             break;
           case 'radio':
@@ -97,7 +97,7 @@ class ReportToolPanel extends Component {
                 onToggle(option);
               }}
               title={name}
-              icon={ICONS[name] || 'fa-cog'}>
+              icon={ICONS[name] || 'unknown'}>
             </IconButton>);
             break;
           default:
@@ -108,7 +108,7 @@ class ReportToolPanel extends Component {
 
     return (
       <div className="ToolPanel">
-        {store.report && <h1>{this.props.t('report-' + store.report.format)}</h1>}
+        {store.report && <Title>{this.props.t('report-' + store.report.format)}</Title>}
         <Loading visible={!store.report} />
         {store.report && buttons}
       </div>

@@ -22,6 +22,7 @@ function csv(report, options = {}) {
   const render = {
     id: (column, entry) => entry.id,
     name: (column, entry) => `${entry.isAccount ? entry.number + ' ' : ''}${entry.name}`,
+    text: (column, entry) => entry[column.name],
     numeric: (column, entry) => (entry.amounts &&
       !entry.hideTotal &&
       entry.amounts[column.name] !== '' &&
@@ -33,8 +34,10 @@ function csv(report, options = {}) {
 
   const { data, columns } = report;
   let line = {};
-  columns.forEach((column) => (line[column.name] = column.title));
-  csv.push(line);
+  if (!options.dropTile) {
+    columns.forEach((column) => (line[column.name] = column.title));
+    csv.push(line);
+  }
 
   data.forEach((entry) => {
     line = {};

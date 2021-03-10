@@ -11,7 +11,8 @@ import Store from '../Stores/Store';
 import Settings from '../Stores/Settings';
 import Cursor from '../Stores/Cursor';
 import EntryModel from '../Models/EntryModel';
-import './Transaction.css';
+import { TableRow, TableCell, Typography } from '@material-ui/core';
+import { Error } from '@material-ui/icons';
 
 @withTranslation('translations')
 @inject('store')
@@ -122,22 +123,22 @@ class Transaction extends Component {
   }
 
   // Render the main row of the document, i.e. the entry having the current account and data from document it belongs to.
-  renderMainTx(classes) {
+  renderMainTx(error) {
     const { tx } = this.props;
 
     const money = (<Money cents={tx.amount} currency="EUR" />);
     const total = (<Money cents={this.props.total} currency="EUR" />);
 
     return (
-      <tr id={tx.getId()} key="title" className={classes} onClick={() => this.onClick()}>
-        <td className="number">
-          {tx.document.number}
-        </td>
-        <td className="date">
+      <TableRow id={tx.getId()} selected={tx.document.selected} key="title" onClick={() => this.onClick()}>
+        <TableCell>
+          {this.props.duplicate ? '' : tx.document.number}
+        </TableCell>
+        <TableCell>
           <TransactionDetails
             index={this.props.index}
             field="date"
-            classNames={tx.open && this.props.index === this.props.cursor.index && this.props.cursor.row === null ? 'sub-selected' : ''}
+            className={tx.open && this.props.index === this.props.cursor.index && this.props.cursor.row === null ? 'sub-selected' : ''}
             document={tx.document}
             onComplete={(doc, proposal) => {
               // Find the new row after order by date has been changed.
@@ -147,35 +148,38 @@ class Transaction extends Component {
               this.props.cursor.setCell(0, 0);
             }}
           />
-        </td>
-        <td className="tags" style={{ width: (tx.tags.length) * 2.6 + 'ex' }}>
+        </TableCell>
+        <TableCell>
           <Tags tags={tx.tags}></Tags>
-        </td>
-        <td className="description">
-          <span className="summary">{tx.description}&nbsp;</span>
-        </td>
-        <td className="debit">
-          <span className="summary">&nbsp;{tx.debit ? money : ''}</span>
-        </td>
-        <td className="credit">
-          <span className="summary">&nbsp;{tx.debit ? '' : money}</span>
-        </td>
-        <td className="total">
+        </TableCell>
+        <TableCell>
+          <Typography color={error ? 'error' : 'inherit'}>
+            {tx.description}
+            {error && <Error style={{ fontSize: '96%' }}/>}
+          </Typography>
+        </TableCell>
+        <TableCell align="right">
+          {tx.debit ? money : ''}
+        </TableCell>
+        <TableCell align="right">
+          {tx.debit ? '' : money}
+        </TableCell>
+        <TableCell align="right">
           {total}
-        </td>
-      </tr>
+        </TableCell>
+      </TableRow>
     );
   }
 
   // Render an entry for opened document.
   renderEntry(idx, tx) {
-    const classes = 'TransactionEntry alt open';
     const id = `tx${tx.document.id}-row${idx}`;
     const entry = tx.document.entries[idx];
 
     return (
-      <tr id={id} key={idx} className={classes}>
-        <td className="account" colSpan={3} onClick={() => this.onClickDetail(0, idx)}>
+      <TableRow id={id} key={idx}>
+        <TableCell />
+        <TableCell colSpan={2} onClick={() => this.onClickDetail(0, idx)} align="left">
           <TransactionDetails
             index={this.props.index}
             error={!entry.account_id}
@@ -184,8 +188,8 @@ class Transaction extends Component {
             entry={entry}
             onComplete={(_, proposal) => this.onComplete(0, idx, proposal)}
           />
-        </td>
-        <td className="description" onClick={() => this.onClickDetail(1, idx)}>
+        </TableCell>
+        <TableCell onClick={() => this.onClickDetail(1, idx)}>
           <TransactionDetails
             index={this.props.index}
             field="description"
@@ -194,8 +198,8 @@ class Transaction extends Component {
             onComplete={(_, proposal) => this.onComplete(1, idx, proposal)}
             onClick={() => this.onClickDetail(1, idx)}
           />
-        </td>
-        <td className="debit" onClick={() => this.onClickDetail(2, idx)}>
+        </TableCell>
+        <TableCell onClick={() => this.onClickDetail(2, idx)} align="right">
           <TransactionDetails
             index={this.props.index}
             field="debit"
@@ -204,8 +208,8 @@ class Transaction extends Component {
             onClick={() => this.onClickDetail()}
             onComplete={(_, proposal) => this.onComplete(2, idx, proposal)}
           />
-        </td>
-        <td className="credit" onClick={() => this.onClickDetail(3, idx)}>
+        </TableCell>
+        <TableCell onClick={() => this.onClickDetail(3, idx)} align="right">
           <TransactionDetails
             index={this.props.index}
             field="credit"
@@ -214,20 +218,17 @@ class Transaction extends Component {
             onClick={() => this.onClickDetail()}
             onComplete={(_, proposal) => this.onComplete(3, idx, proposal)}
           />
-        </td>
-        <td className="empty">
-          &nbsp;
-        </td>
-      </tr>
+        </TableCell>
+        <TableCell />
+      </TableRow>
     );
   }
 
   render() {
     const tx = this.props.tx;
 
-    // Calculate imbalance, missing accounts, mismatching account, and look for deletion request.
+    // Calculate imbalance, missing accounts, and look for deletion request.
     let missingAccount = false;
-    let mismatchingAccount = false;
 
     tx.document.entries.forEach((entry, idx) => {
       if (entry.askForDelete) {
@@ -235,25 +236,15 @@ class Transaction extends Component {
       }
       if (entry.account_id === 0) { // Null account_id is valid until first save, when it turns to 0.
         missingAccount = true;
-      } else {
-        if (entry.account_id === tx.account_id) {
-          mismatchingAccount = false;
-        }
       }
     });
 
     const imbalance = tx.document.imbalance();
     const error = !!imbalance || missingAccount;
 
-    // Set up CSS classes.
-    const classes = tx.document.getClasses() +
-      (error ? ' error' : '') +
-      (mismatchingAccount ? ' mismatch' : '') +
-      (this.props.duplicate ? ' duplicate' : '');
-
     // Render main transaction.
     const ret = [
-      this.renderMainTx(classes)
+      this.renderMainTx(error)
     ];
 
     // Render entries, if opened.
@@ -266,8 +257,8 @@ class Transaction extends Component {
     // Render delete dialog in the dummy row.
     if (this.entryToDelete) {
       ret.push(
-        <tr key="delete">
-          <td colSpan={7}>
+        <TableRow key="delete">
+          <TableCell colSpan={7}>
             <Dialog
               title={<Trans>Delete this transaction?</Trans>}
               isVisible={this.entryToDelete.askForDelete}
@@ -277,27 +268,33 @@ class Transaction extends Component {
               {this.entryToDelete.description}<br/>
               <b>{this.entryToDelete.debit ? '+' : '-'}<Money currency="EUR" cents={this.entryToDelete.amount}></Money></b>
             </Dialog>
-          </td>
-        </tr>
+          </TableCell>
+        </TableRow>
       );
     }
 
     // Render imbalance
     if (imbalance && this.props.tx.document.open) {
       ret.push(
-        <tr key="imbalance" className={'alt error TransactionEntry'} onClick={() => this.onClick()}>
-          <td className="account" colSpan={3}></td>
-          <td className="description">
-            <Trans>Debit and credit do not match</Trans>
-          </td>
-          <td className="debit">
-            {imbalance < 0 ? <Money cents={imbalance} currency="€"/> : ''}
-          </td>
-          <td className="credit">
-            {imbalance > 0 ? <Money cents={imbalance} currency="€"/> : ''}
-          </td>
-          <td className="empty"></td>
-        </tr>);
+        <TableRow key="imbalance">
+          <TableCell colSpan={3} />
+          <TableCell>
+            <Typography color="error">
+              <Trans>Debit and credit do not match</Trans>
+            </Typography>
+          </TableCell>
+          <TableCell align="right">
+            <Typography color="error">
+              {imbalance < 0 ? <Money cents={imbalance} currency="€"/> : ''}
+            </Typography>
+          </TableCell>
+          <TableCell align="right">
+            <Typography color="error">
+              {imbalance > 0 ? <Money cents={imbalance} currency="€"/> : ''}
+            </Typography>
+          </TableCell>
+          <TableCell/>
+        </TableRow>);
     }
 
     return ret;

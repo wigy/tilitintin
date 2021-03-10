@@ -2,34 +2,39 @@
 BUGS
 ====
 
-[ ] Report labeled version leaves unmatched cents as "Other".
-
-[ ] Update on unmounted loading component when switching between reports and transactions.
 [ ] Pressing insert while previous date is early in order, produced 2 selected lines.
-[ ] Mouse does not work on proposals.
 [ ] Changing the account of the entry having current account, keeps the selection in new screen.
 [ ] Page up/down is not practical on opened transaction, which has lot of entries.
 [ ] Clicking Show All in tx view activates account selector for no reason.
+[ ] Clicking Show Details in tx view on income/expense account activates date for no reason.
+[ ] Add entry by pressing tab repeatedly and save without account selected causes crash.
+[ ] Duplicate causes problems on cursor up / down logic.
 
 SMALL IMPROVEMENTS
 ==================
 
-[ ] When selecting proposed text and no debit/credit, it could jump to the previously used debit/credit.
-[ ] After editing date, jump to description (if only one entry).
-[ ] Check and fix configured VAT handling.
-[X] Compact view by default.
-[ ] Maybe add some space on the bottom of the transaction list.
-[X] Display postponed VAT accounts as well in VAT screen.
-[ ] Download current account as CSV.
-[ ] A tool to scan for documents with only one entry.
+[ ] Display discrepancy in the balance sheet in RED.
 
 FUTURE FEATURES
 ===============
 
 2.0
-[ ] Clean up empty columns from tagged income statement.
-[ ] Material UI.
-[ ] Switching between period and document tools: icon is not updated (fa-icon problem).
+[X] Display postponed VAT accounts as well in VAT screen.
+[X] Download current account as CSV.
+[X] Compact view by default.
+[X] Remove completely empty columns from tagged income statement.
+[X] Switching between period and document tools: icon is not updated (fa-icon problem).
+[X] Material UI.
+    [X] Automatic proposal implementation.
+    [X] Re-implement store.messages to use snackbar.
+    [X] Change error handling in tx editor to push messages to the store instead.
+    [X] Remove all getClasses() calls.
+    [X] Check for unused CSS because of getClasses() removal.
+    [X] Get rid of unnecessary CSS files.
+    [X] Duplicate rendering.
+[X] Mouse does not work on proposals.
+[X] Report labeled version leaves unmatched cents as "Other".
+[X] Accounts without tags: could disable show/hide buttons.
 
 3.0
 [ ] Tags management.

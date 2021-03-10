@@ -14,7 +14,7 @@ class LanguageSelector extends Component {
 
   render() {
     const lang = i18n.language === 'fi' ? 'fin' : 'gbr';
-    return <Flag code={lang} height="24" onClick={() => this.onChangeLanguage()} />;
+    return <Flag code={lang} height="20" onClick={() => this.onChangeLanguage()} />;
   }
 }
 

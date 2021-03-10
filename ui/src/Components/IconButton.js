@@ -1,31 +1,61 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
-import './IconButton.css';
+import { IconButton } from '@material-ui/core';
+import { HelpOutline, AccountBalance, StarRate, AttachMoney, CreditCard, LocalGroceryStore, MoneyRounded, AddShoppingCart, PersonAdd, Print, CloudDownload, FormatIndentDecrease, Filter2, Filter3, Filter1, Filter4, LocalOffer, Lock, LockOpen, AttachFile, Functions, Event, Sort, Delete, Storage, CloudUpload, ZoomIn, ZoomOut, Visibility, VisibilityOff } from '@material-ui/icons';
+
+const ICONS = {
+  'calendar-plus': Event,
+  'credit-card': CreditCard,
+  'hide-all': VisibilityOff,
+  'shopping-cart': LocalGroceryStore,
+  'show-all': Visibility,
+  'sort-up': Sort,
+  'user-plus': PersonAdd,
+  'zoom-in': ZoomIn,
+  'zoom-out': ZoomOut,
+  compact: FormatIndentDecrease,
+  database: Storage,
+  download: CloudDownload,
+  lock: Lock,
+  money: AttachMoney,
+  paperclip: AttachFile,
+  print: Print,
+  profit: MoneyRounded,
+  quarter1: Filter1,
+  quarter2: Filter2,
+  quarter3: Filter3,
+  quarter4: Filter4,
+  sales: AddShoppingCart,
+  savings: AccountBalance,
+  star: StarRate,
+  summarize: Functions,
+  tag: LocalOffer,
+  trash: Delete,
+  unknown: HelpOutline,
+  unlock: LockOpen,
+  upload: CloudUpload,
+};
 
 @withTranslation('translations')
-class ToolPanel extends Component {
+class TilitintinIconButton extends Component {
 
   render() {
-    const { t } = this.props;
-    let className = 'IconButton';
-    if ('toggle' in this.props && !this.props.toggle) {
-      className += ' off';
+    const { t, disabled, title, onClick, icon, toggle } = this.props;
+    let color = 'primary';
+    if (toggle !== undefined) {
+      color = toggle ? 'secondary' : undefined;
     }
-    if ('disabled' in this.props && this.props.disabled) {
-      className += ' off';
-    }
+    const Icon = icon in ICONS ? ICONS[icon] : ICONS.unknown;
     return (
-      <div className={className} title={t('icon-' + this.props.title)} onClick={() => !this.props.disabled && this.props.onClick()}>
-        <div className="fa-icon">
-          <i className={'fas fa-2x ' + this.props.icon}></i>
-        </div>
-      </div>
+      <IconButton color={color} title={t('icon-' + title)} disabled={disabled} onClick={() => onClick()}>
+        <Icon style={{ fontSize: 30 }}/>
+      </IconButton>
     );
   }
 }
 
-ToolPanel.propTypes = {
+TilitintinIconButton.propTypes = {
   onClick: PropTypes.func,
   t: PropTypes.func,
   icon: PropTypes.string,
@@ -34,4 +64,4 @@ ToolPanel.propTypes = {
   disabled: PropTypes.bool
 };
 
-export default ToolPanel;
+export default TilitintinIconButton;

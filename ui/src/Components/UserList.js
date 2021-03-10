@@ -5,7 +5,8 @@ import { inject, observer } from 'mobx-react';
 import { withTranslation, Trans } from 'react-i18next';
 import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
-import './UserList.css';
+import Title from './Title';
+import { List, ListItem, ListItemText } from '@material-ui/core';
 
 @withTranslation('translations')
 @inject('store')
@@ -38,18 +39,21 @@ class ToolsList extends Component {
   }
 
   render() {
-    const { store } = this.props;
+    const { store, match } = this.props;
     if (!store.token) {
       return '';
     }
 
     return (
-      <div className="UserList">
-        <h1><Trans>Users</Trans></h1>
-        {this.state.users.map((user) => <div key={user.user} className="user" onClick={() => this.onClickUser(user)}>
-          <div className="name">{user.name} ({user.user})</div>
-          <div className="email">{user.email}</div>
-        </div>)}
+      <div>
+        <Title><Trans>Users</Trans></Title>
+        <List>
+          {this.state.users.map((user) => (
+            <ListItem key={user.user} button selected={match.params.arg === user.user} onClick={() => this.onClickUser(user)}>
+              <ListItemText primary={`${user.name} (${user.user})`} secondary={user.email} />
+            </ListItem>
+          ))}
+        </List>
       </div>
     );
   }

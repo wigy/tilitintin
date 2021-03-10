@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
-import { Link } from 'react-router-dom';
 import Localize from './Localize';
 import { inject, observer } from 'mobx-react';
 import { withTranslation, Trans } from 'react-i18next';
 import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
 import Loading from './Loading';
+import Title from './Title';
+import { Button, Typography, Avatar, List, ListItem } from '@material-ui/core';
+import Panel from './Panel';
 
 @withTranslation('translations')
 @inject('cursor')
@@ -64,27 +66,31 @@ class Dashboard extends Component {
     }
     if (!store.db) {
       return <>
-        <h1><Trans>No Database Selected</Trans></h1>
+        <Title><Trans>No Database Selected</Trans></Title>
       </>;
     }
     const { periodId } = this.props.match.params;
 
     return (
       <div className="Dashboard">
-        <h1><Trans>Database</Trans>: {store.db}</h1>
-        <h2><Trans>Company Info</Trans></h2>
-        <b><Trans>Business name</Trans>: {store.settings.BUSINESS_NAME}</b><br />
-        <b><Trans>Business ID</Trans>: {store.settings.BUSINESS_ID}</b><br />
-        <h2><Trans>Periods</Trans></h2>
-        <Loading visible={store.loading} />
-        <ul className="menu">
-          {store.database.periods.reverse().map((period, index) => <li key={period.id} className={parseInt(periodId) === period.id ? 'period current' : 'period'}>
-            <Link to={`/${store.db}/dashboard/${period.id}`}>
-              <code>{index + 1}</code>&nbsp;
-              <Localize date={period.start_date} /> &mdash; <Localize date={period.end_date} />
-            </Link>
-          </li>)}
-        </ul>
+        <Title><Trans>Database</Trans>: {store.db}</Title>
+        <Panel title={<Trans>Company Info</Trans>}>
+          <Trans>Business name</Trans>: {store.settings.BUSINESS_NAME}<br />
+          <Trans>Business ID</Trans>: {store.settings.BUSINESS_ID}<br />
+          <br />
+          <Typography variant="h5" color="textSecondary"><Trans>Periods</Trans></Typography>
+          <Loading visible={store.loading} />
+          <List>
+            {store.database.periods.reverse().map((period, index) => (
+              <ListItem key={period.id} selected={parseInt(periodId) === period.id}>
+                <Button onClick={() => this.props.history.push(`/${store.db}/dashboard/${period.id}`)}>
+                  <Avatar>{index + 1}</Avatar>&nbsp;
+                  <Localize date={period.start_date} /> &mdash; <Localize date={period.end_date} />
+                </Button>
+              </ListItem>
+            ))}
+          </List>
+        </Panel>
       </div>
     );
   }

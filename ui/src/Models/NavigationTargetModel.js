@@ -6,31 +6,22 @@ class NavigationTargetModel extends Model {
   // If set, this object is currently selected.
   @observable
   selected =false;
-  // If set, this object is extended to show its details (if applicable).
 
+  // If set, this object is extended to show its details (if applicable).
   @observable
   open = false;
-  // If set, then this object is now in editing mode (if applicable).
 
+  // If set, then this object is now in editing mode (if applicable).
   @observable
   edit = false;
-  // If set, the named sub-item column is currently selected.
 
+  // If set, the named sub-item column is currently selected.
   @observable
   column = null;
-  // If set, this model is marked for deletion.
 
+  // If set, this model is marked for deletion.
   @observable
   askForDelete = false;
-
-  /**
-   * Add classes according to the flags and possibly for the given (column, row) sub-item.
-   */
-  getClasses(column = null, row = null) {
-    return super.getClasses() +
-      (this.selected ? ' selected' : '') +
-      (this.open ? ' open' : '');
-  }
 
   /**
    * Find the DOM-element corresponding this element.

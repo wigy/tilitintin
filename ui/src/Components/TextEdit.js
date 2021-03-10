@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation, Trans } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import Model from '../Models/Model';
-import './TextEdit.css';
+import { TextField, List, ListItem, Popper, Paper } from '@material-ui/core';
 import { inject } from 'mobx-react';
 import Cursor from '../Stores/Cursor';
+import Store from '../Stores/Store';
 
 @inject('cursor')
+@inject('store')
 @withTranslation('translations')
 class TextEdit extends Component {
 
@@ -16,13 +18,12 @@ class TextEdit extends Component {
       value: props.value || '',
       proposal: null,
       currentProposal: null,
-      error: null
+      error: false,
+      ref: React.createRef()
     };
   }
 
   componentDidMount() {
-    this.inputRef.focus();
-    this.inputRef.select();
     this.updateProposal(this.state.value);
     this.props.cursor.disableHandler();
   }
@@ -31,19 +32,25 @@ class TextEdit extends Component {
     this.props.cursor.enableHandler();
   }
 
-  onKeyPress(event) {
+  onKeyPress(event, index = null) {
+    console.log(index);
     if (event.key === 'Enter' || event.key === 'Tab') {
-      const proposal = this.state.currentProposal !== null ? this.state.proposal[this.state.currentProposal] : null;
-      const value = this.state.currentProposal !== null ? proposal : this.state.value;
+      if (index === null) {
+        index = this.state.currentProposal;
+      }
+      const proposal = index !== null ? this.state.proposal[index] : null;
+      const value = index !== null ? proposal : this.state.value;
       const error = this.props.validate && this.props.validate(value);
       if (error) {
-        this.setState({ error });
+        this.setState({ error: true });
+        this.props.store.addError(this.props.t(error));
       } else if (this.props.onComplete) {
         const complete = this.props.onComplete(value, proposal);
         if (complete.catch) {
           complete.catch(err => {
             console.error(err);
-            this.setState({ error: <Trans>Saving failed.</Trans> });
+            this.setState({ error: true });
+            this.props.store.addError(this.props.t('Saving failed.'));
           });
         }
       }
@@ -94,7 +101,7 @@ class TextEdit extends Component {
   onChange(event) {
     const value = event.target.value;
     this.props.onChange && this.props.onChange(value);
-    this.setState({ value, error: null });
+    this.setState({ value, error: false });
     this.updateProposal(value);
   }
 
@@ -138,35 +145,54 @@ class TextEdit extends Component {
   }
 
   renderProposal() {
-    if (this.state.proposal === null || this.state.proposal.length === 0) {
+    if (!this.state.ref.current) {
       return '';
     }
+    const placement = 'bottom-start';
     const current = this.state.currentProposal > this.state.proposal.length ? this.state.proposal.length - 1 : this.state.currentProposal;
-    return <div className="proposal-container">
-      <div className="proposal">
-        {this.state.proposal.map(
-          (item, index) => <div id={`proposal${index}`} key={index} className={'item' + (current === index ? ' current' : '')}>
-            {item}
-          </div>
-        )}
-      </div>
-    </div>;
+    return (
+      <Popper placement={placement} open={!!this.state.proposal && this.state.proposal.length > 0} anchorEl={this.state.ref.current}>
+        <Paper style={{ maxHeight: '50vh', overflowY: 'auto' }} elevation={5}>
+          <List>
+            {this.state.proposal.map(
+              (item, index) => (
+                <ListItem
+                  id={`proposal${index}`}
+                  dense
+                  style={{ cursor: 'pointer' }}
+                  key={index}
+                  onClick={ () => {
+                    this.onKeyPress({ key: 'Enter' }, index);
+                  }}
+                  selected={current === index}>
+                  {item}
+                </ListItem>
+              )
+            )}
+          </List>
+        </Paper>
+      </Popper>
+    );
   }
 
   render() {
     return (
-      <div className="TextEdit">
-        <div className="error">{this.state.error}</div>
-        <input
+      <div className="TextEdit" ref={this.state.ref}>
+        <TextField
           value={this.state.value}
-          ref={(input) => { this.inputRef = input; }}
+          error={this.state.error}
+          variant="outlined"
+          size="small"
+          autoFocus
+          fullWidth
           onChange={event => this.onChange(event)}
           onKeyPress={event => this.onKeyPress(event)}
           onKeyUp={event => this.onKeyUp(event)}
           onKeyDown={event => this.onKeyDown(event)}
         />
         {this.renderProposal()}
-      </div>);
+      </div>
+    );
   }
 }
 
@@ -178,7 +204,9 @@ TextEdit.propTypes = {
   value: PropTypes.string,
   target: PropTypes.instanceOf(Model),
   proposal: PropTypes.func,
-  cursor: PropTypes.instanceOf(Cursor)
+  cursor: PropTypes.instanceOf(Cursor),
+  store: PropTypes.instanceOf(Store),
+  t: PropTypes.func,
 };
 
 export default TextEdit;
