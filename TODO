@@ -5,7 +5,6 @@ BUGS
 [ ] Report labeled version leaves unmatched cents as "Other".
 [ ] Update on unmounted loading component when switching between reports and transactions.
 [ ] Pressing insert while previous date is early in order, produced 2 selected lines.
-[ ] Mouse does not work on proposals.
 [ ] Changing the account of the entry having current account, keeps the selection in new screen.
 [ ] Page up/down is not practical on opened transaction, which has lot of entries.
 [ ] Clicking Show All in tx view activates account selector for no reason.
@@ -37,6 +36,7 @@ FUTURE FEATURES
     [X] Check for unused CSS because of getClasses() removal.
     [X] Get rid of unnecessary CSS files.
     [X] Duplicate rendering.
+[X] Mouse does not work on proposals.
 
 3.0
 [ ] Tags management.
