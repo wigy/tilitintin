@@ -17,8 +17,14 @@ class ReportsList extends Component {
   componentDidMount() {
     this.props.cursor.selectPage('Reports', this);
     const { format } = this.props.match.params;
-    if (!format && this.props.store.report) {
-      this.selectReportFormat(this.props.store.report);
+    if (!format) {
+      if (this.props.store.report) {
+        this.selectReportFormat(this.props.store.report);
+      } else {
+        const { db, accountId, periodId } = this.props.store;
+        const url = '/' + db + '/report/' + periodId + '/' + (accountId || '') + '/income-statement';
+        this.props.history.push(url);
+      }
     }
   }
 

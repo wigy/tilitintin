@@ -27,7 +27,6 @@ class Report extends Component {
 
     return (
       <div className="Report">
-        <Loading visible={!this.props.store.report} />
         {this.props.store.report && <ReportDisplay report={this.props.store.report}></ReportDisplay>}
       </div>
     );
