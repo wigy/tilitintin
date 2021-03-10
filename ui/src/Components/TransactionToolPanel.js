@@ -90,7 +90,7 @@ class TransactionToolPanel extends Component {
       });
     };
 
-    const hasTags = account && account.tags && account.tags.length;
+    const hasTags = account && account.tags && account.tags.length > 0;
     let last = null;
 
     return (
