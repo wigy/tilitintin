@@ -59,6 +59,10 @@ In UI you can do filtering using the categories defined.
 
 ## Version History
 
+### 1.1.3
+  * Small fixes.
+  * Last Bootstrap UI.
+
 ### 1.1.2
   * Calculate sum of debit and credit.
   * When selecting proposed text, set account entry as well based on history.
