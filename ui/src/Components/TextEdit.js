@@ -145,7 +145,7 @@ class TextEdit extends Component {
   }
 
   renderProposal() {
-    if (!this.state.ref.current) {
+    if (!this.state.ref.current || !this.state.proposal) {
       return '';
     }
     const placement = 'bottom-start';

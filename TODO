@@ -19,7 +19,8 @@ FUTURE FEATURES
 [ ] Clicking Show Details in tx view on income/expense account activates date for no reason.
 [ ] Add entry by pressing tab repeatedly and save without account selected causes crash.
 [ ] Duplicate causes problems on cursor up / down logic.
-[ ] Pressing 'L' on date editor activation causes crash.
+[X] Pressing a key on date editor activation causes crash.
+[ ] Date validation.
 
 3.0
 [ ] Tags management.
