@@ -90,6 +90,7 @@ class TransactionToolPanel extends Component {
       });
     };
 
+    const hasTags = account && account.tags && account.tags.length;
     let last = null;
 
     return (
@@ -99,13 +100,13 @@ class TransactionToolPanel extends Component {
         <div>
           <IconButton onClick={openAll} title="show-details" icon="zoom-in" />
           <IconButton onClick={closeAll} title="hide-details" icon="zoom-out" />
-          <IconButton onClick={enableAll} title="show-all" icon="show-all" />
-          <IconButton onClick={disableAll} title="hide-all" icon="hide-all" />
+          <IconButton disabled={!hasTags} onClick={enableAll} title="show-all" icon="show-all" />
+          <IconButton disabled={!hasTags} onClick={disableAll} title="hide-all" icon="hide-all" />
           <IconButton onClick={() => this.onDownload(db, periodId, accountId)} title="download-csv" icon="download" />
         </div>
 
         <div style={{ marginBottom: '1rem', marginLeft: '1rem', marginRight: '1rem' }}>
-          {account && account.tags.map((tag, idx) => {
+          {hasTags && account.tags.map((tag, idx) => {
             const needSpacer = (idx > 0 && tag.type !== last);
             last = tag.type;
             return (

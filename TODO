@@ -2,7 +2,6 @@
 BUGS
 ====
 
-[ ] Update on unmounted loading component when switching between reports and transactions.
 [ ] Pressing insert while previous date is early in order, produced 2 selected lines.
 [ ] Changing the account of the entry having current account, keeps the selection in new screen.
 [ ] Page up/down is not practical on opened transaction, which has lot of entries.
@@ -15,7 +14,6 @@ SMALL IMPROVEMENTS
 ==================
 
 [ ] Display discrepancy in the balance sheet in RED.
-[ ] Accounts without tags: could disable show/hide buttons.
 
 FUTURE FEATURES
 ===============
@@ -36,6 +34,7 @@ FUTURE FEATURES
     [X] Duplicate rendering.
 [X] Mouse does not work on proposals.
 [X] Report labeled version leaves unmatched cents as "Other".
+[X] Accounts without tags: could disable show/hide buttons.
 
 3.0
 [ ] Tags management.
