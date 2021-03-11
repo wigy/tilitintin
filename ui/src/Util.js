@@ -30,9 +30,15 @@ export function str2date(str, sample) {
   let year, month, day;
   switch (lang) {
     case 'en':
+      if (!/^\d{1,4}(-\d{1,2}(-\d{1,2})?)?$/.test(str)) {
+        return undefined;
+      }
       [year, month, day] = str.split('-');
       break;
     case 'fi':
+      if (!/^\d{1,2}(\.\d{1,2}(\.\d{1,4})?)?$/.test(str)) {
+        return undefined;
+      }
       [day, month, year] = str.split('.');
       break;
     default:
