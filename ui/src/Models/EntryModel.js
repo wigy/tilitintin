@@ -135,6 +135,17 @@ class EntryModel extends NavigationTargetModel {
   }
 
   /**
+   * Turn editor on, if this is opened.
+   * @param {Cursor} cursor
+   */
+  keyBackspace(cursor) {
+    if (this.document.open) {
+      this.turnEditorOn(cursor);
+      return { preventDefault: true };
+    }
+  }
+
+  /**
    * Turn the correct entry into edit mode.
    * @param {Cursor} cursor
    */
@@ -144,6 +155,13 @@ class EntryModel extends NavigationTargetModel {
       if (entry.canEdit()) {
         entry.edit = true;
         cursor.editTarget = entry;
+      } else {
+        this.store.addError(i18n.t('Cannot edit this entry. Period locked?'));
+      }
+    } else if (cursor.row === null) {
+      if (this.document.canEdit()) {
+        this.document.edit = true;
+        cursor.editTarget = this.document;
       } else {
         this.store.addError(i18n.t('Cannot edit this entry. Period locked?'));
       }

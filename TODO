@@ -13,8 +13,7 @@ FUTURE FEATURES
 2.0.1
 [X] Display discrepancy in the balance sheet in RED.
 [X] Pressing a key on date editor activation causes crash.
-[ ] Date validation.
-[ ] Pressing insert while previous date is early in order, produced 2 selected lines.
+[X] Date validation.
 [ ] Changing the account of the entry having current account, keeps the selection in new screen.
 [ ] Page up/down is not practical on opened transaction, which has lot of entries.
 [ ] Clicking Show All in tx view activates account selector for no reason.

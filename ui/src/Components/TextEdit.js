@@ -33,7 +33,6 @@ class TextEdit extends Component {
   }
 
   onKeyPress(event, index = null) {
-    console.log(index);
     if (event.key === 'Enter' || event.key === 'Tab') {
       if (index === null) {
         index = this.state.currentProposal;
