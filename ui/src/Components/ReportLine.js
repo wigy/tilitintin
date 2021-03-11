@@ -11,7 +11,7 @@ class ReportLine extends Component {
 
   render() {
     let {
-      id, name, number, amounts, bold, italic, hideTotal, tab, pageBreak,
+      id, name, number, amounts, bold, error, italic, hideTotal, tab, pageBreak,
       isAccount, fullWidth, needLocalization, useRemainingColumns, bigger
     } = this.props.line;
 
@@ -27,6 +27,9 @@ class ReportLine extends Component {
       }
       if (italic) {
         text = <i>{text}</i>;
+      }
+      if (error) {
+        text = <span style={{ color: 'red' }}>{text}</span>;
       }
       return text;
     };

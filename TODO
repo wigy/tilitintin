@@ -11,7 +11,7 @@ FUTURE FEATURES
 ===============
 
 2.0.1
-[ ] Display discrepancy in the balance sheet in RED.
+[X] Display discrepancy in the balance sheet in RED.
 [ ] Pressing insert while previous date is early in order, produced 2 selected lines.
 [ ] Changing the account of the entry having current account, keeps the selection in new screen.
 [ ] Page up/down is not practical on opened transaction, which has lot of entries.

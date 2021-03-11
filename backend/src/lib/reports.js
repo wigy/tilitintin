@@ -4,6 +4,14 @@ const tags = require('libfyffe').data.tilitintin.tags;
 const settings = require('./settings');
 
 /**
+ * Convert dash-separated string to camel case.
+ * @param {String} name
+ */
+function camelCase(name) {
+  return name.split('-').map((s) => s[0].toUpperCase() + s.substr(1)).join('');
+}
+
+/**
  * Construct rendering information object based on the code.
  * @param {String} code
  */
@@ -591,7 +599,7 @@ function processEntries(entries, periods, formatName, format, settings) {
   entries = entries.filter(filter);
 
   // Select data conversion function and run it.
-  const camelCaseName = formatName.split('-').map((s) => s[0].toUpperCase() + s.substr(1)).join('');
+  const camelCaseName = camelCase(formatName);
   let results;
   if (processEntries[camelCaseName]) {
     results = processEntries[camelCaseName](entries, periods, formatName, format, settings);
@@ -612,6 +620,39 @@ function processEntries(entries, periods, formatName, format, settings) {
 }
 
 /**
+ * Post process results before returning.
+ * @param {Array<Object>} data
+ * @returns {Array<Object>}
+ */
+function postProcess(data) {
+  const camelCaseName = camelCase(data.format);
+  console.log(camelCaseName);
+  if (postProcess[camelCaseName]) {
+    return postProcess[camelCaseName](data);
+  }
+  return data;
+}
+
+postProcess.BalanceSheet = function(data) {
+  const liabilities = data.data.find(line => line.name === 'Vastattavaa yhteensä');
+  const assets = data.data.find(line => line.name === 'Vastaavaa yhteensä');
+  if (liabilities && assets) {
+    Object.values(liabilities.amounts).forEach((value, idx) => {
+      if (Object.values(assets.amounts)[idx] !== value) {
+        assets.error = true;
+        liabilities.error = true;
+      }
+    });
+  }
+
+  return data;
+};
+
+postProcess.BalanceSheetDetailed = function(data) {
+  return postProcess.BalanceSheet(data);
+};
+
+/**
  * Construct a report data structure for the given Tilitin format.
  * @param {String} db
  * @param {Number[]} periodIds
@@ -621,6 +662,7 @@ function processEntries(entries, periods, formatName, format, settings) {
  *
  * Resulting entries is an array of objects containing:
  * * `tab` Zero originating indentation number.
+ * * `error` If true, this row has an error.
  * * `required` If true, this is always shown.
  * * `hideTotal` if true, do not show total.
  * * `bold` if true, show in bold.
@@ -675,7 +717,8 @@ async function create(db, periodIds, formatName, format, query = {}) {
     .orderBy('entry.row_number'));
 
   const entries = await knexQuery;
-  return processEntries(entries, periods, formatName, format, reportSettings);
+  const data = processEntries(entries, periods, formatName, format, reportSettings);
+  return postProcess(data);
 }
 
 /**
