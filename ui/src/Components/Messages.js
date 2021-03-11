@@ -27,7 +27,10 @@ class Messages extends Component {
 
   render() {
     const { messages } = this.props.store;
-
+    let severity = 'info';
+    if (messages.filter(m => m.type === 'error').length) {
+      severity = 'error';
+    }
     return (
       <div>
         <Snackbar
@@ -37,7 +40,7 @@ class Messages extends Component {
           }}
           open={messages.length > 0}
         >
-          <Alert variant="filled" elevation={6} severity="error">
+          <Alert variant="filled" elevation={6} severity={severity}>
             {messages.map(message => this.renderMessage(message))}
           </Alert>
         </Snackbar>

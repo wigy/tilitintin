@@ -16,6 +16,7 @@ class TextEdit extends Component {
     super(props);
     this.state = {
       value: props.value || '',
+      originalValue: props.value,
       proposal: null,
       currentProposal: null,
       error: false,
@@ -44,7 +45,8 @@ class TextEdit extends Component {
         this.setState({ error: true });
         this.props.store.addError(this.props.t(error));
       } else if (this.props.onComplete) {
-        const complete = this.props.onComplete(value, proposal);
+        const originalValue = this.state.originalValue;
+        const complete = this.props.onComplete(value, proposal, originalValue);
         if (complete.catch) {
           complete.catch(err => {
             console.error(err);

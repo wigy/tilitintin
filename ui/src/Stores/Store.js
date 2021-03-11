@@ -748,7 +748,18 @@ class Store {
    */
   addError(text) {
     const id = NEXT_MESSAGE_ID++;
-    const message = { id, text };
+    const message = { id, text, type: 'error' };
+    this.messages.push(message);
+    setTimeout(() => this.removeMessage(message), 5000);
+  }
+
+  /**
+   * Append normal message to the snackbar.
+   * @param {String} text
+   */
+  addMessage(text) {
+    const id = NEXT_MESSAGE_ID++;
+    const message = { id, text, type: 'info' };
     this.messages.push(message);
     setTimeout(() => this.removeMessage(message), 5000);
   }

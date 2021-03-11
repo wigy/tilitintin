@@ -50,7 +50,22 @@ class Transaction extends Component {
 
   // Handle finalizing editing of a cell.
   @action.bound
-  async onComplete(column, row, proposal) {
+  async onComplete(column, row, proposal, originalValue) {
+    const { store, tx } = this.props;
+
+    // Handle case where account has been changed so that it moves out of the current screen.
+    if (column === 0 && row !== null) {
+      const document = tx.document;
+      const entry = document.entries[row];
+      if (originalValue !== entry.account.number && originalValue === store.account.number) {
+        store.addMessage(this.props.t('Transaction key account changed and moved out of this screen.'));
+        document.open = false;
+        document.selected = false;
+        this.props.cursor.setIndex(null);
+        return;
+      }
+    }
+
     // Helper to create VAT entry, if needed.
     const checkAndAddVat = (VATAccount, debit) => {
       const document = this.props.tx.document;
@@ -59,7 +74,7 @@ class Transaction extends Component {
       if (!account) {
         return;
       }
-      const vatAccount = this.props.store.database.getAccountByNumber(VATAccount);
+      const vatAccount = store.database.getAccountByNumber(VATAccount);
       if (account.vat_percentage) {
         if (document.entries.filter(e => e.account_id === vatAccount.id).length === 0) {
           const vat = new EntryModel(document, {
@@ -74,8 +89,7 @@ class Transaction extends Component {
 
     // If proposal used, do some additional preparation based on that.
     if (column === 1 && proposal !== null) {
-      const store = this.props.store;
-      const document = this.props.tx.document;
+      const document = tx.document;
       const entry = document.entries[row];
       const account = entry.account;
       if (document.entries.length === 1 && document.entries[0].amount === 0 && account) {
@@ -109,12 +123,13 @@ class Transaction extends Component {
       checkAndAddVat(this.props.settings.VAT_SALES_ACCOUNT, 0);
     }
 
+    // Move to next cell.
     column++;
     if (column === 4) {
       column = 0;
       row++;
       // Oops, we are on the last column of last row.
-      if (row >= this.props.tx.document.entries.length) {
+      if (row >= tx.document.entries.length) {
         column = 3;
         row--;
       }
@@ -186,7 +201,7 @@ class Transaction extends Component {
             field="account"
             document={entry.document}
             entry={entry}
-            onComplete={(_, proposal) => this.onComplete(0, idx, proposal)}
+            onComplete={(_, proposal, originalValue) => this.onComplete(0, idx, proposal, originalValue)}
           />
         </TableCell>
         <TableCell onClick={() => this.onClickDetail(1, idx)}>
@@ -195,7 +210,7 @@ class Transaction extends Component {
             field="description"
             document={entry.document}
             entry={entry}
-            onComplete={(_, proposal) => this.onComplete(1, idx, proposal)}
+            onComplete={(_, proposal, originalValue) => this.onComplete(1, idx, proposal, originalValue)}
             onClick={() => this.onClickDetail(1, idx)}
           />
         </TableCell>
@@ -206,7 +221,7 @@ class Transaction extends Component {
             document={entry.document}
             entry={entry}
             onClick={() => this.onClickDetail()}
-            onComplete={(_, proposal) => this.onComplete(2, idx, proposal)}
+            onComplete={(_, proposal, originalValue) => this.onComplete(2, idx, proposal, originalValue)}
           />
         </TableCell>
         <TableCell onClick={() => this.onClickDetail(3, idx)} align="right">
@@ -216,7 +231,7 @@ class Transaction extends Component {
             document={entry.document}
             entry={entry}
             onClick={() => this.onClickDetail()}
-            onComplete={(_, proposal) => this.onComplete(3, idx, proposal)}
+            onComplete={(_, proposal, originalValue) => this.onComplete(3, idx, proposal, originalValue)}
           />
         </TableCell>
         <TableCell />
@@ -306,6 +321,7 @@ Transaction.propTypes = {
   settings: PropTypes.instanceOf(Settings),
   cursor: PropTypes.instanceOf(Cursor),
   tx: PropTypes.instanceOf(EntryModel),
+  t: PropTypes.func,
   index: PropTypes.number,
   duplicate: PropTypes.bool,
   total: PropTypes.number
