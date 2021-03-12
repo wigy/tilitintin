@@ -300,6 +300,15 @@ class Cursor {
   }
 
   /**
+   * Check if the given component is currently selected.
+   * @param {String} name
+   */
+  inComponent(name) {
+    const component = this.getComponent();
+    return component && component.name === name;
+  }
+
+  /**
    * Move one row or index down.
    */
   keyArrowDown() {

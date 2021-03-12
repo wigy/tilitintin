@@ -53,25 +53,40 @@ class TransactionToolPanel extends Component {
     const { account, tools, db, periodId, accountId } = this.props.store;
 
     const toggle = (tag) => {
-      this.props.cursor.leaveComponent();
-      this.props.cursor.resetSelected();
+      const moveCursor = this.props.cursor.inComponent('Balances.transactions');
+      if (moveCursor) {
+        this.props.cursor.leaveComponent();
+        this.props.cursor.resetSelected();
+      }
       tools.tagDisabled[tag] = !tools.tagDisabled[tag];
-      this.props.cursor.enterComponent();
+      if (moveCursor) {
+        this.props.cursor.enterComponent();
+      }
     };
 
     const disableAll = () => {
-      this.props.cursor.leaveComponent();
-      this.props.cursor.resetSelected();
+      const moveCursor = this.props.cursor.inComponent('Balances.transactions');
+      if (moveCursor) {
+        this.props.cursor.leaveComponent();
+        this.props.cursor.resetSelected();
+      }
       tools.tagDisabled = {};
       account.tags.forEach((tag) => (tools.tagDisabled[tag.tag] = true));
-      this.props.cursor.enterComponent();
+      if (moveCursor) {
+        this.props.cursor.enterComponent();
+      }
     };
 
     const enableAll = () => {
-      this.props.cursor.leaveComponent();
-      this.props.cursor.resetSelected();
+      const moveCursor = this.props.cursor.inComponent('Balances.transactions');
+      if (moveCursor) {
+        this.props.cursor.leaveComponent();
+        this.props.cursor.resetSelected();
+      }
       tools.tagDisabled = {};
-      this.props.cursor.enterComponent();
+      if (moveCursor) {
+        this.props.cursor.enterComponent();
+      }
     };
 
     const openAll = () => {
