@@ -378,6 +378,20 @@ class Cursor {
    * Move couple rows or indices down.
    */
   keyPageDown() {
+    const model = this.getModel();
+    if (model && model.open) {
+      const geo = model.geometry();
+      if (geo[1] > 10) {
+        const ret = this.changeBoxBy(0, +10);
+        if (ret) {
+          const el = document.getElementById(`tx${model.document.id}-row${this.row}`);
+          if (el) {
+            el.scrollIntoView({ block: 'center', inline: 'center' });
+          }
+          return ret;
+        }
+      }
+    }
     return this.changeIndexBy(+10);
   }
 
@@ -385,6 +399,20 @@ class Cursor {
    * Move couple rows or indices up.
    */
   keyPageUp() {
+    const model = this.getModel();
+    if (model && model.open) {
+      const geo = model.geometry();
+      if (geo[1] > 10) {
+        const ret = this.changeBoxBy(0, -Math.min(10, this.row + 1));
+        if (ret) {
+          const el = document.getElementById(`tx${model.document.id}-row${this.row}`);
+          if (el) {
+            el.scrollIntoView({ block: 'center', inline: 'center' });
+          }
+          return ret;
+        }
+      }
+    }
     return this.changeIndexBy(-10);
   }
 
