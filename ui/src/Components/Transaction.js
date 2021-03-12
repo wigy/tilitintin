@@ -139,7 +139,7 @@ class Transaction extends Component {
 
   // Render the main row of the document, i.e. the entry having the current account and data from document it belongs to.
   renderMainTx(error) {
-    const { tx } = this.props;
+    const { tx, cursor } = this.props;
 
     const money = (<Money cents={tx.amount} currency="EUR" />);
     const total = (<Money cents={this.props.total} currency="EUR" />);
@@ -153,7 +153,7 @@ class Transaction extends Component {
           <TransactionDetails
             index={this.props.index}
             field="date"
-            className={tx.open && this.props.index === this.props.cursor.index && this.props.cursor.row === null ? 'sub-selected' : ''}
+            className={tx.open && this.props.index === this.props.cursor.index && this.props.cursor.row === null && cursor.inComponent('Balances.transactions') ? 'sub-selected' : ''}
             document={tx.document}
             onComplete={(doc, proposal) => {
               // Find the new row after order by date has been changed.

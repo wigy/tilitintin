@@ -16,7 +16,6 @@ FUTURE FEATURES
 [X] Date validation.
 [X] Page up/down is not practical on opened transaction, which has lot of entries.
 [X] Clicking Show All in tx view activates account selector for no reason.
-[ ] Clicking Show Details in tx view on income/expense account activates date for no reason.
 [ ] Add entry by pressing tab repeatedly and save without account selected causes crash.
 [ ] Duplicate causes problems on cursor up / down logic.
 
