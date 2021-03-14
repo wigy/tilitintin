@@ -3,12 +3,10 @@ import PropTypes from 'prop-types';
 import Configuration from '../Configuration';
 import { inject, observer } from 'mobx-react';
 import Tag from './Tag';
-import IconSpacer from './IconSpacer';
 import Store from '../Stores/Store';
 import Cursor from '../Stores/Cursor';
 import Title from './Title';
 import { Trans } from 'react-i18next';
-import { Button } from '@material-ui/core';
 import i18n from '../i18n';
 import IconButton from './IconButton';
 
