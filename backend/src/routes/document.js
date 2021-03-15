@@ -40,6 +40,11 @@ router.post('/', async (req, res) => {
   } else {
     number = await data.getNextDocument(knex.db(req.db), req.body.period_id);
   }
+  if (!req.body.period_id) {
+    console.error('No period given.');
+    res.sendStatus(400);
+    return;
+  }
   return data.createOne(knex.db(req.db), 'document', {...req.body, number})
     .then((data) => res.send(data));
 });

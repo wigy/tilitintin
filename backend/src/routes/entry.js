@@ -22,6 +22,16 @@ router.post('/', async (req, res) => {
   if ('amount' in obj) {
     obj.amount /= 100;
   }
+  if (!obj.account_id) {
+    console.error('No account given.');
+    res.sendStatus(400);
+    return;
+  }
+  if (!obj.document_id) {
+    console.error('No document given.');
+    res.sendStatus(400);
+    return;
+  }
   data.createOne(knex.db(req.db), 'entry', obj)
     .then(entry => entry ? res.send(entry) : res.sendStatus(400));
 });
@@ -38,6 +48,16 @@ router.patch('/:id', async (req, res) => {
     return;
   }
   const obj = req.body;
+  if (!obj.account_id) {
+    console.error('No account given.');
+    res.sendStatus(400);
+    return;
+  }
+  if (!obj.document_id) {
+    console.error('No document given.');
+    res.sendStatus(400);
+    return;
+  }
   if ('amount' in obj) {
     obj.amount /= 100;
   }
