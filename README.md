@@ -59,6 +59,9 @@ In UI you can do filtering using the categories defined.
 
 ## Version History
 
+### 2.0.1
+  * Small fixes and optimization.
+
 ### 2.0
   * Material UI implemented.
   * Display postponed VAT accounts as well in VAT screen.
