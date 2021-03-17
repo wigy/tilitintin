@@ -300,6 +300,67 @@ class Cursor {
   }
 
   /**
+   * Get the current component from the topology.
+   * @return {TopologyComponent|null}
+   */
+  getComponent() {
+    const topology = this.getTopology();
+    if (!topology) {
+      return null;
+    }
+
+    // Check the X-bounds.
+    if (this.componentY >= topology.length) {
+      this.componentY = topology.length - 1;
+      if (this.componentY < 0) {
+        this.componentY = 0;
+        return null;
+      }
+    }
+    // Check the y-bounds.
+    if (this.componentX >= topology[this.componentY].length) {
+      this.componentX = topology[this.componentY].length - 1;
+      if (this.componentX < 0) {
+        this.componentX = 0;
+        return null;
+      }
+    }
+    return new TopologyComponent(topology[this.componentY][this.componentX]);
+  }
+
+  /**
+   * Get the current topology.
+   */
+  getTopology() {
+    return (this.topology && this.topology()) || null;
+  }
+
+  /**
+   * Switch directly to another topological component.
+   * @param {String} name
+   */
+  setComponent(name) {
+    const component = this.getComponent();
+    if (component.name === name) {
+      return;
+    }
+    this.leaveComponent();
+    // Find new (x,y) from topology.
+    const topology = this.topology();
+    for (let y = 0; y < topology.length; y++) {
+      for (let x = 0; x < topology[y].length; x++) {
+        if (name === topology[y][x].name) {
+          this.componentX = x;
+          this.componentY = y;
+          this.enterComponent();
+          return;
+        }
+      }
+    }
+    throw new Error(`Cannot find topological component called ${name}.`);
+  }
+
+  /**
    * Check if the given component is currently selected.
    * @param {String} name
    */
@@ -525,31 +586,6 @@ class Cursor {
   }
 
   /**
-   * Switch directly to another topological component.
-   * @param {String} name
-   */
-  setComponent(name) {
-    const component = this.getComponent();
-    if (component.name === name) {
-      return;
-    }
-    this.leaveComponent();
-    // Find new (x,y) from topology.
-    const topology = this.topology();
-    for (let y = 0; y < topology.length; y++) {
-      for (let x = 0; x < topology[y].length; x++) {
-        if (name === topology[y][x].name) {
-          this.componentX = x;
-          this.componentY = y;
-          this.enterComponent();
-          return;
-        }
-      }
-    }
-    throw new Error(`Cannot find topological component called ${name}.`);
-  }
-
-  /**
    * Set the current index to the given number, if it is valid. Negative number counts from the end.
    * @param {Number|null|undefined} index
    * @param {Boolean} options.noScroll
@@ -583,7 +619,35 @@ class Cursor {
   changeIndexBy(delta) {
     const component = this.getComponent();
     if (component && component.vertical) {
-      return this.setIndex(this.indexUpdate(this.index, component.length, delta));
+
+      // Helper to calculate new index.
+      const indexUpdate = (index, N, delta) => {
+        const oldIndex = index;
+        if (N) {
+          if (delta === null) {
+            return null;
+          }
+          if (oldIndex === undefined || oldIndex === null) {
+            return delta < 0 ? N - 1 : 0;
+          }
+          index += delta;
+          if (index < 0) {
+            if (oldIndex === 0) {
+              index = N - 1;
+            } else {
+              index = 0;
+            }
+          } else if (index >= N) {
+            if (oldIndex === N - 1) {
+              index = 0;
+            } else {
+              index = N - 1;
+            }
+          }
+          return index;
+        }
+      };
+      return this.setIndex(indexUpdate(this.index, component.length, delta));
     }
   }
 
@@ -680,42 +744,6 @@ class Cursor {
   }
 
   /**
-   * Get the current component from the topology.
-   * @return {TopologyComponent|null}
-   */
-  getComponent() {
-    const topology = this.getTopology();
-    if (!topology) {
-      return null;
-    }
-
-    // Check the X-bounds.
-    if (this.componentY >= topology.length) {
-      this.componentY = topology.length - 1;
-      if (this.componentY < 0) {
-        this.componentY = 0;
-        return null;
-      }
-    }
-    // Check the y-bounds.
-    if (this.componentX >= topology[this.componentY].length) {
-      this.componentX = topology[this.componentY].length - 1;
-      if (this.componentX < 0) {
-        this.componentX = 0;
-        return null;
-      }
-    }
-    return new TopologyComponent(topology[this.componentY][this.componentX]);
-  }
-
-  /**
-   * Get the current topology.
-   */
-  getTopology() {
-    return (this.topology && this.topology()) || null;
-  }
-
-  /**
    * Get the model pointed by the index in the current topology component.
    * @return {Model|null}
    */
@@ -723,39 +751,6 @@ class Cursor {
     if (index !== null) {
       const comp = this.getComponent();
       return comp ? comp.getIndex(index) : null;
-    }
-  }
-
-  /**
-   * Helper to change index counter and wrap it around boundaries.
-   * @param {Number|null} index
-   * @param {Number} N
-   * @param {Number|null} delta
-   */
-  indexUpdate(index, N, delta) {
-    const oldIndex = index;
-    if (N) {
-      if (delta === null) {
-        return null;
-      }
-      if (oldIndex === undefined || oldIndex === null) {
-        return delta < 0 ? N - 1 : 0;
-      }
-      index += delta;
-      if (index < 0) {
-        if (oldIndex === 0) {
-          index = N - 1;
-        } else {
-          index = 0;
-        }
-      } else if (index >= N) {
-        if (oldIndex === N - 1) {
-          index = 0;
-        } else {
-          index = N - 1;
-        }
-      }
-      return index;
     }
   }
 

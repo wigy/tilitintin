@@ -19,6 +19,9 @@ FUTURE FEATURES
 [X] Add entry by pressing tab repeatedly and save without account selected causes crash.
 [ ] Duplicate causes problems on cursor up / down logic.
 
+[ ] Webpack update.
+[ ] Mobx update.
+
 3.0
 [ ] Tags management.
 
