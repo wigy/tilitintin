@@ -1,5 +1,6 @@
 import { observable, action } from 'mobx';
 import TopologyComponent from './TopologyComponent';
+import EntryModel from '../Models/EntryModel';
 
 const KEY_DEBUG = false;
 
@@ -647,7 +648,20 @@ class Cursor {
           return index;
         }
       };
-      return this.setIndex(indexUpdate(this.index, component.length, delta));
+
+      const oldModel = this.getModel(this.index);
+      let newIndex = indexUpdate(this.index, component.length, delta);
+      let newModel = this.getModel(newIndex);
+      // There should be better way but it seems generic topology was not that much needed anyway.
+      // Perhaps sameness function as a part of topology setup.
+      if (component.length > 1 && (newModel instanceof EntryModel)) {
+        while (newModel.document === oldModel.document) {
+          newIndex = indexUpdate(newIndex, component.length, delta);
+          newModel = this.getModel(newIndex);
+        }
+      }
+
+      return this.setIndex(newIndex);
     }
   }
 

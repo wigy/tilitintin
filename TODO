@@ -17,7 +17,7 @@ FUTURE FEATURES
 [X] Page up/down is not practical on opened transaction, which has lot of entries.
 [X] Clicking Show All in tx view activates account selector for no reason.
 [X] Add entry by pressing tab repeatedly and save without account selected causes crash.
-[ ] Duplicate causes problems on cursor up / down logic.
+[X] Duplicate causes problems on cursor up / down logic.
 
 [ ] Webpack update.
 [ ] Mobx update.
