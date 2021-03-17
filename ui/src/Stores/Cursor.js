@@ -654,7 +654,7 @@ class Cursor {
       let newModel = this.getModel(newIndex);
       // There should be better way but it seems generic topology was not that much needed anyway.
       // Perhaps sameness function as a part of topology setup.
-      if (component.length > 1 && (newModel instanceof EntryModel)) {
+      if (component.length > 1 && oldModel && newModel && (newModel instanceof EntryModel)) {
         while (newModel.document === oldModel.document) {
           newIndex = indexUpdate(newIndex, component.length, delta);
           newModel = this.getModel(newIndex);
