@@ -33,6 +33,8 @@ class Cursor {
   currentPageComponent = null;
   // Menu component of the system.
   menuComponent = null;
+  // Current topology component.
+  topologyComponent = null;
 
   constructor(store) {
     this.store = store;
@@ -269,6 +271,7 @@ class Cursor {
       this.componentX = 0;
       this.componentY = 0;
     }
+    this.topologyComponent = null;
   }
 
   /**
@@ -283,12 +286,14 @@ class Cursor {
     this.index = null;
     this.row = null;
     this.column = null;
+    this.topologyComponent = null;
   }
 
   /**
    * Hook that is called when we have just entered the current component.
    */
   enterComponent() {
+    this.topologyComponent = null;
     const component = this.getComponent();
     if (component) {
       this.loadCursor(component);
@@ -305,6 +310,10 @@ class Cursor {
    * @return {TopologyComponent|null}
    */
   getComponent() {
+    if (this.topologyComponent) {
+      return this.topologyComponent;
+    }
+
     const topology = this.getTopology();
     if (!topology) {
       return null;
@@ -326,7 +335,8 @@ class Cursor {
         return null;
       }
     }
-    return new TopologyComponent(topology[this.componentY][this.componentX]);
+    this.topologyComponent = new TopologyComponent(topology[this.componentY][this.componentX]);
+    return this.topologyComponent;
   }
 
   /**
