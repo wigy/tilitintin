@@ -42,10 +42,15 @@ class Dashboard extends Component {
     if (!this.props.store.database) {
       return;
     }
-    const periods = this.props.store.database.periods.reverse();
-    num--;
-    if (num < periods.length) {
-      this.props.history.push(`/${this.props.store.db}/dashboard/${periods[num].id}`);
+    let period;
+    if (typeof num === 'number') {
+      const periods = this.props.store.database.periods.reverse();
+      period = periods[num - 1];
+    } else {
+      period = num;
+    }
+    if (period) {
+      this.props.history.push(`/${this.props.store.db}/txs/${period.id}`);
     }
   }
 
@@ -83,7 +88,7 @@ class Dashboard extends Component {
           <List>
             {store.database.periods.reverse().map((period, index) => (
               <ListItem key={period.id} selected={parseInt(periodId) === period.id}>
-                <Button onClick={() => this.props.history.push(`/${store.db}/dashboard/${period.id}`)}>
+                <Button onClick={() => this.selectPeriod(period)}>
                   <Avatar>{index + 1}</Avatar>&nbsp;
                   <Localize date={period.start_date} /> &mdash; <Localize date={period.end_date} />
                 </Button>
