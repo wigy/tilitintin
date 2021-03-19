@@ -33,7 +33,9 @@ const configFactory = require('../config/webpack.config');
 const createDevServerConfig = require('../config/webpackDevServer.config');
 
 const useYarn = fs.existsSync(paths.yarnLockFile);
-const isInteractive = process.stdout.isTTY;
+// TODO: This is broken!
+// const isInteractive = process.stdout.isTTY;
+const isInteractive = true;
 
 // Warn and crash if required files are missing
 if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
@@ -123,7 +125,8 @@ checkBrowsers(paths.appPath, isInteractive)
         return console.log(err);
       }
       if (isInteractive) {
-        clearConsole();
+        // TODO: NOOO!
+        // clearConsole();
       }
 
       // We used to support resolving modules according to `NODE_PATH`.
@@ -152,8 +155,9 @@ checkBrowsers(paths.appPath, isInteractive)
     if (isInteractive || process.env.CI !== 'true') {
       // Gracefully exit when stdin ends
       process.stdin.on('end', function() {
-        devServer.close();
-        process.exit();
+        // TODO: This is broken!
+        // devServer.close();
+        // process.exit();
       });
       process.stdin.resume();
     }
