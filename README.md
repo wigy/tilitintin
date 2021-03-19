@@ -20,13 +20,15 @@ docker-compose up
 First launch the backend
 ```
 cd backend
-npm start
+npm install
+npm run dev
 ```
 
 In addition, the frontend is needed. Add an other console and launch
 ```
 cd ui
-npm start
+npm install
+npm run dev
 ```
 
 ## Features
