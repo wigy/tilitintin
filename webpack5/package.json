@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack serve --config ./webpack.config.js --mode development",
+    "dev": "webpack serve --port ${PORT:=3102} --config ./webpack.config.js --mode development",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "babel": {
