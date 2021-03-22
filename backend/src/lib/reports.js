@@ -626,7 +626,6 @@ function processEntries(entries, periods, formatName, format, settings) {
  */
 function postProcess(data) {
   const camelCaseName = camelCase(data.format);
-  console.log(camelCaseName);
   if (postProcess[camelCaseName]) {
     return postProcess[camelCaseName](data);
   }
