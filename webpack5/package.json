@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack serve --port ${PORT:=3102} --config ./webpack.config.js --mode development",
+    "build": "webpack build --config ./webpack.config.js --mode production",
+    "start": "npm run build && http-server --port ${PORT:=3102} ./dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "babel": {
