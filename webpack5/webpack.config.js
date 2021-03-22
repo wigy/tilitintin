@@ -38,7 +38,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[id].bundle.js'
+    filename: '[name].[contenthash].bundle.js'
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
