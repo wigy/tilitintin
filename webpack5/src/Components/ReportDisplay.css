@@ -1,0 +1,36 @@
+.ReportDisplay {
+  margin: 2rem 4rem;
+ }
+
+.ReportDisplayTable {
+ max-width: 8in;
+ font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.ReportDisplayTable tr {
+  background-color: transparent !important;
+}
+
+.ReportDisplayTable tr td {
+  border: none !important;
+  padding: 0 1em;
+}
+
+.ReportDisplayTable tr.columns {
+  height: 2.2em;
+  border-top: 2px solid rgb(0,0,93);
+}
+
+.ReportDisplayTable .report-title {
+  font-size: 140%;
+}
+
+.ReportDisplayTable .name {
+  max-width: 5in;
+  text-align: left;
+}
+
+.ReportDisplayTable .numeric {
+  width: 1in;
+  text-align: right;
+}

@@ -1,0 +1,59 @@
+.AccountTable {
+  margin: 0rem 2rem;
+  overflow-x: hidden !important;
+}
+.AccountTable.MuiTableContainer-root {
+  width: 90% !important;
+}
+
+.AccountTable td {
+  border: none !important;
+}
+
+.AccountTable .title {
+  font-weight: bold;
+}
+
+.AccountTable .title.level0 {
+  font-size: 125%;
+}
+
+.AccountTable .title.level1 {
+  font-size: 120%;
+}
+
+.AccountTable .title.level2 {
+  font-size: 115%;
+}
+
+.AccountTable .title.level3 {
+  font-size: 110%;
+}
+
+.AccountTable .title.level4 {
+  font-size: 105%;
+}
+
+.AccountTable .level0 {
+  padding-left: 0rem !important;
+}
+
+.AccountTable .level1 {
+  padding-left: 2rem !important;
+}
+
+.AccountTable .level2 {
+  padding-left: 4rem !important;
+}
+
+.AccountTable .level3 {
+  padding-left: 6rem !important;
+}
+
+.AccountTable .level4 {
+  padding-left: 8rem !important;
+}
+
+.AccountTable .level5 {
+  padding-left: 10rem !important;
+}

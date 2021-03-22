@@ -1,0 +1,82 @@
+@media print {
+  .Page {
+    display: block;
+  }
+    .TopPanel {
+    display: none;
+  }
+  .SidePanel {
+    display: none;
+  }
+  .MainTopPanel {
+    display: none;
+  }
+  .MainPanel {
+    position: initial !important;
+    top: initial !important;
+    left: initial !important;
+    right: initial !important;
+    bottom: initial !important;
+    overflow-y: initial !important;
+  }
+  .Panel {
+    background-color: white;
+    border-top: none !important;
+    border-left: none !important;
+    border-bottom: none !important;
+    border-right: none !important;
+  }
+  .MuiPaper-elevation4 {
+    box-shadow: none !important;
+  }
+}
+
+@media screen {
+  .Page {
+    display: grid;
+    height: calc(100vh - 90px);
+    grid-template-columns: 450px auto;
+  }
+
+  .Panel {
+    margin: 3px;
+  }
+
+  .SidePanel {
+    overflow-y: auto;
+    max-height: calc(100vh - 90px);
+  }
+
+  .MainArea {
+    display: grid;
+    grid-template-rows: fit-content(100%) auto;
+    height: calc(100vh - 90px);
+  }
+
+  .MainTopPanel {
+    height: fit-content;
+  }
+
+  .MainPanel {
+    overflow-y: auto;
+  }
+
+  .current {
+    font-weight: bold;
+  }
+
+  .sub-selected {
+    background-color: yellow !important;
+    outline: 2px rgba(0,0,0,0.5) dotted !important;
+    outline-offset: -1px;
+  }
+
+  .hide-overflow {
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .MuiTableCell-body {
+    cursor: pointer;
+  }
+}
