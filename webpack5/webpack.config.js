@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: path.resolve(__dirname, './src/index.js'),
@@ -13,12 +13,12 @@ module.exports = {
       },
       {
         test: /\.html$/,
-        use: ["html-loader"],
+        use: ['html-loader'],
       },
       {
         test: /\.css$/i,
         exclude: /node_modules/,
-        use: ["style-loader", "css-loader"]
+        use: ['style-loader', 'css-loader']
       },
     ],
   },
@@ -31,12 +31,12 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, "dist", "index.html")
+      template: path.resolve(__dirname, 'public', 'index.html')
     }),
     new webpack.HotModuleReplacementPlugin(),
   ],
   devServer: {
-    contentBase: path.resolve(__dirname, './dist'),
+    contentBase: path.resolve(__dirname, './public'),
     hot: true,
   }
 };
