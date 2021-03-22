@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   entry: path.resolve(__dirname, './src/index.js'),
@@ -47,6 +48,11 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'public', 'index.html')
+    }),
+    new CopyPlugin({
+      patterns: [
+        { from: path.resolve(__dirname, './public/*.{ico,png,json}'), to: path.resolve(__dirname, './dist/[name][ext]') },
+      ],
     }),
   ],
   devServer: {
