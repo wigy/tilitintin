@@ -8,6 +8,7 @@ BUGS
 SMALL IMPROVEMENTS
 ==================
 
+[ ] Could have silent option for API fetch dimming and use it when fetching proposals.
 
 FUTURE FEATURES
 ===============
