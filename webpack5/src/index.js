@@ -28,4 +28,4 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-module.hot.accept();
+module && module.hot && module.hot.accept();
