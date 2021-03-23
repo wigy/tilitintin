@@ -1,4 +1,4 @@
-import { runInAction, computed, observable, makeObservable } from 'mobx';
+import { runInAction, computed, observable, makeObservable, action } from 'mobx';
 import config from '../Configuration';
 import AccountModel from '../Models/AccountModel';
 import DatabaseModel from '../Models/DatabaseModel';
@@ -103,6 +103,7 @@ class Store {
    * @param {Object|null|undefined} data
    * @param {File} file
    */
+  @action
   async request(path, method = 'GET', data = null, file = null) {
     const options = {
       method: method,
@@ -131,7 +132,9 @@ class Store {
     this.loading = true;
     return fetch(config.API_URL + path, options)
       .then(res => {
-        this.loading = false;
+        runInAction(() => {
+          this.loading = false;
+        });
         if ([200, 201, 202, 204].includes(res.status)) {
           debug('    OK:', method, config.API_URL + path, data || '');
           return res.status === 200 ? res.json() : null;
@@ -150,7 +153,8 @@ class Store {
   /**
    * Get the list of available databases.
    */
-  async fetchDatabases(force = false) {
+   @action
+   async fetchDatabases(force = false) {
     if (!this.token) {
       return;
     }
@@ -180,7 +184,8 @@ class Store {
    * @param {String} db
    * @return {Promise}
    */
-  async setDb(db) {
+   @action
+   async setDb(db) {
     db = db || null;
     if (this.db === db) {
       debug('SetDb:', db, 'using old');
@@ -198,8 +203,8 @@ class Store {
         .then(() => this.fetchTags(db))
         .then(() => this.fetchHeadings(db))
         .then(() => this.fetchAccounts(db))
-        .then(() => (this.dbFetch = null))
-        .then(() => (this.db = db))
+        .then(() => runInAction(() => this.dbFetch = null))
+        .then(() => runInAction(() => this.db = db))
         .then(() => debug('SetDb', db, 'Done'));
     } else {
       debug('SetDb', db, 'sharing...');
@@ -213,7 +218,8 @@ class Store {
    * @param {Number} periodId
    * @return {Promise}
    */
-  async setPeriod(db, periodId) {
+   @action
+   async setPeriod(db, periodId) {
     periodId = parseInt(periodId) || null;
     if (this.db === db && this.periodId === periodId) {
       debug('SetPeriod:', db, periodId, 'using old');
@@ -228,9 +234,9 @@ class Store {
       debug('SetPeriod:', db, periodId, 'fetching...');
       this.invalidateReport();
       this.periodFetch = this.fetchBalances(db, periodId)
-        .then(() => (this.periodId = periodId))
+        .then(() => runInAction(() => this.periodId = periodId))
         .then(() => this.fetchDocuments(db, periodId))
-        .then(() => (this.periodFetch = null))
+        .then(() => runInAction(() => this.periodFetch = null))
         .then(() => debug('SetPeriod', db, periodId, 'Done'));
     } else {
       debug('SetPeriod:', db, periodId, 'sharing...');
@@ -244,7 +250,8 @@ class Store {
    * @param {Number} periodId
    * @return {Promise}
    */
-  async setAccount(db, periodId, accountId) {
+   @action
+   async setAccount(db, periodId, accountId) {
     if (accountId === '') {
       return;
     }
@@ -269,7 +276,8 @@ class Store {
   /**
    * Clear DB data.
    */
-  clearDb() {
+   @action
+   clearDb() {
 
     this.db = null;
     this.report = null;
@@ -280,7 +288,8 @@ class Store {
   /**
    * Clear period data.
    */
-  clearPeriod() {
+   @action
+   clearPeriod() {
 
     this.periodId = null;
     this.report = null;
@@ -290,7 +299,8 @@ class Store {
   /**
    * Clear period data.
    */
-  clearAccount() {
+   @action
+   clearAccount() {
 
     this.accountId = null;
     this.tools = {
@@ -304,7 +314,8 @@ class Store {
   /**
    * Get the settings from the DB.
    */
-  async fetchSettings(db) {
+   @action
+   async fetchSettings(db) {
     if (!this.token) {
       return;
     }
@@ -319,7 +330,8 @@ class Store {
   /**
    * Get the list of periods available for the current DB.
    */
-  async fetchPeriods(db) {
+   @action
+   async fetchPeriods(db) {
     if (!this.token) {
       return;
     }
@@ -336,7 +348,8 @@ class Store {
   /**
    * Get the tag definitions from the current database.
    */
-  async fetchTags(db) {
+   @action
+   async fetchTags(db) {
     if (!this.token) {
       return;
     }
@@ -351,7 +364,8 @@ class Store {
   /**
    * Collect all accounts.
    */
-  async fetchAccounts(db) {
+   @action
+   async fetchAccounts(db) {
     if (!this.token) {
       return;
     }
@@ -373,7 +387,8 @@ class Store {
    * @param {Number} accountId
    * @return {String[]}
    */
-  async fetchEntryProposals(db, accountId) {
+   @action
+   async fetchEntryProposals(db, accountId) {
     if (!this.token) {
       return;
     }
@@ -398,7 +413,8 @@ class Store {
   /**
    * Collect all account headings.
    */
-  async fetchHeadings(db) {
+   @action
+   async fetchHeadings(db) {
     if (!this.token) {
       return;
     }
@@ -415,7 +431,8 @@ class Store {
   /**
    * Get the list of report formats available for the current DB.
    */
-  async fetchReports(db) {
+   @action
+   async fetchReports(db) {
     if (!this.token) {
       return;
     }
@@ -433,7 +450,8 @@ class Store {
   /**
    * Get the report data.
    */
-  async fetchReport(db, periodId, format) {
+   @action
+   async fetchReport(db, periodId, format) {
     await this.setPeriod(db, periodId);
     if (!this.period) {
       return;
@@ -459,7 +477,8 @@ class Store {
   /**
    * Get the summary of balances for all accounts in the given period.
    */
-  async fetchBalances(db = null, periodId = null) {
+   @action
+   async fetchBalances(db = null, periodId = null) {
     if (!this.token) {
       return;
     }
@@ -484,7 +503,8 @@ class Store {
   /**
    * Get the documents with entries for the given period.
    */
-  async fetchDocuments(db = null, periodId = null) {
+   @action
+   async fetchDocuments(db = null, periodId = null) {
     if (!this.token) {
       return;
     }
@@ -512,7 +532,8 @@ class Store {
   /**
    * Get a single document raw data without caching.
    */
-  async fetchRawDocument(documentId) {
+   @action
+   async fetchRawDocument(documentId) {
     if (!this.token) {
       return;
     }
@@ -524,7 +545,8 @@ class Store {
    * @param {String} user
    * @param {String} password
    */
-  async login(user, password) {
+   @action
+   async login(user, password) {
     this.token = null;
     return this.request('/auth', 'POST', { user: user, password: password })
       .then((resp) => {
@@ -541,7 +563,8 @@ class Store {
   /**
    * Log out the current user.
    */
-  logout() {
+   @action
+   logout() {
     localStorage.removeItem('token');
     this.token = null;
     this.dbsByName = {};
@@ -556,7 +579,8 @@ class Store {
    * @param info.companyName
    * @param info.companyCode
    */
-  createDatabase(info) {
+   @action
+   createDatabase(info) {
     return this.request('/db', 'POST', info)
       .then(async (res) => {
         await this.fetchDatabases(true);
@@ -568,7 +592,8 @@ class Store {
   /**
    * Remove the report, since it may not be valid anymore.
    */
-  invalidateReport() {
+   @action
+   invalidateReport() {
     if (this.report) {
       this.report = null;
     }
@@ -578,7 +603,8 @@ class Store {
    * Save account data.
    * @param {AccountModel} account
    */
-  async saveAccount(account) {
+   @action
+   async saveAccount(account) {
     return this.request('/db/' + this.db + '/account/' + (account.id || ''), account.id ? 'PATCH' : 'POST', account.toJSON())
       .then((res) => {
         runInAction(() => {
@@ -595,7 +621,8 @@ class Store {
    * Save period content.
    * @param {PeriodModel} period
    */
-  async savePeriod(period) {
+   @action
+   async savePeriod(period) {
     return this.request('/db/' + this.db + '/period/' + (period.id || ''), period.id ? 'PATCH' : 'POST', period.toJSON())
       .then((res) => {
         runInAction(() => {
@@ -612,7 +639,8 @@ class Store {
    * Save transaction content.
    * @param {DocumentModel} doc
    */
-  async saveDocument(doc) {
+   @action
+   async saveDocument(doc) {
     return this.request('/db/' + this.db + '/document/' + (doc.id ? doc.id : ''), doc.id ? 'PATCH' : 'POST', doc.toJSON())
       .then((res) => {
         runInAction(() => {
@@ -632,7 +660,8 @@ class Store {
    * Save entry content.
    * @param {EntryModel} entry
    */
-  async saveEntry(entry) {
+   @action
+   async saveEntry(entry) {
     if (this.entryDescriptions[this.db] && this.entryDescriptions[this.db][entry.account_id]) {
       delete this.entryDescriptions[this.db][entry.account_id];
     }
@@ -659,7 +688,8 @@ class Store {
    * Remove an account.
    * @param {AccountModel} account
    */
-  async deleteAccount(account) {
+   @action
+   async deleteAccount(account) {
     const path = '/db/' + this.db + '/account/' + account.id;
     return this.request(path, 'DELETE')
       .then(() => {
@@ -672,7 +702,8 @@ class Store {
    * Remove an entry.
    * @param {EntryModel} entry
    */
-  async deleteEntry(entry) {
+   @action
+   async deleteEntry(entry) {
     if (!entry.id) {
       entry.document.entries.remove(entry);
       return;
@@ -692,7 +723,8 @@ class Store {
    * Remove a document and all of its entries from the system.
    * @param {DocumentModel} doc
    */
-  async deleteDocument(doc) {
+   @action
+   async deleteDocument(doc) {
     const path = '/db/' + this.db + '/document/' + doc.id;
     return this.request(path, 'DELETE')
       .then(() => {
