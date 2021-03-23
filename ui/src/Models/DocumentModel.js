@@ -1,7 +1,7 @@
 import NavigationTargetModel from './NavigationTargetModel';
 import EntryModel from '../Models/EntryModel';
 import { date2str, str2date } from '../Util';
-import { makeObservable } from 'mobx';
+import { action, makeObservable } from 'mobx';
 
 class DocumentModel extends NavigationTargetModel {
 
@@ -117,7 +117,8 @@ class DocumentModel extends NavigationTargetModel {
    * Add an entry to this document.
    * @param {EntryModel} entry
    */
-  addEntry(entry) {
+   @action
+   addEntry(entry) {
     entry.document_id = this.id;
     entry.parent = this;
     this.entries.push(entry);

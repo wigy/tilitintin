@@ -59,6 +59,7 @@ class Cursor {
    * Select the current modal.
    * @param {Component} modal
    */
+  @action
   addModal(modal) {
     this.activeModal.push(modal);
   }
@@ -67,14 +68,16 @@ class Cursor {
    * Turn the current modal off.
    * @param {Component|null} modal
    */
-  removeModal(modal) {
+   @action
+   removeModal(modal) {
     this.activeModal.splice(this.activeModal.indexOf(modal), 1);
   }
 
   /**
    * Turn off handler.
    */
-  disableHandler() {
+   @action
+   disableHandler() {
     this.disabled = true;
   }
 
@@ -240,7 +243,8 @@ class Cursor {
    * @param {String} page
    * @param {() => Object[][]} topology
    */
-  setTopology(page, topology) {
+   @action
+   setTopology(page, topology) {
     if (this.page === page) {
       return;
     }
@@ -255,7 +259,8 @@ class Cursor {
   /**
    * Save current component for the page.
    */
-  leavePage() {
+   @action
+   leavePage() {
     const { componentX, componentY } = this;
     this.savedPages[this.page] = { componentX, componentY };
   }
@@ -263,7 +268,8 @@ class Cursor {
   /**
    * Restore current component for the page.
    */
-  enterPage() {
+   @action
+   enterPage() {
     if (this.savedPages[this.page]) {
       const { componentX, componentY } = this.savedPages[this.page];
       this.componentX = componentX;
@@ -278,7 +284,8 @@ class Cursor {
   /**
    * Hook that is called when we are leaving the current component.
    */
-  leaveComponent() {
+   @action
+   leaveComponent() {
     const component = this.getComponent();
     if (component) {
       this.saveCursor(component);
@@ -293,7 +300,8 @@ class Cursor {
   /**
    * Hook that is called when we have just entered the current component.
    */
-  enterComponent() {
+   @action
+   enterComponent() {
     this.topologyComponent = null;
     const component = this.getComponent();
     if (component) {
@@ -351,7 +359,8 @@ class Cursor {
    * Switch directly to another topological component.
    * @param {String} name
    */
-  setComponent(name) {
+   @action
+   setComponent(name) {
     const component = this.getComponent();
     if (component.name === name) {
       return;
@@ -550,7 +559,8 @@ class Cursor {
    * @param {TopologyComponent} component
    * @return {Boolean}
    */
-  saveCursor(component) {
+   @action
+   saveCursor(component) {
     if (!component) {
       return false;
     }
@@ -574,7 +584,8 @@ class Cursor {
    * Load the current cursor position for the component.
    * @param {TopologyComponent} component
    */
-  loadCursor(component) {
+   @action
+   loadCursor(component) {
     if (!component) {
       return;
     }
@@ -602,7 +613,8 @@ class Cursor {
    * @param {Number|null|undefined} index
    * @param {Boolean} options.noScroll
    */
-  setIndex(index, options = {}) {
+   @action
+   setIndex(index, options = {}) {
     const component = this.getComponent();
     const oldIndex = this.index;
     this.setCell(null, null);
@@ -628,7 +640,8 @@ class Cursor {
    * Adjust the current index by the given amount, if the component is vertical.
    * @param {Number|null} delta
    */
-  changeIndexBy(delta) {
+   @action
+   changeIndexBy(delta) {
     const component = this.getComponent();
     if (component && component.vertical) {
 
@@ -681,7 +694,8 @@ class Cursor {
    * @param {Number} column
    * @param {Number} row
    */
-  setCell(column, row) {
+   @action
+   setCell(column, row) {
     const model = this.getModel();
     if (model) {
       model.turnEditorOff(this);
@@ -704,7 +718,8 @@ class Cursor {
    * @param {Number|null} dx
    * @param {Number|null} dy
    */
-  changeBoxBy(dx, dy) {
+   @action
+   changeBoxBy(dx, dy) {
     const component = this.getComponent();
     const { subitemExitUp, subitemExitDown, entryColumn, subitemUpStopOnNull } = component || {};
     const model = this.getModel();
@@ -789,7 +804,8 @@ class Cursor {
    * @param {Boolean} [options.subitemExitDown]
    * @param {Number} [options.entryColumn]
    */
-  boxUpdate(N, M, dx, dy, options) {
+   @action
+   boxUpdate(N, M, dx, dy, options) {
     if (N && M) {
       if (dx === null && dy === null) {
         this.row = null;

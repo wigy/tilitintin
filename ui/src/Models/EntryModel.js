@@ -6,7 +6,7 @@ import TagModel from './TagModel';
 import Money from '../Components/Money';
 import { str2num } from '../Util';
 import i18n from '../i18n';
-import { makeObservable } from 'mobx';
+import { action, makeObservable } from 'mobx';
 
 class EntryModel extends NavigationTargetModel {
 
@@ -84,20 +84,23 @@ class EntryModel extends NavigationTargetModel {
   /**
    * Cursor has entered document this entry belongs.
    */
-  enter() {
+   @action
+   enter() {
     this.document.selected = true;
   }
 
   /**
    * Cursor has left this document this entry belongs.
    */
-  leave() {
+   @action
+   leave() {
     this.document.selected = false;
   }
 
   /**
    * Open the parent document.
    */
+  @action
   toggleOpen() {
     this.document.open = !this.document.open;
     this.open = !this.open;
@@ -151,7 +154,8 @@ class EntryModel extends NavigationTargetModel {
    * Turn the correct entry into edit mode.
    * @param {Cursor} cursor
    */
-  turnEditorOn(cursor) {
+   @action
+   turnEditorOn(cursor) {
     if (cursor.row !== null && cursor.row < this.document.entries.length) {
       const entry = this.document.entries[cursor.row];
       if (entry.canEdit()) {
@@ -174,7 +178,8 @@ class EntryModel extends NavigationTargetModel {
    * Turn edit mode off.
    * @param {Cursor} cursor
    */
-  turnEditorOff(cursor) {
+   @action
+   turnEditorOff(cursor) {
     if (cursor.row !== null && cursor.row < this.document.entries.length) {
       const entry = this.document.entries[cursor.row];
       entry.edit = false;
@@ -513,7 +518,8 @@ class EntryModel extends NavigationTargetModel {
   /**
    * Turn null account_id to 0.
    */
-  async save() {
+   @action
+   async save() {
     if (this.account_id === null) {
       this.account_id = 0;
     }
@@ -552,7 +558,8 @@ class EntryModel extends NavigationTargetModel {
    * Extract tags from the text and set them and the description.
    * @param {String} text
    */
-  setText(text) {
+   @action
+   setText(text) {
     this['change.description'](text);
   }
 
@@ -582,7 +589,8 @@ class EntryModel extends NavigationTargetModel {
    * @param {String} name
    * @param {Boolean} value
    */
-  setFlag(name, value) {
+   @action
+   setFlag(name, value) {
     if (value) {
       this.flags = this.flags | EntryModel.FLAGS[name];
     } else {
