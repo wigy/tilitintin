@@ -25,4 +25,4 @@ services:
       - ./ui/public:/var/app/public
       - ./ui/scripts:/var/app/scripts
       - ./ui/src:/var/app/src
-    command: npm run dev
+    command: npm start
