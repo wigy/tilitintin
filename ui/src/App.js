@@ -26,6 +26,7 @@ import TransactionToolPanel from './Components/TransactionToolPanel';
 import UserList from './Components/UserList';
 import Messages from './Components/Messages';
 import { Paper } from '@material-ui/core';
+import Configuration from './Configuration';
 
 import './App.css';
 
@@ -105,6 +106,7 @@ class App extends Component {
               <Route exact path="/:db/tools///:tool?" component={Tools}/>
               <Route path="/:db/account/:periodId?" component={Accounts}/>
             </Paper>
+            <div style={{ position: 'absolute', right: '2px', bottom: '2px' }}>v{Configuration.VERSION}</div>
           </div>
         </div>
       </div>

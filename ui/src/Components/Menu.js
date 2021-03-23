@@ -6,7 +6,6 @@ import { Trans, withTranslation } from 'react-i18next';
 import Store from '../Stores/Store';
 import Localize from './Localize';
 import Cursor from '../Stores/Cursor';
-import Configuration from '../Configuration';
 import LanguageSelector from './LanguageSelector';
 import './Menu.css';
 import AppBar from '@material-ui/core/AppBar';
@@ -183,9 +182,6 @@ class Menu extends Component {
             <IconButton edge="start" className="icon" color="inherit" aria-label="menu" onClick={() => (document.location = '/')}>
               <img className="logo" alt="logo" src="/logo.png"/>
             </IconButton>
-            <Typography variant="h4" className="title">
-              <span className="brand">Tilitintin v{Configuration.VERSION}</span>
-            </Typography>
             <span className="database">
               <Storage/> {this.props.store.db || <>&nbsp;&nbsp;&mdash;</>}
             </span>
