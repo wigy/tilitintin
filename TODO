@@ -20,6 +20,7 @@ FUTURE FEATURES
 [ ] Use Yarn.
 [X] Webpack update.
 [X] Mobx update.
+[ ] Configuration fetch during login (language, vat settings).
 
 3.0
 [ ] Tags management.

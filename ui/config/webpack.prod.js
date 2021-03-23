@@ -15,6 +15,8 @@ module.exports = merge(common, {
     filename: "js/[name].[contenthash].bundle.js",
   },
   plugins: [
+    // Removes/cleans build folders and unused assets when rebuilding
+    new CleanWebpackPlugin(),
     // Extracts CSS into separate files
     // Note: style-loader is for development, MiniCssExtractPlugin is for production
     new MiniCssExtractPlugin({

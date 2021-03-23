@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "NODE_ENV=development webpack serve --port ${PORT:=3102} --config ./config/webpack.dev.js",
+    "dev": "NODE_ENV=development webpack serve --port ${PORT:=3102} --progress --config ./config/webpack.dev.js",
     "build": "webpack build --config ./config/webpack.prod.js",
     "start": "NODE_ENV=production npm run build && npx serve -l tcp://0.0.0.0:${PORT:=3102} -s ./dist",
     "test": "echo \"Error: no test specified\" && exit 1"

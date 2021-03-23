@@ -8,23 +8,23 @@ module.exports = {
   // Where webpack looks to start building the bundle
   entry: [paths.src + '/index.js'],
 
+  target: 'web',
+
   // Where webpack outputs the assets and bundles
   output: {
     path: paths.build,
-    filename: '[name].bundle.js',
+    filename: '[name].[contenthash].js',
     publicPath: '/',
   },
 
   // Customize the webpack build process
   plugins: [
-    // Removes/cleans build folders and unused assets when rebuilding
-    new CleanWebpackPlugin(),
 
     // Copies files from target to destination folder
     new CopyWebpackPlugin({
       patterns: [
         { from: paths.public + '/*.{ico,png,json}', to: paths.build + '/[name][ext]' },
-        ],
+      ],
     }),
 
     // Generates an HTML file from a template
@@ -61,5 +61,18 @@ module.exports = {
       // Fonts and SVGs: Inline files
       { test: /\.(woff(2)?|eot|ttf|otf|svg|)$/, type: 'asset/inline' },
     ],
+  },
+
+  optimization: {
+    runtimeChunk: 'single',
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all',
+        },
+      },
+    },
   }
 };
