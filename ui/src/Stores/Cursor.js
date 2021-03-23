@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { observable, action, makeObservable } from 'mobx';
 import TopologyComponent from './TopologyComponent';
 import EntryModel from '../Models/EntryModel';
 
@@ -52,6 +52,7 @@ class Cursor {
         event.preventDefault();
       }
     });
+    makeObservable(this);
   }
 
   /**

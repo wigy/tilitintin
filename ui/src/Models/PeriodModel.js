@@ -1,4 +1,4 @@
-import { computed, observable } from 'mobx';
+import { computed, makeObservable, observable } from 'mobx';
 import ReportModel from './ReportModel';
 import DocumentModel from './DocumentModel';
 import Model from './Model';
@@ -31,6 +31,7 @@ class PeriodModel extends Model {
       // If set, the period is locked and cannot be changed.
       locked: false
     }, init);
+    makeObservable(this);
   }
 
   getSortKey() {

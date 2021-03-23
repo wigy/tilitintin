@@ -1,4 +1,4 @@
-import { computed, observable } from 'mobx';
+import { computed, makeObservable, observable } from 'mobx';
 
 class Settings {
 
@@ -23,6 +23,10 @@ class Settings {
     'vat-delayed-receivable-account': '1845',
     'vat-delayed-payable-account': '2977'
   };
+
+  constructor() {
+    makeObservable(this);
+  }
 
   /**
    * Set new values.

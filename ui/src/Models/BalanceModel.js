@@ -1,3 +1,4 @@
+import { makeObservable } from 'mobx';
 import NavigationTargetModel from './NavigationTargetModel';
 
 class BalanceModel extends NavigationTargetModel {
@@ -13,6 +14,7 @@ class BalanceModel extends NavigationTargetModel {
       // Balance amount in cents.
       total: null
     }, init);
+    makeObservable(this);
   }
 
   getSortKey() {

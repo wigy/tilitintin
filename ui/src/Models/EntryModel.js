@@ -6,6 +6,7 @@ import TagModel from './TagModel';
 import Money from '../Components/Money';
 import { str2num } from '../Util';
 import i18n from '../i18n';
+import { makeObservable } from 'mobx';
 
 class EntryModel extends NavigationTargetModel {
 
@@ -36,6 +37,7 @@ class EntryModel extends NavigationTargetModel {
       // Tag names extracted from the description.
       tagNames: []
     }, init);
+    makeObservable(this);
   }
 
   /**

@@ -1,4 +1,4 @@
-import { runInAction, computed, observable } from 'mobx';
+import { runInAction, computed, observable, makeObservable } from 'mobx';
 import config from '../Configuration';
 import AccountModel from '../Models/AccountModel';
 import DatabaseModel from '../Models/DatabaseModel';
@@ -93,6 +93,7 @@ class Store {
 
   constructor(settings) {
     this.settings = settings;
+    makeObservable(this);
   }
 
   /**

@@ -1,6 +1,7 @@
 import NavigationTargetModel from './NavigationTargetModel';
 import EntryModel from '../Models/EntryModel';
 import { date2str, str2date } from '../Util';
+import { makeObservable } from 'mobx';
 
 class DocumentModel extends NavigationTargetModel {
 
@@ -16,6 +17,7 @@ class DocumentModel extends NavigationTargetModel {
       // A list of entries of this document.
       entries: []
     }, init);
+    makeObservable(this);
   }
 
   toJSON() {

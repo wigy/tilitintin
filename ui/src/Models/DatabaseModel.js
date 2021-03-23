@@ -1,4 +1,4 @@
-import { observable } from 'mobx';
+import { makeObservable, observable } from 'mobx';
 import Model from './Model';
 import PeriodModel from './PeriodModel';
 
@@ -28,6 +28,7 @@ class DatabaseModel extends Model {
       // Name of the database.
       name: null
     }, init);
+    makeObservable(this);
   }
 
   getSortKey() {

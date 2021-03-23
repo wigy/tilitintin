@@ -1,6 +1,6 @@
 import Model from './Model';
 import TagModel from './TagModel';
-import { observable } from 'mobx';
+import { makeObservable, observable } from 'mobx';
 
 class AccountModel extends Model {
 
@@ -46,6 +46,7 @@ class AccountModel extends Model {
       // VAT code (index to the table above).
       vat_code: 0
     }, init);
+    makeObservable(this);
   }
 
   toString() {
