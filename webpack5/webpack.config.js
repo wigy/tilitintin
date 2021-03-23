@@ -4,16 +4,21 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const CopyPlugin = require("copy-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   entry: path.resolve(__dirname, './src/index.js'),
-  devtool: 'source-map',
+  mode: 'development',
+  devtool: 'inline-source-map',
   module: {
     rules: [
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        use: ['babel-loader']
+        use: ['babel-loader'],
+        resolve: {
+          extensions: ['.js', '.jsx']
+        },
       },
       {
         test: /\.html$/,
@@ -22,12 +27,11 @@ module.exports = {
       {
         test: /\.css$/i,
         exclude: /node_modules/,
-        use: ['style-loader', 'css-loader']
+        use: [ {
+          loader: MiniCssExtractPlugin.loader,
+        }, 'css-loader']
       },
     ],
-  },
-  resolve: {
-    extensions: ['*', '.js', '.jsx']
   },
   optimization: {
     splitChunks: {
@@ -53,6 +57,9 @@ module.exports = {
       patterns: [
         { from: path.resolve(__dirname, './public/*.{ico,png,json}'), to: path.resolve(__dirname, './dist/[name][ext]') },
       ],
+    }),
+    new MiniCssExtractPlugin({
+      filename: "styles.[contentHash].css",
     }),
   ],
   devServer: {
