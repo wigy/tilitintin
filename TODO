@@ -19,9 +19,7 @@ FUTURE FEATURES
 [X] Make more room for menu items.
 [ ] Use Yarn.
 [X] Webpack update.
-
-2.2
-[ ] Mobx update.
+[X] Mobx update.
 
 3.0
 [ ] Tags management.
