@@ -17,6 +17,7 @@ module.exports = merge(common, {
     contentBase: paths.build,
     compress: true,
     hot: true,
+    disableHostCheck: true,
   },
 
   plugins: [
