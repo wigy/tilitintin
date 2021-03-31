@@ -2,7 +2,6 @@
 BUGS
 ====
 
-[ ] Docker does not work out of the box.
 [ ] Dimming does not happen after selecting db in dashboard.
 
 SMALL IMPROVEMENTS
@@ -15,12 +14,12 @@ FUTURE FEATURES
 ===============
 
 2.1
-[ ] Improve looks for cell cursor.
 [X] Make more room for menu items.
-[ ] Use Yarn.
+[X] Use Yarn.
 [X] Webpack update.
 [X] Mobx update.
 [ ] Configuration fetch during login (language, vat settings).
+[ ] Improve looks for cell cursor.
 
 3.0
 [ ] Tags management.
