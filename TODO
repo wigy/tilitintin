@@ -3,6 +3,7 @@ BUGS
 ====
 
 [ ] Dimming does not happen after selecting db in dashboard.
+[ ] Validate date. If not in range, the tx list behaves funnily.
 
 SMALL IMPROVEMENTS
 ==================
