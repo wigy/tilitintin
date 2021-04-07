@@ -2,12 +2,10 @@
 BUGS
 ====
 
-[ ] When switching account by pressing enter, the navigation stops working.
 
 SMALL IMPROVEMENTS
 ==================
 
-[ ] Could have silent option for API fetch dimming and use it when fetching proposals.
 [ ] More icons with keyboard shortcuts as hover text.
 
 FUTURE FEATURES
@@ -20,6 +18,7 @@ FUTURE FEATURES
 [X] Mobx update.
 [X] Select all text when entering old transaction editor.
 [X] Validate date. If not in range, the tx list behaves funnily.
+[X] Could have silent option for API fetch dimming and use it when fetching proposals.
 [ ] Configuration fetch during login (language, vat settings). Maybe JSON-file per user.
 [ ] Improve looks for cell cursor.
 

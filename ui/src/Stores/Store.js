@@ -102,9 +102,10 @@ class Store {
    * @param {String} method
    * @param {Object|null|undefined} data
    * @param {File} file
+   * @param {Boolean} noDimming
    */
   @action
-  async request(path, method = 'GET', data = null, file = null) {
+  async request(path, method = 'GET', data = null, file = null, noDimming = false) {
     const options = {
       method: method,
       headers: {
@@ -129,7 +130,7 @@ class Store {
     debug('  Request:', method, config.API_URL + path, data || '');
 
     this.clearMessages();
-    this.loading = true;
+    this.loading = !noDimming;
     return fetch(config.API_URL + path, options)
       .then(res => {
         runInAction(() => {
@@ -395,7 +396,7 @@ class Store {
     if (this.entryDescriptions[db] && this.entryDescriptions[db][accountId]) {
       return this.entryDescriptions[db][accountId];
     }
-    return this.request('/db/' + db + '/entry?account_id=' + accountId)
+    return this.request('/db/' + db + '/entry?account_id=' + accountId, 'GET', null, null, true)
       .then((entries) => {
         const ret = entries.map(e => ({
           documentId: e.document_id,
