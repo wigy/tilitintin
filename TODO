@@ -2,7 +2,6 @@
 BUGS
 ====
 
-[ ] Dimming does not happen after selecting db in dashboard.
 [ ] Validate date. If not in range, the tx list behaves funnily.
 [ ] When switching account by pressing enter, the navigation stops working.
 
@@ -21,7 +20,7 @@ FUTURE FEATURES
 [X] Use Yarn.
 [X] Webpack update.
 [X] Mobx update.
-[ ] Configuration fetch during login (language, vat settings).
+[ ] Configuration fetch during login (language, vat settings). Maybe JSON-file per user.
 [ ] Improve looks for cell cursor.
 
 3.0
