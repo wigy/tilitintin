@@ -190,6 +190,7 @@ class TextEdit extends Component {
           onKeyPress={event => this.onKeyPress(event)}
           onKeyUp={event => this.onKeyUp(event)}
           onKeyDown={event => this.onKeyDown(event)}
+          onFocus={event => event.target.select()}
         />
         {this.renderProposal()}
       </div>

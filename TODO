@@ -10,7 +10,6 @@ SMALL IMPROVEMENTS
 
 [ ] Could have silent option for API fetch dimming and use it when fetching proposals.
 [ ] More icons with keyboard shortcuts as hover text.
-[ ] Select all text when entering old transaction editor.
 
 FUTURE FEATURES
 ===============
@@ -20,6 +19,7 @@ FUTURE FEATURES
 [X] Use Yarn.
 [X] Webpack update.
 [X] Mobx update.
+[X] Select all text when entering old transaction editor.
 [ ] Configuration fetch during login (language, vat settings). Maybe JSON-file per user.
 [ ] Improve looks for cell cursor.
 
