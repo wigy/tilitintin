@@ -4,12 +4,14 @@ BUGS
 
 [ ] Dimming does not happen after selecting db in dashboard.
 [ ] Validate date. If not in range, the tx list behaves funnily.
+[ ] When switching account by pressing enter, the navigation stops working.
 
 SMALL IMPROVEMENTS
 ==================
 
 [ ] Could have silent option for API fetch dimming and use it when fetching proposals.
 [ ] More icons with keyboard shortcuts as hover text.
+[ ] Select all text when entering old transaction editor.
 
 FUTURE FEATURES
 ===============
