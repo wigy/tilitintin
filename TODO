@@ -19,7 +19,6 @@ FUTURE FEATURES
 [X] Select all text when entering old transaction editor.
 [X] Validate date. If not in range, the tx list behaves funnily.
 [X] Could have silent option for API fetch dimming and use it when fetching proposals.
-[ ] Configuration fetch during login (language, vat settings). Maybe JSON-file per user.
 [ ] Improve looks for cell cursor.
 
 3.0
