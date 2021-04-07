@@ -104,6 +104,8 @@ i18n.init({
         'Delayed VAT': 'Siirretty ALV',
         Databases: 'Tietokannat',
         'Date is incorrect.': 'Virheellinen päivämäärä.',
+        'Date is before the current period starts.': 'Päiväys on ajalta ennen kuin nykyinen tilikausi alkaa.',
+        'Date is after the current period ends.': 'Päiväys on nykyisen tilikauden jälkeen.',
         Date: 'Päiväys',
         'Debit and credit do not match': 'Debet ja kredit ei täsmää',
         Debit: 'Debet',

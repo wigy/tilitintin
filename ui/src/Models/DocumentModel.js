@@ -53,8 +53,19 @@ class DocumentModel extends NavigationTargetModel {
   }
 
   ['validate.date'](value) {
-    const INVALID_DATE = 'Date is incorrect.';
-    return str2date(value, this.store.lastDate) ? null : INVALID_DATE;
+    if (!str2date(value, this.store.lastDate)) {
+      return 'Date is incorrect.';
+    }
+    if (this.period) {
+      value = str2date(value, this.store.lastDate);
+      if (value < this.period.start_date) {
+        return 'Date is before the current period starts.';
+      }
+      if (value > this.period.end_date) {
+        return 'Date is after the current period ends.';
+      }
+    }
+    return null;
   }
 
   ['change.date'](value) {
