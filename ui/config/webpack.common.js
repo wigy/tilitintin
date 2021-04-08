@@ -3,6 +3,7 @@ const paths = require('./paths');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { DefinePlugin } = require('webpack');
 
 module.exports = {
   // Where webpack looks to start building the bundle
@@ -34,6 +35,10 @@ module.exports = {
       template: paths.public + '/index.html', // template file
       filename: 'index.html', // output file
     }),
+
+    new DefinePlugin({
+      API_URL: JSON.stringify(process.env.API_URL || 'http://localhost:3101')
+    })
   ],
 
   // Determine how modules within the project are treated

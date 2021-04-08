@@ -1,11 +1,8 @@
 import pkg from '../package.json'
-//
-// AUTOMATICALLY GENERATED - DO NOT CHANGE ///
-//
-/* eslint quotes: off, comma-dangle: off */
-const config = {
-  VERSION: pkg.version,
-  API_URL: "http://localhost:3101",
+
+const Configuration = {
+  'VERSION': pkg.version,
+  'API_URL': API_URL
 };
 
-export default config;
+export default Configuration;
