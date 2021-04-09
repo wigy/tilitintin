@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import ReactRouterPropTypes from 'react-router-prop-types';
-import { inject, observer } from 'mobx-react';
-import { withTranslation, Trans } from 'react-i18next';
-import Store from '../Stores/Store';
-import Cursor from '../Stores/Cursor';
-import Title from './Title';
-import { List, ListItem, Avatar, ListItemAvatar, ListItemText } from '@material-ui/core';
-import { withRouter } from 'react-router-dom';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import ReactRouterPropTypes from 'react-router-prop-types'
+import { inject, observer } from 'mobx-react'
+import { withTranslation, Trans } from 'react-i18next'
+import Store from '../Stores/Store'
+import Cursor from '../Stores/Cursor'
+import Title from './Title'
+import { List, ListItem, Avatar, ListItemAvatar, ListItemText } from '@material-ui/core'
+import { withRouter } from 'react-router-dom'
 
 @withRouter
 @withTranslation('translations')
@@ -17,38 +17,38 @@ import { withRouter } from 'react-router-dom';
 class ToolsList extends Component {
 
   componentDidMount() {
-    this.props.cursor.selectPage('Tools', this);
+    this.props.cursor.selectPage('Tools', this)
   }
 
   url(page) {
-    const { store } = this.props;
-    return '/' + (store.db || '_') + '/tools/' + (store.periodId || '') + '/' + ((store.account && store.account.id) || '') + '/' + page;
+    const { store } = this.props
+    return '/' + (store.db || '_') + '/tools/' + (store.periodId || '') + '/' + ((store.account && store.account.id) || '') + '/' + page
   }
 
   keyText(cursor, key) {
-    const { store } = this.props;
+    const { store } = this.props
     if (key === '1') {
-      this.props.history.push(this.url('databases'));
-      return { preventDefault: true };
+      this.props.history.push(this.url('databases'))
+      return { preventDefault: true }
     }
     if (key === '2' && store.db) {
-      this.props.history.push(this.url('periods'));
-      return { preventDefault: true };
+      this.props.history.push(this.url('periods'))
+      return { preventDefault: true }
     }
     if (key === '3' && store.periodId) {
-      this.props.history.push(this.url('documents'));
-      return { preventDefault: true };
+      this.props.history.push(this.url('documents'))
+      return { preventDefault: true }
     }
     if (key === '4' && store.periodId) {
-      this.props.history.push(this.url('vat'));
-      return { preventDefault: true };
+      this.props.history.push(this.url('vat'))
+      return { preventDefault: true }
     }
   }
 
   render() {
-    const { store, history, match } = this.props;
+    const { store, history, match } = this.props
     if (!store.token) {
-      return '';
+      return ''
     }
 
     return (
@@ -81,7 +81,7 @@ class ToolsList extends Component {
           </ListItem>
         </List>
       </div>
-    );
+    )
   }
 }
 
@@ -90,6 +90,6 @@ ToolsList.propTypes = {
   match: PropTypes.object,
   history: ReactRouterPropTypes.history.isRequired,
   store: PropTypes.instanceOf(Store)
-};
+}
 
-export default ToolsList;
+export default ToolsList

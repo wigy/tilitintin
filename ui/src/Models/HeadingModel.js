@@ -1,4 +1,4 @@
-import Model from './Model';
+import Model from './Model'
 
 class HeadingModel extends Model {
 
@@ -11,19 +11,19 @@ class HeadingModel extends Model {
       level: null,
       // Heading text.
       text: null
-    }, init);
+    }, init)
   }
 
   /**
    * Get the database this entry belongs to.
    */
   get database() {
-    return this.parent;
+    return this.parent
   }
 
   getObjectType() {
-    return 'Heading';
+    return 'Heading'
   }
 }
 
-export default HeadingModel;
+export default HeadingModel

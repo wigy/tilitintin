@@ -16,7 +16,8 @@
     "space-before-function-paren": "off",
     "comma-dangle": "off",
     "padded-blocks": "off",
-    "react/prop-types": "warn"
+    "react/prop-types": "warn",
+    "semi": [2, "never"]
   },
   "settings": {
     "react": {

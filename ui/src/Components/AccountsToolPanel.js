@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { inject, observer } from 'mobx-react';
-import Store from '../Stores/Store';
-import Cursor from '../Stores/Cursor';
-import IconButton from './IconButton';
-import IconSpacer from './IconSpacer';
-import Title from './Title';
-import { TextField } from '@material-ui/core';
-import { Trans } from 'react-i18next';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { inject, observer } from 'mobx-react'
+import Store from '../Stores/Store'
+import Cursor from '../Stores/Cursor'
+import IconButton from './IconButton'
+import IconSpacer from './IconSpacer'
+import Title from './Title'
+import { TextField } from '@material-ui/core'
+import { Trans } from 'react-i18next'
 
 @inject('store')
 @inject('cursor')
@@ -19,26 +19,26 @@ class AccountsToolPanel extends Component {
   };
 
   componentDidMount() {
-    this.setState({ search: this.props.store.tools.accounts.search || '' });
+    this.setState({ search: this.props.store.tools.accounts.search || '' })
   }
 
   render() {
-    const { store, cursor } = this.props;
+    const { store, cursor } = this.props
     if (!store.token) {
-      return '';
+      return ''
     }
 
     const enableAll = () => {
-      const favorite = store.tools.accounts.favorite;
-      const search = store.tools.accounts.search;
-      store.tools.accounts = { favorite, search };
-    };
+      const favorite = store.tools.accounts.favorite
+      const search = store.tools.accounts.search
+      store.tools.accounts = { favorite, search }
+    }
 
     const disableAll = () => {
-      const favorite = store.tools.accounts.favorite;
-      const search = store.tools.accounts.search;
-      store.tools.accounts = { favorite, search, asset: true, liability: true, equity: true, revenue: true, expense: true, profit: true };
-    };
+      const favorite = store.tools.accounts.favorite
+      const search = store.tools.accounts.search
+      store.tools.accounts = { favorite, search, asset: true, liability: true, equity: true, revenue: true, expense: true, profit: true }
+    }
 
     return ( // ASSET/LIABILITY/EQUITY/REVENUE/EXPENSE/PROFIT_PREV/PROFIT
       <div className="ToolPanel AccountsToolPanel">
@@ -80,23 +80,23 @@ class AccountsToolPanel extends Component {
           label={<Trans>Search</Trans>}
           style={{ height: '36px', width: '280px', fontSize: '20px' }}
           value={this.state.search}
-          onChange={e => { this.setState({ search: e.target.value }); }}
+          onChange={e => { this.setState({ search: e.target.value }) }}
           onKeyPress={e => {
             if (e.key === 'Enter') {
-              store.tools.accounts.search = e.target.value;
+              store.tools.accounts.search = e.target.value
             }
           }}
           onFocus={() => cursor.disableHandler()}
           onBlur={() => cursor.enableHandler()}
         />
       </div>
-    );
+    )
   }
 }
 
 AccountsToolPanel.propTypes = {
   cursor: PropTypes.instanceOf(Cursor),
   store: PropTypes.instanceOf(Store)
-};
+}
 
-export default AccountsToolPanel;
+export default AccountsToolPanel

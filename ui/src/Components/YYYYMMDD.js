@@ -1,17 +1,17 @@
 const YYYYMMDD = (props) => {
 
-  var d = new Date(props.date);
+  const d = new Date(props.date)
 
-  var month = '' + (d.getMonth() + 1);
+  let month = '' + (d.getMonth() + 1)
 
-  var day = '' + d.getDate();
+  let day = '' + d.getDate()
 
-  var year = d.getFullYear();
+  const year = d.getFullYear()
 
-  if (month.length < 2) month = '0' + month;
-  if (day.length < 2) day = '0' + day;
+  if (month.length < 2) month = '0' + month
+  if (day.length < 2) day = '0' + day
 
-  return [year, month, day].join('-');
-};
+  return [year, month, day].join('-')
+}
 
-export default YYYYMMDD;
+export default YYYYMMDD

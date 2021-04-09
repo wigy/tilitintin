@@ -1,5 +1,5 @@
-import { makeObservable } from 'mobx';
-import NavigationTargetModel from './NavigationTargetModel';
+import { makeObservable } from 'mobx'
+import NavigationTargetModel from './NavigationTargetModel'
 
 class BalanceModel extends NavigationTargetModel {
 
@@ -13,55 +13,55 @@ class BalanceModel extends NavigationTargetModel {
       credit: null,
       // Balance amount in cents.
       total: null
-    }, init);
-    makeObservable(this);
+    }, init)
+    makeObservable(this)
   }
 
   getSortKey() {
-    return this.account && this.account.number;
+    return this.account && this.account.number
   }
 
   getId() {
-    return 'Balance' + this.account_id;
+    return 'Balance' + this.account_id
   }
 
   getObjectType() {
-    return 'Balance';
+    return 'Balance'
   }
 
   getUrl() {
-    return '/' + this.database.name + '/txs/' + this.period.id + '/' + this.account_id;
+    return '/' + this.database.name + '/txs/' + this.period.id + '/' + this.account_id
   }
 
   /**
    * Follow the link of the child.
    */
   keyEnter(cursor) {
-    const el = this.getElement();
-    el.click();
-    return { preventDefault: true };
+    const el = this.getElement()
+    el.click()
+    return { preventDefault: true }
   }
 
   /**
    * Get the period of this balance.
    */
   get period() {
-    return this.parent;
+    return this.parent
   }
 
   /**
    * Get the database of this balance.
    */
   get database() {
-    return this.parent.database;
+    return this.parent.database
   }
 
   /**
    * Get the account this balance applies.
    */
   get account() {
-    return this.period.getAccount(this.account_id);
+    return this.period.getAccount(this.account_id)
   }
 }
 
-export default BalanceModel;
+export default BalanceModel

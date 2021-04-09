@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Card, CardContent, Typography } from '@material-ui/core';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { Card, CardContent, Typography } from '@material-ui/core'
 
 const SubPanel = (props) => {
   return (
@@ -11,12 +11,12 @@ const SubPanel = (props) => {
         </Typography>
       </CardContent>
     </Card>
-  );
+  )
 
-};
+}
 
 SubPanel.propTypes = {
   children: PropTypes.node,
-};
+}
 
-export default SubPanel;
+export default SubPanel

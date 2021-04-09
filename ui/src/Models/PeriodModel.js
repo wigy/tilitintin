@@ -1,7 +1,7 @@
-import { computed, makeObservable, observable } from 'mobx';
-import ReportModel from './ReportModel';
-import DocumentModel from './DocumentModel';
-import Model from './Model';
+import { computed, makeObservable, observable } from 'mobx'
+import ReportModel from './ReportModel'
+import DocumentModel from './DocumentModel'
+import Model from './Model'
 
 class PeriodModel extends Model {
 
@@ -30,16 +30,16 @@ class PeriodModel extends Model {
       end_date: null,
       // If set, the period is locked and cannot be changed.
       locked: false
-    }, init);
-    makeObservable(this);
+    }, init)
+    makeObservable(this)
   }
 
   getSortKey() {
-    return this.start_date;
+    return this.start_date
   }
 
   getObjectType() {
-    return 'Period';
+    return 'Period'
   }
 
   /**
@@ -58,16 +58,16 @@ class PeriodModel extends Model {
    */
   async createDocument(data) {
     // Create document.
-    const entries = data.entries || [];
-    delete data.entries;
-    const doc = new DocumentModel(this, { ...data, period_id: this.id });
-    await doc.save();
-    this.addDocument(doc);
+    const entries = data.entries || []
+    delete data.entries
+    const doc = new DocumentModel(this, { ...data, period_id: this.id })
+    await doc.save()
+    this.addDocument(doc)
     // Create entries.
     for (const entry of entries) {
-      await doc.createEntry(entry);
+      await doc.createEntry(entry)
     }
-    return doc;
+    return doc
   }
 
   /**
@@ -75,12 +75,12 @@ class PeriodModel extends Model {
    * @param {DocumentModel} doc
    */
   addDocument(doc) {
-    doc.parent = this;
-    doc.period_id = this.id;
-    this.documents[doc.id] = doc;
+    doc.parent = this
+    doc.period_id = this.id
+    this.documents[doc.id] = doc
     doc.entries.forEach((entry) => {
-      this.addEntry(entry);
-    });
+      this.addEntry(entry)
+    })
   }
 
   /**
@@ -89,10 +89,10 @@ class PeriodModel extends Model {
    */
   addEntry(entry) {
     if (!entry.document || !entry.document.id || !entry.account_id) {
-      return;
+      return
     }
-    this.documentsByAccountId[entry.account_id] = this.documentsByAccountId[entry.account_id] || new Set();
-    this.documentsByAccountId[entry.account_id].add(entry.document.id);
+    this.documentsByAccountId[entry.account_id] = this.documentsByAccountId[entry.account_id] || new Set()
+    this.documentsByAccountId[entry.account_id].add(entry.document.id)
   }
 
   /**
@@ -102,10 +102,10 @@ class PeriodModel extends Model {
   deleteDocument(doc) {
     doc.entries.forEach((entry) => {
       if (this.documentsByAccountId[entry.account_id]) {
-        this.documentsByAccountId[entry.account_id].delete(doc.id);
+        this.documentsByAccountId[entry.account_id].delete(doc.id)
       }
-    });
-    delete this.documents[doc.id];
+    })
+    delete this.documents[doc.id]
   }
 
   /**
@@ -115,7 +115,7 @@ class PeriodModel extends Model {
   deleteEntry(entry) {
     if (entry.account_id) {
       for (const docId of this.documentsByAccountId[entry.account_id]) {
-        this.getDocument(docId).deleteEntry(entry);
+        this.getDocument(docId).deleteEntry(entry)
       }
     }
   }
@@ -127,10 +127,10 @@ class PeriodModel extends Model {
    * @param {Number} accountId
    */
   changeAccount(documentId, oldAccountId, accountId) {
-    this.documentsByAccountId[oldAccountId] = this.documentsByAccountId[oldAccountId] || new Set();
-    this.documentsByAccountId[oldAccountId].delete(documentId);
-    this.documentsByAccountId[accountId] = this.documentsByAccountId[accountId] || new Set();
-    this.documentsByAccountId[accountId].add(documentId);
+    this.documentsByAccountId[oldAccountId] = this.documentsByAccountId[oldAccountId] || new Set()
+    this.documentsByAccountId[oldAccountId].delete(documentId)
+    this.documentsByAccountId[accountId] = this.documentsByAccountId[accountId] || new Set()
+    this.documentsByAccountId[accountId].add(documentId)
   }
 
   /**
@@ -138,8 +138,8 @@ class PeriodModel extends Model {
    * @param {BalanceModel} balance
    */
   addBalance(balance) {
-    balance.parent = this;
-    this.balances[balance.account_id] = balance;
+    balance.parent = this
+    this.balances[balance.account_id] = balance
   }
 
   /**
@@ -147,7 +147,7 @@ class PeriodModel extends Model {
    * @param {Number} accountId
    */
   getBalance(accountId) {
-    return this.balances[accountId];
+    return this.balances[accountId]
   }
 
   /**
@@ -155,7 +155,7 @@ class PeriodModel extends Model {
    * @param {String} number
    */
   getBalanceByNumber(number) {
-    return this.getBalance(this.database.getAccountByNumber(number).id);
+    return this.getBalance(this.database.getAccountByNumber(number).id)
   }
 
   /**
@@ -163,8 +163,8 @@ class PeriodModel extends Model {
    * @param {ReportModel} report
    */
   addReport(report) {
-    report.parent = this;
-    this.reportsByFormat[report.format] = report;
+    report.parent = this
+    this.reportsByFormat[report.format] = report
   }
 
   /**
@@ -172,7 +172,7 @@ class PeriodModel extends Model {
    * @param {String} format
    */
   getReport(format) {
-    return this.reportsByFormat[format] || null;
+    return this.reportsByFormat[format] || null
   }
 
   /**
@@ -181,7 +181,7 @@ class PeriodModel extends Model {
    * @return {null|DocumentModel}
    */
   getDocument(id) {
-    return this.documents[id] || null;
+    return this.documents[id] || null
   }
 
   /**
@@ -190,7 +190,7 @@ class PeriodModel extends Model {
    * @return {null|AccountModel}
    */
   getAccount(id) {
-    return this.database.getAccount(id);
+    return this.database.getAccount(id)
   }
 
   /**
@@ -199,7 +199,7 @@ class PeriodModel extends Model {
    * @return {DocumentModel[]}
    */
   getAccountDocuments(accountId) {
-    return [...(this.documentsByAccountId[accountId] || new Set())].map((id) => this.getDocument(id));
+    return [...(this.documentsByAccountId[accountId] || new Set())].map((id) => this.getDocument(id))
   }
 
   /**
@@ -209,38 +209,38 @@ class PeriodModel extends Model {
    * @return {DocumentModel[]}
    */
   getDocuments(accounts = null, filter = null) {
-    let docs = Object.values({ ...this.documents });
+    let docs = Object.values({ ...this.documents })
     if (accounts !== null) {
       docs = docs.filter((doc) => {
         for (const entry of doc.entries) {
           if (accounts.includes(entry.account.number)) {
-            return filter === null ? true : filter(entry);
+            return filter === null ? true : filter(entry)
           }
         }
-        return false;
-      });
+        return false
+      })
     }
-    return docs;
+    return docs
   }
 
   /**
    * Update tags for all accounts from the current documents.
    */
   refreshTags() {
-    const tags = {};
+    const tags = {}
     Object.values(this.documents).forEach((doc) => {
       doc.entries.forEach((entry) => {
         // Skip new or broken entries.
         if (!entry.account_id) {
-          return;
+          return
         }
-        tags[entry.account_id] = tags[entry.account_id] || new Set();
-        entry.tagNames.forEach((tag) => tags[entry.account_id].add(tag));
-      });
-    });
+        tags[entry.account_id] = tags[entry.account_id] || new Set()
+        entry.tagNames.forEach((tag) => tags[entry.account_id].add(tag))
+      })
+    })
     Object.keys(tags).forEach((accountId) => {
-      this.getAccount(accountId).setTags([...tags[accountId]]);
-    });
+      this.getAccount(accountId).setTags([...tags[accountId]])
+    })
   }
 
   /**
@@ -249,8 +249,8 @@ class PeriodModel extends Model {
   lock() {
     this.store.request(`/db/${this.database.name}/period/${this.id}`, 'PATCH', { locked: 1 })
       .then(() => {
-        this.locked = 1;
-      });
+        this.locked = 1
+      })
   }
 
   /**
@@ -259,8 +259,8 @@ class PeriodModel extends Model {
   unlock() {
     this.store.request(`/db/${this.database.name}/period/${this.id}`, 'PATCH', { locked: 0 })
       .then(() => {
-        this.locked = 0;
-      });
+        this.locked = 0
+      })
   }
 
   /**
@@ -269,22 +269,22 @@ class PeriodModel extends Model {
    */
   @computed
   get VATSummary() {
-    let sales = 0;
-    let purchases = 0;
-    const { VAT_SALES_ACCOUNT, VAT_PURCHASES_ACCOUNT } = this.settings;
+    let sales = 0
+    let purchases = 0
+    const { VAT_SALES_ACCOUNT, VAT_PURCHASES_ACCOUNT } = this.settings
 
     this.openVATDocuments.forEach((doc) => {
       doc.entries.forEach((entry) => {
-        const acc = entry.account.number;
+        const acc = entry.account.number
         if (acc === VAT_SALES_ACCOUNT) {
-          sales += entry.total;
+          sales += entry.total
         }
         if (acc === VAT_PURCHASES_ACCOUNT) {
-          purchases += entry.total;
+          purchases += entry.total
         }
-      });
-    });
-    return { sales, purchases };
+      })
+    })
+    return { sales, purchases }
   }
 
   /**
@@ -292,8 +292,8 @@ class PeriodModel extends Model {
    */
   @computed
   get openVATDocuments() {
-    const { VAT_SALES_ACCOUNT, VAT_PURCHASES_ACCOUNT } = this.settings;
-    return this.store.getDocuments([VAT_SALES_ACCOUNT, VAT_PURCHASES_ACCOUNT], (entry) => !entry.VAT_RECONCILED && !entry.VAT_IGNORE);
+    const { VAT_SALES_ACCOUNT, VAT_PURCHASES_ACCOUNT } = this.settings
+    return this.store.getDocuments([VAT_SALES_ACCOUNT, VAT_PURCHASES_ACCOUNT], (entry) => !entry.VAT_RECONCILED && !entry.VAT_IGNORE)
   }
 
   /**
@@ -301,9 +301,9 @@ class PeriodModel extends Model {
    */
   @computed
   get incorrectlyNumberedDocuments() {
-    let next = 0;
-    const changed = [];
-    const docs = Object.values(this.documents).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime() || a.number - b.number);
+    let next = 0
+    const changed = []
+    const docs = Object.values(this.documents).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime() || a.number - b.number)
     docs.forEach((doc) => {
       if (doc.number !== next) {
         changed.push({
@@ -311,11 +311,11 @@ class PeriodModel extends Model {
           date: doc.date,
           number: doc.number,
           newNumber: next
-        });
+        })
       }
-      next++;
-    });
-    return changed;
+      next++
+    })
+    return changed
   }
 
   /**
@@ -323,22 +323,22 @@ class PeriodModel extends Model {
    */
   @computed
   get emptyDocuments() {
-    return Object.values(this.documents).filter(doc => doc.entries.length === 0 && doc.number);
+    return Object.values(this.documents).filter(doc => doc.entries.length === 0 && doc.number)
   }
 
   /**
    * Get the database this period belongs to.
    */
   get database() {
-    return this.parent;
+    return this.parent
   }
 
   /**
    * Get reports for this period.
    */
   get reports() {
-    return Object.values(this.reportsByFormat).sort(ReportModel.sorter());
+    return Object.values(this.reportsByFormat).sort(ReportModel.sorter())
   }
 }
 
-export default PeriodModel;
+export default PeriodModel

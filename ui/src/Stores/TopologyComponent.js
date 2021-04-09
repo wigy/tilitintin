@@ -1,5 +1,5 @@
-import NavigationTargetModel from '../Models/NavigationTargetModel';
-import { action } from 'mobx';
+import NavigationTargetModel from '../Models/NavigationTargetModel'
+import { action } from 'mobx'
 
 /**
  * Description of some collection of navigational objects.
@@ -15,7 +15,7 @@ import { action } from 'mobx';
  */
 class TopologyComponent {
   constructor(comp) {
-    Object.assign(this, comp);
+    Object.assign(this, comp)
   }
 
   /**
@@ -27,17 +27,17 @@ class TopologyComponent {
   @action.bound
   moveIndex(oldIndex, index, options = {}) {
     if (oldIndex !== null && this.data[oldIndex]) {
-      this.data[oldIndex].leave();
+      this.data[oldIndex].leave()
     }
     if (index !== null && this.data[index]) {
       if (!(this.data[index] instanceof NavigationTargetModel)) {
-        console.error(this.data[index]);
-        throw new Error('Invalid navigation target not inherited from NavigationTargetModel.');
+        console.error(this.data[index])
+        throw new Error('Invalid navigation target not inherited from NavigationTargetModel.')
       }
-      this.data[index].enter();
-      const el = document.getElementById(this.data[index].getId());
+      this.data[index].enter()
+      const el = document.getElementById(this.data[index].getId())
       if (el && !options.noScroll) {
-        el.scrollIntoView({ block: 'center', inline: 'center' });
+        el.scrollIntoView({ block: 'center', inline: 'center' })
       }
     }
   }
@@ -54,15 +54,15 @@ class TopologyComponent {
   @action.bound
   moveBox(oldIndex, index, oldColumn, oldRow, column, row) {
     if (this.data[oldIndex]) {
-      const rows = this.data[oldIndex].rows();
+      const rows = this.data[oldIndex].rows()
       if (oldRow !== null && oldRow >= 0 && oldRow < rows.length) {
-        rows[oldRow].leaveSub(oldColumn);
+        rows[oldRow].leaveSub(oldColumn)
       }
     }
     if (this.data[index]) {
-      const rows = this.data[index].rows();
+      const rows = this.data[index].rows()
       if (row !== null && row >= 0 && row < rows.length) {
-        rows[row].enterSub(column);
+        rows[row].enterSub(column)
       }
     }
   }
@@ -74,17 +74,17 @@ class TopologyComponent {
    */
   getIndex(index) {
     if (index < 0 || index >= this.length) {
-      return null;
+      return null
     }
-    return this.data[index];
+    return this.data[index]
   }
 
   /**
    * Get the number of items in the collection.
    */
   get length() {
-    return this.data.length;
+    return this.data.length
   }
 }
 
-export default TopologyComponent;
+export default TopologyComponent

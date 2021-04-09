@@ -1,20 +1,20 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import ReactRouterPropTypes from 'react-router-prop-types';
-import { inject, observer } from 'mobx-react';
-import { Trans, withTranslation } from 'react-i18next';
-import moment from 'moment';
-import { sprintf } from 'sprintf-js';
-import Dialog from './Dialog';
-import Money from './Money';
-import Transaction from './Transaction';
-import Loading from './Loading';
-import Store from '../Stores/Store';
-import Cursor from '../Stores/Cursor';
-import EntryModel from '../Models/EntryModel';
-import DocumentModel from '../Models/DocumentModel';
-import { withRouter } from 'react-router-dom';
-import { TableContainer, Table, TableHead, TableCell, TableRow, TableBody, Typography, TextField, MenuItem } from '@material-ui/core';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import ReactRouterPropTypes from 'react-router-prop-types'
+import { inject, observer } from 'mobx-react'
+import { Trans, withTranslation } from 'react-i18next'
+import moment from 'moment'
+import { sprintf } from 'sprintf-js'
+import Dialog from './Dialog'
+import Money from './Money'
+import Transaction from './Transaction'
+import Loading from './Loading'
+import Store from '../Stores/Store'
+import Cursor from '../Stores/Cursor'
+import EntryModel from '../Models/EntryModel'
+import DocumentModel from '../Models/DocumentModel'
+import { withRouter } from 'react-router-dom'
+import { TableContainer, Table, TableHead, TableCell, TableRow, TableBody, Typography, TextField, MenuItem } from '@material-ui/core'
 
 @withTranslation('translations')
 @withRouter
@@ -31,81 +31,81 @@ class TransactionTable extends Component {
   txToDelete = null;
 
   componentDidMount() {
-    this.props.cursor.selectPage('Balances', this);
+    this.props.cursor.selectPage('Balances', this)
   }
 
   componentDidUpdate(oldProps) {
-    const eid = new URLSearchParams(this.props.location.search).get('entry');
+    const eid = new URLSearchParams(this.props.location.search).get('entry')
     if (eid) {
-      this.props.cursor.setIndex(null);
-      this.closeAll();
-      this.props.history.push(this.props.location.pathname);
+      this.props.cursor.setIndex(null)
+      this.closeAll()
+      this.props.history.push(this.props.location.pathname)
     }
   }
 
   closeAll() {
     this.props.store.filteredTransactions.forEach(tx => {
       if (tx.open) {
-        tx.toggleOpen();
+        tx.toggleOpen()
       }
-    });
+    })
   }
 
   keyEscape(cursor) {
     if (cursor.index === null) {
-      this.closeAll();
-      return { preventDefault: true };
+      this.closeAll()
+      return { preventDefault: true }
     }
   }
 
   keyTab(cursor) {
-    const { store } = this.props;
+    const { store } = this.props
     if (store.period.locked) {
-      return;
+      return
     }
     if (cursor.componentX !== 1) {
-      return;
+      return
     }
     // Insert entry.
-    const currentDoc = store.filteredTransactions[cursor.index].document;
-    const rowNumber = currentDoc.entries.reduce((prev, cur) => Math.max(prev, cur.row_number), 0) + 1;
-    const description = currentDoc.entries.length ? currentDoc.entries[currentDoc.entries.length - 1].text : '';
-    const entry = new EntryModel(currentDoc, { document_id: currentDoc.id, row_number: rowNumber, description });
-    currentDoc.addEntry(entry);
-    cursor.setCell(0, currentDoc.entries.length - 1);
+    const currentDoc = store.filteredTransactions[cursor.index].document
+    const rowNumber = currentDoc.entries.reduce((prev, cur) => Math.max(prev, cur.row_number), 0) + 1
+    const description = currentDoc.entries.length ? currentDoc.entries[currentDoc.entries.length - 1].text : ''
+    const entry = new EntryModel(currentDoc, { document_id: currentDoc.id, row_number: rowNumber, description })
+    currentDoc.addEntry(entry)
+    cursor.setCell(0, currentDoc.entries.length - 1)
 
-    return { preventDefault: true };
+    return { preventDefault: true }
   }
 
   keyInsert(cursor) {
-    const { store } = this.props;
+    const { store } = this.props
     if (store.period.locked) {
-      return;
+      return
     }
     if (!store.accountId) {
-      this.setState({ showAccountDropdown: true });
-      return;
+      this.setState({ showAccountDropdown: true })
+      return
     }
 
     // Insert new document.
     const document = new DocumentModel(store.period, {
       period_id: store.period.id,
       date: store.lastDate || moment().format('YYYY-MM-DD')
-    });
+    })
     document.save()
       .then(() => {
-        const entry = new EntryModel(document, { document_id: document.id, row_number: 1, account_id: store.accountId });
-        document.addEntry(entry);
-        store.period.addDocument(document);
-        entry.toggleOpen();
+        const entry = new EntryModel(document, { document_id: document.id, row_number: 1, account_id: store.accountId })
+        document.addEntry(entry)
+        store.period.addDocument(document)
+        entry.toggleOpen()
         if (cursor.componentX === 0) {
-          cursor.keyArrowRight();
+          cursor.keyArrowRight()
         }
-        const index = store.filteredTransactions.findIndex(tx => document.id === tx.document.id);
-        cursor.setIndex(index >= 0 ? index : store.filteredTransactions.length - 1);
-      });
+        const index = store.filteredTransactions.findIndex(tx => document.id === tx.document.id)
+        cursor.setIndex(index >= 0 ? index : store.filteredTransactions.length - 1)
+      })
 
-    return { preventDefault: true };
+    return { preventDefault: true }
   }
 
   /**
@@ -113,48 +113,48 @@ class TransactionTable extends Component {
    */
   keyCtrlC(cursor) {
     if (cursor.index === null) {
-      return;
+      return
     }
     if (cursor.componentX !== 1) {
-      return;
+      return
     }
     if (!navigator.clipboard) {
-      return;
+      return
     }
 
-    const { store } = this.props;
-    const doc = store.filteredTransactions[cursor.index].document;
+    const { store } = this.props
+    const doc = store.filteredTransactions[cursor.index].document
 
     if (cursor.row !== null) {
       // Copy one cell.
-      const entry = doc.entries[cursor.row];
-      const column = entry.column;
-      let text;
+      const entry = doc.entries[cursor.row]
+      const column = entry.column
+      let text
       switch (column) {
         case 'account':
-          text = entry.account.toString();
-          break;
+          text = entry.account.toString()
+          break
         case 'description':
-          text = entry['get.description']();
-          break;
+          text = entry['get.description']()
+          break
         case 'debit':
-          text = entry.debit ? sprintf('%.2f', entry.amount / 100) : '';
-          break;
+          text = entry.debit ? sprintf('%.2f', entry.amount / 100) : ''
+          break
         case 'credit':
-          text = entry.debit ? '' : sprintf('%.2f', entry.amount / 100) + '';
-          break;
+          text = entry.debit ? '' : sprintf('%.2f', entry.amount / 100) + ''
+          break
         default:
       }
-      navigator.clipboard.writeText(text);
-      return;
+      navigator.clipboard.writeText(text)
+      return
     }
 
     // Copy entire document with entries.
-    let text = `${doc.number}\t${doc.date}\n`;
+    let text = `${doc.number}\t${doc.date}\n`
     doc.entries.forEach(e => {
-      text += [e.account.toString(), e.description, e.debit ? e.amount : '', e.debit ? '' : e.amount].join('\t') + '\n';
-    });
-    navigator.clipboard.writeText(text);
+      text += [e.account.toString(), e.description, e.debit ? e.amount : '', e.debit ? '' : e.amount].join('\t') + '\n'
+    })
+    navigator.clipboard.writeText(text)
   }
 
   /**
@@ -163,66 +163,66 @@ class TransactionTable extends Component {
    */
   keyCtrlV(cursor) {
     if (cursor.index === null) {
-      return;
+      return
     }
     if (cursor.componentX !== 1) {
-      return;
+      return
     }
     if (!navigator.clipboard) {
-      return;
+      return
     }
     if (cursor.row !== null) {
       // Copy one cell.
-      const doc = this.props.store.filteredTransactions[cursor.index].document;
-      const entry = doc.entries[cursor.row];
-      const column = entry.column;
+      const doc = this.props.store.filteredTransactions[cursor.index].document
+      const entry = doc.entries[cursor.row]
+      const column = entry.column
       navigator.clipboard.readText().then(text => {
         if (entry[`validate.${column}`](text) === null) {
-          entry[`change.${column}`](text);
-          entry.save();
+          entry[`change.${column}`](text)
+          entry.save()
         }
-      });
-      return;
+      })
+      return
     }
 
     // Copy entire document.
     navigator.clipboard.readText().then(text => {
       // Verify the correct format and construct document.
       if (text.endsWith('\n')) {
-        text = text.substr(0, text.length - 1);
-        const lines = text.split('\n');
+        text = text.substr(0, text.length - 1)
+        const lines = text.split('\n')
         if (lines.length >= 2) {
-          const head = lines[0].split('\t');
+          const head = lines[0].split('\t')
           if (head.length === 2 && /^\d+$/.test(head[0]) && /^\d\d\d\d-\d\d-\d\d$/.test(head[1])) {
-            const [, date] = head;
-            const entries = [];
-            let i;
+            const [, date] = head
+            const entries = []
+            let i
             for (i = 1; i < lines.length; i++) {
-              const [acc, description, debit, credit] = lines[i].split('\t');
+              const [acc, description, debit, credit] = lines[i].split('\t')
               if (/^\d+ /.test(acc) && (/^\d+$/.test(debit) || /^\d+$/.test(credit))) {
                 entries.push({
                   description,
                   number: parseInt(acc),
                   amount: debit === '' ? -parseInt(credit) : parseInt(debit)
-                });
+                })
               } else {
-                break;
+                break
               }
             }
             // Not all valid. Skip.
             if (i < lines.length) {
-              return;
+              return
             }
             // Create new document.
-            const { store } = this.props;
+            const { store } = this.props
             store.period.createDocument({
               date,
               entries
-            });
+            })
           }
         }
       }
-    });
+    })
   }
 
   /**
@@ -231,7 +231,7 @@ class TransactionTable extends Component {
    */
   deleteDocument(tx) {
     this.props.store.deleteDocument(tx.document)
-      .then(() => this.props.cursor.changeIndexBy(-1));
+      .then(() => this.props.cursor.changeIndexBy(-1))
   }
 
   /**
@@ -239,16 +239,16 @@ class TransactionTable extends Component {
    */
   async onSelectAccount(id) {
     if (!id) {
-      return;
+      return
     }
-    await this.props.store.setAccount(this.props.store.db, this.props.store.periodId, id);
-    this.keyInsert(this.props.cursor);
+    await this.props.store.setAccount(this.props.store.db, this.props.store.periodId, id)
+    this.keyInsert(this.props.cursor)
   }
 
   render() {
-    const ret = [];
+    const ret = []
 
-    ret.push(<Loading visible={this.props.store.loading} key="loading-indicator"/>);
+    ret.push(<Loading visible={this.props.store.loading} key="loading-indicator"/>)
 
     if (this.state.showAccountDropdown) {
       const accountDialog = (
@@ -270,19 +270,19 @@ class TransactionTable extends Component {
             {this.props.store.accounts.map(a => <MenuItem value={a.id} key={a.id}>{a.toString()}</MenuItem>)}
           </TextField>
         </Dialog>
-      );
-      ret.push(accountDialog);
+      )
+      ret.push(accountDialog)
     }
 
     if (!this.props.store.transactions.length) {
-      ret.push(<Typography key="insert" color="primary"><Trans>Press Insert to create a transaction.</Trans></Typography>);
-      return ret;
+      ret.push(<Typography key="insert" color="primary"><Trans>Press Insert to create a transaction.</Trans></Typography>)
+      return ret
     }
 
     const deleteDialog = (tx) => (<Dialog key="dialog"
       title={<Trans>Delete these transactions?</Trans>}
       isVisible={tx.document.askForDelete}
-      onClose={() => { tx.document.askForDelete = false; this.txToDelete = null; }}
+      onClose={() => { tx.document.askForDelete = false; this.txToDelete = null }}
       onConfirm={() => this.deleteDocument(tx)}>
       <i>#{tx.document.number}</i><br/>
       {tx.document.entries.map((entry, idx) =>
@@ -291,17 +291,17 @@ class TransactionTable extends Component {
           {entry.description} <b> {entry.debit ? '+' : '-'}<Money currency="EUR" cents={entry.amount}></Money></b><br/>
         </div>
       )}<br/>
-    </Dialog>);
+    </Dialog>)
 
-    let sum = 0;
-    let debit = null;
-    let credit = null;
-    const seen = new Set();
-    const txs = this.props.store.filteredTransactions;
+    let sum = 0
+    let debit = null
+    let credit = null
+    const seen = new Set()
+    const txs = this.props.store.filteredTransactions
 
-    let delta = null;
+    let delta = null
     if (txs.length && (txs[0].document.number === 0 || txs[0].document.number === 1)) {
-      delta = txs[0].total;
+      delta = txs[0].total
     }
 
     ret.push(
@@ -322,15 +322,15 @@ class TransactionTable extends Component {
             {
               txs.map((tx, idx) => {
                 if (tx.document.askForDelete) {
-                  this.txToDelete = tx;
+                  this.txToDelete = tx
                 }
-                const duplicate = seen.has(tx.document.number);
-                seen.add(tx.document.number);
-                sum += tx.total;
+                const duplicate = seen.has(tx.document.number)
+                seen.add(tx.document.number)
+                sum += tx.total
                 if (tx.debit) {
-                  debit += tx.amount;
+                  debit += tx.amount
                 } else {
-                  credit += tx.amount;
+                  credit += tx.amount
                 }
                 return <Transaction
                   key={idx}
@@ -338,7 +338,7 @@ class TransactionTable extends Component {
                   duplicate={duplicate}
                   tx={tx}
                   total={sum}
-                />;
+                />
               })}
             <TableRow className="totals">
               <TableCell variant="footer"/>
@@ -360,7 +360,7 @@ class TransactionTable extends Component {
           </TableBody>
         </Table>
       </TableContainer>
-    );
+    )
 
     /*
     Cursor debug helper.
@@ -370,24 +370,24 @@ class TransactionTable extends Component {
     */
 
     if (this.txToDelete) {
-      ret.push(deleteDialog(this.txToDelete));
+      ret.push(deleteDialog(this.txToDelete))
     }
 
     setTimeout(() => {
-      const { index, row } = this.props.cursor;
-      const txs = this.props.store.filteredTransactions;
+      const { index, row } = this.props.cursor
+      const txs = this.props.store.filteredTransactions
       if (index === null || index >= txs.length) {
-        return;
+        return
       }
-      const doc = txs[index].document;
-      const id = txs.length > 5 ? `tx${doc.id}-row${doc.entries.length - 1}` : `tx${doc.id}-row${row}`;
-      const el = document.getElementById(id);
+      const doc = txs[index].document
+      const id = txs.length > 5 ? `tx${doc.id}-row${doc.entries.length - 1}` : `tx${doc.id}-row${row}`
+      const el = document.getElementById(id)
       if (el) {
-        el.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+        el.scrollIntoView({ block: 'nearest', inline: 'nearest' })
       }
-    }, 0);
+    }, 0)
 
-    return ret;
+    return ret
   }
 }
 
@@ -396,6 +396,6 @@ TransactionTable.propTypes = {
   location: PropTypes.object,
   history: ReactRouterPropTypes.history,
   store: PropTypes.instanceOf(Store)
-};
+}
 
-export default TransactionTable;
+export default TransactionTable

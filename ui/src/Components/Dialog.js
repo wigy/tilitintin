@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { inject } from 'mobx-react';
-import { withTranslation, Trans } from 'react-i18next';
-import Cursor from '../Stores/Cursor';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/core';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { inject } from 'mobx-react'
+import { withTranslation, Trans } from 'react-i18next'
+import Cursor from '../Stores/Cursor'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/core'
 
 /**
  * A dialog.
@@ -13,27 +13,27 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mate
 class TilitinDialog extends Component {
 
   componentDidMount = () => {
-    this.props.cursor.addModal(this);
+    this.props.cursor.addModal(this)
   }
 
   componentWillUnmount = () => {
-    this.props.cursor.removeModal(this);
+    this.props.cursor.removeModal(this)
   }
 
   keyEscape = () => {
-    this.props.onClose(false);
-    return { preventDefault: true };
+    this.props.onClose(false)
+    return { preventDefault: true }
   };
 
   keyEnter = () => {
-    this.props.onClose(true);
-    this.props.onConfirm();
-    return { preventDefault: true };
+    this.props.onClose(true)
+    this.props.onConfirm()
+    return { preventDefault: true }
   };
 
   render() {
 
-    const { isVisible, isValid, title, onClose, children, wider } = this.props;
+    const { isVisible, isValid, title, onClose, children, wider } = this.props
 
     return (
       <Dialog open={isVisible} onClose={() => onClose()} fullWidth={wider} maxWidth={wider ? 'sm' : undefined}>
@@ -48,7 +48,7 @@ class TilitinDialog extends Component {
           <Button variant="outlined" onClick={this.keyEnter} disabled={isValid && !isValid()} color="primary"><Trans>Confirm</Trans></Button>
         </DialogActions>
       </Dialog>
-    );
+    )
   }
 }
 
@@ -62,6 +62,6 @@ TilitinDialog.propTypes = {
   onConfirm: PropTypes.func,
   children: PropTypes.any,
   cursor: PropTypes.instanceOf(Cursor),
-};
+}
 
-export default TilitinDialog;
+export default TilitinDialog

@@ -1,7 +1,7 @@
-import NavigationTargetModel from './NavigationTargetModel';
-import EntryModel from '../Models/EntryModel';
-import { date2str, str2date } from '../Util';
-import { action, makeObservable } from 'mobx';
+import NavigationTargetModel from './NavigationTargetModel'
+import EntryModel from '../Models/EntryModel'
+import { date2str, str2date } from '../Util'
+import { action, makeObservable } from 'mobx'
 
 class DocumentModel extends NavigationTargetModel {
 
@@ -16,61 +16,61 @@ class DocumentModel extends NavigationTargetModel {
       date: null,
       // A list of entries of this document.
       entries: []
-    }, init);
-    makeObservable(this);
+    }, init)
+    makeObservable(this)
   }
 
   toJSON() {
-    const ret = super.toJSON();
-    delete ret.entries;
-    return ret;
+    const ret = super.toJSON()
+    delete ret.entries
+    return ret
   }
 
   getSortKey() {
-    return [this.date, this.number, this.id];
+    return [this.date, this.number, this.id]
   }
 
   getId() {
-    return 'Document' + this.id;
+    return 'Document' + this.id
   }
 
   getObjectType() {
-    return 'Document';
+    return 'Document'
   }
 
   /**
    * This is editable if period not locked.
    */
   canEdit() {
-    return !this.period.locked;
+    return !this.period.locked
   }
 
   /**
    * Use localized date.
    */
   ['get.date']() {
-    return date2str(this.date);
+    return date2str(this.date)
   }
 
   ['validate.date'](value) {
     if (!str2date(value, this.store.lastDate)) {
-      return 'Date is incorrect.';
+      return 'Date is incorrect.'
     }
     if (this.period) {
-      value = str2date(value, this.store.lastDate);
+      value = str2date(value, this.store.lastDate)
       if (value < this.period.start_date) {
-        return 'Date is before the current period starts.';
+        return 'Date is before the current period starts.'
       }
       if (value > this.period.end_date) {
-        return 'Date is after the current period ends.';
+        return 'Date is after the current period ends.'
       }
     }
-    return null;
+    return null
   }
 
   ['change.date'](value) {
-    this.date = str2date(value, this.store.lastDate);
-    this.store.lastDate = this.date;
+    this.date = str2date(value, this.store.lastDate)
+    this.store.lastDate = this.date
   }
 
   /**
@@ -78,7 +78,7 @@ class DocumentModel extends NavigationTargetModel {
    * @param {Object} data
    */
   initialize(data) {
-    return { ...data, entries: (data.entries || []).map((e) => new EntryModel(this, e)) };
+    return { ...data, entries: (data.entries || []).map((e) => new EntryModel(this, e)) }
   }
 
   /**
@@ -86,7 +86,7 @@ class DocumentModel extends NavigationTargetModel {
    * @param {EntryModel} entry
    */
   deleteEntry(entry) {
-    this.entries.replace(this.entries.filter((e) => e.id !== entry.id));
+    this.entries.replace(this.entries.filter((e) => e.id !== entry.id))
   }
 
   /**
@@ -103,7 +103,7 @@ class DocumentModel extends NavigationTargetModel {
    */
   async createEntry(data) {
     if (data.number) {
-      data.id = this.database.getAccountByNumber(data.number).id;
+      data.id = this.database.getAccountByNumber(data.number).id
     }
     const init = {
       account_id: data.id,
@@ -111,17 +111,17 @@ class DocumentModel extends NavigationTargetModel {
       debit: data.amount > 0 ? 1 : 0,
       row_number: this.entries.length + 1,
       description: data.description
-    };
+    }
     if ('flags' in data) {
-      init.flags = data.flags;
+      init.flags = data.flags
     }
 
-    const entry = new EntryModel(this, init);
-    this.addEntry(entry);
-    await entry.save();
-    this.period.addEntry(entry);
+    const entry = new EntryModel(this, init)
+    this.addEntry(entry)
+    await entry.save()
+    this.period.addEntry(entry)
 
-    return entry;
+    return entry
   }
 
   /**
@@ -129,44 +129,44 @@ class DocumentModel extends NavigationTargetModel {
    * @param {EntryModel} entry
    */
    @action
-   addEntry(entry) {
-    entry.document_id = this.id;
-    entry.parent = this;
-    this.entries.push(entry);
+  addEntry(entry) {
+    entry.document_id = this.id
+    entry.parent = this
+    this.entries.push(entry)
   }
 
-  /**
+   /**
    * Calculate difference of entry balances.
    */
-  imbalance() {
-    let debit = 0;
-    let credit = 0;
-    this.entries.forEach((entry, idx) => {
-      if (entry.debit) {
-        debit += entry.amount;
-      } else {
-        credit += entry.amount;
-      }
-    });
-    const smaller = Math.min(debit, credit);
-    debit -= smaller;
-    credit -= smaller;
-    return debit - credit;
-  }
+   imbalance() {
+     let debit = 0
+     let credit = 0
+     this.entries.forEach((entry, idx) => {
+       if (entry.debit) {
+         debit += entry.amount
+       } else {
+         credit += entry.amount
+       }
+     })
+     const smaller = Math.min(debit, credit)
+     debit -= smaller
+     credit -= smaller
+     return debit - credit
+   }
 
-  /**
+   /**
    * Get the period this document belongs to.
    */
-  get period() {
-    return this.parent;
-  }
+   get period() {
+     return this.parent
+   }
 
-  /**
+   /**
    * Get the database this document belongs to.
    */
-  get database() {
-    return this.parent.database;
-  }
+   get database() {
+     return this.parent.database
+   }
 }
 
-export default DocumentModel;
+export default DocumentModel

@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { inject, observer } from 'mobx-react';
-import { withTranslation, Trans } from 'react-i18next';
-import Store from '../Stores/Store';
-import Settings from '../Stores/Settings';
-import Money from './Money';
-import Localize from './Localize';
-import SubPanel from './SubPanel';
-import Tag from './Tag';
-import { Link } from '@material-ui/core';
-import { withRouter } from 'react-router-dom';
-import ReactRouterPropTypes from 'react-router-prop-types';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { inject, observer } from 'mobx-react'
+import { withTranslation, Trans } from 'react-i18next'
+import Store from '../Stores/Store'
+import Settings from '../Stores/Settings'
+import Money from './Money'
+import Localize from './Localize'
+import SubPanel from './SubPanel'
+import Tag from './Tag'
+import { Link } from '@material-ui/core'
+import { withRouter } from 'react-router-dom'
+import ReactRouterPropTypes from 'react-router-prop-types'
 
 @withRouter
 @withTranslation('translations')
@@ -22,13 +22,13 @@ class ToolsForVAT extends Component {
   render() {
 
     if (!this.props.store.token) {
-      return '';
+      return ''
     }
     if (!this.props.store.period) {
-      return '';
+      return ''
     }
 
-    const VAT = this.props.store.period.VATSummary;
+    const VAT = this.props.store.period.VATSummary
     const {
       VAT_SALES_ACCOUNT,
       VAT_PURCHASES_ACCOUNT,
@@ -36,14 +36,14 @@ class ToolsForVAT extends Component {
       VAT_PAYABLE_ACCOUNT,
       VAT_DELAYED_RECEIVABLE_ACCOUNT,
       VAT_DELAYED_PAYABLE_ACCOUNT
-    } = this.props.settings;
+    } = this.props.settings
 
-    const vatSalesAccount = this.props.store.database.getAccountByNumber(VAT_SALES_ACCOUNT);
-    const vatPurchasesAccount = this.props.store.database.getAccountByNumber(VAT_PURCHASES_ACCOUNT);
-    const vatPayableAccount = this.props.store.database.getAccountByNumber(VAT_PAYABLE_ACCOUNT);
-    const vatReceivableAccount = this.props.store.database.getAccountByNumber(VAT_RECEIVABLE_ACCOUNT);
-    const vatDelayedPayableAccount = this.props.store.database.getAccountByNumber(VAT_DELAYED_PAYABLE_ACCOUNT);
-    const vatDelayedReceivableAccount = this.props.store.database.getAccountByNumber(VAT_DELAYED_RECEIVABLE_ACCOUNT);
+    const vatSalesAccount = this.props.store.database.getAccountByNumber(VAT_SALES_ACCOUNT)
+    const vatPurchasesAccount = this.props.store.database.getAccountByNumber(VAT_PURCHASES_ACCOUNT)
+    const vatPayableAccount = this.props.store.database.getAccountByNumber(VAT_PAYABLE_ACCOUNT)
+    const vatReceivableAccount = this.props.store.database.getAccountByNumber(VAT_RECEIVABLE_ACCOUNT)
+    const vatDelayedPayableAccount = this.props.store.database.getAccountByNumber(VAT_DELAYED_PAYABLE_ACCOUNT)
+    const vatDelayedReceivableAccount = this.props.store.database.getAccountByNumber(VAT_DELAYED_RECEIVABLE_ACCOUNT)
 
     if (!vatSalesAccount || !vatPurchasesAccount || !vatPayableAccount || !vatReceivableAccount || !vatDelayedReceivableAccount) {
       return (
@@ -51,45 +51,45 @@ class ToolsForVAT extends Component {
           <SubPanel>
             <Trans>This database does not have configured VAT accounts.</Trans>
           </SubPanel>
-        </div>);
+        </div>)
     }
 
-    const payable = this.props.store.period.getBalanceByNumber(VAT_PAYABLE_ACCOUNT);
-    const receivable = this.props.store.period.getBalanceByNumber(VAT_RECEIVABLE_ACCOUNT);
-    const payableDelayed = this.props.store.period.getBalanceByNumber(VAT_DELAYED_PAYABLE_ACCOUNT);
-    const receivableDelayed = this.props.store.period.getBalanceByNumber(VAT_DELAYED_RECEIVABLE_ACCOUNT);
-    const openVATDocuments = this.props.store.period ? this.props.store.period.openVATDocuments : [];
+    const payable = this.props.store.period.getBalanceByNumber(VAT_PAYABLE_ACCOUNT)
+    const receivable = this.props.store.period.getBalanceByNumber(VAT_RECEIVABLE_ACCOUNT)
+    const payableDelayed = this.props.store.period.getBalanceByNumber(VAT_DELAYED_PAYABLE_ACCOUNT)
+    const receivableDelayed = this.props.store.period.getBalanceByNumber(VAT_DELAYED_RECEIVABLE_ACCOUNT)
+    const openVATDocuments = this.props.store.period ? this.props.store.period.openVATDocuments : []
 
     // Split by tags.
-    const VAT_TAG_TYPES = ['Osakas', 'Rahasto']; // TODO: Get from configuration or mark in tag model.
+    const VAT_TAG_TYPES = ['Osakas', 'Rahasto'] // TODO: Get from configuration or mark in tag model.
     const validTags = new Set(
       Object.values(this.props.store.database.tagsByTag)
         .filter(tag => VAT_TAG_TYPES.includes(tag.type))
         .map(tag => tag.tag)
-    );
+    )
 
-    const vatByTag = {};
-    let vatByNoTag = null;
-    let hasTags = false;
+    const vatByTag = {}
+    let vatByNoTag = null
+    let hasTags = false
 
     const addVatByTags = (tags, amount) => {
-      tags = tags.filter(tag => validTags.has(tag));
+      tags = tags.filter(tag => validTags.has(tag))
       if (!tags.length) {
-        vatByNoTag = (vatByNoTag || 0) + amount;
-        return;
+        vatByNoTag = (vatByNoTag || 0) + amount
+        return
       }
-      hasTags = true;
-      const share = (amount >= 0 ? Math.ceil(amount / tags.length) : Math.floor(amount / tags.length));
+      hasTags = true
+      const share = (amount >= 0 ? Math.ceil(amount / tags.length) : Math.floor(amount / tags.length))
       tags.forEach((tag) => {
-        const delta = (amount >= 0 ? Math.min(amount, share) : Math.max(amount, share));
-        vatByTag[tag] = (vatByTag[tag] || 0) + delta;
-        amount -= delta;
-      });
-    };
+        const delta = (amount >= 0 ? Math.min(amount, share) : Math.max(amount, share))
+        vatByTag[tag] = (vatByTag[tag] || 0) + delta
+        amount -= delta
+      })
+    }
     for (const doc of openVATDocuments) {
       for (const entry of doc.entries) {
         if (entry.account_id === vatSalesAccount.id || entry.account_id === vatPurchasesAccount.id) {
-          addVatByTags(entry.tagNames, entry.total);
+          addVatByTags(entry.tagNames, entry.total)
         }
       }
     }
@@ -163,15 +163,15 @@ class ToolsForVAT extends Component {
                   <b> {entry.account.toString()} </b>
                   {entry.text || <span style={{ color: 'red' }}><Trans>Description missing</Trans></span>}
                   <span> </span><Money cents={entry.total} currency="€"></Money>
-                </div>;
+                </div>
               })
               }
               <br />
-            </div>;
+            </div>
           })}
         </SubPanel>
       </div>
-    );
+    )
   }
 }
 
@@ -181,5 +181,5 @@ ToolsForVAT.propTypes = {
   periodId: PropTypes.string,
   settings: PropTypes.instanceOf(Settings),
   store: PropTypes.instanceOf(Store)
-};
-export default ToolsForVAT;
+}
+export default ToolsForVAT

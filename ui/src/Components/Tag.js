@@ -1,11 +1,11 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import TagModel from '../Models/TagModel';
-import { Avatar, Chip } from '@material-ui/core';
-import { RadioButtonChecked, RadioButtonUnchecked } from '@material-ui/icons';
+import React from 'react'
+import PropTypes from 'prop-types'
+import TagModel from '../Models/TagModel'
+import { Avatar, Chip } from '@material-ui/core'
+import { RadioButtonChecked, RadioButtonUnchecked } from '@material-ui/icons'
 
 const Tag = (props) => {
-  const { disabled, onClick, tag: { name, url } } = props;
+  const { disabled, onClick, tag: { name, url } } = props
 
   return (
     <Chip
@@ -18,14 +18,14 @@ const Tag = (props) => {
       onDelete={() => {}}
       onClick={() => onClick() }
     />
-  );
-};
+  )
+}
 
 Tag.propTypes = {
   disabled: PropTypes.bool,
   onClick: PropTypes.func,
   size: PropTypes.string,
   tag: PropTypes.instanceOf(TagModel)
-};
+}
 
-export default Tag;
+export default Tag

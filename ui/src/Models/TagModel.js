@@ -1,5 +1,5 @@
-import Model from './Model';
-import Configuration from '../Configuration';
+import Model from './Model'
+import Configuration from '../Configuration'
 
 class TagModel extends Model {
 
@@ -16,22 +16,22 @@ class TagModel extends Model {
       type: null,
       // Order number of the tag for display.
       order: null
-    }, init);
+    }, init)
   }
 
   getSortKey() {
-    return this.order;
+    return this.order
   }
 
   getObjectType() {
-    return 'Tag';
+    return 'Tag'
   }
 
   /**
    * Construct URL for API image viewer.
    */
   get url() {
-    return `${Configuration.API_URL}/db/${this.store.db}/tags/${this.id}/view?token=${this.store.token}`;
+    return `${Configuration.API_URL}/db/${this.store.db}/tags/${this.id}/view?token=${this.store.token}`
   }
 
   /**
@@ -40,14 +40,14 @@ class TagModel extends Model {
    * @return [String, String[]] Description and list of tags.
    */
   static desc2tags(desc) {
-    const ret = [desc, []];
-    const regex = /^((\[[a-zA-Z0-9]+\])+)\s*(.*)/.exec(desc);
+    const ret = [desc, []]
+    const regex = /^((\[[a-zA-Z0-9]+\])+)\s*(.*)/.exec(desc)
     if (regex && regex[1]) {
-      ret[0] = regex[3];
-      ret[1] = regex[1].substr(1, regex[1].length - 2).split('][');
+      ret[0] = regex[3]
+      ret[1] = regex[1].substr(1, regex[1].length - 2).split('][')
     }
-    return ret;
+    return ret
   }
 }
 
-export default TagModel;
+export default TagModel

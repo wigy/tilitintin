@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { inject, observer } from 'mobx-react';
-import { withTranslation, Trans } from 'react-i18next';
-import Store from '../Stores/Store';
-import Cursor from '../Stores/Cursor';
-import Title from './Title';
-import { Avatar, List, ListItem, ListItemAvatar, ListItemText } from '@material-ui/core';
-import { withRouter } from 'react-router-dom';
-import ReactRouterPropTypes from 'react-router-prop-types';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { inject, observer } from 'mobx-react'
+import { withTranslation, Trans } from 'react-i18next'
+import Store from '../Stores/Store'
+import Cursor from '../Stores/Cursor'
+import Title from './Title'
+import { Avatar, List, ListItem, ListItemAvatar, ListItemText } from '@material-ui/core'
+import { withRouter } from 'react-router-dom'
+import ReactRouterPropTypes from 'react-router-prop-types'
 
 @withRouter
 @withTranslation('translations')
@@ -18,10 +18,10 @@ class DatabaseList extends Component {
 
   render() {
     if (!this.props.store.token) {
-      return '';
+      return ''
     }
 
-    const current = this.props.store.db;
+    const current = this.props.store.db
 
     return (
       <div>
@@ -39,7 +39,7 @@ class DatabaseList extends Component {
           ))}
         </List>
       </div>
-    );
+    )
   }
 }
 
@@ -47,6 +47,6 @@ DatabaseList.propTypes = {
   store: PropTypes.instanceOf(Store),
   cursor: PropTypes.instanceOf(Cursor),
   history: ReactRouterPropTypes.history,
-};
+}
 
-export default DatabaseList;
+export default DatabaseList

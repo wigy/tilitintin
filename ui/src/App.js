@@ -1,34 +1,34 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import ReactRouterPropTypes from 'react-router-prop-types';
-import { Route, withRouter } from 'react-router-dom';
-import { inject } from 'mobx-react';
-import Account from './Components/Account';
-import Accounts from './Components/Accounts';
-import AccountsToolPanel from './Components/AccountsToolPanel';
-import AccountTransactions from './Components/AccountTransactions';
-import Admin from './Components/Admin';
-import AdminToolPanel from './Components/AdminToolPanel';
-import Balances from './Components/Balances';
-import Cursor from './Stores/Cursor';
-import DatabaseList from './Components/DatabaseList';
-import Dashboard from './Components/Dashboard';
-import Login from './Components/Login';
-import Menu from './Components/Menu';
-import Report from './Components/Report';
-import ReportsList from './Components/ReportsList';
-import ReportToolPanel from './Components/ReportToolPanel';
-import Store from './Stores/Store';
-import Tools from './Components/Tools';
-import ToolsList from './Components/ToolsList';
-import ToolsToolPanel from './Components/ToolsToolPanel';
-import TransactionToolPanel from './Components/TransactionToolPanel';
-import UserList from './Components/UserList';
-import Messages from './Components/Messages';
-import { Paper } from '@material-ui/core';
-import Configuration from './Configuration';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import ReactRouterPropTypes from 'react-router-prop-types'
+import { Route, withRouter } from 'react-router-dom'
+import { inject } from 'mobx-react'
+import Account from './Components/Account'
+import Accounts from './Components/Accounts'
+import AccountsToolPanel from './Components/AccountsToolPanel'
+import AccountTransactions from './Components/AccountTransactions'
+import Admin from './Components/Admin'
+import AdminToolPanel from './Components/AdminToolPanel'
+import Balances from './Components/Balances'
+import Cursor from './Stores/Cursor'
+import DatabaseList from './Components/DatabaseList'
+import Dashboard from './Components/Dashboard'
+import Login from './Components/Login'
+import Menu from './Components/Menu'
+import Report from './Components/Report'
+import ReportsList from './Components/ReportsList'
+import ReportToolPanel from './Components/ReportToolPanel'
+import Store from './Stores/Store'
+import Tools from './Components/Tools'
+import ToolsList from './Components/ToolsList'
+import ToolsToolPanel from './Components/ToolsToolPanel'
+import TransactionToolPanel from './Components/TransactionToolPanel'
+import UserList from './Components/UserList'
+import Messages from './Components/Messages'
+import { Paper } from '@material-ui/core'
+import Configuration from './Configuration'
 
-import './App.css';
+import './App.css'
 
 @withRouter
 @inject('store')
@@ -110,7 +110,7 @@ class App extends Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
@@ -118,6 +118,6 @@ App.propTypes = {
   cursor: PropTypes.instanceOf(Cursor),
   store: PropTypes.instanceOf(Store),
   history: ReactRouterPropTypes.history
-};
+}
 
-export default App;
+export default App

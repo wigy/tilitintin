@@ -1,18 +1,18 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { inject, observer } from 'mobx-react';
-import { action } from 'mobx';
-import { Trans, withTranslation } from 'react-i18next';
-import Store from '../Stores/Store';
-import AccountModel from '../Models/AccountModel';
-import Dialog from './Dialog';
-import Localize from './Localize';
-import SubPanel from './SubPanel';
-import Title from './Title';
-import { Link, Button, MenuItem, TextField } from '@material-ui/core';
-import Labeled from './Labeled';
-import SubTitle from './SubTitle';
-import { Lock, LockOpen } from '@material-ui/icons';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { inject, observer } from 'mobx-react'
+import { action } from 'mobx'
+import { Trans, withTranslation } from 'react-i18next'
+import Store from '../Stores/Store'
+import AccountModel from '../Models/AccountModel'
+import Dialog from './Dialog'
+import Localize from './Localize'
+import SubPanel from './SubPanel'
+import Title from './Title'
+import { Link, Button, MenuItem, TextField } from '@material-ui/core'
+import Labeled from './Labeled'
+import SubTitle from './SubTitle'
+import { Lock, LockOpen } from '@material-ui/icons'
 
 @withTranslation('translations')
 @inject('store')
@@ -30,49 +30,49 @@ class Account extends Component {
   };
 
   componentDidMount() {
-    const { db, periodId, accountId } = this.props.match.params;
+    const { db, periodId, accountId } = this.props.match.params
     if (accountId) {
-      this.props.store.setAccount(db, periodId, accountId);
+      this.props.store.setAccount(db, periodId, accountId)
     } else if (periodId) {
-      this.props.store.setPeriod(db, periodId);
+      this.props.store.setPeriod(db, periodId)
     }
   }
 
   componentDidUpdate() {
-    this.componentDidMount();
+    this.componentDidMount()
   }
 
   @action.bound
   onSubmitAccount() {
-    let model;
+    let model
     if (this.state.new) {
       model = new AccountModel(this.props.store.database, {
         name: this.state.accountName,
         number: this.state.accountNumber,
         type: this.state.accountType
-      });
+      })
     } else {
-      model = this.props.store.account;
-      model.name = this.state.accountName;
-      model.number = this.state.accountNumber;
-      model.type = this.state.accountType;
+      model = this.props.store.account
+      model.name = this.state.accountName
+      model.number = this.state.accountNumber
+      model.type = this.state.accountType
     }
     model.save()
       .then(() => {
-        this.setState({ editDialogIsOpen: false, accountName: '', accountNumber: '', accountType: '' });
-        this.props.store.fetchAccounts(this.props.store.database.name);
-      });
+        this.setState({ editDialogIsOpen: false, accountName: '', accountNumber: '', accountType: '' })
+        this.props.store.fetchAccounts(this.props.store.database.name)
+      })
   }
 
   @action.bound
   onDeleteAccount() {
-    const { db, periodId } = this.props.match.params;
+    const { db, periodId } = this.props.match.params
     this.props.store.deleteAccount(this.props.store.account)
-      .then(() => this.props.history.push(`/${db}/account/${periodId || ''}`));
+      .then(() => this.props.history.push(`/${db}/account/${periodId || ''}`))
   }
 
   renderDeleteDialog() {
-    const account = this.props.store.account;
+    const account = this.props.store.account
     return <Dialog
       className="dialog"
       title={<Trans>Delete this account?</Trans>}
@@ -80,21 +80,21 @@ class Account extends Component {
       onClose={() => this.setState({ deleteIsOpen: false })}
       onConfirm={() => this.onDeleteAccount()}>
       <i>{account.number} {account.name}</i><br/>
-    </Dialog>;
+    </Dialog>
   }
 
   renderEditDialog() {
-    const t = this.props.t;
-    const database = this.props.store.database;
+    const t = this.props.t
+    const database = this.props.store.database
     const isValid = () => this.state.accountNumber &&
       this.state.accountName &&
       this.state.accountType &&
-      (!this.state.new || (database && !database.hasAccount(this.state.accountNumber)));
+      (!this.state.new || (database && !database.hasAccount(this.state.accountNumber)))
 
-    const numberAlreadyExists = !!(this.state.changed && this.state.new && this.state.accountNumber && database.hasAccount(this.state.accountNumber));
-    const numberMissing = (this.state.changed && !this.state.accountNumber);
-    const nameMissing = (this.state.changed && !this.state.accountName);
-    const typeMissing = (this.state.changed && !this.state.accountType);
+    const numberAlreadyExists = !!(this.state.changed && this.state.new && this.state.accountNumber && database.hasAccount(this.state.accountNumber))
+    const numberMissing = (this.state.changed && !this.state.accountNumber)
+    const nameMissing = (this.state.changed && !this.state.accountName)
+    const typeMissing = (this.state.changed && !this.state.accountType)
 
     return <Dialog
       isValid={() => isValid()}
@@ -133,18 +133,18 @@ class Account extends Component {
           {['ASSET', 'LIABILITY', 'EQUITY', 'REVENUE', 'EXPENSE'].map(o => <MenuItem value={o} key={o}>{t(o)}</MenuItem>)}
         </TextField>
       </form>
-    </Dialog>;
+    </Dialog>
   }
 
   onClickCreateNew() {
-    const account = this.props.store.account;
+    const account = this.props.store.account
     const nextNumber = (number) => {
       if (!account.database.hasAccount(number)) {
-        return number;
+        return number
       }
-      return nextNumber((parseInt(number) + 1).toString());
-    };
-    const number = account ? nextNumber(account.number) : '';
+      return nextNumber((parseInt(number) + 1).toString())
+    }
+    const number = account ? nextNumber(account.number) : ''
     this.setState({
       editDialogIsOpen: true,
       new: true,
@@ -152,11 +152,11 @@ class Account extends Component {
       accountName: '',
       accountNumber: number,
       accountType: ''
-    });
+    })
   }
 
   onClickEdit() {
-    const account = this.props.store.account;
+    const account = this.props.store.account
     this.setState({
       editDialogIsOpen: true,
       new: false,
@@ -164,25 +164,25 @@ class Account extends Component {
       accountName: account.name,
       accountNumber: account.number,
       accountType: account.type
-    });
+    })
   }
 
   canChange() {
     if (this.state.new) {
-      return true;
+      return true
     }
-    const account = this.props.store.account;
+    const account = this.props.store.account
     if (!account || !account.periods) {
-      return false;
+      return false
     }
-    return account.periods.reduce((prev, cur) => prev && !cur.locked && !cur.entries, true);
+    return account.periods.reduce((prev, cur) => prev && !cur.locked && !cur.entries, true)
   }
 
   render() {
     if (!this.props.store.token) {
-      return '';
+      return ''
     }
-    const { account, db } = this.props.store;
+    const { account, db } = this.props.store
 
     return (
       <div>
@@ -218,8 +218,10 @@ class Account extends Component {
                     </>}>
                       <Link color="inherit" onClick={() => this.props.history.push(`/${db}/txs/${period.id}/${account.id}`)}>
                         {
-                          period.entries === 0 ? this.props.t('no transactions', { num: period.entries })
-                            : period.entries === 1 ? this.props.t('1 transaction', { num: period.entries })
+                          period.entries === 0
+                            ? this.props.t('no transactions', { num: period.entries })
+                            : period.entries === 1
+                              ? this.props.t('1 transaction', { num: period.entries })
                               : this.props.t('{{count}} transactions', { count: period.entries })
                         }
                       </Link>
@@ -229,7 +231,7 @@ class Account extends Component {
               </SubPanel>
         }
       </div>
-    );
+    )
   }
 }
 
@@ -238,6 +240,6 @@ Account.propTypes = {
   history: PropTypes.object.isRequired,
   match: PropTypes.object,
   store: PropTypes.instanceOf(Store)
-};
+}
 
-export default Account;
+export default Account

@@ -1,4 +1,4 @@
-import i18n from 'i18next';
+import i18n from 'i18next'
 
 i18n.init({
   resources: {
@@ -264,8 +264,8 @@ i18n.init({
   react: {
     wait: true
   }
-});
+})
 
-i18n.changeLanguage(localStorage.getItem('language') || 'fi');
+i18n.changeLanguage(localStorage.getItem('language') || 'fi')
 
-export default i18n;
+export default i18n

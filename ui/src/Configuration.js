@@ -1,8 +1,9 @@
 import pkg from '../package.json'
 
 const Configuration = {
-  'VERSION': pkg.version,
-  'API_URL': API_URL
-};
+  VERSION: pkg.version,
+  // eslint-disable-next-line
+  API_URL: API_URL
+}
 
-export default Configuration;
+export default Configuration

@@ -1,18 +1,18 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { action } from 'mobx';
-import { inject, observer } from 'mobx-react';
-import { Trans, withTranslation } from 'react-i18next';
-import { withRouter } from 'react-router-dom';
-import Store from '../Stores/Store';
-import Settings from '../Stores/Settings';
-import IconButton from './IconButton';
-import Dialog from './Dialog';
-import Localize from './Localize';
-import EntryModel from '../Models/EntryModel';
-import moment from 'moment';
-import Title from './Title';
-import { TextField } from '@material-ui/core';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { action } from 'mobx'
+import { inject, observer } from 'mobx-react'
+import { Trans, withTranslation } from 'react-i18next'
+import { withRouter } from 'react-router-dom'
+import Store from '../Stores/Store'
+import Settings from '../Stores/Settings'
+import IconButton from './IconButton'
+import Dialog from './Dialog'
+import Localize from './Localize'
+import EntryModel from '../Models/EntryModel'
+import moment from 'moment'
+import Title from './Title'
+import { TextField } from '@material-ui/core'
 
 @withRouter
 @withTranslation('translations')
@@ -37,17 +37,17 @@ class ToolsToolPanel extends Component {
    * Collect entries with empty descriptions.
    */
   emptyEntries() {
-    const emptyDescriptions = new Set();
+    const emptyDescriptions = new Set()
     if (this.props.store.period) {
       this.props.store.period.openVATDocuments.forEach((doc) => {
         doc.entries.forEach((entry) => {
           if (entry.text === '') {
-            emptyDescriptions.add(entry);
+            emptyDescriptions.add(entry)
           }
-        });
-      });
+        })
+      })
     }
-    return emptyDescriptions;
+    return emptyDescriptions
   }
 
   /**
@@ -57,14 +57,14 @@ class ToolsToolPanel extends Component {
   async fixDescriptions() {
     const entriesChanged = new Set();
     [...this.emptyEntries()].forEach((entry) => {
-      const samples = entry.parent.entries.filter((e) => e.text !== '');
+      const samples = entry.parent.entries.filter((e) => e.text !== '')
       if (samples.length) {
-        entry.setText(samples[0].text);
-        entriesChanged.add(entry);
+        entry.setText(samples[0].text)
+        entriesChanged.add(entry)
       }
-    });
+    })
     for (const entry of [...entriesChanged]) {
-      await entry.save();
+      await entry.save()
     }
   }
 
@@ -73,7 +73,7 @@ class ToolsToolPanel extends Component {
    */
   @action.bound
   async createVATEntry() {
-    const store = this.props.store;
+    const store = this.props.store
     const {
       VAT_SALES_ACCOUNT,
       VAT_PURCHASES_ACCOUNT,
@@ -81,33 +81,33 @@ class ToolsToolPanel extends Component {
       VAT_PAYABLE_ACCOUNT,
       VAT_DELAYED_RECEIVABLE_ACCOUNT,
       VAT_DELAYED_PAYABLE_ACCOUNT
-    } = this.props.settings;
+    } = this.props.settings
     // Collect entries.
-    let sales = 0;
-    let purchases = 0;
-    const entries = [];
+    let sales = 0
+    let purchases = 0
+    const entries = []
     for (const doc of this.props.store.period.openVATDocuments) {
       for (const entry of doc.entries) {
-        const acc = entry.account.number;
+        const acc = entry.account.number
         if (acc === VAT_SALES_ACCOUNT) {
-          sales += entry.total;
-          entries.push(entry);
+          sales += entry.total
+          entries.push(entry)
         }
         if (acc === VAT_PURCHASES_ACCOUNT) {
-          purchases += entry.total;
-          entries.push(entry);
+          purchases += entry.total
+          entries.push(entry)
         }
       }
     }
     // Create new VAT payable/receivable.
-    let date = moment().format('YYYY-MM-DD');
-    let isDelayed = false;
+    let date = moment().format('YYYY-MM-DD')
+    let isDelayed = false
     if (date > store.period.end_date) {
-      isDelayed = true;
-      date = store.period.end_date;
+      isDelayed = true
+      date = store.period.end_date
     }
 
-    const doc = { date, entries: [] };
+    const doc = { date, entries: [] }
 
     if (sales) {
       doc.entries.push({
@@ -115,7 +115,7 @@ class ToolsToolPanel extends Component {
         amount: -sales,
         flags: EntryModel.FLAGS.VAT_IGNORE,
         description: this.props.t('VAT update')
-      });
+      })
     }
     if (purchases) {
       doc.entries.push({
@@ -123,7 +123,7 @@ class ToolsToolPanel extends Component {
         amount: -purchases,
         flags: EntryModel.FLAGS.VAT_IGNORE,
         description: this.props.t('VAT update')
-      });
+      })
     }
     // Add it to the receivable or to the payable VAT.
     if (sales + purchases < 0) {
@@ -131,25 +131,25 @@ class ToolsToolPanel extends Component {
         number: isDelayed ? VAT_DELAYED_PAYABLE_ACCOUNT : VAT_PAYABLE_ACCOUNT,
         amount: sales + purchases,
         description: this.props.t('VAT update')
-      });
+      })
     }
     if (sales + purchases > 0) {
       doc.entries.push({
         number: isDelayed ? VAT_DELAYED_RECEIVABLE_ACCOUNT : VAT_RECEIVABLE_ACCOUNT,
         amount: sales + purchases,
         description: this.props.t('VAT update')
-      });
+      })
     }
 
-    await store.period.createDocument(doc);
+    await store.period.createDocument(doc)
 
     // Mark entries as reconciled.
     for (const entry of entries) {
-      entry.VAT_RECONCILED = true;
-      await entry.save();
+      entry.VAT_RECONCILED = true
+      await entry.save()
     }
 
-    store.fetchBalances();
+    store.fetchBalances()
   }
 
   /**
@@ -157,8 +157,8 @@ class ToolsToolPanel extends Component {
    */
   @action.bound
   async createPeriod(startDate, endDate) {
-    const store = this.props.store;
-    await store.database.createNewPeriod(startDate, endDate, this.props.t('Initial balance'));
+    const store = this.props.store
+    await store.database.createNewPeriod(startDate, endDate, this.props.t('Initial balance'))
   }
 
   /**
@@ -166,11 +166,11 @@ class ToolsToolPanel extends Component {
    */
   @action.bound
   async renumberDocuments(db, periodId) {
-    const toRenumber = this.props.store.period.incorrectlyNumberedDocuments;
+    const toRenumber = this.props.store.period.incorrectlyNumberedDocuments
     for (const change of toRenumber) {
-      const doc = this.props.store.period.getDocument(change.id);
-      doc.number = change.newNumber;
-      await doc.save();
+      const doc = this.props.store.period.getDocument(change.id)
+      doc.number = change.newNumber
+      await doc.save()
     }
   }
 
@@ -179,10 +179,10 @@ class ToolsToolPanel extends Component {
    */
   @action.bound
   async dropEmptyDocuments(db, periodId) {
-    const { period } = this.props.store;
-    const toDrop = period.emptyDocuments;
+    const { period } = this.props.store
+    const toDrop = period.emptyDocuments
     for (const doc of toDrop) {
-      await this.props.store.deleteDocument(doc);
+      await this.props.store.deleteDocument(doc)
     }
   }
 
@@ -194,10 +194,10 @@ class ToolsToolPanel extends Component {
     if (this.state.files[0]) {
       this.props.store.request('/db/upload', 'POST', null, this.state.files[0])
         .then(() => {
-          this.setState({ askUpload: false });
-          this.props.store.clearAccount();
-          this.props.store.fetchDatabases(true);
-        });
+          this.setState({ askUpload: false })
+          this.props.store.clearAccount()
+          this.props.store.fetchDatabases(true)
+        })
     }
   }
 
@@ -214,70 +214,70 @@ class ToolsToolPanel extends Component {
       }
       )
         .then(() => {
-          this.setState({ askNew: false });
-          this.props.history.push(`/${this.state.databaseName}/txs/1`);
-        });
+          this.setState({ askNew: false })
+          this.props.history.push(`/${this.state.databaseName}/txs/1`)
+        })
     }
   }
 
   validDbName(name) {
-    return /^[0-9a-z-_]+$/.test(name);
+    return /^[0-9a-z-_]+$/.test(name)
   }
 
   render() {
-    const { t, store } = this.props;
-    const tool = this.props.match.params.tool;
+    const { t, store } = this.props
+    const tool = this.props.match.params.tool
 
     if (!store.token) {
-      return '';
+      return ''
     }
-    let buttons = [];
-    let label;
-    let startDate, endDate;
-    let toRenumber;
-    let toDelete;
-    const VAT = this.props.store.period ? this.props.store.period.VATSummary : { sales: 0, purchases: 0 };
+    let buttons = []
+    let label
+    let startDate, endDate
+    let toRenumber
+    let toDelete
+    const VAT = this.props.store.period ? this.props.store.period.VATSummary : { sales: 0, purchases: 0 }
 
     switch (tool) {
       case 'vat':
-        label = 'Value Added Tax';
+        label = 'Value Added Tax'
         buttons = [
           <IconButton key="button-fix" disabled={!this.emptyEntries().size} onClick={() => this.fixDescriptions()} title="fix-vat-descriptions" icon="paperclip"></IconButton>,
           <IconButton key="button-vat" disabled={!VAT.sales && !VAT.purchases} onClick={() => this.createVATEntry()} title="summarize-vat-period" icon="summarize"></IconButton>
-        ];
-        break;
+        ]
+        break
 
       case 'periods':
-        label = 'Periods';
+        label = 'Periods'
         if (this.props.store.db) {
           buttons.push(
             <IconButton key="button-new" onClick={() => this.setState({ askNewPeriod: true })} title="create-period" icon="calendar-plus"></IconButton>
-          );
+          )
 
         }
-        startDate = store.database && moment(store.database.periods[store.database.periods.length - 1].end_date).add(1, 'day').format('YYYY-MM-DD');
-        endDate = store.database && moment(store.database.periods[store.database.periods.length - 1].end_date).add(1, 'year').format('YYYY-MM-DD');
-        break;
+        startDate = store.database && moment(store.database.periods[store.database.periods.length - 1].end_date).add(1, 'day').format('YYYY-MM-DD')
+        endDate = store.database && moment(store.database.periods[store.database.periods.length - 1].end_date).add(1, 'year').format('YYYY-MM-DD')
+        break
 
       case 'documents':
-        label = 'Documents';
-        toRenumber = store.period && !store.period.locked ? store.period.incorrectlyNumberedDocuments : [];
-        toDelete = store.period && !store.period.locked ? store.period.emptyDocuments : [];
+        label = 'Documents'
+        toRenumber = store.period && !store.period.locked ? store.period.incorrectlyNumberedDocuments : []
+        toDelete = store.period && !store.period.locked ? store.period.emptyDocuments : []
         buttons = [
           <IconButton key="button-new" disabled={!toRenumber.length} onClick={() => this.renumberDocuments(this.props.store.db, this.props.store.periodId)} title="sort-documents" icon="sort-up"></IconButton>,
           <IconButton key="button-clean" disabled={!toDelete.length} onClick={() => this.dropEmptyDocuments(this.props.store.db, this.props.store.periodId)} title="drop-empty-documents" icon="trash"></IconButton>
-        ];
-        break;
+        ]
+        break
 
       default:
-        label = 'Database Management';
+        label = 'Database Management'
         buttons.push(
           <IconButton key="button-new-database" onClick={() => this.setState({ askNew: true })} title="new-database" icon="database"></IconButton>
-        );
+        )
         buttons.push(
           <IconButton key="button-upload" onClick={() => this.setState({ askUpload: true })} title="upload-database" icon="upload"></IconButton>
-        );
-        break;
+        )
+        break
     }
 
     return (
@@ -287,7 +287,7 @@ class ToolsToolPanel extends Component {
         <Dialog
           title={<Trans>Start new period?</Trans>}
           isVisible={this.state.askNewPeriod}
-          onClose={() => { this.setState({ askNewPeriod: false }); }}
+          onClose={() => { this.setState({ askNewPeriod: false }) }}
           onConfirm={() => this.createPeriod(startDate, endDate)}>
           <Localize date={startDate} /> - <Localize date={endDate} />
         </Dialog>
@@ -295,7 +295,7 @@ class ToolsToolPanel extends Component {
         <Dialog
           title={<Trans>Upload Database</Trans>}
           isVisible={this.state.askUpload}
-          onClose={() => { this.setState({ askUpload: false }); }}
+          onClose={() => { this.setState({ askUpload: false }) }}
           onConfirm={() => this.uploadFile()}>
           <Trans>You can upload old Tilitin file here.</Trans>
           <TextField type="file" onChange={(e) => this.setState({ files: e.target.files })}/>
@@ -309,7 +309,7 @@ class ToolsToolPanel extends Component {
           title={<Trans>Create New Database</Trans>}
           isVisible={this.state.askNew}
           isValid={() => this.validDbName(this.state.databaseName) && this.state.companyName}
-          onClose={() => { this.setState({ askNew: false }); }}
+          onClose={() => { this.setState({ askNew: false }) }}
           onConfirm={() => this.onCreateNewDb()}>
           <div>
             <TextField
@@ -319,7 +319,8 @@ class ToolsToolPanel extends Component {
               onChange={(e) => this.setState({ changed: true, databaseName: e.target.value })}
               error={this.state.changed && (!this.state.databaseName || !this.validDbName(this.state.databaseName))}
               helperText={this.state.changed && (
-                !this.state.databaseName ? t('Database name is required.')
+                !this.state.databaseName
+                  ? t('Database name is required.')
                   : (!this.validDbName(this.state.databaseName) ? t('Invalid database name.') : '')
               )}
             />
@@ -342,7 +343,7 @@ class ToolsToolPanel extends Component {
           </div>
         </Dialog>
       </div>
-    );
+    )
   }
 }
 
@@ -352,6 +353,6 @@ ToolsToolPanel.propTypes = {
   match: PropTypes.object,
   settings: PropTypes.instanceOf(Settings),
   store: PropTypes.instanceOf(Store)
-};
+}
 
-export default ToolsToolPanel;
+export default ToolsToolPanel

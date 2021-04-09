@@ -1,6 +1,6 @@
-import { makeObservable, observable } from 'mobx';
-import Model from './Model';
-import PeriodModel from './PeriodModel';
+import { makeObservable, observable } from 'mobx'
+import Model from './Model'
+import PeriodModel from './PeriodModel'
 
 class DatabaseModel extends Model {
 
@@ -27,16 +27,16 @@ class DatabaseModel extends Model {
     super(parent, {
       // Name of the database.
       name: null
-    }, init);
-    makeObservable(this);
+    }, init)
+    makeObservable(this)
   }
 
   getSortKey() {
-    return this.name;
+    return this.name
   }
 
   getObjectType() {
-    return 'Database';
+    return 'Database'
   }
 
   /**
@@ -44,8 +44,8 @@ class DatabaseModel extends Model {
    * @param {PeriodModel} period
    */
   addPeriod(period) {
-    period.parent = this;
-    this.periodsById[period.id] = period;
+    period.parent = this
+    this.periodsById[period.id] = period
   }
 
   /**
@@ -54,7 +54,7 @@ class DatabaseModel extends Model {
    * @return {null|PeriodModel}
    */
   getPeriod(id) {
-    return this.periodsById[id] || null;
+    return this.periodsById[id] || null
   }
 
   /**
@@ -62,9 +62,9 @@ class DatabaseModel extends Model {
    * @param {AccountModel} account
    */
   addAccount(account) {
-    account.parent = this;
-    this.accountsById[account.id] = account;
-    this.accountsByNumber[account.number] = account;
+    account.parent = this
+    this.accountsById[account.id] = account
+    this.accountsByNumber[account.number] = account
   }
 
   /**
@@ -72,8 +72,8 @@ class DatabaseModel extends Model {
    * @param {AccountModel} account
    */
   addTag(tag) {
-    tag.parent = this;
-    this.tagsByTag[tag.tag] = tag;
+    tag.parent = this
+    this.tagsByTag[tag.tag] = tag
   }
 
   /**
@@ -81,9 +81,9 @@ class DatabaseModel extends Model {
    * @param {HeadingModel} heading
    */
   addHeading(heading) {
-    heading.parent = this;
-    this.headingsByNumber[heading.number] = this.headingsByNumber[heading.number] || [];
-    this.headingsByNumber[heading.number].push(heading);
+    heading.parent = this
+    this.headingsByNumber[heading.number] = this.headingsByNumber[heading.number] || []
+    this.headingsByNumber[heading.number].push(heading)
   }
 
   /**
@@ -92,7 +92,7 @@ class DatabaseModel extends Model {
   getProfitAccount() {
     for (const account of Object.values(this.accountsById)) {
       if (account.type === 'PROFIT_PREV') {
-        return account;
+        return account
       }
     }
   }
@@ -102,48 +102,48 @@ class DatabaseModel extends Model {
    */
   async createNewPeriod(startDate, endDate, initText) {
     if (!this.periods.length) {
-      throw new Error('Creating a period for empty database not yet supported.');
+      throw new Error('Creating a period for empty database not yet supported.')
     }
-    const profitAcc = this.getProfitAccount();
+    const profitAcc = this.getProfitAccount()
     if (!profitAcc) {
-      throw new Error('Cannot find previous profit account.');
+      throw new Error('Cannot find previous profit account.')
     }
-    const lastPeriod = this.periods[this.periods.length - 1];
+    const lastPeriod = this.periods[this.periods.length - 1]
 
     // Collect the balances from the previous period.
-    await this.store.fetchBalances(this.name, lastPeriod.id);
-    let profit = 0;
-    const balances = [];
+    await this.store.fetchBalances(this.name, lastPeriod.id)
+    let profit = 0
+    const balances = []
     Object.values(lastPeriod.balances).forEach((balance) => {
-      const acc = this.accountsById[balance.account_id];
+      const acc = this.accountsById[balance.account_id]
       switch (acc.type) {
         case 'ASSET':
         case 'LIABILITY':
         case 'EQUITY':
           if (Math.abs(balance.total) > 0.0001) {
-            balances.push({ id: acc.id, number: acc.number, balance: balance.total });
+            balances.push({ id: acc.id, number: acc.number, balance: balance.total })
           }
-          break;
+          break
         case 'REVENUE':
         case 'EXPENSE':
         case 'PROFIT_PREV':
-          profit += balance.total;
-          break;
+          profit += balance.total
+          break
         default:
-          throw new Error(`No idea how to handle ${acc.type} account, when creating new period.`);
+          throw new Error(`No idea how to handle ${acc.type} account, when creating new period.`)
       }
-    });
+    })
 
     // Create period.
-    const period = new PeriodModel(this, { start_date: startDate, end_date: endDate });
-    await period.save();
-    this.addPeriod(period);
+    const period = new PeriodModel(this, { start_date: startDate, end_date: endDate })
+    await period.save()
+    this.addPeriod(period)
 
     // Prepare profit entry.
     if (profit) {
-      balances.push({ id: profitAcc.id, number: profitAcc.number, balance: profit });
+      balances.push({ id: profitAcc.id, number: profitAcc.number, balance: profit })
     }
-    balances.sort((a, b) => (a.number > b.number ? 1 : (a.number < b.number ? -1 : 0)));
+    balances.sort((a, b) => (a.number > b.number ? 1 : (a.number < b.number ? -1 : 0)))
 
     // Create initialization document and its entries.
     await period.createDocument({
@@ -154,7 +154,7 @@ class DatabaseModel extends Model {
         amount: balance.balance,
         description: initText
       }))
-    });
+    })
   }
 
   /**
@@ -163,7 +163,7 @@ class DatabaseModel extends Model {
    * @return {Boolean}
    */
   hasTag(tag) {
-    return !!this.tagsByTag[tag];
+    return !!this.tagsByTag[tag]
   }
 
   /**
@@ -171,7 +171,7 @@ class DatabaseModel extends Model {
    * @param {String} tag
    */
   getTag(tag) {
-    return this.tagsByTag[tag] || null;
+    return this.tagsByTag[tag] || null
   }
 
   /**
@@ -180,15 +180,15 @@ class DatabaseModel extends Model {
    * @return {null|AccountModel}
    */
   getAccount(id) {
-    return this.accountsById[id] || null;
+    return this.accountsById[id] || null
   }
 
   /**
    * Clear all accounts.
    */
   deleteAccounts() {
-    this.accountsById = {};
-    this.accountsByNumber = {};
+    this.accountsById = {}
+    this.accountsByNumber = {}
   }
 
   /**
@@ -197,7 +197,7 @@ class DatabaseModel extends Model {
    * @return {null|AccountModel}
    */
   getAccountByNumber(number) {
-    return this.accountsByNumber[number] || null;
+    return this.accountsByNumber[number] || null
   }
 
   /**
@@ -206,7 +206,7 @@ class DatabaseModel extends Model {
    * @return {Boolean}
    */
   hasAccount(number) {
-    return this.getAccountByNumber(number.toString()) !== null;
+    return this.getAccountByNumber(number.toString()) !== null
   }
 
   /**
@@ -214,29 +214,29 @@ class DatabaseModel extends Model {
    * @return {Boolean}
    */
   hasAccounts() {
-    return Object.keys(this.accountsById).length > 0;
+    return Object.keys(this.accountsById).length > 0
   }
 
   /**
    * Get the store.
    */
   get store() {
-    return this.parent;
+    return this.parent
   }
 
   /**
    * Get periods of this database.
    */
   get periods() {
-    return Object.values(this.periodsById);
+    return Object.values(this.periodsById)
   }
 
   /**
    * Get the headings data.
    */
   get headings() {
-    return this.headingsByNumber;
+    return this.headingsByNumber
   }
 }
 
-export default DatabaseModel;
+export default DatabaseModel

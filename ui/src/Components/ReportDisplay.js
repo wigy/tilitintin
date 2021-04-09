@@ -1,27 +1,27 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { observer } from 'mobx-react';
-import { withTranslation } from 'react-i18next';
-import ReportLine from './ReportLine';
-import Localize from './Localize';
-import './ReportDisplay.css';
-import ReportModel from '../Models/ReportModel';
-import i18n from '../i18n';
-import { TableContainer, TableBody, Table, TableRow, TableCell } from '@material-ui/core';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { observer } from 'mobx-react'
+import { withTranslation } from 'react-i18next'
+import ReportLine from './ReportLine'
+import Localize from './Localize'
+import './ReportDisplay.css'
+import ReportModel from '../Models/ReportModel'
+import i18n from '../i18n'
+import { TableContainer, TableBody, Table, TableRow, TableCell } from '@material-ui/core'
 
 @withTranslation('translations')
 @observer
 class ReportHeader extends Component {
 
   render() {
-    const { report } = this.props;
+    const { report } = this.props
 
     if (!report) {
-      return '';
+      return ''
     }
 
-    const lang = i18n.language;
-    const columns = report.columns.length;
+    const lang = i18n.language
+    const columns = report.columns.length
 
     return [
       <TableRow key="1" className="heading1">
@@ -41,22 +41,22 @@ class ReportHeader extends Component {
           <Localize>{column.title}</Localize>
         </TableCell>)}
       </TableRow>
-    ];
+    ]
   }
 }
 
 ReportHeader.propTypes = {
   report: PropTypes.instanceOf(ReportModel),
   t: PropTypes.func
-};
+}
 
 @observer
 class ReportDisplay extends Component {
 
   render() {
-    const { report } = this.props;
+    const { report } = this.props
     if (!report) {
-      return '';
+      return ''
     }
     return (
       <div className="ReportDisplay">
@@ -69,12 +69,12 @@ class ReportDisplay extends Component {
           </Table>
         </TableContainer>
       </div>
-    );
+    )
   }
 }
 
 ReportDisplay.propTypes = {
   report: PropTypes.instanceOf(ReportModel)
-};
+}
 
-export default ReportDisplay;
+export default ReportDisplay

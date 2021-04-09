@@ -1,43 +1,43 @@
-import { extendObservable } from 'mobx';
+import { extendObservable } from 'mobx'
 
 class Model {
 
   constructor(parent, variables, init = {}) {
-    this.parent = parent;
-    this.variables = Object.keys(variables);
+    this.parent = parent
+    this.variables = Object.keys(variables)
     if (!parent) {
-      console.warn(`No parent given for ${this.constructor.name}: ${JSON.stringify(variables)}`);
+      console.warn(`No parent given for ${this.constructor.name}: ${JSON.stringify(variables)}`)
     }
-    extendObservable(this, variables);
-    init = this.initialize(init);
+    extendObservable(this, variables)
+    init = this.initialize(init)
     Object.keys(variables).forEach((key) => {
       if (key in init) {
-        this[key] = init[key];
+        this[key] = init[key]
       }
-    });
+    })
   }
 
   /**
    * Construct a JSON-object compatible with DB format.
    */
   toJSON() {
-    const ret = {};
-    this.variables.forEach((k) => (ret[k] = this[k]));
-    return ret;
+    const ret = {}
+    this.variables.forEach((k) => (ret[k] = this[k]))
+    return ret
   }
 
   /**
    * Get the name of class without 'Model' postfix.
    */
   getObjectType() {
-    throw new Error('Model does not implement getObjectType().');
+    throw new Error('Model does not implement getObjectType().')
   }
 
   /**
    * If sortable model, get the value to be used for sorting (default: use `id`).
    */
   getSortKey() {
-    return this.id;
+    return this.id
   }
 
   /**
@@ -45,7 +45,7 @@ class Model {
    * @param {Object} data
    */
   initialize(data) {
-    return data;
+    return data
   }
 
   /**
@@ -53,7 +53,7 @@ class Model {
    * @return {String}
    */
   getId() {
-    console.error(`Model for ${this.getObjectType()} does not implement getId().`);
+    console.error(`Model for ${this.getObjectType()} does not implement getId().`)
   }
 
   /**
@@ -61,7 +61,7 @@ class Model {
    * @return {String}
    */
   getUrl() {
-    console.error(`Model for ${this.getObjectType()} does not implement getUrl().`);
+    console.error(`Model for ${this.getObjectType()} does not implement getUrl().`)
   }
 
   /**
@@ -69,8 +69,8 @@ class Model {
    * @param {String} field
    */
   getView(field) {
-    const name = `get.${field}`;
-    return name in this ? this[name]() : this[field];
+    const name = `get.${field}`
+    return name in this ? this[name]() : this[field]
   }
 
   /**
@@ -78,8 +78,8 @@ class Model {
    * @param {String} field
    */
   getEdit(field) {
-    const name = `get.edit.${field}`;
-    return name in this ? this[name]() : this.getView(field);
+    const name = `get.edit.${field}`
+    return name in this ? this[name]() : this.getView(field)
   }
 
   /**
@@ -89,8 +89,8 @@ class Model {
    * @return {ReactElement|null} Error message if not valid.
    */
   validate(field, value) {
-    const name = `validate.${field}`;
-    return name in this ? this[name](value) : true;
+    const name = `validate.${field}`
+    return name in this ? this[name](value) : true
   }
 
   /**
@@ -99,8 +99,8 @@ class Model {
    * @param {String} value
    */
   async proposal(field, value) {
-    const name = `proposal.${field}`;
-    return name in this ? this[name](value) : null;
+    const name = `proposal.${field}`
+    return name in this ? this[name](value) : null
   }
 
   /**
@@ -109,62 +109,62 @@ class Model {
    * @param {Any} value
    */
   async change(field, value) {
-    const name = `change.${field}`;
+    const name = `change.${field}`
     if (name in this) {
-      this[name](value);
-      return;
+      this[name](value)
+      return
     }
-    this[field] = value;
+    this[field] = value
   }
 
   /**
    * Write this instance to the store.
    */
   async save() {
-    const name = `save${this.getObjectType()}`;
+    const name = `save${this.getObjectType()}`
     if (!this.store[name]) {
-      throw new Error(`Store does not have ${name}() function.`);
+      throw new Error(`Store does not have ${name}() function.`)
     }
-    return this.store[name](this);
+    return this.store[name](this)
   }
 
   /**
    * Get the store.
    */
   get store() {
-    return this.parent ? this.parent.store : null;
+    return this.parent ? this.parent.store : null
   }
 
   /**
    * Get the settings.
    */
   get settings() {
-    return this.store.settings;
+    return this.store.settings
   }
 
   /**
    * Construct a sorting function for sorting model instances.
    */
   static sorter(reverse = false) {
-    const one = reverse ? -1 : 1;
-    const cmp = (a, b) => (a < b ? -one : (a > b ? one : 0));
+    const one = reverse ? -1 : 1
+    const cmp = (a, b) => (a < b ? -one : (a > b ? one : 0))
     return (a, b) => {
-      const aKey = a.getSortKey();
-      const bKey = b.getSortKey();
+      const aKey = a.getSortKey()
+      const bKey = b.getSortKey()
       if (aKey instanceof Array && bKey instanceof Array) {
-        const N = Math.max(aKey.length, bKey.length);
+        const N = Math.max(aKey.length, bKey.length)
         for (let i = 0; i < N; i++) {
-          const res = cmp(aKey[i], bKey[i]);
+          const res = cmp(aKey[i], bKey[i])
           if (res) {
-            return res;
+            return res
           }
-          return 0;
         }
+        return 0
       } else {
-        return cmp(aKey, bKey);
+        return cmp(aKey, bKey)
       }
-    };
+    }
   }
 }
 
-export default Model;
+export default Model

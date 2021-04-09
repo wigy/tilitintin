@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
-import { Snackbar, IconButton } from '@material-ui/core';
-import { Close } from '@material-ui/icons';
-import { Alert } from '@material-ui/lab';
-import { inject, observer } from 'mobx-react';
-import { PropTypes } from 'prop-types';
-import Store from '../Stores/Store';
+import React, { Component } from 'react'
+import { Snackbar, IconButton } from '@material-ui/core'
+import { Close } from '@material-ui/icons'
+import { Alert } from '@material-ui/lab'
+import { inject, observer } from 'mobx-react'
+import { PropTypes } from 'prop-types'
+import Store from '../Stores/Store'
 
 @inject('store')
 @observer
 class Messages extends Component {
 
   removeMessage(message) {
-    this.props.store.removeMessage(message);
+    this.props.store.removeMessage(message)
   }
 
   renderMessage(message) {
@@ -22,14 +22,14 @@ class Messages extends Component {
           <Close fontSize="small" />
         </IconButton>
       </div>
-    );
+    )
   }
 
   render() {
-    const { messages } = this.props.store;
-    let severity = 'info';
+    const { messages } = this.props.store
+    let severity = 'info'
     if (messages.filter(m => m.type === 'error').length) {
-      severity = 'error';
+      severity = 'error'
     }
     return (
       <div>
@@ -45,12 +45,12 @@ class Messages extends Component {
           </Alert>
         </Snackbar>
       </div>
-    );
+    )
   }
 }
 
 Messages.propTypes = {
   store: PropTypes.instanceOf(Store)
-};
+}
 
-export default Messages;
+export default Messages

@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import ReactRouterPropTypes from 'react-router-prop-types';
-import { inject, observer } from 'mobx-react';
-import { withTranslation } from 'react-i18next';
-import Store from '../Stores/Store';
-import Cursor from '../Stores/Cursor';
-import Title from './Title';
-import { List, ListItem, ListItemText, ListItemAvatar, Avatar } from '@material-ui/core';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import ReactRouterPropTypes from 'react-router-prop-types'
+import { inject, observer } from 'mobx-react'
+import { withTranslation } from 'react-i18next'
+import Store from '../Stores/Store'
+import Cursor from '../Stores/Cursor'
+import Title from './Title'
+import { List, ListItem, ListItemText, ListItemAvatar, Avatar } from '@material-ui/core'
 
 @withTranslation('translations')
 @inject('store')
@@ -15,47 +15,47 @@ import { List, ListItem, ListItemText, ListItemAvatar, Avatar } from '@material-
 class ReportsList extends Component {
 
   componentDidMount() {
-    this.props.cursor.selectPage('Reports', this);
-    const { format } = this.props.match.params;
+    this.props.cursor.selectPage('Reports', this)
+    const { format } = this.props.match.params
     if (!format) {
       if (this.props.store.report) {
-        this.selectReportFormat(this.props.store.report);
+        this.selectReportFormat(this.props.store.report)
       } else {
-        const { db, accountId, periodId } = this.props.store;
-        const url = '/' + db + '/report/' + periodId + '/' + (accountId || '') + '/income-statement';
-        this.props.history.push(url);
+        const { db, accountId, periodId } = this.props.store
+        const url = '/' + db + '/report/' + periodId + '/' + (accountId || '') + '/income-statement'
+        this.props.history.push(url)
       }
     }
   }
 
   selectReportFormat(report) {
-    const url = '/' + report.database.name + '/report/' + report.period.id + '/' + (report.store.accountId || '') + '/' + report.format;
-    this.props.history.push(url);
+    const url = '/' + report.database.name + '/report/' + report.period.id + '/' + (report.store.accountId || '') + '/' + report.format
+    this.props.history.push(url)
   }
 
   selectReport(num) {
-    const { reports } = this.props.store;
-    num--;
+    const { reports } = this.props.store
+    num--
     if (num < 0 || num >= reports.length) {
-      return;
+      return
     }
-    const report = reports[num];
-    this.selectReportFormat(report);
+    const report = reports[num]
+    this.selectReportFormat(report)
 
-    return { preventDefault: true };
+    return { preventDefault: true }
   }
 
   keyText(cursor, key) {
     if (key >= '1' && key <= '9') {
-      return this.selectReport(parseInt(key));
+      return this.selectReport(parseInt(key))
     }
   }
 
   render() {
     if (!this.props.store.token) {
-      return '';
+      return ''
     }
-    const { t, match } = this.props;
+    const { t, match } = this.props
 
     return (
       <div>
@@ -71,7 +71,7 @@ class ReportsList extends Component {
           ))}
         </List>
       </div>
-    );
+    )
   }
 }
 
@@ -81,6 +81,6 @@ ReportsList.propTypes = {
   match: PropTypes.object,
   store: PropTypes.instanceOf(Store),
   t: PropTypes.func,
-};
+}
 
-export default ReportsList;
+export default ReportsList

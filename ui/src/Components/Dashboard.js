@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import ReactRouterPropTypes from 'react-router-prop-types';
-import Localize from './Localize';
-import { inject, observer } from 'mobx-react';
-import { withTranslation, Trans } from 'react-i18next';
-import Store from '../Stores/Store';
-import Cursor from '../Stores/Cursor';
-import Loading from './Loading';
-import Title from './Title';
-import { Button, Typography, Avatar, List, ListItem } from '@material-ui/core';
-import Panel from './Panel';
-import { action } from 'mobx';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import ReactRouterPropTypes from 'react-router-prop-types'
+import Localize from './Localize'
+import { inject, observer } from 'mobx-react'
+import { withTranslation, Trans } from 'react-i18next'
+import Store from '../Stores/Store'
+import Cursor from '../Stores/Cursor'
+import Loading from './Loading'
+import Title from './Title'
+import { Button, Typography, Avatar, List, ListItem } from '@material-ui/core'
+import Panel from './Panel'
+import { action } from 'mobx'
 
 @withTranslation('translations')
 @inject('cursor')
@@ -20,64 +20,64 @@ class Dashboard extends Component {
 
   componentDidUpdate() {
     if (!this.props.store.database) {
-      return;
+      return
     }
     if (this.props.store.database.name !== this.props.match.params.db) {
-      this.props.store.setDb(this.props.match.params.db);
+      this.props.store.setDb(this.props.match.params.db)
     }
   }
 
   componentDidMount() {
-    this.props.cursor.selectPage('Dashboard', this);
+    this.props.cursor.selectPage('Dashboard', this)
   }
 
   @action
   selectDb(num) {
-    const { dbs } = this.props.store;
-    num--;
+    const { dbs } = this.props.store
+    num--
     if (num < dbs.length) {
-      this.props.history.push(`/${dbs[num].name}`);
+      this.props.history.push(`/${dbs[num].name}`)
     }
   }
 
   @action
   selectPeriod(num) {
     if (!this.props.store.database) {
-      return;
+      return
     }
-    let period;
+    let period
     if (typeof num === 'number') {
-      const periods = this.props.store.database.periods.reverse();
-      period = periods[num - 1];
+      const periods = this.props.store.database.periods.reverse()
+      period = periods[num - 1]
     } else {
-      period = num;
+      period = num
     }
     if (period) {
-      this.props.history.push(`/${this.props.store.db}/txs/${period.id}`);
+      this.props.history.push(`/${this.props.store.db}/txs/${period.id}`)
     }
   }
 
   keyText(cursor, key) {
     if (key >= '1' && key <= '9') {
-      this.selectPeriod(parseInt(key));
+      this.selectPeriod(parseInt(key))
     }
-    key = key.toUpperCase();
+    key = key.toUpperCase()
     if (key >= 'A' && key <= 'Z') {
-      this.selectDb(key.charCodeAt(0) - 64);
+      this.selectDb(key.charCodeAt(0) - 64)
     }
   }
 
   render() {
-    const { store } = this.props;
+    const { store } = this.props
     if (!store.token) {
-      return '';
+      return ''
     }
     if (!store.db) {
       return <>
         <Title><Trans>No Database Selected</Trans></Title>
-      </>;
+      </>
     }
-    const { periodId } = this.props.match.params;
+    const { periodId } = this.props.match.params
 
     return (
       <div className="Dashboard">
@@ -100,7 +100,7 @@ class Dashboard extends Component {
           </List>
         </Panel>
       </div>
-    );
+    )
   }
 }
 
@@ -109,6 +109,6 @@ Dashboard.propTypes = {
   history: ReactRouterPropTypes.history.isRequired,
   store: PropTypes.instanceOf(Store),
   cursor: PropTypes.instanceOf(Cursor)
-};
+}
 
-export default Dashboard;
+export default Dashboard

@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { inject, observer } from 'mobx-react';
-import { withTranslation } from 'react-i18next';
-import Store from '../Stores/Store';
-import IconButton from './IconButton';
-import IconSpacer from './IconSpacer';
-import Loading from './Loading';
-import Configuration from '../Configuration';
-import i18n from '../i18n';
-import Title from './Title';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { inject, observer } from 'mobx-react'
+import { withTranslation } from 'react-i18next'
+import Store from '../Stores/Store'
+import IconButton from './IconButton'
+import IconSpacer from './IconSpacer'
+import Loading from './Loading'
+import Configuration from '../Configuration'
+import i18n from '../i18n'
+import Title from './Title'
 
 const ICONS = {
   'option-compact': 'compact',
@@ -17,7 +17,7 @@ const ICONS = {
   'option-quarter3': 'quarter3',
   'option-full': 'quarter4',
   'option-byTags': 'tag'
-};
+}
 
 @withTranslation('translations')
 @inject('store')
@@ -25,19 +25,19 @@ const ICONS = {
 class ReportToolPanel extends Component {
 
   render() {
-    const store = this.props.store;
-    const lang = i18n.language;
+    const store = this.props.store
+    const lang = i18n.language
 
     if (!store.token) {
-      return '';
+      return ''
     }
 
     const onPrint = () => {
-      window.print();
-    };
+      window.print()
+    }
 
     const onDownload = () => {
-      const url = `${Configuration.API_URL}${store.report.getUrl()}&csv&lang=${lang}`;
+      const url = `${Configuration.API_URL}${store.report.getUrl()}&csv&lang=${lang}`
       fetch(url, {
         method: 'GET',
         headers: new Headers({
@@ -46,34 +46,34 @@ class ReportToolPanel extends Component {
       })
         .then(response => response.blob())
         .then(blob => {
-          var url = window.URL.createObjectURL(blob);
-          var a = document.createElement('a');
-          a.href = url;
-          a.target = '_blank';
-          a.download = store.report.fileName();
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-        });
-    };
+          const url = window.URL.createObjectURL(blob)
+          const a = document.createElement('a')
+          a.href = url
+          a.target = '_blank'
+          a.download = store.report.fileName()
+          document.body.appendChild(a)
+          a.click()
+          a.remove()
+        })
+    }
 
     const onToggle = (option) => {
-      store.report.config[option] = !store.report.config[option];
-      store.fetchReport(store.db, store.periodId, store.report.format);
-    };
+      store.report.config[option] = !store.report.config[option]
+      store.fetchReport(store.db, store.periodId, store.report.format)
+    }
 
-    const options = store.report ? Object.keys({ ...store.report.options }) : [];
+    const options = store.report ? Object.keys({ ...store.report.options }) : []
 
     const buttons = [
       <IconButton key="button-print" onClick={onPrint} title="print" icon="print"></IconButton>,
       <IconButton key="button-download" onClick={onDownload} title="download-csv" icon="download"></IconButton>
-    ];
+    ]
 
     if (options.length) {
-      buttons.push(<IconSpacer key="space"/>);
+      buttons.push(<IconSpacer key="space"/>)
       options.forEach((option) => {
-        const [optionType, optionArg1] = store.report.options[option].split(':');
-        const name = `option-${option}`;
+        const [optionType, optionArg1] = store.report.options[option].split(':')
+        const name = `option-${option}`
         switch (optionType) {
           case 'boolean':
             buttons.push(<IconButton
@@ -82,8 +82,8 @@ class ReportToolPanel extends Component {
               onClick={() => onToggle(option)}
               title={name}
               icon={ICONS[name] || 'unknown'}>
-            </IconButton>);
-            break;
+            </IconButton>)
+            break
           case 'radio':
             buttons.push(<IconButton
               key={name}
@@ -91,19 +91,19 @@ class ReportToolPanel extends Component {
               onClick={() => {
                 Object.entries(store.report.options).forEach(([opt, type]) => {
                   if (type.startsWith('radio:' + optionArg1)) {
-                    store.report.config[opt] = false;
+                    store.report.config[opt] = false
                   }
-                });
-                onToggle(option);
+                })
+                onToggle(option)
               }}
               title={name}
               icon={ICONS[name] || 'unknown'}>
-            </IconButton>);
-            break;
+            </IconButton>)
+            break
           default:
-            throw new Error(`Unsupported report option type ${optionType}`);
+            throw new Error(`Unsupported report option type ${optionType}`)
         }
-      });
+      })
     }
 
     return (
@@ -112,13 +112,13 @@ class ReportToolPanel extends Component {
         <Loading visible={!store.report} />
         {store.report && buttons}
       </div>
-    );
+    )
   }
 }
 
 ReportToolPanel.propTypes = {
   t: PropTypes.func,
   store: PropTypes.instanceOf(Store)
-};
+}
 
-export default ReportToolPanel;
+export default ReportToolPanel

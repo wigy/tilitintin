@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import ReactRouterPropTypes from 'react-router-prop-types';
-import { inject, observer } from 'mobx-react';
-import { withTranslation, Trans } from 'react-i18next';
-import Store from '../Stores/Store';
-import Cursor from '../Stores/Cursor';
-import SubPanel from './SubPanel';
-import RegisterForm from './RegisterForm';
-import Title from './Title';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import ReactRouterPropTypes from 'react-router-prop-types'
+import { inject, observer } from 'mobx-react'
+import { withTranslation, Trans } from 'react-i18next'
+import Store from '../Stores/Store'
+import Cursor from '../Stores/Cursor'
+import SubPanel from './SubPanel'
+import RegisterForm from './RegisterForm'
+import Title from './Title'
 
 @withTranslation('translations')
 @inject('store')
@@ -19,44 +19,44 @@ class Admin extends Component {
   };
 
   componentDidMount() {
-    this.updateUser(this.props.match.params.arg);
+    this.updateUser(this.props.match.params.arg)
   }
 
   componentDidUpdate() {
-    const user = this.props.match.params.arg;
+    const user = this.props.match.params.arg
     if (user && user !== (this.state.user && this.state.user.user)) {
-      this.updateUser(user);
+      this.updateUser(user)
     }
   }
 
   updateUser(user) {
     if (user === '[create]' || !user) {
-      return;
+      return
     }
     this.props.store.request(`/admin/user/${user}`)
       .then((user) => {
-        this.setState({ user });
-      });
+        this.setState({ user })
+      })
   }
 
   onRegister({ user, name, password, email }) {
     return this.props.store.request('/admin/user', 'POST', { user, name, password, email })
       .then(() => {
-        this.props.history.push('/_/admin');
+        this.props.history.push('/_/admin')
       })
       .catch(() => {
-        this.props.store.addError(this.props.t('User creation failed.'));
-      });
+        this.props.store.addError(this.props.t('User creation failed.'))
+      })
   }
 
   render() {
-    const { store } = this.props;
+    const { store } = this.props
 
     if (!store.token) {
-      return '';
+      return ''
     }
 
-    const creatingUser = this.props.match.params.arg === '[create]';
+    const creatingUser = this.props.match.params.arg === '[create]'
 
     return (
       <div>
@@ -73,7 +73,7 @@ class Admin extends Component {
           creatingUser && <RegisterForm onRegister={({ user, name, password, email }) => this.onRegister({ user, name, password, email })}/>
         }
       </div>
-    );
+    )
   }
 }
 
@@ -83,6 +83,6 @@ Admin.propTypes = {
   match: PropTypes.object,
   store: PropTypes.instanceOf(Store),
   t: PropTypes.func
-};
+}
 
-export default Admin;
+export default Admin

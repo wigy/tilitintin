@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import ReactRouterPropTypes from 'react-router-prop-types';
-import { inject, observer } from 'mobx-react';
-import { withTranslation, Trans } from 'react-i18next';
-import Store from '../Stores/Store';
-import Cursor from '../Stores/Cursor';
-import Title from './Title';
-import { List, ListItem, ListItemText } from '@material-ui/core';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import ReactRouterPropTypes from 'react-router-prop-types'
+import { inject, observer } from 'mobx-react'
+import { withTranslation, Trans } from 'react-i18next'
+import Store from '../Stores/Store'
+import Cursor from '../Stores/Cursor'
+import Title from './Title'
+import { List, ListItem, ListItemText } from '@material-ui/core'
 
 @withTranslation('translations')
 @inject('store')
@@ -18,30 +18,30 @@ class ToolsList extends Component {
   }
 
   componentDidMount() {
-    this.getUsers();
+    this.getUsers()
   }
 
   componentDidUpdate(oldProps) {
     if (oldProps.match.params.arg && !this.props.match.params.arg) {
-      this.getUsers();
+      this.getUsers()
     }
   }
 
   getUsers() {
     this.props.store.request('/admin/user')
       .then((users) => {
-        this.setState({ users });
-      });
+        this.setState({ users })
+      })
   }
 
   onClickUser(user) {
-    this.props.history.push(`/_/admin/${user.user}`);
+    this.props.history.push(`/_/admin/${user.user}`)
   }
 
   render() {
-    const { store, match } = this.props;
+    const { store, match } = this.props
     if (!store.token) {
-      return '';
+      return ''
     }
 
     return (
@@ -55,7 +55,7 @@ class ToolsList extends Component {
           ))}
         </List>
       </div>
-    );
+    )
   }
 }
 
@@ -64,6 +64,6 @@ ToolsList.propTypes = {
   match: PropTypes.object,
   history: ReactRouterPropTypes.history.isRequired,
   store: PropTypes.instanceOf(Store)
-};
+}
 
-export default ToolsList;
+export default ToolsList

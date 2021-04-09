@@ -1,4 +1,4 @@
-import { action, computed, makeObservable, observable } from 'mobx';
+import { action, computed, makeObservable, observable } from 'mobx'
 
 class Settings {
 
@@ -25,7 +25,7 @@ class Settings {
   };
 
   constructor() {
-    makeObservable(this);
+    makeObservable(this)
   }
 
   /**
@@ -34,14 +34,14 @@ class Settings {
    */
   @action
   update(values) {
-    Object.assign(this.settings, values);
+    Object.assign(this.settings, values)
   }
 
   /**
    * Reset to the defaults.
    */
   reset() {
-    Object.keys(this.defaults).forEach((name) => (this.settings[name] = undefined));
+    Object.keys(this.defaults).forEach((name) => (this.settings[name] = undefined))
   }
 
   /**
@@ -50,34 +50,34 @@ class Settings {
    */
   get(name) {
     if (this.settings[name] !== undefined) {
-      return this.settings[name];
+      return this.settings[name]
     }
-    return this.defaults[name];
+    return this.defaults[name]
   }
 
   @computed
-  get BUSINESS_NAME() { return this.get('name'); }
+  get BUSINESS_NAME() { return this.get('name') }
 
   @computed
-  get BUSINESS_ID() { return this.get('business_id'); }
+  get BUSINESS_ID() { return this.get('business_id') }
 
   @computed
-  get VAT_SALES_ACCOUNT() { return this.get('vat-sales-account'); }
+  get VAT_SALES_ACCOUNT() { return this.get('vat-sales-account') }
 
   @computed
-  get VAT_PURCHASES_ACCOUNT() { return this.get('vat-purchases-account'); }
+  get VAT_PURCHASES_ACCOUNT() { return this.get('vat-purchases-account') }
 
   @computed
-  get VAT_RECEIVABLE_ACCOUNT() { return this.get('vat-receivable-account'); }
+  get VAT_RECEIVABLE_ACCOUNT() { return this.get('vat-receivable-account') }
 
   @computed
-  get VAT_PAYABLE_ACCOUNT() { return this.get('vat-payable-account'); }
+  get VAT_PAYABLE_ACCOUNT() { return this.get('vat-payable-account') }
 
   @computed
-  get VAT_DELAYED_RECEIVABLE_ACCOUNT() { return this.get('vat-delayed-receivable-account'); }
+  get VAT_DELAYED_RECEIVABLE_ACCOUNT() { return this.get('vat-delayed-receivable-account') }
 
   @computed
-  get VAT_DELAYED_PAYABLE_ACCOUNT() { return this.get('vat-delayed-payable-account'); }
+  get VAT_DELAYED_PAYABLE_ACCOUNT() { return this.get('vat-delayed-payable-account') }
 }
 
-export default Settings;
+export default Settings

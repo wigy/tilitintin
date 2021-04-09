@@ -1,21 +1,20 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import ReactRouterPropTypes from 'react-router-prop-types';
-import { inject, observer } from 'mobx-react';
-import { Trans, withTranslation } from 'react-i18next';
-import Store from '../Stores/Store';
-import Localize from './Localize';
-import Cursor from '../Stores/Cursor';
-import LanguageSelector from './LanguageSelector';
-import './Menu.css';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import { ButtonGroup } from '@material-ui/core';
-import { CalendarToday, NavigateBefore, NavigateNext, Storage } from '@material-ui/icons';
-import { action } from 'mobx';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import ReactRouterPropTypes from 'react-router-prop-types'
+import { inject, observer } from 'mobx-react'
+import { Trans, withTranslation } from 'react-i18next'
+import Store from '../Stores/Store'
+import Localize from './Localize'
+import Cursor from '../Stores/Cursor'
+import LanguageSelector from './LanguageSelector'
+import './Menu.css'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import Button from '@material-ui/core/Button'
+import IconButton from '@material-ui/core/IconButton'
+import { ButtonGroup } from '@material-ui/core'
+import { CalendarToday, NavigateBefore, NavigateNext, Storage } from '@material-ui/icons'
+import { action } from 'mobx'
 
 @withTranslation('translations')
 @inject('store')
@@ -64,102 +63,102 @@ class Menu extends Component {
   @action
   update({ db, periodId }) {
     if (db === '_') {
-      db = null;
+      db = null
     }
-    periodId = parseInt(periodId) || null;
-    this.props.store.setPeriod(db, periodId);
+    periodId = parseInt(periodId) || null
+    this.props.store.setPeriod(db, periodId)
   }
 
   componentDidMount() {
-    this.props.cursor.registerMenu(this);
-    this.props.store.fetchDatabases();
-    this.update(this.props.match.params);
+    this.props.cursor.registerMenu(this)
+    this.props.store.fetchDatabases()
+    this.update(this.props.match.params)
   }
 
   componentDidUpdate() {
-    this.update(this.props.match.params);
+    this.update(this.props.match.params)
   }
 
   keyText(cursor, key) {
-    key = key.toUpperCase();
-    const entry = this.menu.filter(e => e.shortcut === key);
+    key = key.toUpperCase()
+    const entry = this.menu.filter(e => e.shortcut === key)
     if (entry.length) {
       if (!this.isEnabled(entry[0])) {
-        return;
+        return
       }
-      entry[0].action();
-      return { preventDefault: true };
+      entry[0].action()
+      return { preventDefault: true }
     }
     if (key === '<') {
-      this.handleSelect('previous-period');
+      this.handleSelect('previous-period')
     }
     if (key === '>') {
-      this.handleSelect('next-period');
+      this.handleSelect('next-period')
     }
   }
 
   handleSelect(key) {
-    const { store, history, cursor } = this.props;
-    const periods = store.periods;
-    let url;
-    const [, db, tool, periodId, accountId, extras] = this.props.history.location.pathname.split('/');
+    const { store, history, cursor } = this.props
+    const periods = store.periods
+    let url
+    const [, db, tool, periodId, accountId, extras] = this.props.history.location.pathname.split('/')
     switch (key) {
       case 'logout':
-        store.logout();
-        history.push('/');
-        break;
+        store.logout()
+        history.push('/')
+        break
       case 'dashboard':
       case 'txs':
       case 'account':
       case 'report':
       case 'tools':
-        url = '/' + (db || '_') + '/' + key;
+        url = '/' + (db || '_') + '/' + key
         if (periodId) {
-          url += '/' + periodId;
+          url += '/' + periodId
         }
         if (accountId) {
-          url += '/' + accountId;
+          url += '/' + accountId
         }
-        cursor.resetSelected();
-        history.push(url);
-        break;
+        cursor.resetSelected()
+        history.push(url)
+        break
       case 'next-period':
       case 'previous-period':
         if (db && periods && periods.length) {
-          let index = periods.findIndex(p => p.id === parseInt(periodId));
+          let index = periods.findIndex(p => p.id === parseInt(periodId))
           if (index < 0) {
-            return;
+            return
           }
           if (index > 0 && key === 'next-period') {
-            index--;
+            index--
           } else if (index < periods.length - 1 && key === 'previous-period') {
-            index++;
+            index++
           } else {
-            return;
+            return
           }
-          url = '/' + db + '/' + tool + '/' + periods[index].id;
+          url = '/' + db + '/' + tool + '/' + periods[index].id
           if (accountId) {
-            url += '/' + accountId;
+            url += '/' + accountId
           }
           if (extras) {
             if (!accountId) {
-              url += '/';
+              url += '/'
             }
-            url += '/' + extras;
+            url += '/' + extras
           }
-          cursor.resetSelected();
-          history.push(url);
+          cursor.resetSelected()
+          history.push(url)
         }
-        break;
+        break
       default:
-        console.log('No idea how to handle', key);
+        console.log('No idea how to handle', key)
     }
   }
 
   isEnabled(entry) {
-    const { db, periodId, isAdmin } = this.props.store;
-    const notLoggedIn = !this.props.store.token;
-    return !entry.disabled({ db, periodId, isAdmin, notLoggedIn });
+    const { db, periodId, isAdmin } = this.props.store
+    const notLoggedIn = !this.props.store.token
+    return !entry.disabled({ db, periodId, isAdmin, notLoggedIn })
   }
 
   renderMenu(entry) {
@@ -173,7 +172,7 @@ class Menu extends Component {
       startIcon={entry.shortcut && <span className="shortcut">{entry.shortcut === ' ' ? 'Space' : entry.shortcut}</span>}
     >
       <Trans>{entry.title}</Trans>
-    </Button>;
+    </Button>
   }
 
   render() {
@@ -219,7 +218,7 @@ class Menu extends Component {
           </Toolbar>
         </AppBar>
       </div>
-    );
+    )
   }
 }
 
@@ -229,6 +228,6 @@ Menu.propTypes = {
   match: PropTypes.object,
   history: ReactRouterPropTypes.history.isRequired,
   t: PropTypes.any
-};
+}
 
-export default Menu;
+export default Menu
