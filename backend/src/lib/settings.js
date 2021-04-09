@@ -1,4 +1,4 @@
-const knex = require('./knex');
+const knex = require('./knex')
 
 /**
  * Check if settings table is available.
@@ -6,7 +6,7 @@ const knex = require('./knex');
  * @return {Promise<boolean>}
  */
 async function isReady(db) {
-  return knex.db(db).schema.hasTable('fyffe_settings');
+  return knex.db(db).schema.hasTable('fyffe_settings')
 }
 
 /**
@@ -18,36 +18,36 @@ async function ensure(db) {
   return isReady(db)
     .then((yes) => {
       if (yes) {
-        return Promise.resolve(true);
+        return Promise.resolve(true)
       }
       return knex.db(db).schema.createTable('fyffe_settings', function (table) {
-        table.string('name', 64).notNullable();
-        table.text('value').notNullable();
-        table.unique('name');
+        table.string('name', 64).notNullable()
+        table.text('value').notNullable()
+        table.unique('name')
       })
-        .then(() => true);
-    });
+        .then(() => true)
+    })
 }
 
 /**
  * Set the value for the setting variable.
  */
 async function set(db, variable, value) {
-  await ensure(db);
+  await ensure(db)
   return knex.db(db)('fyffe_settings').select('name').where({ name: variable }).first()
     .then(res => {
       return res ? knex.db(db)('fyffe_settings').update({ value: JSON.stringify(value) }).where({ name: variable })
-        : knex.db(db)('fyffe_settings').insert({ name: variable, value: JSON.stringify(value) });
-    });
+        : knex.db(db)('fyffe_settings').insert({ name: variable, value: JSON.stringify(value) })
+    })
 }
 
 /**
  * Get the value of the setting variable or default, if not set.
  */
 async function get(db, variable, def = undefined) {
-  await ensure(db);
+  await ensure(db)
   return knex.db(db)('fyffe_settings').select('value').where({ name: variable }).first()
-    .then(res => res ? JSON.parse(res.value) : def);
+    .then(res => res ? JSON.parse(res.value) : def)
 }
 
 /**
@@ -55,15 +55,15 @@ async function get(db, variable, def = undefined) {
  * @param {String} db
  */
 async function getAll(db) {
-  await ensure(db);
+  await ensure(db)
   return knex.db(db)('fyffe_settings').select('*')
     .then((data) => {
-      const ret = {};
+      const ret = {}
       data.forEach((setting) => {
-        ret[setting.name] = setting.value;
-      });
-      return ret;
-    });
+        ret[setting.name] = setting.value
+      })
+      return ret
+    })
 }
 
-module.exports = { get, set, getAll };
+module.exports = { get, set, getAll }

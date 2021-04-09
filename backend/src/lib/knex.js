@@ -1,10 +1,10 @@
-const fs = require('fs');
-const knex = require('knex');
-const config = require('../config');
-const glob = require('glob');
+const fs = require('fs')
+const knex = require('knex')
+const config = require('../config')
+const glob = require('glob')
 
 if (!fs.existsSync(config.DBPATH)) {
-  throw new Error('Configured DBPATH ' + config.DBPATH + ' does not exist. Please set environment DBPATH.');
+  throw new Error('Configured DBPATH ' + config.DBPATH + ' does not exist. Please set environment DBPATH.')
 }
 
 /**
@@ -14,9 +14,9 @@ if (!fs.existsSync(config.DBPATH)) {
  */
 function dbs(user) {
   if (!user) {
-    return [];
+    return []
   }
-  return glob.sync(config.DBPATH + '/' + user + '/*.sqlite').map(path => path.replace(/.*\/(.*)\.sqlite$/, '$1'));
+  return glob.sync(config.DBPATH + '/' + user + '/*.sqlite').map(path => path.replace(/.*\/(.*)\.sqlite$/, '$1'))
 }
 
 /**
@@ -26,18 +26,18 @@ function dbs(user) {
  * @returns {Boolean}
  */
 function isDb(user, name) {
-  return dbs(user).includes(name);
+  return dbs(user).includes(name)
 }
 
 // Current user.
-let user = null;
+let user = null
 
 /**
  * Set the current user.
  * @param {String} u
  */
 function setUser(u) {
-  user = u;
+  user = u
 }
 
 /**
@@ -47,7 +47,7 @@ function setUser(u) {
  */
 function db(name) {
   if (!user || !isDb(user, name)) {
-    throw new Error('No such DB as ' + name);
+    throw new Error('No such DB as ' + name)
   }
   return knex({
     client: 'sqlite3',
@@ -55,7 +55,7 @@ function db(name) {
       filename: userPath(name + '.sqlite')
     },
     useNullAsDefault: true
-  });
+  })
 }
 
 /**
@@ -63,7 +63,7 @@ function db(name) {
  * @param {String} basename
  */
 function userPath(basename) {
-  return config.DBPATH + '/' + user + '/' + basename;
+  return config.DBPATH + '/' + user + '/' + basename
 }
 
 /**
@@ -73,10 +73,10 @@ function userPath(basename) {
  */
 function userFile(basename) {
   if (!basename) {
-    return null;
+    return null
   }
-  const path = userPath(basename);
-  return fs.existsSync(path) ? path : null;
+  const path = userPath(basename)
+  return fs.existsSync(path) ? path : null
 }
 
 module.exports = {
@@ -87,4 +87,4 @@ module.exports = {
   userPath,
   userFile,
   knex
-};
+}

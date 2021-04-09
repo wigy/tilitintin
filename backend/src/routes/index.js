@@ -1,12 +1,12 @@
-const express = require('express');
-const router = express.Router();
-const dump = require('neat-dump');
-const config = require('../config');
-const knex = require('../lib/knex');
-const users = require('../lib/users');
-const { getToken, checkToken, checkAdminToken } = require('../lib/middleware');
-const tags = require('libfyffe').data.tilitintin.tags;
-const data = require('libfyffe').data.tilitintin.data;
+const express = require('express')
+const router = express.Router()
+const dump = require('neat-dump')
+const config = require('../config')
+const knex = require('../lib/knex')
+const users = require('../lib/users')
+const { getToken, checkToken, checkAdminToken } = require('../lib/middleware')
+const tags = require('libfyffe').data.tilitintin.tags
+const data = require('libfyffe').data.tilitintin.data
 
 /**
  * Authenticate against fixed credentials and construct a token.
@@ -15,22 +15,22 @@ router.post('/auth',
   express.urlencoded({ extended: true }),
   express.json(),
   async (req, res) => {
-    const { user, password } = req.body;
-    const token = await users.login(user, password);
+    const { user, password } = req.body
+    const token = await users.login(user, password)
     if (token) {
-      res.send({ token });
+      res.send({ token })
     } else {
-      res.status(401).send('Invalid user or password.');
+      res.status(401).send('Invalid user or password.')
     }
-  });
+  })
 
 /**
  * Get the readiness status of the application.
  */
 router.get('/status',
   (req, res) => {
-    res.send({ hasAdminUser: users.hasAdminUser() });
-  });
+    res.send({ hasAdminUser: users.hasAdminUser() })
+  })
 
 /**
  * Create new admin user.
@@ -39,25 +39,25 @@ router.post('/register',
   express.urlencoded({ extended: true }),
   express.json(),
   async (req, res) => {
-    const { user, name, email, password, admin } = req.body;
+    const { user, name, email, password, admin } = req.body
     if (admin) {
       if (users.hasAdminUser()) {
-        res.sendStatus(400);
+        res.sendStatus(400)
       } else {
-        const err = users.validateUser(user, name, password, email);
+        const err = users.validateUser(user, name, password, email)
         if (err !== true) {
-          dump.error(err);
-          res.sendStatus(400);
+          dump.error(err)
+          res.sendStatus(400)
         } else if (!await users.registerUser({ user, name, email, password, admin })) {
-          res.sendStatus(500);
+          res.sendStatus(500)
         } else {
-          res.sendStatus(204);
+          res.sendStatus(204)
         }
       }
     } else {
-      res.sendStatus(400);
+      res.sendStatus(400)
     }
-  });
+  })
 
 router.get('/',
   checkToken,
@@ -66,25 +66,25 @@ router.get('/',
       links: {
         databases: config.BASEURL + '/db'
       }
-    });
-  });
+    })
+  })
 
 router.get('/db',
   checkToken,
   (req, res) => {
     res.send(knex.dbs(req.user).map(db => {
-      return { name: db, links: { view: config.BASEURL + '/db/' + db } };
-    }));
-  });
+      return { name: db, links: { view: config.BASEURL + '/db/' + db } }
+    }))
+  })
 
 function checkDb(req, res, next) {
-  const { db } = req.params;
+  const { db } = req.params
   if (!req.user || !knex.isDb(req.user, db)) {
-    res.status(404).send('Database not found.');
+    res.status(404).send('Database not found.')
   } else {
-    req.db = db;
-    knex.setUser(req.user);
-    next();
+    req.db = db
+    knex.setUser(req.user)
+    next()
   }
 }
 
@@ -92,7 +92,7 @@ router.get('/db/:db',
   checkToken,
   checkDb,
   (req, res) => {
-    const { db } = req.params;
+    const { db } = req.params
     res.send({
       links: {
         periods: config.BASEURL + '/db/' + db + '/period',
@@ -103,117 +103,117 @@ router.get('/db/:db',
         tags: config.BASEURL + '/db/' + db + '/tags',
         report: config.BASEURL + '/db/' + db + '/report'
       }
-    });
-  });
+    })
+  })
 
 router.get('/db/:db/tags/:id/view',
   async (req, res) => {
-    const token = getToken(req);
+    const token = getToken(req)
     if (!token) {
-      dump.error('Missing token.');
-      return res.sendStatus(403);
+      dump.error('Missing token.')
+      return res.sendStatus(403)
     }
-    const payload = await users.verifyToken(token, false, false);
+    const payload = await users.verifyToken(token, false, false)
     if (!payload) {
-      dump.error('Invalid token.');
-      return res.sendStatus(403);
+      dump.error('Invalid token.')
+      return res.sendStatus(403)
     }
     // Handle special tokens allowing only tag viewing.
-    let db;
+    let db
     if (payload.tag) {
-      knex.setUser(payload.user);
+      knex.setUser(payload.user)
       if (payload.db !== req.params.db || parseInt(payload.id) !== parseInt(req.params.id)) {
-        dump.error('Invalid DB or ID.');
-        return res.sendStatus(403);
+        dump.error('Invalid DB or ID.')
+        return res.sendStatus(403)
       }
-      db = knex.db(payload.db);
+      db = knex.db(payload.db)
     } else {
     // Otherwise use the authenticated user token.
-      knex.setUser(payload.user);
-      db = knex.db(req.params.db);
+      knex.setUser(payload.user)
+      db = knex.db(req.params.db)
     }
     tags.isReady(db)
       .then((ready) => {
         if (!ready) {
-          return res.send('');
+          return res.send('')
         }
         data.getOne(db, 'tags', req.params.id)
           .then(tag => {
             if (payload.tag && tag.tag !== payload.tag) {
-              dump.error('Invalid tag.');
-              return res.sendStatus(403);
+              dump.error('Invalid tag.')
+              return res.sendStatus(403)
             }
-            res.header('Content-Type', tag.mime);
-            res.send(tag.picture);
-          });
-      });
-  });
+            res.header('Content-Type', tag.mime)
+            res.send(tag.picture)
+          })
+      })
+  })
 
 router.use('/db/:db/period',
   express.urlencoded({ extended: true }),
   express.json(),
   checkToken,
   checkDb,
-  require('./period'));
+  require('./period'))
 
 router.use('/db/:db/account',
   express.urlencoded({ extended: true }),
   express.json(),
   checkToken,
   checkDb,
-  require('./account'));
+  require('./account'))
 
 router.use('/db/:db/document',
   express.urlencoded({ extended: true }),
   express.json(),
   checkToken,
   checkDb,
-  require('./document'));
+  require('./document'))
 
 router.use('/db/:db/entry',
   express.urlencoded({ extended: true }),
   express.json(),
   checkToken,
   checkDb,
-  require('./entry'));
+  require('./entry'))
 
 router.use('/db/:db/heading',
   express.urlencoded({ extended: true }),
   express.json(),
   checkToken,
   checkDb,
-  require('./heading'));
+  require('./heading'))
 
 router.use('/db/:db/tags',
   express.urlencoded({ extended: true }),
   express.json(),
   checkToken,
   checkDb,
-  require('./tags'));
+  require('./tags'))
 
 router.use('/db/:db/report',
   express.urlencoded({ extended: true }),
   express.json(),
   checkToken,
   checkDb,
-  require('./report'));
+  require('./report'))
 
 router.use('/db/:db/settings',
   express.urlencoded({ extended: true }),
   express.json(),
   checkToken,
   checkDb,
-  require('./settings'));
+  require('./settings'))
 
 router.use('/admin/user',
   express.urlencoded({ extended: true }),
   express.json(),
   checkAdminToken,
-  require('./user'));
+  require('./user'))
 
 router.use('/db',
   express.urlencoded({ extended: true }),
   checkToken,
-  require('./db'));
+  require('./db'))
 
-module.exports = router;
+module.exports = router

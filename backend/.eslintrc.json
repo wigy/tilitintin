@@ -11,6 +11,7 @@
   },
   "rules": {
     "space-before-function-paren": "off",
-    "padded-blocks": "off"
+    "padded-blocks": "off",
+    "semi": [2, "never"]
   }
 }

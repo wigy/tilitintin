@@ -5,11 +5,11 @@
 function num(n, lang) {
   switch (lang) {
     case 'fi':
-      return ('' + n).replace('.', ',');
+      return ('' + n).replace('.', ',')
   }
-  return '' + n;
+  return '' + n
 }
 
 module.exports = {
   num
-};
+}

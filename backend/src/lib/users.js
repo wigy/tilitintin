@@ -1,9 +1,9 @@
-const fs = require('fs');
-const path = require('path');
-const bcrypt = require('bcrypt');
-const glob = require('glob');
-const jwt = require('jsonwebtoken');
-const config = require('../config');
+const fs = require('fs')
+const path = require('path')
+const bcrypt = require('bcrypt')
+const glob = require('glob')
+const jwt = require('jsonwebtoken')
+const config = require('../config')
 
 /**
  * Validate new user data.
@@ -15,21 +15,21 @@ const config = require('../config');
  */
 function validateUser(user, name, password, email) {
   if (!user || !/^[a-z0-9]+$/.test(user)) {
-    return `User name ${user} is not valid (lower case letters and numbers only).`;
+    return `User name ${user} is not valid (lower case letters and numbers only).`
   }
   if (password.length < 4) {
-    return 'Password is too short.';
+    return 'Password is too short.'
   }
   if (!email) {
-    return 'Email is required.';
+    return 'Email is required.'
   }
   if (!name) {
-    return 'Full name is required.';
+    return 'Full name is required.'
   }
   if (hasUser(user)) {
-    return `User '${user}' exists.`;
+    return `User '${user}' exists.`
   }
-  return true;
+  return true
 }
 
 /**
@@ -40,26 +40,26 @@ async function registerUser({ user, name, email, password, admin }) {
   return new Promise((resolve, reject) => {
     bcrypt.genSalt(10, function(err, salt) {
       if (err) {
-        console.error(err);
-        reject(err);
+        console.error(err)
+        reject(err)
       } else {
         bcrypt.hash(password, salt, function(err, hash) {
           if (err) {
-            console.error(err);
-            reject(err);
+            console.error(err)
+            reject(err)
           } else {
-            const authDir = admin ? config.DBPATH : path.join(config.DBPATH, user);
-            const authPath = path.join(authDir, 'auth.json');
+            const authDir = admin ? config.DBPATH : path.join(config.DBPATH, user)
+            const authPath = path.join(authDir, 'auth.json')
             if (!fs.existsSync(authDir)) {
-              fs.mkdirSync(authDir);
+              fs.mkdirSync(authDir)
             }
-            fs.writeFileSync(authPath, JSON.stringify({ user, name, email, password: hash }));
-            resolve(true);
+            fs.writeFileSync(authPath, JSON.stringify({ user, name, email, password: hash }))
+            resolve(true)
           }
-        });
+        })
       }
-    });
-  });
+    })
+  })
 }
 
 /**
@@ -67,7 +67,7 @@ async function registerUser({ user, name, email, password, admin }) {
  * @return {Boolean}
  */
 function hasAdminUser() {
-  return fs.existsSync(path.join(config.DBPATH, 'auth.json'));
+  return fs.existsSync(path.join(config.DBPATH, 'auth.json'))
 }
 
 /**
@@ -75,7 +75,7 @@ function hasAdminUser() {
  */
 function adminUser() {
   if (hasAdminUser()) {
-    return require(path.join(config.DBPATH, 'auth.json')).user;
+    return require(path.join(config.DBPATH, 'auth.json')).user
   }
 }
 
@@ -84,7 +84,7 @@ function adminUser() {
  * @return {Boolean}
  */
 function hasUser(user) {
-  return user === adminUser() || fs.existsSync(path.join(config.DBPATH, user, 'auth.json'));
+  return user === adminUser() || fs.existsSync(path.join(config.DBPATH, user, 'auth.json'))
 }
 
 /**
@@ -96,41 +96,41 @@ function hasUser(user) {
  */
 async function verifyPassword(path, user, password) {
   return new Promise((resolve, reject) => {
-    const json = JSON.parse(fs.readFileSync(path));
+    const json = JSON.parse(fs.readFileSync(path))
     if (json.user !== user) {
-      resolve(false);
+      resolve(false)
     } else {
       bcrypt.compare(password, json.password, function(err, isMatch) {
         if (err) {
-          console.error(err);
-          resolve(false);
+          console.error(err)
+          resolve(false)
         } else {
-          resolve(isMatch);
+          resolve(isMatch)
         }
-      });
+      })
     }
-  });
+  })
 }
 
 /**
  * Log in and produce an access token if successful.
  */
 async function login(user, password) {
-  let token = null;
+  let token = null
   if (!user || !password) {
-    return token;
+    return token
   }
   if (fs.existsSync(path.join(config.DBPATH, user, 'auth.json'))) {
     if (await verifyPassword(path.join(config.DBPATH, user, 'auth.json'), user, password)) {
-      token = jwt.sign({ service: 'Tilitintin', user: user, login: true }, config.SECRET);
+      token = jwt.sign({ service: 'Tilitintin', user: user, login: true }, config.SECRET)
     }
   }
   if (!token && hasAdminUser()) {
     if (await verifyPassword(path.join(config.DBPATH, 'auth.json'), user, password)) {
-      token = jwt.sign({ service: 'Tilitintin', user: user, login: true, isAdmin: true }, config.SECRET);
+      token = jwt.sign({ service: 'Tilitintin', user: user, login: true, isAdmin: true }, config.SECRET)
     }
   }
-  return token;
+  return token
 }
 
 /**
@@ -142,16 +142,16 @@ async function verifyToken(token, needAdmin = false, needLogin = true) {
   return new Promise((resolve, reject) => {
     jwt.verify(token, config.SECRET, (err, decoded) => {
       if (err) {
-        resolve(null);
+        resolve(null)
       } else if (decoded.service !== 'Tilitintin' || (needLogin && !decoded.login)) {
-        resolve(null);
+        resolve(null)
       }
       if (needAdmin && !decoded.isAdmin) {
-        resolve(null);
+        resolve(null)
       }
-      resolve(decoded);
-    });
-  });
+      resolve(decoded)
+    })
+  })
 }
 
 /**
@@ -161,20 +161,20 @@ async function getAll() {
   return new Promise((resolve, reject) => {
     glob.glob(path.join(config.DBPATH, '*', 'auth.json'), function(err, matches) {
       if (err) {
-        reject(err);
+        reject(err)
       } else {
         const users = matches.map((path) => {
-          const json = JSON.parse(fs.readFileSync(path));
+          const json = JSON.parse(fs.readFileSync(path))
           return {
             user: json.user,
             name: json.name || null,
             email: json.email || null
-          };
-        });
-        resolve(users);
+          }
+        })
+        resolve(users)
       }
-    });
-  });
+    })
+  })
 }
 
 /**
@@ -182,18 +182,18 @@ async function getAll() {
  */
 async function getOne(user) {
   return new Promise((resolve, reject) => {
-    const filePath = path.join(config.DBPATH, user, 'auth.json');
+    const filePath = path.join(config.DBPATH, user, 'auth.json')
     if (!fs.existsSync(filePath)) {
-      return reject(new Error(`User ${user} does not exist.`));
+      return reject(new Error(`User ${user} does not exist.`))
     } else {
-      const json = JSON.parse(fs.readFileSync(filePath));
+      const json = JSON.parse(fs.readFileSync(filePath))
       resolve({
         user: json.user,
         name: json.name || null,
         email: json.email || null
-      });
+      })
     }
-  });
+  })
 }
 
 module.exports = {
@@ -205,4 +205,4 @@ module.exports = {
   registerUser,
   validateUser,
   verifyToken
-};
+}

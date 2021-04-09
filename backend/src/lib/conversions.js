@@ -1,5 +1,5 @@
-const json2csv = require('json2csv').parse;
-const locale = require('./locale');
+const json2csv = require('json2csv').parse
+const locale = require('./locale')
 
 /**
  * No conversion.
@@ -7,7 +7,7 @@ const locale = require('./locale');
  * @param {Object} options
  */
 function identical(report, options = {}) {
-  return report;
+  return report
 }
 
 /**
@@ -17,7 +17,7 @@ function identical(report, options = {}) {
  * @param {String} options.lang Localize number using this language.
  */
 function csv(report, options = {}) {
-  const csv = [];
+  const csv = []
 
   const render = {
     id: (column, entry) => entry.id,
@@ -30,33 +30,33 @@ function csv(report, options = {}) {
       !isNaN(entry.amounts[column.name]) &&
       entry.amounts[column.name] !== undefined)
       ? locale.num(entry.amounts[column.name] / 100, options.lang) : ''
-  };
+  }
 
-  const { data, columns } = report;
-  let line = {};
+  const { data, columns } = report
+  let line = {}
   if (!options.dropTile) {
-    columns.forEach((column) => (line[column.name] = column.title));
-    csv.push(line);
+    columns.forEach((column) => (line[column.name] = column.title))
+    csv.push(line)
   }
 
   data.forEach((entry) => {
-    line = {};
+    line = {}
     columns.forEach((column) => {
       if (entry.pageBreak) {
-        line[column.name] = '';
+        line[column.name] = ''
       } else {
-        line[column.name] = render[column.type](column, entry);
+        line[column.name] = render[column.type](column, entry)
       }
-    });
-    csv.push(line);
-  });
+    })
+    csv.push(line)
+  })
 
-  const fields = columns.map((c) => c.name);
+  const fields = columns.map((c) => c.name)
 
-  return json2csv(csv, { fields, header: false });
+  return json2csv(csv, { fields, header: false })
 }
 
 module.exports = {
   identical,
   csv
-};
+}

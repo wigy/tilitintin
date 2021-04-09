@@ -1,4 +1,4 @@
-const path = require('path');
+const path = require('path')
 
 module.exports = {
   PORT: process.env.PORT || 3101,
@@ -6,4 +6,4 @@ module.exports = {
   DBPATH: process.env.DBPATH || path.resolve(process.cwd(), 'databases'),
   SECRET: process.env.SECRET || 'oGBtRQBWIVUjnqw0nbmvbJ7zsd&67rtyr/r5fyft62',
   AUTO_LOGIN_USER: process.env.AUTO_LOGIN_USER || null
-};
+}
