@@ -156,7 +156,7 @@ class ToolsForVAT extends Component {
         <SubPanel>
           {openVATDocuments.map((doc) => {
             return <div key={doc.id}>
-              <Localize>{`{${doc.date}}`}</Localize>
+              <Localize date={doc.date} />
               <br/>
               { doc.entries.map((entry) => {
                 return <div key={entry.id}>
