@@ -253,10 +253,14 @@ class ToolsToolPanel extends Component {
           buttons.push(
             <IconButton key="button-new" onClick={() => this.setState({ askNewPeriod: true })} title="create-period" icon="calendar-plus"></IconButton>
           )
-
         }
-        startDate = store.database && moment(store.database.periods[store.database.periods.length - 1].end_date).add(1, 'day').format('YYYY-MM-DD')
-        endDate = store.database && moment(store.database.periods[store.database.periods.length - 1].end_date).add(1, 'year').format('YYYY-MM-DD')
+        if (store.database && store.database.periods.length) {
+          startDate = moment(store.database.periods[store.database.periods.length - 1].end_date).add(1, 'day').format('YYYY-MM-DD')
+          endDate = moment(store.database.periods[store.database.periods.length - 1].end_date).add(1, 'year').format('YYYY-MM-DD')
+        } else {
+          startDate =moment().startOf('year').format('YYYY-MM-DD')
+          endDate = moment().startOf('year').add(1, 'year').add(-1, 'day').format('YYYY-MM-DD')
+        }
         break
 
       case 'documents':
