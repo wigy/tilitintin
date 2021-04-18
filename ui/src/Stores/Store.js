@@ -462,8 +462,8 @@ class Store {
      if (this.report && this.report.url === url) {
        return
      }
-     this.report = null
      runInAction(() => {
+       this.report = null
        report.setData(url, [])
      })
      return this.request(url)

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { runInAction } from 'mobx'
 import { inject, observer } from 'mobx-react'
 import { withTranslation } from 'react-i18next'
 import Store from '../Stores/Store'
@@ -89,12 +90,14 @@ class ReportToolPanel extends Component {
               key={name}
               toggle={store.report.config[option]}
               onClick={() => {
-                Object.entries(store.report.options).forEach(([opt, type]) => {
-                  if (type.startsWith('radio:' + optionArg1)) {
-                    store.report.config[opt] = false
-                  }
+                runInAction(() => {
+                  Object.entries(store.report.options).forEach(([opt, type]) => {
+                    if (type.startsWith('radio:' + optionArg1)) {
+                      store.report.config[opt] = false
+                    }
+                  })
+                  onToggle(option)
                 })
-                onToggle(option)
               }}
               title={name}
               icon={ICONS[name] || 'unknown'}>
