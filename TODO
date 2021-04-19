@@ -3,22 +3,11 @@ BUGS
 ====
 
 
-SMALL IMPROVEMENTS
-==================
-
-[ ] More icons with keyboard shortcuts as hover text.
-
 FUTURE FEATURES
 ===============
 
-2.1
-[X] Make more room for menu items.
-[X] Use Yarn.
-[X] Webpack update.
-[X] Mobx update.
-[X] Select all text when entering old transaction editor.
-[X] Validate date. If not in range, the tx list behaves funnily.
-[X] Could have silent option for API fetch dimming and use it when fetching proposals.
+2.2
 [ ] Improve looks for cell cursor.
 [ ] VAT percentage for account editor.
 [ ] Automatically added VAT could show reasoning by default in text (VAT 24%).
+[ ] More icons with keyboard shortcuts as hover text.

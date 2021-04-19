@@ -61,6 +61,14 @@ In UI you can do filtering using the categories defined.
 
 ## Version History
 
+### 2.1
+  * Updated Webpack.
+  * Updated Mobx.
+  * Switch to Yarn.
+  * Fix text selection when entering text edit.
+  * Date validation in period range.
+  * No dimming when fetching proposals for transaction text.
+
 ### 2.0.1
   * Small fixes and optimization.
 
