@@ -41,14 +41,14 @@ const ICONS = {
 class TilitintinIconButton extends Component {
 
   render() {
-    const { t, disabled, title, onClick, icon, toggle } = this.props
+    const { t, disabled, title, onClick, icon, toggle, id } = this.props
     let color = 'primary'
     if (toggle !== undefined) {
       color = toggle ? 'secondary' : undefined
     }
     const Icon = icon in ICONS ? ICONS[icon] : ICONS.unknown
     return (
-      <IconButton color={color} title={t('icon-' + title)} disabled={disabled} onClick={() => onClick()}>
+      <IconButton id={id} color={color} title={t('icon-' + title)} disabled={disabled} onClick={() => onClick()}>
         <Icon style={{ fontSize: 30 }}/>
       </IconButton>
     )
@@ -58,6 +58,7 @@ class TilitintinIconButton extends Component {
 TilitintinIconButton.propTypes = {
   onClick: PropTypes.func,
   t: PropTypes.func,
+  id: PropTypes.string,
   icon: PropTypes.string,
   title: PropTypes.string,
   toggle: PropTypes.bool,

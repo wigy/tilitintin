@@ -63,24 +63,28 @@ class RegisterForm extends Component {
       <Panel>
         <TextField
           style={{ width: '50%' }}
+          name="username"
           label={<Trans>Username</Trans>}
           onChange={(event) => (this.setState({ user: event.target.value }))}
         />
         <br/>
         <TextField
           style={{ width: '50%' }}
+          name="full-name"
           label={<Trans>Full Name</Trans>}
           onChange={(event) => (this.setState({ name: event.target.value }))}
         />
         <br/>
         <TextField
           style={{ width: '50%' }}
+          name="email"
           label={<Trans>Email</Trans>}
           onChange={(event) => (this.setState({ email: event.target.value }))}
         />
         <br/>
         <TextField
           type="password"
+          name="password"
           style={{ width: '50%' }}
           label={<Trans>Password</Trans>}
           onChange={(event) => (this.setState({ password: event.target.value }))}
@@ -88,13 +92,14 @@ class RegisterForm extends Component {
         <br/>
         <TextField
           type="password"
+          name="password-again"
           style={{ width: '50%' }}
           label={<Trans>Password Again</Trans>}
           onChange={(event) => (this.setState({ passwordAgain: event.target.value }))}
         />
         <br/>
         <br/>
-        <Button variant="outlined" onClick={() => this.onRegister()}><Trans>Submit</Trans></Button>
+        <Button id="submit" variant="outlined" onClick={() => this.onRegister()}><Trans>Submit</Trans></Button>
       </Panel>
     </form>
   }

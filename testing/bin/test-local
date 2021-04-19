@@ -6,6 +6,9 @@ ROOT=`readlink -f "$FILE"`
 export TEST_BASE_URL=http://localhost:3102
 export TEST_ADMIN_USER=root
 export TEST_ADMIN_PASSWORD=pass
+export TEST_USER=test
+export TEST_PASSWORD=pass
+export TEST_EMAIL=user@localhost
 
 cd $ROOT
 robot --outputdir reports tests

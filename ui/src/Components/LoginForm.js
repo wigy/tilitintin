@@ -34,6 +34,7 @@ class RegisterForm extends Component {
     return (
       <Panel>
         <TextField
+          name="username"
           style={{ width: '50%' }}
           label={<Trans>Username</Trans>}
           onChange={(event) => (this.setState({ user: event.target.value }))}
@@ -41,6 +42,7 @@ class RegisterForm extends Component {
         <br/>
         <br/>
         <TextField
+          name="password"
           type="password"
           style={{ width: '50%' }}
           label={<Trans>Password</Trans>}
@@ -48,7 +50,7 @@ class RegisterForm extends Component {
         />
         <br/>
         <br/>
-        <Button variant="outlined" onClick={() => this.onLogin()}><Trans>Login</Trans></Button>
+        <Button id="login" variant="outlined" onClick={() => this.onLogin()}><Trans>Login</Trans></Button>
       </Panel>
     )
   }

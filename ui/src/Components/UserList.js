@@ -47,7 +47,7 @@ class ToolsList extends Component {
     return (
       <div>
         <Title><Trans>Users</Trans></Title>
-        <List>
+        <List className="UserList">
           {this.state.users.map((user) => (
             <ListItem key={user.user} button selected={match.params.arg === user.user} onClick={() => this.onClickUser(user)}>
               <ListItemText primary={`${user.name} (${user.user})`} secondary={user.email} />
