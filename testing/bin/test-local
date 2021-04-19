@@ -1,0 +1,11 @@
+#!/bin/bash
+
+FILE=`dirname "${BASH_SOURCE[0]}"`/..
+ROOT=`readlink -f "$FILE"`
+
+export TEST_BASE_URL=http://localhost:3102
+export TEST_ADMIN_USER=root
+export TEST_ADMIN_PASSWORD=pass
+
+cd $ROOT
+robot --outputdir reports tests
