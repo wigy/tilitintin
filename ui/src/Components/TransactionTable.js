@@ -260,6 +260,7 @@ class TransactionTable extends Component {
           onConfirm={() => this.onSelectAccount(this.state.account)}>
 
           <TextField
+            id="Select Account"
             select
             fullWidth
             label={<Trans>Account</Trans>}
@@ -267,7 +268,7 @@ class TransactionTable extends Component {
             onChange={(e) => this.setState({ account: e.target.value })}
           >
             <MenuItem>&nbsp;</MenuItem>
-            {this.props.store.accounts.map(a => <MenuItem value={a.id} key={a.id}>{a.toString()}</MenuItem>)}
+            {this.props.store.accounts.map(a => <MenuItem id={`Account ${a.number}`} value={a.id} key={a.id}>{a.toString()}</MenuItem>)}
           </TextField>
         </Dialog>
       )
