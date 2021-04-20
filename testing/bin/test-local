@@ -11,4 +11,9 @@ export TEST_PASSWORD=pass
 export TEST_EMAIL=user@localhost
 
 cd $ROOT
-robot --outputdir reports --exclude skip tests
+if [ -z "$*" ]; then
+    ARGS=tests
+else
+    ARGS=$*
+fi
+robot --outputdir reports --exclude skip $ARGS
