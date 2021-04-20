@@ -38,10 +38,13 @@ Login As
     Go To                           ${TEST_BASE_URL}/
     Fill in Login                   ${username}     ${password}
 
+Logout
+    Click Element                   Logout
+
 Standard Suite Setup
     Initialize
     Open Browser                    ${TEST_BASE_URL}/      Chrome
 
 Standard Suite Teardown
-    Close Browser
-    #No Operation
+    #Close Browser
+    No Operation
