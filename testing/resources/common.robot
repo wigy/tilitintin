@@ -2,6 +2,7 @@
 Library                             SeleniumLibrary    timeout=5s    implicit_wait=1s
 Library                             OperatingSystem
 Resource                            ./admin/users.robot
+Resource                            ./shared/navigation.robot
 
 *** Variables ***
 
@@ -29,17 +30,6 @@ Initialize
     Log to Console                  Normal user emails is ${TEST_EMAIL}
     ${TEST_PASSWORD}                Get Environment Variable    TEST_PASSWORD
     Set Global Variable             ${TEST_PASSWORD}
-
-Login As Admin
-    Login As                        ${TEST_ADMIN_USER}      ${TEST_ADMIN_PASSWORD}
-
-Login As
-    [Arguments]                     ${username}     ${password}
-    Go To                           ${TEST_BASE_URL}/
-    Fill in Login                   ${username}     ${password}
-
-Logout
-    Click Element                   Logout
 
 Standard Suite Setup
     Initialize

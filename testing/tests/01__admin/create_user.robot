@@ -9,7 +9,7 @@ ${USER_LIST}                        //*[contains(@class, "UserList")]
 
 *** Test Cases ***
 Create New User
-    [tags]                          skipx
+    [tags]                          skip
 # TODO: At the moment we don't care duplicates but we should delete user afterwards.
     Login as Admin
     Click Element                   create-user
