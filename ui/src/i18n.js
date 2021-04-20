@@ -11,6 +11,7 @@ i18n.init({
         'report-income-statement-detailed': 'Detailed income statement',
         'report-income-statement': 'Income statement',
 
+        'icon-add-tx': 'Add new transaction',
         'icon-all-account-types': 'Choose all types',
         'icon-asset': 'Assets',
         'icon-create-period': 'Create new period',
@@ -195,6 +196,7 @@ i18n.init({
         'report-income-statement-detailed': 'Tuloslaskelma tilierittelyin',
         'report-income-statement': 'Tuloslaskelma',
 
+        'icon-add-tx': 'Lisää uusi tapahtuma',
         'icon-hide-details': 'Piilota osatapahtumat',
         'icon-show-details': 'Näytä osatapahtumat',
         'icon-show-all': 'Näytä kaikki',

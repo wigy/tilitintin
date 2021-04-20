@@ -106,6 +106,7 @@ class TransactionToolPanel extends Component {
     }
 
     const hasTags = account && account.tags && account.tags.length > 0
+    const cannotAdd = !this.props.store.period || !!this.props.store.period.locked
     let last = null
 
     return (
@@ -118,6 +119,7 @@ class TransactionToolPanel extends Component {
           <IconButton disabled={!hasTags} onClick={enableAll} title="show-all" icon="show-all" />
           <IconButton disabled={!hasTags} onClick={disableAll} title="hide-all" icon="hide-all" />
           <IconButton onClick={() => this.onDownload(db, periodId, accountId)} title="download-csv" icon="download" />
+          <IconButton disabled={cannotAdd} pressKey="Insert" title="add-tx" icon="add-tx" />
         </div>
 
         <div style={{ marginBottom: '1rem', marginLeft: '1rem', marginRight: '1rem' }}>
