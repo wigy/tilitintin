@@ -114,12 +114,12 @@ class TransactionToolPanel extends Component {
         <Title>{account ? account.toString() : <Trans>No account selected</Trans>}</Title>
 
         <div>
-          <IconButton onClick={openAll} title="show-details" icon="zoom-in" />
-          <IconButton onClick={closeAll} title="hide-details" icon="zoom-out" />
-          <IconButton disabled={!hasTags} onClick={enableAll} title="show-all" icon="show-all" />
-          <IconButton disabled={!hasTags} onClick={disableAll} title="hide-all" icon="hide-all" />
-          <IconButton onClick={() => this.onDownload(db, periodId, accountId)} title="download-csv" icon="download" />
-          <IconButton disabled={cannotAdd} pressKey="Insert" title="add-tx" icon="add-tx" />
+          <IconButton id="Zoom In" onClick={openAll} title="show-details" icon="zoom-in" />
+          <IconButton id="Zoom Out" onClick={closeAll} title="hide-details" icon="zoom-out" />
+          <IconButton id="Show All" disabled={!hasTags} onClick={enableAll} title="show-all" icon="show-all" />
+          <IconButton id="Hide All" disabled={!hasTags} onClick={disableAll} title="hide-all" icon="hide-all" />
+          <IconButton id="Download" onClick={() => this.onDownload(db, periodId, accountId)} title="download-csv" icon="download" />
+          <IconButton id="Add Transaction" disabled={cannotAdd} pressKey="Insert" title="add-tx" icon="add-tx" />
         </div>
 
         <div style={{ marginBottom: '1rem', marginLeft: '1rem', marginRight: '1rem' }}>

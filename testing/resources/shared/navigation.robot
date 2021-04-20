@@ -12,3 +12,6 @@ Login As
 
 Logout
     Click Element                   Logout
+
+Go To Tools
+    Click Element                   Tools

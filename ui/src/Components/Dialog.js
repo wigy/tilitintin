@@ -44,8 +44,8 @@ class TilitinDialog extends Component {
           {children}
         </DialogContent>
         <DialogActions>
-          <Button variant="outlined" onClick={this.keyEscape}><Trans>Cancel</Trans></Button>
-          <Button variant="outlined" onClick={this.keyEnter} disabled={isValid && !isValid()} color="primary"><Trans>Confirm</Trans></Button>
+          <Button id="Cancel" variant="outlined" onClick={this.keyEscape}><Trans>Cancel</Trans></Button>
+          <Button id="OK" variant="outlined" onClick={this.keyEnter} disabled={isValid && !isValid()} color="primary"><Trans>Confirm</Trans></Button>
         </DialogActions>
       </Dialog>
     )

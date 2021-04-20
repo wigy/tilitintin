@@ -215,7 +215,6 @@ class ToolsToolPanel extends Component {
       )
         .then(() => {
           this.setState({ askNew: false })
-          this.props.history.push(`/${this.state.databaseName}/txs/1`)
         })
     }
   }
@@ -258,7 +257,7 @@ class ToolsToolPanel extends Component {
           startDate = moment(store.database.periods[store.database.periods.length - 1].end_date).add(1, 'day').format('YYYY-MM-DD')
           endDate = moment(store.database.periods[store.database.periods.length - 1].end_date).add(1, 'year').format('YYYY-MM-DD')
         } else {
-          startDate =moment().startOf('year').format('YYYY-MM-DD')
+          startDate = moment().startOf('year').format('YYYY-MM-DD')
           endDate = moment().startOf('year').add(1, 'year').add(-1, 'day').format('YYYY-MM-DD')
         }
         break
@@ -268,7 +267,7 @@ class ToolsToolPanel extends Component {
         toRenumber = store.period && !store.period.locked ? store.period.incorrectlyNumberedDocuments : []
         toDelete = store.period && !store.period.locked ? store.period.emptyDocuments : []
         buttons = [
-          <IconButton key="button-new" disabled={!toRenumber.length} onClick={() => this.renumberDocuments(this.props.store.db, this.props.store.periodId)} title="sort-documents" icon="sort-up"></IconButton>,
+          <IconButton key="button-renumber" disabled={!toRenumber.length} onClick={() => this.renumberDocuments(this.props.store.db, this.props.store.periodId)} title="sort-documents" icon="sort-up"></IconButton>,
           <IconButton key="button-clean" disabled={!toDelete.length} onClick={() => this.dropEmptyDocuments(this.props.store.db, this.props.store.periodId)} title="drop-empty-documents" icon="trash"></IconButton>
         ]
         break
@@ -276,10 +275,10 @@ class ToolsToolPanel extends Component {
       default:
         label = 'Database Management'
         buttons.push(
-          <IconButton key="button-new-database" onClick={() => this.setState({ askNew: true })} title="new-database" icon="database"></IconButton>
+          <IconButton id="New Database" key="button-new-database" onClick={() => this.setState({ askNew: true })} title="new-database" icon="database"></IconButton>
         )
         buttons.push(
-          <IconButton key="button-upload" onClick={() => this.setState({ askUpload: true })} title="upload-database" icon="upload"></IconButton>
+          <IconButton if="Upload Database" key="button-upload" onClick={() => this.setState({ askUpload: true })} title="upload-database" icon="upload"></IconButton>
         )
         break
     }
@@ -318,6 +317,7 @@ class ToolsToolPanel extends Component {
           <div>
             <TextField
               fullWidth
+              name="database-name"
               label={<Trans>Database Name</Trans>}
               value={this.state.databaseName}
               onChange={(e) => this.setState({ changed: true, databaseName: e.target.value })}
@@ -331,6 +331,7 @@ class ToolsToolPanel extends Component {
             <br/>
             <TextField
               fullWidth
+              name="company-name"
               label={<Trans>Company Name</Trans>}
               value={this.state.companyName}
               onChange={(e) => this.setState({ changed: true, companyName: e.target.value })}
@@ -340,6 +341,7 @@ class ToolsToolPanel extends Component {
             <br/>
             <TextField
               fullWidth
+              name="company-number"
               label={<Trans>Company Registration Number</Trans>}
               value={this.state.companyCode}
               onChange={(e) => this.setState({ changed: true, companyCode: e.target.value })}
