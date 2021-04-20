@@ -1,6 +1,7 @@
 *** Settings ***
 Library                                 SeleniumLibrary    timeout=5s    implicit_wait=1s
 Library                                 OperatingSystem
+Library                                 ../libraries/date_and_time.py
 Resource                                ./admin/users.robot
 Resource                                ./shared/navigation.robot
 
@@ -13,6 +14,7 @@ ${TEST_USER}                            Not set
 ${TEST_PASSWORD}                        Not set
 ${TEST_DATABASE}                        robot
 ${TEST_COMPANY}                         Robot Oy
+${YEAR}                                 0000
 
 *** Keywords ***
 Initialize
@@ -32,6 +34,8 @@ Initialize
     Log to Console                      Normal user emails is ${TEST_EMAIL}
     ${TEST_PASSWORD}                    Get Environment Variable    TEST_PASSWORD
     Set Global Variable                 ${TEST_PASSWORD}
+    ${YEAR}                             Current Year
+    Set Global Variable                 ${YEAR}
 
 Standard Suite Setup
     Initialize

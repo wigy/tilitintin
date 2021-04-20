@@ -27,16 +27,20 @@ class DatabaseList extends Component {
       <div>
         <Title><Trans>Databases</Trans></Title>
         <List>
-          {this.props.store.dbs.map((db, index) => (
-            <ListItem key={db.name} button selected={current === db.name} onClick={() => this.props.history.push(`/${db.name}`)}>
-              <ListItemAvatar color="primary">
-                <Avatar>{'ABCDEFGHIJKLMNOPQRSTUVWZ'[index]}</Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                primary={db.name}
-              />
-            </ListItem>
-          ))}
+          {this.props.store.dbs.map((db, index) => {
+            const letter = 'ABCDEFGHIJKLMNOPQRSTUVWZ'[index]
+            return (
+              <ListItem id={letter} key={db.name} button selected={current === db.name} onClick={() => this.props.history.push(`/${db.name}`)}>
+                <ListItemAvatar color="primary">
+                  <Avatar>{letter}</Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                  primary={db.name}
+                />
+              </ListItem>
+            )
+          }
+          )}
         </List>
       </div>
     )
