@@ -15,3 +15,6 @@ Logout
 
 Go To Tools
     Click Element                       Tools
+
+Go To Transactions
+    Click Element                       Transactions

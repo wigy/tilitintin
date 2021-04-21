@@ -20,19 +20,20 @@ const BalanceLine = withRouter(inject('cursor')(observer(
 
     return (
       <TableRow
+        className="BalanceLine"
         key={balance.account_id}
         id={balance.getId()}
         hover
         selected={balance.selected}
         onClick={() => onClick(index, balance.getUrl())}
       >
-        <TableCell>
+        <TableCell className="number">
           {balance.account.number}
         </TableCell>
-        <TableCell align="left">
+        <TableCell align="left" className="account">
           {balance.account.name}
         </TableCell>
-        <TableCell align="right">
+        <TableCell align="right" className="balance">
           <Money cents={balance.total} currency="EUR" />
         </TableCell>
       </TableRow>
