@@ -70,7 +70,7 @@ class EntryModel extends NavigationTargetModel {
   }
 
   getId() {
-    return 'Entry' + this.id
+    return 'Entry' + (this.id || 'New')
   }
 
   getObjectType() {

@@ -177,8 +177,9 @@ class TextEdit extends Component {
   }
 
   render() {
+    const className = 'TextEdit' + (this.props.className ? ` ${this.props.className}` : '')
     return (
-      <div className="TextEdit" ref={this.state.ref}>
+      <div className={className} ref={this.state.ref}>
         <TextField
           value={this.state.value}
           error={this.state.error}
@@ -199,6 +200,7 @@ class TextEdit extends Component {
 }
 
 TextEdit.propTypes = {
+  className: PropTypes.string,
   onCancel: PropTypes.func,
   onComplete: PropTypes.func,
   onChange: PropTypes.func,

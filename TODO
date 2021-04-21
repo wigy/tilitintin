@@ -12,3 +12,4 @@ FUTURE FEATURES
 [ ] Automatically added VAT could show reasoning by default in text (VAT 24%).
 [ ] More icons with keyboard shortcuts as hover text.
 [ ] BUG: Insert new tx to empty DB causes crash.
+[ ] BUG: After creating fresh database and viewing it, the first period is not visible.

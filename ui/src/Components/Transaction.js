@@ -147,10 +147,10 @@ class Transaction extends Component {
 
     return (
       <TableRow id={tx.getId()} selected={tx.document.selected} key="title" onClick={() => this.onClick()}>
-        <TableCell>
+        <TableCell className="number">
           {this.props.duplicate ? '' : tx.document.number}
         </TableCell>
-        <TableCell>
+        <TableCell className="date">
           <TransactionDetails
             index={this.props.index}
             field="date"
@@ -165,22 +165,22 @@ class Transaction extends Component {
             }}
           />
         </TableCell>
-        <TableCell>
+        <TableCell className="tags">
           <Tags tags={tx.tags}></Tags>
         </TableCell>
-        <TableCell>
+        <TableCell className="description">
           <Typography color={error ? 'error' : 'inherit'}>
             {tx.description}
             {error && <Error style={{ fontSize: '96%' }}/>}
           </Typography>
         </TableCell>
-        <TableCell align="right">
+        <TableCell className="debit" align="right">
           {tx.debit ? money : ''}
         </TableCell>
-        <TableCell align="right">
+        <TableCell className="credit" align="right">
           {tx.debit ? '' : money}
         </TableCell>
-        <TableCell align="right">
+        <TableCell className="total" align="right">
           {total}
         </TableCell>
       </TableRow>

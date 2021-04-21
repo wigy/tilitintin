@@ -31,7 +31,7 @@ class DocumentModel extends NavigationTargetModel {
   }
 
   getId() {
-    return 'Document' + this.id
+    return 'Document' + (this.id || 'New')
   }
 
   getObjectType() {

@@ -27,6 +27,7 @@ class TransactionDetails extends Component {
 
       return (<TextEdit
         value={target.getEdit(this.props.field)}
+        className={`TransactionDetails ${this.props.field}`}
         target={target}
         validate={value => target.validate(this.props.field, value)}
         proposal={value => target.proposal(this.props.field, value)}
@@ -43,7 +44,8 @@ class TransactionDetails extends Component {
     const row = this.props.cursor.row
     const isSubSelected = target.isSubSelected && target.isSubSelected(column, row)
     const isCurrent = target.account_id && this.props.store.accountId === target.account_id
-    const className = 'hide-overflow ' +
+    const className = 'TransactionDetails hide-overflow ' +
+      (this.props.field + ' ') +
       (isSubSelected ? ' sub-selected' : '') +
       (isCurrent ? ' current' : '') +
       (this.props.className ? ' ' + this.props.className : '')
