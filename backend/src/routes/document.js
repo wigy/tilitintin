@@ -49,8 +49,7 @@ router.post('/',
       return
     }
     const document = { }
-    Object.assign(document, req.body)
-    document.number = number
+    Object.assign(document, req.body, { number })
     return data.createOne(knex.db(req.db), 'document', document)
       .then((data) => res.send(data))
   })
