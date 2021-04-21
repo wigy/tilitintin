@@ -146,7 +146,7 @@ class Transaction extends Component {
     const total = (<Money cents={this.props.total} currency="EUR" />)
 
     return (
-      <TableRow id={tx.getId()} selected={tx.document.selected} key="title" onClick={() => this.onClick()}>
+      <TableRow className="Transaction" id={tx.getId()} selected={tx.document.selected} key="title" onClick={() => this.onClick()}>
         <TableCell className="number">
           {this.props.duplicate ? '' : tx.document.number}
         </TableCell>

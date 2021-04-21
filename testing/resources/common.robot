@@ -4,6 +4,7 @@ Library                                 OperatingSystem
 Library                                 ../libraries/date_and_time.py
 Resource                                ./admin/users.robot
 Resource                                ./shared/navigation.robot
+Resource                                ./user/transactions.robot
 
 *** Variables ***
 
