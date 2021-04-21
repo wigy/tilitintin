@@ -215,7 +215,6 @@ class ToolsToolPanel extends Component {
       )
         .then(() => {
           this.setState({ askNew: false })
-          this.props.history.push(`/${this.state.databaseName}/tools///periods`)
         })
     }
   }
