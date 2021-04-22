@@ -171,7 +171,7 @@ class Menu extends Component {
   renderMenu(entry) {
     return <Button
       key={entry.title}
-      id={entry.title}
+      id={`${entry.title}Menu`}
       className="button"
       disabled={!this.isEnabled(entry)}
       color="primary"

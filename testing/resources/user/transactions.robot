@@ -13,7 +13,7 @@ ${BALANCE_LINE}                         //tr[contains(@class, "BalanceLine")]
 *** Keywords ***
 Select First Period of DB
     [Documentation]                     Got to the home page and select first period of first database.
-    Go To Transactions
+    Go To Dashboard
     Click Element                       A
     Click Element                       1
 

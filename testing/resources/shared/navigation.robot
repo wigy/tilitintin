@@ -11,21 +11,24 @@ Login As
     Return From Keyword If              ${current_user} == ${username}
     Go To                               ${TEST_BASE_URL}/
     Fill in Login                       ${username}     ${password}
-    Wait Until Element is Enabled       id:Home
+    Wait Until Element is Enabled       HomeMenu
     Log to Console                      Logged in as ${username}
 
 Logout
-    Click Element                       Logout
-# TODO: Wait
+    Click Element                       LogoutMenu
+    Wait Until Element is Visible       css:.LoginPage
+
+Go To Dashboard
+    Click Element                       HomeMenu
+    Wait Until Element is Visible       css:.DatabasesPage
 
 Go To Tools
-    Click Element                       Tools
-# TODO: Wait
+    Click Element                       ToolsMenu
+    Wait Until Element is Visible       css:.ToolsForDatabasesPage
 
 Go To Transactions
-    Click Element                       Transactions
-    Wait Until Element is Visible       DatabasesPage
-
+    Click Element                       TransactionsMenu
+    Wait Until Element is Visible       css:.TransactionsPage
 
 Get Currently Logged User
     [Documentation]                     Find out the name of the currently logged user from the JWT token stored to local store.

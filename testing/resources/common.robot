@@ -44,5 +44,5 @@ Standard Suite Setup
     Open Browser                        ${TEST_BASE_URL}/      Chrome
 
 Standard Suite Teardown
-    Close Browser
+    #Close Browser
     No Operation
