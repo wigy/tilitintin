@@ -77,12 +77,12 @@ class Transaction extends Component {
       const vatAccount = store.database.getAccountByNumber(VATAccount)
       if (account.vat_percentage) {
         if (document.entries.filter(e => e.account_id === vatAccount.id).length === 0) {
+          console.log(entry.amount);
           const vatAmount = Math.round(entry.amount - entry.amount / (1 + account.vat_percentage / 100))
+          console.log(vatAmount);
           const vat = new EntryModel(document, {
             id: vatAccount.id,
-            amount: debit
-              ? Math.round(vatAmount)
-              : Math.round(-account.vat_percentage * entry.amount / 100)
+            amount: debit ? vatAmount : -vatAmount
           })
           entry.amount -= vatAmount
           entry.save()
@@ -121,10 +121,20 @@ class Transaction extends Component {
       }
     // Automatically add VAT entry for purchases.
     } else if (column === 2) {
-      checkAndAddVat(this.props.settings.VAT_PURCHASES_ACCOUNT, 1)
+      const document = tx.document
+      const entry = document.entries[row]
+      const account = entry.account
+      if (account.type === 'EXPENSE') {
+        checkAndAddVat(this.props.settings.VAT_PURCHASES_ACCOUNT, 1)
+      }
     // Automatically add VAT entry for sales.
     } else if (column === 3) {
-      checkAndAddVat(this.props.settings.VAT_SALES_ACCOUNT, 0)
+      const document = tx.document
+      const entry = document.entries[row]
+      const account = entry.account
+      if (account.type === 'REVENUE') {
+        checkAndAddVat(this.props.settings.VAT_SALES_ACCOUNT, 0)
+      }
     }
 
     // Move to next cell.
