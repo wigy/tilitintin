@@ -26,7 +26,7 @@ class Menu extends Component {
     {
       title: 'Home',
       shortcut: ' ',
-      disabled: ({ notLoggedIn, isAdmin }) => notLoggedIn || isAdmin,
+      disabled: ({ notLoggedIn }) => notLoggedIn,
       action: () => this.handleSelect('dashboard')
     },
     {
@@ -52,6 +52,12 @@ class Menu extends Component {
       shortcut: 'T',
       disabled: ({ notLoggedIn, isAdmin }) => notLoggedIn || isAdmin,
       action: () => this.handleSelect('tools')
+    },
+    {
+      title: 'Admin',
+      shortcut: 'A',
+      disabled: ({ notLoggedIn, isAdmin }) => notLoggedIn || !isAdmin,
+      action: () => this.handleSelect('admin')
     },
     {
       title: 'Logout',
@@ -107,6 +113,7 @@ class Menu extends Component {
         store.logout()
         history.push('/')
         break
+      case 'admin':
       case 'dashboard':
       case 'txs':
       case 'account':

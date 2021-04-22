@@ -74,6 +74,7 @@ i18n.init({
         'Account scheme': 'Tilikartta',
         'Account type is required.': 'Tilin laji puuttuu.',
         'Account Type': 'Tilin laji',
+        Admin: 'Ylläpito',
         'Transaction key account changed and moved out of this screen.': 'Aktiivinen tili muuttui ja koko tapahtuma siirtyi pois tältä sivulta',
         Account: 'Tili',
         Accounts: 'Tilit',
