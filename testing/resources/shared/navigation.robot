@@ -9,6 +9,7 @@ Login As
     [Arguments]                         ${username}     ${password}
     Go To                               ${TEST_BASE_URL}/
     Fill in Login                       ${username}     ${password}
+    Wait Until Element is Enabled       id:Home
 
 Logout
     Click Element                       Logout

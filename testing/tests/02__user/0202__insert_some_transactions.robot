@@ -6,6 +6,12 @@ Suite Teardown                          Standard Suite Teardown
 *** Test Cases ***
 Create First Few Transactions
     Login as User
+    ${token}     Execute Javascript      return localStorage.getItem('token')
+    Log to Console    TOKEN: ${token}
+
+Create First Few Transactions Real
+    [Tags]      skip
+    Login as User
     Click Element                       A
     Click Element                       1
     Click Element                       Add Transaction
