@@ -17,6 +17,14 @@ Select First Period of DB
     Click Element                       A
     Click Element                       1
 
+Select Account from Balances
+    [Documentation]                     Go to the transactions page and select the given account.
+    [Arguments]                         ${account}
+    Go To Transactions
+    Scroll Element Into View            //tr[contains(@class, "BalanceLine")][./td[contains(@class, "number")][text()="${account}"]]
+    Click Element                       //tr[contains(@class, "BalanceLine")][./td[contains(@class, "number")][text()="${account}"]]
+    Wait Until Page Contains Element    css:.TransactionTable
+
 Fill New 2-Part Income Tx
     [Documentation]                     Assume that we have freshly created transaction that has date field active.
     ...                                 This keyword fills in 2-part transaction with the given details.

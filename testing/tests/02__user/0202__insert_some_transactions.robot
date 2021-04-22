@@ -5,7 +5,7 @@ Suite Teardown                          Standard Suite Teardown
 
 *** Test Cases ***
 Create First Few Transactions
-    [Tags]  skip
+    [Tags]      skip
     Login as User
     Select First Period of DB
     Click Element                       Add Transaction
@@ -22,3 +22,8 @@ Create First Few Transactions
     Ensure Account Balance              2001    -2 500,00€
     Ensure Account Balance              2621    -7 500,00€
     Ensure Account Balance              2622    -6 000,00€
+
+Create More Transactions
+    Login as User
+    Select First Period of DB
+    Select Account from Balances        1900
