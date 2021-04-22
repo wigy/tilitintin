@@ -27,3 +27,5 @@ Create More Transactions
     Login as User
     Select First Period of DB
     Select Account from Balances        1900
+    Click Element                       Add Transaction
+    Fill New 3-Part VAT Expense Tx      16.3.${YEAR}    Buy computer                        300     7680
