@@ -75,7 +75,7 @@ class Login extends Component {
     if (this.state.appState === 'NO_ROOT') {
       return (
         <div>
-          <Title className="LoginPage"><Trans>This system has no admin user</Trans></Title>
+          <Title><Trans>This system has no admin user</Trans></Title>
           <Panel title={<Trans>Please register an admin user</Trans>}>
             <RegisterForm onRegister={onRegisterAdmin}/>
           </Panel>
@@ -86,7 +86,7 @@ class Login extends Component {
     if (this.state.appState === 'NOT_LOGGED_IN') {
       return (
         <div>
-          <Title><Trans>Login to Tilitintin</Trans></Title>
+          <Title className="LoginPage"><Trans>Login to Tilitintin</Trans></Title>
           <LoginForm onLogin={onLogin}/>
         </div>
       )

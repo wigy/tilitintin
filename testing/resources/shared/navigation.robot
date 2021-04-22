@@ -1,4 +1,11 @@
 *** Keywords ***
+Ensure Browser Is Open
+    [Documentation]                     Check if the browser is not open and open it.
+    ${ret}                              Run Keyword And Return Status       Execute Javascript      return 1
+    Return From Keyword If              ${ret}
+    Open Browser                        ${TEST_BASE_URL}/      Chrome
+    Wait Until Element is Visible       css:.logo
+
 Login As Admin
     Login As                            ${TEST_ADMIN_USER}      ${TEST_ADMIN_PASSWORD}
 
@@ -7,15 +14,20 @@ Login As User
 
 Login As
     [Arguments]                         ${username}     ${password}
+    Ensure Browser Is Open
     ${current_user}                     Get Currently Logged User
-    Return From Keyword If              ${current_user} == ${username}
-    Go To                               ${TEST_BASE_URL}/
+    Return From Keyword If              '${current_user}' == '${username}'
+    Go To Login
     Fill in Login                       ${username}     ${password}
     Wait Until Element is Enabled       HomeMenu
     Log to Console                      Logged in as ${username}
 
 Logout
     Click Element                       LogoutMenu
+    Wait Until Element is Visible       css:.LoginPage
+
+Go To Login
+    Go To                               ${TEST_BASE_URL}/
     Wait Until Element is Visible       css:.LoginPage
 
 Go To Dashboard

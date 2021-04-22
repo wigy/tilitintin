@@ -19,7 +19,7 @@ ${TEST_COMPANY}                         Robot Oy
 ${YEAR}                                 0000
 
 *** Keywords ***
-Initialize
+Initialize Variables
     ${TEST_BASE_URL}                    Get Environment Variable    TEST_BASE_URL
     Set Global Variable                 ${TEST_BASE_URL}
     Log to Console                      Base URL is ${TEST_BASE_URL}
@@ -40,9 +40,7 @@ Initialize
     Set Global Variable                 ${YEAR}
 
 Standard Suite Setup
-    Initialize
-    Open Browser                        ${TEST_BASE_URL}/      Chrome
+    Initialize Variables
 
 Standard Suite Teardown
-    #Close Browser
     No Operation

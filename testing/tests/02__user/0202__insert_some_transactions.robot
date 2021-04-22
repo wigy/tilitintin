@@ -5,6 +5,7 @@ Suite Teardown                          Standard Suite Teardown
 
 *** Test Cases ***
 Create First Few Transactions
+    [Tags]  skip
     Login as User
     Select First Period of DB
     Click Element                       Add Transaction
