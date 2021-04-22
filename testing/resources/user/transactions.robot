@@ -11,6 +11,12 @@ ${CURRENTLY_SELECTED_ROW}               //tr[contains(@class, "Transaction")][co
 ${BALANCE_LINE}                         //tr[contains(@class, "BalanceLine")]
 
 *** Keywords ***
+Select First Period of DB
+    [Documentation]                     Got to the home page and select first period of first database.
+    Go To Transactions
+    Click Element                       A
+    Click Element                       1
+
 Fill New 2-Part Income Tx
     [Documentation]                     Assume that we have freshly created transaction that has date field active.
     ...                                 This keyword fills in 2-part transaction with the given details.

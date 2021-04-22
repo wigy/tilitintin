@@ -2,6 +2,7 @@
 Library                                 SeleniumLibrary    timeout=5s    implicit_wait=1s
 Library                                 OperatingSystem
 Library                                 ../libraries/date_and_time.py
+Library                                 ../libraries/security.py
 Resource                                ./admin/users.robot
 Resource                                ./shared/navigation.robot
 Resource                                ./user/transactions.robot
@@ -43,5 +44,5 @@ Standard Suite Setup
     Open Browser                        ${TEST_BASE_URL}/      Chrome
 
 Standard Suite Teardown
-    #Close Browser
+    Close Browser
     No Operation

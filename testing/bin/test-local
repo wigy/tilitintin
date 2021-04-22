@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 FILE=`dirname "${BASH_SOURCE[0]}"`/..
 ROOT=`readlink -f "$FILE"`
 
@@ -9,6 +11,7 @@ export TEST_ADMIN_PASSWORD=pass
 export TEST_USER=test
 export TEST_PASSWORD=pass
 export TEST_EMAIL=user@localhost
+export TEST_SECRET="oGBtRQBWIVUjnqw0nbmvbJ7zsd&67rtyr/r5fyft62"
 
 cd $ROOT
 if [ -z "$*" ]; then

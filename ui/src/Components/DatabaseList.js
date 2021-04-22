@@ -25,7 +25,7 @@ class DatabaseList extends Component {
 
     return (
       <div>
-        <Title><Trans>Databases</Trans></Title>
+        <Title className="DatabasesPage"><Trans>Databases</Trans></Title>
         <List>
           {this.props.store.dbs.map((db, index) => {
             const letter = 'ABCDEFGHIJKLMNOPQRSTUVWZ'[index]

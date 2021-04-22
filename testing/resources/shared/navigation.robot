@@ -7,15 +7,31 @@ Login As User
 
 Login As
     [Arguments]                         ${username}     ${password}
+    ${current_user}                     Get Currently Logged User
+    Return From Keyword If              ${current_user} == ${username}
     Go To                               ${TEST_BASE_URL}/
     Fill in Login                       ${username}     ${password}
     Wait Until Element is Enabled       id:Home
+    Log to Console                      Logged in as ${username}
 
 Logout
     Click Element                       Logout
+# TODO: Wait
 
 Go To Tools
     Click Element                       Tools
+# TODO: Wait
 
 Go To Transactions
     Click Element                       Transactions
+    Wait Until Element is Visible       DatabasesPage
+
+
+Get Currently Logged User
+    [Documentation]                     Find out the name of the currently logged user from the JWT token stored to local store.
+    ${token}                            Execute Javascript      return localStorage.getItem('token')
+    Return From Keyword If              '${token}' == 'None'
+    ${jwt}                              Parse JWT Token         ${token}
+    Return From Keyword If              not ${jwt}
+    Return From Keyword If              not ${jwt}[login]
+    Return From Keyword                 ${jwt}[user]
