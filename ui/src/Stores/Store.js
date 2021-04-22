@@ -783,7 +783,7 @@ class Store {
   addError(text) {
     const id = NEXT_MESSAGE_ID++
     const message = { id, text, type: 'error' }
-    this.messages.push(message)
+    runInAction(() => this.messages.push(message))
     setTimeout(() => this.removeMessage(message), 5000)
   }
 
@@ -794,7 +794,7 @@ class Store {
   addMessage(text) {
     const id = NEXT_MESSAGE_ID++
     const message = { id, text, type: 'info' }
-    this.messages.push(message)
+    runInAction(() => this.messages.push(message))
     setTimeout(() => this.removeMessage(message), 5000)
   }
 
@@ -802,14 +802,14 @@ class Store {
    * Remove a message from the current list.
    */
   removeMessage(message) {
-    this.messages.replace(this.messages.filter(m => m.id !== message.id))
+    runInAction(() => this.messages.replace(this.messages.filter(m => m.id !== message.id)))
   }
 
   /**
    * Remove all messages.
    */
   clearMessages() {
-    this.messages.replace([])
+    runInAction(() => this.messages.replace([]))
   }
 
   /**
