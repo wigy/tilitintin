@@ -13,4 +13,5 @@ FUTURE FEATURES
 [ ] More icons with keyboard shortcuts as hover text (or some other presentation).
 [ ] BUG: Insert new tx to empty DB causes crash.
 [ ] BUG: After creating fresh database and viewing it, the first period is not visible.
-[ ] Purchase VAT should be calculated assuming that total includes VAT.
+[X] Purchase VAT should be calculated assuming that total includes VAT.
+[ ] MobX warnings: Delete entries / documents.

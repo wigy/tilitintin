@@ -77,12 +77,15 @@ class Transaction extends Component {
       const vatAccount = store.database.getAccountByNumber(VATAccount)
       if (account.vat_percentage) {
         if (document.entries.filter(e => e.account_id === vatAccount.id).length === 0) {
+          const vatAmount = Math.round(entry.amount - entry.amount / (1 + account.vat_percentage / 100))
           const vat = new EntryModel(document, {
             id: vatAccount.id,
             amount: debit
-              ? Math.round(account.vat_percentage * entry.amount / 100)
+              ? Math.round(vatAmount)
               : Math.round(-account.vat_percentage * entry.amount / 100)
           })
+          entry.amount -= vatAmount
+          entry.save()
           document.createEntry(vat)
         }
       }
