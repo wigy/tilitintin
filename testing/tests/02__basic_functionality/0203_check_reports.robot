@@ -8,7 +8,7 @@ ${JOURNAL_REPORT}                       SEPARATOR=\n
 ...                                     Päiväkirja                                  Robot Oy        |
 ...                                     23.4.2021                                   12345678-9      |
 ...                                     Nro         Päiväys ja tilit    Debet       Kredit          |
-...                                     /#[0-9]+/   12.03.2021                                      |
+...                                     /#[0-9]+/   12.03.2021          .           .               |
 
 *** Test Cases ***
 Verify That Reports Are Correct
