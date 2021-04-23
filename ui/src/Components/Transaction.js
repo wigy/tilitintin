@@ -67,7 +67,7 @@ class Transaction extends Component {
     }
 
     // Helper to create VAT entry, if needed.
-    const checkAndAddVat = (VATAccount, debit) => {
+    const checkAndAddVat = async (VATAccount, debit) => {
       const document = this.props.tx.document
       const entry = document.entries[row]
       const account = entry.account
@@ -80,11 +80,13 @@ class Transaction extends Component {
           const vatAmount = Math.round(entry.amount - entry.amount / (1 + account.vat_percentage / 100))
           const vat = new EntryModel(document, {
             id: vatAccount.id,
-            amount: debit ? vatAmount : -vatAmount
+            amount: debit ? vatAmount : -vatAmount,
+            description: entry.description
           })
           entry.amount -= vatAmount
-          entry.save()
-          document.createEntry(vat)
+          await entry.save()
+          await document.createEntry(vat)
+          return store.fetchBalances()
         }
       }
     }
@@ -115,6 +117,7 @@ class Transaction extends Component {
               await entry.save()
             }
           }
+          await store.fetchBalances()
         }
       }
     // Automatically add VAT entry for purchases.
@@ -123,7 +126,7 @@ class Transaction extends Component {
       const entry = document.entries[row]
       const account = entry.account
       if (account.type === 'EXPENSE') {
-        checkAndAddVat(this.props.settings.VAT_PURCHASES_ACCOUNT, 1)
+        await checkAndAddVat(this.props.settings.VAT_PURCHASES_ACCOUNT, 1)
       }
     // Automatically add VAT entry for sales.
     } else if (column === 3) {
@@ -131,7 +134,7 @@ class Transaction extends Component {
       const entry = document.entries[row]
       const account = entry.account
       if (account.type === 'REVENUE') {
-        checkAndAddVat(this.props.settings.VAT_SALES_ACCOUNT, 0)
+        await checkAndAddVat(this.props.settings.VAT_SALES_ACCOUNT, 0)
       }
     }
 
