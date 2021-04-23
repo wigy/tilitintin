@@ -18,7 +18,7 @@ def report_should_match(report, format):
             sys.stderr.write('DEBUG[%d]: %r\n' % (i, args[i]))
 
     def error(report, format, msg = 'Report does not match to format.'):
-        format = '\t' + format.replace('\n', '\t').replace('|', '|\n')
+        format = repr(format)
         raise Exception('%s\nFormat:\n%s\nReport:\n%s\n\n' % (msg, format, report))
 
     def compare_item(report, format):
@@ -36,7 +36,7 @@ def report_should_match(report, format):
     def compare_line(report, format):
         format = format.strip().split('\n')
         if len(report) != len(format):
-            error(report, '\n'.join(format) + '|', 'Report line has different length than format.')
+            error(report, format, 'Report line has different length than format.')
         for i in range(len(report)):
             compare_item(report[i], format[i])
 
