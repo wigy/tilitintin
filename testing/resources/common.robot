@@ -3,6 +3,7 @@ Library                                 SeleniumLibrary    timeout=5s    implici
 Library                                 OperatingSystem
 Library                                 ../libraries/date_and_time.py
 Library                                 ../libraries/security.py
+Library                                 ../libraries/report_parsing.py
 Resource                                ./admin/users.robot
 Resource                                ./shared/navigation.robot
 Resource                                ./user/transactions.robot

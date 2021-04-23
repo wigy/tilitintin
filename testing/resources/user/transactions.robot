@@ -139,6 +139,7 @@ Fill New 3-Part VAT Income Tx
     Press Keys                          None    ESC
     Wait Until Page Does Not Contain Element    ${CURRENTLY_SELECTED_ROW}
 
+# TODO: Rename Account Balance Should Be
 Ensure Account Balance
     [Documentation]                     This function assumest that we are on transaction page.
     ...                                 Check that we have correct balance for the given account.
