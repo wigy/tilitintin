@@ -7,12 +7,12 @@ ${COLLECT_REPORT_JS}                    SEPARATOR=\n
 ...      while (true) {
 ...        const line = report.iterateNext();
 ...        if (!line) break;
-...        const texts = [];
+...        let texts = [];
 ...        const cells = document.evaluate('./td', line, null, XPathResult.ANY_TYPE, null);
 ...        while (true) {
 ...          const cell = cells.iterateNext();
 ...          if (!cell) break;
-...          texts.push(cell.innerText.trim());
+...          texts = texts.concat(cell.innerText.trim().split('\\n'));
 ...        }
 ...        result.push(texts);
 ...      }
