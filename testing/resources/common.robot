@@ -6,6 +6,7 @@ Library                                 ../libraries/security.py
 Resource                                ./admin/users.robot
 Resource                                ./shared/navigation.robot
 Resource                                ./user/transactions.robot
+Resource                                ./user/reports.robot
 
 *** Variables ***
 

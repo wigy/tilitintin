@@ -34,13 +34,17 @@ Go To Dashboard
     Click Element                       HomeMenu
     Wait Until Element is Visible       css:.DatabasesPage
 
-Go To Tools
-    Click Element                       ToolsMenu
-    Wait Until Element is Visible       css:.ToolsForDatabasesPage
-
 Go To Transactions
     Click Element                       TransactionsMenu
     Wait Until Element is Visible       css:.TransactionsPage
+
+Go To Reports
+    Click Element                       ReportsMenu
+    Wait Until Element is Visible       css:.ReportsPage
+
+Go To Tools
+    Click Element                       ToolsMenu
+    Wait Until Element is Visible       css:.ToolsForDatabasesPage
 
 Get Currently Logged User
     [Documentation]                     Find out the name of the currently logged user from the JWT token stored to local store.

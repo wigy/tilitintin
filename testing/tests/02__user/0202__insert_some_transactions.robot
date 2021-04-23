@@ -5,7 +5,6 @@ Suite Teardown                          Standard Suite Teardown
 
 *** Test Cases ***
 Create First Few Transactions
-    [Tags]      skip
     Login as User
     Select First Period of DB
     Click Element                       Add Transaction
@@ -23,9 +22,24 @@ Create First Few Transactions
     Ensure Account Balance              2621    -7 500,00€
     Ensure Account Balance              2622    -6 000,00€
 
-Create More Transactions
+Create Some VAT Transactions
     Login as User
     Select First Period of DB
     Select Account from Balances        1900
     Click Element                       Add Transaction
     Fill New 3-Part VAT Expense Tx      16.3.${YEAR}    Buy computer                        300     7680
+    Click Element                       Add Transaction
+    Fill New 3-Part VAT Expense Tx      16.3.${YEAR}    Buy mouse                           10      7680
+    Click Element                       Add Transaction
+    Fill New 3-Part VAT Income Tx       16.3.${YEAR}   Sell 1h consultation                 100     3000
+    Click Element                       Add Transaction
+    Fill New 3-Part VAT Income Tx       16.3.${YEAR}   Sell 2h consultation                 200     3010
+    Ensure Account Balance              1900    15 990,00€
+    Ensure Account Balance              2001    -2 500,00€
+    Ensure Account Balance              2621    -7 500,00€
+    Ensure Account Balance              2622    -6 000,00€
+    Ensure Account Balance              29391   -58,06€
+    Ensure Account Balance              29392   60,00€
+    Ensure Account Balance              7680    250,00€
+    Ensure Account Balance              3000    -80,65€
+    Ensure Account Balance              3010    -161,29€
