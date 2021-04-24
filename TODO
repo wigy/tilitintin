@@ -14,6 +14,6 @@ FUTURE FEATURES
 [ ] BUG: Insert new tx to empty DB causes crash.
 [ ] BUG: After creating fresh database and viewing it, the first period is not visible.
 [X] Purchase VAT should be calculated assuming that total includes VAT.
-[ ] MobX warnings: Delete entries / documents.
+[X] MobX warnings: Delete entries / documents.
 [X] BUG: Incorrect balances without refresh after adding automated VAT.
 [ ] BUG: Deleting documents seems to screw up cursor position.

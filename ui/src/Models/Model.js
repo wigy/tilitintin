@@ -1,4 +1,4 @@
-import { extendObservable } from 'mobx'
+import { extendObservable, runInAction } from 'mobx'
 
 class Model {
 
@@ -110,11 +110,13 @@ class Model {
    */
   async change(field, value) {
     const name = `change.${field}`
-    if (name in this) {
-      this[name](value)
-      return
-    }
-    this[field] = value
+    runInAction(() => {
+      if (name in this) {
+        this[name](value)
+      } else {
+        this[field] = value
+      }
+    })
   }
 
   /**
