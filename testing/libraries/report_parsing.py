@@ -40,10 +40,20 @@ def report_should_match(report, format):
         for i in range(len(report)):
             compare_item(report[i], format[i])
 
+    def is_finished(report):
+        if len(report):
+            error(report, 'END', 'Extra lines in the end of the report.')
+
     def compare_report(report, format):
         i = 0
         for line in format.split('|'):
-            # Once format is finished, we don't care the rest.
+            # If END, then verify that report is finished.
+            if line.strip() == 'END':
+                is_finished(report[i:])
+                break
+            if i >= len(report):
+                error([], line, 'Report does not have enough lines.')
+            # Once format is finished without END, we don't care the rest.
             if line == '':
                 break
             compare_line(report[i], line)
