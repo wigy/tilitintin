@@ -39,6 +39,6 @@ The format is split to lines is split from `|` and then to cells from multiple s
 Each cell is compared to the content found from the report table. By default they are
 compared as exact matching strings. Few special notations are used:
 
-* `/regex/` - If string starts and ends with `/` it is used as regex and matched against the cell content.
+* `/regex/` - If string starts and ends with `/` it is used as regex and matched against the cell content. Use `\\` for `\`.
 * `.` - A single dot can be used to denote empty cell.
 * `END` - By default report can have extra lines. If `END` is given as the last line, the report must have no extra lines.

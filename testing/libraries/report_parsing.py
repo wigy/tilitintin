@@ -44,9 +44,11 @@ def report_should_match(report, format):
         if len(report):
             error(report, 'END', 'Extra lines in the end of the report.')
 
-    def compare_report(report, format):
+    def compare_report(report, format, debug_lines=False):
         i = 0
         for line in format.split('|'):
+            if debug_lines:
+                debug(line)
             # If END, then verify that report is finished.
             if line.strip() == 'END':
                 is_finished(report[i:])
@@ -59,6 +61,9 @@ def report_should_match(report, format):
             compare_line(report[i], line)
             i += 1
 
-    report = json.loads(report.replace("'", '"')) # Convert test string. Not needed normally?
+    # Allow quick testing from string copy pasted from console.
+    if type(report) == str:
+        report = json.loads(report.replace("'", '"'))
+
     compare_report(report, format)
     return True

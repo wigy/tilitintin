@@ -5,8 +5,8 @@ Suite Teardown                          Standard Suite Teardown
 
 *** Variables ***
 ${JOURNAL_REPORT}      SEPARATOR=\n
-...     Päiväkirja                                                                                       Robot Oy       |
-...     23.4.2021                                                                                        12345678-9     |
+...     Päiväkirja                                                                                      Robot Oy        |
+...     /\\d+\\.\\d+\\.\\d+/                                                                            12345678-9      |
 ...     Nro          Päiväys ja tilit                                                       Debet       Kredit          |
 ...     /#[0-9]+/    12.03.2021                                                             .           .               |
 ...     .            1900 Käteisvarat: Deposit of the company capital	                    2 500,00€	–               |
@@ -37,12 +37,13 @@ ${JOURNAL_REPORT}      SEPARATOR=\n
 
 *** Test Cases ***
 Verify That Reports Are Correct
-    #Login as User
-    #Select First Period of DB
-    #Select Report                       general-journal
+    Login as User
+    Select First Period of DB
+    Select Report                       general-journal
     ${data}                             Gather Report Data
     Report Should Match                 ${data}     ${JOURNAL_REPORT}
-#general-journal
+
+# TODO: Report checks for:
 #general-ledger
 #balance-sheet
 #balance-sheet-detailed
