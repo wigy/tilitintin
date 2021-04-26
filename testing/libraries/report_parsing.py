@@ -46,7 +46,8 @@ def report_should_match(report, format):
 
     def compare_report(report, format, debug_lines=False):
         i = 0
-        for line in format.split('|'):
+        lines = format.split('|')
+        for line in lines:
             if debug_lines:
                 debug(line)
             # If END, then verify that report is finished.
@@ -54,6 +55,9 @@ def report_should_match(report, format):
                 is_finished(report[i:])
                 break
             if i >= len(report):
+                # Check the case where we have just one empty line remaining.
+                if i == len(lines) - 1 and lines[i].strip() == '':
+                    break
                 error([], line, 'Report does not have enough lines.')
             # Once format is finished without END, we don't care the rest.
             if line == '':
