@@ -67,6 +67,7 @@ class ReportDisplay extends Component {
               {report.data.map((line, idx) => <ReportLine key={idx} line={line} columns={report.columns}></ReportLine>)}
             </TableBody>
           </Table>
+          <div className={`EndOfReport ${report.format}`} />
         </TableContainer>
       </div>
     )
