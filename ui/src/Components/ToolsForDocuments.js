@@ -11,7 +11,7 @@ import SubPanel from './SubPanel'
 @withTranslation('translations')
 @inject('store')
 @observer
-class ToolsForPeriods extends Component {
+class ToolsForDocuments extends Component {
 
   render() {
 
@@ -28,7 +28,7 @@ class ToolsForPeriods extends Component {
     return (
       <div>
         <Title><Trans>Documents that need renumbering</Trans></Title>
-        <SubPanel>
+        <SubPanel className="NeedRenumbering">
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', marginBottom: '1rem', padding: '1rem' }}>
             {
               toRenumber.length
@@ -44,7 +44,7 @@ class ToolsForPeriods extends Component {
           </div>
         </SubPanel>
         <Title><Trans>Documents having no entries</Trans></Title>
-        <SubPanel>
+        <SubPanel className="EmptyDocuments">
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', marginBottom: '1rem', padding: '1rem' }}>
             {
               toDelete.length
@@ -64,9 +64,9 @@ class ToolsForPeriods extends Component {
   }
 }
 
-ToolsForPeriods.propTypes = {
+ToolsForDocuments.propTypes = {
   db: PropTypes.string,
   periodId: PropTypes.string,
   store: PropTypes.instanceOf(Store)
 }
-export default ToolsForPeriods
+export default ToolsForDocuments

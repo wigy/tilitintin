@@ -35,7 +35,7 @@ class ToolsForDatabases extends Component {
               <CardContent>
               </CardContent>
               <CardActions>
-                <Button variant="outlined" color="primary" size="small" onClick={() => goto(db)}><Trans>View</Trans></Button>
+                <Button className="ViewDatabase" variant="outlined" color="primary" size="small" onClick={() => goto(db)}><Trans>View</Trans></Button>
               </CardActions>
             </Card>
           ))}

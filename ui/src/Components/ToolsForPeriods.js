@@ -50,7 +50,7 @@ class ToolsForPeriods extends Component {
           </TableHead>
           <TableBody>
             {this.props.store.database.periods.reverse().map((period) => (
-              <TableRow key={period.id}>
+              <TableRow id={`Period ${period.start_date}`} key={period.id}>
                 <TableCell>{period.id}</TableCell>
                 <TableCell><Localize date={period.start_date} /></TableCell>
                 <TableCell><Localize date={period.end_date} /></TableCell>
@@ -58,8 +58,8 @@ class ToolsForPeriods extends Component {
                   <Locked lock={!!period.locked} />
                 </TableCell>
                 <TableCell>
-                  <IconButton toggle={!!period.locked} onClick={() => period.lock()} title="lock-period" icon="lock"></IconButton>
-                  <IconButton toggle={!period.locked} onClick={() => period.unlock()} title="unlock-period" icon="unlock"></IconButton>
+                  <IconButton className="LockPeriod" toggle={!!period.locked} onClick={() => period.lock()} title="lock-period" icon="lock"></IconButton>
+                  <IconButton className="UnlockPeriod" toggle={!period.locked} onClick={() => period.unlock()} title="unlock-period" icon="unlock"></IconButton>
                 </TableCell>
                 <TableCell>
                   <Button variant="outlined" color="primary" size="small" onClick={() => goto(period)}><Trans>View</Trans></Button>
