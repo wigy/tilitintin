@@ -17,4 +17,4 @@ FUTURE FEATURES
 [X] MobX warnings: Delete entries / documents.
 [X] BUG: Incorrect balances without refresh after adding automated VAT.
 [ ] BUG: Deleting documents seems to screw up cursor position.
-[ ] Fix i18n warning.
+[X] Fix i18n warning.

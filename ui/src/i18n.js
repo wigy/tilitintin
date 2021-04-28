@@ -265,7 +265,7 @@ i18n.init({
   },
 
   react: {
-    wait: true
+    useSuspense: true
   }
 })
 
