@@ -1,9 +1,8 @@
-const paths = require('./paths');
+const paths = require('./paths')
 
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { DefinePlugin } = require('webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { DefinePlugin } = require('webpack')
 
 module.exports = {
   // Where webpack looks to start building the bundle
@@ -74,10 +73,30 @@ module.exports = {
       cacheGroups: {
         vendor: {
           test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
+          name: 'vendor',
+          chunks: 'all',
+        },
+        plugin: {
+          test: /[\\/]src[\\/]Plugins/,
+          name: 'plugin',
+          chunks: 'all',
+        },
+        components: {
+          test: /[\\/]src[\\/]Components/,
+          name: 'components',
+          chunks: 'all',
+        },
+        models: {
+          test: /[\\/]src[\\/]Models/,
+          name: 'models',
+          chunks: 'all',
+        },
+        stores: {
+          test: /[\\/]src[\\/]Stores/,
+          name: 'stores',
           chunks: 'all',
         },
       },
     },
   }
-};
+}
