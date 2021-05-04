@@ -61,6 +61,11 @@ In UI you can do filtering using the categories defined.
 
 ## Version History
 
+### 2.2
+  * Editable VAT for accounts.
+  * Show VAT when creating automatically line for it.
+  * Clean up MobX and i18n warnings.
+
 ### 2.1
   * Updated Webpack.
   * Updated Mobx.
