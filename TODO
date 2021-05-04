@@ -11,9 +11,9 @@ FUTURE FEATURES
 [X] MobX warnings: Delete entries / documents.
 [X] BUG: Incorrect balances without refresh after adding automated VAT.
 [X] Fix i18n warning.
+[X] VAT percentage for account editor.
 
 [ ] Improve looks for cell cursor.
-[ ] VAT percentage for account editor.
 [ ] Automatically added VAT could show reasoning by default in text (VAT 24%).
 [ ] More icons with keyboard shortcuts as hover text (or some other presentation).
 [ ] BUG: Insert new tx to empty DB causes crash.

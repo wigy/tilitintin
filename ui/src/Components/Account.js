@@ -26,7 +26,8 @@ class Account extends Component {
     new: null,
     accountName: '',
     accountNumber: '',
-    accountType: ''
+    accountType: '',
+    accountVAT: ''
   };
 
   componentDidMount() {
@@ -49,7 +50,8 @@ class Account extends Component {
       model = new AccountModel(this.props.store.database, {
         name: this.state.accountName,
         number: this.state.accountNumber,
-        type: this.state.accountType
+        type: this.state.accountType,
+        vat_percentage: this.state.accountVAT
       })
     } else {
       runInAction(() => {
@@ -57,11 +59,12 @@ class Account extends Component {
         model.name = this.state.accountName
         model.number = this.state.accountNumber
         model.type = this.state.accountType
+        model.vat_percentage = this.state.accountVAT
       })
     }
     model.save()
       .then(() => {
-        this.setState({ editDialogIsOpen: false, accountName: '', accountNumber: '', accountType: '' })
+        this.setState({ editDialogIsOpen: false, accountName: '', accountNumber: '', accountType: '', accountVAT: '' })
         this.props.store.fetchAccounts(this.props.store.database.name)
       })
   }
@@ -134,6 +137,12 @@ class Account extends Component {
           <MenuItem>&nbsp;</MenuItem>
           {['ASSET', 'LIABILITY', 'EQUITY', 'REVENUE', 'EXPENSE'].map(o => <MenuItem value={o} key={o}>{t(o)}</MenuItem>)}
         </TextField>
+        <TextField
+          fullWidth
+          label={<Trans>VAT %</Trans>}
+          value={this.state.accountVAT}
+          onChange={(e) => this.setState({ changed: true, accountVAT: e.target.value })}
+        />
       </form>
     </Dialog>
   }
@@ -153,7 +162,8 @@ class Account extends Component {
       changed: false,
       accountName: '',
       accountNumber: number,
-      accountType: ''
+      accountType: '',
+      accountVAT: ''
     })
   }
 
@@ -165,7 +175,8 @@ class Account extends Component {
       changed: false,
       accountName: account.name,
       accountNumber: account.number,
-      accountType: account.type
+      accountType: account.type,
+      accountVAT: account.vat_percentage
     })
   }
 
@@ -198,6 +209,7 @@ class Account extends Component {
             <Labeled title={<Trans>Account Name</Trans>}>{account.name}</Labeled>
             <Labeled title={<Trans>Account Number</Trans>}>{account.number}</Labeled>
             <Labeled title={<Trans>Account Type</Trans>}><Trans>{account.type}</Trans></Labeled>
+            {account.vat_percentage ? <Labeled title={<Trans>Account VAT</Trans>}>{account.vat_percentage}%</Labeled> : ''}
             <br/>
             <br/>
             <Button variant="outlined" color="secondary" disabled={!this.canChange()} onClick={() => this.setState({ deleteIsOpen: true })}><Trans>Delete Account</Trans></Button>
