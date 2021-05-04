@@ -24,7 +24,8 @@ import { TableContainer, Table, TableHead, TableCell, TableRow, TableBody, Typog
 class TransactionTable extends Component {
 
   state = {
-    showAccountDropdown: false
+    showAccountDropdown: false,
+    account: ''
   };
 
   // Store for transaction waiting for deletion confirmation.
@@ -267,7 +268,7 @@ class TransactionTable extends Component {
             value={this.state.account}
             onChange={(e) => this.setState({ account: e.target.value })}
           >
-            <MenuItem>&nbsp;</MenuItem>
+            <MenuItem value=''>&nbsp;</MenuItem>
             {this.props.store.accounts.map(a => <MenuItem id={`Account ${a.number}`} value={a.id} key={a.id}>{a.toString()}</MenuItem>)}
           </TextField>
         </Dialog>
