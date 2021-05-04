@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
-import { action } from 'mobx'
+import { action, runInAction } from 'mobx'
 import { withTranslation, Trans } from 'react-i18next'
 import Dialog from './Dialog'
 import Money from './Money'
@@ -77,15 +77,18 @@ class Transaction extends Component {
       const vatAccount = store.database.getAccountByNumber(VATAccount)
       if (account.vat_percentage) {
         if (document.entries.filter(e => e.account_id === vatAccount.id).length === 0) {
-          const vatAmount = Math.round(entry.amount - entry.amount / (1 + account.vat_percentage / 100))
-          const vat = new EntryModel(document, {
-            id: vatAccount.id,
-            amount: debit ? vatAmount : -vatAmount,
-            description: entry.description
+          runInAction(async () => {
+            const vatAmount = Math.round(entry.amount - entry.amount / (1 + account.vat_percentage / 100))
+            const text = `${this.props.t('VAT')} ${account.vat_percentage}%`
+            const vat = new EntryModel(document, {
+              id: vatAccount.id,
+              amount: debit ? vatAmount : -vatAmount,
+              description: `${entry.description} ${text}`.trim()
+            })
+            entry.amount -= vatAmount
+            await entry.save()
+            await document.createEntry(vat)
           })
-          entry.amount -= vatAmount
-          await entry.save()
-          await document.createEntry(vat)
           return store.fetchBalances()
         }
       }
