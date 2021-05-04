@@ -1,4 +1,4 @@
-import { computed, makeObservable, observable } from 'mobx'
+import { computed, makeObservable, observable, runInAction } from 'mobx'
 import ReportModel from './ReportModel'
 import DocumentModel from './DocumentModel'
 import Model from './Model'
@@ -75,11 +75,13 @@ class PeriodModel extends Model {
    * @param {DocumentModel} doc
    */
   addDocument(doc) {
-    doc.parent = this
-    doc.period_id = this.id
-    this.documents[doc.id] = doc
-    doc.entries.forEach((entry) => {
-      this.addEntry(entry)
+    runInAction(() => {
+      doc.parent = this
+      doc.period_id = this.id
+      this.documents[doc.id] = doc
+      doc.entries.forEach((entry) => {
+        this.addEntry(entry)
+      })
     })
   }
 
@@ -91,8 +93,10 @@ class PeriodModel extends Model {
     if (!entry.document || !entry.document.id || !entry.account_id) {
       return
     }
-    this.documentsByAccountId[entry.account_id] = this.documentsByAccountId[entry.account_id] || new Set()
-    this.documentsByAccountId[entry.account_id].add(entry.document.id)
+    runInAction(() => {
+      this.documentsByAccountId[entry.account_id] = this.documentsByAccountId[entry.account_id] || new Set()
+      this.documentsByAccountId[entry.account_id].add(entry.document.id)
+    })
   }
 
   /**
@@ -100,12 +104,14 @@ class PeriodModel extends Model {
    * @param {DocumentModel} doc
    */
   deleteDocument(doc) {
-    doc.entries.forEach((entry) => {
-      if (this.documentsByAccountId[entry.account_id]) {
-        this.documentsByAccountId[entry.account_id].delete(doc.id)
-      }
+    runInAction(() => {
+      doc.entries.forEach((entry) => {
+        if (this.documentsByAccountId[entry.account_id]) {
+          this.documentsByAccountId[entry.account_id].delete(doc.id)
+        }
+      })
+      delete this.documents[doc.id]
     })
-    delete this.documents[doc.id]
   }
 
   /**
@@ -113,11 +119,13 @@ class PeriodModel extends Model {
    * @param {EntryModel} entry
    */
   deleteEntry(entry) {
-    if (entry.account_id) {
-      for (const docId of this.documentsByAccountId[entry.account_id]) {
-        this.getDocument(docId).deleteEntry(entry)
+    runInAction(() => {
+      if (entry.account_id) {
+        for (const docId of this.documentsByAccountId[entry.account_id]) {
+          this.getDocument(docId).deleteEntry(entry)
+        }
       }
-    }
+    })
   }
 
   /**
