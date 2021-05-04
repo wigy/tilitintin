@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
-import { action } from 'mobx'
+import { action, runInAction } from 'mobx'
 import { Trans, withTranslation } from 'react-i18next'
 import Store from '../Stores/Store'
 import AccountModel from '../Models/AccountModel'
@@ -52,10 +52,12 @@ class Account extends Component {
         type: this.state.accountType
       })
     } else {
-      model = this.props.store.account
-      model.name = this.state.accountName
-      model.number = this.state.accountNumber
-      model.type = this.state.accountType
+      runInAction(() => {
+        model = this.props.store.account
+        model.name = this.state.accountName
+        model.number = this.state.accountNumber
+        model.type = this.state.accountType
+      })
     }
     model.save()
       .then(() => {

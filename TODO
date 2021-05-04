@@ -7,14 +7,15 @@ FUTURE FEATURES
 ===============
 
 2.2
+[X] Purchase VAT should be calculated assuming that total includes VAT.
+[X] MobX warnings: Delete entries / documents.
+[X] BUG: Incorrect balances without refresh after adding automated VAT.
+[X] Fix i18n warning.
+
 [ ] Improve looks for cell cursor.
 [ ] VAT percentage for account editor.
 [ ] Automatically added VAT could show reasoning by default in text (VAT 24%).
 [ ] More icons with keyboard shortcuts as hover text (or some other presentation).
 [ ] BUG: Insert new tx to empty DB causes crash.
 [ ] BUG: After creating fresh database and viewing it, the first period is not visible.
-[X] Purchase VAT should be calculated assuming that total includes VAT.
-[X] MobX warnings: Delete entries / documents.
-[X] BUG: Incorrect balances without refresh after adding automated VAT.
 [ ] BUG: Deleting documents seems to screw up cursor position.
-[X] Fix i18n warning.
