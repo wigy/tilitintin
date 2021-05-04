@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { action } from 'mobx'
+import { action, runInAction } from 'mobx'
 import { inject, observer } from 'mobx-react'
 import { Trans, withTranslation } from 'react-i18next'
 import { withRouter } from 'react-router-dom'
@@ -166,12 +166,14 @@ class ToolsToolPanel extends Component {
    */
   @action.bound
   async renumberDocuments(db, periodId) {
-    const toRenumber = this.props.store.period.incorrectlyNumberedDocuments
-    for (const change of toRenumber) {
-      const doc = this.props.store.period.getDocument(change.id)
-      doc.number = change.newNumber
-      await doc.save()
-    }
+    runInAction(async () => {
+      const toRenumber = this.props.store.period.incorrectlyNumberedDocuments
+      for (const change of toRenumber) {
+        const doc = this.props.store.period.getDocument(change.id)
+        doc.number = change.newNumber
+        await doc.save()
+      }
+    })
   }
 
   /**
@@ -179,11 +181,13 @@ class ToolsToolPanel extends Component {
    */
   @action.bound
   async dropEmptyDocuments(db, periodId) {
-    const { period } = this.props.store
-    const toDrop = period.emptyDocuments
-    for (const doc of toDrop) {
-      await this.props.store.deleteDocument(doc)
-    }
+    runInAction(async () => {
+      const { period } = this.props.store
+      const toDrop = period.emptyDocuments
+      for (const doc of toDrop) {
+        await this.props.store.deleteDocument(doc)
+      }
+    })
   }
 
   /**
