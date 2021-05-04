@@ -1,4 +1,4 @@
-import { observable, action, makeObservable } from 'mobx'
+import { observable, action, makeObservable, runInAction } from 'mobx'
 import TopologyComponent from './TopologyComponent'
 import EntryModel from '../Models/EntryModel'
 
@@ -527,12 +527,14 @@ class Cursor {
    keyEnter() {
      const model = this.getModel()
      if (model && model.geometry()) {
-       model.toggleOpen()
-       if (!model.open) {
-         this.column = null
-         this.row = null
-         this.getComponent().moveBox(null, null)
-       }
+       runInAction(() => {
+         model.toggleOpen()
+         if (!model.open) {
+           this.column = null
+           this.row = null
+           this.getComponent().moveBox(null, null)
+         }
+       })
        return { preventDefault: true }
      }
    }
