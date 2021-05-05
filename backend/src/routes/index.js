@@ -5,8 +5,8 @@ const config = require('../config')
 const knex = require('../lib/knex')
 const users = require('../lib/users')
 const { getToken, checkToken, checkAdminToken } = require('../lib/middleware')
-const tags = require('libfyffe').data.tilitintin.tags
-const data = require('libfyffe').data.tilitintin.data
+const tags = require('../lib/tags')
+const data = require('../lib/data')
 
 /**
  * Authenticate against fixed credentials and construct a token.

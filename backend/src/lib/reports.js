@@ -1,6 +1,6 @@
 const moment = require('moment')
 const knex = require('./knex')
-const tags = require('libfyffe').data.tilitintin.tags
+const tags = require('./tags')
 const settings = require('./settings')
 
 /**

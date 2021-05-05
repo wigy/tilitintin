@@ -7,8 +7,8 @@ const multer = require('multer')
 const config = require('../config')
 const knex = require('../lib/knex')
 const { checkToken } = require('../lib/middleware')
-const { dateToDb } = require('libfyffe').data.tilitintin.utils
-const { empty } = require('libfyffe').data.tilitintin.db
+const { dateToDb } = require('../lib/utils')
+const { empty } = require('../lib/db')
 
 router.post('/',
   checkToken,

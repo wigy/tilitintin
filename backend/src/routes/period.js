@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const data = require('libfyffe').data.tilitintin.data
+const data = require('../lib/data')
 const knex = require('../lib/knex')
 
 router.get('/',

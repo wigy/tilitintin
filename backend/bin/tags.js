@@ -2,7 +2,7 @@
 const promiseSeq = require('promise-sequential');
 const path = require('path');
 const fs = require('fs');
-const tags = require('libfyffe').data.tilitintin.tags;
+const tags = require('../src/lib/tags');
 const knex = require('../src/lib/knex');
 const { util: { cli } } = require('libfyffe');
 const USER = process.env.FYFFE_USER || 'user';
