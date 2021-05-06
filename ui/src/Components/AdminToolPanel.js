@@ -34,33 +34,40 @@ class AdminToolPanel extends Component {
   }
 
   render() {
-    const { store } = this.props
+    const { store, match } = this.props
+
     if (!store.token) {
       return ''
     }
 
-    return (
-      <div className="ToolPanel AdminToolPanel">
-        <Title><Trans>Admin Tools</Trans></Title>
-        <IconButton id="create-user" disabled={this.state.showCreateUserDialog} onClick={() => this.onCreateUser()} title="create-user" icon="user-plus"></IconButton>
-        <Dialog noActions
-          title={<Trans>Create User</Trans>}
-          isVisible={this.state.showCreateUserDialog}
-          onClose={() => this.setState({ showCreateUserDialog: false })}
-          wider
-        >
-          <RegisterForm
-            onCancel={() => this.setState({ showCreateUserDialog: false })}
-            onRegister={({ user, name, password, email }) => this.onRegister({ user, name, password, email })}
-            />
-        </Dialog>
-      </div>
-    )
+    if (match.params && match.params.tool === 'users') {
+      return (
+        <div className="ToolPanel AdminToolPanel">
+          <Title><Trans>User Tools</Trans></Title>
+          <IconButton id="create-user" disabled={this.state.showCreateUserDialog} onClick={() => this.onCreateUser()} title="create-user" icon="user-plus"></IconButton>
+          <Dialog noActions
+            title={<Trans>Create User</Trans>}
+            isVisible={this.state.showCreateUserDialog}
+            onClose={() => this.setState({ showCreateUserDialog: false })}
+            wider
+          >
+            <RegisterForm
+              onCancel={() => this.setState({ showCreateUserDialog: false })}
+              onRegister={({ user, name, password, email }) => this.onRegister({ user, name, password, email })}
+              />
+          </Dialog>
+        </div>
+      )
+    }
+
+    return <Title><Trans>No Tools</Trans></Title>
   }
 }
 
 AdminToolPanel.propTypes = {
   cursor: PropTypes.instanceOf(Cursor),
+  location: PropTypes.object,
+  match: PropTypes.object,
   store: PropTypes.instanceOf(Store),
   t: PropTypes.func
 }

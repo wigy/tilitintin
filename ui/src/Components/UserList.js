@@ -30,20 +30,20 @@ class ToolsList extends Component {
   }
 
   onClickUser(user) {
-    this.props.history.push(`/_/admin/${user.user}`)
+    this.props.history.push(`/_/admin///users?user=${user.user}`)
   }
 
   render() {
-    const { store, current } = this.props
+    const { store, location } = this.props
     if (!store.token) {
       return ''
     }
-
+    const current = new URLSearchParams(location.search).get('user')
     return (
       <div>
         <List className="UserList">
           {this.state.users.map((user) => (
-            <ListItem key={user.user} button selected={current && current.user === user.user} onClick={() => this.onClickUser(user)}>
+            <ListItem key={user.user} button selected={current === user.user} onClick={() => this.onClickUser(user)}>
               <ListItemText primary={`${user.name} (${user.user})`} secondary={user.email} />
             </ListItem>
           ))}
@@ -55,7 +55,7 @@ class ToolsList extends Component {
 
 ToolsList.propTypes = {
   cursor: PropTypes.instanceOf(Cursor),
-  current: PropTypes.object,
+  location: PropTypes.object,
   history: ReactRouterPropTypes.history,
   store: PropTypes.instanceOf(Store)
 }

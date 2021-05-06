@@ -38,6 +38,7 @@ class AdminToolsList extends Component {
 
   render() {
     const { store, history, match } = this.props
+
     if (!store.token) {
       return ''
     }

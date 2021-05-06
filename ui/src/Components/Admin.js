@@ -6,7 +6,6 @@ import { withTranslation, Trans } from 'react-i18next'
 import Store from '../Stores/Store'
 import Cursor from '../Stores/Cursor'
 import UserList from './UserList'
-import RegisterForm from './RegisterForm'
 import Title from './Title'
 import { withRouter } from 'react-router-dom'
 
@@ -17,18 +16,21 @@ import { withRouter } from 'react-router-dom'
 class Admin extends Component {
 
   render() {
-    const { store } = this.props
+    const { store, match } = this.props
 
     if (!store.token) {
       return ''
     }
 
-    return (
-      <div>
-        <Title><Trans>Users</Trans></Title>
-        <UserList current={null}/>
-      </div>
-    )
+    if (match.params && match.params.tool === 'users') {
+      return (
+        <div>
+          <Title><Trans>Users</Trans></Title>
+          <UserList/>
+        </div>
+      )
+    }
+    return <Title><Trans>Admin</Trans></Title>
   }
 }
 
