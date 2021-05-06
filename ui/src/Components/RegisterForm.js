@@ -6,9 +6,12 @@ import Store from '../Stores/Store'
 import Panel from './Panel'
 import { TextField, Button } from '@material-ui/core'
 import Cursor from '../Stores/Cursor'
+import ReactRouterPropTypes from 'react-router-prop-types'
+import { withRouter } from 'react-router-dom'
 
 @inject('store')
 @inject('cursor')
+@withRouter
 @withTranslation('translations')
 @observer
 class RegisterForm extends Component {
@@ -27,6 +30,10 @@ class RegisterForm extends Component {
 
   componentWillUnmount = () => {
     this.props.cursor.enableHandler()
+  }
+
+  onCancel() {
+    this.props.history.push('/_/admin')
   }
 
   onRegister() {
@@ -99,6 +106,8 @@ class RegisterForm extends Component {
         />
         <br/>
         <br/>
+        <Button id="cancel" variant="outlined" onClick={() => this.onCancel()}><Trans>Cancel</Trans></Button>
+        &nbsp;
         <Button id="submit" variant="outlined" onClick={() => this.onRegister()}><Trans>Submit</Trans></Button>
       </Panel>
     </form>
@@ -107,6 +116,7 @@ class RegisterForm extends Component {
 
 RegisterForm.propTypes = {
   store: PropTypes.instanceOf(Store),
+  history: ReactRouterPropTypes.history.isRequired,
   onRegister: PropTypes.func,
   t: PropTypes.func,
   cursor: PropTypes.instanceOf(Cursor)

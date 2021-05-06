@@ -8,7 +8,9 @@ import Cursor from '../Stores/Cursor'
 import SubPanel from './SubPanel'
 import RegisterForm from './RegisterForm'
 import Title from './Title'
+import { withRouter } from 'react-router-dom'
 
+@withRouter
 @withTranslation('translations')
 @inject('store')
 @observer
