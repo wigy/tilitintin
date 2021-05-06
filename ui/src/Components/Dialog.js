@@ -33,7 +33,7 @@ class TilitinDialog extends Component {
 
   render() {
 
-    const { isVisible, isValid, title, onClose, children, wider } = this.props
+    const { isVisible, isValid, title, onClose, children, wider, noActions } = this.props
 
     return (
       <Dialog open={isVisible} onClose={() => onClose()} fullWidth={wider} maxWidth={wider ? 'sm' : undefined}>
@@ -43,10 +43,14 @@ class TilitinDialog extends Component {
         <DialogContent dividers>
           {children}
         </DialogContent>
-        <DialogActions>
+        {
+          noActions
+            ? ''
+            : <DialogActions>
           <Button id="Cancel" variant="outlined" onClick={this.keyEscape}><Trans>Cancel</Trans></Button>
           <Button id="OK" variant="outlined" onClick={this.keyEnter} disabled={isValid && !isValid()} color="primary"><Trans>Confirm</Trans></Button>
         </DialogActions>
+        }
       </Dialog>
     )
   }
@@ -55,6 +59,7 @@ class TilitinDialog extends Component {
 TilitinDialog.propTypes = {
   isVisible: PropTypes.bool,
   isValid: PropTypes.func,
+  noActions: PropTypes.bool,
   className: PropTypes.string,
   wider: PropTypes.bool,
   title: PropTypes.any,
