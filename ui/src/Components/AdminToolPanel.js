@@ -40,7 +40,7 @@ class AdminToolPanel extends Component {
       return ''
     }
 
-    if (match.params && match.params.tool === 'users') {
+    if (match.params && (match.params.tool === 'users' || !match.params.tool)) {
       return (
         <div className="ToolPanel AdminToolPanel">
           <Title><Trans>User Tools</Trans></Title>

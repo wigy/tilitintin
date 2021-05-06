@@ -30,10 +30,6 @@ class AdminToolsList extends Component {
       this.props.history.push(this.url('users'))
       return { preventDefault: true }
     }
-    if (key === '2') {
-      this.props.history.push(this.url('dummy'))
-      return { preventDefault: true }
-    }
   }
 
   render() {
@@ -52,12 +48,6 @@ class AdminToolsList extends Component {
               <Avatar>1</Avatar>
             </ListItemAvatar>
             <ListItemText primary={<Trans>Users</Trans>}/>
-          </ListItem>
-          <ListItem button selected={match.params.tool === 'dummy'} onClick={() => history.push(this.url('dummy'))}>
-            <ListItemAvatar color="primary">
-              <Avatar>2</Avatar>
-            </ListItemAvatar>
-            <ListItemText primary={<Trans>Dummy</Trans>}/>
           </ListItem>
         </List>
       </div>
