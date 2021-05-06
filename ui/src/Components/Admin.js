@@ -5,7 +5,7 @@ import { inject, observer } from 'mobx-react'
 import { withTranslation, Trans } from 'react-i18next'
 import Store from '../Stores/Store'
 import Cursor from '../Stores/Cursor'
-import SubPanel from './SubPanel'
+import UserList from './UserList'
 import RegisterForm from './RegisterForm'
 import Title from './Title'
 import { withRouter } from 'react-router-dom'
@@ -62,14 +62,9 @@ class Admin extends Component {
 
     return (
       <div>
-        <Title>{this.state.user ? this.state.user.name : (creatingUser ? <Trans>Create New User</Trans> : <Trans>No User Selected</Trans>)}</Title>
+        <Title><Trans>Users</Trans></Title>
         {
-          this.state.user && !creatingUser &&
-          <SubPanel>
-            <b><Trans>User</Trans></b>: {this.state.user.user} <br/>
-            <b><Trans>Name</Trans></b>: {this.state.user.name} <br/>
-            <b><Trans>Email</Trans></b>: {this.state.user.email} <br/>
-          </SubPanel>
+          this.state.user && !creatingUser && <UserList current={this.state.user}/>
         }
         {
           creatingUser && <RegisterForm onRegister={({ user, name, password, email }) => this.onRegister({ user, name, password, email })}/>
@@ -81,7 +76,7 @@ class Admin extends Component {
 
 Admin.propTypes = {
   cursor: PropTypes.instanceOf(Cursor),
-  history: ReactRouterPropTypes.history.isRequired,
+  history: ReactRouterPropTypes.history,
   match: PropTypes.object,
   store: PropTypes.instanceOf(Store),
   t: PropTypes.func
