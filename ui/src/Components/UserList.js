@@ -12,7 +12,7 @@ import { withRouter } from 'react-router-dom'
 @withTranslation('translations')
 @inject('store')
 @observer
-class ToolsList extends Component {
+class UserList extends Component {
 
   state = {
     users: []
@@ -53,11 +53,11 @@ class ToolsList extends Component {
   }
 }
 
-ToolsList.propTypes = {
+UserList.propTypes = {
   cursor: PropTypes.instanceOf(Cursor),
   location: PropTypes.object,
   history: ReactRouterPropTypes.history,
   store: PropTypes.instanceOf(Store)
 }
 
-export default ToolsList
+export default UserList
