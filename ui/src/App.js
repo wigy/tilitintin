@@ -41,8 +41,7 @@ class App extends Component {
         <Messages />
         <div className="TopPanel Panel">
           <Route exact path="/" component={Menu}/>
-          <Route exact path="/:db/admin/:periodId?/:accountId?/:tool?/:arg" component={Menu}/>
-          <Route exact path="/:db/admin/:periodId?/:accountId?/:tool?" component={Menu}/>
+          <Route exact path="/:db/admin/:periodId?/:accountId?/:tool" component={Menu}/>
           <Route exact path="/:db/admin//:accountId?/:tool" component={Menu}/>
           <Route exact path="/:db/admin/:periodId?//:tool" component={Menu}/>
           <Route exact path="/:db/admin///:tool?" component={Menu}/>
@@ -67,11 +66,10 @@ class App extends Component {
         <div className="Page">
           <Paper className="SidePanel Panel" elevation={4}>
             <Route exact path="/" component={DatabaseList}/>
-            <Route exact path="/:db/admin/:periodId?/:accountId?/:tool?/:arg" component={AdminToolsList}/>
-            <Route exact path="/:db/admin/:periodId?/:accountId?/:tool?" component={AdminToolsList}/>
-            <Route exact path="/:db/admin//:accountId?/:tool?" component={AdminToolsList}/>
-            <Route exact path="/:db/admin/:periodId?//:tool?" component={AdminToolsList}/>
-            <Route exact path="/:db/admin///:tool?" component={AdminToolsList}/>
+            <Route exact path="/:db/admin/:periodId?/:accountId?/:tool" component={AdminToolsList}/>
+            <Route exact path="/:db/admin//:accountId?/:tool" component={AdminToolsList}/>
+            <Route exact path="/:db/admin/:periodId?//:tool" component={AdminToolsList}/>
+            <Route exact path="/:db/admin///:tool" component={AdminToolsList}/>
             <Route exact path="/:db" component={DatabaseList}/>
             <Route exact path="/:db/dashboard/:periodId?" component={DatabaseList}/>
             <Route exact path="/:db/dashboard/:periodId/:accountId" component={DatabaseList}/>
@@ -88,11 +86,10 @@ class App extends Component {
           </Paper>
           <div className="MainArea">
             <Paper className="MainTopPanel Panel" elevation={4}>
-              <Route exact path="/:db/admin/:periodId?/:accountId?/:tool?/:arg" component={AdminToolPanel}/>
-              <Route exact path="/:db/admin/:periodId?/:accountId?/:tool?" component={AdminToolPanel}/>
-              <Route exact path="/:db/admin//:accountId?/:tool?" component={AdminToolPanel}/>
-              <Route exact path="/:db/admin/:periodId?//:tool?" component={AdminToolPanel}/>
-              <Route exact path="/:db/admin///:tool?" component={AdminToolPanel}/>
+              <Route exact path="/:db/admin/:periodId?/:accountId?/:tool" component={AdminToolPanel}/>
+              <Route exact path="/:db/admin//:accountId?/:tool" component={AdminToolPanel}/>
+              <Route exact path="/:db/admin/:periodId?//:tool" component={AdminToolPanel}/>
+              <Route exact path="/:db/admin///:tool" component={AdminToolPanel}/>
               <Route path="/:db/txs/:periodId/:accountId?" component={TransactionToolPanel}/>
               <Route path="/:db/report/:periodId/:accountId?/:format?" component={ReportToolPanel}/>
               <Route path="/:db/account/:periodId?" component={AccountsToolPanel}/>
@@ -104,11 +101,10 @@ class App extends Component {
             <Paper className="MainPanel Panel" elevation={4}>
               <Route exact path="/" component={Login}/>
               <Route exact path="/" component={Dashboard}/>
-              <Route exact path="/:db/admin/:periodId?/:accountId?/:tool?/:arg" component={Admin}/>
-              <Route exact path="/:db/admin/:periodId?/:accountId?/:tool?" component={Admin}/>
-              <Route exact path="/:db/admin//:accountId?/:tool?" component={Admin}/>
-              <Route exact path="/:db/admin/:periodId?//:tool?" component={Admin}/>
-              <Route exact path="/:db/admin///:tool?" component={Admin}/>
+              <Route exact path="/:db/admin/:periodId?/:accountId?/:tool" component={Admin}/>
+              <Route exact path="/:db/admin//:accountId?/:tool" component={Admin}/>
+              <Route exact path="/:db/admin/:periodId?//:tool" component={Admin}/>
+              <Route exact path="/:db/admin///:tool" component={Admin}/>
               <Route exact path="/:db" component={Dashboard}/>
               <Route exact path="/:db/dashboard" component={Dashboard}/>
               <Route exact path="/:db/dashboard/:periodId" component={Dashboard}/>
