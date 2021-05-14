@@ -249,8 +249,6 @@ class TransactionTable extends Component {
   render() {
     const ret = []
 
-    ret.push(<Loading visible={this.props.store.loading} key="loading-indicator"/>)
-
     if (this.state.showAccountDropdown) {
       const accountDialog = (
         <Dialog key="dialog2"

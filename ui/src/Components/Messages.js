@@ -5,6 +5,7 @@ import { Alert } from '@material-ui/lab'
 import { inject, observer } from 'mobx-react'
 import { PropTypes } from 'prop-types'
 import Store from '../Stores/Store'
+import Loading from './Loading'
 
 @inject('store')
 @observer
@@ -26,13 +27,14 @@ class Messages extends Component {
   }
 
   render() {
-    const { messages } = this.props.store
+    const { messages, loading } = this.props.store
     let severity = 'info'
     if (messages.filter(m => m.type === 'error').length) {
       severity = 'error'
     }
     return (
       <div>
+        <Loading visible={loading} />
         <Snackbar
           anchorOrigin={{
             vertical: 'bottom',

@@ -5,7 +5,6 @@ import { withTranslation, Trans } from 'react-i18next'
 import BalanceTable from '../Components/BalanceTable'
 import Store from '../Stores/Store'
 import Cursor from '../Stores/Cursor'
-import Loading from './Loading'
 import Title from './Title'
 
 @withTranslation('translations')
@@ -22,7 +21,6 @@ class Balances extends Component {
     return (
       <div style={{ margin: '1rem' }}>
         <Title className="TransactionsPage"><Trans>Account Balances</Trans></Title>
-        <Loading visible={this.props.store.loading}/>
         <BalanceTable balances={this.props.store.balances}/>
       </div>
     )

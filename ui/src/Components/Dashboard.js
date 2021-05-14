@@ -6,7 +6,6 @@ import { inject, observer } from 'mobx-react'
 import { withTranslation, Trans } from 'react-i18next'
 import Store from '../Stores/Store'
 import Cursor from '../Stores/Cursor'
-import Loading from './Loading'
 import Title from './Title'
 import { Button, Typography, Avatar, List, ListItem } from '@material-ui/core'
 import Panel from './Panel'
@@ -87,7 +86,6 @@ class Dashboard extends Component {
           <Trans>Business ID</Trans>: {store.settings.BUSINESS_ID}<br />
           <br />
           <Typography variant="h5" color="textSecondary"><Trans>Periods</Trans></Typography>
-          <Loading visible={store.loading} />
           <List>
             {store.database.periods.reverse().map((period, index) => (
               <ListItem key={period.id} selected={parseInt(periodId) === period.id}>
