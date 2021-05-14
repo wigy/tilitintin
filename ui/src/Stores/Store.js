@@ -106,6 +106,7 @@ class Store {
    */
   @action
   async request(path, method = 'GET', data = null, file = null, noDimming = false) {
+    let url = config.API_URL + path
     const options = {
       method: method,
       headers: {
@@ -127,26 +128,31 @@ class Store {
       options.mode = 'cors'
     }
 
-    debug('  Request:', method, config.API_URL + path, data || '')
+    debug('  Request:', method, url, data || '')
 
     this.clearMessages()
     this.loading = !noDimming
-    return fetch(config.API_URL + path, options)
+    return fetch(url, options)
       .then(res => {
         runInAction(() => {
           this.loading = false
         })
         if ([200, 201, 202, 204].includes(res.status)) {
-          debug('    OK:', method, config.API_URL + path, data || '')
-          return res.status === 200 ? res.json() : null
+          debug('    OK:', method, url, data || '')
+          return res.status === 200 ? res.json() : true
         } else if (res.status === 401) {
           this.addError(i18n.t('Invalid credentials.'))
           this.logout()
         } else if (res.status === 403) {
           return undefined
         } else {
-          debug('    Fail:', method, config.API_URL + path, data || '')
-          throw new Error(res.status + ' ' + res.statusText)
+          debug('    Fail:', method, url, data || '')
+          res.json().then((response) => {
+            this.addError(i18n.t(response.message))
+          })
+          .catch(err => {
+            throw new Error(`Request ${method} ${url} failed and no error message received.`)
+          })
         }
       })
   }
