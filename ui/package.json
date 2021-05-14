@@ -2,7 +2,7 @@
   "name": "ui",
   "version": "2.2.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.jsx",
   "scripts": {
     "dev": "NODE_ENV=development webpack serve --host 0.0.0.0 --port ${PORT:=3102} --config ./config/webpack.dev.js",
     "build": "webpack build --config ./config/webpack.prod.js",

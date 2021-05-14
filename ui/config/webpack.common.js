@@ -6,7 +6,7 @@ const { DefinePlugin } = require('webpack')
 
 module.exports = {
   // Where webpack looks to start building the bundle
-  entry: [paths.src + '/index.js'],
+  entry: [paths.src + '/index.jsx'],
 
   target: 'web',
 
@@ -40,11 +40,20 @@ module.exports = {
     })
   ],
 
+  resolve: {
+    extensions: ['.js', '.jsx'],
+  },
+
   // Determine how modules within the project are treated
   module: {
+
     rules: [
       // JavaScript: Use Babel to transpile JavaScript files
-      { test: /\.(js|jsx)$/, exclude: /node_modules/, use: ['babel-loader'] },
+      {
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        use: ['babel-loader'],
+      },
 
       // Styles: Inject CSS into the head with source maps
       {
