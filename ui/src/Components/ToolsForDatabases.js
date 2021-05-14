@@ -28,7 +28,7 @@ class ToolsForDatabases extends Component {
     return (
       <div>
         <Title className="ToolsForDatabasesPage"><Trans>Databases</Trans></Title>
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap' }}>
           {this.props.store.dbs.map((db, index) => (
             <Card key={index} style={{ margin: '1rem', width: '20rem' }}>
               <CardHeader className="Database" avatar={<Storage/>} title={<Trans>Database</Trans>} subheader={db.name}/>
