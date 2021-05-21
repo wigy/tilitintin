@@ -10,4 +10,5 @@ FUTURE FEATURES
 [ ] Improve looks for cell cursor.
 [ ] More icons with keyboard shortcuts as hover text (or some other presentation).
 [ ] BUG: Deleting documents seems to screw up cursor position. (Is this related to empty documents?)
+[ ] BUG: (May relate previous) Crash after creating and deleting two entries.
 [ ] BUG: Cursor does not move after insert (DB xx, acc 3000).
