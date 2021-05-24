@@ -70,23 +70,27 @@ const debug = (...args) => DEBUG && console.log.apply(console, args)
  *       Tag1: true,
  *       Tag2: false
  *     }
- *   }
+ *   },
+ *   users: [{
+ *
+ *   }]
  * }
  */
 class Store {
 
-  @observable db = null;
-  @observable loading = false;
-  @observable messages = [];
-  @observable periodId = null;
-  @observable accountId = null;
-  @observable changed = false;
-  @observable dbsByName = {};
-  @observable lastDate = null;
-  @observable report = null;
-  @observable tags = {};
-  @observable token = localStorage.getItem('token');
-  @observable tools = { tagDisabled: {}, accounts: {} };
+  @observable db = null
+  @observable loading = false
+  @observable messages = []
+  @observable periodId = null
+  @observable accountId = null
+  @observable changed = false
+  @observable dbsByName = {}
+  @observable lastDate = null
+  @observable report = null
+  @observable tags = {}
+  @observable token = localStorage.getItem('token')
+  @observable tools = { tagDisabled: {}, accounts: {} }
+  @observable users = []
 
   // Cache for account descriptions list.
   entryDescriptions = {};
@@ -106,7 +110,7 @@ class Store {
    */
   @action
   async request(path, method = 'GET', data = null, file = null, noDimming = false) {
-    let url = config.API_URL + path
+    const url = config.API_URL + path
     const options = {
       method: method,
       headers: {
@@ -150,9 +154,9 @@ class Store {
           res.json().then((response) => {
             this.addError(i18n.t(response.message))
           })
-          .catch(err => {
-            throw new Error(`Request ${method} ${url} failed and no error message received.`)
-          })
+            .catch(err => {
+              throw new Error(`Request ${method} ${url} failed with ${err} and no error message received.`)
+            })
         }
       })
   }
@@ -780,6 +784,16 @@ class Store {
       return []
     }
     return this.period.getDocuments(accounts, filter)
+  }
+
+  /**
+   * Fill in users table (admin only).
+   */
+  getUsers() {
+    this.request('/admin/user')
+      .then((users) => {
+        runInAction(() => this.users.replace(users))
+      })
   }
 
   /**

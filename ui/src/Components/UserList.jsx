@@ -14,21 +14,6 @@ import { withRouter } from 'react-router-dom'
 @observer
 class UserList extends Component {
 
-  state = {
-    users: []
-  }
-
-  componentDidMount() {
-    this.getUsers()
-  }
-
-  getUsers() {
-    this.props.store.request('/admin/user')
-      .then((users) => {
-        this.setState({ users })
-      })
-  }
-
   onClickUser(user) {
     this.props.history.push(`/_/admin///users?user=${user.user}`)
   }
@@ -42,7 +27,7 @@ class UserList extends Component {
     return (
       <div>
         <List className="UserList">
-          {this.state.users.map((user) => (
+          {this.props.store.users.map((user) => (
             <ListItem key={user.user} button selected={current === user.user} onClick={() => this.onClickUser(user)}>
               <ListItemText primary={`${user.name} (${user.user})`} secondary={user.email} />
             </ListItem>

@@ -18,6 +18,10 @@ class AdminToolPanel extends Component {
     showCreateUserDialog: false
   }
 
+  componentDidMount() {
+    this.props.store.getUsers()
+  }
+
   onCreateUser() {
     this.setState({ showCreateUserDialog: true })
   }
@@ -26,6 +30,7 @@ class AdminToolPanel extends Component {
     return this.props.store.request('/admin/user', 'POST', { user, name, password, email })
       .then(() => {
         this.setState({ showCreateUserDialog: false })
+        this.props.store.getUsers()
       })
       .catch(() => {
         this.setState({ showCreateUserDialog: false })
