@@ -1,0 +1,9 @@
+{
+  "name": "Tilitintin",
+  "repository": "git@github.com:wigy/tilitintin.git",
+  "author": "Tommi Ronkainen <tommi.ronkainen@gmail.com>",
+  "license": "GPL-3",
+  "scripts": {
+    "test": "testing/bin/test-local"
+  }
+}

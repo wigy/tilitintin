@@ -10,6 +10,19 @@ development. Possibly manually cleaning up changed done by your test
 in between. Once ready, run the remaining tests to complete cycle.
 After that you should verify that whole story will be executed successfully.
 
+## Requirements
+
+You need Python and [Robot Framework](https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html)
+```
+pip install -r requirements.txt
+```
+Also Chrome driver needs to be downloaded from https://sites.google.com/chromium.org/driver/
+
+## Running Tests
+
+Full test scripts can be found from `bin`. They should work as an examples for running
+smaller parts of the tests.
+
 ## Custom Functions
 
 The following Robot Framework custom functions are available:

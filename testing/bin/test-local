@@ -12,6 +12,7 @@ export TEST_USER=test
 export TEST_PASSWORD=pass
 export TEST_EMAIL=user@localhost
 export TEST_SECRET="oGBtRQBWIVUjnqw0nbmvbJ7zsd&67rtyr/r5fyft62"
+export CI=False
 
 cd $ROOT
 if [ -z "$*" ]; then

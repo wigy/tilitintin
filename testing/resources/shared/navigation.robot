@@ -1,6 +1,7 @@
 *** Keywords ***
 Ensure Browser Is Open
     [Documentation]                     Check if the browser is not open and open it.
+    Run Keyword If                      '${CI}'=='True'    Start Virtual Display               1920    1080
     ${ret}                              Run Keyword And Return Status       Execute Javascript      return 1
     Return From Keyword If              ${ret}
     Open Browser                        ${TEST_BASE_URL}/      Chrome

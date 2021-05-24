@@ -1,6 +1,7 @@
 *** Settings ***
-Library                                 SeleniumLibrary    timeout=5s    implicit_wait=1s
+Library                                 SeleniumLibrary    timeout=5s    implicit_wait=1s   run_on_failure=Capture Page Screenshot
 Library                                 OperatingSystem
+Library                                 XvfbRobot
 Library                                 ../libraries/date_and_time.py
 Library                                 ../libraries/security.py
 Library                                 ../libraries/report_parsing.py
@@ -22,6 +23,9 @@ ${YEAR}                                 0000
 
 *** Keywords ***
 Initialize Variables
+    ${CI}                               Get Environment Variable    CI
+    Set Global Variable                 ${CI}
+    Log to Console                      Continuous Integration is ${CI}
     ${TEST_BASE_URL}                    Get Environment Variable    TEST_BASE_URL
     Set Global Variable                 ${TEST_BASE_URL}
     Log to Console                      Base URL is ${TEST_BASE_URL}
