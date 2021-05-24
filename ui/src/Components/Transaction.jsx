@@ -77,7 +77,7 @@ class Transaction extends Component {
       const vatAccount = store.database.getAccountByNumber(VATAccount)
       if (account.vat_percentage) {
         if (document.entries.filter(e => e.account_id === vatAccount.id).length === 0) {
-          runInAction(async () => {
+          await runInAction(async () => {
             const vatAmount = Math.round(entry.amount - entry.amount / (1 + account.vat_percentage / 100))
             const text = `${this.props.t('VAT')} ${account.vat_percentage}%`
             const vat = new EntryModel(document, {
@@ -89,7 +89,7 @@ class Transaction extends Component {
             await entry.save()
             await document.createEntry(vat)
           })
-          return store.fetchBalances()
+          await store.fetchBalances()
         }
       }
     }
