@@ -68,6 +68,7 @@ def report_should_match(report, format):
     # Allow quick testing from string copy pasted from console.
     if type(report) == str:
         report = json.loads(report.replace("'", '"'))
-
+    # debug(report)
+    # debug(format)
     compare_report(report, format)
     return True

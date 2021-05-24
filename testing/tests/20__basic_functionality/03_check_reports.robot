@@ -20,19 +20,19 @@ ${JOURNAL_REPORT}      SEPARATOR=\n
 ...     /#[0-9]+/	16.03.2021		                                                        .           .               |
 ...     .            1900 Käteisvarat: Buy computer	                                        –	        300,00€         |
 ...     .            7680 Atk-laitehankinnat (< 3v. kalusto): Buy computer	                241,94€	    –               |
-...     .            29392 Alv ostoista: Buy computer	                                    58,06€	    –               |
+...     .            29392 Alv ostoista: Buy computer VAT 24%                               58,06€	    –               |
 ...     /#[0-9]+/	16.03.2021		                                                        .           .               |
 ...     .            1900 Käteisvarat: Buy mouse	                                            –	        10,00€      |
 ...     .            7680 Atk-laitehankinnat (< 3v. kalusto): Buy mouse	                    8,06€	    –               |
-...     .            29392 Alv ostoista: Buy mouse	                                        1,94€	    –               |
+...     .            29392 Alv ostoista: Buy mouse VAT 24%                                  1,94€	    –               |
 ...     /#[0-9]+/	16.03.2021		                                                        .           .               |
 ...     .            1900 Käteisvarat: Sell 1h consultation	                                100,00€	    –               |
 ...     .            3000 Myynti: Sell 1h consultation	                                    –	        80,65€          |
-...     .            29391 Alv myynnistä: Sell 1h consultation	                            –	        19,35€          |
+...     .            29391 Alv myynnistä: Sell 1h consultation VAT 24%                      –	        19,35€          |
 ...     /#[0-9]+/	16.03.2021		                                                        .           .               |
 ...     .            1900 Käteisvarat: Sell 2h consultation	                                200,00€	    –               |
 ...     .            3010 Myynti 2: Sell 2h consultation	                                –	        161,29€         |
-...     .            29391 Alv myynnistä: Sell 2h consultation	                            –	        38,71€          |
+...     .            29391 Alv myynnistä: Sell 2h consultation VAT 24%                      –	        38,71€          |
 ...     END
 
 ${LEDGER_REPORT}      SEPARATOR=\n
