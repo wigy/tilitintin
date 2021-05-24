@@ -182,6 +182,7 @@ i18n.init({
         User: 'Käyttäjä',
         'User creation failed.': 'Käyttäjän luonti epäonnistui.',
         'User Tools': 'Käyttäjien hallintatyökalut',
+        'User already exists.': 'Käyttäjä on jo olemassa.',
         Username: 'Käyttäjätunnus',
         Users: 'Käyttäjät',
         'Value Added Tax': 'Arvonlisävero',

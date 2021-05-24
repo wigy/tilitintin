@@ -15,7 +15,7 @@ const config = require('../config')
  */
 function validateUser(user, name, password, email) {
   if (!user || !/^[a-z0-9]+$/.test(user)) {
-    return `User name ${user} is not valid (lower case letters and numbers only).`
+    return 'User name is not valid (lower case letters and numbers only).'
   }
   if (password.length < 4) {
     return 'Password is too short.'
@@ -27,7 +27,7 @@ function validateUser(user, name, password, email) {
     return 'Full name is required.'
   }
   if (hasUser(user)) {
-    return `User '${user}' exists.`
+    return 'User already exists.'
   }
   return true
 }

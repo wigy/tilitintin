@@ -25,7 +25,7 @@ router.post('/',
     const err = users.validateUser(user, name, password, email)
     if (err !== true) {
       dump.error(err)
-      return res.sendStatus(400)
+      return res.status(400).send({ message: err })
     }
 
     users.registerUser({ user, name, password, email })
