@@ -194,6 +194,12 @@ i18n.init({
         Yes: 'Kyllä',
         'You can upload old Tilitin file here.': 'Voit lähettää tästä olemassaolevan Tilitin-tiedoston.',
         'Note that a database with the same name is overridden automatically.': 'Huomaa, että jos samanniminen tietokanta on jo olemassa, se ylikirjoitetaan automaattisesti.',
+        Delete: 'Poista',
+        'Delete this database?': 'Poistetaanko tämä tietokanta?',
+        'Database name was not given correctly.': 'Tietokannan nimi ei ollut oikein.',
+        'Database deleted permanently.': 'Tietokanta poistettu lopullisesti.',
+        'Please type in the database name': 'Ole hyvä ja anna tietokannan nimi',
+        'Deleting the database is irreversible!': 'Tietokannan poisto on lopullinen!',
 
         'report-balance-sheet-detailed': 'Tase tilierittelyin',
         'report-balance-sheet': 'Tase',

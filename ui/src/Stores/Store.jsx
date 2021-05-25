@@ -747,31 +747,41 @@ class Store {
        })
    }
 
-  /**
+   /**
+   * Remove a database.
+   * @param {DatabaseModel} db
+   */
+    @action
+   async deleteDatabase(db) {
+     const path = '/db/' + this.db
+     return this.request(path, 'DELETE')
+   }
+
+    /**
    * Computed property to collect only transactions matching the current filter.
    */
   @computed
-   get filteredTransactions() {
-     const visible = (tx) => {
-       const allEnabled = Object.values(this.tools.tagDisabled).filter((v) => v).length === 0
-       if (!tx.tags || !tx.tags.length) {
-         return allEnabled
-       }
-       let disabled = true
-       tx.tags.forEach((tag) => {
-         if (!this.tools.tagDisabled[tag.tag]) {
-           disabled = false
-         }
-       })
-       return !disabled
-     }
+    get filteredTransactions() {
+      const visible = (tx) => {
+        const allEnabled = Object.values(this.tools.tagDisabled).filter((v) => v).length === 0
+        if (!tx.tags || !tx.tags.length) {
+          return allEnabled
+        }
+        let disabled = true
+        tx.tags.forEach((tag) => {
+          if (!this.tools.tagDisabled[tag.tag]) {
+            disabled = false
+          }
+        })
+        return !disabled
+      }
 
-     const filter = (txs) => {
-       return txs.filter((tx) => visible(tx))
-     }
+      const filter = (txs) => {
+        return txs.filter((tx) => visible(tx))
+      }
 
-     return filter(this.transactions)
-   }
+      return filter(this.transactions)
+    }
 
   /**
    * Get currently loaded documents having entry for accounts and matching the filter.

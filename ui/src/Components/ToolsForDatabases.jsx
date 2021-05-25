@@ -4,16 +4,32 @@ import { inject, observer } from 'mobx-react'
 import { withTranslation, Trans } from 'react-i18next'
 import Store from '../Stores/Store'
 import Title from './Title'
-import { Card, CardActions, CardContent, Button, CardHeader } from '@material-ui/core'
+import { Card, CardActions, CardContent, Button, CardHeader, Typography, TextField } from '@material-ui/core'
 import ReactRouterPropTypes from 'react-router-prop-types'
 import { withRouter } from 'react-router-dom'
 import { Storage } from '@material-ui/icons'
+import Dialog from './Dialog'
 
 @withRouter
 @withTranslation('translations')
 @inject('store')
 @observer
 class ToolsForDatabases extends Component {
+
+  state = {
+    dbToDelete: null,
+    nameInput: ''
+  }
+
+  async onDeleteDb() {
+    if (this.state.dbToDelete.name !== this.state.nameInput) {
+      this.props.store.addError(this.props.t('Database name was not given correctly.'))
+    } else {
+      const db = this.state.dbToDelete
+      await db.delete()
+      this.props.store.addMessage(this.props.t('Database deleted permanently.'))
+    }
+  }
 
   render() {
 
@@ -25,6 +41,7 @@ class ToolsForDatabases extends Component {
       this.props.history.push(`/${db.name}`)
     }
 
+    console.log(this.props.store.dbs.map(db => db.name === this.props.store.db))
     return (
       <div>
         <Title className="ToolsForDatabasesPage"><Trans>Databases</Trans></Title>
@@ -36,10 +53,29 @@ class ToolsForDatabases extends Component {
               </CardContent>
               <CardActions>
                 <Button className="ViewDatabase" variant="outlined" color="primary" size="small" onClick={() => goto(db)}><Trans>View</Trans></Button>
+                <Button className="DeleteDatabase" disabled={this.props.store.db === db.name} style={{ color: this.props.store.db === db.name ? 'gray' : 'red' }} size="small" onClick={() => this.setState({ dbToDelete: db, nameInput: '' })}><Trans>Delete</Trans></Button>
               </CardActions>
             </Card>
           ))}
         </div>
+
+        { this.state.dbToDelete &&
+          <Dialog
+            title={<Trans>Delete this database?</Trans>}
+            isVisible={!!this.state.dbToDelete}
+            onClose={() => this.setState({ dbToDelete: null, nameInput: '' })}
+            onConfirm={() => this.onDeleteDb()}>
+              <Trans>Deleting the database is irreversible!</Trans><br />
+              <Trans>Please type in the database name</Trans> <b>{this.state.dbToDelete.name}</b>
+              <TextField
+                name="name"
+                fullWidth
+                label={<Trans>Name</Trans>}
+                value={this.state.nameInput}
+                onChange={(event) => (this.setState({ nameInput: event.target.value }))}
+              />
+          </Dialog>
+      }
       </div>
     )
   }
@@ -47,6 +83,7 @@ class ToolsForDatabases extends Component {
 
 ToolsForDatabases.propTypes = {
   db: PropTypes.string,
+  t: PropTypes.func,
   periodId: PropTypes.string,
   history: ReactRouterPropTypes.history,
   store: PropTypes.instanceOf(Store)

@@ -131,6 +131,17 @@ class Model {
   }
 
   /**
+   * Delete this instance from the store.
+   */
+  async delete() {
+    const name = `delete${this.getObjectType()}`
+    if (!this.store[name]) {
+      throw new Error(`Store does not have ${name}() function.`)
+    }
+    return this.store[name](this)
+  }
+
+  /**
    * Get the store.
    */
   get store() {
