@@ -753,7 +753,7 @@ class Store {
    */
     @action
    async deleteDatabase(db) {
-     const path = '/db/' + this.db
+     const path = '/db/' + db.name
      return this.request(path, 'DELETE')
    }
 

@@ -10,6 +10,8 @@ const { checkToken } = require('../lib/middleware')
 const { dateToDb } = require('../lib/utils')
 const { empty } = require('../lib/db')
 
+const DB_REGEX = /^[0-9a-z-_]+$/
+
 router.post('/',
   checkToken,
   express.urlencoded({ extended: true }),
@@ -17,7 +19,7 @@ router.post('/',
   async (req, res) => {
     const { databaseName, companyName, companyCode } = req.body
 
-    if (!/^[0-9a-z-_]+$/.test(databaseName)) {
+    if (!DB_REGEX.test(databaseName)) {
       console.error(`Invalid database name ${databaseName}.`)
       return res.sendStatus(400)
     }
@@ -43,6 +45,18 @@ router.post('/',
     await db('period').insert({ id: 1, start_date: start, end_date: end, locked: false })
     await db('document').insert({ id: 1, number: 0, period_id: 1, date: lastYear })
 
+    res.sendStatus(204)
+  })
+
+router.delete('/:name',
+  async (req, res) => {
+    const { name } = req.params
+    if (!DB_REGEX.test(name)) {
+      console.error(`Invalid database name ${name}.`)
+      return res.sendStatus(400)
+    }
+    const dbPath = `${path.join(config.DBPATH, req.user)}/${name}.sqlite`
+    fs.unlinkSync(dbPath)
     res.sendStatus(204)
   })
 

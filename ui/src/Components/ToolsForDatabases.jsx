@@ -17,6 +17,7 @@ import Dialog from './Dialog'
 class ToolsForDatabases extends Component {
 
   state = {
+    showDeleteDialog: false,
     dbToDelete: null,
     nameInput: ''
   }
@@ -27,6 +28,7 @@ class ToolsForDatabases extends Component {
     } else {
       const db = this.state.dbToDelete
       await db.delete()
+      await this.props.store.fetchDatabases(true)
       this.props.store.addMessage(this.props.t('Database deleted permanently.'))
     }
   }
@@ -41,7 +43,6 @@ class ToolsForDatabases extends Component {
       this.props.history.push(`/${db.name}`)
     }
 
-    console.log(this.props.store.dbs.map(db => db.name === this.props.store.db))
     return (
       <div>
         <Title className="ToolsForDatabasesPage"><Trans>Databases</Trans></Title>
@@ -53,17 +54,17 @@ class ToolsForDatabases extends Component {
               </CardContent>
               <CardActions>
                 <Button className="ViewDatabase" variant="outlined" color="primary" size="small" onClick={() => goto(db)}><Trans>View</Trans></Button>
-                <Button className="DeleteDatabase" disabled={this.props.store.db === db.name} style={{ color: this.props.store.db === db.name ? 'gray' : 'red' }} size="small" onClick={() => this.setState({ dbToDelete: db, nameInput: '' })}><Trans>Delete</Trans></Button>
+                <Button className="DeleteDatabase" disabled={this.props.store.db === db.name} style={{ color: this.props.store.db === db.name ? 'gray' : 'red' }} size="small" onClick={() => this.setState({ showDeleteDialog: true, dbToDelete: db, nameInput: '' })}><Trans>Delete</Trans></Button>
               </CardActions>
             </Card>
           ))}
         </div>
 
-        { this.state.dbToDelete &&
+        { this.state.showDeleteDialog &&
           <Dialog
             title={<Trans>Delete this database?</Trans>}
-            isVisible={!!this.state.dbToDelete}
-            onClose={() => this.setState({ dbToDelete: null, nameInput: '' })}
+            isVisible={this.state.showDeleteDialog}
+            onClose={() => this.setState({ showDeleteDialog: false })}
             onConfirm={() => this.onDeleteDb()}>
               <Trans>Deleting the database is irreversible!</Trans><br />
               <Trans>Please type in the database name</Trans> <b>{this.state.dbToDelete.name}</b>
