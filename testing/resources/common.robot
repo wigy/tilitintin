@@ -7,6 +7,7 @@ Library                                 ../libraries/security.py
 Library                                 ../libraries/report_parsing.py
 Resource                                ./admin/users.robot
 Resource                                ./shared/navigation.robot
+Resource                                ./shared/messages.robot
 Resource                                ./user/transactions.robot
 Resource                                ./user/reports.robot
 
