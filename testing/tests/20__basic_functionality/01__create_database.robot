@@ -17,4 +17,4 @@ Create Database
     Input Text                          company-name         ${TEST_COMPANY}
     Input Text                          company-number       12345678-9
     Click Element                       OK
-    Wait Until Page Contains Element    ${DATABASE_CARD}//*[text()='${TEST_DATABASE}']
+    Wait For Title                      Periods

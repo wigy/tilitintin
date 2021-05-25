@@ -55,3 +55,9 @@ Get Currently Logged User
     Return From Keyword If              not ${jwt}
     Return From Keyword If              not ${jwt}[login]
     Return From Keyword                 ${jwt}[user]
+
+Wait For Title
+    [Documentation]                     Wait until page subtitle is visible.
+    [Arguments]                         ${title}
+    # TODO: Should add class.
+    Wait Until Element is Visible       //h5[text() = '${title}']
