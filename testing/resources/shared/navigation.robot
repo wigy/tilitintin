@@ -18,6 +18,8 @@ Login As
     Ensure Browser Is Open
     ${current_user}                     Get Currently Logged User
     Return From Keyword If              '${current_user}' == '${username}'
+    Log to Console                      Want to be ${username} but we are ${current_user}
+    Run Keyword If                      ${current_user}       Logout
     Go To Login
     Fill in Login                       ${username}     ${password}
     Wait Until Element is Enabled       HomeMenu
@@ -25,6 +27,7 @@ Login As
     Change Language                     en
 
 Logout
+    Log to Console                      Logging out
     Click Element                       LogoutMenu
     Wait Until Element is Visible       css:.LoginPage
 
