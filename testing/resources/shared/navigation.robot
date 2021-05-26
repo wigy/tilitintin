@@ -1,4 +1,5 @@
 *** Keywords ***
+
 Ensure Browser Is Open
     [Documentation]                     Check if the browser is not open and open it.
     Run Keyword If                      '${CI}'=='True'    Start Virtual Display               1920    1080
@@ -40,24 +41,34 @@ Go To Login
     Wait Until Element is Visible       css:.LoginPage
 
 Go To Dashboard
+    Wait Until No Loading Shadow
     Click Element                       HomeMenu
     Wait Until Element is Visible       css:.DatabasesPage
+    Wait Until No Loading Shadow
 
 Go To Transactions
+    Wait Until No Loading Shadow
     Click Element                       TransactionsMenu
     Wait Until Element is Visible       css:.TransactionsPage
+    Wait Until No Loading Shadow
 
 Go To Reports
+    Wait Until No Loading Shadow
     Click Element                       ReportsMenu
     Wait Until Element is Visible       css:.ReportsPage
+    Wait Until No Loading Shadow
 
 Go To Tools
+    Wait Until No Loading Shadow
     Click Element                       ToolsMenu
     Wait Until Element is Visible       css:.ToolsForDatabasesPage
+    Wait Until No Loading Shadow
 
 Go To Admin
+    Wait Until No Loading Shadow
     Click Element                       AdminMenu
     Wait Until Element is Visible       css:.UserTools
+    Wait Until No Loading Shadow
 
 Get Currently Logged User
     [Documentation]                     Find out the name of the currently logged user from the JWT token stored to local store.
