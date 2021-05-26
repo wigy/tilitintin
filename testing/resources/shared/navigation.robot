@@ -22,6 +22,7 @@ Login As
     Fill in Login                       ${username}     ${password}
     Wait Until Element is Enabled       HomeMenu
     Log to Console                      Logged in as ${username}
+    Change Language                     en
 
 Logout
     Click Element                       LogoutMenu
@@ -46,6 +47,10 @@ Go To Reports
 Go To Tools
     Click Element                       ToolsMenu
     Wait Until Element is Visible       css:.ToolsForDatabasesPage
+
+Go To Admin
+    Click Element                       AdminMenu
+    Wait Until Element is Visible       css:.UserTools
 
 Get Currently Logged User
     [Documentation]                     Find out the name of the currently logged user from the JWT token stored to local store.

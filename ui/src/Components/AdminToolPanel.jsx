@@ -66,7 +66,7 @@ class AdminToolPanel extends Component {
 
       return (
         <div className="ToolPanel AdminToolPanel">
-          <Title><Trans>User Tools</Trans></Title>
+          <Title className="UserTools"><Trans>User Tools</Trans></Title>
 
           <IconButton id="create-user" disabled={this.state.showCreateUserDialog} onClick={() => this.onCreateUser()} title="create-user" icon="user-plus"></IconButton>
           <IconButton id="delete-user" disabled={!selectedUser} onClick={() => this.setState({ showDeleteUserDialog: true, emailInput: '' })} title="delete-user" icon="trash"></IconButton>

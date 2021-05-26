@@ -28,7 +28,7 @@ class UserList extends Component {
       <div>
         <List className="UserList">
           {this.props.store.users.map((user) => (
-            <ListItem key={user.user} button selected={current === user.user} onClick={() => this.onClickUser(user)}>
+            <ListItem id={`user-${user.user}`} key={user.user} button selected={current === user.user} onClick={() => this.onClickUser(user)}>
               <ListItemText primary={`${user.name} (${user.user})`} secondary={user.email} />
             </ListItem>
           ))}
