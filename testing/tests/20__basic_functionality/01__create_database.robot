@@ -6,7 +6,6 @@ Suite Teardown                          Standard Suite Teardown
 *** Test Cases ***
 Create Database
 # TODO: At the moment we don't care duplicates but we should delete database afterwards.
-    Change Language                     en
     Login as User
     Go To Tools
     Click Element                       New Database

@@ -165,6 +165,7 @@ ${INCOME_STATEMENT_DETAILED_REPORT}      SEPARATOR=\n
 *** Test Cases ***
 Verify That Reports Are Correct
     Login as User
+    Change Language                     fi
     Select First Period of DB
     Select Report                       general-journal
     ${data}                             Gather Report Data

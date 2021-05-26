@@ -6,6 +6,7 @@ Suite Teardown                          Standard Suite Teardown
 *** Test Cases ***
 Create First Few Transactions
     Login as User
+    Change Language                     fi
     Select First Period of DB
     Click Element                       Add Transaction
     Click Element                       Select Account
@@ -24,6 +25,7 @@ Create First Few Transactions
 
 Create Some VAT Transactions
     Login as User
+    Change Language                     fi
     Select First Period of DB
     Select Account from Balances        1900
     Click Element                       Add Transaction
