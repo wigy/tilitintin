@@ -41,6 +41,7 @@ i18n.init({
         'icon-new-database': 'Create new database',
         'icon-hide-details': 'Hide details',
         'icon-show-details': 'Show details',
+        'icon-delete-user': 'Delete User',
 
         'column-account-number': 'Num',
         'column-balance': 'Balance',
@@ -200,6 +201,12 @@ i18n.init({
         'Database deleted permanently.': 'Tietokanta poistettu lopullisesti.',
         'Please type in the database name': 'Ole hyvä ja anna tietokannan nimi',
         'Deleting the database is irreversible!': 'Tietokannan poisto on lopullinen!',
+        'User deletion failed': 'Käyttäjän poisto epäonnistui',
+        'Email was not given correctly.': 'Sähköpostiosoite annettiin väärin.',
+        'User deleted permanently.': 'Käyttäjä poistettu pysyvästi.',
+        'Delete User': 'Poista käyttäjä',
+        'Deleting the user is irreversible!': 'Käyttäjän poisto on peruuttamaton!',
+        'Please type in the email': 'Syötä alle sähköpostiosoite',
 
         'report-balance-sheet-detailed': 'Tase tilierittelyin',
         'report-balance-sheet': 'Tase',
@@ -240,6 +247,7 @@ i18n.init({
         'icon-unlock-period': 'Poista tilikauden lukitus',
         'icon-upload-database': 'Lähetä palvelimelle vanha Tilitin tiedosto',
         'icon-new-database': 'Luo uusi tietokanta',
+        'icon-delete-user': 'Poista käyttäjä',
 
         'column-account-number': 'Nro',
         'column-balance': 'Saldo',

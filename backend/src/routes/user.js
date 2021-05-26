@@ -34,12 +34,14 @@ router.post('/',
       })
   })
 
-router.patch('/:user',
-  async (req, res) => {
-  })
-
 router.delete('/:user',
   async (req, res) => {
+    await users.deleteOne(req.params.user)
+      .then(() => res.sendStatus(204))
+      .catch(err => {
+        console.error(err)
+        return res.status(500).send({ message: 'User deletion failed' })
+      })
   })
 
 module.exports = router

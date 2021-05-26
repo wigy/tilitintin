@@ -8,6 +8,7 @@ import Cursor from '../Stores/Cursor'
 import Title from './Title'
 import RegisterForm from './RegisterForm'
 import Dialog from './Dialog'
+import { TextField } from '@material-ui/core'
 
 @withTranslation('translations')
 @inject('store')
@@ -15,7 +16,9 @@ import Dialog from './Dialog'
 class AdminToolPanel extends Component {
 
   state = {
-    showCreateUserDialog: false
+    showCreateUserDialog: false,
+    showDeleteUserDialog: false,
+    emailInput: ''
   }
 
   componentDidMount() {
@@ -24,6 +27,17 @@ class AdminToolPanel extends Component {
 
   onCreateUser() {
     this.setState({ showCreateUserDialog: true })
+  }
+
+  async onDeleteUser(user) {
+    if (user.email !== this.state.emailInput) {
+      this.props.store.addError(this.props.t('Email was not given correctly.'))
+    } else {
+      if (await this.props.store.deleteUser(user)) {
+        this.props.store.getUsers()
+        this.props.store.addMessage(this.props.t('User deleted permanently.'))
+      }
+    }
   }
 
   onRegister({ user, name, password, email }) {
@@ -46,19 +60,45 @@ class AdminToolPanel extends Component {
     }
 
     if (match.params && (match.params.tool === 'users' || !match.params.tool)) {
+
+      const selectedUser = this.props.location.search && new URLSearchParams(this.props.location.search).get('user')
+      const user = selectedUser && this.props.store.getUser(selectedUser)
+
       return (
         <div className="ToolPanel AdminToolPanel">
           <Title><Trans>User Tools</Trans></Title>
+
           <IconButton id="create-user" disabled={this.state.showCreateUserDialog} onClick={() => this.onCreateUser()} title="create-user" icon="user-plus"></IconButton>
-          <Dialog noActions
+          <IconButton id="delete-user" disabled={!selectedUser} onClick={() => this.setState({ showDeleteUserDialog: true, emailInput: '' })} title="delete-user" icon="trash"></IconButton>
+
+          <Dialog
+            noActions
+            wider
             title={<Trans>Create User</Trans>}
             isVisible={this.state.showCreateUserDialog}
             onClose={() => this.setState({ showCreateUserDialog: false })}
-            wider
           >
             <RegisterForm
               onCancel={() => this.setState({ showCreateUserDialog: false })}
               onRegister={({ user, name, password, email }) => this.onRegister({ user, name, password, email })}
+              />
+          </Dialog>
+
+          <Dialog
+            title={<Trans>Delete User</Trans>}
+            isVisible={this.state.showDeleteUserDialog}
+            onClose={() => this.setState({ showDeleteUserDialog: false })}
+            onConfirm={() => this.onDeleteUser(user)}
+            wider
+          >
+              <Trans>Deleting the user is irreversible!</Trans><br />
+              <Trans>Please type in the email</Trans> <b>{user && user.email}</b>
+              <TextField
+                name="deleted-user-email"
+                fullWidth
+                label={<Trans>Email</Trans>}
+                value={this.state.nameInput}
+                onChange={(event) => (this.setState({ emailInput: event.target.value }))}
               />
           </Dialog>
         </div>

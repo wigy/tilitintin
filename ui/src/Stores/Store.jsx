@@ -799,11 +799,27 @@ class Store {
   /**
    * Fill in users table (admin only).
    */
-  getUsers() {
-    this.request('/admin/user')
+  async getUsers() {
+    return this.request('/admin/user')
       .then((users) => {
         runInAction(() => this.users.replace(users))
       })
+  }
+
+  /**
+   * Find the given user that has been already loaded.
+   */
+  getUser(name) {
+    return this.users.find(u => u.user === name)
+  }
+
+  /**
+   * Delete user from the system.
+   * @param {User} user
+   */
+  async deleteUser(user) {
+    const path = '/admin/user/' + user.user
+    return this.request(path, 'DELETE')
   }
 
   /**

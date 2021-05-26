@@ -5,6 +5,10 @@ const glob = require('glob')
 const jwt = require('jsonwebtoken')
 const config = require('../config')
 
+function validUserName(name) {
+  return name && /^[a-z0-9]+$/.test(`${name}`)
+}
+
 /**
  * Validate new user data.
  * @param {String} user
@@ -14,7 +18,7 @@ const config = require('../config')
  * @returns {true|String}
  */
 function validateUser(user, name, password, email) {
-  if (!user || !/^[a-z0-9]+$/.test(user)) {
+  if (!validUserName(user)) {
     return 'User name is not valid (lower case letters and numbers only).'
   }
   if (password.length < 4) {
@@ -196,9 +200,28 @@ async function getOne(user) {
   })
 }
 
+/**
+ * Delete a user.
+ */
+async function deleteOne(user) {
+  return new Promise((resolve, reject) => {
+    if (!validUserName(user)) {
+      return reject(new Error('Invalid user name'))
+    }
+    const filePath = path.join(config.DBPATH, user, 'auth.json')
+    if (!fs.existsSync(filePath)) {
+      reject(new Error(`User ${user} does not exist.`))
+    } else {
+      fs.rmdirSync(path.join(config.DBPATH, user), { recursive: true })
+      resolve()
+    }
+  })
+}
+
 module.exports = {
   getAll,
   getOne,
+  deleteOne,
   hasAdminUser,
   hasUser,
   login,
