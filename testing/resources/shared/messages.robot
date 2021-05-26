@@ -3,6 +3,7 @@ Change Language
     [Arguments]                         ${language}
     Execute Javascript                  localStorage.setItem('language', '${language}')
     Execute Javascript                  document.location.reload()
+    Wait Until Element is Visible       css:.Version
 
 Should Have Any Error Message
     Page Should Contain Element         css:.Message.error

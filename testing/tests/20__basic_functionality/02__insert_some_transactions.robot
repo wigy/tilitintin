@@ -25,7 +25,6 @@ Create First Few Transactions
 
 Create Some VAT Transactions
     Login as User
-    Change Language                     fi
     Select First Period of DB
     Select Account from Balances        1900
     Click Element                       Add Transaction
