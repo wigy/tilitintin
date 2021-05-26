@@ -21,7 +21,7 @@ Actually Remove Database
     Login as User
     Go To Tools
     Click Element                       ${TEST_DATABASE_CARD}/../../..//*[contains(@class,'DeleteDatabase')]
-    Input Text                          name                ${TEST_DATABASE}
+    Input Text                          deleted-database-name       ${TEST_DATABASE}
     Click Element                       OK
     Wait Until Page Does Not Contain Element    ${TEST_DATABASE_CARD}
     Should Have Info Message            Database deleted permanently.

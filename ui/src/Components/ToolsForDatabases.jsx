@@ -27,9 +27,10 @@ class ToolsForDatabases extends Component {
       this.props.store.addError(this.props.t('Database name was not given correctly.'))
     } else {
       const db = this.state.dbToDelete
-      await db.delete()
-      await this.props.store.fetchDatabases(true)
-      this.props.store.addMessage(this.props.t('Database deleted permanently.'))
+      if (await db.delete()) {
+        await this.props.store.fetchDatabases(true)
+        this.props.store.addMessage(this.props.t('Database deleted permanently.'))
+      }
     }
   }
 
@@ -65,11 +66,12 @@ class ToolsForDatabases extends Component {
             title={<Trans>Delete this database?</Trans>}
             isVisible={this.state.showDeleteDialog}
             onClose={() => this.setState({ showDeleteDialog: false })}
-            onConfirm={() => this.onDeleteDb()}>
+            onConfirm={() => this.onDeleteDb()}
+          >
               <Trans>Deleting the database is irreversible!</Trans><br />
               <Trans>Please type in the database name</Trans> <b>{this.state.dbToDelete.name}</b>
               <TextField
-                name="name"
+                name="deleted-database-name"
                 fullWidth
                 label={<Trans>Name</Trans>}
                 value={this.state.nameInput}
