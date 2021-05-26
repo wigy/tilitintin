@@ -11,6 +11,8 @@ ${TEST_DATABASE_DELETE_BUTTON}          ${TEST_DATABASE_CARD}/../../..//*[contai
 *** Test Cases ***
 Try To Remove Database
     Login as User
+    Change Language                     en
+    Go To Starting URL
     Go To Tools
     Click Element                       ${TEST_DATABASE_DELETE_BUTTON}
     Input Text                          deleted-database-name       ${TEST_DATABASE}FAIL
@@ -19,6 +21,7 @@ Try To Remove Database
 
 Actually Remove Database
     Login as User
+    Change Language                     en
     Go To Tools
     Click Element                       ${TEST_DATABASE_DELETE_BUTTON}
     Input Text                          deleted-database-name       ${TEST_DATABASE}

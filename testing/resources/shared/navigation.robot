@@ -5,6 +5,7 @@ Ensure Browser Is Open
     ${ret}                              Run Keyword And Return Status       Execute Javascript      return 1
     Return From Keyword If              ${ret}
     Open Browser                        ${TEST_BASE_URL}/      Chrome
+    Maximize Browser Window
     Wait Until Element is Visible       css:.logo
 
 Login As Admin
@@ -31,8 +32,11 @@ Logout
     Click Element                       LogoutMenu
     Wait Until Element is Visible       css:.LoginPage
 
-Go To Login
+Go To Starting URL
     Go To                               ${TEST_BASE_URL}/
+
+Go To Login
+    Go To Starting URL
     Wait Until Element is Visible       css:.LoginPage
 
 Go To Dashboard

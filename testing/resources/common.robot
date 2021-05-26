@@ -40,7 +40,7 @@ Initialize Variables
     Log to Console                      Normal user is ${TEST_USER}
     ${TEST_EMAIL}                       Get Environment Variable    TEST_EMAIL
     Set Global Variable                 ${TEST_EMAIL}
-    Log to Console                      Normal user emails is ${TEST_EMAIL}
+    Log to Console                      Normal user email is ${TEST_EMAIL}
     ${TEST_PASSWORD}                    Get Environment Variable    TEST_PASSWORD
     Set Global Variable                 ${TEST_PASSWORD}
     ${YEAR}                             Current Year
