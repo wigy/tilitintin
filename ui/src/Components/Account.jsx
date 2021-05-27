@@ -112,6 +112,7 @@ class Account extends Component {
         <TextField
           fullWidth
           label={<Trans>Account Number</Trans>}
+          name="account_number"
           error={numberAlreadyExists || numberMissing}
           helperText={numberAlreadyExists ? t('Account number exists.') : (numberMissing ? t('Account number is required.') : '')}
           value={this.state.accountNumber}
@@ -120,6 +121,7 @@ class Account extends Component {
         <TextField
           fullWidth
           label={<Trans>Account Name</Trans>}
+          name="account_name"
           error={nameMissing}
           helperText={nameMissing ? t('Account name is required.') : ''}
           value={this.state.accountName}
@@ -129,6 +131,8 @@ class Account extends Component {
           select
           fullWidth
           label={<Trans>Account Type</Trans>}
+          name="account_type"
+          className="account-type-dropdown"
           error={typeMissing}
           value={this.state.accountType}
           onChange={(e) => this.setState({ changed: true, accountType: e.target.value })}
@@ -140,6 +144,7 @@ class Account extends Component {
         <TextField
           fullWidth
           label={<Trans>VAT %</Trans>}
+          name="vat"
           value={this.state.accountVAT}
           onChange={(e) => this.setState({ changed: true, accountVAT: e.target.value })}
         />
@@ -201,7 +206,7 @@ class Account extends Component {
       <div>
         <Title><Trans>Accounts</Trans></Title>
         <SubPanel>
-          <Button variant="outlined" color="secondary" onClick={() => this.onClickCreateNew()}><Trans>Create New Account</Trans></Button>
+          <Button id="CreateNewAccount" variant="outlined" color="secondary" onClick={() => this.onClickCreateNew()}><Trans>Create New Account</Trans></Button>
         </SubPanel>
         {
           account &&
@@ -212,9 +217,9 @@ class Account extends Component {
             {account.vat_percentage ? <Labeled title={<Trans>Account VAT</Trans>}>{account.vat_percentage}%</Labeled> : ''}
             <br/>
             <br/>
-            <Button variant="outlined" color="secondary" disabled={!this.canChange()} onClick={() => this.setState({ deleteIsOpen: true })}><Trans>Delete Account</Trans></Button>
+            <Button id="DeleteAccount" variant="outlined" color="secondary" disabled={!this.canChange()} onClick={() => this.setState({ deleteIsOpen: true })}><Trans>Delete Account</Trans></Button>
             &nbsp;
-            <Button variant="outlined" color="secondary" onClick={() => this.onClickEdit()}><Trans>Edit Account</Trans></Button>
+            <Button id="EditAccount" variant="outlined" color="secondary" onClick={() => this.onClickEdit()}><Trans>Edit Account</Trans></Button>
             {this.renderDeleteDialog()}
           </SubPanel>
         }

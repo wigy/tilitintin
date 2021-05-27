@@ -69,7 +69,6 @@ Page Should Not Contain Any Account Types
 
 *** Test Cases ***
 Check Basic Account Listing Filtering
-    [Tags]  skip
     Login as User
     Select First Period of DB
    	Go To Accounts
@@ -90,7 +89,6 @@ Check Basic Account Listing Filtering
 	Page Should Contain Profits
 
 Test Searching Accounts With Text
-    [Tags]  skip
     Login as User
     Select First Period of DB
    	Go To Accounts
