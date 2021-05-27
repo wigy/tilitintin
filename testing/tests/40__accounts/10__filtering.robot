@@ -10,7 +10,7 @@ Page Should Contain Few Assets
 	Page Should Contain					1763 Arvonlisäverosaamiset
 
 Page Should Not Contain Assets
-	Wait Until Element Is Not Visible	1900 Käteisvarat
+	Wait Until Page Does Not Contain	1900 Käteisvarat    timeout=0.01s
 
 Page Should Contain Few Liabilities
 	Page Should Contain					2871 Ostovelat 1
@@ -19,13 +19,13 @@ Page Should Contain Few Liabilities
 	Page Should Contain					2939 Arvonlisäverovelka
 
 Page Should Not Contain Liabilities
-	Wait Until Element Is Not Visible	2871 Ostovelat 1
+	Wait Until Page Does Not Contain	2871 Ostovelat 1    timeout=0.01s
 
 Page Should Contain Few Equities
 	Page Should Contain					2001 Osakepääoma
 
 Page Should Not Contain Equities
-	Wait Until Element Is Not Visible	2001 Osakepääoma
+	Wait Until Page Does Not Contain	2001 Osakepääoma    timeout=0.01s
 
 Page Should Contain Few Revenues
 	Page Should Contain					3000 Myynti
@@ -34,7 +34,7 @@ Page Should Contain Few Revenues
 	Page Should Contain					9700 Satunnaiset tuotot
 
 Page Should Not Contain Revenues
-	Wait Until Element Is Not Visible	3000 Myynti
+	Wait Until Page Does Not Contain	3000 Myynti         timeout=0.01s
 
 Page Should Contain Few Expenses
 	Page Should Contain					4000 Ostot
@@ -43,13 +43,13 @@ Page Should Contain Few Expenses
 	Page Should Contain					9740 Satunnaiset kulut
 
 Page Should Not Contain Expenses
-	Wait Until Element Is Not Visible   4000 Ostot
+	Wait Until Page Does Not Contain    4000 Ostot          timeout=0.01s
 
 Page Should Contain Profits
 	Page Should Contain					2251 Edellisten tilikausien voitto/tappio
 
 Page Should Not Contain Profits
-	Wait Until Element Is Not Visible	2251 Edellisten tilikausien voitto/tappio
+	Wait Until Page Does Not Contain	2251 Edellisten tilikausien voitto/tappio   timeout=0.01s
 
 Page Should Contain All Account Types
 	Page Should Contain Few Assets
@@ -90,6 +90,7 @@ Check Basic Account Listing Filtering
 	Page Should Contain Profits
 
 Test Searching Accounts With Text
+    [Tags]  skip
     Login as User
     Select First Period of DB
    	Go To Accounts
@@ -103,3 +104,6 @@ Test Searching Accounts With Text
     Input Text                          search          Arvonlisäverovelka
     Press Keys                          None    ENTER
 	Page Should Contain					2939 Arvonlisäverovelka
+    Press Keys                          None    CTRL+A
+    Press Keys                          None    BACKSPACE
+    Press Keys                          None    ENTER
