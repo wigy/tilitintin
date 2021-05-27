@@ -12,7 +12,7 @@ Fill in Login
 Fill in Registration
     [Arguments]                         ${username}     ${password}     ${email}
     Input Text                          username        ${username}
-    Input Text                          full-name       Does Not Matter
+    Input Text                          full-name       Created by Robot
     Input Text                          email           ${email}
     Input Password                      password        ${password}
     Input Password                      password-again  ${password}

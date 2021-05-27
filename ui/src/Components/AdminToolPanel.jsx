@@ -45,6 +45,7 @@ class AdminToolPanel extends Component {
       .then(() => {
         this.setState({ showCreateUserDialog: false })
         this.props.store.getUsers()
+        this.props.store.addMessage(this.props.t('User created successfully.'))
       })
       .catch(() => {
         this.setState({ showCreateUserDialog: false })
