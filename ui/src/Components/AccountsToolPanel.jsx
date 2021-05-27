@@ -84,6 +84,7 @@ class AccountsToolPanel extends Component {
         <TextField
           className="Search"
           label={<Trans>Search</Trans>}
+          name="search"
           style={{ height: '36px', width: '280px', fontSize: '20px' }}
           value={this.state.search}
           onChange={e => { this.setState({ search: e.target.value }) }}

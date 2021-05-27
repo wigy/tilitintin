@@ -69,6 +69,7 @@ Page Should Not Contain Any Account Types
 
 *** Test Cases ***
 Check Basic Account Listing Filtering
+    [Tags]  skip
     Login as User
     Select First Period of DB
    	Go To Accounts
@@ -87,3 +88,18 @@ Check Basic Account Listing Filtering
 	Page Should Contain Few Expenses
     Click Element                       Profit
 	Page Should Contain Profits
+
+Test Searching Accounts With Text
+    Login as User
+    Select First Period of DB
+   	Go To Accounts
+    Input Text                          search          1900
+    Press Keys                          None    ENTER
+	Page Should Contain					1900 Käteisvarat
+    Press Keys                          None    BACKSPACE
+    Press Keys                          None    BACKSPACE
+    Press Keys                          None    BACKSPACE
+    Press Keys                          None    BACKSPACE
+    Input Text                          search          Arvonlisäverovelka
+    Press Keys                          None    ENTER
+	Page Should Contain					2939 Arvonlisäverovelka
