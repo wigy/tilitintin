@@ -42,30 +42,35 @@ Go To Login
 
 Go To Dashboard
     Wait Until No Loading Shadow
+    Wait Until Element is Visible       HomeMenu
     Click Element                       HomeMenu
     Wait Until Element is Visible       css:.DatabasesPage
     Wait Until No Loading Shadow
 
 Go To Transactions
     Wait Until No Loading Shadow
+    Wait Until Element is Visible       TransactionsMenu
     Click Element                       TransactionsMenu
     Wait Until Element is Visible       css:.TransactionsPage
     Wait Until No Loading Shadow
 
 Go To Reports
     Wait Until No Loading Shadow
+    Wait Until Element is Visible       ReportsMenu
     Click Element                       ReportsMenu
     Wait Until Element is Visible       css:.ReportsPage
     Wait Until No Loading Shadow
 
 Go To Tools
     Wait Until No Loading Shadow
+    Wait Until Element is Visible       ToolsMenu
     Click Element                       ToolsMenu
     Wait Until Element is Visible       css:.ToolsForDatabasesPage
     Wait Until No Loading Shadow
 
 Go To Admin
     Wait Until No Loading Shadow
+    Wait Until Element is Visible       AdminMenu
     Click Element                       AdminMenu
     Wait Until Element is Visible       css:.UserTools
     Wait Until No Loading Shadow
