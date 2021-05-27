@@ -61,6 +61,13 @@ Go To Reports
     Wait Until Element is Visible       css:.ReportsPage
     Wait Until No Loading Shadow
 
+Go To Accounts
+    Wait Until No Loading Shadow
+    Wait Until Element is Visible       AccountsMenu
+    Click Element                       AccountsMenu
+    Wait Until Element is Visible       css:.AccountsPage
+    Wait Until No Loading Shadow
+
 Go To Tools
     Wait Until No Loading Shadow
     Wait Until Element is Visible       ToolsMenu

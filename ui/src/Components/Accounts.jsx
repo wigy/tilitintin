@@ -37,7 +37,7 @@ class Accounts extends Component {
     ))
 
     return (
-      <div>
+      <div className="AccountsPage">
         <Title><Trans>Account scheme</Trans></Title>
         <AccountTable accounts={accounts} headings={this.props.store.headings} />
       </div>
