@@ -48,8 +48,8 @@ class AccountsToolPanel extends Component {
     return ( // ASSET/LIABILITY/EQUITY/REVENUE/EXPENSE/PROFIT_PREV/PROFIT
       <div className="ToolPanel AccountsToolPanel">
         <Title>Accounts</Title>
-        <IconButton id="Show All" onClick={enableAll} title="all-account-types" icon="show-all"></IconButton>
-        <IconButton id="Hide All" onClick={disableAll} title="none-account-types" icon="hide-all"></IconButton>
+        <IconButton id="ShowAll" onClick={enableAll} title="all-account-types" icon="show-all"></IconButton>
+        <IconButton id="HideAll" onClick={disableAll} title="none-account-types" icon="hide-all"></IconButton>
         <IconSpacer/>
         <IconButton id="Favourites" key="button-favorite" title="favorite" icon="star"
           toggle={!!store.tools.accounts.favorite}

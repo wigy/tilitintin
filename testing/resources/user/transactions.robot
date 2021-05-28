@@ -11,8 +11,13 @@ ${CURRENTLY_SELECTED_ROW}               //tr[contains(@class, "Transaction")][co
 ${BALANCE_LINE}                         //tr[contains(@class, "BalanceLine")]
 
 *** Keywords ***
+# TODO: This could go to different file like db.robot.
 Select First Period of DB
     [Documentation]                     Got to the home page and select first period of first database.
+    ${db}                               Current DB
+    ${period}                           Current Period
+    ${already_there}                    Evaluate            ${db}!=None and ${period}!=None
+    Return From Keyword If              ${already_there}
     Go To Dashboard
     Click Element                       A
     Click Element                       1

@@ -73,7 +73,7 @@ Check Basic Account Listing Filtering
     Select First Period of DB
    	Go To Accounts
 	Page Should Contain All Account Types
-    Click Element                       Hide All
+    Click Element                       HideAll
     Page Should Not Contain Any Account Types
     Click Element                       Asset
 	Page Should Contain Few Assets
@@ -87,6 +87,7 @@ Check Basic Account Listing Filtering
 	Page Should Contain Few Expenses
     Click Element                       Profit
 	Page Should Contain Profits
+    Click Element                       ShowAll
 
 Test Searching Accounts With Text
     Login as User

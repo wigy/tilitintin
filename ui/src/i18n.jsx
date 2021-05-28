@@ -289,6 +289,10 @@ i18n.init({
   }
 })
 
-i18n.changeLanguage(localStorage.getItem('language') || 'fi')
+const language = localStorage.getItem('language')
+if (!language) {
+  localStorage.setItem('language', 'fi')
+}
+i18n.changeLanguage(localStorage.getItem('language'))
 
 export default i18n

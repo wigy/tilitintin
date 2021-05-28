@@ -48,6 +48,9 @@ Go To Dashboard
     Wait Until No Loading Shadow
 
 Go To Transactions
+    ${page}                             Current Page
+    ${already_there}                    Evaluate            '${page}'=='txs'
+    Return From Keyword If              ${already_there}
     Wait Until No Loading Shadow
     Wait Until Element is Visible       TransactionsMenu
     Click Element                       TransactionsMenu
@@ -55,6 +58,9 @@ Go To Transactions
     Wait Until No Loading Shadow
 
 Go To Reports
+    ${page}                             Current Page
+    ${already_there}                    Evaluate            '${page}'=='report'
+    Return From Keyword If              ${already_there}
     Wait Until No Loading Shadow
     Wait Until Element is Visible       ReportsMenu
     Click Element                       ReportsMenu
@@ -62,6 +68,9 @@ Go To Reports
     Wait Until No Loading Shadow
 
 Go To Accounts
+    ${page}                             Current Page
+    ${already_there}                    Evaluate            '${page}'=='account'
+    Return From Keyword If              ${already_there}
     Wait Until No Loading Shadow
     Wait Until Element is Visible       AccountsMenu
     Click Element                       AccountsMenu
@@ -69,6 +78,9 @@ Go To Accounts
     Wait Until No Loading Shadow
 
 Go To Tools
+    ${page}                             Current Page
+    ${already_there}                    Evaluate            '${page}'=='tools'
+    Return From Keyword If              ${already_there}
     Wait Until No Loading Shadow
     Wait Until Element is Visible       ToolsMenu
     Click Element                       ToolsMenu
@@ -76,6 +88,9 @@ Go To Tools
     Wait Until No Loading Shadow
 
 Go To Admin
+    ${page}                             Current Page
+    ${already_there}                    Evaluate            '${page}'=='admin'
+    Return From Keyword If              ${already_there}
     Wait Until No Loading Shadow
     Wait Until Element is Visible       AdminMenu
     Click Element                       AdminMenu

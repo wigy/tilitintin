@@ -79,7 +79,7 @@ class Account extends Component {
   renderDeleteDialog() {
     const account = this.props.store.account
     return <Dialog
-      className="dialog"
+      className="DeleteAccountDialog"
       title={<Trans>Delete this account?</Trans>}
       isVisible={this.state.deleteIsOpen}
       onClose={() => this.setState({ deleteIsOpen: false })}
@@ -210,10 +210,10 @@ class Account extends Component {
         </SubPanel>
         {
           account &&
-          <SubPanel>
-            <Labeled title={<Trans>Account Name</Trans>}>{account.name}</Labeled>
-            <Labeled title={<Trans>Account Number</Trans>}>{account.number}</Labeled>
-            <Labeled title={<Trans>Account Type</Trans>}><Trans>{account.type}</Trans></Labeled>
+          <SubPanel className="AccountInfoPanel">
+            <Labeled className="name" title={<Trans>Account Name</Trans>}>{account.name}</Labeled>
+            <Labeled className="number" title={<Trans>Account Number</Trans>}>{account.number}</Labeled>
+            <Labeled className="type" title={<Trans>Account Type</Trans>}><Trans>{account.type}</Trans></Labeled>
             {account.vat_percentage ? <Labeled title={<Trans>Account VAT</Trans>}>{account.vat_percentage}%</Labeled> : ''}
             <br/>
             <br/>

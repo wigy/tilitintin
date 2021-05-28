@@ -4,7 +4,7 @@ import { Card, CardContent, Typography } from '@material-ui/core'
 
 const SubPanel = (props) => {
   return (
-    <Card className={props.className || ''} variant="outlined" style={{ margin: '1rem' }}>
+    <Card className={props.className || 'SubPanel'} variant="outlined" style={{ margin: '1rem' }}>
       <CardContent>
         <Typography variant="body1" component="div">
           {props.children}

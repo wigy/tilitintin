@@ -1,6 +1,8 @@
 *** Keywords ***
 Change Language
     [Arguments]                         ${language}
+    ${old}                              Current Language
+    Return From Keyword If              '${old}' == '${language}'
     Execute Javascript                  localStorage.setItem('language', '${language}')
     Execute Javascript                  document.location.reload()
     Wait Until Element is Visible       css:.Version
