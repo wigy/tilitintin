@@ -166,14 +166,12 @@ class ToolsToolPanel extends Component {
    */
   @action.bound
   async renumberDocuments(db, periodId) {
-    runInAction(async () => {
-      const toRenumber = this.props.store.period.incorrectlyNumberedDocuments
-      for (const change of toRenumber) {
-        const doc = this.props.store.period.getDocument(change.id)
-        doc.number = change.newNumber
-        await doc.save()
-      }
-    })
+    const toRenumber = this.props.store.period.incorrectlyNumberedDocuments
+    for (const change of toRenumber) {
+      const doc = this.props.store.period.getDocument(change.id)
+      runInAction(() => (doc.number = change.newNumber))
+      await doc.save()
+    }
   }
 
   /**
@@ -217,9 +215,12 @@ class ToolsToolPanel extends Component {
         companyCode: this.state.companyCode
       }
       )
-        .then(() => {
-          this.setState({ askNew: false })
-          this.props.history.push(`/${this.state.databaseName}/tools///periods`)
+        .then((res) => {
+          if (res) {
+            const dbName = this.state.databaseName
+            this.setState({ askNew: false, databaseName: '', companyName: '', companyCode: '' })
+            this.props.history.push(`/${dbName}/tools///periods`)
+          }
         })
     }
   }

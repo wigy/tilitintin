@@ -208,6 +208,7 @@ i18n.init({
         'Deleting the user is irreversible!': 'Käyttäjän poisto on peruuttamaton!',
         'Please type in the email': 'Syötä alle sähköpostiosoite',
         'User created successfully.': 'Käyttäjä luotu onnistuneesti.',
+        'Database already exists.': 'Samanniminen tietokanta on jo olemassa.',
 
         'report-balance-sheet-detailed': 'Tase tilierittelyin',
         'report-balance-sheet': 'Tase',

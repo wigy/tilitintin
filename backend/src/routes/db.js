@@ -21,12 +21,12 @@ router.post('/',
 
     if (!DB_REGEX.test(databaseName)) {
       console.error(`Invalid database name ${databaseName}.`)
-      return res.sendStatus(400)
+      return res.status(400).send({ message: 'Invalid database name.' })
     }
 
     if (knex.dbs(req.user).includes(databaseName)) {
       console.error(`Database ${databaseName} exists.`)
-      return res.sendStatus(400)
+      return res.status(400).send({ message: 'Database already exists.' })
     }
 
     const dst = knex.userPath(`${databaseName}.sqlite`)
@@ -53,7 +53,7 @@ router.delete('/:name',
     const { name } = req.params
     if (!DB_REGEX.test(name)) {
       console.error(`Invalid database name ${name}.`)
-      return res.sendStatus(400)
+      return res.status(400).send({ message: 'Invalid database name.' })
     }
     const dbPath = `${path.join(config.DBPATH, req.user)}/${name}.sqlite`
     fs.unlinkSync(dbPath)
