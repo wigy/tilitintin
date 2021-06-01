@@ -110,7 +110,7 @@ class Store {
    */
   @action
   async request(path, method = 'GET', data = null, file = null, noDimming = false) {
-    const url = config.API_URL + path
+    const url = config.UI_API_URL + path
     const options = {
       method: method,
       headers: {

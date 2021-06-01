@@ -31,7 +31,7 @@ class TagModel extends Model {
    * Construct URL for API image viewer.
    */
   get url() {
-    return `${Configuration.API_URL}/db/${this.store.db}/tags/${this.id}/view?token=${this.store.token}`
+    return `${Configuration.UI_API_URL}/db/${this.store.db}/tags/${this.id}/view?token=${this.store.token}`
   }
 
   /**

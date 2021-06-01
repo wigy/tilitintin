@@ -36,7 +36,7 @@ module.exports = {
     }),
 
     new DefinePlugin({
-      API_URL: JSON.stringify(process.env.API_URL || 'http://localhost:3101')
+      UI_API_URL: JSON.stringify(process.env.UI_API_URL || 'http://localhost:3101')
     })
   ],
 

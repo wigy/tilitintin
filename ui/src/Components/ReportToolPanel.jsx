@@ -38,7 +38,7 @@ class ReportToolPanel extends Component {
     }
 
     const onDownload = () => {
-      const url = `${Configuration.API_URL}${store.report.getUrl()}&csv&lang=${lang}`
+      const url = `${Configuration.UI_API_URL}${store.report.getUrl()}&csv&lang=${lang}`
       fetch(url, {
         method: 'GET',
         headers: new Headers({

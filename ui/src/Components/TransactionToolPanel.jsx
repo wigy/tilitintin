@@ -24,7 +24,7 @@ class TransactionToolPanel extends Component {
   onDownload = (db, periodId, accountId) => {
     const store = this.props.store
     const lang = i18n.language
-    const url = `${Configuration.API_URL}/db/${db}/report/account/${periodId}/${accountId}?csv&lang=${lang}`
+    const url = `${Configuration.UI_API_URL}/db/${db}/report/account/${periodId}/${accountId}?csv&lang=${lang}`
 
     fetch(url, {
       method: 'GET',

@@ -19,6 +19,8 @@ services:
       context: ui
     ports:
       - 3102:3102
+    environment:
+      UI_API_URL: http://localhost:3101
     volumes:
       - ./ui/bin:/var/app/bin
       - ./ui/config:/var/app/config
