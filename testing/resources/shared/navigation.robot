@@ -109,5 +109,4 @@ Get Currently Logged User
 Wait For Title
     [Documentation]                     Wait until page subtitle is visible.
     [Arguments]                         ${title}
-    # TODO: Should add class.
-    Wait Until Element is Visible       //h5[text() = '${title}']
+    Wait Until Element is Visible       //*[contains(@class, "Title")]/h5[text() = '${title}']
