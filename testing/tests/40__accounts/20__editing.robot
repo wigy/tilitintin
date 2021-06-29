@@ -1,13 +1,13 @@
+*** Settings ***
+Resource                                ../../resources/common.robot
+Suite Setup                             Standard Suite Setup
+Suite Teardown                          Standard Suite Teardown
+
 *** Variables ***
 ${ACCOUNT_INFO_PANEL}                   //*[contains(@class, 'AccountInfoPanel')]
 ${ACCOUNT_INFO_NUMBER}                  ${ACCOUNT_INFO_PANEL}//*[@class='number']
 ${ACCOUNT_INFO_NAME}                    ${ACCOUNT_INFO_PANEL}//*[@class='name']
 ${ACCOUNT_INFO_TYPE}                    ${ACCOUNT_INFO_PANEL}//*[@class='type']
-
-*** Settings ***
-Resource                                ../../resources/common.robot
-Suite Setup                             Standard Suite Setup
-Suite Teardown                          Standard Suite Teardown
 
 *** Test Cases ***
 Test Creating Accounts

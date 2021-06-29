@@ -9,6 +9,7 @@ Create New Account
     Click Element                       css:.account-type-dropdown
     Wait Until Element Is Enabled       //li[@data-value='${type}']
     Click Element                       //li[@data-value='${type}']
+    Wait Until Element Is Enabled       OK
     Click Element                       OK
     Wait Until Page Contains            ${number} ${name}
 
