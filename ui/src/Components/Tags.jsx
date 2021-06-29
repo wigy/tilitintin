@@ -11,9 +11,9 @@ class Tags extends Component {
 
   render() {
     return (
-      <div style={{ display: 'flex' }}>
+      <div style={{ marginLeft: '2px', display: 'flex' }}>
         {this.props.tags.map((tag) => (
-          <Avatar style={{ height: '24px', width: '24px' }} variant="rounded" key={tag.tag} src={tag.url}/>
+          <Avatar style={{ height: '22px', width: '22px' }} variant="rounded" key={tag.tag} src={tag.url}/>
         ))}
       </div>
     )

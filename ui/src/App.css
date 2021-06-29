@@ -66,9 +66,8 @@
   }
 
   .sub-selected {
-    background-color: yellow !important;
-    outline: 2px rgba(0,0,0,0.5) dotted !important;
-    outline-offset: -1px;
+    outline: 1px black solid !important;
+    outline-offset: 1px;
   }
 
   .hide-overflow {
