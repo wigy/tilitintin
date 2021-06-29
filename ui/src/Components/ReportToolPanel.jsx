@@ -77,6 +77,7 @@ class ReportToolPanel extends Component {
         switch (optionType) {
           case 'boolean':
             buttons.push(<IconButton
+              id={name}
               key={name}
               toggle={store.report.config[option]}
               onClick={() => onToggle(option)}
@@ -86,6 +87,7 @@ class ReportToolPanel extends Component {
             break
           case 'radio':
             buttons.push(<IconButton
+              id={name}
               key={name}
               toggle={store.report.config[option]}
               onClick={() => {
