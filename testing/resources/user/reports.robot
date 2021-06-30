@@ -28,3 +28,10 @@ Select Report
 Gather Report Data
     ${data}                             Execute Javascript      ${COLLECT_REPORT_JS}
     Return From Keyword                 ${data}
+
+Select Report Option
+    [Documentation]                     Click toolbar icon from the report options.
+    [Arguments]                         ${option}
+    Wait Until Page Contains Element    css:#${option}
+    Click Element                       css:#${option}
+    Wait Until No Loading Shadow
