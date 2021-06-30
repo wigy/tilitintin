@@ -86,9 +86,9 @@ class Dashboard extends Component {
           <Trans>Business ID</Trans>: {store.settings.BUSINESS_ID}<br />
           <br />
           <Typography variant="h5" color="textSecondary"><Trans>Periods</Trans></Typography>
-          <List>
+          <List className="PeriodList">
             {store.database.periods.reverse().map((period, index) => (
-              <ListItem key={period.id} selected={parseInt(periodId) === period.id}>
+              <ListItem id={`period-${period.start_date}-${period.end_date}`} key={period.id} selected={parseInt(periodId) === period.id}>
                 <Button id={index + 1} onClick={() => this.selectPeriod(period)}>
                   <Avatar>{index + 1}</Avatar>&nbsp;
                   <Localize date={period.start_date} /> &mdash; <Localize date={period.end_date} />
