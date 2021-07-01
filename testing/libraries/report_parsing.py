@@ -90,7 +90,7 @@ def report_should_match(report, format):
     if type(report) == str:
         report = json.loads(report.replace("'", '"'))
     if debug_whole:
-        debug('Complete Format', *format.split('|'))
+        debug('Complete Format', *map(lambda s: s.split('\n'), format.split('\n|\n')))
         debug('Complete Report', *report)
     compare_report(report, format)
     return True
