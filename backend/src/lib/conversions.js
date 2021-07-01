@@ -26,10 +26,9 @@ function csv(report, options = {}) {
     numeric: (column, entry) => (entry.amounts &&
       !entry.hideTotal &&
       entry.amounts[column.name] !== '' &&
-      entry.amounts[column.name] !== null &&
       !isNaN(entry.amounts[column.name]) &&
       entry.amounts[column.name] !== undefined)
-      ? locale.num(entry.amounts[column.name] / 100, options.lang) : ''
+      ? locale.num(entry.amounts[column.name], options.lang) : ''
   }
 
   const { data, columns } = report
