@@ -58,8 +58,10 @@ class ReportToolPanel extends Component {
     }
 
     const onToggle = (option) => {
-      store.report.config[option] = !store.report.config[option]
-      store.fetchReport(store.db, store.periodId, store.report.format)
+      runInAction(() => {
+        store.report.config[option] = !store.report.config[option]
+        store.fetchReport(store.db, store.periodId, store.report.format)
+      })
     }
 
     const options = store.report ? Object.keys({ ...store.report.options }) : []
