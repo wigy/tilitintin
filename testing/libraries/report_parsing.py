@@ -3,7 +3,7 @@ import sys
 import json
 
 first = True
-debug_whole = False
+debug_whole = True
 debug_lines = False
 debug_comparison = False
 
@@ -31,8 +31,8 @@ def report_should_match(report, format):
         global debug_comparison
         format = format.strip()
         if debug_comparison:
-            debug('  Compare format', format)
-            debug('  Compare report', report)
+            debug('    Compare format', format)
+            debug('    Compare report', report)
         if format[0] == '/' and format[-1] == '/':
             regex = re.compile('^' + format[1:-1] + '$')
             if not regex.match(report):
@@ -63,7 +63,7 @@ def report_should_match(report, format):
         lines = format.split('|')
         for line in lines:
             if debug_lines:
-                debug('Format', line)
+                debug('  Format', line)
             # If END, then verify that report is finished.
             if line.strip() == 'END':
                 is_finished(report[i:])
@@ -74,7 +74,7 @@ def report_should_match(report, format):
                     break
                 error([], line, 'Report does not have enough lines.')
             if debug_lines:
-                debug('Line  ', report[i])
+                debug('  Line  ', report[i])
             # Once format is finished without END, we don't care the rest.
             if line == '':
                 break
@@ -85,7 +85,7 @@ def report_should_match(report, format):
     if type(report) == str:
         report = json.loads(report.replace("'", '"'))
     if debug_whole:
-        debug('Complete Report', report)
-        debug('Complete Format', format)
+        debug('Complete Format', *format.split('|'))
+        debug('Complete Report', *report)
     compare_report(report, format)
     return True

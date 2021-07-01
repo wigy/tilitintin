@@ -35,3 +35,4 @@ Select Report Option
     Wait Until Page Contains Element    css:#${option}
     Click Element                       css:#${option}
     Wait Until No Loading Shadow
+    Wait Until Page Contains Element    css:.EndOfReport
