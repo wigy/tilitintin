@@ -6,6 +6,7 @@ first = True
 debug_whole = True
 debug_lines = False
 debug_comparison = False
+line_number = None
 
 def report_should_match(report, format):
     """
@@ -19,13 +20,14 @@ def report_should_match(report, format):
             sys.stderr.write('\n')
             first = False
         for i in range(len(args)):
-            sys.stderr.write('DEBUG %s[%d]: %r\n' % (prefix, i, args[i]))
+            sys.stderr.write('DEBUG %s[%d]: %r\n' % (prefix, i + 1, args[i]))
         if not args:
             sys.stderr.write('DEBUG %s\n' % prefix)
 
     def error(report, format, msg = 'Report does not match to format.'):
+        global line_number
         format = repr(format)
-        raise Exception('%s\nFormat:\n%s\nReport:\n%s\n\n' % (msg, format, report))
+        raise Exception('%s\nLine number: %d\nFormat:\n%s\nReport:\n%s\n\n' % (msg, line_number, format, report))
 
     def compare_item(report, format):
         global debug_comparison
@@ -58,8 +60,10 @@ def report_should_match(report, format):
             error(report, 'END', 'Extra lines in the end of the report.')
 
     def compare_report(report, format):
+        global line_number
         global debug_lines
         i = 0
+        line_number = 1
         lines = format.split('|')
         for line in lines:
             if debug_lines:
@@ -80,6 +84,7 @@ def report_should_match(report, format):
                 break
             compare_line(report[i], line)
             i += 1
+            line_number += 1
 
     # Allow quick testing from string copy pasted from console.
     if type(report) == str:
