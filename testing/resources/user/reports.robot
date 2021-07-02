@@ -32,23 +32,24 @@ Gather Report Data
 Select Report Option
     [Documentation]                     Click toolbar icon from the report options.
     [Arguments]                         ${option}
-    Wait Until Page Contains Element    css:#${option}
+    Wait Until Element is Enabled       css:#${option}
     Click Element                       css:#${option}
-    Wait Until No Loading Shadow
-    Wait Until Page Contains Element    css:.EndOfReport
+    Wait Until Page Contains Element    css:.EndOfReport.${option}-on
 
 Toggle Report Option On
     [Documentation]                     Toggle toolbar icon from the report options if it is not already on.
     [Arguments]                         ${option}
-    Wait Until Page Contains Element    css:#${option}
+    Wait Until Element is Enabled       css:#${option}
     ${c}                                Get Element Count            css:#${option}.toggle-on
     Return from Keyword If              ${c} > 0
     Click Element                       css:#${option}
+    Wait Until Page Contains Element    css:.EndOfReport.${option}-on
 
 Toggle Report Option Off
     [Documentation]                     Toggle toolbar icon from the report options if it is not already off.
     [Arguments]                         ${option}
-    Wait Until Page Contains Element    css:#${option}
+    Wait Until Element is Enabled       css:#${option}
     ${c}                                Get Element Count            css:#${option}.toggle-off
     Return from Keyword If              ${c} > 0
     Click Element                       css:#${option}
+    Wait Until Page Contains Element    css:.EndOfReport.${option}-off

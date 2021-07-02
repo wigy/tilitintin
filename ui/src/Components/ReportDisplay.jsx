@@ -55,6 +55,10 @@ class ReportDisplay extends Component {
 
   render() {
     const { report } = this.props
+    let states = ''
+    Object.entries(report.config).forEach(([k, v]) => {
+      states += ` option-${k}-${v ? 'on' : 'off'}`
+    })
     if (!report) {
       return ''
     }
@@ -67,7 +71,7 @@ class ReportDisplay extends Component {
               {report.data.map((line, idx) => <ReportLine key={idx} line={line} columns={report.columns}></ReportLine>)}
             </TableBody>
           </Table>
-          <div className={`EndOfReport ${report.format}`} />
+          <div className={`EndOfReport ${report.format} ${states}`} />
         </TableContainer>
       </div>
     )

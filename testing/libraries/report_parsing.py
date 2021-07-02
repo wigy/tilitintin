@@ -3,7 +3,7 @@ import sys
 import json
 
 first = True
-debug_whole = True
+debug_whole = False
 debug_lines = False
 debug_comparison = False
 line_number = None
