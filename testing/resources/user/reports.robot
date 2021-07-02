@@ -36,3 +36,19 @@ Select Report Option
     Click Element                       css:#${option}
     Wait Until No Loading Shadow
     Wait Until Page Contains Element    css:.EndOfReport
+
+Toggle Report Option On
+    [Documentation]                     Toggle toolbar icon from the report options if it is not already on.
+    [Arguments]                         ${option}
+    Wait Until Page Contains Element    css:#${option}
+    ${c}                                Get Element Count            css:#${option}.toggle-on
+    Return from Keyword If              ${c} > 0
+    Click Element                       css:#${option}
+
+Toggle Report Option Off
+    [Documentation]                     Toggle toolbar icon from the report options if it is not already off.
+    [Arguments]                         ${option}
+    Wait Until Page Contains Element    css:#${option}
+    ${c}                                Get Element Count            css:#${option}.toggle-off
+    Return from Keyword If              ${c} > 0
+    Click Element                       css:#${option}

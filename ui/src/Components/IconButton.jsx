@@ -47,8 +47,10 @@ class TilitintinIconButton extends Component {
   render() {
     const { t, disabled, title, pressKey, onClick, icon, toggle, id } = this.props
     let color = 'primary'
+    let className = 'IconButton'
     if (toggle !== undefined) {
       color = toggle ? 'secondary' : undefined
+      className += toggle ? ' toggle-on' : 'toggle-off'
     }
     const Icon = icon in ICONS ? ICONS[icon] : ICONS.unknown
     const handleClick = () => {
@@ -61,8 +63,9 @@ class TilitintinIconButton extends Component {
         }
       }
     }
+
     return (
-      <IconButton id={id} color={color} title={t('icon-' + title)} disabled={disabled} onClick={() => handleClick()}>
+      <IconButton id={id} className={className} color={color} title={t('icon-' + title)} disabled={disabled} onClick={() => handleClick()}>
         <Icon style={{ fontSize: 30 }}/>
       </IconButton>
     )
