@@ -385,7 +385,11 @@ function parseAndCombineReport(accountNumbers, accountNames, columnNames, format
             item.number = number
             item.amounts = {}
             columnNames.forEach((column) => {
-              item.amounts[column] = totals[column][number] + 0
+              if (totals[column][number] === undefined) {
+                item.amounts[column] = null
+              } else {
+                item.amounts[column] = totals[column][number] + 0
+              }
             })
             ret.push(item)
           }
