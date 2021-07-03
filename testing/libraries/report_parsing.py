@@ -3,7 +3,7 @@ import sys
 import json
 
 first = True
-debug_whole = False
+debug_whole = True
 debug_lines = False
 debug_comparison = False
 line_number = None
@@ -15,6 +15,9 @@ def report_should_match(report, format):
     global debug_whole
 
     def debug(prefix, *args):
+        """
+        Helper to print debug.
+        """
         global first
         if first:
             sys.stderr.write('\n')
@@ -25,11 +28,17 @@ def report_should_match(report, format):
             sys.stderr.write('DEBUG %s\n' % prefix)
 
     def error(report, format, msg = 'Report does not match to format.'):
+        """
+        Raise an excpetion and show error spot.
+        """
         global line_number
         format = repr(format)
         raise Exception('%s\nLine number: %d\nFormat:\n%s\nReport:\n%s\n\n' % (msg, line_number, format, report))
 
     def compare_item(report, format):
+        """
+        Perform comparison to the single cells.
+        """
         global debug_comparison
         format = format.strip()
         if debug_comparison:
@@ -49,6 +58,9 @@ def report_should_match(report, format):
             error(report, format)
 
     def compare_line(report, format):
+        """
+        Compare one report line to the format.
+        """
         format = format.strip().split('\n')
         if len(report) != len(format):
             error(report, format, 'Report line has different length than format.')
@@ -56,10 +68,16 @@ def report_should_match(report, format):
             compare_item(report[i], format[i])
 
     def is_finished(report):
+        """
+        Check if we have lines in report left and raise error if we do.
+        """
         if len(report):
             error(report, 'END', 'Extra lines in the end of the report.')
 
     def compare_report(report, format):
+        """
+        Execute report and format comparison.
+        """
         global line_number
         global debug_lines
         i = 0
