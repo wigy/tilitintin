@@ -3,7 +3,7 @@ import sys
 import json
 
 first = True
-debug_whole = True
+debug_whole = False
 debug_lines = False
 debug_comparison = False
 line_number = None
@@ -104,9 +104,34 @@ def report_should_match(report, format):
             i += 1
             line_number += 1
 
+    def prepare_report(report):
+        """
+        Trim empty lines away from the report.
+        """
+        def is_non_empty_line(line):
+            return any(map(lambda cell: cell!='', line))
+        return list(filter(lambda line: is_non_empty_line(line), report))
+
+    def prepare_format(format):
+        """
+        Trim empty lines away from the report.
+        """
+        def is_non_empty_line(cells):
+            return any(map(lambda cell: cell!='.', cells))
+        non_empty = []
+        for line in format.split('\n|\n'):
+            cells = line.split('\n')
+            if is_non_empty_line(cells):
+                non_empty.append(cells)
+        # TODO: Reconstructing it to back to string is pointless. Should use it as a list.
+        return '\n|\n'.join(map(lambda cells: '\n'.join(cells), non_empty))
+
     # Allow quick testing from string copy pasted from console.
     if type(report) == str:
         report = json.loads(report.replace("'", '"'))
+
+    report = prepare_report(report)
+    format = prepare_format(format)
     if debug_whole:
         debug('Complete Format', *map(lambda s: s.split('\n'), format.split('\n|\n')))
         debug('Complete Report', *report)
