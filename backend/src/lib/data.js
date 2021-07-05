@@ -512,7 +512,6 @@ async function getNextDocument(db, periodId) {
     .select(db.raw('MAX(number) AS number'))
     .from('document')
     .where({ period_id: periodId })
-    .pluck('number')
     .first()
     .then((res) => {
       return res.number ? res.number + 1 : 1
