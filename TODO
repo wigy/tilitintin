@@ -13,3 +13,4 @@ FUTURE FEATURES
 [ ] BUG: (May relate previous) Crash after creating and deleting two entries.
 [ ] BUG: Cursor does not move after insert (DB xx, acc 3000).
 [ ] BUG: Ctrl+V succeeds even if locked period.
+[ ] BUG: After clicking browser back button in non-keyboard page, keyboard stops working.
