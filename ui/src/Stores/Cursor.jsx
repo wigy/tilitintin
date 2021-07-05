@@ -360,6 +360,13 @@ class Cursor {
    }
 
    /**
+    * A function used to notify that old topology is not valid anymore.
+    */
+   topologyChanged() {
+     this.topologyComponent = null
+   }
+
+   /**
    * Switch directly to another topological component.
    * @param {String} name
    */
