@@ -58,7 +58,9 @@ class TransactionToolPanel extends Component {
         this.props.cursor.leaveComponent()
         this.props.cursor.resetSelected()
       }
-      tools.tagDisabled[tag] = !tools.tagDisabled[tag]
+      runInAction(() => {
+        tools.tagDisabled[tag] = !tools.tagDisabled[tag]
+      })
       if (moveCursor) {
         this.props.cursor.enterComponent()
       }
@@ -70,8 +72,10 @@ class TransactionToolPanel extends Component {
         this.props.cursor.leaveComponent()
         this.props.cursor.resetSelected()
       }
-      tools.tagDisabled = {}
-      account.tags.forEach((tag) => (tools.tagDisabled[tag.tag] = true))
+      runInAction(() => {
+        tools.tagDisabled = {}
+        account.tags.forEach((tag) => (tools.tagDisabled[tag.tag] = true))
+      })
       if (moveCursor) {
         this.props.cursor.enterComponent()
       }
@@ -83,7 +87,9 @@ class TransactionToolPanel extends Component {
         this.props.cursor.leaveComponent()
         this.props.cursor.resetSelected()
       }
-      tools.tagDisabled = {}
+      runInAction(() => {
+        tools.tagDisabled = {}
+      })
       if (moveCursor) {
         this.props.cursor.enterComponent()
       }
