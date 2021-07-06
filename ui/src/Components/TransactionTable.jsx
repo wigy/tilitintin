@@ -14,6 +14,7 @@ import EntryModel from '../Models/EntryModel'
 import DocumentModel from '../Models/DocumentModel'
 import { withRouter } from 'react-router-dom'
 import { TableContainer, Table, TableHead, TableCell, TableRow, TableBody, Typography, TextField, MenuItem } from '@material-ui/core'
+import { runInAction } from 'mobx'
 
 @withTranslation('translations')
 @withRouter
@@ -178,10 +179,12 @@ class TransactionTable extends Component {
       const entry = doc.entries[cursor.row]
       const column = entry.column
       navigator.clipboard.readText().then(text => {
-        if (entry[`validate.${column}`](text) === null) {
-          entry[`change.${column}`](text)
-          entry.save()
-        }
+        runInAction(() => {
+          if (entry[`validate.${column}`](text) === null) {
+            entry[`change.${column}`](text)
+            entry.save()
+          }
+        })
       })
       return
     }
