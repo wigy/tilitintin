@@ -3,11 +3,13 @@ import PropTypes from 'prop-types'
 import { inject } from 'mobx-react'
 import { withTranslation } from 'react-i18next'
 import { IconButton } from '@material-ui/core'
-import { HelpOutline, AccountBalance, StarRate, AttachMoney, CreditCard, LocalGroceryStore, MoneyRounded, AddShoppingCart, PersonAdd, Print, CloudDownload, FormatIndentDecrease, Filter2, Filter3, Filter1, Filter4, LocalOffer, Lock, LockOpen, AttachFile, Functions, Event, Sort, Delete, Storage, CloudUpload, ZoomIn, ZoomOut, Visibility, VisibilityOff, PlaylistAdd } from '@material-ui/icons'
+import { HelpOutline, AccountBalance, StarRate, AttachMoney, CreditCard, LocalGroceryStore, MoneyRounded, AddShoppingCart, PersonAdd, Print, CloudDownload, FormatIndentDecrease, Filter2, Filter3, Filter1, Filter4, LocalOffer, Lock, LockOpen, AttachFile, Functions, Event, Sort, Delete, Storage, CloudUpload, ZoomIn, ZoomOut, Visibility, VisibilityOff, PlaylistAdd, DeleteSweep } from '@material-ui/icons'
 import Cursor from '../Stores/Cursor'
 
 const ICONS = {
   'add-tx': PlaylistAdd,
+  'delete-entry': DeleteSweep,
+  'delete-tx': Delete,
   'calendar-plus': Event,
   'credit-card': CreditCard,
   'hide-all': VisibilityOff,

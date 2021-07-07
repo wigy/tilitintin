@@ -51,47 +51,48 @@ class TransactionToolPanel extends Component {
     }
 
     const { account, tools, db, periodId, accountId } = this.props.store
+    const { cursor } = this.props
 
     const toggle = (tag) => {
-      const moveCursor = this.props.cursor.inComponent('Balances.transactions')
+      const moveCursor = cursor.inComponent('Balances.transactions')
       if (moveCursor) {
-        this.props.cursor.leaveComponent()
-        this.props.cursor.resetSelected()
+        cursor.leaveComponent()
+        cursor.resetSelected()
       }
       runInAction(() => {
         tools.tagDisabled[tag] = !tools.tagDisabled[tag]
       })
       if (moveCursor) {
-        this.props.cursor.enterComponent()
+        cursor.enterComponent()
       }
     }
 
     const disableAll = () => {
-      const moveCursor = this.props.cursor.inComponent('Balances.transactions')
+      const moveCursor = cursor.inComponent('Balances.transactions')
       if (moveCursor) {
-        this.props.cursor.leaveComponent()
-        this.props.cursor.resetSelected()
+        cursor.leaveComponent()
+        cursor.resetSelected()
       }
       runInAction(() => {
         tools.tagDisabled = {}
         account.tags.forEach((tag) => (tools.tagDisabled[tag.tag] = true))
       })
       if (moveCursor) {
-        this.props.cursor.enterComponent()
+        cursor.enterComponent()
       }
     }
 
     const enableAll = () => {
-      const moveCursor = this.props.cursor.inComponent('Balances.transactions')
+      const moveCursor = cursor.inComponent('Balances.transactions')
       if (moveCursor) {
-        this.props.cursor.leaveComponent()
-        this.props.cursor.resetSelected()
+        cursor.leaveComponent()
+        cursor.resetSelected()
       }
       runInAction(() => {
         tools.tagDisabled = {}
       })
       if (moveCursor) {
-        this.props.cursor.enterComponent()
+        cursor.enterComponent()
       }
     }
 
@@ -113,6 +114,8 @@ class TransactionToolPanel extends Component {
 
     const hasTags = account && account.tags && account.tags.length > 0
     const cannotAdd = !this.props.store.period || !!this.props.store.period.locked
+    const canDeleteEntry = cursor.componentX > 0 && cursor.index !== null && cursor.row !== null
+    const canDeleteTx = cursor.componentX > 0 && cursor.index !== null && cursor.row === null
     let last = null
 
     return (
@@ -126,6 +129,8 @@ class TransactionToolPanel extends Component {
           <IconButton id="Hide All" disabled={!hasTags} onClick={disableAll} title="hide-all" icon="hide-all" />
           <IconButton id="Download" onClick={() => this.onDownload(db, periodId, accountId)} title="download-csv" icon="download" />
           <IconButton id="Add Transaction" disabled={cannotAdd} pressKey="Insert" title="add-tx" icon="add-tx" />
+          <IconButton id="Delete Transaction" disabled={!canDeleteTx} pressKey="Delete" title="delete-tx" icon="delete-tx" />
+          <IconButton id="Delete Row" disabled={!canDeleteEntry} pressKey="Delete" title="delete-entry" icon="delete-entry" />
         </div>
 
         <div style={{ marginBottom: '1rem', marginLeft: '1rem', marginRight: '1rem' }}>
