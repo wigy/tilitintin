@@ -74,7 +74,7 @@ class TransactionTable extends Component {
     const entry = new EntryModel(currentDoc, { document_id: currentDoc.id, row_number: rowNumber, description })
     currentDoc.addEntry(entry)
     cursor.setCell(0, currentDoc.entries.length - 1)
-
+    cursor.topologyChanged()
     return { preventDefault: true }
   }
 
@@ -235,7 +235,10 @@ class TransactionTable extends Component {
    */
   deleteDocument(tx) {
     this.props.store.deleteDocument(tx.document)
-      .then(() => this.props.cursor.changeIndexBy(-1))
+      .then(() => {
+        this.props.cursor.topologyChanged()
+        this.props.cursor.changeIndexBy(-1)
+      })
   }
 
   /**

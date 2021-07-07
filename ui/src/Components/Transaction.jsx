@@ -29,6 +29,7 @@ class Transaction extends Component {
     const { index, column, row } = this.props.cursor
     this.props.store.deleteEntry(this.entryToDelete)
       .then(() => {
+        this.props.cursor.topologyChanged()
         this.props.cursor.setIndex(index)
         this.props.cursor.setCell(column, row)
       })
