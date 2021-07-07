@@ -173,6 +173,10 @@ class TransactionTable extends Component {
     if (!navigator.clipboard) {
       return
     }
+    if (this.props.store.period.locked) {
+      this.props.store.addError(this.props.t('Cannot edit this entry. Period locked?'))
+      return
+    }
     if (cursor.row !== null) {
       // Copy one cell.
       const doc = this.props.store.filteredTransactions[cursor.index].document
@@ -401,7 +405,8 @@ TransactionTable.propTypes = {
   cursor: PropTypes.instanceOf(Cursor),
   location: PropTypes.object,
   history: ReactRouterPropTypes.history,
-  store: PropTypes.instanceOf(Store)
+  store: PropTypes.instanceOf(Store),
+  t: PropTypes.func
 }
 
 export default TransactionTable
