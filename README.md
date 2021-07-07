@@ -61,6 +61,12 @@ In UI you can do filtering using the categories defined.
 
 ## Version History
 
+### 2.3
+  * Automated tests.
+  * User deletion.
+  * Database deletion.
+  * Bug fixes.
+
 ### 2.2
   * Editable VAT for accounts.
   * Show VAT when creating automatically line for it.

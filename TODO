@@ -5,8 +5,3 @@ BUGS
 
 FUTURE FEATURES
 ===============
-
-2.3
-[X] Improve looks for cell cursor.
-[X] More icons with keyboard shortcuts as hover text (or some other presentation).
-[X] BUG: Ctrl+V succeeds even if locked period.
