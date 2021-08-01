@@ -2,8 +2,8 @@
 BUGS
 ====
 
-[ ] Cache failure: Ctrl+V
-[ ] Cache failure: Edit date
+[X] Cache failure: Ctrl+V
+[ ] Edit date breaks cursor movement.
 
 FUTURE FEATURES
 ===============

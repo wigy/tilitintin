@@ -194,7 +194,7 @@ class TransactionTable extends Component {
     }
 
     // Copy entire document.
-    navigator.clipboard.readText().then(text => {
+    navigator.clipboard.readText().then(async text => {
       // Verify the correct format and construct document.
       if (text.endsWith('\n')) {
         text = text.substr(0, text.length - 1)
@@ -223,10 +223,11 @@ class TransactionTable extends Component {
             }
             // Create new document.
             const { store } = this.props
-            store.period.createDocument({
+            await store.period.createDocument({
               date,
               entries
             })
+            cursor.topologyChanged()
           }
         }
       }

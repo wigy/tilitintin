@@ -154,6 +154,7 @@ class Transaction extends Component {
       }
     }
     this.props.cursor.setCell(column, row)
+    this.props.cursor.topologyChanged()
   }
 
   // Render the main row of the document, i.e. the entry having the current account and data from document it belongs to.
