@@ -178,6 +178,7 @@ class Transaction extends Component {
             onComplete={(doc, proposal) => {
               // Find the new row after order by date has been changed.
               const numbers = this.props.store.filteredTransactions.map(tx => tx.document.number)
+              this.props.cursor.topologyChanged()
               const index = numbers.indexOf(doc.number)
               this.props.cursor.setIndex(index)
               this.props.cursor.setCell(0, 0)
