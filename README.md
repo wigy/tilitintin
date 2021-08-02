@@ -61,6 +61,9 @@ In UI you can do filtering using the categories defined.
 
 ## Version History
 
+### 2.3.1
+  * Bug fixes.
+
 ### 2.3
   * Automated tests.
   * User deletion.
