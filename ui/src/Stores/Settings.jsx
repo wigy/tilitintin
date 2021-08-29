@@ -1,4 +1,4 @@
-import { action, computed, makeObservable, observable } from 'mobx'
+import { computed, makeObservable, observable } from 'mobx'
 
 class Settings {
 
@@ -32,7 +32,6 @@ class Settings {
    * Set new values.
    * @param {Object} values
    */
-  @action
   update(values) {
     Object.assign(this.settings, values)
   }

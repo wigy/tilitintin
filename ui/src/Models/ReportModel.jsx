@@ -1,5 +1,4 @@
 import clone from 'clone'
-import { action } from 'mobx'
 import Model from './Model'
 
 class ReportModel extends Model {
@@ -85,7 +84,6 @@ class ReportModel extends Model {
    * @param {String} url
    * @param {Object} data
    */
-  @action
   setData(url, data) {
     this.url = url
     this.columns = data.columns || []

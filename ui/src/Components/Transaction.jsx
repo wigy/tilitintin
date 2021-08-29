@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
-import { action, runInAction } from 'mobx'
+import { runInAction } from 'mobx'
 import { withTranslation, Trans } from 'react-i18next'
 import Dialog from './Dialog'
 import Money from './Money'
@@ -24,7 +24,6 @@ class Transaction extends Component {
   // Temporary store for entry waiting for deletion confirmation.
   entryToDelete = null;
 
-  @action.bound
   deleteEntry() {
     const { index, column, row } = this.props.cursor
     this.props.store.deleteEntry(this.entryToDelete)
@@ -36,7 +35,6 @@ class Transaction extends Component {
   }
 
   // Move to the transaction and toggle it.
-  @action.bound
   onClick() {
     this.props.cursor.setComponent('Balances.transactions')
     this.props.cursor.setIndex(this.props.index)
@@ -44,13 +42,11 @@ class Transaction extends Component {
   }
 
   // Select cell, when clicked.
-  @action.bound
   onClickDetail(column, row) {
     this.props.cursor.setCell(column, row)
   }
 
   // Handle finalizing editing of a cell.
-  @action.bound
   async onComplete(column, row, proposal, originalValue) {
     const { store, tx } = this.props
 

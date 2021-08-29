@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
-import { action, runInAction } from 'mobx'
+import { runInAction } from 'mobx'
 import { Trans, withTranslation } from 'react-i18next'
 import Store from '../Stores/Store'
 import AccountModel from '../Models/AccountModel'
@@ -43,7 +43,6 @@ class Account extends Component {
     this.componentDidMount()
   }
 
-  @action.bound
   onSubmitAccount() {
     let model
     if (this.state.new) {
@@ -69,7 +68,6 @@ class Account extends Component {
       })
   }
 
-  @action.bound
   onDeleteAccount() {
     const { db, periodId } = this.props.match.params
     this.props.store.deleteAccount(this.props.store.account)

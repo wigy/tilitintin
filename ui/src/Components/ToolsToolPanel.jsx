@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { action, runInAction } from 'mobx'
+import { runInAction } from 'mobx'
 import { inject, observer } from 'mobx-react'
 import { Trans, withTranslation } from 'react-i18next'
 import { withRouter } from 'react-router-dom'
@@ -53,7 +53,6 @@ class ToolsToolPanel extends Component {
   /**
    * Copy a description to the empty VAT fields usually inherited from Tilitin data.
    */
-  @action.bound
   async fixDescriptions() {
     const entriesChanged = new Set();
     [...this.emptyEntries()].forEach((entry) => {
@@ -71,7 +70,6 @@ class ToolsToolPanel extends Component {
   /**
    * Combine unprocessed VAT to new payable or receivable entry.
    */
-  @action.bound
   async createVATEntry() {
     const store = this.props.store
     const {
@@ -155,7 +153,6 @@ class ToolsToolPanel extends Component {
   /**
    * Create new period.
    */
-  @action.bound
   async createPeriod(startDate, endDate) {
     const store = this.props.store
     await store.database.createNewPeriod(startDate, endDate, this.props.t('Initial balance'))
@@ -164,7 +161,6 @@ class ToolsToolPanel extends Component {
   /**
    * Renumber documents of the period.
    */
-  @action.bound
   async renumberDocuments(db, periodId) {
     const toRenumber = this.props.store.period.incorrectlyNumberedDocuments
     for (const change of toRenumber) {
@@ -177,7 +173,6 @@ class ToolsToolPanel extends Component {
   /**
    * Delete all documents without entries.
    */
-  @action.bound
   async dropEmptyDocuments(db, periodId) {
     runInAction(async () => {
       const { period } = this.props.store
@@ -191,7 +186,6 @@ class ToolsToolPanel extends Component {
   /**
    * Upload selected file.
    */
-  @action.bound
   uploadFile() {
     if (this.state.files[0]) {
       this.props.store.request('/db/upload', 'POST', null, this.state.files[0])
@@ -206,7 +200,6 @@ class ToolsToolPanel extends Component {
   /**
    * Create new database.
    */
-  @action.bound
   onCreateNewDb() {
     if (this.validDbName(this.state.databaseName)) {
       this.props.store.createDatabase({

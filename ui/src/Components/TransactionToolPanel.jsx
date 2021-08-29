@@ -9,14 +9,13 @@ import Title from './Title'
 import { Trans } from 'react-i18next'
 import i18n from '../i18n'
 import IconButton from './IconButton'
-import { action, runInAction } from 'mobx'
+import { runInAction } from 'mobx'
 
 @inject('store')
 @inject('cursor')
 @observer
 class TransactionToolPanel extends Component {
 
-  @action
   componentDidMount() {
     runInAction(() => (this.props.store.tools.tagDisabled = {}))
   }
