@@ -1,4 +1,5 @@
 import NavigationTargetModel from '../Models/NavigationTargetModel'
+import { action } from 'mobx'
 
 /**
  * Description of some collection of navigational objects.
@@ -23,6 +24,7 @@ class TopologyComponent {
    * @param {Number} index
    * @param {Boolean} options.noScroll
    */
+  @action.bound
   moveIndex(oldIndex, index, options = {}) {
     if (oldIndex !== null && this.data[oldIndex]) {
       this.data[oldIndex].leave()
@@ -49,6 +51,7 @@ class TopologyComponent {
    * @param {Number} column
    * @param {Number} row
    */
+  @action.bound
   moveBox(oldIndex, index, oldColumn, oldRow, column, row) {
     if (this.data[oldIndex]) {
       const rows = this.data[oldIndex].rows()

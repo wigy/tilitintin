@@ -14,6 +14,7 @@ import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
 import { ButtonGroup } from '@material-ui/core'
 import { CalendarToday, NavigateBefore, NavigateNext, Storage } from '@material-ui/icons'
+import { action } from 'mobx'
 
 @withTranslation('translations')
 @inject('store')
@@ -65,6 +66,7 @@ class Menu extends Component {
     }
   ];
 
+  @action
   update({ db, periodId }) {
     if (db === '_') {
       db = null

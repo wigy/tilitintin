@@ -1,7 +1,7 @@
 import NavigationTargetModel from './NavigationTargetModel'
 import EntryModel from '../Models/EntryModel'
 import { date2str, str2date } from '../Util'
-import { makeObservable } from 'mobx'
+import { action, makeObservable } from 'mobx'
 
 class DocumentModel extends NavigationTargetModel {
 
@@ -128,44 +128,45 @@ class DocumentModel extends NavigationTargetModel {
    * Add an entry to this document.
    * @param {EntryModel} entry
    */
+   @action
   addEntry(entry) {
     entry.document_id = this.id
     entry.parent = this
     this.entries.push(entry)
   }
 
-  /**
+   /**
    * Calculate difference of entry balances.
    */
-  imbalance() {
-    let debit = 0
-    let credit = 0
-    this.entries.forEach((entry, idx) => {
-      if (entry.debit) {
-        debit += entry.amount
-      } else {
-        credit += entry.amount
-      }
-    })
-    const smaller = Math.min(debit, credit)
-    debit -= smaller
-    credit -= smaller
-    return debit - credit
-  }
+   imbalance() {
+     let debit = 0
+     let credit = 0
+     this.entries.forEach((entry, idx) => {
+       if (entry.debit) {
+         debit += entry.amount
+       } else {
+         credit += entry.amount
+       }
+     })
+     const smaller = Math.min(debit, credit)
+     debit -= smaller
+     credit -= smaller
+     return debit - credit
+   }
 
-  /**
+   /**
    * Get the period this document belongs to.
    */
-  get period() {
-    return this.parent
-  }
+   get period() {
+     return this.parent
+   }
 
-  /**
+   /**
    * Get the database this document belongs to.
    */
-  get database() {
-    return this.parent.database
-  }
+   get database() {
+     return this.parent.database
+   }
 }
 
 export default DocumentModel

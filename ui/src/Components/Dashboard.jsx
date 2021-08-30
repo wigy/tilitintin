@@ -9,6 +9,7 @@ import Cursor from '../Stores/Cursor'
 import Title from './Title'
 import { Button, Typography, Avatar, List, ListItem } from '@material-ui/core'
 import Panel from './Panel'
+import { action } from 'mobx'
 
 @withTranslation('translations')
 @inject('cursor')
@@ -29,6 +30,7 @@ class Dashboard extends Component {
     this.props.cursor.selectPage('Dashboard', this)
   }
 
+  @action
   selectDb(num) {
     const { dbs } = this.props.store
     num--
@@ -37,6 +39,7 @@ class Dashboard extends Component {
     }
   }
 
+  @action
   selectPeriod(num) {
     if (!this.props.store.database) {
       return
