@@ -24,12 +24,6 @@ class Menu extends Component {
 
   menu = [
     {
-      title: 'Home',
-      shortcut: ' ',
-      disabled: ({ notLoggedIn }) => notLoggedIn,
-      action: () => this.handleSelect('dashboard')
-    },
-    {
       title: 'Transactions',
       shortcut: 'X',
       disabled: ({ db, periodId, notLoggedIn }) => !db || !periodId || notLoggedIn,
