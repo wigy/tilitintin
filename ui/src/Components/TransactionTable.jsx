@@ -110,6 +110,9 @@ class TransactionTable extends Component {
     return { preventDefault: true }
   }
 
+  /**
+   * Toggle open for entry if closed.
+   */
   keyArrowRight(cursor) {
     const { store } = this.props
     if (cursor.index === null || cursor.componentX !== 1 || cursor.row !== null) {
@@ -122,6 +125,9 @@ class TransactionTable extends Component {
     }
   }
 
+  /**
+   * Toggle close for entry if open.
+   */
   keyArrowLeft(cursor) {
     const { store } = this.props
     if (cursor.index === null || cursor.componentX !== 1 || cursor.row !== null) {
