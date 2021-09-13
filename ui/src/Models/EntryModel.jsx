@@ -133,8 +133,16 @@ class EntryModel extends NavigationTargetModel {
    * @param {Cursor} cursor
    */
   keyEnter(cursor) {
-    if (this.document.open && cursor.row !== null) {
-      this.turnEditorOn(cursor)
+    if (this.document.open) {
+      if (cursor.row === null) {
+        this.document.turnEditorOn(cursor)
+        return { preventDefault: true }
+      } else {
+        this.turnEditorOn(cursor)
+        return { preventDefault: true }
+      }
+    } else {
+      this.toggleOpen()
       return { preventDefault: true }
     }
   }

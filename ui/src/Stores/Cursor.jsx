@@ -1,4 +1,4 @@
-import { observable, action, makeObservable, runInAction } from 'mobx'
+import { observable, action, makeObservable } from 'mobx'
 import TopologyComponent from './TopologyComponent'
 import EntryModel from '../Models/EntryModel'
 
