@@ -40,7 +40,7 @@ class Transaction extends Component {
   onClick() {
     this.props.cursor.setComponent('Balances.transactions')
     this.props.cursor.setIndex(this.props.index)
-    this.props.cursor.keyEnter()
+    this.props.tx.toggleOpen()
   }
 
   // Select cell, when clicked.
