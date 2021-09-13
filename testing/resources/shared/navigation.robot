@@ -87,6 +87,10 @@ Go To Tools
     Wait Until Element is Visible       css:.ToolsForDatabasesPage
     Wait Until No Loading Shadow
 
+Select Tool
+    [Arguments]                         ${tool}
+    Click Element                       //*[@role="button"]//*[text()='${tool}']
+
 Go To Admin
     ${page}                             Current Page
     ${already_there}                    Evaluate            '${page}'=='admin'
