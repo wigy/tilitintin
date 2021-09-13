@@ -91,6 +91,10 @@ Select Tool
     [Arguments]                         ${tool}
     Click Element                       //*[@role="button"]//*[text()='${tool}']
 
+Click Tool Icon
+    [Arguments]                         ${icon}
+    Click Element                       //*[contains(@class, "MainTopPanel")]//*[@id="${icon}"]
+
 Go To Admin
     ${page}                             Current Page
     ${already_there}                    Evaluate            '${page}'=='admin'

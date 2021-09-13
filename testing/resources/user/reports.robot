@@ -53,3 +53,7 @@ Toggle Report Option Off
     Return from Keyword If              ${c} > 0
     Click Element                       css:#${option}
     Wait Until Page Contains Element    css:.EndOfReport.${option}-off
+
+Page Should Contain Report Line
+    [Arguments]                         ${title}                    ${value}
+    Page Should Contain Element         //*[contains(@class, "ReportDisplay")]//tr[contains(@class, "ReportLine")][.//*[text()="${title}"]][.//*[text()="${value}"]]
