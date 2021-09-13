@@ -90,10 +90,13 @@ class Menu extends Component {
       return { preventDefault: true }
     }
     if (key === '<') {
+      // TODO: These keys do not necessarily work. It seems to give out | and \ in finnish layout.
       this.handleSelect('previous-period')
+      return { preventDefault: true }
     }
     if (key === '>') {
       this.handleSelect('next-period')
+      return { preventDefault: true }
     }
   }
 
@@ -171,7 +174,7 @@ class Menu extends Component {
       color="primary"
       variant="contained"
       onClick={() => entry.action()}
-      startIcon={entry.shortcut && <span className="shortcut">{entry.shortcut === ' ' ? 'Space' : entry.shortcut}</span>}
+      title={entry.shortcut ? `Ctrl + ${entry.shortcut}` : ''}
     >
       <Trans>{entry.title}</Trans>
     </Button>
