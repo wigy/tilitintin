@@ -6,7 +6,6 @@ Change Language
     Execute Javascript                  localStorage.setItem('language', '${language}')
     Execute Javascript                  document.location.reload()
     Wait Until Element is Visible       css:.Version
-    Wait Until Element is Visible       HomeMenu
 
 Should Have Any Error Message
     Page Should Contain Element         css:.Message.error

@@ -24,7 +24,7 @@ Login As
     Run Keyword If                      ${current_user}       Logout
     Go To Login
     Fill in Login                       ${username}     ${password}
-    Wait Until Element is Enabled       HomeMenu
+    Wait Until Element is Enabled       css:div.Version
     Log to Console                      Logged in as ${username}
     Change Language                     en
 
@@ -42,8 +42,8 @@ Go To Login
 
 Go To Dashboard
     Wait Until No Loading Shadow
-    Wait Until Element is Visible       HomeMenu
-    Click Element                       HomeMenu
+    Wait Until Element is Visible       css:div.Version
+    Click Element                       css:div.Version
     Wait Until Element is Visible       css:.DatabasesPage
     Wait Until No Loading Shadow
 
