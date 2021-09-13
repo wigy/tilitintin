@@ -5,7 +5,7 @@ Change Language
     Return From Keyword If              '${old}' == '${language}'
     Execute Javascript                  localStorage.setItem('language', '${language}')
     Execute Javascript                  document.location.reload()
-    Wait Until Element is Visible       css:.Version
+    Wait Until App Loaded
 
 Should Have Any Error Message
     Page Should Contain Element         css:.Message.error

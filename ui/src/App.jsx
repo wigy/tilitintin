@@ -124,6 +124,7 @@ class App extends Component {
               <Route path="/:db/account/:periodId?" component={Accounts}/>
             </Paper>
             <div className="Version" style={{ color: 'rgb(0,0,0,0.5)', fontSize: '0.6rem', position: 'absolute', right: '2px', bottom: '2px' }}>v{Configuration.VERSION}</div>
+            <div className={this.props.store.token ? 'logged-in' : 'not-logged-in'}/>
           </div>
         </div>
       </div>
