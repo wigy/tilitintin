@@ -533,24 +533,6 @@ class Cursor {
    }
 
    /**
-   * Toggle entries visible and non-visible.
-   */
-   keyEnter() {
-     const model = this.getModel()
-     if (model && model.geometry()) {
-       runInAction(() => {
-         model.toggleOpen()
-         if (!model.open) {
-           this.column = null
-           this.row = null
-           this.getComponent().moveBox(null, null)
-         }
-       })
-       return { preventDefault: true }
-     }
-   }
-
-   /**
    * Leave/close/de-select the current.
    */
    keyEscape() {

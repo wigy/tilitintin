@@ -110,14 +110,35 @@ class TransactionTable extends Component {
     return { preventDefault: true }
   }
 
+  keyArrowRight(cursor) {
+    const { store } = this.props
+    if (cursor.index === null || cursor.componentX !== 1 || cursor.row !== null) {
+      return
+    }
+    const entry = store.filteredTransactions[cursor.index]
+    if (!entry.open) {
+      entry.toggleOpen()
+      return { preventDefault: true }
+    }
+  }
+
+  keyArrowLeft(cursor) {
+    const { store } = this.props
+    if (cursor.index === null || cursor.componentX !== 1 || cursor.row !== null) {
+      return
+    }
+    const entry = store.filteredTransactions[cursor.index]
+    if (entry.open) {
+      entry.toggleOpen()
+      return { preventDefault: true }
+    }
+  }
+
   /**
    * Collect current transaction.
    */
   keyCtrlC(cursor) {
-    if (cursor.index === null) {
-      return
-    }
-    if (cursor.componentX !== 1) {
+    if (cursor.index === null || cursor.componentX !== 1) {
       return
     }
     if (!navigator.clipboard) {
@@ -164,10 +185,7 @@ class TransactionTable extends Component {
    * @param {Cursor} cursor
    */
   keyCtrlV(cursor) {
-    if (cursor.index === null) {
-      return
-    }
-    if (cursor.componentX !== 1) {
+    if (cursor.index === null || cursor.componentX !== 1) {
       return
     }
     if (!navigator.clipboard) {
