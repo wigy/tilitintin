@@ -25,31 +25,31 @@ class Menu extends Component {
   menu = [
     {
       title: 'Transactions',
-      shortcut: 'X',
+      shortcut: '2',
       disabled: ({ db, periodId, notLoggedIn }) => !db || !periodId || notLoggedIn,
       action: () => this.handleSelect('txs')
     },
     {
       title: 'Reports',
-      shortcut: 'R',
+      shortcut: '3',
       disabled: ({ db, periodId, notLoggedIn }) => !db || !periodId || notLoggedIn,
       action: () => this.handleSelect('report')
     },
     {
       title: 'Accounts',
-      shortcut: 'Y',
+      shortcut: '4',
       disabled: ({ db, notLoggedIn }) => !db || notLoggedIn,
       action: () => this.handleSelect('account')
     },
     {
       title: 'Tools',
-      shortcut: 'T',
+      shortcut: '5',
       disabled: ({ notLoggedIn, isAdmin }) => notLoggedIn || isAdmin,
       action: () => this.handleSelect('tools')
     },
     {
       title: 'Admin',
-      shortcut: 'A',
+      shortcut: '6',
       disabled: ({ notLoggedIn, isAdmin }) => notLoggedIn || !isAdmin,
       action: () => this.handleSelect('admin')
     },
@@ -79,7 +79,45 @@ class Menu extends Component {
     this.update(this.props.match.params)
   }
 
-  keyText(cursor, key) {
+  keyAlt1() {
+    if (this.props.store.token) {
+      this.handleSelect('dashboard')
+    }
+  }
+
+  keyAlt2() {
+    this.handleShortcut('2')
+  }
+
+  keyAlt3() {
+    this.handleShortcut('3')
+  }
+
+  keyAlt4() {
+    this.handleShortcut('4')
+  }
+
+  keyAlt5() {
+    this.handleShortcut('5')
+  }
+
+  keyAlt6() {
+    this.handleShortcut('6')
+  }
+
+  keyAlt7() {
+    this.handleShortcut('7')
+  }
+
+  keyAlt8() {
+    this.handleShortcut('8')
+  }
+
+  keyAlt9() {
+    this.handleShortcut('9')
+  }
+
+  handleShortcut(key) {
     key = key.toUpperCase()
     const entry = this.menu.filter(e => e.shortcut === key)
     if (entry.length) {
@@ -89,6 +127,10 @@ class Menu extends Component {
       entry[0].action()
       return { preventDefault: true }
     }
+  }
+
+  keyText(cursor, key) {
+    key = key.toUpperCase()
     if (key === '<') {
       // TODO: These keys do not necessarily work. It seems to give out | and \ in finnish layout.
       this.handleSelect('previous-period')
@@ -174,7 +216,7 @@ class Menu extends Component {
       color="primary"
       variant="contained"
       onClick={() => entry.action()}
-      title={entry.shortcut ? `Ctrl + ${entry.shortcut}` : ''}
+      title={entry.shortcut ? `Alt + ${entry.shortcut}` : ''}
     >
       <Trans>{entry.title}</Trans>
     </Button>
@@ -185,7 +227,7 @@ class Menu extends Component {
       <div className="Menu">
         <AppBar position="static">
           <Toolbar>
-            <IconButton edge="start" className="icon" color="inherit" aria-label="menu" onClick={() => (document.location = '/')}>
+            <IconButton edge="start" title="Alt + 1" className="icon" color="inherit" aria-label="menu" onClick={() => (document.location = '/')}>
               <img className="logo" alt="logo" src="/logo.png"/>
             </IconButton>
             <span className="database">

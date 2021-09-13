@@ -2,7 +2,7 @@ import { observable, action, makeObservable } from 'mobx'
 import TopologyComponent from './TopologyComponent'
 import EntryModel from '../Models/EntryModel'
 
-const KEY_DEBUG = false
+const KEY_DEBUG = true
 
 /**
  * Keyboard navigation handler and current cursor data storage.
