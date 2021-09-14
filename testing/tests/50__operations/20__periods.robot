@@ -13,8 +13,8 @@ Create New Period
 
     Chould Contains Table Row 4         1       ${YEAR}-01-01   ${YEAR}-12-31   Unlocked
 
-    # Click Tool Icon                     Create Period
-    # Click Element                       OK
+    Click Tool Icon                     Create Period
+    Click Element                       OK
 
     ${next}                             Next Year
     Chould Contains Table Row 4         2       ${next}-01-01   ${next}-12-31   Unlocked
