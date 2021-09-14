@@ -8,6 +8,7 @@ Library                                 ../libraries/report_parsing.py
 Resource                                ./shared/inspection.robot
 Resource                                ./shared/navigation.robot
 Resource                                ./shared/messages.robot
+Resource                                ./shared/tables.robot
 Resource                                ./admin/users.robot
 Resource                                ./shared/misc.robot
 Resource                                ./user/transactions.robot
