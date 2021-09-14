@@ -1,5 +1,4 @@
 *** Keywords ***
-    ${YEAR}                             Next Year
 
 Chould Contains Table Row 2
     [Arguments]                         ${td1}  ${td2}

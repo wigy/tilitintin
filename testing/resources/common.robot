@@ -15,6 +15,7 @@ Resource                                ./user/transactions.robot
 Resource                                ./user/reports.robot
 Resource                                ./user/accounts.robot
 Resource                                ./user/databases.robot
+Resource                                ./user/periods.robot
 
 *** Variables ***
 
