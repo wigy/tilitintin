@@ -58,11 +58,11 @@ class Dashboard extends Component {
 
   keyText(cursor, key) {
     if (key >= '1' && key <= '9') {
-      this.selectPeriod(parseInt(key))
+      this.selectDb(parseInt(key))
     }
     key = key.toUpperCase()
     if (key >= 'A' && key <= 'Z') {
-      this.selectDb(key.charCodeAt(0) - 64)
+      this.selectPeriod(key.charCodeAt(0) - 64)
     }
   }
 
@@ -87,14 +87,20 @@ class Dashboard extends Component {
           <br />
           <Typography variant="h5" color="textSecondary"><Trans>Periods</Trans></Typography>
           <List className="PeriodList">
-            {store.database.periods.reverse().map((period, index) => (
-              <ListItem id={`period-${period.start_date}-${period.end_date}`} key={period.id} selected={parseInt(periodId) === period.id}>
-                <Button id={index + 1} onClick={() => this.selectPeriod(period)}>
-                  <Avatar>{index + 1}</Avatar>&nbsp;
-                  <Localize date={period.start_date} /> &mdash; <Localize date={period.end_date} />
-                </Button>
-              </ListItem>
-            ))}
+            {store.database.periods.reverse().map((period, index) => {
+              const letter = 'ABCDEFGHIJKLMNOPQRSTUVWZ'[index]
+              return (
+                <ListItem
+                  id={`period-${period.start_date}-${period.end_date}`}
+                  key={period.id}
+                  selected={parseInt(periodId) === period.id}>
+                  <Button id={letter} onClick={() => this.selectPeriod(period)}>
+                    <Avatar>{letter}</Avatar>&nbsp;
+                    <Localize date={period.start_date} /> &mdash; <Localize date={period.end_date} />
+                  </Button>
+                </ListItem>
+              )
+            })}
           </List>
         </Panel>
       </div>
