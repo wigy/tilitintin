@@ -6,8 +6,8 @@ Select First Period of DB
     ${already_there}                    Evaluate            ${db}!=None and ${period}!=None
     Return From Keyword If              ${already_there}
     Go To Dashboard
-    Click Element                       A
     Click Element                       1
+    Click Element                       A
 
 Select Database
     [Documentation]                     Select the given database.
