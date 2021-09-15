@@ -46,6 +46,7 @@ class Cursor {
         (event.key.length > 1 && event.shiftKey ? 'Shift+' : '') +
         (event.ctrlKey ? 'Ctrl+' : '') +
         (event.altKey ? 'Alt+' : '') +
+        (event.metaKey ? 'Meta+' : '') +
         event.key)
       const keyResult = this.handle(keyName)
       if (keyResult && keyResult.preventDefault) {
