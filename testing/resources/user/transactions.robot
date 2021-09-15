@@ -133,6 +133,30 @@ Fill New 3-Part VAT Income Tx
     Press Keys                          None    ESC
     Wait Until Page Does Not Contain Element    ${CURRENTLY_SELECTED_ROW}
 
+Select Named Tx
+    [Documentation]                     Start from the transaction page.
+    ...                                 Click the the trasaction to open with the given text.
+    [Arguments]                         ${text}
+    Click Element With text             ${text}
+    Wait Until Page Contains Element    ${SELECTED_DATE}
+
+Go To Line 1 Description
+    [Documentation]                     Assume just opened trasaction.
+    ...                                 Go to the first description line of the transaction.
+    Press Keys                          None    ARROW_DOWN
+    Wait Until Page Contains Element    ${SELECTED_ACCOUNT}
+    Press Keys                          None    ARROW_RIGHT
+    Wait Until Page Contains Element    ${SELECTED_DESCRIPTION}
+
+Edit Transaction Cell
+    [Documentation]                     Assume we are in editable transaction cell.
+    ...                                 Enter to the cell and type in new content.
+    ...                                 Press enter again.
+    [Arguments]                         ${text}
+    Press Keys                          None    ENTER
+    Press Keys                          None    ${text}
+    Press Keys                          None    ENTER
+
 Account Balance Should Be
     [Documentation]                     This function assumest that we are on transaction page.
     ...                                 Check that we have correct balance for the given account.

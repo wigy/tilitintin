@@ -30,8 +30,20 @@ Create New Period
     Account Balance Should Be           2622	-6 000,00€
 
 
-#Lock a Period
-#    Lock Period                         ${YEAR}-01-01
-#    Chould Contains Table Row 4         1       ${YEAR}-01-01   ${YEAR}-12-31   Locked
+Lock a Period
+    Login as User
+    Change Language                     en
+    Select First Period of DB
+    Go To Tools
+    Select Tool                         Periods
 
-# TODO: Check editing of locked period.
+    Lock Period                         ${YEAR}-01-01
+    Chould Contains Table Row 4         1       ${YEAR}-01-01   ${YEAR}-12-31   Locked
+
+    Select Database                     robot
+    Select Period                       ${YEAR}-01-01-${YEAR}-12-31
+    Select Account from Balances        1900
+    Select Named Tx                     Buy mouse
+    Go To Line 1 Description
+    Press Keys                          None    ENTER
+    Should Have Error Message           Cannot edit this entry. Period locked?
