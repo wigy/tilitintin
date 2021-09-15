@@ -8,6 +8,9 @@ const Configuration = {
   OS: browser.os,
   VERSION: pkg.version,
   COMMAND_KEY: browser.os === 'iOS' ? '⌘' : 'Alt',
+  COMMAND_KEY_MOD: browser.os === 'iOS' ? 'Meta' : 'Alt',
+  ICON_KEY: 'Ctrl',
+  ICON_KEY_MOD: 'Ctrl',
   // eslint-disable-next-line
   UI_API_URL: UI_API_URL
 }

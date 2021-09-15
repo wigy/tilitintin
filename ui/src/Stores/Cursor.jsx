@@ -1,6 +1,7 @@
 import { observable, action, makeObservable } from 'mobx'
 import TopologyComponent from './TopologyComponent'
 import EntryModel from '../Models/EntryModel'
+import Configuration from '../Configuration'
 
 const KEY_DEBUG = false
 
@@ -42,12 +43,16 @@ class Cursor {
       if (this.disabled || !event || !event.key) {
         return
       }
-      const keyName = (
+      // Construct full name for the key.
+      let keyName = (
         (event.key.length > 1 && event.shiftKey ? 'Shift+' : '') +
         (event.ctrlKey ? 'Ctrl+' : '') +
         (event.altKey ? 'Alt+' : '') +
         (event.metaKey ? 'Meta+' : '') +
         event.key)
+      // Unify results for system specific shortcut keys.
+      keyName = keyName.replace(Configuration.COMMAND_KEY_MOD, 'Command')
+      keyName = keyName.replace(Configuration.ICON_KEY_MOD, 'Icon')
       const keyResult = this.handle(keyName)
       if (keyResult && keyResult.preventDefault) {
         event.preventDefault()

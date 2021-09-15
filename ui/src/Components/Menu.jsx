@@ -79,42 +79,42 @@ class Menu extends Component {
     this.update(this.props.match.params)
   }
 
-  keyAlt1() {
+  keyCommand1() {
     if (this.props.store.token) {
       this.handleSelect('dashboard')
       return { preventDefault: true }
     }
   }
 
-  keyAlt2() {
+  keyCommand2() {
     return this.handleShortcut('2')
   }
 
-  keyAlt3() {
+  keyCommand3() {
     return this.handleShortcut('3')
   }
 
-  keyAlt4() {
+  keyCommand4() {
     return this.handleShortcut('4')
   }
 
-  keyAlt5() {
+  keyCommand5() {
     return this.handleShortcut('5')
   }
 
-  keyAlt6() {
+  keyCommand6() {
     return this.handleShortcut('6')
   }
 
-  keyAlt7() {
+  keyCommand7() {
     return this.handleShortcut('7')
   }
 
-  keyAlt8() {
+  keyCommand8() {
     return this.handleShortcut('8')
   }
 
-  keyAlt9() {
+  keyCommand9() {
     return this.handleShortcut('9')
   }
 
