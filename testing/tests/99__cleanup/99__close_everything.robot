@@ -1,3 +1,8 @@
+#
+# Requires:
+# (Nothing)
+#
+
 *** Settings ***
 Resource                                ../../resources/common.robot
 

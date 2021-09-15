@@ -1,3 +1,8 @@
+#
+# Requires:
+# tests/10__initialize/10__create_user.robot
+#
+
 *** Settings ***
 Resource                                ../../resources/common.robot
 Suite Setup                             Standard Suite Setup
