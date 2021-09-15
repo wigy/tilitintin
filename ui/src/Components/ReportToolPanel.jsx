@@ -39,33 +39,35 @@ class ReportToolPanel extends Component {
     return { preventDefault: true }
   }
 
-  render() {
+  keyIconD() {
     const store = this.props.store
     const lang = i18n.language
+    const url = `${Configuration.UI_API_URL}${store.report.getUrl()}&csv&lang=${lang}`
+    fetch(url, {
+      method: 'GET',
+      headers: new Headers({
+        Authorization: 'Bearer ' + store.token
+      })
+    })
+      .then(response => response.blob())
+      .then(blob => {
+        const url = window.URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.target = '_blank'
+        a.download = store.report.fileName()
+        document.body.appendChild(a)
+        a.click()
+        a.remove()
+      })
+    return { preventDefault: true }
+  }
+
+  render() {
+    const store = this.props.store
 
     if (!store.token) {
       return ''
-    }
-
-    const onDownload = () => {
-      const url = `${Configuration.UI_API_URL}${store.report.getUrl()}&csv&lang=${lang}`
-      fetch(url, {
-        method: 'GET',
-        headers: new Headers({
-          Authorization: 'Bearer ' + store.token
-        })
-      })
-        .then(response => response.blob())
-        .then(blob => {
-          const url = window.URL.createObjectURL(blob)
-          const a = document.createElement('a')
-          a.href = url
-          a.target = '_blank'
-          a.download = store.report.fileName()
-          document.body.appendChild(a)
-          a.click()
-          a.remove()
-        })
     }
 
     const onToggle = (option) => {
@@ -79,7 +81,7 @@ class ReportToolPanel extends Component {
 
     const buttons = [
       <IconButton key="button-print" onClick={() => this.keyIconP()} title="print" shortcut="P" icon="print"></IconButton>,
-      <IconButton key="button-download" onClick={onDownload} title="download-csv" icon="download"></IconButton>
+      <IconButton key="button-download" onClick={() => this.keyIconD()} title="download-csv" shortcut="C" icon="download"></IconButton>
     ]
 
     if (options.length) {
