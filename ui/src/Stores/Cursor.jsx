@@ -32,6 +32,8 @@ class Cursor {
   topology = null;
   // Component that has selected the page last time.
   currentPageComponent = null;
+  // A tool component registered from the current page.
+  currentToolComponent = null;
   // Menu component of the system.
   menuComponent = null;
   // Current topology component.
@@ -53,6 +55,7 @@ class Cursor {
       // Unify results for system specific shortcut keys.
       keyName = keyName.replace(Configuration.COMMAND_KEY_MOD, 'Command')
       keyName = keyName.replace(Configuration.ICON_KEY_MOD, 'Icon')
+      // Handle.
       const keyResult = this.handle(keyName)
       if (keyResult && keyResult.preventDefault) {
         event.preventDefault()
@@ -144,6 +147,14 @@ class Cursor {
       }
     }
 
+    // Try toolbar component handler.
+    if (!result && this.currentToolComponent && this.currentToolComponent[fn]) {
+      result = this.currentToolComponent[fn](this, key)
+      if (result && KEY_DEBUG) {
+        console.log('Tool component:', fn, ':', result)
+      }
+    }
+
     // Try menu handler.
     if (!result && this.menuComponent && this.menuComponent[fn]) {
       result = this.menuComponent[fn](this, key)
@@ -172,11 +183,19 @@ class Cursor {
   }
 
   /**
-   *
+   * Select menu handling component.
    * @param {Component} component
    */
   registerMenu(component) {
     this.menuComponent = component
+  }
+
+  /**
+   * Select a toolbar component.
+   * @param {Component} component
+   */
+  registerTools(component) {
+    this.currentToolComponent = component
   }
 
   /**

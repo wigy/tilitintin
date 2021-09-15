@@ -4,6 +4,7 @@ import { runInAction } from 'mobx'
 import { inject, observer } from 'mobx-react'
 import { withTranslation } from 'react-i18next'
 import Store from '../Stores/Store'
+import Cursor from '../Stores/Cursor'
 import IconButton from './IconButton'
 import IconSpacer from './IconSpacer'
 import Configuration from '../Configuration'
@@ -21,8 +22,22 @@ const ICONS = {
 
 @withTranslation('translations')
 @inject('store')
+@inject('cursor')
 @observer
 class ReportToolPanel extends Component {
+
+  componentDidMount() {
+    this.props.cursor.registerTools(this)
+  }
+
+  componentWillUnmount() {
+    this.props.cursor.registerTools(null)
+  }
+
+  keyIconP() {
+    window.print()
+    return { preventDefault: true }
+  }
 
   render() {
     const store = this.props.store
@@ -30,10 +45,6 @@ class ReportToolPanel extends Component {
 
     if (!store.token) {
       return ''
-    }
-
-    const onPrint = () => {
-      window.print()
     }
 
     const onDownload = () => {
@@ -67,7 +78,7 @@ class ReportToolPanel extends Component {
     const options = store.report ? Object.keys({ ...store.report.options }) : []
 
     const buttons = [
-      <IconButton key="button-print" onClick={onPrint} title="print" icon="print"></IconButton>,
+      <IconButton key="button-print" onClick={() => this.keyIconP()} title="print" shortcut="P" icon="print"></IconButton>,
       <IconButton key="button-download" onClick={onDownload} title="download-csv" icon="download"></IconButton>
     ]
 
@@ -123,6 +134,7 @@ class ReportToolPanel extends Component {
 
 ReportToolPanel.propTypes = {
   t: PropTypes.func,
+  cursor: PropTypes.instanceOf(Cursor),
   store: PropTypes.instanceOf(Store)
 }
 

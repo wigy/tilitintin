@@ -5,6 +5,7 @@ import { withTranslation } from 'react-i18next'
 import { IconButton } from '@material-ui/core'
 import { HelpOutline, AccountBalance, StarRate, AttachMoney, CreditCard, LocalGroceryStore, MoneyRounded, AddShoppingCart, PersonAdd, Print, CloudDownload, FormatIndentDecrease, Filter2, Filter3, Filter1, Filter4, LocalOffer, Lock, LockOpen, AttachFile, Functions, Event, Sort, Delete, Storage, CloudUpload, ZoomIn, ZoomOut, Visibility, VisibilityOff, PlaylistAdd, DeleteSweep } from '@material-ui/icons'
 import Cursor from '../Stores/Cursor'
+import Configuration from '../Configuration'
 
 const ICONS = {
   'add-tx': PlaylistAdd,
@@ -47,7 +48,7 @@ const ICONS = {
 class TilitintinIconButton extends Component {
 
   render() {
-    const { t, disabled, title, pressKey, onClick, icon, toggle, id } = this.props
+    const { t, disabled, title, pressKey, onClick, icon, shortcut, toggle, id } = this.props
     let color = 'primary'
     let className = 'IconButton'
     if (toggle !== undefined) {
@@ -67,7 +68,7 @@ class TilitintinIconButton extends Component {
     }
 
     return (
-      <IconButton id={id} className={className} color={color} title={t('icon-' + title)} disabled={disabled} onClick={() => handleClick()}>
+      <IconButton id={id} className={className} color={color} title={t('icon-' + title) + (shortcut ? ` (${Configuration.ICON_KEY} + ${shortcut})` : '')} disabled={disabled} onClick={() => handleClick()}>
         <Icon style={{ fontSize: 30 }}/>
       </IconButton>
     )
@@ -80,6 +81,7 @@ TilitintinIconButton.propTypes = {
   id: PropTypes.string,
   icon: PropTypes.string,
   title: PropTypes.string,
+  shortcut: PropTypes.string,
   toggle: PropTypes.bool,
   pressKey: PropTypes.string,
   cursor: PropTypes.instanceOf(Cursor),
