@@ -11,13 +11,13 @@ Create New Period
     Go To Tools
     Select Tool                         Periods
 
-    Chould Contains Table Row 4         1       ${YEAR}-01-01   ${YEAR}-12-31   Unlocked
+    Should Contains Table Row 4         1       ${YEAR}-01-01   ${YEAR}-12-31   Unlocked
 
     Click Tool Icon                     Create Period
     Click Element                       OK
 
     ${NEXT}                             Next Year
-    Chould Contains Table Row 4         2       ${NEXT}-01-01   ${NEXT}-12-31   Unlocked
+    Should Contains Table Row 4         2       ${NEXT}-01-01   ${NEXT}-12-31   Unlocked
 
     Select Database                     robot
     Select Period                       ${NEXT}-01-01-${NEXT}-12-31
@@ -38,7 +38,7 @@ Lock a Period
     Select Tool                         Periods
 
     Lock Period                         ${YEAR}-01-01
-    Chould Contains Table Row 4         1       ${YEAR}-01-01   ${YEAR}-12-31   Locked
+    Should Contains Table Row 4         1       ${YEAR}-01-01   ${YEAR}-12-31   Locked
 
     Select Database                     robot
     Select Period                       ${YEAR}-01-01-${YEAR}-12-31
