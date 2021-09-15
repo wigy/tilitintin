@@ -15,6 +15,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { ButtonGroup } from '@material-ui/core'
 import { CalendarToday, NavigateBefore, NavigateNext, Storage } from '@material-ui/icons'
 import { action } from 'mobx'
+import Configuration from '../Configuration'
 
 @withTranslation('translations')
 @inject('store')
@@ -25,30 +26,35 @@ class Menu extends Component {
   menu = [
     {
       title: 'Transactions',
+      help: 'View and edit transactions of the current period.',
       shortcut: '2',
       disabled: ({ db, periodId, notLoggedIn }) => !db || !periodId || notLoggedIn,
       action: () => this.handleSelect('txs')
     },
     {
       title: 'Reports',
+      help: 'Display various reports for the current period.',
       shortcut: '3',
       disabled: ({ db, periodId, notLoggedIn }) => !db || !periodId || notLoggedIn,
       action: () => this.handleSelect('report')
     },
     {
       title: 'Accounts',
+      help: 'View and edit accounting schema of this database.',
       shortcut: '4',
       disabled: ({ db, notLoggedIn }) => !db || notLoggedIn,
       action: () => this.handleSelect('account')
     },
     {
       title: 'Tools',
+      help: 'A collection of various tools.',
       shortcut: '5',
       disabled: ({ notLoggedIn, isAdmin }) => notLoggedIn || isAdmin,
       action: () => this.handleSelect('tools')
     },
     {
       title: 'Admin',
+      help: 'System administration',
       shortcut: '6',
       disabled: ({ notLoggedIn, isAdmin }) => notLoggedIn || !isAdmin,
       action: () => this.handleSelect('admin')
@@ -217,7 +223,7 @@ class Menu extends Component {
       color="primary"
       variant="contained"
       onClick={() => entry.action()}
-      title={entry.shortcut ? `Alt + ${entry.shortcut}` : ''}
+      title={entry.help + (entry.shortcut ? ` (${Configuration.COMMAND_KEY} + ${entry.shortcut})` : '')}
     >
       <Trans>{entry.title}</Trans>
     </Button>
