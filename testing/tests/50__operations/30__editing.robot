@@ -9,6 +9,10 @@ Suite Setup                             Standard Suite Setup
 Suite Teardown                          Standard Suite Teardown
 
 *** Test Cases ***
-Delete Line from Transaction
+Test Bad Date Format
     Login as User
     Select Default Database
+    Select Account from Balances        1900
+    Click Element                       Add Transaction
+    # Fill New 3-Part VAT Expense Tx      7.6.${NEXT_YEAR}    Buy more suff                   500     7680
+    # Should Have Error Message           Date is incorrect.
