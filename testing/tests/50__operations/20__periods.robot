@@ -12,7 +12,7 @@ Suite Teardown                          Standard Suite Teardown
 Create New Period
     Login as User
     Change Language                     en
-    Select First Period of DB
+    Select Default Database
     Go To Tools
     Select Tool                         Periods
 
@@ -38,7 +38,7 @@ Create New Period
 Lock a Period
     Login as User
     Change Language                     en
-    Select First Period of DB
+    Select Default Database
     Go To Tools
     Select Tool                         Periods
 

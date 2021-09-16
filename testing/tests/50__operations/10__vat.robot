@@ -12,7 +12,7 @@ Suite Teardown                          Standard Suite Teardown
 Calculate VAT
     Login as User
     Change Language                     en
-    Select First Period of DB
+    Select Default Database
     Go To Tools
     Select Tool                         Value Added Tax
 
@@ -33,7 +33,7 @@ Calculate VAT
 Verify VAT from Report
     Login as User
     Change Language                     fi
-    Select First Period of DB
+    Select Default Database
 
     Select Report                       balance-sheet
     Page Should Contain Report Line     Muut saamiset                       1,94€

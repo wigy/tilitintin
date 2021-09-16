@@ -171,7 +171,7 @@ ${INCOME_STATEMENT_DETAILED_REPORT}      SEPARATOR=\n
 Verify That Reports Are Correct
     Login as User
     Change Language                     fi
-    Select First Period of DB
+    Select Default Database
     Select Report                       general-journal
     ${data}                             Gather Report Data
     Report Should Match                 ${data}     ${JOURNAL_REPORT}

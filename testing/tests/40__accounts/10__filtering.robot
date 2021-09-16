@@ -75,7 +75,7 @@ Page Should Not Contain Any Account Types
 *** Test Cases ***
 Check Basic Account Listing Filtering
     Login as User
-    Select First Period of DB
+    Select Default Database
    	Go To Accounts
 	Page Should Contain All Account Types
     Click Element                       HideAll
@@ -96,7 +96,7 @@ Check Basic Account Listing Filtering
 
 Test Searching Accounts With Text
     Login as User
-    Select First Period of DB
+    Select Default Database
    	Go To Accounts
     Input Text                          search          1900
     Press Keys                          None    ENTER

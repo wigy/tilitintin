@@ -12,7 +12,7 @@ Suite Teardown                          Standard Suite Teardown
 Create First Few Transactions
     Login as User
     Change Language                     fi
-    Select First Period of DB
+    Select Default Database
     Click Element                       Add Transaction
     Click Element                       Select Account
     Scroll Element Into View            Account 1900
@@ -30,7 +30,7 @@ Create First Few Transactions
 
 Create Some VAT Transactions
     Login as User
-    Select First Period of DB
+    Select Default Database
     Select Account from Balances        1900
     Click Element                       Add Transaction
     Fill New 3-Part VAT Expense Tx      16.3.${YEAR}    Buy computer                        300     7680

@@ -1,5 +1,5 @@
 *** Keywords ***
-Select First Period of DB
+Select Default Database
     [Documentation]                     Got to the home page and select first period of first database.
     ${db}                               Current DB
     ${period}                           Current Period
