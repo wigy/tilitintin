@@ -158,6 +158,7 @@ class TextEdit extends Component {
             {this.state.proposal.map(
               (item, index) => (
                 <ListItem
+                  className="proposal"
                   id={`proposal${index}`}
                   dense
                   style={{ cursor: 'pointer' }}

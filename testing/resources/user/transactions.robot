@@ -157,6 +157,13 @@ Edit Transaction Cell
     Press Keys                          None    ${text}
     Press Keys                          None    ENTER
 
+Clear Transaction Cell
+    [Documentation]                     Assume we are in editing a transaction cell.
+    ...                                 Clear the content.
+    Press Keys                          None    CTRL+a
+    Press Keys                          None    BACKSPACE
+
+
 Account Balance Should Be
     [Documentation]                     This function assumest that we are on transaction page.
     ...                                 Check that we have correct balance for the given account.
