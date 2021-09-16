@@ -21,11 +21,10 @@ Create New Period
     Click Tool Icon                     Create Period
     Click Element                       OK
 
-    ${NEXT}                             Next Year
-    Should Contains Table Row 4         2       ${NEXT}-01-01   ${NEXT}-12-31   Unlocked
+    Should Contains Table Row 4         2       ${NEXT_YEAR}-01-01   ${NEXT_YEAR}-12-31   Unlocked
 
     Select Database                     robot
-    Select Period                       ${NEXT}-01-01-${NEXT}-12-31
+    Select Period                       ${NEXT_YEAR}-01-01-${NEXT_YEAR}-12-31
 
     Account Balance Should Be           1763	1,94€
     Account Balance Should Be           1900	15 990,00€

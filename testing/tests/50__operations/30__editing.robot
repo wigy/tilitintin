@@ -11,3 +11,4 @@ Suite Teardown                          Standard Suite Teardown
 *** Test Cases ***
 Delete Line from Transaction
     Login as User
+    Select Default Database

@@ -51,6 +51,8 @@ Initialize Variables
     Set Global Variable                 ${TEST_PASSWORD}
     ${YEAR}                             Current Year
     Set Global Variable                 ${YEAR}
+    ${NEXT_YEAR}                             Next Year
+    Set Global Variable                 ${NEXT_YEAR}
 
 Standard Suite Setup
     Initialize Variables
