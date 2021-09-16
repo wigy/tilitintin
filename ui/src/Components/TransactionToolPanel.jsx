@@ -26,8 +26,9 @@ class TransactionToolPanel extends Component {
     this.props.cursor.registerTools(null)
   }
 
-  onDownload = (db, periodId, accountId) => {
+  keyIconD = () => {
     const store = this.props.store
+    const { db, periodId, accountId } = store
     const lang = i18n.language
     const url = `${Configuration.UI_API_URL}/db/${db}/report/account/${periodId}/${accountId}?csv&lang=${lang}`
 
@@ -48,7 +49,8 @@ class TransactionToolPanel extends Component {
         a.click()
         a.remove()
       })
-  };
+    return { preventDefault: true }
+  }
 
   keyIconI() {
     this.props.store.transactions.forEach(tx => {
@@ -108,7 +110,7 @@ class TransactionToolPanel extends Component {
       return ''
     }
 
-    const { account, tools, db, periodId, accountId } = this.props.store
+    const { account, tools } = this.props.store
     const { cursor } = this.props
 
     const toggle = (tag) => {
@@ -140,7 +142,7 @@ class TransactionToolPanel extends Component {
           <IconButton id="Zoom Out" shortcut="O" pressKey="IconO" title="hide-details" icon="zoom-out" />
           <IconButton id="Show All" shortcut="S" pressKey="IconS" disabled={!hasTags} title="show-all" icon="show-all" />
           <IconButton id="Hide All" shortcut="H" pressKey="IconH" disabled={!hasTags} title="hide-all" icon="hide-all" />
-          <IconButton id="Download" shortcut="" onClick={() => this.onDownload(db, periodId, accountId)} title="download-csv" icon="download" />
+          <IconButton id="Download" shortcut="D" pressKey="IconD" title="download-csv" icon="download" />
           <IconButton id="Add Transaction" shortcut="A" disabled={cannotAdd} pressKey="IconA" title="add-tx" icon="add-tx" />
           <IconButton id="Delete Transaction" shortcut="X" disabled={!canDeleteTx} pressKey="IconX" title="delete-tx" icon="delete-tx" />
           <IconButton id="Delete Row" shortcut="X" disabled={!canDeleteEntry} pressKey="IconX" title="delete-entry" icon="delete-entry" />
