@@ -78,14 +78,14 @@ class TransactionTable extends Component {
     return { preventDefault: true }
   }
 
-  keyInsert(cursor) {
+  keyIconA(cursor) {
     const { store } = this.props
     if (store.period.locked) {
-      return
+      return { preventDefault: true }
     }
     if (!store.accountId) {
       this.setState({ showAccountDropdown: true })
-      return
+      return { preventDefault: true }
     }
 
     // Insert new document.
@@ -107,6 +107,24 @@ class TransactionTable extends Component {
         cursor.setIndex(index >= 0 ? index : store.filteredTransactions.length - 1)
       })
 
+    return { preventDefault: true }
+  }
+
+  keyIconX(cursor) {
+    const { store } = this.props
+    const entry = store.filteredTransactions[cursor.index]
+    const document = entry.document
+    if (cursor.row === null) {
+      if (!document.canEdit()) {
+        return
+      }
+      document.markForDeletion()
+    } else {
+      if (!document.entries[cursor.row].canEdit()) {
+        return
+      }
+      document.entries[cursor.row].markForDeletion()
+    }
     return { preventDefault: true }
   }
 
@@ -278,7 +296,7 @@ class TransactionTable extends Component {
       return
     }
     await this.props.store.setAccount(this.props.store.db, this.props.store.periodId, id)
-    this.keyInsert(this.props.cursor)
+    this.keyIconA(this.props.cursor)
   }
 
   render() {

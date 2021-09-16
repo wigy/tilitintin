@@ -196,25 +196,6 @@ class EntryModel extends NavigationTargetModel {
   }
 
   /**
-  * Mark either document or entry for deletion.
-  * @param {Cursor} cursor
-  */
-  keyDelete(cursor) {
-    if (cursor.row === null) {
-      if (!this.document.canEdit()) {
-        return
-      }
-      this.document.markForDeletion()
-    } else {
-      if (!this.document.entries[cursor.row].canEdit()) {
-        return
-      }
-      this.document.entries[cursor.row].markForDeletion()
-    }
-    return { preventDefault: true }
-  }
-
-  /**
   * Walk through columns and rows and add an entry, if on the last column of the last row.
   * @param {Cursor} cursor
   */
