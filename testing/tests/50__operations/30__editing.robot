@@ -18,17 +18,19 @@ Test Bad Date Format and Proposal
     Press Keys                          None    CTRL+a
 
     # Localization format not right.
+    Wait Until Page Contains Element    ${SELECTED_DATE}
     Edit Transaction Cell               7.6.${NEXT_YEAR}
     Should Have Error Message           Date is incorrect.
 
     # Year is not right.
     Clear Transaction Cell
-    Edit Transaction Cell               ${YEAR}-06-07
+    Enter Transaction                   ${YEAR}-06-07
     Should Have Error Message           Date is before the current period starts.
 
     # Get it right.
     Clear Transaction Cell
-    Edit Transaction Cell               ${NEXT_YEAR}-06-07
+    Enter Transaction                   ${NEXT_YEAR}-06-07
+    Wait Until Page Contains Element    ${SELECTED_ACCOUNT}
 
     # Fill some stuff. Test automatic proposal as well.
     Press Keys                          None    ARROW_RIGHT

@@ -154,6 +154,12 @@ Edit Transaction Cell
     ...                                 Press enter again.
     [Arguments]                         ${text}
     Press Keys                          None    ENTER
+    Enter Transaction                   ${text}
+
+Enter Transaction
+    [Documentation]                     Assume we are in editable transaction cell and editing is started.
+    ...                                 Type in new content. Press enter at the end.
+    [Arguments]                         ${text}
     Press Keys                          None    ${text}
     Press Keys                          None    ENTER
 
