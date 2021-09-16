@@ -28,10 +28,92 @@ class ReportToolPanel extends Component {
 
   componentDidMount() {
     this.props.cursor.registerTools(this)
+    this.radioKeys = {}
+    this.toggleKeys = {}
   }
 
   componentWillUnmount() {
     this.props.cursor.registerTools(null)
+  }
+
+  keyIcon1() {
+    return this.handleRadio('1')
+  }
+
+  keyIcon2() {
+    return this.handleRadio('2')
+  }
+
+  keyIcon3() {
+    return this.handleRadio('3')
+  }
+
+  keyIcon4() {
+    return this.handleRadio('4')
+  }
+
+  keyIcon5() {
+    return this.handleRadio('5')
+  }
+
+  keyIcon6() {
+    return this.handleRadio('6')
+  }
+
+  keyIcon7() {
+    return this.handleRadio('7')
+  }
+
+  keyIcon8() {
+    return this.handleRadio('8')
+  }
+
+  keyIcon9() {
+    return this.handleRadio('9')
+  }
+
+  keyIconE() {
+    return this.handleToggle('E')
+  }
+
+  keyIconR() {
+    return this.handleToggle('R')
+  }
+
+  keyIconT() {
+    return this.handleToggle('T')
+  }
+
+  keyIconY() {
+    return this.handleToggle('Y')
+  }
+
+  keyIconU() {
+    return this.handleToggle('U')
+  }
+
+  keyIconI() {
+    return this.handleToggle('I')
+  }
+
+  keyIconO() {
+    return this.handleToggle('O')
+  }
+
+  handleToggle(letter) {
+    const fn = this.toggleKeys[letter]
+    if (fn) {
+      fn()
+      return { preventDefault: true }
+    }
+  }
+
+  handleRadio(letter) {
+    const fn = this.radioKeys[letter]
+    if (fn) {
+      fn()
+      return { preventDefault: true }
+    }
   }
 
   keyIconP() {
@@ -86,38 +168,51 @@ class ReportToolPanel extends Component {
 
     if (options.length) {
       buttons.push(<IconSpacer key="space"/>)
-      options.forEach((option) => {
+      let toggleKeys = 0
+      let radioKeys = 0
+      let shortcut
+      options.forEach((option, index) => {
+        const radioKey = '1234567890'
+        const toggleKey = 'ERTYUIO'
         const [optionType, optionArg1] = store.report.options[option].split(':')
         const name = `option-${option}`
         switch (optionType) {
           case 'boolean':
+            shortcut = toggleKey[toggleKeys]
             buttons.push(<IconButton
               id={name}
               key={name}
+              shortcut={shortcut}
+              pressKey={`Icon${shortcut}`}
               toggle={store.report.config[option]}
-              onClick={() => onToggle(option)}
               title={name}
               icon={ICONS[name] || 'unknown'}>
             </IconButton>)
+            this.toggleKeys[shortcut] = () => onToggle(option)
+            toggleKeys++
             break
           case 'radio':
+            shortcut = radioKey[radioKeys]
             buttons.push(<IconButton
               id={name}
               key={name}
+              shortcut={shortcut}
+              pressKey={`Icon${shortcut}`}
               toggle={store.report.config[option]}
-              onClick={() => {
-                runInAction(() => {
-                  Object.entries(store.report.options).forEach(([opt, type]) => {
-                    if (type.startsWith('radio:' + optionArg1)) {
-                      store.report.config[opt] = false
-                    }
-                  })
-                  onToggle(option)
-                })
-              }}
               title={name}
               icon={ICONS[name] || 'unknown'}>
             </IconButton>)
+            this.radioKeys[shortcut] = () => {
+              runInAction(() => {
+                Object.entries(store.report.options).forEach(([opt, type]) => {
+                  if (type.startsWith('radio:' + optionArg1)) {
+                    store.report.config[opt] = false
+                  }
+                })
+                onToggle(option)
+              })
+            }
+            radioKeys++
             break
           default:
             throw new Error(`Unsupported report option type ${optionType}`)
