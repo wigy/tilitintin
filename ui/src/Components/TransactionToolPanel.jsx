@@ -68,6 +68,41 @@ class TransactionToolPanel extends Component {
     return { preventDefault: true }
   }
 
+  keyIconH() {
+    const { account, tools } = this.props.store
+    const { cursor } = this.props
+    const moveCursor = cursor.inComponent('Balances.transactions')
+    if (moveCursor) {
+      cursor.leaveComponent()
+      cursor.resetSelected()
+    }
+    runInAction(() => {
+      tools.tagDisabled = {}
+      account.tags.forEach((tag) => (tools.tagDisabled[tag.tag] = true))
+    })
+    if (moveCursor) {
+      cursor.enterComponent()
+    }
+    return { preventDefault: true }
+  }
+
+  keyIconS() {
+    const { tools } = this.props.store
+    const { cursor } = this.props
+    const moveCursor = cursor.inComponent('Balances.transactions')
+    if (moveCursor) {
+      cursor.leaveComponent()
+      cursor.resetSelected()
+    }
+    runInAction(() => {
+      tools.tagDisabled = {}
+    })
+    if (moveCursor) {
+      cursor.enterComponent()
+    }
+    return { preventDefault: true }
+  }
+
   render() {
     if (!this.props.store.token) {
       return ''
@@ -90,35 +125,6 @@ class TransactionToolPanel extends Component {
       }
     }
 
-    const disableAll = () => {
-      const moveCursor = cursor.inComponent('Balances.transactions')
-      if (moveCursor) {
-        cursor.leaveComponent()
-        cursor.resetSelected()
-      }
-      runInAction(() => {
-        tools.tagDisabled = {}
-        account.tags.forEach((tag) => (tools.tagDisabled[tag.tag] = true))
-      })
-      if (moveCursor) {
-        cursor.enterComponent()
-      }
-    }
-
-    const enableAll = () => {
-      const moveCursor = cursor.inComponent('Balances.transactions')
-      if (moveCursor) {
-        cursor.leaveComponent()
-        cursor.resetSelected()
-      }
-      runInAction(() => {
-        tools.tagDisabled = {}
-      })
-      if (moveCursor) {
-        cursor.enterComponent()
-      }
-    }
-
     const hasTags = account && account.tags && account.tags.length > 0
     const cannotAdd = !this.props.store.period || !!this.props.store.period.locked
     const canDeleteEntry = cursor.componentX > 0 && cursor.index !== null && cursor.row !== null
@@ -132,8 +138,8 @@ class TransactionToolPanel extends Component {
         <div>
           <IconButton id="Zoom In" shortcut="I" pressKey="IconI" title="show-details" icon="zoom-in" />
           <IconButton id="Zoom Out" shortcut="O" pressKey="IconO" title="hide-details" icon="zoom-out" />
-          <IconButton id="Show All" shortcut="" disabled={!hasTags} onClick={enableAll} title="show-all" icon="show-all" />
-          <IconButton id="Hide All" shortcut="" disabled={!hasTags} onClick={disableAll} title="hide-all" icon="hide-all" />
+          <IconButton id="Show All" shortcut="S" pressKey="IconS" disabled={!hasTags} title="show-all" icon="show-all" />
+          <IconButton id="Hide All" shortcut="H" pressKey="IconH" disabled={!hasTags} title="hide-all" icon="hide-all" />
           <IconButton id="Download" shortcut="" onClick={() => this.onDownload(db, periodId, accountId)} title="download-csv" icon="download" />
           <IconButton id="Add Transaction" shortcut="A" disabled={cannotAdd} pressKey="IconA" title="add-tx" icon="add-tx" />
           <IconButton id="Delete Transaction" shortcut="X" disabled={!canDeleteTx} pressKey="IconX" title="delete-tx" icon="delete-tx" />
