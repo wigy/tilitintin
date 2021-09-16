@@ -18,7 +18,12 @@ class TransactionToolPanel extends Component {
 
   @action
   componentDidMount() {
+    this.props.cursor.registerTools(this)
     runInAction(() => (this.props.store.tools.tagDisabled = {}))
+  }
+
+  componentWillUnmount() {
+    this.props.cursor.registerTools(null)
   }
 
   onDownload = (db, periodId, accountId) => {
@@ -44,6 +49,24 @@ class TransactionToolPanel extends Component {
         a.remove()
       })
   };
+
+  keyIconI() {
+    this.props.store.transactions.forEach(tx => {
+      if (!tx.open && tx.document.number > 1) {
+        tx.toggleOpen()
+      }
+    })
+    return { preventDefault: true }
+  }
+
+  keyIconO() {
+    this.props.store.transactions.forEach(tx => {
+      if (tx.open) {
+        tx.toggleOpen()
+      }
+    })
+    return { preventDefault: true }
+  }
 
   render() {
     if (!this.props.store.token) {
@@ -96,22 +119,6 @@ class TransactionToolPanel extends Component {
       }
     }
 
-    const openAll = () => {
-      this.props.store.transactions.forEach(tx => {
-        if (!tx.open && tx.document.number > 1) {
-          tx.toggleOpen()
-        }
-      })
-    }
-
-    const closeAll = () => {
-      this.props.store.transactions.forEach(tx => {
-        if (tx.open) {
-          tx.toggleOpen()
-        }
-      })
-    }
-
     const hasTags = account && account.tags && account.tags.length > 0
     const cannotAdd = !this.props.store.period || !!this.props.store.period.locked
     const canDeleteEntry = cursor.componentX > 0 && cursor.index !== null && cursor.row !== null
@@ -123,8 +130,8 @@ class TransactionToolPanel extends Component {
         <Title>{account ? account.toString() : <Trans>No account selected</Trans>}</Title>
 
         <div>
-          <IconButton id="Zoom In" shortcut="" onClick={openAll} title="show-details" icon="zoom-in" />
-          <IconButton id="Zoom Out" shortcut="" onClick={closeAll} title="hide-details" icon="zoom-out" />
+          <IconButton id="Zoom In" shortcut="I" pressKey="IconI" title="show-details" icon="zoom-in" />
+          <IconButton id="Zoom Out" shortcut="O" pressKey="IconO" title="hide-details" icon="zoom-out" />
           <IconButton id="Show All" shortcut="" disabled={!hasTags} onClick={enableAll} title="show-all" icon="show-all" />
           <IconButton id="Hide All" shortcut="" disabled={!hasTags} onClick={disableAll} title="hide-all" icon="hide-all" />
           <IconButton id="Download" shortcut="" onClick={() => this.onDownload(db, periodId, accountId)} title="download-csv" icon="download" />
