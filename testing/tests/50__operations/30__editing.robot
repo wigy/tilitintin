@@ -12,7 +12,8 @@ Suite Teardown                          Standard Suite Teardown
 Test Bad Date Format and Proposal
     Login as User
     Change Language                     en
-    Select Default Database
+    Select Database                     robot
+    Select Period                       ${NEXT_YEAR}-01-01-${NEXT_YEAR}-12-31
     Select Account from Balances        1900
     Press Keys                          None    CTRL+a
 
