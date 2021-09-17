@@ -134,7 +134,6 @@ class Store {
 
     debug('  Request:', method, url, data || '')
 
-    this.clearMessages()
     this.loading = !noDimming
     return fetch(url, options)
       .then(res => {
