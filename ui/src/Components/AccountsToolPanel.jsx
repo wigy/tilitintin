@@ -21,6 +21,73 @@ class AccountsToolPanel extends Component {
 
   componentDidMount() {
     this.setState({ search: this.props.store.tools.accounts.search || '' })
+    this.props.cursor.registerTools(this)
+  }
+
+  componentWillUnmount() {
+    this.props.cursor.registerTools(null)
+  }
+
+  keyIconS() {
+    const { store } = this.props
+    runInAction(() => {
+      const favorite = store.tools.accounts.favorite
+      const search = store.tools.accounts.search
+      store.tools.accounts = { favorite, search }
+    })
+    return { preventDefault: true }
+  }
+
+  keyIconH() {
+    const { store } = this.props
+    runInAction(() => {
+      const favorite = store.tools.accounts.favorite
+      const search = store.tools.accounts.search
+      store.tools.accounts = { favorite, search, asset: true, liability: true, equity: true, revenue: true, expense: true, profit: true }
+    })
+    return { preventDefault: true }
+  }
+
+  keyIconF() {
+    const { store } = this.props
+    runInAction(() => (store.tools.accounts.favorite = !store.tools.accounts.favorite))
+    return { preventDefault: true }
+  }
+
+  keyIconA() {
+    const { store } = this.props
+    runInAction(() => (store.tools.accounts.asset = !store.tools.accounts.asset))
+    return { preventDefault: true }
+  }
+
+  keyIconL() {
+    const { store } = this.props
+    runInAction(() => (store.tools.accounts.liability = !store.tools.accounts.liability))
+    return { preventDefault: true }
+  }
+
+  keyIconE() {
+    const { store } = this.props
+    runInAction(() => (store.tools.accounts.equity = !store.tools.accounts.equity))
+    return { preventDefault: true }
+  }
+
+  keyIconR() {
+    const { store } = this.props
+    runInAction(() => (store.tools.accounts.revenue = !store.tools.accounts.revenue))
+    return { preventDefault: true }
+  }
+
+  keyIconX() {
+    const { store } = this.props
+    runInAction(() => (store.tools.accounts.expense = !store.tools.accounts.expense))
+    return { preventDefault: true }
+  }
+
+  keyIconO() {
+    const { store } = this.props
+    runInAction(() => (store.tools.accounts.profit = !store.tools.accounts.profit))
+    return { preventDefault: true }
   }
 
   render() {
@@ -29,56 +96,33 @@ class AccountsToolPanel extends Component {
       return ''
     }
 
-    const enableAll = () => {
-      runInAction(() => {
-        const favorite = store.tools.accounts.favorite
-        const search = store.tools.accounts.search
-        store.tools.accounts = { favorite, search }
-      })
-    }
-
-    const disableAll = () => {
-      runInAction(() => {
-        const favorite = store.tools.accounts.favorite
-        const search = store.tools.accounts.search
-        store.tools.accounts = { favorite, search, asset: true, liability: true, equity: true, revenue: true, expense: true, profit: true }
-      })
-    }
-
     return ( // ASSET/LIABILITY/EQUITY/REVENUE/EXPENSE/PROFIT_PREV/PROFIT
       <div className="ToolPanel AccountsToolPanel">
         <Title>Accounts</Title>
-        <IconButton id="ShowAll" onClick={enableAll} title="all-account-types" icon="show-all"></IconButton>
-        <IconButton id="HideAll" onClick={disableAll} title="none-account-types" icon="hide-all"></IconButton>
+        <IconButton id="ShowAll" shortcut="S" pressKey="IconS" title="all-account-types" icon="show-all"></IconButton>
+        <IconButton id="HideAll" shortcut="H" pressKey="IconH" title="none-account-types" icon="hide-all"></IconButton>
         <IconSpacer/>
-        <IconButton id="Favourites" key="button-favorite" title="favorite" icon="star"
+        <IconButton id="Favourites" shortcut="F" pressKey="IconF" key="button-favorite" title="favorite" icon="star"
           toggle={!!store.tools.accounts.favorite}
-          onClick={() => runInAction(() => (store.tools.accounts.favorite = !store.tools.accounts.favorite))}
         />
         <IconSpacer/>
-        <IconButton id="Asset" key="button-asset" title="asset" icon="money"
+        <IconButton id="Asset" key="button-asset" shortcut="A" pressKey="IconA" title="asset" icon="money"
           toggle={!store.tools.accounts.asset}
-          onClick={() => runInAction(() => (store.tools.accounts.asset = !store.tools.accounts.asset))}
         />
-        <IconButton id="Liability" key="button-liability" title="liability" icon="credit-card"
+        <IconButton id="Liability" key="button-liability" shortcut="L" pressKey="IconL" title="liability" icon="credit-card"
           toggle={!store.tools.accounts.liability}
-          onClick={() => runInAction(() => (store.tools.accounts.liability = !store.tools.accounts.liability))}
         />
-        <IconButton id="Equity" key="button-equity" title="equity" icon="savings"
+        <IconButton id="Equity" key="button-equity" shortcut="E" pressKey="IconE" title="equity" icon="savings"
           toggle={!store.tools.accounts.equity}
-          onClick={() => runInAction(() => (store.tools.accounts.equity = !store.tools.accounts.equity))}
         />
-        <IconButton id="Revenue" key="button-revenue" title="revenue" icon="sales"
+        <IconButton id="Revenue" key="button-revenue" shortcut="R" pressKey="IconR" title="revenue" icon="sales"
           toggle={!store.tools.accounts.revenue}
-          onClick={() => runInAction(() => (store.tools.accounts.revenue = !store.tools.accounts.revenue))}
         />
-        <IconButton id="Expense" key="button-expense" title="expense" icon="shopping-cart"
+        <IconButton id="Expense" key="button-expense" shortcut="X" pressKey="IconX" title="expense" icon="shopping-cart"
           toggle={!store.tools.accounts.expense}
-          onClick={() => runInAction(() => (store.tools.accounts.expense = !store.tools.accounts.expense))}
         />
-        <IconButton id="Profit" key="button-profit" title="profit" icon="profit"
+        <IconButton id="Profit" key="button-profit" shortcut="O" pressKey="IconO" title="profit" icon="profit"
           toggle={!store.tools.accounts.profit}
-          onClick={() => runInAction(() => (store.tools.accounts.profit = !store.tools.accounts.profit))}
         />
         <IconSpacer/>
         <TextField
