@@ -177,3 +177,8 @@ Account Balance Should Be
     [Arguments]                         ${account}  ${balance}
     Go To Transactions
     Page Should Contain Element         //tr[contains(@class, "BalanceLine")][./td[contains(@class, "number")][text()="${account}"]][./td[contains(@class, "balance")]/*[text()="${balance}"]]
+
+Wait Until Tx Selected
+    [Documentation]                     Helper for verifying correct navigation.
+    [Arguments]                         ${text}
+    Wait Until Page Contains Element    //*[contains(@class, "TransactionDetails")][contains(@class, "account")][contains(@class, "sub-selected")]//*[text()='${text}']
