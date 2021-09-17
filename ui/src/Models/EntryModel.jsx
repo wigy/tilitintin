@@ -505,14 +505,16 @@ class EntryModel extends NavigationTargetModel {
   }
 
   /**
-  * Turn null account_id to 0.
+  * Turn null account_id to 0 and update period.
   */
   @action
   async save() {
+    this.period.deleteEntry(this)
     if (this.account_id === null) {
       this.account_id = 0
     }
-    return super.save()
+    await super.save()
+    this.period.addEntry(this)
   }
 
   /**
