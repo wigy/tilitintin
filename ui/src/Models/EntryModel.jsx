@@ -509,7 +509,6 @@ class EntryModel extends NavigationTargetModel {
   */
   @action
   async save() {
-    this.period.deleteEntry(this)
     if (this.account_id === null) {
       this.account_id = 0
     }
