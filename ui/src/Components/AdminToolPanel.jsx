@@ -12,6 +12,7 @@ import { TextField } from '@material-ui/core'
 
 @withTranslation('translations')
 @inject('store')
+@inject('cursor')
 @observer
 class AdminToolPanel extends Component {
 
@@ -23,10 +24,11 @@ class AdminToolPanel extends Component {
 
   componentDidMount() {
     this.props.store.getUsers()
+    this.props.cursor.registerTools(this)
   }
 
-  onCreateUser() {
-    this.setState({ showCreateUserDialog: true })
+  componentWillUnmount() {
+    this.props.cursor.registerTools(null)
   }
 
   async onDeleteUser(user) {
@@ -53,6 +55,16 @@ class AdminToolPanel extends Component {
       })
   }
 
+  keyIconA() {
+    this.setState({ showCreateUserDialog: true })
+    return { preventDefault: true }
+  }
+
+  keyIconX() {
+    this.setState({ showDeleteUserDialog: true, emailInput: '' })
+    return { preventDefault: true }
+  }
+
   render() {
     const { store, match } = this.props
 
@@ -69,8 +81,8 @@ class AdminToolPanel extends Component {
         <div className="ToolPanel AdminToolPanel">
           <Title className="UserTools"><Trans>User Tools</Trans></Title>
 
-          <IconButton id="create-user" disabled={this.state.showCreateUserDialog} onClick={() => this.onCreateUser()} title="create-user" icon="user-plus"></IconButton>
-          <IconButton id="delete-user" disabled={!selectedUser} onClick={() => this.setState({ showDeleteUserDialog: true, emailInput: '' })} title="delete-user" icon="trash"></IconButton>
+          <IconButton id="create-user" shortcut="A" pressKey="IconA" disabled={this.state.showCreateUserDialog} title="create-user" icon="user-plus"></IconButton>
+          <IconButton id="delete-user" shortcut="X" pressKey="IconX" disabled={!selectedUser} title="delete-user" icon="trash"></IconButton>
 
           <Dialog
             noActions
