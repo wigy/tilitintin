@@ -111,19 +111,21 @@ class TransactionTable extends Component {
   }
 
   keyIconX(cursor) {
-    const { store } = this.props
-    const entry = store.filteredTransactions[cursor.index]
-    const document = entry.document
-    if (cursor.row === null) {
-      if (!document.canEdit()) {
-        return
+    if (cursor.inComponent('Balances.transactions')) {
+      const { store } = this.props
+      const entry = store.filteredTransactions[cursor.index]
+      const document = entry.document
+      if (cursor.row === null) {
+        if (!document.canEdit()) {
+          return
+        }
+        runInAction(() => document.markForDeletion())
+      } else {
+        if (!document.entries[cursor.row].canEdit()) {
+          return
+        }
+        runInAction(() => document.entries[cursor.row].markForDeletion())
       }
-      document.markForDeletion()
-    } else {
-      if (!document.entries[cursor.row].canEdit()) {
-        return
-      }
-      document.entries[cursor.row].markForDeletion()
     }
     return { preventDefault: true }
   }
@@ -335,7 +337,7 @@ class TransactionTable extends Component {
     const deleteDialog = (tx) => (<Dialog key="dialog"
       title={<Trans>Delete these transactions?</Trans>}
       isVisible={tx.document.askForDelete}
-      onClose={() => { tx.document.askForDelete = false; this.txToDelete = null }}
+      onClose={() => { runInAction(() => { tx.document.askForDelete = false; this.txToDelete = null }) }}
       onConfirm={() => this.deleteDocument(tx)}>
       <i>#{tx.document.number}</i><br/>
       {tx.document.entries.map((entry, idx) =>
