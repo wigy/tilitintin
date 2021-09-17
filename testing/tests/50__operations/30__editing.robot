@@ -62,6 +62,8 @@ Delete Lines of Transaction and Whole Transaction
     Select Database                     robot
     Select Period                       ${NEXT_YEAR}-01-01-${NEXT_YEAR}-12-31
     Select Account from Balances        1900
+
+    # Delete one line.
     Select Named Tx                     Bought even more stuff
     Press Keys                          None    ARROW_DOWN
     Press Keys                          None    ARROW_DOWN
@@ -69,5 +71,9 @@ Delete Lines of Transaction and Whole Transaction
     Press Keys                          None    CTRL+x
     Press Keys                          None    ENTER
 
-    # TODO: Enable this once cache bug is fixed.
+    # Delete the reminder.
+    Account Balance Should Be           1900    16 490,00€
+    Press Keys                          None    CTRL+x
+    Press Keys                          None    ENTER
+
     Account Balance Should Be           1900    15 990,00€

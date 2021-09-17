@@ -26,9 +26,18 @@ class Transaction extends Component {
 
   @action.bound
   deleteEntry() {
-    const { index, column, row } = this.props.cursor
+    let { index, column, row } = this.props.cursor
     this.props.store.deleteEntry(this.entryToDelete)
       .then(() => {
+        row--
+        if (row < 0) {
+          row = null
+          column = null
+          index--
+          if (index < 0) {
+            index = null
+          }
+        }
         this.props.cursor.topologyChanged()
         this.props.cursor.setIndex(index)
         this.props.cursor.setCell(column, row)
