@@ -14,6 +14,7 @@
 .ReportDisplayTable tr td {
   border: none !important;
   padding: 0 1em;
+  vertical-align: top;
 }
 
 .ReportDisplayTable tr.columns {
