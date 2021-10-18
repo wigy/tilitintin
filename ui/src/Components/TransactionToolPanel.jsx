@@ -31,7 +31,7 @@ class TransactionToolPanel extends Component {
     const { db, periodId, accountId } = store
     const lang = i18n.language
     const url = `${Configuration.UI_API_URL}/db/${db}/report/account/${periodId}/${accountId}?csv&lang=${lang}`
-
+    console.log({ db, periodId, accountId })
     fetch(url, {
       method: 'GET',
       headers: new Headers({
@@ -131,6 +131,7 @@ class TransactionToolPanel extends Component {
     const cannotAdd = !this.props.store.period || !!this.props.store.period.locked
     const canDeleteEntry = cursor.componentX > 0 && cursor.index !== null && cursor.row !== null
     const canDeleteTx = cursor.componentX > 0 && cursor.index !== null && cursor.row === null
+    const canDownload = !!this.props.store.accountId
     let last = null
 
     return (
@@ -142,7 +143,7 @@ class TransactionToolPanel extends Component {
           <IconButton id="Zoom Out" shortcut="O" pressKey="IconO" title="hide-details" icon="zoom-out" />
           <IconButton id="Show All" shortcut="S" pressKey="IconS" disabled={!hasTags} title="show-all" icon="show-all" />
           <IconButton id="Hide All" shortcut="H" pressKey="IconH" disabled={!hasTags} title="hide-all" icon="hide-all" />
-          <IconButton id="Download" shortcut="D" pressKey="IconD" title="download-csv" icon="download" />
+          <IconButton id="Download" shortcut="D" pressKey="IconD" disabled={!canDownload} title="download-csv" icon="download" />
           <IconButton id="Add Transaction" shortcut="A" disabled={cannotAdd} pressKey="IconA" title="add-tx" icon="add-tx" />
           <IconButton id="Delete Transaction" shortcut="X" disabled={!canDeleteTx} pressKey="IconX" title="delete-tx" icon="delete-tx" />
           <IconButton id="Delete Row" shortcut="X" disabled={!canDeleteEntry} pressKey="IconX" title="delete-entry" icon="delete-entry" />
