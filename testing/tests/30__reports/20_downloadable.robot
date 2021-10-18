@@ -18,3 +18,4 @@ Verify That Download Account CSV is Correct
     Click Element                       Download
     ${path}                             Get Account Download File
     Wait for Downloaded File            ${path}
+    File Should Match                   ${path}         data/files/transactions-1-1900.csv
