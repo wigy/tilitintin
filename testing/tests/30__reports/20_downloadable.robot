@@ -10,7 +10,6 @@ Suite Teardown                          Standard Suite Teardown
 
 *** Keywords ***
 Clear Downloads
-    ${DOWNLOADS}                        Get Download Directory
     Remove Files                        ${DOWNLOADS}/*.csv
 
 *** Test Cases ***
@@ -18,5 +17,8 @@ Verify That Download Account CSV is Correct
     Login as User
     Select Default Database
     Clear Downloads
-#    Go To Transactions
-#    Select Account from Balances        1900
+    Go To Transactions
+    Select Account from Balances        1900
+    Click Element                       Download
+    Sleep      10s
+    

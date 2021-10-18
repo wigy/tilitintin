@@ -1,5 +1,5 @@
 *** Settings ***
-Library                                 SeleniumLibrary    timeout=5s    implicit_wait=1s   run_on_failure=Capture Page Screenshot
+Library                                 RPA.Browser.Selenium    timeout=5s    implicit_wait=1s   run_on_failure=Capture Page Screenshot
 Library                                 OperatingSystem
 Library                                 XvfbRobot
 Library                                 ../libraries/date_and_time.py
@@ -54,6 +54,9 @@ Initialize Variables
     Set Global Variable                 ${YEAR}
     ${NEXT_YEAR}                        Next Year
     Set Global Variable                 ${NEXT_YEAR}
+    ${DOWNLOADS}                        Get Download Directory
+    Set Global Variable                 ${DOWNLOADS}
+    Set Download Directory              ${DOWNLOADS}
 
 Standard Suite Setup
     Initialize Variables
