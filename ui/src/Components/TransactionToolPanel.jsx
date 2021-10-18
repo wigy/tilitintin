@@ -31,7 +31,7 @@ class TransactionToolPanel extends Component {
     const { db, periodId, accountId } = store
     const lang = i18n.language
     const url = `${Configuration.UI_API_URL}/db/${db}/report/account/${periodId}/${accountId}?csv&lang=${lang}`
-    console.log({ db, periodId, accountId })
+
     fetch(url, {
       method: 'GET',
       headers: new Headers({
