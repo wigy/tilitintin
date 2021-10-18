@@ -5,6 +5,7 @@ Library                                 XvfbRobot
 Library                                 ../libraries/date_and_time.py
 Library                                 ../libraries/security.py
 Library                                 ../libraries/report_parsing.py
+Library                                 ../libraries/downloading.py
 Resource                                ./shared/inspection.robot
 Resource                                ./shared/navigation.robot
 Resource                                ./shared/messages.robot
