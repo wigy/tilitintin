@@ -681,8 +681,7 @@ postProcess.BalanceSheetDetailed = function(data) {
  * * `amounts` An object with entry `all` for full total and [Tags] indexing the tag specific totals.
  */
 async function create(db, periodIds, formatName, format, query = {}) {
-
-  const negateSomeEntries = (formatName !== 'general-journal' && formatName !== 'general-ledger')
+  const negateSomeEntries = (formatName !== 'account' && formatName !== 'general-journal' && formatName !== 'general-ledger')
   const negateSql = '(1 - (entry.debit == 0) * 2)' + (negateSomeEntries ? ' * (1 - ((account.type IN (1, 2, 3, 4, 5)) * 2))' : '')
 
   const reportSettings = await knex.db(db).select('*').from('settings').first()
