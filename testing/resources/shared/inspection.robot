@@ -18,7 +18,7 @@ Current Period
     ${data}                             Execute Javascript      ${FIND_PERIOD_JS}
     Return From Keyword                 ${data}
 
-Current Transaction
+Current Account
     ${data}                             Execute Javascript      ${FIND_TX_JS}
     Return From Keyword                 ${data}
 

@@ -8,10 +8,6 @@ Resource                                ../../resources/common.robot
 Suite Setup                             Standard Suite Setup
 Suite Teardown                          Standard Suite Teardown
 
-*** Keywords ***
-Clear Downloads
-    Remove Files                        ${DOWNLOADS}/*.csv
-
 *** Test Cases ***
 Verify That Download Account CSV is Correct
     Login as User
@@ -20,5 +16,5 @@ Verify That Download Account CSV is Correct
     Go To Transactions
     Select Account from Balances        1900
     Click Element                       Download
-    Sleep      10s
-    
+    ${path}                             Get Account Download File
+    Wait for Downloaded File            ${path}

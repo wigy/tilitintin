@@ -1,11 +1,12 @@
 *** Settings ***
-Library                                 RPA.Browser.Selenium    timeout=5s    implicit_wait=1s   run_on_failure=Capture Page Screenshot
+Library                                 SeleniumLibrary    timeout=5s    implicit_wait=1s   run_on_failure=Capture Page Screenshot
 Library                                 OperatingSystem
 Library                                 XvfbRobot
 Library                                 ../libraries/date_and_time.py
 Library                                 ../libraries/security.py
 Library                                 ../libraries/report_parsing.py
 Library                                 ../libraries/downloading.py
+Resource                                ./shared/files.robot
 Resource                                ./shared/inspection.robot
 Resource                                ./shared/navigation.robot
 Resource                                ./shared/messages.robot
@@ -56,10 +57,9 @@ Initialize Variables
     Set Global Variable                 ${NEXT_YEAR}
     ${DOWNLOADS}                        Get Download Directory
     Set Global Variable                 ${DOWNLOADS}
-    Set Download Directory              ${DOWNLOADS}
 
 Standard Suite Setup
     Initialize Variables
 
 Standard Suite Teardown
-    No Operation
+    Clear Downloads

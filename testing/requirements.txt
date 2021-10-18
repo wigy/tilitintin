@@ -1,4 +1,3 @@
 robotframework==4.0.1
 robotframework-seleniumlibrary==4.5.0
 robotframework-pythonlibcore==2.2.1
-rpaframework==11.4.0
