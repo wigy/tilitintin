@@ -5,15 +5,19 @@ Library                                 XvfbRobot
 Library                                 ../libraries/date_and_time.py
 Library                                 ../libraries/security.py
 Library                                 ../libraries/report_parsing.py
+Library                                 ../libraries/downloading.py
+Resource                                ./shared/files.robot
 Resource                                ./shared/inspection.robot
 Resource                                ./shared/navigation.robot
 Resource                                ./shared/messages.robot
+Resource                                ./shared/tables.robot
 Resource                                ./admin/users.robot
 Resource                                ./shared/misc.robot
 Resource                                ./user/transactions.robot
 Resource                                ./user/reports.robot
 Resource                                ./user/accounts.robot
 Resource                                ./user/databases.robot
+Resource                                ./user/periods.robot
 
 *** Variables ***
 
@@ -49,9 +53,13 @@ Initialize Variables
     Set Global Variable                 ${TEST_PASSWORD}
     ${YEAR}                             Current Year
     Set Global Variable                 ${YEAR}
+    ${NEXT_YEAR}                        Next Year
+    Set Global Variable                 ${NEXT_YEAR}
+    ${DOWNLOADS}                        Get Download Directory
+    Set Global Variable                 ${DOWNLOADS}
 
 Standard Suite Setup
     Initialize Variables
 
 Standard Suite Teardown
-    No Operation
+    Clear Downloads

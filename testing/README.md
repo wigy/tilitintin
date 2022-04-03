@@ -10,6 +10,10 @@ development. Possibly manually cleaning up changed done by your test
 in between. Once ready, run the remaining tests to complete cycle.
 After that you should verify that whole story will be executed successfully.
 
+Tests should have requirement section on the top describing that what
+is the minimal set of preparations required before that text. That makes
+it easier to reproduce test faster.
+
 ## Requirements
 
 You need Python and [Robot Framework](https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html)
@@ -30,6 +34,10 @@ The following Robot Framework custom functions are available:
 ### Current Year
 
 Returns the current year as a string.
+
+### Next Year
+
+Returns the next year as a string.
 
 ### Parse JWT Token
 

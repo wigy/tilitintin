@@ -119,13 +119,13 @@ class PeriodModel extends Model {
    * @param {EntryModel} entry
    */
   deleteEntry(entry) {
-    runInAction(() => {
-      if (entry.account_id) {
+    if (entry && entry.account_id && this.documentsByAccountId[entry.account_id]) {
+      runInAction(() => {
         for (const docId of this.documentsByAccountId[entry.account_id]) {
           this.getDocument(docId).deleteEntry(entry)
         }
-      }
-    })
+      })
+    }
   }
 
   /**

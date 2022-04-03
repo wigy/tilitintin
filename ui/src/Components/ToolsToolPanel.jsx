@@ -13,11 +13,13 @@ import EntryModel from '../Models/EntryModel'
 import moment from 'moment'
 import Title from './Title'
 import { TextField } from '@material-ui/core'
+import Cursor from '../Stores/Cursor'
 
 @withRouter
 @withTranslation('translations')
 @inject('store')
 @inject('settings')
+@inject('cursor')
 @observer
 class ToolsToolPanel extends Component {
 
@@ -32,6 +34,24 @@ class ToolsToolPanel extends Component {
     code: null,
     files: []
   };
+
+  componentDidMount() {
+    this.props.cursor.registerTools(this)
+  }
+
+  componentWillUnmount() {
+    this.props.cursor.registerTools(null)
+  }
+
+  keyIconA() {
+    this.setState({ askNew: true })
+    return { preventDefault: true }
+  }
+
+  keyIconU() {
+    this.setState({ askUpload: true })
+    return { preventDefault: true }
+  }
 
   /**
    * Collect entries with empty descriptions.
@@ -281,10 +301,10 @@ class ToolsToolPanel extends Component {
       default:
         label = 'Database Management'
         buttons.push(
-          <IconButton id="New Database" key="button-new-database" onClick={() => this.setState({ askNew: true })} title="new-database" icon="database"></IconButton>
+          <IconButton id="New Database" key="button-new-database" shortcut="A" pressKey="IconA" title="new-database" icon="database"></IconButton>
         )
         buttons.push(
-          <IconButton id="Upload Database" key="button-upload" onClick={() => this.setState({ askUpload: true })} title="upload-database" icon="upload"></IconButton>
+          <IconButton id="Upload Database" key="button-upload" shortcut="U" pressKey="IconU" title="upload-database" icon="upload"></IconButton>
         )
         break
     }
@@ -364,6 +384,7 @@ ToolsToolPanel.propTypes = {
   history: PropTypes.any,
   match: PropTypes.object,
   settings: PropTypes.instanceOf(Settings),
+  cursor: PropTypes.instanceOf(Cursor),
   store: PropTypes.instanceOf(Store)
 }
 

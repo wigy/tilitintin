@@ -1,3 +1,8 @@
+#
+# Requires:
+# tests/10__initialize/10__create_user.robot tests/10__initialize/20__create_database.robot tests/20__transactions/02__insert_some_transactions.robot
+#
+
 *** Settings ***
 Resource                                ../../resources/common.robot
 Suite Setup                             Standard Suite Setup
@@ -166,7 +171,7 @@ ${INCOME_STATEMENT_DETAILED_REPORT}      SEPARATOR=\n
 Verify That Reports Are Correct
     Login as User
     Change Language                     fi
-    Select First Period of DB
+    Select Default Database
     Select Report                       general-journal
     ${data}                             Gather Report Data
     Report Should Match                 ${data}     ${JOURNAL_REPORT}

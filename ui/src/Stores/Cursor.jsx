@@ -1,6 +1,7 @@
-import { observable, action, makeObservable, runInAction } from 'mobx'
+import { observable, action, makeObservable } from 'mobx'
 import TopologyComponent from './TopologyComponent'
 import EntryModel from '../Models/EntryModel'
+import Configuration from '../Configuration'
 
 const KEY_DEBUG = false
 
@@ -31,6 +32,8 @@ class Cursor {
   topology = null;
   // Component that has selected the page last time.
   currentPageComponent = null;
+  // A tool component registered from the current page.
+  currentToolComponent = null;
   // Menu component of the system.
   menuComponent = null;
   // Current topology component.
@@ -42,11 +45,17 @@ class Cursor {
       if (this.disabled || !event || !event.key) {
         return
       }
-      const keyName = (
+      // Construct full name for the key.
+      let keyName = (
         (event.key.length > 1 && event.shiftKey ? 'Shift+' : '') +
         (event.ctrlKey ? 'Ctrl+' : '') +
         (event.altKey ? 'Alt+' : '') +
+        (event.metaKey ? 'Meta+' : '') +
         event.key)
+      // Unify results for system specific shortcut keys.
+      keyName = keyName.replace(Configuration.COMMAND_KEY_MOD, 'Command')
+      keyName = keyName.replace(Configuration.ICON_KEY_MOD, 'Icon')
+      // Handle.
       const keyResult = this.handle(keyName)
       if (keyResult && keyResult.preventDefault) {
         event.preventDefault()
@@ -68,25 +77,25 @@ class Cursor {
    * Turn the current modal off.
    * @param {Component|null} modal
    */
-   @action
+  @action
   removeModal(modal) {
     this.activeModal.splice(this.activeModal.indexOf(modal), 1)
   }
 
-   /**
-   * Turn off handler.
-   */
-   @action
-   disableHandler() {
-     this.disabled = true
-   }
+  /**
+  * Turn off handler.
+  */
+  @action
+  disableHandler() {
+    this.disabled = true
+  }
 
-   /**
-   * Turn on handler.
-   */
-   enableHandler() {
-     this.disabled = false
-   }
+  /**
+  * Turn on handler.
+  */
+  enableHandler() {
+    this.disabled = false
+  }
 
   /**
    * Update navigation structures in the store based on the key pressed.
@@ -94,83 +103,99 @@ class Cursor {
    * @return {Object}
    */
   @action.bound
-   handle(key) {
-     let result
-     const keyName = (key.length === 1 ? 'Text' : key)
-     const parts = keyName.split('+')
-     if (parts.length > 1 && parts[parts.length - 1].length === 1) {
-       parts[parts.length - 1] = parts[parts.length - 1].toUpperCase()
-     }
-     if (parts[parts.length - 1] === ' ') {
-       parts[parts.length - 1] = 'Space'
-     }
-     const fn = 'key' + parts.join('')
+  handle(key) {
+    let result
+    const keyName = (key.length === 1 ? 'Text' : key)
+    const parts = keyName.split('+')
+    if (parts.length > 1 && parts[parts.length - 1].length === 1) {
+      parts[parts.length - 1] = parts[parts.length - 1].toUpperCase()
+    }
+    if (parts[parts.length - 1] === ' ') {
+      parts[parts.length - 1] = 'Space'
+    }
+    const fn = 'key' + parts.join('')
 
-     // Try active modal handler.
-     if (!result && this.activeModal.length) {
-       for (let i = 0; i < this.activeModal.length; i++) {
-         if (this.activeModal[i].props.isVisible) {
-           if (!this.activeModal[i][fn]) {
-             return null
-           }
-           result = this.activeModal[i][fn](this, key)
-           if (result && KEY_DEBUG) {
-             console.log('Modal:', fn, ':', result)
-           }
-         }
-       }
-     }
+    // Try active modal handler.
+    if (!result && this.activeModal.length) {
+      for (let i = 0; i < this.activeModal.length; i++) {
+        if (this.activeModal[i].props.isVisible) {
+          if (!this.activeModal[i][fn]) {
+            return null
+          }
+          result = this.activeModal[i][fn](this, key)
+          if (result && KEY_DEBUG) {
+            console.log('Modal:', fn, ':', result)
+          }
+        }
+      }
+    }
 
-     // Try model handler.
-     const model = this.getModel()
-     if (!result && model && model[fn]) {
-       result = model[fn](this, key)
-       if (result && KEY_DEBUG) {
-         console.log('Model:', fn, ':', result)
-       }
-     }
+    // Try model handler.
+    const model = this.getModel()
+    if (!result && model && model[fn]) {
+      result = model[fn](this, key)
+      if (result && KEY_DEBUG) {
+        console.log('Model:', fn, ':', result)
+      }
+    }
 
-     // Try page component handler.
-     if (!result && this.currentPageComponent && this.currentPageComponent[fn]) {
-       result = this.currentPageComponent[fn](this, key)
-       if (result && KEY_DEBUG) {
-         console.log('Page component:', fn, ':', result)
-       }
-     }
+    // Try page component handler.
+    if (!result && this.currentPageComponent && this.currentPageComponent[fn]) {
+      result = this.currentPageComponent[fn](this, key)
+      if (result && KEY_DEBUG) {
+        console.log('Page component:', fn, ':', result)
+      }
+    }
 
-     // Try menu handler.
-     if (!result && this.menuComponent && this.menuComponent[fn]) {
-       result = this.menuComponent[fn](this, key)
-       if (result && KEY_DEBUG) {
-         console.log('Menu component:', fn, ':', result)
-       }
-     }
+    // Try toolbar component handler.
+    if (!result && this.currentToolComponent && this.currentToolComponent[fn]) {
+      result = this.currentToolComponent[fn](this, key)
+      if (result && KEY_DEBUG) {
+        console.log('Tool component:', fn, ':', result)
+      }
+    }
 
-     // Try generic handler.
-     if (!result && this[fn]) {
-       result = this[fn]()
-       if (result && KEY_DEBUG) {
-         console.log('Cursor:', fn, ':', result)
-       }
-     }
+    // Try menu handler.
+    if (!result && this.menuComponent && this.menuComponent[fn]) {
+      result = this.menuComponent[fn](this, key)
+      if (result && KEY_DEBUG) {
+        console.log('Menu component:', fn, ':', result)
+      }
+    }
 
-     if (result) {
-       return result
-     }
+    // Try generic handler.
+    if (!result && this[fn]) {
+      result = this[fn]()
+      if (result && KEY_DEBUG) {
+        console.log('Cursor:', fn, ':', result)
+      }
+    }
 
-     if (KEY_DEBUG) {
-       console.log(`No handler ${fn} for key '${key}'.`)
-     }
+    if (result) {
+      return result
+    }
 
-     return null
-   }
+    if (KEY_DEBUG) {
+      console.log(`No handler ${fn} for key '${key}'.`)
+    }
+
+    return null
+  }
 
   /**
-   *
+   * Select menu handling component.
    * @param {Component} component
    */
   registerMenu(component) {
     this.menuComponent = component
+  }
+
+  /**
+   * Select a toolbar component.
+   * @param {Component} component
+   */
+  registerTools(component) {
+    this.currentToolComponent = component
   }
 
   /**
@@ -247,7 +272,7 @@ class Cursor {
    * @param {String} page
    * @param {() => Object[][]} topology
    */
-   @action
+  @action
   setTopology(page, topology) {
     if (this.page === page) {
       return
@@ -260,519 +285,501 @@ class Cursor {
     this.enterComponent()
   }
 
-   /**
-   * Save current component for the page.
+  /**
+  * Save current component for the page.
+  */
+  @action
+  leavePage() {
+    const { componentX, componentY } = this
+    this.savedPages[this.page] = { componentX, componentY }
+  }
+
+  /**
+  * Restore current component for the page.
+  */
+  @action
+  enterPage() {
+    if (this.savedPages[this.page]) {
+      const { componentX, componentY } = this.savedPages[this.page]
+      this.componentX = componentX
+      this.componentY = componentY
+    } else {
+      this.componentX = 0
+      this.componentY = 0
+    }
+    this.topologyComponent = null
+  }
+
+  /**
+  * Hook that is called when we are leaving the current component.
+  */
+  @action
+  leaveComponent() {
+    const component = this.getComponent()
+    if (component) {
+      this.saveCursor(component)
+      component.moveIndex(this.index, null)
+    }
+    this.index = null
+    this.row = null
+    this.column = null
+    this.topologyComponent = null
+  }
+
+  /**
+  * Hook that is called when we have just entered the current component.
+  */
+  @action
+  enterComponent() {
+    this.topologyComponent = null
+    const component = this.getComponent()
+    if (component) {
+      this.loadCursor(component)
+      component.moveIndex(null, this.index)
+    } else {
+      this.index = null
+      this.row = null
+      this.column = null
+    }
+  }
+
+  /**
+  * Get the current component from the topology.
+  * @return {TopologyComponent|null}
+  */
+  getComponent() {
+    if (this.topologyComponent) {
+      return this.topologyComponent
+    }
+
+    const topology = this.getTopology()
+    if (!topology) {
+      return null
+    }
+
+    // Check the X-bounds.
+    if (this.componentY >= topology.length) {
+      this.componentY = topology.length - 1
+      if (this.componentY < 0) {
+        this.componentY = 0
+        return null
+      }
+    }
+    // Check the y-bounds.
+    if (this.componentX >= topology[this.componentY].length) {
+      this.componentX = topology[this.componentY].length - 1
+      if (this.componentX < 0) {
+        this.componentX = 0
+        return null
+      }
+    }
+    this.topologyComponent = new TopologyComponent(topology[this.componentY][this.componentX])
+    return this.topologyComponent
+  }
+
+  /**
+  * Get the current topology.
+  */
+  getTopology() {
+    return (this.topology && this.topology()) || null
+  }
+
+  /**
+   * A function used to notify that old topology is not valid anymore.
    */
-   @action
-   leavePage() {
-     const { componentX, componentY } = this
-     this.savedPages[this.page] = { componentX, componentY }
-   }
+  topologyChanged() {
+    this.topologyComponent = null
+  }
 
-   /**
-   * Restore current component for the page.
-   */
-   @action
-   enterPage() {
-     if (this.savedPages[this.page]) {
-       const { componentX, componentY } = this.savedPages[this.page]
-       this.componentX = componentX
-       this.componentY = componentY
-     } else {
-       this.componentX = 0
-       this.componentY = 0
-     }
-     this.topologyComponent = null
-   }
+  /**
+  * Switch directly to another topological component.
+  * @param {String} name
+  */
+  @action
+  setComponent(name) {
+    const component = this.getComponent()
+    if (component.name === name) {
+      return
+    }
+    this.leaveComponent()
+    // Find new (x,y) from topology.
+    const topology = this.topology()
+    for (let y = 0; y < topology.length; y++) {
+      for (let x = 0; x < topology[y].length; x++) {
+        if (name === topology[y][x].name) {
+          this.componentX = x
+          this.componentY = y
+          this.enterComponent()
+          return
+        }
+      }
+    }
+    throw new Error(`Cannot find topological component called ${name}.`)
+  }
 
-   /**
-   * Hook that is called when we are leaving the current component.
-   */
-   @action
-   leaveComponent() {
-     const component = this.getComponent()
-     if (component) {
-       this.saveCursor(component)
-       component.moveIndex(this.index, null)
-     }
-     this.index = null
-     this.row = null
-     this.column = null
-     this.topologyComponent = null
-   }
+  /**
+  * Check if the given component is currently selected.
+  * @param {String} name
+  */
+  inComponent(name) {
+    const component = this.getComponent()
+    return component && component.name === name
+  }
 
-   /**
-   * Hook that is called when we have just entered the current component.
-   */
-   @action
-   enterComponent() {
-     this.topologyComponent = null
-     const component = this.getComponent()
-     if (component) {
-       this.loadCursor(component)
-       component.moveIndex(null, this.index)
-     } else {
-       this.index = null
-       this.row = null
-       this.column = null
-     }
-   }
+  /**
+  * Move one row or index down.
+  */
+  keyArrowDown() {
+    if (this.index === null && this.getComponent()) {
+      this.enterComponent(this.getComponent())
+      return { preventDefault: true }
+    }
+    const model = this.getModel()
+    if (model && model.open) {
+      const ret = this.changeBoxBy(0, +1)
+      if (ret) {
+        return ret
+      }
+    }
+    return this.changeIndexBy(+1)
+  }
 
-   /**
-   * Get the current component from the topology.
-   * @return {TopologyComponent|null}
-   */
-   getComponent() {
-     if (this.topologyComponent) {
-       return this.topologyComponent
-     }
+  /**
+  * Move one row or index up.
+  */
+  keyArrowUp() {
+    if (this.index === null && this.getComponent()) {
+      this.enterComponent(this.getComponent())
+      return { preventDefault: true }
+    }
+    const model = this.getModel()
+    if (model) {
+      const ret = this.changeBoxBy(0, -1)
+      if (ret) {
+        return ret
+      }
+    }
+    return this.changeIndexBy(-1)
+  }
 
-     const topology = this.getTopology()
-     if (!topology) {
-       return null
-     }
+  /**
+  * Move to the component left.
+  */
+  keyArrowLeft() {
+    const model = this.getModel()
+    if (model && model.open && this.row !== null) {
+      const ret = this.changeBoxBy(-1, 0)
+      if (ret) {
+        return ret
+      }
+    }
+    if (this.componentX > 0) {
+      this.leaveComponent()
+      this.componentX--
+      this.enterComponent()
+    }
+    return { preventDefault: true }
+  }
 
-     // Check the X-bounds.
-     if (this.componentY >= topology.length) {
-       this.componentY = topology.length - 1
-       if (this.componentY < 0) {
-         this.componentY = 0
-         return null
-       }
-     }
-     // Check the y-bounds.
-     if (this.componentX >= topology[this.componentY].length) {
-       this.componentX = topology[this.componentY].length - 1
-       if (this.componentX < 0) {
-         this.componentX = 0
-         return null
-       }
-     }
-     this.topologyComponent = new TopologyComponent(topology[this.componentY][this.componentX])
-     return this.topologyComponent
-   }
+  /**
+  * Move to the component right.
+  */
+  keyArrowRight() {
+    const model = this.getModel()
+    if (model && model.open && this.row !== null) {
+      const ret = this.changeBoxBy(+1, 0)
+      if (ret) {
+        return ret
+      }
+    }
+    const row = this.getRow()
+    if (this.componentX < row.length - 1) {
+      this.leaveComponent()
+      this.componentX++
+      this.enterComponent()
+    }
+    return { preventDefault: true }
+  }
 
-   /**
-   * Get the current topology.
-   */
-   getTopology() {
-     return (this.topology && this.topology()) || null
-   }
+  /**
+  * Move couple rows or indices down.
+  */
+  keyPageDown() {
+    const model = this.getModel()
+    if (model && model.open) {
+      const geo = model.geometry()
+      if (geo[1] > 10) {
+        const ret = this.changeBoxBy(0, +10)
+        if (ret) {
+          const el = document.getElementById(`tx${model.document.id}-row${this.row}`)
+          if (el) {
+            el.scrollIntoView({ block: 'center', inline: 'center' })
+          }
+          return ret
+        }
+      }
+    }
+    return this.changeIndexBy(+10)
+  }
 
-   /**
-    * A function used to notify that old topology is not valid anymore.
-    */
-   topologyChanged() {
-     this.topologyComponent = null
-   }
+  /**
+  * Move couple rows or indices up.
+  */
+  keyPageUp() {
+    const model = this.getModel()
+    if (model && model.open) {
+      const geo = model.geometry()
+      if (geo[1] > 10) {
+        const ret = this.changeBoxBy(0, -Math.min(10, this.row + 1))
+        if (ret) {
+          const el = document.getElementById(`tx${model.document.id}-row${this.row}`)
+          if (el) {
+            el.scrollIntoView({ block: 'center', inline: 'center' })
+          }
+          return ret
+        }
+      }
+    }
+    return this.changeIndexBy(-10)
+  }
 
-   /**
-   * Switch directly to another topological component.
-   * @param {String} name
-   */
-   @action
-   setComponent(name) {
-     const component = this.getComponent()
-     if (component.name === name) {
-       return
-     }
-     this.leaveComponent()
-     // Find new (x,y) from topology.
-     const topology = this.topology()
-     for (let y = 0; y < topology.length; y++) {
-       for (let x = 0; x < topology[y].length; x++) {
-         if (name === topology[y][x].name) {
-           this.componentX = x
-           this.componentY = y
-           this.enterComponent()
-           return
-         }
-       }
-     }
-     throw new Error(`Cannot find topological component called ${name}.`)
-   }
+  /**
+  * Move to the first index.
+  */
+  keyHome() {
+    return this.setIndex(0)
+  }
 
-   /**
-   * Check if the given component is currently selected.
-   * @param {String} name
-   */
-   inComponent(name) {
-     const component = this.getComponent()
-     return component && component.name === name
-   }
+  /**
+  * Move to the last index.
+  */
+  keyEnd() {
+    return this.setIndex(-1)
+  }
 
-   /**
-   * Move one row or index down.
-   */
-   keyArrowDown() {
-     if (this.index === null && this.getComponent()) {
-       this.enterComponent(this.getComponent())
-       return { preventDefault: true }
-     }
-     const model = this.getModel()
-     if (model && model.open) {
-       const ret = this.changeBoxBy(0, +1)
-       if (ret) {
-         return ret
-       }
-     }
-     return this.changeIndexBy(+1)
-   }
+  /**
+  * Leave/close/de-select the current.
+  */
+  keyEscape() {
+    const model = this.getModel()
+    if (model && model.open) {
+      if (this.row !== null) {
+        this.setCell(null, null)
+      } else {
+        model.toggleOpen()
+      }
+    } else {
+      this.setIndex(null)
+    }
+    return { preventDefault: true }
+  }
 
-   /**
-   * Move one row or index up.
-   */
-   keyArrowUp() {
-     if (this.index === null && this.getComponent()) {
-       this.enterComponent(this.getComponent())
-       return { preventDefault: true }
-     }
-     const model = this.getModel()
-     if (model) {
-       const ret = this.changeBoxBy(0, -1)
-       if (ret) {
-         return ret
-       }
-     }
-     return this.changeIndexBy(-1)
-   }
+  /**
+  * Save the current cursor position for the component.
+  * @param {TopologyComponent} component
+  * @return {Boolean}
+  */
+  @action
+  saveCursor(component) {
+    if (!component) {
+      return false
+    }
+    const name = component.name
+    if (!name) {
+      console.error(component)
+      throw new Error('Component does not have a name.')
+    }
+    if (this.index === null) {
+      return false
+    }
+    this.savedComponents[name] = {
+      index: this.index,
+      column: this.column,
+      row: this.row
+    }
+    return true
+  }
 
-   /**
-   * Move to the component left.
-   */
-   keyArrowLeft() {
-     const model = this.getModel()
-     if (model && model.open && this.row !== null) {
-       const ret = this.changeBoxBy(-1, 0)
-       if (ret) {
-         return ret
-       }
-     }
-     if (this.componentX > 0) {
-       this.leaveComponent()
-       this.componentX--
-       this.enterComponent()
-     }
-     return { preventDefault: true }
-   }
+  /**
+  * Load the current cursor position for the component.
+  * @param {TopologyComponent} component
+  */
+  @action
+  loadCursor(component) {
+    if (!component) {
+      return
+    }
+    const name = component.name
+    if (!name) {
+      console.error(component)
+      throw new Error('Component does not have a name.')
+    }
+    if (this.savedComponents[name]) {
+      if (this.savedComponents[name].index >= component.length) {
+        this.setIndex(component.length ? component.length - 1 : null)
+        return
+      }
+      this.setIndex(this.savedComponents[name].index)
+      this.setCell(this.savedComponents[name].column, this.savedComponents[name].row)
+    } else {
+      this.index = 0
+      this.row = null
+      this.column = null
+    }
+  }
 
-   /**
-   * Move to the component right.
-   */
-   keyArrowRight() {
-     const model = this.getModel()
-     if (model && model.open && this.row !== null) {
-       const ret = this.changeBoxBy(+1, 0)
-       if (ret) {
-         return ret
-       }
-     }
-     const row = this.getRow()
-     if (this.componentX < row.length - 1) {
-       this.leaveComponent()
-       this.componentX++
-       this.enterComponent()
-     }
-     return { preventDefault: true }
-   }
+  /**
+  * Set the current index to the given number, if it is valid. Negative number counts from the end.
+  * @param {Number|null|undefined} index
+  * @param {Boolean} options.noScroll
+  */
+  @action
+  setIndex(index, options = {}) {
+    const component = this.getComponent()
+    const oldIndex = this.index
+    this.setCell(null, null)
+    if (index === null || index === undefined) {
+      this.leaveComponent()
+      this.index = null
+      component && component.moveIndex(oldIndex, null, options)
+      return { preventDefault: true }
+    }
+    if (component) {
+      if (index < 0) {
+        index = component.length + index
+      }
+      if (index >= 0 && index < component.length) {
+        this.index = index
+        component.moveIndex(oldIndex, this.index, options)
+      }
+      return { preventDefault: true }
+    }
+  }
 
-   /**
-   * Move couple rows or indices down.
-   */
-   keyPageDown() {
-     const model = this.getModel()
-     if (model && model.open) {
-       const geo = model.geometry()
-       if (geo[1] > 10) {
-         const ret = this.changeBoxBy(0, +10)
-         if (ret) {
-           const el = document.getElementById(`tx${model.document.id}-row${this.row}`)
-           if (el) {
-             el.scrollIntoView({ block: 'center', inline: 'center' })
-           }
-           return ret
-         }
-       }
-     }
-     return this.changeIndexBy(+10)
-   }
+  /**
+  * Adjust the current index by the given amount, if the component is vertical.
+  * @param {Number|null} delta
+  */
+  @action
+  changeIndexBy(delta) {
+    const component = this.getComponent()
+    if (component && component.vertical) {
 
-   /**
-   * Move couple rows or indices up.
-   */
-   keyPageUp() {
-     const model = this.getModel()
-     if (model && model.open) {
-       const geo = model.geometry()
-       if (geo[1] > 10) {
-         const ret = this.changeBoxBy(0, -Math.min(10, this.row + 1))
-         if (ret) {
-           const el = document.getElementById(`tx${model.document.id}-row${this.row}`)
-           if (el) {
-             el.scrollIntoView({ block: 'center', inline: 'center' })
-           }
-           return ret
-         }
-       }
-     }
-     return this.changeIndexBy(-10)
-   }
+      // Helper to calculate new index.
+      const indexUpdate = (index, N, delta) => {
+        const oldIndex = index
+        if (N) {
+          if (delta === null) {
+            return null
+          }
+          if (oldIndex === undefined || oldIndex === null) {
+            return delta < 0 ? N - 1 : 0
+          }
+          index += delta
+          if (index < 0) {
+            if (oldIndex === 0) {
+              index = N - 1
+            } else {
+              index = 0
+            }
+          } else if (index >= N) {
+            if (oldIndex === N - 1) {
+              index = 0
+            } else {
+              index = N - 1
+            }
+          }
+          return index
+        }
+      }
 
-   /**
-   * Move to the first index.
-   */
-   keyHome() {
-     return this.setIndex(0)
-   }
+      const oldModel = this.getModel(this.index)
+      let newIndex = indexUpdate(this.index, component.length, delta)
+      let newModel = this.getModel(newIndex)
+      // There should be better way but it seems generic topology was not that much needed anyway.
+      // Perhaps sameness function as a part of topology setup.
+      if (component.length > 1 && oldModel && newModel && (newModel instanceof EntryModel)) {
+        while (newModel.document === oldModel.document) {
+          newIndex = indexUpdate(newIndex, component.length, delta)
+          newModel = this.getModel(newIndex)
+        }
+      }
 
-   /**
-   * Move to the last index.
-   */
-   keyEnd() {
-     return this.setIndex(-1)
-   }
+      return this.setIndex(newIndex)
+    }
+  }
 
-   /**
-   * Toggle entries visible and non-visible.
-   */
-   keyEnter() {
-     const model = this.getModel()
-     if (model && model.geometry()) {
-       runInAction(() => {
-         model.toggleOpen()
-         if (!model.open) {
-           this.column = null
-           this.row = null
-           this.getComponent().moveBox(null, null)
-         }
-       })
-       return { preventDefault: true }
-     }
-   }
+  /**
+  * Set the current location inside the sub-item.
+  * @param {Number} column
+  * @param {Number} row
+  */
+  @action
+  setCell(column, row) {
+    const model = this.getModel()
+    if (model) {
+      model.turnEditorOff(this)
+    }
+    if (column === null && row === null) {
+      this.changeBoxBy(null, null)
+    } else if (this.row === null) {
+      const component = this.getComponent()
+      component.moveBox(this.index, this.index, null, null, column, row)
+      this.column = column
+      this.row = row
+    } else {
+      this.changeBoxBy(column - this.column, row - this.row)
+    }
+    return { preventDefault: true }
+  }
 
-   /**
-   * Leave/close/de-select the current.
-   */
-   keyEscape() {
-     const model = this.getModel()
-     if (model && model.open) {
-       if (this.row !== null) {
-         this.setCell(null, null)
-       } else {
-         model.toggleOpen()
-       }
-     } else {
-       this.setIndex(null)
-     }
-     return { preventDefault: true }
-   }
+  /**
+  * Adjust the currently selected sub-item.
+  * @param {Number|null} dx
+  * @param {Number|null} dy
+  */
+  @action
+  changeBoxBy(dx, dy) {
+    const component = this.getComponent()
+    const { subitemExitUp, subitemExitDown, entryColumn, subitemUpStopOnNull } = component || {}
+    const model = this.getModel()
 
-   /**
-   * Save the current cursor position for the component.
-   * @param {TopologyComponent} component
-   * @return {Boolean}
-   */
-   @action
-   saveCursor(component) {
-     if (!component) {
-       return false
-     }
-     const name = component.name
-     if (!name) {
-       console.error(component)
-       throw new Error('Component does not have a name.')
-     }
-     if (this.index === null) {
-       return false
-     }
-     this.savedComponents[name] = {
-       index: this.index,
-       column: this.column,
-       row: this.row
-     }
-     return true
-   }
+    // Helper to adjust cursor inside 2-dimensional box.
+    const tryBoxUpdate = () => {
+      const [columns, rows] = model.geometry()
+      const oldRow = this.row
+      const oldColumn = this.column
+      const oldIndex = this.index
+      if (this.boxUpdate(columns, rows, dx, dy, { subitemExitUp, subitemExitDown, entryColumn, subitemUpStopOnNull })) {
+        component.moveBox(oldIndex, this.index, oldColumn, oldRow, this.column, this.row)
+        return { preventDefault: true }
+      }
+    }
 
-   /**
-   * Load the current cursor position for the component.
-   * @param {TopologyComponent} component
-   */
-   @action
-   loadCursor(component) {
-     if (!component) {
-       return
-     }
-     const name = component.name
-     if (!name) {
-       console.error(component)
-       throw new Error('Component does not have a name.')
-     }
-     if (this.savedComponents[name]) {
-       if (this.savedComponents[name].index >= component.length) {
-         this.setIndex(component.length ? component.length - 1 : null)
-         return
-       }
-       this.setIndex(this.savedComponents[name].index)
-       this.setCell(this.savedComponents[name].column, this.savedComponents[name].row)
-     } else {
-       this.index = 0
-       this.row = null
-       this.column = null
-     }
-   }
-
-   /**
-   * Set the current index to the given number, if it is valid. Negative number counts from the end.
-   * @param {Number|null|undefined} index
-   * @param {Boolean} options.noScroll
-   */
-   @action
-   setIndex(index, options = {}) {
-     const component = this.getComponent()
-     const oldIndex = this.index
-     this.setCell(null, null)
-     if (index === null || index === undefined) {
-       this.leaveComponent()
-       this.index = null
-       component && component.moveIndex(oldIndex, null, options)
-       return { preventDefault: true }
-     }
-     if (component) {
-       if (index < 0) {
-         index = component.length + index
-       }
-       if (index >= 0 && index < component.length) {
-         this.index = index
-         component.moveIndex(oldIndex, this.index, options)
-       }
-       return { preventDefault: true }
-     }
-   }
-
-   /**
-   * Adjust the current index by the given amount, if the component is vertical.
-   * @param {Number|null} delta
-   */
-   @action
-   changeIndexBy(delta) {
-     const component = this.getComponent()
-     if (component && component.vertical) {
-
-       // Helper to calculate new index.
-       const indexUpdate = (index, N, delta) => {
-         const oldIndex = index
-         if (N) {
-           if (delta === null) {
-             return null
-           }
-           if (oldIndex === undefined || oldIndex === null) {
-             return delta < 0 ? N - 1 : 0
-           }
-           index += delta
-           if (index < 0) {
-             if (oldIndex === 0) {
-               index = N - 1
-             } else {
-               index = 0
-             }
-           } else if (index >= N) {
-             if (oldIndex === N - 1) {
-               index = 0
-             } else {
-               index = N - 1
-             }
-           }
-           return index
-         }
-       }
-
-       const oldModel = this.getModel(this.index)
-       let newIndex = indexUpdate(this.index, component.length, delta)
-       let newModel = this.getModel(newIndex)
-       // There should be better way but it seems generic topology was not that much needed anyway.
-       // Perhaps sameness function as a part of topology setup.
-       if (component.length > 1 && oldModel && newModel && (newModel instanceof EntryModel)) {
-         while (newModel.document === oldModel.document) {
-           newIndex = indexUpdate(newIndex, component.length, delta)
-           newModel = this.getModel(newIndex)
-         }
-       }
-
-       return this.setIndex(newIndex)
-     }
-   }
-
-   /**
-   * Set the current location inside the sub-item.
-   * @param {Number} column
-   * @param {Number} row
-   */
-   @action
-   setCell(column, row) {
-     const model = this.getModel()
-     if (model) {
-       model.turnEditorOff(this)
-     }
-     if (column === null && row === null) {
-       this.changeBoxBy(null, null)
-     } else if (this.row === null) {
-       const component = this.getComponent()
-       component.moveBox(this.index, this.index, null, null, column, row)
-       this.column = column
-       this.row = row
-     } else {
-       this.changeBoxBy(column - this.column, row - this.row)
-     }
-     return { preventDefault: true }
-   }
-
-   /**
-   * Adjust the currently selected sub-item.
-   * @param {Number|null} dx
-   * @param {Number|null} dy
-   */
-   @action
-   changeBoxBy(dx, dy) {
-     const component = this.getComponent()
-     const { subitemExitUp, subitemExitDown, entryColumn, subitemUpStopOnNull } = component || {}
-     const model = this.getModel()
-
-     // Helper to adjust cursor inside 2-dimensional box.
-     const tryBoxUpdate = () => {
-       const [columns, rows] = model.geometry()
-       const oldRow = this.row
-       const oldColumn = this.column
-       const oldIndex = this.index
-       if (this.boxUpdate(columns, rows, dx, dy, { subitemExitUp, subitemExitDown, entryColumn, subitemUpStopOnNull })) {
-         component.moveBox(oldIndex, this.index, oldColumn, oldRow, this.column, this.row)
-         return { preventDefault: true }
-       }
-     }
-
-     if (model && model.open && dy >= 0) {
-       return tryBoxUpdate()
-     } else if (dy < 0) {
-       if (this.row === null) {
-         const index = (this.index + dy + component.length) % component.length
-         const model = this.getModel(index)
-         if (model && model.open && this.setIndex(index)) {
-           const [, rows] = model.geometry()
-           return this.setCell(entryColumn || 0, rows - 1)
-         }
-       } else if (model) {
-         return tryBoxUpdate()
-       }
-     }
-   }
+    if (model && model.open && dy >= 0) {
+      return tryBoxUpdate()
+    } else if (dy < 0) {
+      if (this.row === null) {
+        const index = (this.index + dy + component.length) % component.length
+        const model = this.getModel(index)
+        if (model && model.open && this.setIndex(index)) {
+          const [, rows] = model.geometry()
+          return this.setCell(entryColumn || 0, rows - 1)
+        }
+      } else if (model) {
+        return tryBoxUpdate()
+      }
+    }
+  }
 
   /**
    * Reset all selections.
    */
   @action.bound
-   resetSelected() {
-     this.setCell(null, null)
-     this.setIndex(null)
-   }
+  resetSelected() {
+    this.setCell(null, null)
+    this.setIndex(null)
+  }
 
   /**
    * Get an array of components from the current row.
@@ -817,7 +824,7 @@ class Cursor {
    * @param {Boolean} [options.subitemExitDown]
    * @param {Number} [options.entryColumn]
    */
-   @action
+  @action
   boxUpdate(N, M, dx, dy, options) {
     if (N && M) {
       if (dx === null && dy === null) {

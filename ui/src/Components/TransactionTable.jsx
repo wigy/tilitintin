@@ -78,14 +78,14 @@ class TransactionTable extends Component {
     return { preventDefault: true }
   }
 
-  keyInsert(cursor) {
+  keyIconA(cursor) {
     const { store } = this.props
     if (store.period.locked) {
-      return
+      return { preventDefault: true }
     }
     if (!store.accountId) {
       this.setState({ showAccountDropdown: true })
-      return
+      return { preventDefault: true }
     }
 
     // Insert new document.
@@ -110,14 +110,61 @@ class TransactionTable extends Component {
     return { preventDefault: true }
   }
 
+  keyIconX(cursor) {
+    if (cursor.inComponent('Balances.transactions')) {
+      const { store } = this.props
+      const entry = store.filteredTransactions[cursor.index]
+      const document = entry.document
+      if (cursor.row === null) {
+        if (!document.canEdit()) {
+          return
+        }
+        runInAction(() => document.markForDeletion())
+      } else {
+        if (!document.entries[cursor.row].canEdit()) {
+          return
+        }
+        runInAction(() => document.entries[cursor.row].markForDeletion())
+      }
+    }
+    return { preventDefault: true }
+  }
+
+  /**
+   * Toggle open for entry if closed.
+   */
+  keyArrowRight(cursor) {
+    const { store } = this.props
+    if (cursor.index === null || cursor.componentX !== 1 || cursor.row !== null) {
+      return
+    }
+    const entry = store.filteredTransactions[cursor.index]
+    if (!entry.open) {
+      entry.toggleOpen()
+      return { preventDefault: true }
+    }
+  }
+
+  /**
+   * Toggle close for entry if open.
+   */
+  keyArrowLeft(cursor) {
+    const { store } = this.props
+    if (cursor.index === null || cursor.componentX !== 1 || cursor.row !== null) {
+      return
+    }
+    const entry = store.filteredTransactions[cursor.index]
+    if (entry.open) {
+      entry.toggleOpen()
+      return { preventDefault: true }
+    }
+  }
+
   /**
    * Collect current transaction.
    */
   keyCtrlC(cursor) {
-    if (cursor.index === null) {
-      return
-    }
-    if (cursor.componentX !== 1) {
+    if (cursor.index === null || cursor.componentX !== 1) {
       return
     }
     if (!navigator.clipboard) {
@@ -164,10 +211,7 @@ class TransactionTable extends Component {
    * @param {Cursor} cursor
    */
   keyCtrlV(cursor) {
-    if (cursor.index === null) {
-      return
-    }
-    if (cursor.componentX !== 1) {
+    if (cursor.index === null || cursor.componentX !== 1) {
       return
     }
     if (!navigator.clipboard) {
@@ -254,7 +298,7 @@ class TransactionTable extends Component {
       return
     }
     await this.props.store.setAccount(this.props.store.db, this.props.store.periodId, id)
-    this.keyInsert(this.props.cursor)
+    this.keyIconA(this.props.cursor)
   }
 
   render() {
@@ -293,7 +337,7 @@ class TransactionTable extends Component {
     const deleteDialog = (tx) => (<Dialog key="dialog"
       title={<Trans>Delete these transactions?</Trans>}
       isVisible={tx.document.askForDelete}
-      onClose={() => { tx.document.askForDelete = false; this.txToDelete = null }}
+      onClose={() => { runInAction(() => { tx.document.askForDelete = false; this.txToDelete = null }) }}
       onConfirm={() => this.deleteDocument(tx)}>
       <i>#{tx.document.number}</i><br/>
       {tx.document.entries.map((entry, idx) =>

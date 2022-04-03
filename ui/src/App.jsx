@@ -123,7 +123,7 @@ class App extends Component {
               <Route exact path="/:db/tools///:tool?" component={Tools}/>
               <Route path="/:db/account/:periodId?" component={Accounts}/>
             </Paper>
-            <div className="Version" style={{ color: 'rgb(0,0,0,0.5)', fontSize: '0.6rem', position: 'absolute', right: '2px', bottom: '2px' }}>v{Configuration.VERSION}</div>
+            <div className={`Version ${this.props.store.token ? 'logged-in' : 'not-logged-in'}`} style={{ color: 'rgb(0,0,0,0.5)', fontSize: '0.6rem', position: 'absolute', right: '2px', bottom: '2px' }}>v{Configuration.VERSION}</div>
           </div>
         </div>
       </div>

@@ -24,14 +24,14 @@ Login As
     Run Keyword If                      ${current_user}       Logout
     Go To Login
     Fill in Login                       ${username}     ${password}
-    Wait Until Element is Enabled       HomeMenu
+    Wait Until App Loaded
     Log to Console                      Logged in as ${username}
     Change Language                     en
 
 Logout
     Log to Console                      Logging out
     Click Element                       LogoutMenu
-    Wait Until Element is Visible       css:.LoginPage
+    Wait Until Element is Visible       css:.not-logged-in
 
 Go To Starting URL
     Go To                               ${TEST_BASE_URL}/
@@ -42,8 +42,8 @@ Go To Login
 
 Go To Dashboard
     Wait Until No Loading Shadow
-    Wait Until Element is Visible       HomeMenu
-    Click Element                       HomeMenu
+    Wait Until App Loaded
+    Click Element                       css:.logo
     Wait Until Element is Visible       css:.DatabasesPage
     Wait Until No Loading Shadow
 
@@ -87,6 +87,14 @@ Go To Tools
     Wait Until Element is Visible       css:.ToolsForDatabasesPage
     Wait Until No Loading Shadow
 
+Select Tool
+    [Arguments]                         ${tool}
+    Click Element                       //*[@role="button"]//*[text()='${tool}']
+
+Click Tool Icon
+    [Arguments]                         ${icon}
+    Click Element                       //*[contains(@class, "MainTopPanel")]//*[@id="${icon}"]
+
 Go To Admin
     ${page}                             Current Page
     ${already_there}                    Evaluate            '${page}'=='admin'
@@ -110,3 +118,6 @@ Wait For Title
     [Documentation]                     Wait until page subtitle is visible.
     [Arguments]                         ${title}
     Wait Until Element is Visible       //*[contains(@class, "Title")]/h5[text() = '${title}']
+
+Wait Until App Loaded
+    Wait Until Page Contains Element    css:.logged-in

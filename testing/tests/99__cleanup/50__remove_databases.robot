@@ -1,3 +1,8 @@
+#
+# Requires:
+# (Nothing)
+#
+
 *** Settings ***
 Resource                                ../../resources/common.robot
 Suite Setup                             Standard Suite Setup

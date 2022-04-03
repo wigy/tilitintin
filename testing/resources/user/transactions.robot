@@ -11,17 +11,6 @@ ${CURRENTLY_SELECTED_ROW}               //tr[contains(@class, "Transaction")][co
 ${BALANCE_LINE}                         //tr[contains(@class, "BalanceLine")]
 
 *** Keywords ***
-# TODO: This could go to different file like db.robot.
-Select First Period of DB
-    [Documentation]                     Got to the home page and select first period of first database.
-    ${db}                               Current DB
-    ${period}                           Current Period
-    ${already_there}                    Evaluate            ${db}!=None and ${period}!=None
-    Return From Keyword If              ${already_there}
-    Go To Dashboard
-    Click Element                       A
-    Click Element                       1
-
 Select Account from Balances
     [Documentation]                     Go to the transactions page and select the given account.
     [Arguments]                         ${account}
@@ -144,11 +133,52 @@ Fill New 3-Part VAT Income Tx
     Press Keys                          None    ESC
     Wait Until Page Does Not Contain Element    ${CURRENTLY_SELECTED_ROW}
 
-# TODO: Rename Account Balance Should Be
-Ensure Account Balance
+Select Named Tx
+    [Documentation]                     Start from the transaction page.
+    ...                                 Click the the trasaction to open with the given text.
+    [Arguments]                         ${text}
+    Click Element With text             ${text}
+    Wait Until Page Contains Element    ${SELECTED_DATE}
+
+Go To Line 1 Description
+    [Documentation]                     Assume just opened trasaction.
+    ...                                 Go to the first description line of the transaction.
+    Press Keys                          None    ARROW_DOWN
+    Wait Until Page Contains Element    ${SELECTED_ACCOUNT}
+    Press Keys                          None    ARROW_RIGHT
+    Wait Until Page Contains Element    ${SELECTED_DESCRIPTION}
+
+Edit Transaction Cell
+    [Documentation]                     Assume we are in editable transaction cell.
+    ...                                 Enter to the cell and type in new content.
+    ...                                 Press enter again.
+    [Arguments]                         ${text}
+    Press Keys                          None    ENTER
+    Enter Transaction                   ${text}
+
+Enter Transaction
+    [Documentation]                     Assume we are in editable transaction cell and editing is started.
+    ...                                 Type in new content. Press enter at the end.
+    [Arguments]                         ${text}
+    Press Keys                          None    ${text}
+    Press Keys                          None    ENTER
+
+Clear Transaction Cell
+    [Documentation]                     Assume we are in editing a transaction cell.
+    ...                                 Clear the content.
+    Press Keys                          None    CTRL+a
+    Press Keys                          None    BACKSPACE
+
+
+Account Balance Should Be
     [Documentation]                     This function assumest that we are on transaction page.
     ...                                 Check that we have correct balance for the given account.
     ...                                 Account is given as number and balance exact text with currency symbol and spacing.
     [Arguments]                         ${account}  ${balance}
     Go To Transactions
     Page Should Contain Element         //tr[contains(@class, "BalanceLine")][./td[contains(@class, "number")][text()="${account}"]][./td[contains(@class, "balance")]/*[text()="${balance}"]]
+
+Wait Until Tx Selected
+    [Documentation]                     Helper for verifying correct navigation.
+    [Arguments]                         ${text}
+    Wait Until Page Contains Element    //*[contains(@class, "TransactionDetails")][contains(@class, "account")][contains(@class, "sub-selected")]//*[text()='${text}']

@@ -1,3 +1,8 @@
+#
+# Requires:
+# tests/10__initialize/10__create_user.robot tests/10__initialize/20__create_database.robot
+#
+
 *** Settings ***
 Resource                                ../../resources/common.robot
 Suite Setup                             Standard Suite Setup
@@ -13,7 +18,7 @@ ${ACCOUNT_INFO_TYPE}                    ${ACCOUNT_INFO_PANEL}//*[@class='type']
 Test Creating Accounts
     Login as User
     Go To Starting URL                  # Need to hide possible selected account, since it disturbs test.
-    Select First Period of DB
+    Select Default Database
    	Go To Accounts
     Create New Account                  1915        Candy Bank              ASSET
     Create New Account                  2625        Loan for candy          LIABILITY
@@ -23,7 +28,7 @@ Test Creating Accounts
 Browse Created Accounts
     Login as User
     Change Language                     en
-    Select First Period of DB
+    Select Default Database
    	Go To Accounts
 
     Select Account from Account List    1915
@@ -49,7 +54,7 @@ Browse Created Accounts
 Edit Created Accounts
     [Tags]  skip
     Login as User
-    Select First Period of DB
+    Select Default Database
    	Go To Accounts
     Select Account from Account List    1915
     Click Element                       EditAccount
@@ -69,7 +74,7 @@ Browse Edited Accounts
     [Tags]  skip
     Login as User
     Change Language                     en
-    Select First Period of DB
+    Select Default Database
    	Go To Accounts
 
     Select Account from Account List    1915
@@ -85,7 +90,7 @@ Browse Edited Accounts
 Delete Created and Edited Accounts
     [Tags]  skip
     Login as User
-    Select First Period of DB
+    Select Default Database
    	Go To Accounts
 
     Select Account from Account List    1915
@@ -111,7 +116,7 @@ Delete Created and Edited Accounts
 Verify That Accounts Are Deleted
     [Tags]  skip
     Login as User
-    Select First Period of DB
+    Select Default Database
    	Go To Accounts
     Page Should Not Contain             1915 Candy Bank
     Page Should Not Contain             2625 Loan for candy

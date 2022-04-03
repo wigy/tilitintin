@@ -134,7 +134,6 @@ class Store {
 
     debug('  Request:', method, url, data || '')
 
-    this.clearMessages()
     this.loading = !noDimming
     return fetch(url, options)
       .then(res => {
@@ -164,7 +163,7 @@ class Store {
   /**
    * Get the list of available databases.
    */
-   @action
+  @action
   async fetchDatabases(force = false) {
     if (!this.token) {
       return
@@ -190,598 +189,598 @@ class Store {
     return this.dbsFetch
   }
 
-   /**
-   * Set the current database.
-   * @param {String} db
-   * @return {Promise}
-   */
-   @action
-   async setDb(db) {
-     db = db || null
-     if (this.db === db) {
-       debug('SetDb:', db, 'using old')
-       return
-     }
-     await this.fetchDatabases()
-     if (!db) {
-       return
-     }
-     if (!this.dbFetch) {
-       debug('SetDb', db, 'fetching...')
-       this.dbFetch = this.fetchSettings(db)
-         .then(() => this.fetchPeriods(db))
-         .then(() => this.fetchReports(db))
-         .then(() => this.fetchTags(db))
-         .then(() => this.fetchHeadings(db))
-         .then(() => this.fetchAccounts(db))
-         .then(() => runInAction(() => (this.dbFetch = null)))
-         .then(() => runInAction(() => (this.db = db)))
-         .then(() => debug('SetDb', db, 'Done'))
-     } else {
-       debug('SetDb', db, 'sharing...')
-     }
-     return this.dbFetch
-   }
+  /**
+  * Set the current database.
+  * @param {String} db
+  * @return {Promise}
+  */
+  @action
+  async setDb(db) {
+    db = db || null
+    if (this.db === db) {
+      debug('SetDb:', db, 'using old')
+      return
+    }
+    await this.fetchDatabases()
+    if (!db) {
+      return
+    }
+    if (!this.dbFetch) {
+      debug('SetDb', db, 'fetching...')
+      this.dbFetch = this.fetchSettings(db)
+        .then(() => this.fetchPeriods(db))
+        .then(() => this.fetchReports(db))
+        .then(() => this.fetchTags(db))
+        .then(() => this.fetchHeadings(db))
+        .then(() => this.fetchAccounts(db))
+        .then(() => runInAction(() => (this.dbFetch = null)))
+        .then(() => runInAction(() => (this.db = db)))
+        .then(() => debug('SetDb', db, 'Done'))
+    } else {
+      debug('SetDb', db, 'sharing...')
+    }
+    return this.dbFetch
+  }
 
-   /**
-   * Set the current period.
-   * @param {String} db
-   * @param {Number} periodId
-   * @return {Promise}
-   */
-   @action
-   async setPeriod(db, periodId) {
-     periodId = parseInt(periodId) || null
-     if (this.db === db && this.periodId === periodId) {
-       debug('SetPeriod:', db, periodId, 'using old')
-       return
-     }
-     await this.setDb(db)
-     if (!periodId) {
-       runInAction(() => (this.periodId = null))
-       return
-     }
-     if (!this.periodFetch) {
-       debug('SetPeriod:', db, periodId, 'fetching...')
-       this.invalidateReport()
-       this.periodFetch = this.fetchBalances(db, periodId)
-         .then(() => runInAction(() => (this.periodId = periodId)))
-         .then(() => this.fetchDocuments(db, periodId))
-         .then(() => runInAction(() => (this.periodFetch = null)))
-         .then(() => debug('SetPeriod', db, periodId, 'Done'))
-     } else {
-       debug('SetPeriod:', db, periodId, 'sharing...')
-     }
-     return this.periodFetch
-   }
+  /**
+  * Set the current period.
+  * @param {String} db
+  * @param {Number} periodId
+  * @return {Promise}
+  */
+  @action
+  async setPeriod(db, periodId) {
+    periodId = parseInt(periodId) || null
+    if (this.db === db && this.periodId === periodId) {
+      debug('SetPeriod:', db, periodId, 'using old')
+      return
+    }
+    await this.setDb(db)
+    if (!periodId) {
+      runInAction(() => (this.periodId = null))
+      return
+    }
+    if (!this.periodFetch) {
+      debug('SetPeriod:', db, periodId, 'fetching...')
+      this.invalidateReport()
+      this.periodFetch = this.fetchBalances(db, periodId)
+        .then(() => runInAction(() => (this.periodId = periodId)))
+        .then(() => this.fetchDocuments(db, periodId))
+        .then(() => runInAction(() => (this.periodFetch = null)))
+        .then(() => debug('SetPeriod', db, periodId, 'Done'))
+    } else {
+      debug('SetPeriod:', db, periodId, 'sharing...')
+    }
+    return this.periodFetch
+  }
 
-   /**
-   * Set the current period.
-   * @param {String} db
-   * @param {Number} periodId
-   * @return {Promise}
-   */
-   @action
-   async setAccount(db, periodId, accountId) {
-     if (accountId === '') {
-       return
-     }
-     periodId = parseInt(periodId) || null
-     accountId = parseInt(accountId) || null
-     if (this.db === db && this.periodId === periodId && this.accountId === accountId) {
-       debug('SetAccount:', db, periodId, accountId, 'using old')
-       return
-     }
-     await this.setPeriod(db, periodId)
-     // Fetch additional data for an account.
-     return this.request('/db/' + db + '/account/' + accountId)
-       .then((account) => {
-         runInAction(() => {
-           this.accountId = accountId
-           this.account.periods.replace(account.periods)
-           debug('SetAccount:', db, periodId, accountId, 'Done')
-         })
-       })
-   }
+  /**
+  * Set the current period.
+  * @param {String} db
+  * @param {Number} periodId
+  * @return {Promise}
+  */
+  @action
+  async setAccount(db, periodId, accountId) {
+    if (accountId === '') {
+      return
+    }
+    periodId = parseInt(periodId) || null
+    accountId = parseInt(accountId) || null
+    if (this.db === db && this.periodId === periodId && this.accountId === accountId) {
+      debug('SetAccount:', db, periodId, accountId, 'using old')
+      return
+    }
+    await this.setPeriod(db, periodId)
+    // Fetch additional data for an account.
+    return this.request('/db/' + db + '/account/' + accountId)
+      .then((account) => {
+        runInAction(() => {
+          this.accountId = accountId
+          this.account.periods.replace(account.periods)
+          debug('SetAccount:', db, periodId, accountId, 'Done')
+        })
+      })
+  }
 
-   /**
-   * Clear DB data.
-   */
-   @action
-   clearDb() {
+  /**
+  * Clear DB data.
+  */
+  @action
+  clearDb() {
 
-     this.db = null
-     this.report = null
-     this.settings.reset()
-     this.clearPeriod()
-   }
+    this.db = null
+    this.report = null
+    this.settings.reset()
+    this.clearPeriod()
+  }
 
-   /**
-   * Clear period data.
-   */
-   @action
-   clearPeriod() {
+  /**
+  * Clear period data.
+  */
+  @action
+  clearPeriod() {
 
-     this.periodId = null
-     this.report = null
-     this.clearAccount()
-   }
+    this.periodId = null
+    this.report = null
+    this.clearAccount()
+  }
 
-   /**
-   * Clear period data.
-   */
-   @action
-   clearAccount() {
+  /**
+  * Clear period data.
+  */
+  @action
+  clearAccount() {
 
-     this.accountId = null
-     this.tools = {
-       tagDisabled: {
-       },
-       accounts: {
-       }
-     }
-   }
+    this.accountId = null
+    this.tools = {
+      tagDisabled: {
+      },
+      accounts: {
+      }
+    }
+  }
 
-   /**
-   * Get the settings from the DB.
-   */
-   @action
-   async fetchSettings(db) {
-     if (!this.token) {
-       return
-     }
-     return this.request('/db/' + db + '/settings')
-       .then((settings) => {
-         runInAction(() => {
-           this.settings.update(settings)
-         })
-       })
-   }
+  /**
+  * Get the settings from the DB.
+  */
+  @action
+  async fetchSettings(db) {
+    if (!this.token) {
+      return
+    }
+    return this.request('/db/' + db + '/settings')
+      .then((settings) => {
+        runInAction(() => {
+          this.settings.update(settings)
+        })
+      })
+  }
 
-   /**
-   * Get the list of periods available for the current DB.
-   */
-   @action
-   async fetchPeriods(db) {
-     if (!this.token) {
-       return
-     }
-     return this.request('/db/' + db + '/period')
-       .then((periods) => {
-         runInAction(() => {
-           periods.forEach((data) => {
-             this.dbsByName[db].addPeriod(new PeriodModel(this.dbsByName[db], data))
-           })
-         })
-       })
-   }
+  /**
+  * Get the list of periods available for the current DB.
+  */
+  @action
+  async fetchPeriods(db) {
+    if (!this.token) {
+      return
+    }
+    return this.request('/db/' + db + '/period')
+      .then((periods) => {
+        runInAction(() => {
+          periods.forEach((data) => {
+            this.dbsByName[db].addPeriod(new PeriodModel(this.dbsByName[db], data))
+          })
+        })
+      })
+  }
 
-   /**
-   * Get the tag definitions from the current database.
-   */
-   @action
-   async fetchTags(db) {
-     if (!this.token) {
-       return
-     }
-     return this.request('/db/' + db + '/tags')
-       .then((tags) => {
-         runInAction(() => {
-           tags.forEach((tag) => (this.dbsByName[db].addTag(new TagModel(this.dbsByName[db], tag))))
-         })
-       })
-   }
+  /**
+  * Get the tag definitions from the current database.
+  */
+  @action
+  async fetchTags(db) {
+    if (!this.token) {
+      return
+    }
+    return this.request('/db/' + db + '/tags')
+      .then((tags) => {
+        runInAction(() => {
+          tags.forEach((tag) => (this.dbsByName[db].addTag(new TagModel(this.dbsByName[db], tag))))
+        })
+      })
+  }
 
-   /**
-   * Collect all accounts.
-   */
-   @action
-   async fetchAccounts(db) {
-     if (!this.token) {
-       return
-     }
-     return this.request('/db/' + db + '/account')
-       .then((accounts) => {
-         runInAction(() => {
-           this.dbsByName[db].deleteAccounts()
-           accounts.forEach((data) => {
-             const account = new AccountModel(this.dbsByName[db], data)
-             this.dbsByName[db].addAccount(account)
-           })
-         })
-       })
-   }
+  /**
+  * Collect all accounts.
+  */
+  @action
+  async fetchAccounts(db) {
+    if (!this.token) {
+      return
+    }
+    return this.request('/db/' + db + '/account')
+      .then((accounts) => {
+        runInAction(() => {
+          this.dbsByName[db].deleteAccounts()
+          accounts.forEach((data) => {
+            const account = new AccountModel(this.dbsByName[db], data)
+            this.dbsByName[db].addAccount(account)
+          })
+        })
+      })
+  }
 
-   /**
-   * Fetch all historical descriptions given for entries of the given account.
-   * @param {String} db
-   * @param {Number} accountId
-   * @return {String[]}
-   */
-   @action
-   async fetchEntryProposals(db, accountId) {
-     if (!this.token) {
-       return
-     }
-     if (this.entryDescriptions[db] && this.entryDescriptions[db][accountId]) {
-       return this.entryDescriptions[db][accountId]
-     }
-     return this.request('/db/' + db + '/entry?account_id=' + accountId, 'GET', null, null, true)
-       .then((entries) => {
-         const ret = entries.map(e => ({
-           documentId: e.document_id,
-           description: e.description,
-           debit: e.debit ? e.amount : null,
-           credit: e.debit ? null : e.amount
-         }))
-         this.entryDescriptions[db] = this.entryDescriptions[db] || {}
-         this.entryDescriptions[db][accountId] = ret
-         return ret
-       })
+  /**
+  * Fetch all historical descriptions given for entries of the given account.
+  * @param {String} db
+  * @param {Number} accountId
+  * @return {String[]}
+  */
+  @action
+  async fetchEntryProposals(db, accountId) {
+    if (!this.token) {
+      return
+    }
+    if (this.entryDescriptions[db] && this.entryDescriptions[db][accountId]) {
+      return this.entryDescriptions[db][accountId]
+    }
+    return this.request('/db/' + db + '/entry?account_id=' + accountId, 'GET', null, null, true)
+      .then((entries) => {
+        const ret = entries.map(e => ({
+          documentId: e.document_id,
+          description: e.description,
+          debit: e.debit ? e.amount : null,
+          credit: e.debit ? null : e.amount
+        }))
+        this.entryDescriptions[db] = this.entryDescriptions[db] || {}
+        this.entryDescriptions[db][accountId] = ret
+        return ret
+      })
 
-   }
+  }
 
-   /**
-   * Collect all account headings.
-   */
-   @action
-   async fetchHeadings(db) {
-     if (!this.token) {
-       return
-     }
-     return this.request('/db/' + db + '/heading')
-       .then((headings) => {
-         runInAction(() => {
-           headings.forEach((heading) => {
-             this.dbsByName[db].addHeading(new HeadingModel(this.dbsByName[db], heading))
-           })
-         })
-       })
-   }
+  /**
+  * Collect all account headings.
+  */
+  @action
+  async fetchHeadings(db) {
+    if (!this.token) {
+      return
+    }
+    return this.request('/db/' + db + '/heading')
+      .then((headings) => {
+        runInAction(() => {
+          headings.forEach((heading) => {
+            this.dbsByName[db].addHeading(new HeadingModel(this.dbsByName[db], heading))
+          })
+        })
+      })
+  }
 
-   /**
-   * Get the list of report formats available for the current DB.
-   */
-   @action
-   async fetchReports(db) {
-     if (!this.token) {
-       return
-     }
-     return this.request('/db/' + db + '/report')
-       .then((reports) => {
-         runInAction(() => {
-           Object.keys(reports.links).forEach((format, idx) => {
-             const opts = { format, order: idx, options: reports.options[format] || {} }
-             this.dbsByName[db].periods.forEach((period) => period.addReport(new ReportModel(period, opts)))
-           })
-         })
-       })
-   }
+  /**
+  * Get the list of report formats available for the current DB.
+  */
+  @action
+  async fetchReports(db) {
+    if (!this.token) {
+      return
+    }
+    return this.request('/db/' + db + '/report')
+      .then((reports) => {
+        runInAction(() => {
+          Object.keys(reports.links).forEach((format, idx) => {
+            const opts = { format, order: idx, options: reports.options[format] || {} }
+            this.dbsByName[db].periods.forEach((period) => period.addReport(new ReportModel(period, opts)))
+          })
+        })
+      })
+  }
 
-   /**
-   * Get the report data.
-   */
-   @action
-   async fetchReport(db, periodId, format) {
-     await this.setPeriod(db, periodId)
-     if (!this.period) {
-       return
-     }
-     const report = this.period.getReport(format)
-     const url = report.getUrl()
-     if (this.report && this.report.url === url) {
-       return
-     }
-     runInAction(() => {
-       this.report = null
-       report.setData(url, [])
-     })
-     return this.request(url)
-       .then((data) => {
-         runInAction(() => {
-           report.setData(url, data)
-           this.report = report
-         })
-       })
-   }
+  /**
+  * Get the report data.
+  */
+  @action
+  async fetchReport(db, periodId, format) {
+    await this.setPeriod(db, periodId)
+    if (!this.period) {
+      return
+    }
+    const report = this.period.getReport(format)
+    const url = report.getUrl()
+    if (this.report && this.report.url === url) {
+      return
+    }
+    runInAction(() => {
+      this.report = null
+      report.setData(url, [])
+    })
+    return this.request(url)
+      .then((data) => {
+        runInAction(() => {
+          report.setData(url, data)
+          this.report = report
+        })
+      })
+  }
 
-   /**
-   * Get the summary of balances for all accounts in the given period.
-   */
-   @action
-   async fetchBalances(db = null, periodId = null) {
-     if (!this.token) {
-       return
-     }
-     if (!db) {
-       db = this.db
-     }
-     if (!periodId) {
-       periodId = this.periodId
-     }
-     return this.request('/db/' + db + '/period/' + periodId)
-       .then((balances) => {
-         runInAction(() => {
-           const period = this.dbsByName[db].getPeriod(periodId)
-           period.balances = {}
-           balances.balances.forEach((data) => {
-             period.addBalance(new BalanceModel(period, { account_id: data.id, ...data }))
-           })
-         })
-       })
-   }
+  /**
+  * Get the summary of balances for all accounts in the given period.
+  */
+  @action
+  async fetchBalances(db = null, periodId = null) {
+    if (!this.token) {
+      return
+    }
+    if (!db) {
+      db = this.db
+    }
+    if (!periodId) {
+      periodId = this.periodId
+    }
+    return this.request('/db/' + db + '/period/' + periodId)
+      .then((balances) => {
+        runInAction(() => {
+          const period = this.dbsByName[db].getPeriod(periodId)
+          period.balances = {}
+          balances.balances.forEach((data) => {
+            period.addBalance(new BalanceModel(period, { account_id: data.id, ...data }))
+          })
+        })
+      })
+  }
 
-   /**
-   * Get the documents with entries for the given period.
-   */
-   @action
-   async fetchDocuments(db = null, periodId = null) {
-     if (!this.token) {
-       return
-     }
-     if (!db) {
-       db = this.db
-     }
-     if (!periodId) {
-       periodId = this.periodId
-     }
-     return this.request('/db/' + db + '/document?entries&period=' + periodId)
-       .then((data) => {
-         runInAction(() => {
-           let lastDate
-           data.forEach((tx) => {
-             const doc = new DocumentModel(this.period, tx)
-             this.period.addDocument(doc)
-             lastDate = tx.date
-           })
-           this.period.refreshTags()
-           this.lastDate = lastDate
-         })
-       })
-   }
+  /**
+  * Get the documents with entries for the given period.
+  */
+  @action
+  async fetchDocuments(db = null, periodId = null) {
+    if (!this.token) {
+      return
+    }
+    if (!db) {
+      db = this.db
+    }
+    if (!periodId) {
+      periodId = this.periodId
+    }
+    return this.request('/db/' + db + '/document?entries&period=' + periodId)
+      .then((data) => {
+        runInAction(() => {
+          let lastDate
+          data.forEach((tx) => {
+            const doc = new DocumentModel(this.period, tx)
+            this.period.addDocument(doc)
+            lastDate = tx.date
+          })
+          this.period.refreshTags()
+          this.lastDate = lastDate
+        })
+      })
+  }
 
-   /**
-   * Get a single document raw data without caching.
-   */
-   @action
-   async fetchRawDocument(documentId) {
-     if (!this.token) {
-       return
-     }
-     return this.request('/db/' + this.db + '/document/' + documentId)
-   }
+  /**
+  * Get a single document raw data without caching.
+  */
+  @action
+  async fetchRawDocument(documentId) {
+    if (!this.token) {
+      return
+    }
+    return this.request('/db/' + this.db + '/document/' + documentId)
+  }
 
-   /**
-   * Login to the back-end.
-   * @param {String} user
-   * @param {String} password
-   */
-   @action
-   async login(user, password) {
-     this.token = null
-     return this.request('/auth', 'POST', { user: user, password: password })
-       .then((resp) => {
-         if (resp && resp.token) {
-           runInAction(() => {
-             this.token = resp.token
-             localStorage.setItem('token', resp.token)
-             this.fetchDatabases()
-           })
-         }
-       })
-   }
-
-   /**
-   * Log out the current user.
-   */
-   @action
-   logout() {
-     localStorage.removeItem('token')
-     this.token = null
-     this.dbsByName = {}
-     this.db = null
-     this.periodId = null
-     this.clearDb()
-   }
-
-   /**
-   * Create new database.
-   * @param info.databaseName
-   * @param info.companyName
-   * @param info.companyCode
-   */
-   @action
-   createDatabase(info) {
-     return this.request('/db', 'POST', info)
-       .then(async (res) => {
-         await this.fetchDatabases(true)
-         this.clearAccount()
-         return res
-       })
-   }
-
-   /**
-   * Remove the report, since it may not be valid anymore.
-   */
-   @action
-   invalidateReport() {
-     if (this.report) {
-       this.report = null
-     }
-   }
-
-   /**
-   * Save account data.
-   * @param {AccountModel} account
-   */
-   @action
-   async saveAccount(account) {
-     return this.request('/db/' + this.db + '/account/' + (account.id || ''), account.id ? 'PATCH' : 'POST', account.toJSON())
-       .then((res) => {
-         runInAction(() => {
-           if (!account.id) {
-             account.id = res.id
-           }
-         })
-         this.invalidateReport()
-         return res
-       })
-   }
-
-   /**
-   * Save period content.
-   * @param {PeriodModel} period
-   */
-   @action
-   async savePeriod(period) {
-     return this.request('/db/' + this.db + '/period/' + (period.id || ''), period.id ? 'PATCH' : 'POST', period.toJSON())
-       .then((res) => {
-         runInAction(() => {
-           if (!period.id) {
-             period.id = res.id
-           }
-         })
-         this.invalidateReport()
-         return res
-       })
-   }
-
-   /**
-   * Save transaction content.
-   * @param {DocumentModel} doc
-   */
-   @action
-   async saveDocument(doc) {
-     return this.request('/db/' + this.db + '/document/' + (doc.id ? doc.id : ''), doc.id ? 'PATCH' : 'POST', doc.toJSON())
-       .then((res) => {
-         runInAction(() => {
-           if (!doc.id) {
-             doc.id = res.id
-           }
-           if (!doc.number) {
-             doc.number = res.number
-           }
-           this.invalidateReport()
-           return res
-         })
-       })
-   }
-
-   /**
-   * Save entry content.
-   * @param {EntryModel} entry
-   */
-   @action
-   async saveEntry(entry) {
-     if (this.entryDescriptions[this.db] && this.entryDescriptions[this.db][entry.account_id]) {
-       delete this.entryDescriptions[this.db][entry.account_id]
-     }
-     // Remove from old account, if changed.
-     if (entry.id) {
-       const old = await this.request('/db/' + this.db + '/entry/' + entry.id)
-       if (old.account_id !== entry.account_id) {
-         entry.document.period.changeAccount(entry.document_id, old.account_id, entry.account_id)
-       }
-     }
-     return this.request('/db/' + this.db + '/entry/' + (entry.id || ''), entry.id ? 'PATCH' : 'POST', entry.toJSON())
-       .then((res) => {
-         runInAction(() => {
-           if (!entry.id) {
-             entry.id = res.id
-           }
-         })
-         this.invalidateReport()
-         return res
-       })
-   }
-
-   /**
-   * Remove an account.
-   * @param {AccountModel} account
-   */
-   @action
-   async deleteAccount(account) {
-     const path = '/db/' + this.db + '/account/' + account.id
-     return this.request(path, 'DELETE')
-       .then(() => {
-         this.invalidateReport()
-         return this.fetchAccounts(this.db)
-       })
-   }
-
-   /**
-   * Remove an entry.
-   * @param {EntryModel} entry
-   */
-   @action
-   async deleteEntry(entry) {
-     if (!entry.id) {
-       entry.document.entries.remove(entry)
-       return
-     }
-     const path = '/db/' + this.db + '/entry/' + entry.id
-     return this.request(path, 'DELETE')
-       .then(() => {
-         runInAction(() => {
-           this.period.deleteEntry(entry)
-         })
-         this.invalidateReport()
-         return this.fetchBalances(this.db, this.periodId)
-       })
-   }
-
-   /**
-   * Remove a document and all of its entries from the system.
-   * @param {DocumentModel} doc
-   */
-   @action
-   async deleteDocument(doc) {
-     const path = '/db/' + this.db + '/document/' + doc.id
-     return this.request(path, 'DELETE')
-       .then(() => {
-         runInAction(() => {
-           this.period.deleteDocument(doc)
-         })
-         this.invalidateReport()
-         return this.fetchBalances(this.db, this.periodId)
-       })
-   }
-
-   /**
-   * Remove a database.
-   * @param {DatabaseModel} db
-   */
-    @action
-   async deleteDatabase(db) {
-     const path = '/db/' + db.name
-     return this.request(path, 'DELETE')
-   }
-
-    /**
-   * Computed property to collect only transactions matching the current filter.
-   */
-  @computed
-    get filteredTransactions() {
-      const visible = (tx) => {
-        const allEnabled = Object.values(this.tools.tagDisabled).filter((v) => v).length === 0
-        if (!tx.tags || !tx.tags.length) {
-          return allEnabled
+  /**
+  * Login to the back-end.
+  * @param {String} user
+  * @param {String} password
+  */
+  @action
+  async login(user, password) {
+    this.token = null
+    return this.request('/auth', 'POST', { user: user, password: password })
+      .then((resp) => {
+        if (resp && resp.token) {
+          runInAction(() => {
+            this.token = resp.token
+            localStorage.setItem('token', resp.token)
+            this.fetchDatabases()
+          })
         }
-        let disabled = true
-        tx.tags.forEach((tag) => {
-          if (!this.tools.tagDisabled[tag.tag]) {
-            disabled = false
+      })
+  }
+
+  /**
+  * Log out the current user.
+  */
+  @action
+  logout() {
+    localStorage.removeItem('token')
+    this.token = null
+    this.dbsByName = {}
+    this.db = null
+    this.periodId = null
+    this.clearDb()
+  }
+
+  /**
+  * Create new database.
+  * @param info.databaseName
+  * @param info.companyName
+  * @param info.companyCode
+  */
+  @action
+  createDatabase(info) {
+    return this.request('/db', 'POST', info)
+      .then(async (res) => {
+        await this.fetchDatabases(true)
+        this.clearAccount()
+        return res
+      })
+  }
+
+  /**
+  * Remove the report, since it may not be valid anymore.
+  */
+  @action
+  invalidateReport() {
+    if (this.report) {
+      this.report = null
+    }
+  }
+
+  /**
+  * Save account data.
+  * @param {AccountModel} account
+  */
+  @action
+  async saveAccount(account) {
+    return this.request('/db/' + this.db + '/account/' + (account.id || ''), account.id ? 'PATCH' : 'POST', account.toJSON())
+      .then((res) => {
+        runInAction(() => {
+          if (!account.id) {
+            account.id = res.id
           }
         })
-        return !disabled
-      }
+        this.invalidateReport()
+        return res
+      })
+  }
 
-      const filter = (txs) => {
-        return txs.filter((tx) => visible(tx))
-      }
+  /**
+  * Save period content.
+  * @param {PeriodModel} period
+  */
+  @action
+  async savePeriod(period) {
+    return this.request('/db/' + this.db + '/period/' + (period.id || ''), period.id ? 'PATCH' : 'POST', period.toJSON())
+      .then((res) => {
+        runInAction(() => {
+          if (!period.id) {
+            period.id = res.id
+          }
+        })
+        this.invalidateReport()
+        return res
+      })
+  }
 
-      return filter(this.transactions)
+  /**
+  * Save transaction content.
+  * @param {DocumentModel} doc
+  */
+  @action
+  async saveDocument(doc) {
+    return this.request('/db/' + this.db + '/document/' + (doc.id ? doc.id : ''), doc.id ? 'PATCH' : 'POST', doc.toJSON())
+      .then((res) => {
+        runInAction(() => {
+          if (!doc.id) {
+            doc.id = res.id
+          }
+          if (!doc.number) {
+            doc.number = res.number
+          }
+          this.invalidateReport()
+          return res
+        })
+      })
+  }
+
+  /**
+  * Save entry content.
+  * @param {EntryModel} entry
+  */
+  @action
+  async saveEntry(entry) {
+    if (this.entryDescriptions[this.db] && this.entryDescriptions[this.db][entry.account_id]) {
+      delete this.entryDescriptions[this.db][entry.account_id]
     }
+    // Remove from old account, if changed.
+    if (entry.id) {
+      const old = await this.request('/db/' + this.db + '/entry/' + entry.id)
+      if (old.account_id !== entry.account_id) {
+        entry.document.period.changeAccount(entry.document_id, old.account_id, entry.account_id)
+      }
+    }
+    return this.request('/db/' + this.db + '/entry/' + (entry.id || ''), entry.id ? 'PATCH' : 'POST', entry.toJSON())
+      .then((res) => {
+        runInAction(() => {
+          if (!entry.id) {
+            entry.id = res.id
+          }
+        })
+        this.invalidateReport()
+        return res
+      })
+  }
+
+  /**
+  * Remove an account.
+  * @param {AccountModel} account
+  */
+  @action
+  async deleteAccount(account) {
+    const path = '/db/' + this.db + '/account/' + account.id
+    return this.request(path, 'DELETE')
+      .then(() => {
+        this.invalidateReport()
+        return this.fetchAccounts(this.db)
+      })
+  }
+
+  /**
+  * Remove an entry.
+  * @param {EntryModel} entry
+  */
+  @action
+  async deleteEntry(entry) {
+    if (!entry.id) {
+      entry.document.entries.remove(entry)
+      return
+    }
+    const path = '/db/' + this.db + '/entry/' + entry.id
+    return this.request(path, 'DELETE')
+      .then(() => {
+        runInAction(() => {
+          this.period.deleteEntry(entry)
+        })
+        this.invalidateReport()
+        return this.fetchBalances(this.db, this.periodId)
+      })
+  }
+
+  /**
+  * Remove a document and all of its entries from the system.
+  * @param {DocumentModel} doc
+  */
+  @action
+  async deleteDocument(doc) {
+    const path = '/db/' + this.db + '/document/' + doc.id
+    return this.request(path, 'DELETE')
+      .then(() => {
+        runInAction(() => {
+          this.period.deleteDocument(doc)
+        })
+        this.invalidateReport()
+        return this.fetchBalances(this.db, this.periodId)
+      })
+  }
+
+  /**
+  * Remove a database.
+  * @param {DatabaseModel} db
+  */
+  @action
+  async deleteDatabase(db) {
+    const path = '/db/' + db.name
+    return this.request(path, 'DELETE')
+  }
+
+  /**
+ * Computed property to collect only transactions matching the current filter.
+ */
+  @computed
+  get filteredTransactions() {
+    const visible = (tx) => {
+      const allEnabled = Object.values(this.tools.tagDisabled).filter((v) => v).length === 0
+      if (!tx.tags || !tx.tags.length) {
+        return allEnabled
+      }
+      let disabled = true
+      tx.tags.forEach((tag) => {
+        if (!this.tools.tagDisabled[tag.tag]) {
+          disabled = false
+        }
+      })
+      return !disabled
+    }
+
+    const filter = (txs) => {
+      return txs.filter((tx) => visible(tx))
+    }
+
+    return filter(this.transactions)
+  }
 
   /**
    * Get currently loaded documents having entry for accounts and matching the filter.

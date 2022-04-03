@@ -15,6 +15,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { ButtonGroup } from '@material-ui/core'
 import { CalendarToday, NavigateBefore, NavigateNext, Storage } from '@material-ui/icons'
 import { action } from 'mobx'
+import Configuration from '../Configuration'
 
 @withTranslation('translations')
 @inject('store')
@@ -24,38 +25,37 @@ class Menu extends Component {
 
   menu = [
     {
-      title: 'Home',
-      shortcut: ' ',
-      disabled: ({ notLoggedIn }) => notLoggedIn,
-      action: () => this.handleSelect('dashboard')
-    },
-    {
       title: 'Transactions',
-      shortcut: 'X',
+      help: 'View and edit transactions of the current period.',
+      shortcut: '2',
       disabled: ({ db, periodId, notLoggedIn }) => !db || !periodId || notLoggedIn,
       action: () => this.handleSelect('txs')
     },
     {
       title: 'Reports',
-      shortcut: 'R',
+      help: 'Display various reports for the current period.',
+      shortcut: '3',
       disabled: ({ db, periodId, notLoggedIn }) => !db || !periodId || notLoggedIn,
       action: () => this.handleSelect('report')
     },
     {
       title: 'Accounts',
-      shortcut: 'Y',
+      help: 'View and edit accounting schema of this database.',
+      shortcut: '4',
       disabled: ({ db, notLoggedIn }) => !db || notLoggedIn,
       action: () => this.handleSelect('account')
     },
     {
       title: 'Tools',
-      shortcut: 'T',
+      help: 'A collection of various tools.',
+      shortcut: '5',
       disabled: ({ notLoggedIn, isAdmin }) => notLoggedIn || isAdmin,
       action: () => this.handleSelect('tools')
     },
     {
       title: 'Admin',
-      shortcut: 'A',
+      help: 'System administration',
+      shortcut: '6',
       disabled: ({ notLoggedIn, isAdmin }) => notLoggedIn || !isAdmin,
       action: () => this.handleSelect('admin')
     },
@@ -85,7 +85,46 @@ class Menu extends Component {
     this.update(this.props.match.params)
   }
 
-  keyText(cursor, key) {
+  keyCommand1() {
+    if (this.props.store.token) {
+      this.handleSelect('dashboard')
+      return { preventDefault: true }
+    }
+  }
+
+  keyCommand2() {
+    return this.handleShortcut('2')
+  }
+
+  keyCommand3() {
+    return this.handleShortcut('3')
+  }
+
+  keyCommand4() {
+    return this.handleShortcut('4')
+  }
+
+  keyCommand5() {
+    return this.handleShortcut('5')
+  }
+
+  keyCommand6() {
+    return this.handleShortcut('6')
+  }
+
+  keyCommand7() {
+    return this.handleShortcut('7')
+  }
+
+  keyCommand8() {
+    return this.handleShortcut('8')
+  }
+
+  keyCommand9() {
+    return this.handleShortcut('9')
+  }
+
+  handleShortcut(key) {
     key = key.toUpperCase()
     const entry = this.menu.filter(e => e.shortcut === key)
     if (entry.length) {
@@ -95,11 +134,18 @@ class Menu extends Component {
       entry[0].action()
       return { preventDefault: true }
     }
+  }
+
+  keyText(cursor, key) {
+    key = key.toUpperCase()
     if (key === '<') {
+      // TODO: These keys do not necessarily work. It seems to give out | and \ in finnish layout.
       this.handleSelect('previous-period')
+      return { preventDefault: true }
     }
     if (key === '>') {
       this.handleSelect('next-period')
+      return { preventDefault: true }
     }
   }
 
@@ -177,7 +223,7 @@ class Menu extends Component {
       color="primary"
       variant="contained"
       onClick={() => entry.action()}
-      startIcon={entry.shortcut && <span className="shortcut">{entry.shortcut === ' ' ? 'Space' : entry.shortcut}</span>}
+      title={entry.help + (entry.shortcut ? ` (${Configuration.COMMAND_KEY} + ${entry.shortcut})` : '')}
     >
       <Trans>{entry.title}</Trans>
     </Button>
@@ -188,7 +234,7 @@ class Menu extends Component {
       <div className="Menu">
         <AppBar position="static">
           <Toolbar>
-            <IconButton edge="start" className="icon" color="inherit" aria-label="menu" onClick={() => (document.location = '/')}>
+            <IconButton edge="start" title="Alt + 1" className="icon" color="inherit" aria-label="menu" onClick={() => (document.location = '/')}>
               <img className="logo" alt="logo" src="/logo.png"/>
             </IconButton>
             <span className="database">

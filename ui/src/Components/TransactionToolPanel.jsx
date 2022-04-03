@@ -18,11 +18,17 @@ class TransactionToolPanel extends Component {
 
   @action
   componentDidMount() {
+    this.props.cursor.registerTools(this)
     runInAction(() => (this.props.store.tools.tagDisabled = {}))
   }
 
-  onDownload = (db, periodId, accountId) => {
+  componentWillUnmount() {
+    this.props.cursor.registerTools(null)
+  }
+
+  keyIconD = () => {
     const store = this.props.store
+    const { db, periodId, accountId } = store
     const lang = i18n.language
     const url = `${Configuration.UI_API_URL}/db/${db}/report/account/${periodId}/${accountId}?csv&lang=${lang}`
 
@@ -43,14 +49,68 @@ class TransactionToolPanel extends Component {
         a.click()
         a.remove()
       })
-  };
+    return { preventDefault: true }
+  }
+
+  keyIconI() {
+    this.props.store.transactions.forEach(tx => {
+      if (!tx.open && tx.document.number > 1) {
+        tx.toggleOpen()
+      }
+    })
+    return { preventDefault: true }
+  }
+
+  keyIconO() {
+    this.props.store.transactions.forEach(tx => {
+      if (tx.open) {
+        tx.toggleOpen()
+      }
+    })
+    return { preventDefault: true }
+  }
+
+  keyIconH() {
+    const { account, tools } = this.props.store
+    const { cursor } = this.props
+    const moveCursor = cursor.inComponent('Balances.transactions')
+    if (moveCursor) {
+      cursor.leaveComponent()
+      cursor.resetSelected()
+    }
+    runInAction(() => {
+      tools.tagDisabled = {}
+      account.tags.forEach((tag) => (tools.tagDisabled[tag.tag] = true))
+    })
+    if (moveCursor) {
+      cursor.enterComponent()
+    }
+    return { preventDefault: true }
+  }
+
+  keyIconS() {
+    const { tools } = this.props.store
+    const { cursor } = this.props
+    const moveCursor = cursor.inComponent('Balances.transactions')
+    if (moveCursor) {
+      cursor.leaveComponent()
+      cursor.resetSelected()
+    }
+    runInAction(() => {
+      tools.tagDisabled = {}
+    })
+    if (moveCursor) {
+      cursor.enterComponent()
+    }
+    return { preventDefault: true }
+  }
 
   render() {
     if (!this.props.store.token) {
       return ''
     }
 
-    const { account, tools, db, periodId, accountId } = this.props.store
+    const { account, tools } = this.props.store
     const { cursor } = this.props
 
     const toggle = (tag) => {
@@ -67,55 +127,11 @@ class TransactionToolPanel extends Component {
       }
     }
 
-    const disableAll = () => {
-      const moveCursor = cursor.inComponent('Balances.transactions')
-      if (moveCursor) {
-        cursor.leaveComponent()
-        cursor.resetSelected()
-      }
-      runInAction(() => {
-        tools.tagDisabled = {}
-        account.tags.forEach((tag) => (tools.tagDisabled[tag.tag] = true))
-      })
-      if (moveCursor) {
-        cursor.enterComponent()
-      }
-    }
-
-    const enableAll = () => {
-      const moveCursor = cursor.inComponent('Balances.transactions')
-      if (moveCursor) {
-        cursor.leaveComponent()
-        cursor.resetSelected()
-      }
-      runInAction(() => {
-        tools.tagDisabled = {}
-      })
-      if (moveCursor) {
-        cursor.enterComponent()
-      }
-    }
-
-    const openAll = () => {
-      this.props.store.transactions.forEach(tx => {
-        if (!tx.open && tx.document.number > 1) {
-          tx.toggleOpen()
-        }
-      })
-    }
-
-    const closeAll = () => {
-      this.props.store.transactions.forEach(tx => {
-        if (tx.open) {
-          tx.toggleOpen()
-        }
-      })
-    }
-
     const hasTags = account && account.tags && account.tags.length > 0
     const cannotAdd = !this.props.store.period || !!this.props.store.period.locked
     const canDeleteEntry = cursor.componentX > 0 && cursor.index !== null && cursor.row !== null
     const canDeleteTx = cursor.componentX > 0 && cursor.index !== null && cursor.row === null
+    const canDownload = !!this.props.store.accountId
     let last = null
 
     return (
@@ -123,14 +139,14 @@ class TransactionToolPanel extends Component {
         <Title>{account ? account.toString() : <Trans>No account selected</Trans>}</Title>
 
         <div>
-          <IconButton id="Zoom In" onClick={openAll} title="show-details" icon="zoom-in" />
-          <IconButton id="Zoom Out" onClick={closeAll} title="hide-details" icon="zoom-out" />
-          <IconButton id="Show All" disabled={!hasTags} onClick={enableAll} title="show-all" icon="show-all" />
-          <IconButton id="Hide All" disabled={!hasTags} onClick={disableAll} title="hide-all" icon="hide-all" />
-          <IconButton id="Download" onClick={() => this.onDownload(db, periodId, accountId)} title="download-csv" icon="download" />
-          <IconButton id="Add Transaction" disabled={cannotAdd} pressKey="Insert" title="add-tx" icon="add-tx" />
-          <IconButton id="Delete Transaction" disabled={!canDeleteTx} pressKey="Delete" title="delete-tx" icon="delete-tx" />
-          <IconButton id="Delete Row" disabled={!canDeleteEntry} pressKey="Delete" title="delete-entry" icon="delete-entry" />
+          <IconButton id="Zoom In" shortcut="I" pressKey="IconI" title="show-details" icon="zoom-in" />
+          <IconButton id="Zoom Out" shortcut="O" pressKey="IconO" title="hide-details" icon="zoom-out" />
+          <IconButton id="Show All" shortcut="S" pressKey="IconS" disabled={!hasTags} title="show-all" icon="show-all" />
+          <IconButton id="Hide All" shortcut="H" pressKey="IconH" disabled={!hasTags} title="hide-all" icon="hide-all" />
+          <IconButton id="Download" shortcut="D" pressKey="IconD" disabled={!canDownload} title="download-csv" icon="download" />
+          <IconButton id="Add Transaction" shortcut="A" disabled={cannotAdd} pressKey="IconA" title="add-tx" icon="add-tx" />
+          <IconButton id="Delete Transaction" shortcut="X" disabled={!canDeleteTx} pressKey="IconX" title="delete-tx" icon="delete-tx" />
+          <IconButton id="Delete Row" shortcut="X" disabled={!canDeleteEntry} pressKey="IconX" title="delete-entry" icon="delete-entry" />
         </div>
 
         <div style={{ marginBottom: '1rem', marginLeft: '1rem', marginRight: '1rem' }}>
