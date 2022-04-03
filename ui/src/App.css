@@ -29,6 +29,9 @@
   .MuiPaper-elevation4 {
     box-shadow: none !important;
   }
+  .Version {
+    display: none;
+  }
 }
 
 @media screen {
