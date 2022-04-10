@@ -6,8 +6,11 @@ info:
   contact:
     name: Tommi Ronkainen
   license:
-    name: UNLICENCED
-servers: []
+    name: GPL-3.0
+    url: https://opensource.org/licenses/GPL-3.0
+servers:
+  - url: http://localhost:3101
+    description: Local development host
 paths:
   /db:
     $ref: paths/db.yaml

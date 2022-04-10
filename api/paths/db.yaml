@@ -1,10 +1,21 @@
 get:
+  operationId: getDatabases
+  summary: List of databases
   responses:
     '200':
-      summary: List of databases accessible by the user.
+      description: Get the list of all databases accessible by the authenticated user.
       content:
         application/json:
           schema:
             type: array
             items:
               $ref: ../components/schemas/Database.yaml
+    '403':
+      description: User is not authenticated.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
