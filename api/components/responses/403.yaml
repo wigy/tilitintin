@@ -1,0 +1,5 @@
+description: User is not authenticated.
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/Error.yaml

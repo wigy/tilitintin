@@ -11,11 +11,4 @@ get:
             items:
               $ref: ../components/schemas/Database.yaml
     '403':
-      description: User is not authenticated.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
+      $ref: ../components/responses/403.yaml
