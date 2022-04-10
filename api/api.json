@@ -1,0 +1,11 @@
+{
+    "openapi":"3.0.2",
+    "info": {
+      "title":"Tilitintin API",
+      "version":"1.0"
+    },
+    "servers": [
+    ],
+    "paths": {
+    }
+  }
