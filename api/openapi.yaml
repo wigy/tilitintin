@@ -1,0 +1,13 @@
+openapi: 3.0.2
+info:
+  title: Tilitintin API
+  description: Complete set of API end-points to manage bookkeeping.
+  version: '1.0'
+  contact:
+    name: Tommi Ronkainen
+  license:
+    name: UNLICENCED
+servers: []
+paths:
+  /db:
+    $ref: paths/db.yaml

@@ -1,0 +1,10 @@
+get:
+  responses:
+    '200':
+      description: List of databases accessible by the user.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: ../components/schemas/Database.yaml
