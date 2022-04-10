@@ -1,11 +1,49 @@
 {
-    "openapi":"3.0.2",
-    "info": {
-      "title":"Tilitintin API",
-      "version":"1.0"
+  "openapi": "3.0.2",
+  "info": {
+    "title": "Tilitintin API",
+    "description": "Complete set of API end-points to manage bookkeeping.",
+    "version": "1.0",
+    "contact": {
+      "name": "Tommi Ronkainen"
     },
-    "servers": [
-    ],
-    "paths": {
+    "license": {
+      "name": "UNLICENCED"
+    }
+  },
+  "servers": [],
+  "paths": {
+    "/db": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "List of databases accessible by the user.",
+            "content": {
+              "application/json":{
+                "schema":{
+                  "type":"array",
+                  "items":{
+                    "$ref": "#/components/schemas/Database"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Database": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[0-9a-z-_]+$"
+          }
+        }
+      }
     }
   }
+}
