@@ -29,7 +29,8 @@
     "promise-sequential": "^1.1.1",
     "request-promise": "^4.2.6",
     "sprintf": "^0.1.5",
-    "sqlite3": "^5.0.0"
+    "sqlite3": "^5.0.0",
+    "swagger-ui-express": "^4.3.0"
   },
   "devDependencies": {
     "eslint": "^7.10.0",
