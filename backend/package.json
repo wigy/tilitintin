@@ -4,10 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/server.js",
+    "start": "yarn doc && node src/server.js",
     "dev": "nodemon -w src/ src/server.js",
     "lint": "eslint src",
-    "lint-fix": "eslint --fix src"
+    "lint-fix": "eslint --fix src",
+    "doc": "swagger-cli bundle -o api/openapi.json api/openapi.yaml"
   },
   "author": "",
   "license": "GPL-3.0",
@@ -30,6 +31,7 @@
     "request-promise": "^4.2.6",
     "sprintf": "^0.1.5",
     "sqlite3": "^5.0.0",
+    "swagger-cli": "^4.0.4",
     "swagger-ui-express": "^4.3.0"
   },
   "devDependencies": {

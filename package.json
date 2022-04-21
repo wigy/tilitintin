@@ -5,13 +5,11 @@
   "license": "GPL-3.0-only",
   "scripts": {
     "test": "testing/bin/test-local",
-    "lint": "openapi lint api/openapi.yaml",
-    "doc": "swagger-cli bundle -o api/openapi.json api/openapi.yaml"
+    "lint": "openapi lint backend/api/openapi.yaml"
   },
   "dependencies": {
     "@redocly/openapi-cli": "^1.0.0-beta.93",
     "csv-parser": "^3.0.0",
-    "sprintf-js": "^1.1.2",
-    "swagger-cli": "^4.0.4"
+    "sprintf-js": "^1.1.2"
   }
 }
