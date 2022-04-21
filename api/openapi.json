@@ -1,0 +1,65 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "Tilitintin API",
+    "description": "Complete set of API end-points to manage bookkeeping.",
+    "version": "1.0",
+    "contact": {
+      "name": "Tommi Ronkainen"
+    },
+    "license": {
+      "name": "GPL-3.0",
+      "url": "https://opensource.org/licenses/GPL-3.0"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3101",
+      "description": "Local development host"
+    }
+  ],
+  "paths": {
+    "/db": {
+      "get": {
+        "operationId": "getDatabases",
+        "summary": "List of databases",
+        "responses": {
+          "200": {
+            "description": "Get the list of all databases accessible by the authenticated user.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "pattern": "^[0-9a-z-_]+$"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User is not authenticated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
