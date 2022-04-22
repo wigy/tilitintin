@@ -1,0 +1,20 @@
+type: object
+properties:
+  scheme:
+    type: string
+  databaseName:
+    type: string
+    pattern: ^[0-9a-z-_]+$
+  companyName:
+    type: string
+  companyCode:
+    type: string
+  language:
+    type: string
+    pattern: ^{fi,en}$
+  currency:
+    type: string
+    pattern: ^{EUR,ZAR,USD}$
+required:
+  - scheme
+  - databaseName

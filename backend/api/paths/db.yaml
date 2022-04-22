@@ -9,6 +9,24 @@ get:
           schema:
             type: array
             items:
-              $ref: ../components/schemas/Database.yaml
+              $ref: ../components/schemas/GetDatabase.yaml
+    '403':
+      $ref: ../components/responses/403.yaml
+
+post:
+  operationId: createDatabase
+  summary: Create a database
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/CreateDatabase.yaml
+
+
+  responses:
+    '204':
+      description: New database successfully created.
+    '400':
+      $ref: ../components/responses/400.yaml
     '403':
       $ref: ../components/responses/403.yaml

@@ -6,7 +6,8 @@
   "scripts": {
     "start": "yarn doc && node src/server.js",
     "dev": "nodemon -w src/ src/server.js",
-    "doc": "redoc-cli build -o doc/api-docs/index.html api/openapi.yaml ",
+    "doc": "redoc-cli build -o doc/api-docs/index.html api/openapi.yaml",
+    "doc:preview": "openapi preview-docs api/openapi.yaml",
     "lint": "eslint src",
     "lint-fix": "eslint --fix src",
     "lint:api": "openapi lint api/openapi.yaml"
