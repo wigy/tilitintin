@@ -2,19 +2,25 @@ type: object
 properties:
   scheme:
     type: string
+    example: SchemaName
   databaseName:
     type: string
     pattern: ^[0-9a-z-_]+$
+    example: mydb2
   companyName:
     type: string
+    example: Company Inc.
   companyCode:
     type: string
+    example: 1234567-US
   language:
     type: string
     enum: [fi, en]
+    example: en
   currency:
     type: string
     enum: [EUR, ZAR, USD]
+    example: USD
 required:
   - scheme
   - databaseName

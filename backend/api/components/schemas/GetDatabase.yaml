@@ -3,3 +3,4 @@ properties:
   name:
     type: string
     pattern: ^[0-9a-z-_]+$
+    example: "mydb2"
