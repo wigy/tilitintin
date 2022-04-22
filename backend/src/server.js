@@ -7,7 +7,7 @@ const dump = require('neat-dump')
 app.use(dump.middleware())
 app.use(cors())
 app.options('*', cors())
-app.use(express.static('docs'))
+app.use(express.static('doc'))
 
 app.use('/', require('./routes/index'))
 
