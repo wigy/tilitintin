@@ -11,10 +11,10 @@ properties:
     type: string
   language:
     type: string
-    pattern: ^{fi,en}$
+    enum: [fi, en]
   currency:
     type: string
-    pattern: ^{EUR,ZAR,USD}$
+    enum: [EUR, ZAR, USD]
 required:
   - scheme
   - databaseName
