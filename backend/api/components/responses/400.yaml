@@ -2,4 +2,8 @@ description: Invalid payload in the request.
 content:
   application/json:
     schema:
-      $ref: ../schemas/Error.yaml
+      type: object
+      properties:
+        message:
+          type: string
+          example: Invalid parameters for request.

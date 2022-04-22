@@ -2,4 +2,7 @@ description: Proccessing ended in internal error.
 content:
   application/json:
     schema:
-      $ref: ../schemas/Error.yaml
+      properties:
+        message:
+          type: string
+          example: Internal server error.
