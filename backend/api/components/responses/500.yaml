@@ -1,0 +1,5 @@
+description: Proccessing ended in internal error.
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/Error.yaml

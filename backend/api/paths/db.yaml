@@ -21,8 +21,6 @@ post:
       application/json:
         schema:
           $ref: ../components/schemas/CreateDatabase.yaml
-
-
   responses:
     '204':
       description: New database successfully created.

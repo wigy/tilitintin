@@ -1,0 +1,15 @@
+
+delete:
+  operationId: deleteDatabase
+  summary: Delete a database
+  parameters:
+    - in: path
+      name: databaseName
+      schema:
+        type: string
+        pattern:  ^[0-9a-z-_]+$
+      required: true
+      description: Name of the database to delete.
+  responses:
+    '204':
+      description: Database successfully deleted.
