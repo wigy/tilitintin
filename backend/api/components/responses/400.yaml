@@ -7,3 +7,5 @@ content:
         message:
           type: string
           example: Invalid parameters for request.
+      required:
+        - message
