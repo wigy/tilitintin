@@ -12,6 +12,8 @@ servers:
   - url: http://localhost:3101
     description: Local development host
 paths:
+  /auth:
+    $ref: paths/auth.yaml
   /db:
     $ref: paths/db.yaml
   /db/{databaseName}:

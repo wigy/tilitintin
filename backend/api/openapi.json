@@ -19,6 +19,94 @@
     }
   ],
   "paths": {
+    "/auth": {
+      "post": {
+        "operationId": "login",
+        "summary": "Log in with a password",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "user": {
+                    "type": "string",
+                    "example": "my.name@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "hiwD322ds_aede2"
+                  }
+                },
+                "required": [
+                  "user",
+                  "password"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "description": "Access token for API end points.",
+                      "type": "string",
+                      "example": "7bf61f0db64ec74f68ff099e53b218e9611a0"
+                    },
+                    "refresh": {
+                      "description": "Access token for renewing existing token.",
+                      "type": "string",
+                      "example": "XRhIjp7ImF1ZGllbmNlIjoiYm9va2tl"
+                    },
+                    "key": {
+                      "description": "Encryption key for client semi-private data stored in the local store.",
+                      "type": "string",
+                      "example": "5a4f52c1caa84912b58830a0d1c1a5e8"
+                    },
+                    "data": {
+                      "description": "Encryption data for client semi-private data stored in the local store.",
+                      "type": "string",
+                      "example": "lZXBpbmciLCJpc3MiOiJBYmFj"
+                    }
+                  },
+                  "required": [
+                    "token",
+                    "refresh",
+                    "key",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Login failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Incorrect username or password."
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/db": {
       "get": {
         "operationId": "getDatabases",
@@ -34,6 +122,7 @@
                     "type": "object",
                     "properties": {
                       "name": {
+                        "description": "Globally unique name for the database.",
                         "type": "string",
                         "pattern": "^[0-9a-z-_]+$",
                         "example": "mydb2"
@@ -74,23 +163,28 @@
                 "type": "object",
                 "properties": {
                   "scheme": {
+                    "description": "A code of the supported scheme available.",
                     "type": "string",
                     "example": "SchemaName"
                   },
                   "databaseName": {
+                    "description": "Globally unique name for the database.",
                     "type": "string",
                     "pattern": "^[0-9a-z-_]+$",
                     "example": "mydb2"
                   },
                   "companyName": {
+                    "description": "Name of the company,",
                     "type": "string",
                     "example": "Company Inc."
                   },
                   "companyCode": {
+                    "description": "Official registration code of the company.",
                     "type": "string",
                     "example": "1234567-US"
                   },
                   "language": {
+                    "description": "Language used in the database.",
                     "type": "string",
                     "enum": [
                       "fi",
@@ -99,6 +193,7 @@
                     "example": "en"
                   },
                   "currency": {
+                    "description": "System default currency for the database.",
                     "type": "string",
                     "enum": [
                       "EUR",
@@ -185,6 +280,7 @@
                 "type": "object",
                 "properties": {
                   "file": {
+                    "description": "A database file in the format used for saving database to the file.",
                     "type": "string",
                     "format": "binary"
                   }

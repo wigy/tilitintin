@@ -8,6 +8,7 @@ post:
           type: object
           properties:
             file:
+              description: A database file in the format used for saving database to the file.
               type: string
               format: binary
   responses:

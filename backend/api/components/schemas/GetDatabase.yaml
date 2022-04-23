@@ -1,6 +1,7 @@
 type: object
 properties:
   name:
+    description: Globally unique name for the database.
     type: string
     pattern: ^[0-9a-z-_]+$
     example: "mydb2"

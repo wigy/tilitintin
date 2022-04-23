@@ -4,6 +4,9 @@
  */
 
 export interface paths {
+  "/auth": {
+    post: operations["login"];
+  };
   "/db": {
     get: operations["getDatabases"];
     post: operations["createDatabase"];
@@ -19,13 +22,66 @@ export interface paths {
 export interface components {}
 
 export interface operations {
+  login: {
+    responses: {
+      /** Login successful. */
+      200: {
+        content: {
+          "application/json": {
+            /**
+             * @description Access token for API end points.
+             * @example 7bf61f0db64ec74f68ff099e53b218e9611a0
+             */
+            token: string;
+            /**
+             * @description Access token for renewing existing token.
+             * @example XRhIjp7ImF1ZGllbmNlIjoiYm9va2tl
+             */
+            refresh: string;
+            /**
+             * @description Encryption key for client semi-private data stored in the local store.
+             * @example 5a4f52c1caa84912b58830a0d1c1a5e8
+             */
+            key: string;
+            /**
+             * @description Encryption data for client semi-private data stored in the local store.
+             * @example lZXBpbmciLCJpc3MiOiJBYmFj
+             */
+            data: string;
+          };
+        };
+      };
+      /** Login failed. */
+      401: {
+        content: {
+          "application/json": {
+            /** @example Incorrect username or password. */
+            message: string;
+          };
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          /** @example my.name@gmail.com */
+          user: string;
+          /** @example hiwD322ds_aede2 */
+          password: string;
+        };
+      };
+    };
+  };
   getDatabases: {
     responses: {
       /** Get the list of all databases accessible by the authenticated user. */
       200: {
         content: {
           "application/json": {
-            /** @example mydb2 */
+            /**
+             * @description Globally unique name for the database.
+             * @example mydb2
+             */
             name?: string;
           }[];
         };
@@ -59,20 +115,34 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": {
-          /** @example SchemaName */
+          /**
+           * @description A code of the supported scheme available.
+           * @example SchemaName
+           */
           scheme: string;
-          /** @example mydb2 */
+          /**
+           * @description Globally unique name for the database.
+           * @example mydb2
+           */
           databaseName: string;
-          /** @example Company Inc. */
+          /**
+           * @description Name of the company,
+           * @example Company Inc.
+           */
           companyName?: string;
-          /** @example 1234567-US */
+          /**
+           * @description Official registration code of the company.
+           * @example 1234567-US
+           */
           companyCode?: string;
           /**
+           * @description Language used in the database.
            * @example en
            * @enum {string}
            */
           language?: "fi" | "en";
           /**
+           * @description System default currency for the database.
            * @example USD
            * @enum {string}
            */
@@ -114,7 +184,10 @@ export interface operations {
     requestBody: {
       content: {
         "multipart/form-data": {
-          /** Format: binary */
+          /**
+           * Format: binary
+           * @description A database file in the format used for saving database to the file.
+           */
           file?: string;
         };
       };
