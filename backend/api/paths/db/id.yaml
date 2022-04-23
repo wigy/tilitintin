@@ -1,6 +1,8 @@
 
 delete:
   operationId: deleteDatabase
+  tags:
+   - Databases
   summary: Delete a database
   parameters:
     - in: path

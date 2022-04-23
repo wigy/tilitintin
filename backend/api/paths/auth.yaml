@@ -1,5 +1,7 @@
 post:
   operationId: login
+  tags:
+    - Authentication
   summary: Log in with a password
   requestBody:
     content:

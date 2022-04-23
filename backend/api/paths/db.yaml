@@ -1,5 +1,7 @@
 get:
   operationId: getDatabases
+  tags:
+   - Databases
   summary: List of databases
   responses:
     '200':
@@ -15,6 +17,8 @@ get:
 
 post:
   operationId: createDatabase
+  tags:
+   - Databases
   summary: Create a database
   requestBody:
     content:

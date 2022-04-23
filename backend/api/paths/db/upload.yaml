@@ -1,5 +1,7 @@
 post:
   operationId: uploadDatabase
+  tags:
+   - Databases
   summary: Upload a database file
   requestBody:
     content:

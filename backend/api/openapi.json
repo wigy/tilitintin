@@ -22,6 +22,9 @@
     "/auth": {
       "post": {
         "operationId": "login",
+        "tags": [
+          "Authentication"
+        ],
         "summary": "Log in with a password",
         "requestBody": {
           "content": {
@@ -110,6 +113,9 @@
     "/db": {
       "get": {
         "operationId": "getDatabases",
+        "tags": [
+          "Databases"
+        ],
         "summary": "List of databases",
         "responses": {
           "200": {
@@ -155,6 +161,9 @@
       },
       "post": {
         "operationId": "createDatabase",
+        "tags": [
+          "Databases"
+        ],
         "summary": "Create a database",
         "requestBody": {
           "content": {
@@ -243,6 +252,9 @@
     "/db/{databaseName}": {
       "delete": {
         "operationId": "deleteDatabase",
+        "tags": [
+          "Databases"
+        ],
         "summary": "Delete a database",
         "parameters": [
           {
@@ -272,6 +284,9 @@
     "/db/upload": {
       "post": {
         "operationId": "uploadDatabase",
+        "tags": [
+          "Databases"
+        ],
         "summary": "Upload a database file",
         "requestBody": {
           "content": {
