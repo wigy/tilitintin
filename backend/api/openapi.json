@@ -35,7 +35,8 @@
                     "properties": {
                       "name": {
                         "type": "string",
-                        "pattern": "^[0-9a-z-_]+$"
+                        "pattern": "^[0-9a-z-_]+$",
+                        "example": "mydb2"
                       }
                     }
                   }
@@ -48,12 +49,174 @@
             "content": {
               "application/json": {
                 "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Access denied."
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createDatabase",
+        "summary": "Create a database",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "scheme": {
+                    "type": "string",
+                    "example": "SchemaName"
+                  },
+                  "databaseName": {
+                    "type": "string",
+                    "pattern": "^[0-9a-z-_]+$",
+                    "example": "mydb2"
+                  },
+                  "companyName": {
+                    "type": "string",
+                    "example": "Company Inc."
+                  },
+                  "companyCode": {
+                    "type": "string",
+                    "example": "1234567-US"
+                  },
+                  "language": {
+                    "type": "string",
+                    "enum": [
+                      "fi",
+                      "en"
+                    ],
+                    "example": "en"
+                  },
+                  "currency": {
+                    "type": "string",
+                    "enum": [
+                      "EUR",
+                      "ZAR",
+                      "USD"
+                    ],
+                    "example": "USD"
+                  }
+                },
+                "required": [
+                  "scheme",
+                  "databaseName"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "New database successfully created."
+          },
+          "400": {
+            "description": "Invalid payload in the request.",
+            "content": {
+              "application/json": {
+                "schema": {
                   "type": "object",
                   "properties": {
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Invalid parameters for request."
                     }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/paths/~1db/get/responses/403"
+          }
+        }
+      }
+    },
+    "/db/{databaseName}": {
+      "delete": {
+        "operationId": "deleteDatabase",
+        "summary": "Delete a database",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9a-z-_]+$"
+            },
+            "required": true,
+            "description": "Name of the database to delete."
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Database successfully deleted."
+          },
+          "400": {
+            "$ref": "#/paths/~1db/post/responses/400"
+          },
+          "403": {
+            "$ref": "#/paths/~1db/get/responses/403"
+          }
+        }
+      }
+    },
+    "/db/upload": {
+      "post": {
+        "operationId": "uploadDatabase",
+        "summary": "Upload a database file",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
                   }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "New database successfully created."
+          },
+          "400": {
+            "$ref": "#/paths/~1db/post/responses/400"
+          },
+          "403": {
+            "$ref": "#/paths/~1db/get/responses/403"
+          },
+          "500": {
+            "description": "Proccessing ended in internal error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error."
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             }

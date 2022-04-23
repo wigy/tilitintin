@@ -1,5 +1,5 @@
 post:
-  operationId: upliadDatabase
+  operationId: uploadDatabase
   summary: Upload a database file
   requestBody:
     content:
