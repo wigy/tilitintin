@@ -14,7 +14,7 @@ servers:
 paths:
   /db:
     $ref: paths/db.yaml
-  /db/{name}:
+  /db/{databaseName}:
     $ref: paths/db/id.yaml
   /db/upload:
     $ref: paths/db/upload.yaml

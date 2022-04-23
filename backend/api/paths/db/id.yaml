@@ -13,3 +13,7 @@ delete:
   responses:
     '204':
       description: Database successfully deleted.
+    '400':
+      $ref: ../../components/responses/400.yaml
+    '403':
+      $ref: ../../components/responses/403.yaml
