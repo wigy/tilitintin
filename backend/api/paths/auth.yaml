@@ -10,9 +10,11 @@ post:
           type: object
           properties:
             user:
+              description: Email of the user.
               type: string
               example: my.name@gmail.com
             password:
+              description: Password of the user.
               type: string
               example: hiwD322ds_aede2
           required:

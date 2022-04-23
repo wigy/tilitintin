@@ -4,6 +4,7 @@ content:
     schema:
       properties:
         message:
+          description: Error message.
           type: string
           example: Internal server error.
       required:

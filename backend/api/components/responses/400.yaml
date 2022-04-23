@@ -5,6 +5,7 @@ content:
       type: object
       properties:
         message:
+          description: Explanation of the incorrect request parameters.
           type: string
           example: Invalid parameters for request.
       required:
