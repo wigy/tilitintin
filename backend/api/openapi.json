@@ -33,10 +33,12 @@
                 "type": "object",
                 "properties": {
                   "user": {
+                    "description": "Email of the user.",
                     "type": "string",
                     "example": "my.name@gmail.com"
                   },
                   "password": {
+                    "description": "Password of the user.",
                     "type": "string",
                     "example": "hiwD322ds_aede2"
                   }
@@ -133,7 +135,10 @@
                         "pattern": "^[0-9a-z-_]+$",
                         "example": "mydb2"
                       }
-                    }
+                    },
+                    "required": [
+                      "name"
+                    ]
                   }
                 }
               }
@@ -146,6 +151,7 @@
                 "schema": {
                   "properties": {
                     "message": {
+                      "description": "Error message.",
                       "type": "string",
                       "example": "Access denied."
                     }
@@ -232,6 +238,7 @@
                   "type": "object",
                   "properties": {
                     "message": {
+                      "description": "Explanation of the incorrect request parameters.",
                       "type": "string",
                       "example": "Invalid parameters for request."
                     }
@@ -321,6 +328,7 @@
                 "schema": {
                   "properties": {
                     "message": {
+                      "description": "Error message.",
                       "type": "string",
                       "example": "Internal server error."
                     }

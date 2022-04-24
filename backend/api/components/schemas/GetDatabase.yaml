@@ -5,3 +5,5 @@ properties:
     type: string
     pattern: ^[0-9a-z-_]+$
     example: "mydb2"
+required:
+  - name

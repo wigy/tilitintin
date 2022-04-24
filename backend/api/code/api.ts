@@ -64,9 +64,15 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": {
-          /** @example my.name@gmail.com */
+          /**
+           * @description Email of the user.
+           * @example my.name@gmail.com
+           */
           user: string;
-          /** @example hiwD322ds_aede2 */
+          /**
+           * @description Password of the user.
+           * @example hiwD322ds_aede2
+           */
           password: string;
         };
       };
@@ -82,7 +88,7 @@ export interface operations {
              * @description Globally unique name for the database.
              * @example mydb2
              */
-            name?: string;
+            name: string;
           }[];
         };
       };
@@ -90,7 +96,10 @@ export interface operations {
       403: {
         content: {
           "application/json": {
-            /** @example Access denied. */
+            /**
+             * @description Error message.
+             * @example Access denied.
+             */
             message: string;
           };
         };
@@ -105,7 +114,10 @@ export interface operations {
       400: {
         content: {
           "application/json": {
-            /** @example Invalid parameters for request. */
+            /**
+             * @description Explanation of the incorrect request parameters.
+             * @example Invalid parameters for request.
+             */
             message: string;
           };
         };
@@ -175,7 +187,10 @@ export interface operations {
       500: {
         content: {
           "application/json": {
-            /** @example Internal server error. */
+            /**
+             * @description Error message.
+             * @example Internal server error.
+             */
             message: string;
           };
         };
