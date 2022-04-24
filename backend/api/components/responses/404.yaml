@@ -1,0 +1,11 @@
+description: Required target not found.
+content:
+  application/json:
+    schema:
+      properties:
+        message:
+          description: Error message.
+          type: string
+          example: Not found.
+      required:
+        - message
