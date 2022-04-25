@@ -1,0 +1,16 @@
+get:
+  operationId: getAccounts
+  tags:
+   - Accounts
+  summary: List of all accounts
+  responses:
+    '200':
+      description: Get the list of all accounts in the database.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: ../components/schemas/GetAccount.yaml
+    '403':
+      $ref: ../components/responses/403.yaml

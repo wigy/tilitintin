@@ -20,3 +20,5 @@ paths:
     $ref: paths/db/id.yaml
   /db/upload:
     $ref: paths/db/upload.yaml
+  /db/account/{databaseName}:
+    $ref: paths/account.yaml

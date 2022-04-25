@@ -1,0 +1,43 @@
+type: object
+properties:
+  id:
+    description: The ID of the account.
+    type: integer
+    minimum: 1
+  number:
+    description: Numeric code of the account as a string.
+    type: string
+    pattern: ^[0-9]+$
+    example: "3000"
+  name:
+    description: Name of the account.
+    type: string
+    example: "Savings Bank Account"
+  type:
+    description: Language used in the database.
+    type: string
+    enum: [ASSET, LIABILITY, EQUITY, REVENUE, EXPENSE, PROFIT_PREV, PROFIT]
+    example: ASSET
+  language:
+    description: Language of the account name translation.
+    type: string
+    enum: [fi, en]
+    example: en
+  currency:
+    description: Currency used in the account.
+    type: string
+    enum: [EUR, ZAR, USD]
+    example: USD
+  favourite:
+    description: If set, this account can be filtered as favourite account.
+    type: boolean
+    example: true
+  tax:
+    description: The tax type code.
+    type: string
+
+required:
+  - id
+  - number
+  - name
+  - type
