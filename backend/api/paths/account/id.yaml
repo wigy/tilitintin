@@ -1,0 +1,32 @@
+get:
+  operationId: getAccount
+  tags:
+   - Accounts
+  summary: Get account data of one account.
+  responses:
+    '200':
+      description: Get the details of the account.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: ../../components/schemas/GetAccount.yaml
+              - type: object
+                properties:
+                  periods:
+                    description: List of periods that account has transactions.
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: ../../components/schemas/GetPeriod.yaml
+                        - type: object
+                          properties:
+                            entries:
+                              description: The number of transactions for the account in this period.
+                              type: integer
+                              example: 31
+
+    '403':
+      $ref: ../../components/responses/403.yaml
+    '404':
+      $ref: ../../components/responses/404.yaml
