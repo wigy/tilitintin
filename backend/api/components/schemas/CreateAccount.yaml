@@ -1,0 +1,7 @@
+allOf:
+  - $ref: ./GetAccount.yaml
+required:
+  - id
+  - number
+  - name
+  - type

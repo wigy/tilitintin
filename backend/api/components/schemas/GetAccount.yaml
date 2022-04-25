@@ -35,9 +35,3 @@ properties:
   tax:
     description: The tax type code.
     type: string
-
-required:
-  - id
-  - number
-  - name
-  - type

@@ -1,7 +1,7 @@
 get:
   operationId: getAccount
   tags:
-   - Accounts
+    - Accounts
   summary: Get account data of one account.
   responses:
     '200':
@@ -30,3 +30,14 @@ get:
       $ref: ../../components/responses/403.yaml
     '404':
       $ref: ../../components/responses/404.yaml
+
+patch:
+  operationId: updateAccount
+  tags:
+    - Accounts
+  summary: Change the account attributes.
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/CreateAccount.yaml
