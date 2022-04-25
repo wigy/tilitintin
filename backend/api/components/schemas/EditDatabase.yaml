@@ -1,14 +1,11 @@
 type: object
 properties:
+  allOf:
+    - $ref: ./Database.yaml
   scheme:
     description: A code of the supported scheme available.
     type: string
     example: SchemaName
-  databaseName:
-    description: Globally unique name for the database.
-    type: string
-    pattern: ^[0-9a-z-_]+$
-    example: mydb2
   companyName:
     description: Name of the company,
     type: string
@@ -30,3 +27,4 @@ properties:
 required:
   - scheme
   - databaseName
+  - companyName

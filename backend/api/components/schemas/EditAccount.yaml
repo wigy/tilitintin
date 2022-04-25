@@ -1,5 +1,5 @@
 allOf:
-  - $ref: ./GetAccount.yaml
+  - $ref: ./Account.yaml
 required:
   - id
   - number

@@ -18,7 +18,3 @@ properties:
     description: If set, the period transactions cannot be modified anymore.
     type: boolean
     example: false
-required:
-  - name
-  - start_date
-  - end_date

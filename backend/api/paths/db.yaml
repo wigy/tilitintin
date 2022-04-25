@@ -11,7 +11,7 @@ get:
           schema:
             type: array
             items:
-              $ref: ../components/schemas/GetDatabase.yaml
+              $ref: ../components/schemas/Database.yaml
     '403':
       $ref: ../components/responses/403.yaml
 
@@ -24,7 +24,7 @@ post:
     content:
       application/json:
         schema:
-          $ref: ../components/schemas/CreateDatabase.yaml
+          $ref: ../components/schemas/EditDatabase.yaml
   responses:
     '204':
       description: New database successfully created.

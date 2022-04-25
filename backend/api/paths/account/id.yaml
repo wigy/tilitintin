@@ -10,7 +10,7 @@ get:
         application/json:
           schema:
             allOf:
-              - $ref: ../../components/schemas/GetAccount.yaml
+              - $ref: ../../components/schemas/Account.yaml
               - type: object
                 properties:
                   periods:
@@ -18,7 +18,7 @@ get:
                     type: array
                     items:
                       allOf:
-                        - $ref: ../../components/schemas/GetPeriod.yaml
+                        - $ref: ../../components/schemas/Period.yaml
                         - type: object
                           properties:
                             entries:
@@ -40,4 +40,4 @@ patch:
     content:
       application/json:
         schema:
-          $ref: ../../components/schemas/CreateAccount.yaml
+          $ref: ../../components/schemas/EditAccount.yaml

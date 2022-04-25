@@ -11,6 +11,6 @@ get:
           schema:
             type: array
             items:
-              $ref: ../components/schemas/GetAccount.yaml
+              $ref: ../components/schemas/Account.yaml
     '403':
       $ref: ../components/responses/403.yaml
