@@ -135,10 +135,7 @@
                         "pattern": "^[0-9a-z-_]+$",
                         "example": "mydb2"
                       }
-                    },
-                    "required": [
-                      "name"
-                    ]
+                    }
                   }
                 }
               }
@@ -175,18 +172,17 @@
           "content": {
             "application/json": {
               "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/paths/~1db/get/responses/200/content/application~1json/schema/items"
+                  }
+                ],
                 "type": "object",
                 "properties": {
                   "scheme": {
                     "description": "A code of the supported scheme available.",
                     "type": "string",
                     "example": "SchemaName"
-                  },
-                  "databaseName": {
-                    "description": "Globally unique name for the database.",
-                    "type": "string",
-                    "pattern": "^[0-9a-z-_]+$",
-                    "example": "mydb2"
                   },
                   "companyName": {
                     "description": "Name of the company,",
@@ -220,7 +216,8 @@
                 },
                 "required": [
                   "scheme",
-                  "databaseName"
+                  "databaseName",
+                  "companyName"
                 ]
               }
             }
@@ -284,6 +281,25 @@
           },
           "403": {
             "$ref": "#/paths/~1db/get/responses/403"
+          },
+          "404": {
+            "description": "Required target not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Not found."
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
           }
         }
       }
@@ -339,6 +355,258 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/db/account/{databaseName}": {
+      "get": {
+        "operationId": "getAccounts",
+        "tags": [
+          "Accounts"
+        ],
+        "summary": "List of all accounts",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9a-z-_]+$"
+            },
+            "required": true,
+            "description": "Name of the database."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get the list of all accounts in the database.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "description": "The ID of the account.",
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "number": {
+                        "description": "Numeric code of the account as a string.",
+                        "type": "string",
+                        "pattern": "^[0-9]+$",
+                        "example": "3000"
+                      },
+                      "name": {
+                        "description": "Name of the account.",
+                        "type": "string",
+                        "example": "Savings Bank Account"
+                      },
+                      "type": {
+                        "description": "Language used in the database.",
+                        "type": "string",
+                        "enum": [
+                          "ASSET",
+                          "LIABILITY",
+                          "EQUITY",
+                          "REVENUE",
+                          "EXPENSE",
+                          "PROFIT_PREV",
+                          "PROFIT"
+                        ],
+                        "example": "ASSET"
+                      },
+                      "language": {
+                        "description": "Language of the account name translation.",
+                        "type": "string",
+                        "enum": [
+                          "fi",
+                          "en"
+                        ],
+                        "example": "en"
+                      },
+                      "currency": {
+                        "description": "Currency used in the account.",
+                        "type": "string",
+                        "enum": [
+                          "EUR",
+                          "ZAR",
+                          "USD"
+                        ],
+                        "example": "USD"
+                      },
+                      "favourite": {
+                        "description": "If set, this account can be filtered as favourite account.",
+                        "type": "boolean",
+                        "example": true
+                      },
+                      "tax": {
+                        "description": "The tax type code.",
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/paths/~1db/get/responses/403"
+          }
+        }
+      }
+    },
+    "/db/account/{databaseName}/{id}": {
+      "get": {
+        "operationId": "getAccount",
+        "tags": [
+          "Accounts"
+        ],
+        "summary": "Get account data of one account.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9a-z-_]+$"
+            },
+            "required": true,
+            "description": "Name of the database to delete."
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "required": true,
+            "description": "The ID of the account."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get the details of the account.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/paths/~1db~1account~1%7BdatabaseName%7D/get/responses/200/content/application~1json/schema/items"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "periods": {
+                          "description": "List of periods that account has transactions.",
+                          "type": "array",
+                          "items": {
+                            "allOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "description": "The ID of the period.",
+                                    "type": "integer",
+                                    "minimum": 1
+                                  },
+                                  "start_date": {
+                                    "description": "The first date included in the period.",
+                                    "type": "string",
+                                    "format": "date",
+                                    "example": "2001-01-01"
+                                  },
+                                  "end_date": {
+                                    "description": "The last date included in the period.",
+                                    "type": "string",
+                                    "format": "date",
+                                    "example": "2001-12-31"
+                                  },
+                                  "locked": {
+                                    "description": "If set, the period transactions cannot be modified anymore.",
+                                    "type": "boolean",
+                                    "example": false
+                                  }
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "entries": {
+                                    "description": "The number of transactions for the account in this period.",
+                                    "type": "integer",
+                                    "example": 31
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/paths/~1db/get/responses/403"
+          },
+          "404": {
+            "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/responses/404"
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateAccount",
+        "tags": [
+          "Accounts"
+        ],
+        "summary": "Change the account attributes.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9a-z-_]+$"
+            },
+            "required": true,
+            "description": "Name of the database to delete."
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "required": true,
+            "description": "The ID of the account."
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/paths/~1db~1account~1%7BdatabaseName%7D/get/responses/200/content/application~1json/schema/items"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Account updated successfully."
+          },
+          "403": {
+            "$ref": "#/paths/~1db/get/responses/403"
           }
         }
       }
