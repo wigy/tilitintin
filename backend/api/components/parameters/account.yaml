@@ -1,0 +1,8 @@
+account:
+  - in: path
+    name: id
+    schema:
+      type: integer
+      minimum: 1
+    required: true
+    description: The ID of the account.

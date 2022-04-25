@@ -3,6 +3,14 @@ get:
   tags:
    - Accounts
   summary: List of all accounts
+  parameters:
+    - in: path
+      name: databaseName
+      schema:
+        type: string
+        pattern:  ^[0-9a-z-_]+$
+      required: true
+      description: Name of the database.
   responses:
     '200':
       description: Get the list of all accounts in the database.

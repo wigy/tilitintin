@@ -1,7 +1,7 @@
+allOf:
+  - $ref: ./Database.yaml
 type: object
 properties:
-  allOf:
-    - $ref: ./Database.yaml
   scheme:
     description: A code of the supported scheme available.
     type: string
