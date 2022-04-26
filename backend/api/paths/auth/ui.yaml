@@ -1,0 +1,17 @@
+get:
+  operationId: refreshUIToken
+  tags:
+   - Login
+  security: []
+  summary: Retrieve new token pair for UI server
+  responses:
+    '200':
+      description: If given refrestoken is valid, return new access token and refresh token.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: ../../components/schemas/TokenPair.yaml
+    '403':
+      $ref: ../../components/responses/403.yaml

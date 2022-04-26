@@ -27,6 +27,12 @@ paths:
   /auth:
     $ref: paths/auth.yaml
 
+  /auth/refresh:
+    $ref: paths/auth/refresh.yaml
+
+  /auth/refresh/ui:
+    $ref: paths/auth/ui.yaml
+
   /db:
     $ref: paths/db.yaml
 
