@@ -11,18 +11,16 @@ properties:
     example: "Savings Bank Account"
   type:
     description: Language used in the database.
-    type: string
-    enum: [ASSET, LIABILITY, EQUITY, REVENUE, EXPENSE, PROFIT_PREV, PROFIT]
+    $ref: ../types/accountType.yaml
     example: ASSET
   language:
     description: Language of the account name translation.
-    type: string
-    enum: [fi, en]
+    $ref: ../types/language.yaml
     example: en
   currency:
     description: Currency used in the account.
     type: string
-    enum: [EUR, ZAR, USD]
+    $ref: ../types/currency.yaml
     example: USD
   favourite:
     description: If set, this account can be filtered as favourite account.
