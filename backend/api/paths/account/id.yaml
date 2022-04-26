@@ -3,21 +3,6 @@ get:
   tags:
     - Accounts
   summary: Get account data of one account.
-  parameters:
-  - in: path
-    name: databaseName
-    schema:
-      type: string
-      pattern:  ^[0-9a-z-_]+$
-    required: true
-    description: Name of the database to delete.
-  - in: path
-    name: id
-    schema:
-      type: integer
-      minimum: 1
-    required: true
-    description: The ID of the account.
   responses:
     '200':
       description: Get the details of the account.
@@ -51,21 +36,6 @@ patch:
   tags:
     - Accounts
   summary: Change the account attributes.
-  parameters:
-  - in: path
-    name: databaseName
-    schema:
-      type: string
-      pattern:  ^[0-9a-z-_]+$
-    required: true
-    description: Name of the database to delete.
-  - in: path
-    name: id
-    schema:
-      type: integer
-      minimum: 1
-    required: true
-    description: The ID of the account.
   requestBody:
     content:
       application/json:
