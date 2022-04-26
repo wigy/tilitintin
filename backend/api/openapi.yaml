@@ -13,6 +13,16 @@ servers:
   - url: http://localhost:3101
     description: Local development host
 
+components:
+  securitySchemes:
+    "Bearer Token":
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - "Bearer Token": []
+
 paths:
   /auth:
     $ref: paths/auth.yaml
