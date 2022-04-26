@@ -30,11 +30,11 @@ post:
             type: object
             properties:
               token:
-                description: Access token for API end points.
+                description: Bearer token for API end points.
                 type: string
                 example: 7bf61f0db64ec74f68ff099e53b218e9611a0
               refresh:
-                description: Access token for renewing existing token.
+                description: Bearer token for renewing existing token.
                 type: string
                 example: XRhIjp7ImF1ZGllbmNlIjoiYm9va2tl
               key:
@@ -45,11 +45,6 @@ post:
                 description: Encryption data for client semi-private data stored in the local store.
                 type: string
                 example: lZXBpbmciLCJpc3MiOiJBYmFj
-            required:
-              - token
-              - refresh
-              - key
-              - data
     '401':
       description: Login failed.
       content:
