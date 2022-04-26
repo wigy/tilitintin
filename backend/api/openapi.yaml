@@ -25,8 +25,7 @@ paths:
       - in: path
         name: databaseName
         schema:
-          type: string
-          pattern:  ^[0-9a-z-_]+$
+          $ref: ./components/types/databaseName.yaml
         required: true
         description: Name of the database.
     $ref: paths/db/id.yaml
@@ -39,8 +38,7 @@ paths:
     - in: path
       name: databaseName
       schema:
-        type: string
-        pattern: ^[0-9a-z-_]+$
+        $ref: ./components/types/databaseName.yaml
       required: true
       description: Name of the database.
     $ref: paths/account.yaml
@@ -50,15 +48,13 @@ paths:
     - in: path
       name: databaseName
       schema:
-        type: string
-        pattern:  ^[0-9a-z-_]+$
+        $ref: ./components/types/databaseName.yaml
       required: true
       description: Name of the database.
     - in: path
       name: id
       schema:
-        type: integer
-        minimum: 1
+        $ref: ./components/types/id.yaml
       required: true
       description: The ID of the account.
     $ref: paths/account/id.yaml
