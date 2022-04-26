@@ -1,0 +1,12 @@
+allOf:
+  - $ref: ./TokenPair.yaml
+type: object
+properties:
+  key:
+    description: Encryption key for client semi-private data stored in the local store.
+    type: string
+    example: 5a4f52c1caa84912b58830a0d1c1a5e8
+  data:
+    description: Encryption data for client semi-private data stored in the local store.
+    type: string
+    example: lZXBpbmciLCJpc3MiOiJBYmFj
