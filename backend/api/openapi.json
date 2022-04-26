@@ -18,12 +18,27 @@
       "description": "Local development host"
     }
   ],
+  "components": {
+    "securitySchemes": {
+      "Bearer Token": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "Bearer Token": []
+    }
+  ],
   "paths": {
     "/auth": {
       "post": {
+        "security": [],
         "operationId": "login",
         "tags": [
-          "Authentication"
+          "Login"
         ],
         "summary": "Log in with a password",
         "requestBody": {
@@ -196,22 +211,22 @@
                   },
                   "language": {
                     "description": "Language used in the database.",
+                    "example": "en",
                     "type": "string",
                     "enum": [
                       "fi",
                       "en"
-                    ],
-                    "example": "en"
+                    ]
                   },
                   "currency": {
                     "description": "System default currency for the database.",
+                    "example": "USD",
                     "type": "string",
                     "enum": [
                       "EUR",
                       "ZAR",
                       "USD"
-                    ],
-                    "example": "USD"
+                    ]
                   }
                 },
                 "required": [
@@ -254,24 +269,23 @@
       }
     },
     "/db/{databaseName}": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "databaseName",
+          "schema": {
+            "$ref": "./components/types/databaseName.yaml"
+          },
+          "required": true,
+          "description": "Name of the database."
+        }
+      ],
       "delete": {
         "operationId": "deleteDatabase",
         "tags": [
           "Databases"
         ],
         "summary": "Delete a database",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "databaseName",
-            "schema": {
-              "type": "string",
-              "pattern": "^[0-9a-z-_]+$"
-            },
-            "required": true,
-            "description": "Name of the database to delete."
-          }
-        ],
         "responses": {
           "204": {
             "description": "Database successfully deleted."
@@ -359,25 +373,24 @@
         }
       }
     },
-    "/db/account/{databaseName}": {
+    "/db/{databaseName}/account": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "databaseName",
+          "schema": {
+            "$ref": "./components/types/databaseName.yaml"
+          },
+          "required": true,
+          "description": "Name of the database."
+        }
+      ],
       "get": {
         "operationId": "getAccounts",
         "tags": [
           "Accounts"
         ],
         "summary": "List of all accounts",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "databaseName",
-            "schema": {
-              "type": "string",
-              "pattern": "^[0-9a-z-_]+$"
-            },
-            "required": true,
-            "description": "Name of the database."
-          }
-        ],
         "responses": {
           "200": {
             "description": "Get the list of all accounts in the database.",
@@ -386,67 +399,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "description": "The ID of the account.",
-                        "type": "integer",
-                        "minimum": 1
-                      },
-                      "number": {
-                        "description": "Numeric code of the account as a string.",
-                        "type": "string",
-                        "pattern": "^[0-9]+$",
-                        "example": "3000"
-                      },
-                      "name": {
-                        "description": "Name of the account.",
-                        "type": "string",
-                        "example": "Savings Bank Account"
-                      },
-                      "type": {
-                        "description": "Language used in the database.",
-                        "type": "string",
-                        "enum": [
-                          "ASSET",
-                          "LIABILITY",
-                          "EQUITY",
-                          "REVENUE",
-                          "EXPENSE",
-                          "PROFIT_PREV",
-                          "PROFIT"
-                        ],
-                        "example": "ASSET"
-                      },
-                      "language": {
-                        "description": "Language of the account name translation.",
-                        "type": "string",
-                        "enum": [
-                          "fi",
-                          "en"
-                        ],
-                        "example": "en"
-                      },
-                      "currency": {
-                        "description": "Currency used in the account.",
-                        "type": "string",
-                        "enum": [
-                          "EUR",
-                          "ZAR",
-                          "USD"
-                        ],
-                        "example": "USD"
-                      },
-                      "favourite": {
-                        "description": "If set, this account can be filtered as favourite account.",
-                        "type": "boolean",
-                        "example": true
-                      },
-                      "tax": {
-                        "description": "The tax type code.",
-                        "type": "string"
-                      }
-                    }
+                    "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1account/post/responses/200/content/application~1json/schema"
                   }
                 }
               }
@@ -456,37 +409,104 @@
             "$ref": "#/paths/~1db/get/responses/403"
           }
         }
+      },
+      "post": {
+        "operationId": "createAccount",
+        "tags": [
+          "Accounts"
+        ],
+        "summary": "Create new account",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "description": "The ID of the account.",
+                        "type": "integer",
+                        "minimum": 1
+                      }
+                    }
+                  },
+                  {
+                    "allOf": [
+                      {
+                        "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1account~1%7Bid%7D/patch/requestBody/content/application~1json/schema/allOf/0"
+                      }
+                    ],
+                    "required": [
+                      "name",
+                      "number",
+                      "type"
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Newly created account.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1account~1%7Bid%7D/patch/requestBody/content/application~1json/schema/allOf/0"
+                    }
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "description": "The ID of the account.",
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/paths/~1db/post/responses/400"
+          },
+          "403": {
+            "$ref": "#/paths/~1db/get/responses/403"
+          }
+        }
       }
     },
-    "/db/account/{databaseName}/{id}": {
+    "/db/{databaseName}/account/{id}": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "databaseName",
+          "schema": {
+            "$ref": "./components/types/databaseName.yaml"
+          },
+          "required": true,
+          "description": "Name of the database."
+        },
+        {
+          "in": "path",
+          "name": "id",
+          "schema": {
+            "$ref": "./components/types/id.yaml"
+          },
+          "required": true,
+          "description": "The ID of the account."
+        }
+      ],
       "get": {
         "operationId": "getAccount",
         "tags": [
           "Accounts"
         ],
         "summary": "Get account data of one account.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "databaseName",
-            "schema": {
-              "type": "string",
-              "pattern": "^[0-9a-z-_]+$"
-            },
-            "required": true,
-            "description": "Name of the database to delete."
-          },
-          {
-            "in": "path",
-            "name": "id",
-            "schema": {
-              "type": "integer",
-              "minimum": 1
-            },
-            "required": true,
-            "description": "The ID of the account."
-          }
-        ],
         "responses": {
           "200": {
             "description": "Get the details of the account.",
@@ -495,7 +515,7 @@
                 "schema": {
                   "allOf": [
                     {
-                      "$ref": "#/paths/~1db~1account~1%7BdatabaseName%7D/get/responses/200/content/application~1json/schema/items"
+                      "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1account/post/responses/200/content/application~1json/schema"
                     },
                     {
                       "type": "object",
@@ -566,35 +586,60 @@
           "Accounts"
         ],
         "summary": "Change the account attributes.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "databaseName",
-            "schema": {
-              "type": "string",
-              "pattern": "^[0-9a-z-_]+$"
-            },
-            "required": true,
-            "description": "Name of the database to delete."
-          },
-          {
-            "in": "path",
-            "name": "id",
-            "schema": {
-              "type": "integer",
-              "minimum": 1
-            },
-            "required": true,
-            "description": "The ID of the account."
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
                 "allOf": [
                   {
-                    "$ref": "#/paths/~1db~1account~1%7BdatabaseName%7D/get/responses/200/content/application~1json/schema/items"
+                    "type": "object",
+                    "properties": {
+                      "number": {
+                        "description": "Numeric code of the account as a string.",
+                        "type": "string",
+                        "pattern": "^[0-9]+$",
+                        "example": "3000"
+                      },
+                      "name": {
+                        "description": "Name of the account.",
+                        "type": "string",
+                        "example": "Savings Bank Account"
+                      },
+                      "type": {
+                        "description": "Language used in the database.",
+                        "example": "ASSET",
+                        "type": "string",
+                        "enum": [
+                          "ASSET",
+                          "LIABILITY",
+                          "EQUITY",
+                          "REVENUE",
+                          "EXPENSE",
+                          "PROFIT_PREV",
+                          "PROFIT"
+                        ]
+                      },
+                      "language": {
+                        "description": "Language of the account name translation.",
+                        "$ref": "#/paths/~1db/post/requestBody/content/application~1json/schema/properties/language",
+                        "example": "en"
+                      },
+                      "currency": {
+                        "description": "Currency used in the account.",
+                        "type": "string",
+                        "$ref": "#/paths/~1db/post/requestBody/content/application~1json/schema/properties/currency",
+                        "example": "USD"
+                      },
+                      "favourite": {
+                        "description": "If set, this account can be filtered as favourite account.",
+                        "type": "boolean",
+                        "example": true
+                      },
+                      "tax": {
+                        "description": "The tax type code.",
+                        "type": "string"
+                      }
+                    }
                   }
                 ]
               }
