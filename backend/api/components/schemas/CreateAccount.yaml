@@ -1,0 +1,6 @@
+allOf:
+  - $ref: ./Account.yaml
+required:
+  - name
+  - number
+  - type

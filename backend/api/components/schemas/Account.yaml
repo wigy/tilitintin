@@ -1,9 +1,5 @@
 type: object
 properties:
-  id:
-    description: The ID of the account.
-    type: integer
-    minimum: 1
   number:
     description: Numeric code of the account as a string.
     type: string

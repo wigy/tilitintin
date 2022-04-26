@@ -20,7 +20,7 @@ paths:
     $ref: paths/db/id.yaml
   /db/upload:
     $ref: paths/db/upload.yaml
-  /db/account/{databaseName}:
+  /db/{databaseName}/account:
     $ref: paths/account.yaml
-  /db/account/{databaseName}/{id}:
+  /db/{databaseName}/account/{id}:
     $ref: paths/account/id.yaml

@@ -19,6 +19,43 @@ get:
           schema:
             type: array
             items:
-              $ref: ../components/schemas/Account.yaml
+              $ref: ../components/schemas/GetAccount.yaml
+    '403':
+      $ref: ../components/responses/403.yaml
+
+post:
+  operationId: createAccount
+  tags:
+   - Accounts
+  summary: Create new account
+  parameters:
+    - in: path
+      name: databaseName
+      schema:
+        type: string
+        pattern:  ^[0-9a-z-_]+$
+      required: true
+      description: Name of the database.
+  requestBody:
+    content:
+      application/json:
+        schema:
+          allOf:
+            - type: object
+              properties:
+                id:
+                  description: The ID of the account.
+                  type: integer
+                  minimum: 1
+            - $ref: ../components/schemas/CreateAccount.yaml
+  responses:
+    '200':
+      description: Newly created account.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/GetAccount.yaml
+    '400':
+      $ref: ../components/responses/400.yaml
     '403':
       $ref: ../components/responses/403.yaml

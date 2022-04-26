@@ -1,0 +1,8 @@
+allOf:
+- $ref: ./Account.yaml
+type: object
+properties:
+  id:
+    description: The ID of the account.
+    type: integer
+    minimum: 1
