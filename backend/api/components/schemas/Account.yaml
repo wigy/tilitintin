@@ -22,10 +22,14 @@ properties:
     type: string
     $ref: ../types/currency.yaml
     example: USD
-  favourite:
-    description: If set, this account can be filtered as favourite account.
-    type: boolean
-    example: true
-  tax:
-    description: The tax type code.
-    type: string
+  data:
+    description: Additional accout attributes.
+    type: object
+    properties:
+      favourite:
+        description: If set, this account can be filtered as favourite account.
+        type: boolean
+        example: true
+      tax:
+        description: The tax type code.
+        type: string
