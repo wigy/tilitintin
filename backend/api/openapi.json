@@ -72,18 +72,13 @@
             "content": {
               "application/json": {
                 "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/paths/~1auth~1refresh/get/responses/200/content/application~1json/schema/items"
+                    }
+                  ],
                   "type": "object",
                   "properties": {
-                    "token": {
-                      "description": "Access token for API end points.",
-                      "type": "string",
-                      "example": "7bf61f0db64ec74f68ff099e53b218e9611a0"
-                    },
-                    "refresh": {
-                      "description": "Access token for renewing existing token.",
-                      "type": "string",
-                      "example": "XRhIjp7ImF1ZGllbmNlIjoiYm9va2tl"
-                    },
                     "key": {
                       "description": "Encryption key for client semi-private data stored in the local store.",
                       "type": "string",
@@ -94,13 +89,7 @@
                       "type": "string",
                       "example": "lZXBpbmciLCJpc3MiOiJBYmFj"
                     }
-                  },
-                  "required": [
-                    "token",
-                    "refresh",
-                    "key",
-                    "data"
-                  ]
+                  }
                 }
               }
             }
@@ -123,6 +112,74 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/auth/refresh": {
+      "get": {
+        "operationId": "refreshToken",
+        "tags": [
+          "Login"
+        ],
+        "security": [],
+        "summary": "Retrieve new token pair",
+        "responses": {
+          "200": {
+            "description": "If given refrestoken is valid, return new access token and refresh token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "token": {
+                        "description": "Bearer token for API end points.",
+                        "type": "string",
+                        "example": "7bf61f0db64ec74f68ff099e53b218e9611a0"
+                      },
+                      "refresh": {
+                        "description": "Bearer token for renewing existing token.",
+                        "type": "string",
+                        "example": "XRhIjp7ImF1ZGllbmNlIjoiYm9va2tl"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/paths/~1db/get/responses/403"
+          }
+        }
+      }
+    },
+    "/auth/refresh/ui": {
+      "get": {
+        "operationId": "refreshUIToken",
+        "tags": [
+          "Login"
+        ],
+        "security": [],
+        "summary": "Retrieve new token pair for UI server",
+        "responses": {
+          "200": {
+            "description": "If given refrestoken is valid, return new access token and refresh token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/paths/~1auth~1refresh/get/responses/200/content/application~1json/schema/items"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/paths/~1db/get/responses/403"
           }
         }
       }
@@ -630,14 +687,20 @@
                         "$ref": "#/paths/~1db/post/requestBody/content/application~1json/schema/properties/currency",
                         "example": "USD"
                       },
-                      "favourite": {
-                        "description": "If set, this account can be filtered as favourite account.",
-                        "type": "boolean",
-                        "example": true
-                      },
-                      "tax": {
-                        "description": "The tax type code.",
-                        "type": "string"
+                      "data": {
+                        "description": "Additional accout attributes.",
+                        "type": "object",
+                        "properties": {
+                          "favourite": {
+                            "description": "If set, this account can be filtered as favourite account.",
+                            "type": "boolean",
+                            "example": true
+                          },
+                          "tax": {
+                            "description": "The tax type code.",
+                            "type": "string"
+                          }
+                        }
                       }
                     }
                   }
