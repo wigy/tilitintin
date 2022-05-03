@@ -1,0 +1,53 @@
+get:
+  operationId: getDocument
+  tags:
+    - Documents
+  summary: Get data of one transaction
+  responses:
+    '200':
+      description: Get the details of the transaction document.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: ../../components/schemas/GetDocument.yaml
+              - type: object
+                properties:
+                  entries:
+                    description: List of entries of thistransactions.
+                    type: array
+                    items:
+                      $ref: ../../components/schemas/GetEntry.yaml
+
+    '403':
+      $ref: ../../components/responses/403.yaml
+    '404':
+      $ref: ../../components/responses/404.yaml
+
+patch:
+  operationId: updateDocument
+  tags:
+    - Documents
+  summary: Change the document attributes.
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/EditDocument.yaml
+  responses:
+    '204':
+      description: Document updated successfully.
+    '403':
+      $ref: ../../components/responses/403.yaml
+
+
+delete:
+  operationId: deleteDocument
+  tags:
+    - Documents
+  summary: Delete a transaction
+  responses:
+    '204':
+      description: Document deleted successfully.
+    '403':
+      $ref: ../../components/responses/403.yaml

@@ -1,0 +1,8 @@
+allOf:
+- $ref: ./Entry.yaml
+type: object
+properties:
+  id:
+    description: The ID of the entry.
+    type: integer
+    minimum: 1

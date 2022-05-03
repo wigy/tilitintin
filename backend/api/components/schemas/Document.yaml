@@ -1,0 +1,19 @@
+type: object
+properties:
+  number:
+    description: Order number of the document. Zero is reserved for initial balances.
+    type: integer
+    minimum: 0
+    example: 15
+  date:
+    description: Transaction date.
+    type: string
+    format: date
+    example: "2001-06-15"
+  period_id:
+    description: The period this document belongs. to.
+    $ref: ../types/id.yaml
+    example: 3
+  data:
+    description: Additional document attributes.
+    type: object

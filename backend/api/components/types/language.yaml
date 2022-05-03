@@ -1,2 +1,4 @@
+description: Language.
 type: string
 enum: [fi, en]
+example: en

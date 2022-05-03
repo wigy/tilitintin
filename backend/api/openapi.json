@@ -268,22 +268,13 @@
                   },
                   "language": {
                     "description": "Language used in the database.",
-                    "example": "en",
-                    "type": "string",
-                    "enum": [
-                      "fi",
-                      "en"
-                    ]
+                    "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1account~1%7Bid%7D/patch/requestBody/content/application~1json/schema/allOf/0/properties/language",
+                    "example": "en"
                   },
                   "currency": {
                     "description": "System default currency for the database.",
-                    "example": "USD",
-                    "type": "string",
-                    "enum": [
-                      "EUR",
-                      "ZAR",
-                      "USD"
-                    ]
+                    "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1account~1%7Bid%7D/patch/requestBody/content/application~1json/schema/allOf/0/properties/currency",
+                    "example": "USD"
                   }
                 },
                 "required": [
@@ -677,15 +668,23 @@
                         ]
                       },
                       "language": {
-                        "description": "Language of the account name translation.",
-                        "$ref": "#/paths/~1db/post/requestBody/content/application~1json/schema/properties/language",
+                        "description": "Language.",
+                        "type": "string",
+                        "enum": [
+                          "fi",
+                          "en"
+                        ],
                         "example": "en"
                       },
                       "currency": {
-                        "description": "Currency used in the account.",
+                        "description": "Currency",
                         "type": "string",
-                        "$ref": "#/paths/~1db/post/requestBody/content/application~1json/schema/properties/currency",
-                        "example": "USD"
+                        "enum": [
+                          "EUR",
+                          "ZAR",
+                          "USD"
+                        ],
+                        "example": "EUR"
                       },
                       "data": {
                         "description": "Additional accout attributes.",
@@ -712,6 +711,321 @@
         "responses": {
           "204": {
             "description": "Account updated successfully."
+          },
+          "403": {
+            "$ref": "#/paths/~1db/get/responses/403"
+          }
+        }
+      }
+    },
+    "/db/{databaseName}/document": {
+      "get": {
+        "operationId": "getDocuments",
+        "tags": [
+          "Documents"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9a-z-_]+$"
+            },
+            "required": true,
+            "description": "Name of the database."
+          },
+          {
+            "in": "query",
+            "name": "entries",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "If given, list also entries of each document."
+          },
+          {
+            "in": "query",
+            "name": "period",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "If given, limit to the documents in the period with this ID."
+          }
+        ],
+        "summary": "List of all transactions",
+        "responses": {
+          "200": {
+            "description": "Get the list of documents in the database or period.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "allOf": [
+                      {
+                        "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1document/post/requestBody/content/application~1json/schema/allOf/0"
+                      }
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "description": "The ID of the document.",
+                        "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1document/get/parameters/2/schema"
+                      },
+                      "entries": {
+                        "description": "Entries of the document.",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "document_id": {
+                              "description": "The ID of the document.",
+                              "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1document/get/parameters/2/schema"
+                            },
+                            "account_id": {
+                              "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1document/get/parameters/2/schema",
+                              "description": "The ID of the account."
+                            },
+                            "debit": {
+                              "description": "If true, this entry goes to debit side.",
+                              "type": "boolean",
+                              "example": false
+                            },
+                            "amount": {
+                              "description": "Currency amount in cents for this transaction line.",
+                              "type": "number",
+                              "minimum": 0,
+                              "example": 3200
+                            },
+                            "description": {
+                              "description": "Text of the transaction line.",
+                              "type": "string",
+                              "example": "Computer purchase"
+                            },
+                            "row_number": {
+                              "description": "Order number for display.",
+                              "type": "number",
+                              "minimum": 1,
+                              "example": 1
+                            },
+                            "data": {
+                              "description": "Additional attributes for the transaction line.",
+                              "type": "object"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/paths/~1db/get/responses/403"
+          }
+        }
+      },
+      "post": {
+        "operationId": "createDocument",
+        "tags": [
+          "Documents"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1document/get/parameters/0/schema"
+            },
+            "required": true,
+            "description": "Name of the database."
+          }
+        ],
+        "summary": "Create new transaction",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "number": {
+                        "description": "Order number of the document. Zero is reserved for initial balances.",
+                        "type": "integer",
+                        "minimum": 0,
+                        "example": 15
+                      },
+                      "date": {
+                        "description": "Transaction date.",
+                        "type": "string",
+                        "format": "date",
+                        "example": "2001-06-15"
+                      },
+                      "period_id": {
+                        "description": "The period this document belongs. to.",
+                        "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1document/get/parameters/2/schema",
+                        "example": 3
+                      },
+                      "data": {
+                        "description": "Additional document attributes.",
+                        "type": "object"
+                      }
+                    }
+                  }
+                ],
+                "required": [
+                  "date",
+                  "period_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Newly created document.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1document/post/requestBody/content/application~1json/schema/allOf/0"
+                    }
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "description": "The ID of the document.",
+                      "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1document/get/parameters/2/schema"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/paths/~1db/post/responses/400"
+          },
+          "403": {
+            "$ref": "#/paths/~1db/get/responses/403"
+          }
+        }
+      }
+    },
+    "/db/{databaseName}/document/{id}": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "databaseName",
+          "schema": {
+            "$ref": "./components/types/databaseName.yaml"
+          },
+          "required": true,
+          "description": "Name of the database."
+        },
+        {
+          "in": "path",
+          "name": "id",
+          "schema": {
+            "$ref": "./components/types/id.yaml"
+          },
+          "required": true,
+          "description": "The ID of the document."
+        }
+      ],
+      "get": {
+        "operationId": "getDocument",
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Get data of one transaction",
+        "responses": {
+          "200": {
+            "description": "Get the details of the transaction document.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1document/post/responses/200/content/application~1json/schema"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "entries": {
+                          "description": "List of entries of thistransactions.",
+                          "type": "array",
+                          "items": {
+                            "allOf": [
+                              {
+                                "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1document/get/responses/200/content/application~1json/schema/items/properties/entries/items"
+                              }
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "description": "The ID of the entry.",
+                                "type": "integer",
+                                "minimum": 1
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/paths/~1db/get/responses/403"
+          },
+          "404": {
+            "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/responses/404"
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateDocument",
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Change the document attributes.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1document/post/requestBody/content/application~1json/schema/allOf/0"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Document updated successfully."
+          },
+          "403": {
+            "$ref": "#/paths/~1db/get/responses/403"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteDocument",
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Delete a transaction",
+        "responses": {
+          "204": {
+            "description": "Document deleted successfully."
           },
           "403": {
             "$ref": "#/paths/~1db/get/responses/403"

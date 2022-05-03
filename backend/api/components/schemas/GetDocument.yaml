@@ -1,0 +1,7 @@
+allOf:
+- $ref: ./Document.yaml
+type: object
+properties:
+  id:
+    description: The ID of the document.
+    $ref: ../types/id.yaml

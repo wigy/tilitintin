@@ -1,2 +1,4 @@
+description: Currency
 type: string
 enum: [EUR, ZAR, USD]
+example: EUR

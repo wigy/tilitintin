@@ -14,14 +14,9 @@ properties:
     $ref: ../types/accountType.yaml
     example: ASSET
   language:
-    description: Language of the account name translation.
     $ref: ../types/language.yaml
-    example: en
   currency:
-    description: Currency used in the account.
-    type: string
     $ref: ../types/currency.yaml
-    example: USD
   data:
     description: Additional accout attributes.
     type: object

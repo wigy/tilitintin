@@ -1,0 +1,5 @@
+allOf:
+  - $ref: ./Document.yaml
+required:
+  - date
+  - period_id

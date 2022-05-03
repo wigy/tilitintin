@@ -1,0 +1,29 @@
+type: object
+properties:
+  document_id:
+    description: The ID of the document.
+    $ref: ../types/id.yaml
+  account_id:
+    $ref: ../types/id.yaml
+    description: The ID of the account.
+  debit:
+    description: If true, this entry goes to debit side.
+    type: boolean
+    example: false
+  amount:
+    description: Currency amount in cents for this transaction line.
+    type: number
+    minimum: 0
+    example: 3200
+  description:
+    description: Text of the transaction line.
+    type: string
+    example: Computer purchase
+  row_number:
+    description: Order number for display.
+    type: number
+    minimum: 1
+    example: 1
+  data:
+    description: Additional attributes for the transaction line.
+    type: object
