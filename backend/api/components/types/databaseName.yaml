@@ -1,2 +1,4 @@
+description: Name of the database.
 type: string
 pattern:  ^[0-9a-z-_]+$
+example: company_2

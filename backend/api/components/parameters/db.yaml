@@ -2,7 +2,5 @@ db:
   - in: path
     name: databaseName
     schema:
-      type: string
-      pattern:  ^[0-9a-z-_]+$
+      $ref: ../../components/types/databaseName.yaml
     required: true
-    description: Name of the database to delete.

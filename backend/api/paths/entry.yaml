@@ -9,7 +9,6 @@ get:
     schema:
       $ref: ../components/types/databaseName.yaml
     required: true
-    description: Name of the database.
   - in: query
     name: account_id
     schema:
@@ -37,7 +36,6 @@ post:
     schema:
       $ref: ../components/types/databaseName.yaml
     required: true
-    description: Name of the database.
   summary: Create new transaction line
   requestBody:
     content:

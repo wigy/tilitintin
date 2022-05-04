@@ -8,7 +8,6 @@ get:
     schema:
       $ref: ../components/types/databaseName.yaml
     required: true
-    description: Name of the database.
   - in: query
     name: entries
     schema:
@@ -42,7 +41,6 @@ post:
     schema:
       $ref: ../components/types/databaseName.yaml
     required: true
-    description: Name of the database.
   summary: Create new transaction
   requestBody:
     content:
