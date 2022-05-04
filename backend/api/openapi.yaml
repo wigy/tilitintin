@@ -140,3 +140,12 @@ paths:
       required: true
       description: The ID of the period.
     $ref: paths/period/id.yaml
+
+  /db/{databaseName}/report:
+    parameters:
+    - in: path
+      name: databaseName
+      schema:
+        $ref: ./components/types/databaseName.yaml
+      required: true
+    $ref: paths/report.yaml

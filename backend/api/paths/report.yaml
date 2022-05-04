@@ -1,0 +1,93 @@
+get:
+  operationId: getReportOptions
+  tags:
+   - Reports
+  summary: Available report options
+  responses:
+    '200':
+      description: An object describing available report options.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              balance-sheet-detailed:
+                type: object
+                properties:
+                  quarter1:
+                    type: string
+                    example: radio:1
+                  quarter2:
+                    type: string
+                    example: radio:1
+                  quarter3:
+                    type: string
+                    example: radio:1
+                  full:
+                    type: string
+                    example: radio:1:default
+              balance-sheet:
+                type: object
+                properties:
+                  quarter1:
+                    type: string
+                    example: radio:1
+                  quarter2:
+                    type: string
+                    example: radio:1
+                  quarter3:
+                    type: string
+                    example: radio:1
+                  full:
+                    type: string
+                    example: radio:1:default
+              income-statement-detailed:
+                type: object
+                properties:
+                  quarter1:
+                    type: string
+                    example: radio:1
+                  quarter2:
+                    type: string
+                    example: radio:1
+                  quarter3:
+                    type: string
+                    example: radio:1
+                  full:
+                    type: string
+                    example: radio:1:default
+                  byTags:
+                    type: string
+                    example: boolean
+              income-statement:
+                type: object
+                properties:
+                  quarter1:
+                    type: string
+                    example: radio:1
+                  quarter2:
+                    type: string
+                    example: radio:1
+                  quarter3:
+                    type: string
+                    example: radio:1
+                  full:
+                    type: string
+                    example: radio:1:default
+                  byTags:
+                    type: string
+                    example: boolean
+              general-journal:
+                type: object
+                properties:
+                  compact:
+                    type: string
+                    example: boolean:true
+              general-ledger:
+                type: object
+                properties:
+                  compact:
+                    type: string
+                    example: boolean:true
+    '403':
+      $ref: ../components/responses/403.yaml
