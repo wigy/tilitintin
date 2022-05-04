@@ -1,0 +1,12 @@
+allOf:
+- $ref: ./Period.yaml
+type: object
+properties:
+  id:
+    description: The ID of the period.
+    type: integer
+    minimum: 1
+  locked:
+    description: If set, the period transactions cannot be modified anymore.
+    type: boolean
+    example: false

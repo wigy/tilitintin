@@ -28,7 +28,7 @@ patch:
   operationId: updateDocument
   tags:
     - Documents
-  summary: Change the document attributes.
+  summary: Change the document attributes
   requestBody:
     content:
       application/json:

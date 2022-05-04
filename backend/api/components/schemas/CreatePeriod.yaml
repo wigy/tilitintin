@@ -1,0 +1,5 @@
+allOf:
+  - $ref: ./Period.yaml
+required:
+  - start_date
+  - end_date

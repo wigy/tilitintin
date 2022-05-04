@@ -1,0 +1,8 @@
+allOf:
+  - $ref: ./Period.yaml
+type: object
+properties:
+  locked:
+    description: If set, the period transactions cannot be modified anymore.
+    type: boolean
+    example: false

@@ -1,0 +1,50 @@
+get:
+  operationId: getPeriods
+  tags:
+   - Periods
+  parameters:
+  - in: path
+    name: databaseName
+    schema:
+      $ref: ../components/types/databaseName.yaml
+    required: true
+  summary: List of all periods
+  responses:
+    '200':
+      description: Get the list of periods in the database.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: ../components/schemas/GetPeriod.yaml
+    '403':
+      $ref: ../components/responses/403.yaml
+
+post:
+  operationId: createPeriod
+  tags:
+   - Periods
+  parameters:
+  - in: path
+    name: databaseName
+    schema:
+      $ref: ../components/types/databaseName.yaml
+    required: true
+  summary: Create new period
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/CreatePeriod.yaml
+  responses:
+    '200':
+      description: Newly created period.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/GetPeriod.yaml
+    '400':
+      $ref: ../components/responses/400.yaml
+    '403':
+      $ref: ../components/responses/403.yaml

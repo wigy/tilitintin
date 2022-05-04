@@ -1,9 +1,5 @@
 type: object
 properties:
-  id:
-    description: The ID of the period.
-    type: integer
-    minimum: 1
   start_date:
     description: The first date included in the period.
     type: string
@@ -14,7 +10,3 @@ properties:
     type: string
     format: date
     example: "2001-12-31"
-  locked:
-    description: If set, the period transactions cannot be modified anymore.
-    type: boolean
-    example: false

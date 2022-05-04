@@ -124,3 +124,19 @@ paths:
       schema:
         $ref: ./components/types/databaseName.yaml
       required: true
+    $ref: paths/period.yaml
+
+  /db/{databaseName}/period/{id}:
+    parameters:
+    - in: path
+      name: databaseName
+      schema:
+        $ref: ./components/types/databaseName.yaml
+      required: true
+    - in: path
+      name: id
+      schema:
+        $ref: ./components/types/id.yaml
+      required: true
+      description: The ID of the period.
+    $ref: paths/period/id.yaml

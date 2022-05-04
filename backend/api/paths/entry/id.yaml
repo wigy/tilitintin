@@ -20,7 +20,7 @@ patch:
   operationId: updateEntry
   tags:
     - Entries
-  summary: Change the line attributes.
+  summary: Change the line attributes
   requestBody:
     content:
       application/json:

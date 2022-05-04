@@ -1,0 +1,55 @@
+get:
+  operationId: getPeriod
+  tags:
+    - Periods
+  summary: Get all account balances
+  responses:
+    '200':
+      description: |
+        Get the list of all accounts that have transactions
+        and their current balances.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: ../../components/schemas/GetPeriod.yaml
+              - type: object
+                properties:
+                  balances:
+                    description: List of account balances having any entries on this period.
+                    type: array
+                    items:
+                      $ref: ../../components/schemas/Balance.yaml
+
+    '403':
+      $ref: ../../components/responses/403.yaml
+    '404':
+      $ref: ../../components/responses/404.yaml
+
+patch:
+  operationId: updatePeriod
+  tags:
+    - Periods
+  summary: Change the period attributes
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/EditPeriod.yaml
+  responses:
+    '204':
+      description: Period updated successfully.
+    '403':
+      $ref: ../../components/responses/403.yaml
+
+
+delete:
+  operationId: deletePeriod
+  tags:
+    - Periods
+  summary: Delete a period
+  responses:
+    '204':
+      description: Period deleted successfully.
+    '403':
+      $ref: ../../components/responses/403.yaml
