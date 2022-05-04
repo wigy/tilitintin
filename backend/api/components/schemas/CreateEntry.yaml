@@ -1,0 +1,5 @@
+allOf:
+  - $ref: ./Entry.yaml
+required:
+  - document_id
+  - account_id

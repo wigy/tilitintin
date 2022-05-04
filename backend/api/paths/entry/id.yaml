@@ -1,0 +1,45 @@
+get:
+  operationId: getEntry
+  tags:
+    - Entries
+  summary: Get data of one transaction line
+  responses:
+    '200':
+      description: Get the details of the transaction entries.
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/GetEntry.yaml
+
+    '403':
+      $ref: ../../components/responses/403.yaml
+    '404':
+      $ref: ../../components/responses/404.yaml
+
+patch:
+  operationId: updateEntry
+  tags:
+    - Entries
+  summary: Change the line attributes.
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/EditEntry.yaml
+  responses:
+    '204':
+      description: Entry updated successfully.
+    '403':
+      $ref: ../../components/responses/403.yaml
+
+
+delete:
+  operationId: deleteEntry
+  tags:
+    - Entries
+  summary: Delete a transaction line
+  responses:
+    '204':
+      description: Entry deleted successfully.
+    '403':
+      $ref: ../../components/responses/403.yaml

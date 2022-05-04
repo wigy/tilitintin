@@ -1,0 +1,57 @@
+get:
+  operationId: getEntries
+  tags:
+   - Entries
+  summary: List of all transaction lines
+  parameters:
+  - in: path
+    name: databaseName
+    schema:
+      $ref: ../components/types/databaseName.yaml
+    required: true
+    description: Name of the database.
+  - in: query
+    name: account_id
+    schema:
+      $ref: ../components/types/id.yaml
+    description: If given, limit to the entries associated with this account ID.
+  responses:
+    '200':
+      description: Get the list of enntries in the database or for an account.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: ../components/schemas/GetEntry.yaml
+    '403':
+      $ref: ../components/responses/403.yaml
+
+post:
+  operationId: createEntry
+  tags:
+   - Entries
+  parameters:
+  - in: path
+    name: databaseName
+    schema:
+      $ref: ../components/types/databaseName.yaml
+    required: true
+    description: Name of the database.
+  summary: Create new transaction line
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/CreateEntry.yaml
+  responses:
+    '200':
+      description: Newly created entry.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/GetEntry.yaml
+    '400':
+      $ref: ../components/responses/400.yaml
+    '403':
+      $ref: ../components/responses/403.yaml

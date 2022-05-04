@@ -93,3 +93,22 @@ paths:
       required: true
       description: The ID of the document.
     $ref: paths/document/id.yaml
+
+  /db/{databaseName}/entry:
+    $ref: paths/entry.yaml
+
+  /db/{databaseName}/entry/{id}:
+    parameters:
+    - in: path
+      name: databaseName
+      schema:
+        $ref: ./components/types/databaseName.yaml
+      required: true
+      description: Name of the database.
+    - in: path
+      name: id
+      schema:
+        $ref: ./components/types/id.yaml
+      required: true
+      description: The ID of the entry.
+    $ref: paths/entry/id.yaml
