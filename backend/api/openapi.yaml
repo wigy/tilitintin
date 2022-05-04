@@ -112,3 +112,13 @@ paths:
       required: true
       description: The ID of the entry.
     $ref: paths/entry/id.yaml
+
+  /db/{databaseName}/heading:
+    parameters:
+    - in: path
+      name: databaseName
+      schema:
+        $ref: ./components/types/databaseName.yaml
+      required: true
+      description: Name of the database.
+    $ref: paths/heading.yaml

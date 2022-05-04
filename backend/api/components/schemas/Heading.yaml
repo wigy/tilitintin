@@ -1,0 +1,17 @@
+type: object
+properties:
+  id:
+    description: The ID of the heading.
+    $ref: ../types/id.yaml
+  number:
+    $ref: ../types/accountNumber.yaml
+  text:
+    description: Text of the title line.
+    type: string
+    example: Expenses
+  level:
+    description: A hierarchival level of the title.
+    type: number
+    minimum: 0
+    maximum: 5
+    example: 3

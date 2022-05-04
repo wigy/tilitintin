@@ -1,18 +1,13 @@
 type: object
 properties:
   number:
-    description: Numeric code of the account as a string.
-    type: string
-    pattern: ^[0-9]+$
-    example: "3000"
+    $ref: ../types/accountNumber.yaml
   name:
     description: Name of the account.
     type: string
     example: "Savings Bank Account"
   type:
-    description: Language used in the database.
     $ref: ../types/accountType.yaml
-    example: ASSET
   language:
     $ref: ../types/language.yaml
   currency:

@@ -1,2 +1,4 @@
+description: Type of the account.
 type: string
 enum: [ASSET, LIABILITY, EQUITY, REVENUE, EXPENSE, PROFIT_PREV, PROFIT]
+example: EXPENSE

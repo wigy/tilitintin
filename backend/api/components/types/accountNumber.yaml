@@ -1,0 +1,4 @@
+description: Numeric code of the account as a string.
+type: string
+pattern: ^[0-9]+$
+example: "3000"

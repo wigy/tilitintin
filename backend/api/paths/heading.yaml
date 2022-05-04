@@ -1,0 +1,18 @@
+get:
+  operationId: getHeadings
+  tags:
+   - Headings
+  summary: Get account list headings
+  responses:
+    '200':
+      description: |
+        This list describes headings that can be used when
+        displaying account lists.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: ../components/schemas/Heading.yaml
+    '403':
+      $ref: ../components/responses/403.yaml
