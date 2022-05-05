@@ -1,11 +1,11 @@
 get:
-  operationId: getReport
+  operationId: getAccountReport
   tags:
    - Reports
-  summary: Get report data for a period
+  summary: Get report data for an account
   responses:
     '200':
-      description: Meta data, column definitions and row data for a report.
+      description: A report of transactions for a single account in the given period.
       content:
         application/json:
           schema:
