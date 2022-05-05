@@ -1,0 +1,4 @@
+description: Display as a toggle button selected by default.
+type: string
+enum: [boolean:true]
+example: boolean:true

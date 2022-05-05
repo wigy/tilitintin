@@ -1,0 +1,4 @@
+description: Display as a radio button option, which is selected by the default.
+type: string
+enum: [radio:1:default]
+example: radio:1:default

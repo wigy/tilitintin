@@ -1,0 +1,10 @@
+type: object
+properties:
+  quarter1:
+    $ref: ../types/reportOptionRadio.yaml
+  quarter2:
+    $ref: ../types/reportOptionRadio.yaml
+  quarter3:
+    $ref: ../types/reportOptionRadio.yaml
+  full:
+    $ref: ../types/reportOptionRadioDefault.yaml

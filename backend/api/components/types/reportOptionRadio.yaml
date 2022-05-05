@@ -1,0 +1,4 @@
+description: Display as a radio button option.
+type: string
+enum: [radio:1]
+example: radio:1
