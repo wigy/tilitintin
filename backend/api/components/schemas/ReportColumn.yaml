@@ -1,0 +1,17 @@
+type: object
+properties:
+  type:
+    description: Type of the column data.
+    type: string
+    enum: [id, name, numeric]
+    example: numeric
+  name:
+    description: Name of the key used in data array to refer a value in this column.
+    type: string
+    example: credit
+  title:
+    description: |
+      Code defining the title to be shown for the report column.
+      Values in {} are localized.
+    type: string
+    example: "{column-credit}"

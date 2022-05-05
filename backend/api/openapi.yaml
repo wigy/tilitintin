@@ -149,3 +149,24 @@ paths:
         $ref: ./components/types/databaseName.yaml
       required: true
     $ref: paths/report.yaml
+
+  /db/{databaseName}/report/{format}/{id}:
+    parameters:
+    - in: path
+      name: databaseName
+      schema:
+        $ref: ./components/types/databaseName.yaml
+      required: true
+    - in: path
+      name: format
+      schema:
+        $ref: ./components/types/reportFormat.yaml
+      required: true
+      description: The report format.
+    - in: path
+      name: id
+      schema:
+        $ref: ./components/types/id.yaml
+      required: true
+      description: The ID of the period.
+    $ref: paths/report/id.yaml

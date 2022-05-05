@@ -1,0 +1,15 @@
+get:
+  operationId: getReport
+  tags:
+   - Reports
+  summary: Get report data for a period
+  responses:
+    '200':
+      description: An object describing available report options.
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/ReportData.yaml
+
+    '403':
+      $ref: ../../components/responses/403.yaml

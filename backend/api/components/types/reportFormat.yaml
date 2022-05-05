@@ -1,0 +1,10 @@
+description: A string defining the report format.
+type: string
+enum:
+  - balance-sheet-detailed
+  - balance-sheet
+  - income-statement-detailed
+  - income-statement
+  - general-journal
+  - general-ledger
+example: balance-sheet

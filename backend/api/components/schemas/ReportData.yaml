@@ -1,0 +1,24 @@
+type: object
+properties:
+  format:
+    $ref: ../../components/types/reportFormat.yaml
+  columns:
+    type: array
+    items:
+      $ref: ../../components/schemas/ReportColumn.yaml
+  meta:
+    type: object
+    properties:
+      businessName:
+        type: string
+      businessId:
+        type: string
+      additionalProperties: true
+    example:
+      businessName: Company Inc.
+      businessId: 1234567-US
+  data:
+    type: array
+    items:
+      type: object
+      additionalProperties: true
