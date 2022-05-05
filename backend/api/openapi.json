@@ -268,7 +268,7 @@
                   },
                   "language": {
                     "description": "Language used in the database.",
-                    "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1account~1%7Bid%7D/patch/requestBody/content/application~1json/schema/allOf/0/properties/language",
+                    "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1report~1%7Bformat%7D~1%7Bid%7D/get/parameters/9/schema",
                     "example": "en"
                   },
                   "currency": {
@@ -638,13 +638,7 @@
                         "example": "EXPENSE"
                       },
                       "language": {
-                        "description": "Language.",
-                        "type": "string",
-                        "enum": [
-                          "fi",
-                          "en"
-                        ],
-                        "example": "en"
+                        "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1report~1%7Bformat%7D~1%7Bid%7D/get/parameters/9/schema"
                       },
                       "currency": {
                         "description": "Currency",
@@ -1521,6 +1515,430 @@
         "responses": {
           "204": {
             "description": "Period deleted successfully."
+          },
+          "403": {
+            "$ref": "#/paths/~1db/get/responses/403"
+          }
+        }
+      }
+    },
+    "/db/{databaseName}/report": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "databaseName",
+          "schema": {
+            "$ref": "./components/types/databaseName.yaml"
+          },
+          "required": true
+        }
+      ],
+      "get": {
+        "operationId": "getReportOptions",
+        "tags": [
+          "Reports"
+        ],
+        "summary": "Available report options",
+        "responses": {
+          "200": {
+            "description": "An object describing available report options.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "balance-sheet-detailed": {
+                      "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1report/get/responses/200/content/application~1json/schema/properties/balance-sheet"
+                    },
+                    "balance-sheet": {
+                      "type": "object",
+                      "properties": {
+                        "quarter1": {
+                          "description": "Display as a radio button option.",
+                          "type": "string",
+                          "enum": [
+                            "radio:1"
+                          ],
+                          "example": "radio:1"
+                        },
+                        "quarter2": {
+                          "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1report/get/responses/200/content/application~1json/schema/properties/balance-sheet/properties/quarter1"
+                        },
+                        "quarter3": {
+                          "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1report/get/responses/200/content/application~1json/schema/properties/balance-sheet/properties/quarter1"
+                        },
+                        "full": {
+                          "description": "Display as a radio button option, which is selected by the default.",
+                          "type": "string",
+                          "enum": [
+                            "radio:1:default"
+                          ],
+                          "example": "radio:1:default"
+                        }
+                      }
+                    },
+                    "income-statement-detailed": {
+                      "allOf": [
+                        {
+                          "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1report/get/responses/200/content/application~1json/schema/properties/balance-sheet"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "byTags": {
+                              "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1report/get/responses/200/content/application~1json/schema/properties/income-statement/allOf/1/properties/byTags"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "income-statement": {
+                      "allOf": [
+                        {
+                          "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1report/get/responses/200/content/application~1json/schema/properties/balance-sheet"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "byTags": {
+                              "description": "Display as a toggle button.",
+                              "type": "string",
+                              "enum": [
+                                "boolean"
+                              ],
+                              "example": "boolean"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "general-journal": {
+                      "type": "object",
+                      "properties": {
+                        "compact": {
+                          "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1report/get/responses/200/content/application~1json/schema/properties/general-ledger/properties/compact"
+                        }
+                      }
+                    },
+                    "general-ledger": {
+                      "type": "object",
+                      "properties": {
+                        "compact": {
+                          "description": "Display as a toggle button selected by default.",
+                          "type": "string",
+                          "enum": [
+                            "boolean:true"
+                          ],
+                          "example": "boolean:true"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/paths/~1db/get/responses/403"
+          }
+        }
+      }
+    },
+    "/db/{databaseName}/report/{format}/{id}": {
+      "get": {
+        "operationId": "getReport",
+        "tags": [
+          "Reports"
+        ],
+        "summary": "Get report data for a period",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1entry/get/parameters/0/schema"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "format",
+            "schema": {
+              "description": "A string defining the report format.",
+              "type": "string",
+              "enum": [
+                "balance-sheet-detailed",
+                "balance-sheet",
+                "income-statement-detailed",
+                "income-statement",
+                "general-journal",
+                "general-ledger"
+              ],
+              "example": "balance-sheet"
+            },
+            "required": true,
+            "description": "The report format."
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1entry/get/parameters/1/schema"
+            },
+            "required": true,
+            "description": "The ID of the period."
+          },
+          {
+            "in": "query",
+            "name": "quarter1",
+            "schema": {
+              "description": "If set, limit to the first quarter.",
+              "type": "string",
+              "enum": [
+                true,
+                false
+              ],
+              "example": true
+            }
+          },
+          {
+            "in": "query",
+            "name": "quarter2",
+            "schema": {
+              "description": "If set, limit to the first two quarters.",
+              "type": "string",
+              "enum": [
+                true,
+                false
+              ],
+              "example": true
+            }
+          },
+          {
+            "in": "query",
+            "name": "quarter3",
+            "schema": {
+              "description": "If set, limit to the first three quarters.",
+              "type": "string",
+              "enum": [
+                true,
+                false
+              ],
+              "example": true
+            }
+          },
+          {
+            "in": "query",
+            "name": "byTags",
+            "schema": {
+              "type": "string",
+              "description": "If set, make separate columns per each associated tag.",
+              "enum": [
+                true,
+                false
+              ],
+              "example": true
+            }
+          },
+          {
+            "in": "query",
+            "name": "compact",
+            "schema": {
+              "type": "string",
+              "description": "If set, use more compat version of the report.",
+              "enum": [
+                true,
+                false
+              ],
+              "example": true
+            }
+          },
+          {
+            "in": "query",
+            "name": "csv",
+            "schema": {
+              "type": "string",
+              "description": "If set, produce CSV format.",
+              "enum": [
+                true,
+                false
+              ],
+              "example": true
+            }
+          },
+          {
+            "in": "query",
+            "name": "lang",
+            "schema": {
+              "description": "Language.",
+              "type": "string",
+              "enum": [
+                "fi",
+                "en"
+              ],
+              "example": "en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Meta data, column definitions and row data for a report.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "format": {
+                      "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1report~1%7Bformat%7D~1%7Bid%7D/get/parameters/1/schema"
+                    },
+                    "columns": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "description": "Type of the column data.",
+                            "type": "string",
+                            "enum": [
+                              "id",
+                              "name",
+                              "numeric"
+                            ],
+                            "example": "numeric"
+                          },
+                          "name": {
+                            "description": "Name of the key used in data array to refer a value in this column.",
+                            "type": "string",
+                            "example": "credit"
+                          },
+                          "title": {
+                            "description": "Code defining the title to be shown for the report column.\nValues in {} are localized.\n",
+                            "type": "string",
+                            "example": "{column-credit}"
+                          }
+                        }
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "businessName": {
+                          "type": "string"
+                        },
+                        "businessId": {
+                          "type": "string"
+                        },
+                        "additionalProperties": true
+                      },
+                      "example": {
+                        "businessName": "Company Inc.",
+                        "businessId": "1234567-US"
+                      }
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": true
+                      }
+                    }
+                  }
+                }
+              },
+              "application/csv": {
+                "schema": {
+                  "type": "string",
+                  "description": "Report data rendered in CSV format by columns."
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/paths/~1db/get/responses/403"
+          }
+        }
+      }
+    },
+    "/db/{databaseName}/report/{format}/{id}/{account}": {
+      "get": {
+        "operationId": "getAccountReport",
+        "tags": [
+          "Reports"
+        ],
+        "summary": "Get report data for an account",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1entry/get/parameters/0/schema"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "format",
+            "schema": {
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1report~1%7Bformat%7D~1%7Bid%7D/get/parameters/1/schema"
+            },
+            "required": true,
+            "description": "The report format."
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1entry/get/parameters/1/schema"
+            },
+            "required": true,
+            "description": "The ID of the period."
+          },
+          {
+            "in": "path",
+            "name": "account",
+            "schema": {
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1entry/get/parameters/1/schema"
+            },
+            "required": true,
+            "description": "The ID of the account."
+          },
+          {
+            "in": "query",
+            "name": "csv",
+            "schema": {
+              "type": "string",
+              "description": "If set, produce CSV format.",
+              "enum": [
+                true,
+                false
+              ],
+              "example": true
+            }
+          },
+          {
+            "in": "query",
+            "name": "lang",
+            "schema": {
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1report~1%7Bformat%7D~1%7Bid%7D/get/parameters/9/schema"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A report of transactions for a single account in the given period.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1report~1%7Bformat%7D~1%7Bid%7D/get/responses/200/content/application~1json/schema"
+                }
+              },
+              "application/csv": {
+                "schema": {
+                  "type": "string",
+                  "description": "Report data rendered in CSV format by columns."
+                }
+              }
+            }
           },
           "403": {
             "$ref": "#/paths/~1db/get/responses/403"
