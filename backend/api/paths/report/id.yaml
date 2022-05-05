@@ -3,6 +3,70 @@ get:
   tags:
    - Reports
   summary: Get report data for a period
+  parameters:
+  - in: path
+    name: databaseName
+    schema:
+      $ref: ../../components/types/databaseName.yaml
+    required: true
+  - in: path
+    name: format
+    schema:
+      $ref: ../../components/types/reportFormat.yaml
+    required: true
+    description: The report format.
+  - in: path
+    name: id
+    schema:
+      $ref: ../../components/types/id.yaml
+    required: true
+    description: The ID of the period.
+  - in: query
+    name: quarter1
+    schema:
+      description: If set, limit to the first quarter.
+      type: string
+      enum: [true, false]
+      example: true
+  - in: query
+    name: quarter2
+    schema:
+      description: If set, limit to the first two quarters.
+      type: string
+      enum: [true, false]
+      example: true
+  - in: query
+    name: quarter3
+    schema:
+      description: If set, limit to the first three quarters.
+      type: string
+      enum: [true, false]
+      example: true
+  - in: query
+    name: byTags
+    schema:
+      type: string
+      description: If set, make separate columns per each associated tag.
+      enum: [true, false]
+      example: true
+  - in: query
+    name: compact
+    schema:
+      type: string
+      description: If set, use more compat version of the report.
+      enum: [true, false]
+      example: true
+  - in: query
+    name: csv
+    schema:
+      type: string
+      description: If set, produce CSV format.
+      enum: [true, false]
+      example: true
+  - in: query
+    name: lang
+    schema:
+      $ref: ../../components/types/language.yaml
   responses:
     '200':
       description: Meta data, column definitions and row data for a report.

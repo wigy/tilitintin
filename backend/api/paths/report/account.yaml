@@ -3,6 +3,41 @@ get:
   tags:
    - Reports
   summary: Get report data for an account
+  parameters:
+  - in: path
+    name: databaseName
+    schema:
+      $ref: ../../components/types/databaseName.yaml
+    required: true
+  - in: path
+    name: format
+    schema:
+      $ref: ../../components/types/reportFormat.yaml
+    required: true
+    description: The report format.
+  - in: path
+    name: id
+    schema:
+      $ref: ../../components/types/id.yaml
+    required: true
+    description: The ID of the period.
+  - in: path
+    name: account
+    schema:
+      $ref: ../../components/types/id.yaml
+    required: true
+    description: The ID of the account.
+  - in: query
+    name: csv
+    schema:
+      type: string
+      description: If set, produce CSV format.
+      enum: [true, false]
+      example: true
+  - in: query
+    name: lang
+    schema:
+      $ref: ../../components/types/language.yaml
   responses:
     '200':
       description: A report of transactions for a single account in the given period.
