@@ -3,12 +3,6 @@ get:
   tags:
    - Users
   summary: List of all users
-  parameters:
-  - in: path
-    name: databaseName
-    schema:
-      $ref: ../../components/types/databaseName.yaml
-    required: true
   responses:
     '200':
       description: Get the list of users in the database.
@@ -26,12 +20,6 @@ post:
   tags:
    - Users
   summary: Create new user
-  parameters:
-  - in: path
-    name: databaseName
-    schema:
-      $ref: ../../components/types/databaseName.yaml
-    required: true
   requestBody:
     content:
       application/json:

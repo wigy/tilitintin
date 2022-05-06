@@ -25,14 +25,14 @@ properties:
     type: string
     example: 1.0.7
   admin:
-    description:
+    description: If set, user is an admin.
     type: boolean
     example: true
   superuser:
-    description:
+    description: If set, user is a superuser.
     type: boolean
     example: false
   isCreator:
-    description:
+    description: If set, user is creator of the database.
     type: boolean
     example: true

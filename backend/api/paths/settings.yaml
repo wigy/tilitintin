@@ -42,5 +42,7 @@ patch:
   responses:
     '204':
       description: Settings changed successfully.
+    '403':
+      $ref: ../components/responses/403.yaml
     '500':
       description: Tried to change a setting that is not allowed to be changed.

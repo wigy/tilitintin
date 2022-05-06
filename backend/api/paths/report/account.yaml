@@ -32,7 +32,7 @@ get:
     schema:
       type: string
       description: If set, produce CSV format.
-      enum: [true, false]
+      enum: ["true", "false"]
       example: true
   - in: query
     name: lang

@@ -26,42 +26,42 @@ get:
     schema:
       description: If set, limit to the first quarter.
       type: string
-      enum: [true, false]
+      enum: ["true", "false"]
       example: true
   - in: query
     name: quarter2
     schema:
       description: If set, limit to the first two quarters.
       type: string
-      enum: [true, false]
+      enum: ["true", "false"]
       example: true
   - in: query
     name: quarter3
     schema:
       description: If set, limit to the first three quarters.
       type: string
-      enum: [true, false]
+      enum: ["true", "false"]
       example: true
   - in: query
     name: byTags
     schema:
       type: string
       description: If set, make separate columns per each associated tag.
-      enum: [true, false]
+      enum: ["true", "false"]
       example: true
   - in: query
     name: compact
     schema:
       type: string
       description: If set, use more compat version of the report.
-      enum: [true, false]
+      enum: ["true", "false"]
       example: true
   - in: query
     name: csv
     schema:
       type: string
       description: If set, produce CSV format.
-      enum: [true, false]
+      enum: ["true", "false"]
       example: true
   - in: query
     name: lang
