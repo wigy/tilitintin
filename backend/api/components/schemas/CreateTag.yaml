@@ -1,0 +1,6 @@
+allOf:
+  - $ref: ./Tag.yaml
+required:
+  - tag
+  - name
+  - type

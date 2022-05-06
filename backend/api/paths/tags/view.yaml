@@ -1,0 +1,29 @@
+get:
+  operationId: getTagView
+  tags:
+    - Tags
+  summary: Get a picture for tag
+  parameters:
+  - in: path
+    name: databaseName
+    schema:
+      $ref: ../../components/types/databaseName.yaml
+    required: true
+  - in: path
+    name: id
+    schema:
+      $ref: ../../components/types/id.yaml
+    required: true
+    description: The ID of the tag.
+  responses:
+    '200':
+      description: Get a tag picture.
+      content:
+        image/*:
+          schema:
+            type: string
+            format: binary
+    '403':
+      $ref: ../../components/responses/403.yaml
+    '404':
+      $ref: ../../components/responses/404.yaml

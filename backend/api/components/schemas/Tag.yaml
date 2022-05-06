@@ -1,0 +1,25 @@
+type: object
+properties:
+  tag:
+    description: Code to be used in descriptions.
+    type: string
+    example: CompAc
+  name:
+    description: The meaning of the tag.
+    type: string
+    example: Computer Acessories
+  mime:
+    $ref: ../../components/types/mime.yaml
+  picture:
+    description: Image data in base 64 encoding.
+    type: string
+    format: byte
+    example: vPv6f9tTtNpnUlrTk5Pe/RbkaFaxWNQyb3ted2ncsR
+  type:
+    description: A group name of the tag.
+    type: string
+    example: Product Category
+  order:
+    description: Visual ordering index for the tag.
+    type: integer
+    example: 205

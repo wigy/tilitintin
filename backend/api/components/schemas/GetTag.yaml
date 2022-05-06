@@ -1,0 +1,8 @@
+allOf:
+- $ref: ./Tag.yaml
+type: object
+properties:
+  id:
+    description: The ID of the tag.
+    type: integer
+    minimum: 1

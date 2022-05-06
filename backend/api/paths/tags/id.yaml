@@ -1,0 +1,80 @@
+get:
+  operationId: getTag
+  tags:
+    - Tags
+  summary: Get a single tag
+  parameters:
+  - in: path
+    name: databaseName
+    schema:
+      $ref: ../../components/types/databaseName.yaml
+    required: true
+  - in: path
+    name: id
+    schema:
+      $ref: ../../components/types/id.yaml
+    required: true
+    description: The ID of the tag.
+  responses:
+    '200':
+      description: Get a tag data of single tag.
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/GetTag.yaml
+    '403':
+      $ref: ../../components/responses/403.yaml
+    '404':
+      $ref: ../../components/responses/404.yaml
+
+patch:
+  operationId: updateTag
+  tags:
+    - Tags
+  summary: Change the tag attributes
+  parameters:
+  - in: path
+    name: databaseName
+    schema:
+      $ref: ../../components/types/databaseName.yaml
+    required: true
+  - in: path
+    name: id
+    schema:
+      $ref: ../../components/types/id.yaml
+    required: true
+    description: The ID of the tag.
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/EditTag.yaml
+  responses:
+    '204':
+      description: Tag updated successfully.
+    '403':
+      $ref: ../../components/responses/403.yaml
+
+
+delete:
+  operationId: deleteTag
+  tags:
+    - Tags
+  summary: Delete a tag
+  parameters:
+  - in: path
+    name: databaseName
+    schema:
+      $ref: ../../components/types/databaseName.yaml
+    required: true
+  - in: path
+    name: id
+    schema:
+      $ref: ../../components/types/id.yaml
+    required: true
+    description: The ID of the tag.
+  responses:
+    '204':
+      description: Tag deleted successfully.
+    '403':
+      $ref: ../../components/responses/403.yaml

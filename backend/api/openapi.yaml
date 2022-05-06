@@ -80,3 +80,12 @@ paths:
 
   /db/{databaseName}/settings:
     $ref: paths/settings.yaml
+
+  /db/{databaseName}/tags:
+    $ref: paths/tags.yaml
+
+  /db/{databaseName}/tags/{id}:
+    $ref: paths/tags/id.yaml
+
+  /db/{databaseName}/tags/{id}/view:
+    $ref: paths/tags/view.yaml

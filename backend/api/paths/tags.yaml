@@ -1,0 +1,50 @@
+get:
+  operationId: getTags
+  tags:
+   - Tags
+  summary: List of all tags
+  parameters:
+  - in: path
+    name: databaseName
+    schema:
+      $ref: ../components/types/databaseName.yaml
+    required: true
+  responses:
+    '200':
+      description: Get the list of tags in the database.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: ../components/schemas/GetTag.yaml
+    '403':
+      $ref: ../components/responses/403.yaml
+
+post:
+  operationId: createTag
+  tags:
+   - Tags
+  summary: Create new tag
+  parameters:
+  - in: path
+    name: databaseName
+    schema:
+      $ref: ../components/types/databaseName.yaml
+    required: true
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/CreateTag.yaml
+  responses:
+    '200':
+      description: Newly created tag.
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/GetTag.yaml
+    '400':
+      $ref: ../components/responses/400.yaml
+    '403':
+      $ref: ../components/responses/403.yaml
