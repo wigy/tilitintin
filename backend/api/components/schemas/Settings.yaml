@@ -1,0 +1,38 @@
+type: object
+properties:
+  databaseId:
+    description: ID number of the database.
+    type: number
+    example: 7
+  currency:
+    $ref: ../../components/types/currency.yaml
+  language:
+    $ref: ../../components/types/language.yaml
+  companyName:
+    description: Company name.
+    type: string
+    example: Company Inc.
+  companyCode:
+    description: Company registration code.
+    type: string
+    example: 12345678-US
+  scheme:
+    description: Selected name of the initial database scheme.
+    type: string
+    example: LimitedCompanyUS
+  schemeVersion:
+    description: Version number of the initial database scheme.
+    type: string
+    example: 1.0.7
+  admin:
+    description:
+    type: boolean
+    example: true
+  superuser:
+    description:
+    type: boolean
+    example: false
+  isCreator:
+    description:
+    type: boolean
+    example: true

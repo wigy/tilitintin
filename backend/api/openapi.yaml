@@ -155,3 +155,6 @@ paths:
 
   /db/{databaseName}/report/{format}/{id}/{account}:
     $ref: paths/report/account.yaml
+
+  /db/{databaseName}/settings:
+    $ref: paths/settings.yaml

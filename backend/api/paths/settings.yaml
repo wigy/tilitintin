@@ -1,0 +1,22 @@
+get:
+  operationId: getSettings
+  tags:
+   - Settings
+  summary: Get database settings
+  parameters:
+  - in: path
+    name: databaseName
+    schema:
+      $ref: ../components/types/databaseName.yaml
+    required: true
+  responses:
+    '200':
+      description: Get all database specific settings.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: ../components/schemas/Settings.yaml
+    '403':
+      $ref: ../components/responses/403.yaml
