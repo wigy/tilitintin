@@ -1,4 +1,4 @@
-description: User is not authenticated.
+description: User has no access to this.
 content:
   application/json:
     schema:

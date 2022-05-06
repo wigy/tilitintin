@@ -1,0 +1,25 @@
+type: object
+properties:
+  name:
+    description: Full name of the user.
+    type: string
+    example: Jack D. Dow
+  email:
+    description: Email address of the user.
+    type: string
+    example: jack.d.dow@gmail.com
+  disabled:
+    description: If set, user cannot log in.
+    type: boolean
+  config:
+    description: Additional configuration for the user.
+    type: object
+    properties:
+      admin:
+        description: If set, user is admin.
+        type: boolean
+        example: false
+      superuser:
+        description: If set, user is super user.
+        type: boolean
+        example: false

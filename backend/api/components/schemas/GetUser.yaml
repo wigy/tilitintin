@@ -1,0 +1,8 @@
+allOf:
+- $ref: ./User.yaml
+type: object
+properties:
+  id:
+    description: The ID of the user.
+    type: integer
+    minimum: 1

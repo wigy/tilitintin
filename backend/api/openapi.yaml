@@ -89,3 +89,12 @@ paths:
 
   /db/{databaseName}/tags/{id}/view:
     $ref: paths/tags/view.yaml
+
+  /admin/user:
+    $ref: paths/admin/user.yaml
+
+  /admin/user/{email}:
+    $ref: paths/admin/user/email.yaml
+
+  /admin/user/current-user:
+    $ref: paths/admin/current-user.yaml

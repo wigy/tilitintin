@@ -1,0 +1,16 @@
+get:
+  operationId: getCurrentUser
+  tags:
+    - Users
+  summary: Get current user data
+  responses:
+    '200':
+      description: Get user data.
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/GetUser.yaml
+    '403':
+      $ref: ../../components/responses/403.yaml
+    '404':
+      $ref: ../../components/responses/404.yaml

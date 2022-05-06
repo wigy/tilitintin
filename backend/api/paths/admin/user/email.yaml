@@ -1,0 +1,43 @@
+get:
+  operationId: getUser
+  tags:
+    - Users
+  summary: Get user data
+  parameters:
+  - in: path
+    name: email
+    schema:
+      description: Email of the user
+      type: string
+      example: foo@bar.com
+    required: true
+  responses:
+    '200':
+      description: Get user data.
+      content:
+        application/json:
+          schema:
+            $ref: ../../../components/schemas/GetUser.yaml
+    '403':
+      $ref: ../../../components/responses/403.yaml
+    '404':
+      $ref: ../../../components/responses/404.yaml
+
+delete:
+  operationId: deleteUser
+  tags:
+    - Users
+  summary: Delete a user
+  parameters:
+  - in: path
+    name: email
+    schema:
+      description: Email of the user
+      type: string
+      example: foo@bar.com
+    required: true
+  responses:
+    '204':
+      description: User deleted successfully.
+    '403':
+      $ref: ../../../components/responses/403.yaml
