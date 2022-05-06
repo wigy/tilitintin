@@ -3,6 +3,18 @@ get:
   tags:
     - Documents
   summary: Get data of one transaction
+  parameters:
+  - in: path
+    name: databaseName
+    schema:
+      $ref: ../../components/types/databaseName.yaml
+    required: true
+  - in: path
+    name: id
+    schema:
+      $ref: ../../components/types/id.yaml
+    required: true
+    description: The ID of the document.
   responses:
     '200':
       description: Get the details of the transaction document.
@@ -29,6 +41,18 @@ patch:
   tags:
     - Documents
   summary: Change the document attributes
+  parameters:
+  - in: path
+    name: databaseName
+    schema:
+      $ref: ../../components/types/databaseName.yaml
+    required: true
+  - in: path
+    name: id
+    schema:
+      $ref: ../../components/types/id.yaml
+    required: true
+    description: The ID of the document.
   requestBody:
     content:
       application/json:
@@ -46,6 +70,18 @@ delete:
   tags:
     - Documents
   summary: Delete a transaction
+  parameters:
+  - in: path
+    name: databaseName
+    schema:
+      $ref: ../../components/types/databaseName.yaml
+    required: true
+  - in: path
+    name: id
+    schema:
+      $ref: ../../components/types/id.yaml
+    required: true
+    description: The ID of the document.
   responses:
     '204':
       description: Document deleted successfully.

@@ -3,6 +3,12 @@ get:
   tags:
    - Reports
   summary: Available report options
+  parameters:
+  - in: path
+    name: databaseName
+    schema:
+      $ref: ../components/types/databaseName.yaml
+    required: true
   responses:
     '200':
       description: An object describing available report options.

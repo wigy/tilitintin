@@ -4,6 +4,12 @@ delete:
   tags:
    - Databases
   summary: Delete a database
+  parameters:
+    - in: path
+      name: databaseName
+      schema:
+        $ref: ../../components/types/databaseName.yaml
+      required: true
   responses:
     '204':
       description: Database successfully deleted.

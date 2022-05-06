@@ -3,6 +3,12 @@ get:
   tags:
    - Headings
   summary: Get account list headings
+  parameters:
+  - in: path
+    name: databaseName
+    schema:
+      $ref: ../components/types/databaseName.yaml
+    required: true
   responses:
     '200':
       description: |

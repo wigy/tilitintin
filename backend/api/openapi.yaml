@@ -37,117 +37,39 @@ paths:
     $ref: paths/db.yaml
 
   /db/{databaseName}:
-    parameters:
-      - in: path
-        name: databaseName
-        schema:
-          $ref: ./components/types/databaseName.yaml
-        required: true
     $ref: paths/db/id.yaml
 
   /db/upload:
     $ref: paths/db/upload.yaml
 
   /db/{databaseName}/account:
-    parameters:
-    - in: path
-      name: databaseName
-      schema:
-        $ref: ./components/types/databaseName.yaml
-      required: true
     $ref: paths/account.yaml
 
   /db/{databaseName}/account/{id}:
-    parameters:
-    - in: path
-      name: databaseName
-      schema:
-        $ref: ./components/types/databaseName.yaml
-      required: true
-    - in: path
-      name: id
-      schema:
-        $ref: ./components/types/id.yaml
-      required: true
-      description: The ID of the account.
     $ref: paths/account/id.yaml
 
   /db/{databaseName}/document:
     $ref: paths/document.yaml
 
   /db/{databaseName}/document/{id}:
-    parameters:
-    - in: path
-      name: databaseName
-      schema:
-        $ref: ./components/types/databaseName.yaml
-      required: true
-    - in: path
-      name: id
-      schema:
-        $ref: ./components/types/id.yaml
-      required: true
-      description: The ID of the document.
     $ref: paths/document/id.yaml
 
   /db/{databaseName}/entry:
     $ref: paths/entry.yaml
 
   /db/{databaseName}/entry/{id}:
-    parameters:
-    - in: path
-      name: databaseName
-      schema:
-        $ref: ./components/types/databaseName.yaml
-      required: true
-    - in: path
-      name: id
-      schema:
-        $ref: ./components/types/id.yaml
-      required: true
-      description: The ID of the entry.
     $ref: paths/entry/id.yaml
 
   /db/{databaseName}/heading:
-    parameters:
-    - in: path
-      name: databaseName
-      schema:
-        $ref: ./components/types/databaseName.yaml
-      required: true
     $ref: paths/heading.yaml
 
   /db/{databaseName}/period:
-    parameters:
-    - in: path
-      name: databaseName
-      schema:
-        $ref: ./components/types/databaseName.yaml
-      required: true
     $ref: paths/period.yaml
 
   /db/{databaseName}/period/{id}:
-    parameters:
-    - in: path
-      name: databaseName
-      schema:
-        $ref: ./components/types/databaseName.yaml
-      required: true
-    - in: path
-      name: id
-      schema:
-        $ref: ./components/types/id.yaml
-      required: true
-      description: The ID of the period.
     $ref: paths/period/id.yaml
 
   /db/{databaseName}/report:
-    parameters:
-    - in: path
-      name: databaseName
-      schema:
-        $ref: ./components/types/databaseName.yaml
-      required: true
     $ref: paths/report.yaml
 
   /db/{databaseName}/report/{format}/{id}:

@@ -3,6 +3,18 @@ get:
   tags:
     - Periods
   summary: Get all account balances
+  parameters:
+  - in: path
+    name: databaseName
+    schema:
+      $ref: ../../components/types/databaseName.yaml
+    required: true
+  - in: path
+    name: id
+    schema:
+      $ref: ../../components/types/id.yaml
+    required: true
+    description: The ID of the period.
   responses:
     '200':
       description: |
@@ -31,6 +43,18 @@ patch:
   tags:
     - Periods
   summary: Change the period attributes
+  parameters:
+  - in: path
+    name: databaseName
+    schema:
+      $ref: ../../components/types/databaseName.yaml
+    required: true
+  - in: path
+    name: id
+    schema:
+      $ref: ../../components/types/id.yaml
+    required: true
+    description: The ID of the period.
   requestBody:
     content:
       application/json:
@@ -48,6 +72,18 @@ delete:
   tags:
     - Periods
   summary: Delete a period
+  parameters:
+  - in: path
+    name: databaseName
+    schema:
+      $ref: ../../components/types/databaseName.yaml
+    required: true
+  - in: path
+    name: id
+    schema:
+      $ref: ../../components/types/id.yaml
+    required: true
+    description: The ID of the period.
   responses:
     '204':
       description: Period deleted successfully.

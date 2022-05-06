@@ -3,6 +3,18 @@ get:
   tags:
     - Entries
   summary: Get data of one transaction line
+  parameters:
+  - in: path
+    name: databaseName
+    schema:
+      $ref: ../../components/types/databaseName.yaml
+    required: true
+  - in: path
+    name: id
+    schema:
+      $ref: ../../components/types/id.yaml
+    required: true
+    description: The ID of the entry.
   responses:
     '200':
       description: Get the details of the transaction entries.
@@ -21,6 +33,18 @@ patch:
   tags:
     - Entries
   summary: Change the line attributes
+  parameters:
+  - in: path
+    name: databaseName
+    schema:
+      $ref: ../../components/types/databaseName.yaml
+    required: true
+  - in: path
+    name: id
+    schema:
+      $ref: ../../components/types/id.yaml
+    required: true
+    description: The ID of the entry.
   requestBody:
     content:
       application/json:
@@ -38,6 +62,18 @@ delete:
   tags:
     - Entries
   summary: Delete a transaction line
+  parameters:
+  - in: path
+    name: databaseName
+    schema:
+      $ref: ../../components/types/databaseName.yaml
+    required: true
+  - in: path
+    name: id
+    schema:
+      $ref: ../../components/types/id.yaml
+    required: true
+    description: The ID of the entry.
   responses:
     '204':
       description: Entry deleted successfully.
