@@ -20,3 +20,27 @@ get:
               $ref: ../components/schemas/Settings.yaml
     '403':
       $ref: ../components/responses/403.yaml
+
+patch:
+  operationId: chenageSettings
+  tags:
+   - Settings
+  summary: Change one or more settings
+  parameters:
+  - in: path
+    name: databaseName
+    schema:
+      $ref: ../components/types/databaseName.yaml
+    required: true
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          additionalProperties: true
+          example: { companyName: "New Company Inc.", companyCode: "123456-CA"}
+  responses:
+    '204':
+      description: Settings changed successfully.
+    '500':
+      description: Tried to change a setting that is not allowed to be changed.
