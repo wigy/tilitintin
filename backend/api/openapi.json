@@ -214,7 +214,7 @@
             }
           },
           "403": {
-            "description": "User is not authenticated.",
+            "description": "User has no access to this.",
             "content": {
               "application/json": {
                 "schema": {
@@ -273,7 +273,7 @@
                   },
                   "currency": {
                     "description": "System default currency for the database.",
-                    "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1account~1%7Bid%7D/patch/requestBody/content/application~1json/schema/allOf/0/properties/currency",
+                    "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1settings/get/responses/200/content/application~1json/schema/items/properties/currency",
                     "example": "USD"
                   }
                 },
@@ -317,22 +317,22 @@
       }
     },
     "/db/{databaseName}": {
-      "parameters": [
-        {
-          "in": "path",
-          "name": "databaseName",
-          "schema": {
-            "$ref": "./components/types/databaseName.yaml"
-          },
-          "required": true
-        }
-      ],
       "delete": {
         "operationId": "deleteDatabase",
         "tags": [
           "Databases"
         ],
         "summary": "Delete a database",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+            },
+            "required": true
+          }
+        ],
         "responses": {
           "204": {
             "description": "Database successfully deleted."
@@ -344,23 +344,7 @@
             "$ref": "#/paths/~1db/get/responses/403"
           },
           "404": {
-            "description": "Required target not found.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "message": {
-                      "description": "Error message.",
-                      "type": "string",
-                      "example": "Not found."
-                    }
-                  },
-                  "required": [
-                    "message"
-                  ]
-                }
-              }
-            }
+            "$ref": "#/paths/~1admin~1user~1%7Bemail%7D/get/responses/404"
           }
         }
       }
@@ -421,22 +405,22 @@
       }
     },
     "/db/{databaseName}/account": {
-      "parameters": [
-        {
-          "in": "path",
-          "name": "databaseName",
-          "schema": {
-            "$ref": "./components/types/databaseName.yaml"
-          },
-          "required": true
-        }
-      ],
       "get": {
         "operationId": "getAccounts",
         "tags": [
           "Accounts"
         ],
         "summary": "List of all accounts",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+            },
+            "required": true
+          }
+        ],
         "responses": {
           "200": {
             "description": "Get the list of all accounts in the database.",
@@ -462,6 +446,16 @@
           "Accounts"
         ],
         "summary": "Create new account",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+            },
+            "required": true
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -527,31 +521,31 @@
       }
     },
     "/db/{databaseName}/account/{id}": {
-      "parameters": [
-        {
-          "in": "path",
-          "name": "databaseName",
-          "schema": {
-            "$ref": "./components/types/databaseName.yaml"
-          },
-          "required": true
-        },
-        {
-          "in": "path",
-          "name": "id",
-          "schema": {
-            "$ref": "./components/types/id.yaml"
-          },
-          "required": true,
-          "description": "The ID of the account."
-        }
-      ],
       "get": {
         "operationId": "getAccount",
         "tags": [
           "Accounts"
         ],
         "summary": "Get account data of one account.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1entry/get/parameters/1/schema"
+            },
+            "required": true,
+            "description": "The ID of the account."
+          }
+        ],
         "responses": {
           "200": {
             "description": "Get the details of the account.",
@@ -597,7 +591,7 @@
             "$ref": "#/paths/~1db/get/responses/403"
           },
           "404": {
-            "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/responses/404"
+            "$ref": "#/paths/~1admin~1user~1%7Bemail%7D/get/responses/404"
           }
         }
       },
@@ -607,6 +601,25 @@
           "Accounts"
         ],
         "summary": "Change the account attributes.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1entry/get/parameters/1/schema"
+            },
+            "required": true,
+            "description": "The ID of the account."
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -641,14 +654,7 @@
                         "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1report~1%7Bformat%7D~1%7Bid%7D/get/parameters/9/schema"
                       },
                       "currency": {
-                        "description": "Currency",
-                        "type": "string",
-                        "enum": [
-                          "EUR",
-                          "ZAR",
-                          "USD"
-                        ],
-                        "example": "EUR"
+                        "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1settings/get/responses/200/content/application~1json/schema/items/properties/currency"
                       },
                       "data": {
                         "description": "Additional accout attributes.",
@@ -693,7 +699,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1entry/get/parameters/0/schema"
+              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
             },
             "required": true
           },
@@ -762,7 +768,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1entry/get/parameters/0/schema"
+              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
             },
             "required": true
           }
@@ -840,31 +846,31 @@
       }
     },
     "/db/{databaseName}/document/{id}": {
-      "parameters": [
-        {
-          "in": "path",
-          "name": "databaseName",
-          "schema": {
-            "$ref": "./components/types/databaseName.yaml"
-          },
-          "required": true
-        },
-        {
-          "in": "path",
-          "name": "id",
-          "schema": {
-            "$ref": "./components/types/id.yaml"
-          },
-          "required": true,
-          "description": "The ID of the document."
-        }
-      ],
       "get": {
         "operationId": "getDocument",
         "tags": [
           "Documents"
         ],
         "summary": "Get data of one transaction",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1entry/get/parameters/1/schema"
+            },
+            "required": true,
+            "description": "The ID of the document."
+          }
+        ],
         "responses": {
           "200": {
             "description": "Get the details of the transaction document.",
@@ -896,7 +902,7 @@
             "$ref": "#/paths/~1db/get/responses/403"
           },
           "404": {
-            "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/responses/404"
+            "$ref": "#/paths/~1admin~1user~1%7Bemail%7D/get/responses/404"
           }
         }
       },
@@ -906,6 +912,25 @@
           "Documents"
         ],
         "summary": "Change the document attributes",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1entry/get/parameters/1/schema"
+            },
+            "required": true,
+            "description": "The ID of the document."
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -934,6 +959,25 @@
           "Documents"
         ],
         "summary": "Delete a transaction",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1entry/get/parameters/1/schema"
+            },
+            "required": true,
+            "description": "The ID of the document."
+          }
+        ],
         "responses": {
           "204": {
             "description": "Document deleted successfully."
@@ -956,10 +1000,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "description": "Name of the database.",
-              "type": "string",
-              "pattern": "^[0-9a-z-_]+$",
-              "example": "company_2"
+              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
             },
             "required": true
           },
@@ -1002,7 +1043,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1entry/get/parameters/0/schema"
+              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
             },
             "required": true
           }
@@ -1094,31 +1135,31 @@
       }
     },
     "/db/{databaseName}/entry/{id}": {
-      "parameters": [
-        {
-          "in": "path",
-          "name": "databaseName",
-          "schema": {
-            "$ref": "./components/types/databaseName.yaml"
-          },
-          "required": true
-        },
-        {
-          "in": "path",
-          "name": "id",
-          "schema": {
-            "$ref": "./components/types/id.yaml"
-          },
-          "required": true,
-          "description": "The ID of the entry."
-        }
-      ],
       "get": {
         "operationId": "getEntry",
         "tags": [
           "Entries"
         ],
         "summary": "Get data of one transaction line",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1entry/get/parameters/1/schema"
+            },
+            "required": true,
+            "description": "The ID of the entry."
+          }
+        ],
         "responses": {
           "200": {
             "description": "Get the details of the transaction entries.",
@@ -1134,7 +1175,7 @@
             "$ref": "#/paths/~1db/get/responses/403"
           },
           "404": {
-            "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/responses/404"
+            "$ref": "#/paths/~1admin~1user~1%7Bemail%7D/get/responses/404"
           }
         }
       },
@@ -1144,6 +1185,25 @@
           "Entries"
         ],
         "summary": "Change the line attributes",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1entry/get/parameters/1/schema"
+            },
+            "required": true,
+            "description": "The ID of the entry."
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1172,6 +1232,25 @@
           "Entries"
         ],
         "summary": "Delete a transaction line",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1entry/get/parameters/1/schema"
+            },
+            "required": true,
+            "description": "The ID of the entry."
+          }
+        ],
         "responses": {
           "204": {
             "description": "Entry deleted successfully."
@@ -1183,22 +1262,22 @@
       }
     },
     "/db/{databaseName}/heading": {
-      "parameters": [
-        {
-          "in": "path",
-          "name": "databaseName",
-          "schema": {
-            "$ref": "./components/types/databaseName.yaml"
-          },
-          "required": true
-        }
-      ],
       "get": {
         "operationId": "getHeadings",
         "tags": [
           "Headings"
         ],
         "summary": "Get account list headings",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+            },
+            "required": true
+          }
+        ],
         "responses": {
           "200": {
             "description": "This list describes headings that can be used when\ndisplaying account lists.\n",
@@ -1244,32 +1323,22 @@
       }
     },
     "/db/{databaseName}/period": {
-      "parameters": [
-        {
-          "in": "path",
-          "name": "databaseName",
-          "schema": {
-            "$ref": "./components/types/databaseName.yaml"
-          },
-          "required": true
-        }
-      ],
       "get": {
         "operationId": "getPeriods",
         "tags": [
           "Periods"
         ],
+        "summary": "List of all periods",
         "parameters": [
           {
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1entry/get/parameters/0/schema"
+              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
             },
             "required": true
           }
         ],
-        "summary": "List of all periods",
         "responses": {
           "200": {
             "description": "Get the list of periods in the database.",
@@ -1294,17 +1363,17 @@
         "tags": [
           "Periods"
         ],
+        "summary": "Create new period",
         "parameters": [
           {
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1entry/get/parameters/0/schema"
+              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
             },
             "required": true
           }
         ],
-        "summary": "Create new period",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1374,31 +1443,31 @@
       }
     },
     "/db/{databaseName}/period/{id}": {
-      "parameters": [
-        {
-          "in": "path",
-          "name": "databaseName",
-          "schema": {
-            "$ref": "./components/types/databaseName.yaml"
-          },
-          "required": true
-        },
-        {
-          "in": "path",
-          "name": "id",
-          "schema": {
-            "$ref": "./components/types/id.yaml"
-          },
-          "required": true,
-          "description": "The ID of the period."
-        }
-      ],
       "get": {
         "operationId": "getPeriod",
         "tags": [
           "Periods"
         ],
         "summary": "Get all account balances",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1entry/get/parameters/1/schema"
+            },
+            "required": true,
+            "description": "The ID of the period."
+          }
+        ],
         "responses": {
           "200": {
             "description": "Get the list of all accounts that have transactions\nand their current balances.\n",
@@ -1466,7 +1535,7 @@
             "$ref": "#/paths/~1db/get/responses/403"
           },
           "404": {
-            "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/responses/404"
+            "$ref": "#/paths/~1admin~1user~1%7Bemail%7D/get/responses/404"
           }
         }
       },
@@ -1476,6 +1545,25 @@
           "Periods"
         ],
         "summary": "Change the period attributes",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1entry/get/parameters/1/schema"
+            },
+            "required": true,
+            "description": "The ID of the period."
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1512,6 +1600,25 @@
           "Periods"
         ],
         "summary": "Delete a period",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1entry/get/parameters/1/schema"
+            },
+            "required": true,
+            "description": "The ID of the period."
+          }
+        ],
         "responses": {
           "204": {
             "description": "Period deleted successfully."
@@ -1523,22 +1630,22 @@
       }
     },
     "/db/{databaseName}/report": {
-      "parameters": [
-        {
-          "in": "path",
-          "name": "databaseName",
-          "schema": {
-            "$ref": "./components/types/databaseName.yaml"
-          },
-          "required": true
-        }
-      ],
       "get": {
         "operationId": "getReportOptions",
         "tags": [
           "Reports"
         ],
         "summary": "Available report options",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+            },
+            "required": true
+          }
+        ],
         "responses": {
           "200": {
             "description": "An object describing available report options.",
@@ -1656,7 +1763,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1entry/get/parameters/0/schema"
+              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
             },
             "required": true
           },
@@ -1871,7 +1978,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1entry/get/parameters/0/schema"
+              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
             },
             "required": true
           },
@@ -1942,6 +2049,694 @@
           },
           "403": {
             "$ref": "#/paths/~1db/get/responses/403"
+          }
+        }
+      }
+    },
+    "/db/{databaseName}/settings": {
+      "get": {
+        "operationId": "getSettings",
+        "tags": [
+          "Settings"
+        ],
+        "summary": "Get database settings",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get all database specific settings.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "databaseId": {
+                        "description": "ID number of the database.",
+                        "type": "number",
+                        "example": 7
+                      },
+                      "currency": {
+                        "description": "Currency",
+                        "type": "string",
+                        "enum": [
+                          "EUR",
+                          "ZAR",
+                          "USD"
+                        ],
+                        "example": "EUR"
+                      },
+                      "language": {
+                        "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1report~1%7Bformat%7D~1%7Bid%7D/get/parameters/9/schema"
+                      },
+                      "companyName": {
+                        "description": "Company name.",
+                        "type": "string",
+                        "example": "Company Inc."
+                      },
+                      "companyCode": {
+                        "description": "Company registration code.",
+                        "type": "string",
+                        "example": "12345678-US"
+                      },
+                      "scheme": {
+                        "description": "Selected name of the initial database scheme.",
+                        "type": "string",
+                        "example": "LimitedCompanyUS"
+                      },
+                      "schemeVersion": {
+                        "description": "Version number of the initial database scheme.",
+                        "type": "string",
+                        "example": "1.0.7"
+                      },
+                      "admin": {
+                        "description": null,
+                        "type": "boolean",
+                        "example": true
+                      },
+                      "superuser": {
+                        "description": null,
+                        "type": "boolean",
+                        "example": false
+                      },
+                      "isCreator": {
+                        "description": null,
+                        "type": "boolean",
+                        "example": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/paths/~1db/get/responses/403"
+          }
+        }
+      },
+      "patch": {
+        "operationId": "chenageSettings",
+        "tags": [
+          "Settings"
+        ],
+        "summary": "Change one or more settings",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "example": {
+                  "companyName": "New Company Inc.",
+                  "companyCode": "123456-CA"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Settings changed successfully."
+          },
+          "500": {
+            "description": "Tried to change a setting that is not allowed to be changed."
+          }
+        }
+      }
+    },
+    "/db/{databaseName}/tags": {
+      "get": {
+        "operationId": "getTags",
+        "tags": [
+          "Tags"
+        ],
+        "summary": "List of all tags",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get the list of tags in the database.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1tags/post/responses/200/content/application~1json/schema"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/paths/~1db/get/responses/403"
+          }
+        }
+      },
+      "post": {
+        "operationId": "createTag",
+        "tags": [
+          "Tags"
+        ],
+        "summary": "Create new tag",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "tag": {
+                        "description": "Code to be used in descriptions.",
+                        "type": "string",
+                        "example": "CompAc"
+                      },
+                      "name": {
+                        "description": "The meaning of the tag.",
+                        "type": "string",
+                        "example": "Computer Acessories"
+                      },
+                      "mime": {
+                        "description": "A MIME type for the content.",
+                        "type": "string",
+                        "example": "image/jpeg"
+                      },
+                      "picture": {
+                        "description": "Image data in base 64 encoding.",
+                        "type": "string",
+                        "format": "byte",
+                        "example": "vPv6f9tTtNpnUlrTk5Pe/RbkaFaxWNQyb3ted2ncsR"
+                      },
+                      "type": {
+                        "description": "A group name of the tag.",
+                        "type": "string",
+                        "example": "Product Category"
+                      },
+                      "order": {
+                        "description": "Visual ordering index for the tag.",
+                        "type": "integer",
+                        "example": 205
+                      }
+                    }
+                  }
+                ],
+                "required": [
+                  "tag",
+                  "name",
+                  "type"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Newly created tag.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1tags/post/requestBody/content/application~1json/schema/allOf/0"
+                    }
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "description": "The ID of the tag.",
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/paths/~1db/post/responses/400"
+          },
+          "403": {
+            "$ref": "#/paths/~1db/get/responses/403"
+          }
+        }
+      }
+    },
+    "/db/{databaseName}/tags/{id}": {
+      "get": {
+        "operationId": "getTag",
+        "tags": [
+          "Tags"
+        ],
+        "summary": "Get a single tag",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1entry/get/parameters/1/schema"
+            },
+            "required": true,
+            "description": "The ID of the tag."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get a tag data of single tag.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1tags/post/responses/200/content/application~1json/schema"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/paths/~1db/get/responses/403"
+          },
+          "404": {
+            "$ref": "#/paths/~1admin~1user~1%7Bemail%7D/get/responses/404"
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateTag",
+        "tags": [
+          "Tags"
+        ],
+        "summary": "Change the tag attributes",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1entry/get/parameters/1/schema"
+            },
+            "required": true,
+            "description": "The ID of the tag."
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1tags/post/requestBody/content/application~1json/schema/allOf/0"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Tag updated successfully."
+          },
+          "403": {
+            "$ref": "#/paths/~1db/get/responses/403"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteTag",
+        "tags": [
+          "Tags"
+        ],
+        "summary": "Delete a tag",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1entry/get/parameters/1/schema"
+            },
+            "required": true,
+            "description": "The ID of the tag."
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Tag deleted successfully."
+          },
+          "403": {
+            "$ref": "#/paths/~1db/get/responses/403"
+          }
+        }
+      }
+    },
+    "/db/{databaseName}/tags/{id}/view": {
+      "get": {
+        "operationId": "getTagView",
+        "tags": [
+          "Tags"
+        ],
+        "summary": "Get a picture for tag",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D~1entry/get/parameters/1/schema"
+            },
+            "required": true,
+            "description": "The ID of the tag."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get a tag picture.",
+            "content": {
+              "image/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/paths/~1db/get/responses/403"
+          },
+          "404": {
+            "$ref": "#/paths/~1admin~1user~1%7Bemail%7D/get/responses/404"
+          }
+        }
+      }
+    },
+    "/admin/user": {
+      "get": {
+        "operationId": "getUsers",
+        "tags": [
+          "Users"
+        ],
+        "summary": "List of all users",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "description": "Name of the database.",
+              "type": "string",
+              "pattern": "^[0-9a-z-_]+$",
+              "example": "company_2"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get the list of users in the database.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/paths/~1admin~1user/post/responses/200/content/application~1json/schema"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/paths/~1db/get/responses/403"
+          }
+        }
+      },
+      "post": {
+        "operationId": "createUser",
+        "tags": [
+          "Users"
+        ],
+        "summary": "Create new user",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "description": "Full name of the user.",
+                        "type": "string",
+                        "example": "Jack D. Dow"
+                      },
+                      "email": {
+                        "description": "Email address of the user.",
+                        "type": "string",
+                        "example": "jack.d.dow@gmail.com"
+                      },
+                      "disabled": {
+                        "description": "If set, user cannot log in.",
+                        "type": "boolean"
+                      },
+                      "config": {
+                        "description": "Additional configuration for the user.",
+                        "type": "object",
+                        "properties": {
+                          "admin": {
+                            "description": "If set, user is admin.",
+                            "type": "boolean",
+                            "example": false
+                          },
+                          "superuser": {
+                            "description": "If set, user is super user.",
+                            "type": "boolean",
+                            "example": false
+                          }
+                        }
+                      }
+                    }
+                  }
+                ],
+                "required": [
+                  "name",
+                  "email"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Newly created user.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/paths/~1admin~1user/post/requestBody/content/application~1json/schema/allOf/0"
+                    }
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "description": "The ID of the user.",
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/paths/~1db/post/responses/400"
+          },
+          "403": {
+            "description": "No permission or user registration disabled."
+          },
+          "500": {
+            "description": "Something went wrong with new user creation."
+          }
+        }
+      }
+    },
+    "/admin/user/{email}": {
+      "get": {
+        "operationId": "getUser",
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get user data",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "email",
+            "schema": {
+              "description": "Email of the user",
+              "type": "string",
+              "example": "foo@bar.com"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get user data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/paths/~1admin~1user/post/responses/200/content/application~1json/schema"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/paths/~1db/get/responses/403"
+          },
+          "404": {
+            "description": "Required target not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "description": "Error message.",
+                      "type": "string",
+                      "example": "Not found."
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteUser",
+        "tags": [
+          "Users"
+        ],
+        "summary": "Delete a user",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "email",
+            "schema": {
+              "description": "Email of the user",
+              "type": "string",
+              "example": "foo@bar.com"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "User deleted successfully."
+          },
+          "403": {
+            "$ref": "#/paths/~1db/get/responses/403"
+          }
+        }
+      }
+    },
+    "/admin/user/current-user": {
+      "get": {
+        "operationId": "getCurrentUser",
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get current user data",
+        "responses": {
+          "200": {
+            "description": "Get user data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/paths/~1admin~1user/post/responses/200/content/application~1json/schema"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/paths/~1db/get/responses/403"
+          },
+          "404": {
+            "$ref": "#/paths/~1admin~1user~1%7Bemail%7D/get/responses/404"
           }
         }
       }
