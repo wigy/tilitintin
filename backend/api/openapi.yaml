@@ -42,6 +42,9 @@ paths:
   /db/upload:
     $ref: paths/db/upload.yaml
 
+  /db/{databaseName}/download:
+    $ref: paths/db/download.yaml
+
   /db/{databaseName}/account:
     $ref: paths/account.yaml
 

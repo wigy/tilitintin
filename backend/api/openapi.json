@@ -328,7 +328,10 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+              "description": "Name of the database.",
+              "type": "string",
+              "pattern": "^[0-9a-z-_]+$",
+              "example": "company_2"
             },
             "required": true
           }
@@ -404,6 +407,44 @@
         }
       }
     },
+    "/db/{databaseName}/download": {
+      "get": {
+        "operationId": "downloadDb",
+        "tags": [
+          "Databases"
+        ],
+        "summary": "Download a database",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "databaseName",
+            "schema": {
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/parameters/0/schema"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get a database.",
+            "content": {
+              "application/gzip": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/paths/~1db/get/responses/403"
+          },
+          "404": {
+            "$ref": "#/paths/~1admin~1user~1%7Bemail%7D/get/responses/404"
+          }
+        }
+      }
+    },
     "/db/{databaseName}/account": {
       "get": {
         "operationId": "getAccounts",
@@ -416,7 +457,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/parameters/0/schema"
             },
             "required": true
           }
@@ -451,7 +492,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/parameters/0/schema"
             },
             "required": true
           }
@@ -532,7 +573,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/parameters/0/schema"
             },
             "required": true
           },
@@ -606,7 +647,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/parameters/0/schema"
             },
             "required": true
           },
@@ -699,7 +740,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/parameters/0/schema"
             },
             "required": true
           },
@@ -768,7 +809,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/parameters/0/schema"
             },
             "required": true
           }
@@ -857,7 +898,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/parameters/0/schema"
             },
             "required": true
           },
@@ -917,7 +958,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/parameters/0/schema"
             },
             "required": true
           },
@@ -964,7 +1005,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/parameters/0/schema"
             },
             "required": true
           },
@@ -1000,7 +1041,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/parameters/0/schema"
             },
             "required": true
           },
@@ -1043,7 +1084,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/parameters/0/schema"
             },
             "required": true
           }
@@ -1146,7 +1187,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/parameters/0/schema"
             },
             "required": true
           },
@@ -1190,7 +1231,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/parameters/0/schema"
             },
             "required": true
           },
@@ -1237,7 +1278,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/parameters/0/schema"
             },
             "required": true
           },
@@ -1273,7 +1314,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/parameters/0/schema"
             },
             "required": true
           }
@@ -1334,7 +1375,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/parameters/0/schema"
             },
             "required": true
           }
@@ -1369,7 +1410,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/parameters/0/schema"
             },
             "required": true
           }
@@ -1454,7 +1495,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/parameters/0/schema"
             },
             "required": true
           },
@@ -1550,7 +1591,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/parameters/0/schema"
             },
             "required": true
           },
@@ -1605,7 +1646,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/parameters/0/schema"
             },
             "required": true
           },
@@ -1641,7 +1682,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/parameters/0/schema"
             },
             "required": true
           }
@@ -1763,7 +1804,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/parameters/0/schema"
             },
             "required": true
           },
@@ -1802,8 +1843,8 @@
               "description": "If set, limit to the first quarter.",
               "type": "string",
               "enum": [
-                true,
-                false
+                "true",
+                "false"
               ],
               "example": true
             }
@@ -1815,8 +1856,8 @@
               "description": "If set, limit to the first two quarters.",
               "type": "string",
               "enum": [
-                true,
-                false
+                "true",
+                "false"
               ],
               "example": true
             }
@@ -1828,8 +1869,8 @@
               "description": "If set, limit to the first three quarters.",
               "type": "string",
               "enum": [
-                true,
-                false
+                "true",
+                "false"
               ],
               "example": true
             }
@@ -1841,8 +1882,8 @@
               "type": "string",
               "description": "If set, make separate columns per each associated tag.",
               "enum": [
-                true,
-                false
+                "true",
+                "false"
               ],
               "example": true
             }
@@ -1854,8 +1895,8 @@
               "type": "string",
               "description": "If set, use more compat version of the report.",
               "enum": [
-                true,
-                false
+                "true",
+                "false"
               ],
               "example": true
             }
@@ -1867,8 +1908,8 @@
               "type": "string",
               "description": "If set, produce CSV format.",
               "enum": [
-                true,
-                false
+                "true",
+                "false"
               ],
               "example": true
             }
@@ -1934,8 +1975,7 @@
                         },
                         "businessId": {
                           "type": "string"
-                        },
-                        "additionalProperties": true
+                        }
                       },
                       "example": {
                         "businessName": "Company Inc.",
@@ -1945,8 +1985,7 @@
                     "data": {
                       "type": "array",
                       "items": {
-                        "type": "object",
-                        "additionalProperties": true
+                        "type": "object"
                       }
                     }
                   }
@@ -1978,7 +2017,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/parameters/0/schema"
             },
             "required": true
           },
@@ -2016,8 +2055,8 @@
               "type": "string",
               "description": "If set, produce CSV format.",
               "enum": [
-                true,
-                false
+                "true",
+                "false"
               ],
               "example": true
             }
@@ -2065,7 +2104,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/parameters/0/schema"
             },
             "required": true
           }
@@ -2119,17 +2158,17 @@
                         "example": "1.0.7"
                       },
                       "admin": {
-                        "description": null,
+                        "description": "If set, user is an admin.",
                         "type": "boolean",
                         "example": true
                       },
                       "superuser": {
-                        "description": null,
+                        "description": "If set, user is a superuser.",
                         "type": "boolean",
                         "example": false
                       },
                       "isCreator": {
-                        "description": null,
+                        "description": "If set, user is creator of the database.",
                         "type": "boolean",
                         "example": true
                       }
@@ -2155,7 +2194,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/parameters/0/schema"
             },
             "required": true
           }
@@ -2178,6 +2217,9 @@
           "204": {
             "description": "Settings changed successfully."
           },
+          "403": {
+            "$ref": "#/paths/~1db/get/responses/403"
+          },
           "500": {
             "description": "Tried to change a setting that is not allowed to be changed."
           }
@@ -2196,7 +2238,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/parameters/0/schema"
             },
             "required": true
           }
@@ -2231,7 +2273,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/parameters/0/schema"
             },
             "required": true
           }
@@ -2331,7 +2373,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/parameters/0/schema"
             },
             "required": true
           },
@@ -2375,7 +2417,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/parameters/0/schema"
             },
             "required": true
           },
@@ -2422,7 +2464,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/parameters/0/schema"
             },
             "required": true
           },
@@ -2458,7 +2500,7 @@
             "in": "path",
             "name": "databaseName",
             "schema": {
-              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
+              "$ref": "#/paths/~1db~1%7BdatabaseName%7D/delete/parameters/0/schema"
             },
             "required": true
           },
@@ -2500,19 +2542,6 @@
           "Users"
         ],
         "summary": "List of all users",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "databaseName",
-            "schema": {
-              "description": "Name of the database.",
-              "type": "string",
-              "pattern": "^[0-9a-z-_]+$",
-              "example": "company_2"
-            },
-            "required": true
-          }
-        ],
         "responses": {
           "200": {
             "description": "Get the list of users in the database.",
@@ -2538,16 +2567,6 @@
           "Users"
         ],
         "summary": "Create new user",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "databaseName",
-            "schema": {
-              "$ref": "#/paths/~1admin~1user/get/parameters/0/schema"
-            },
-            "required": true
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
