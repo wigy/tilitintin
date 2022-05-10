@@ -20,5 +20,7 @@ get:
             type: array
             items:
               $ref: ../components/schemas/Heading.yaml
+    '401':
+      $ref: ../components/responses/401.yaml
     '403':
       $ref: ../components/responses/403.yaml

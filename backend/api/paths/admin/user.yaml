@@ -12,6 +12,8 @@ get:
             type: array
             items:
               $ref: ../../components/schemas/GetUser.yaml
+    '401':
+      $ref: ../../components/responses/401.yaml
     '403':
       $ref: ../../components/responses/403.yaml
 
@@ -34,6 +36,8 @@ post:
             $ref: ../../components/schemas/GetUser.yaml
     '400':
       $ref: ../../components/responses/400.yaml
+    '401':
+      $ref: ../../components/responses/401.yaml
     '403':
       description: No permission or user registration disabled.
     '500':

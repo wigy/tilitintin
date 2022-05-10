@@ -18,7 +18,9 @@ post:
       description: New database successfully created.
     '400':
       $ref: ../../components/responses/400.yaml
-    '500':
-      $ref: ../../components/responses/500.yaml
+    '401':
+      $ref: ../../components/responses/401.yaml
     '403':
       $ref: ../../components/responses/403.yaml
+    '500':
+      $ref: ../../components/responses/500.yaml

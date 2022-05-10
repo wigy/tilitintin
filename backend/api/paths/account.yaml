@@ -18,6 +18,8 @@ get:
             type: array
             items:
               $ref: ../components/schemas/GetAccount.yaml
+    '401':
+      $ref: ../components/responses/401.yaml
     '403':
       $ref: ../components/responses/403.yaml
 
@@ -53,5 +55,7 @@ post:
             $ref: ../components/schemas/GetAccount.yaml
     '400':
       $ref: ../components/responses/400.yaml
+    '401':
+      $ref: ../components/responses/401.yaml
     '403':
       $ref: ../components/responses/403.yaml

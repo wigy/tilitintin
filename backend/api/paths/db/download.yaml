@@ -17,6 +17,8 @@ get:
           schema:
             type: string
             format: binary
+    '401':
+      $ref: ../../components/responses/401.yaml
     '403':
       $ref: ../../components/responses/403.yaml
     '404':

@@ -31,6 +31,8 @@ get:
                     items:
                       $ref: ../../components/schemas/GetEntry.yaml
 
+    '401':
+      $ref: ../../components/responses/401.yaml
     '403':
       $ref: ../../components/responses/403.yaml
     '404':
@@ -61,6 +63,8 @@ patch:
   responses:
     '204':
       description: Document updated successfully.
+    '401':
+      $ref: ../../components/responses/401.yaml
     '403':
       $ref: ../../components/responses/403.yaml
 
@@ -85,5 +89,7 @@ delete:
   responses:
     '204':
       description: Document deleted successfully.
+    '401':
+      $ref: ../../components/responses/401.yaml
     '403':
       $ref: ../../components/responses/403.yaml

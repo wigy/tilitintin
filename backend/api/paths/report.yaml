@@ -45,5 +45,7 @@ get:
                 properties:
                   compact:
                     $ref: ../components/types/reportOptionToggleDefault.yaml
+    '401':
+      $ref: ../components/responses/401.yaml
     '403':
       $ref: ../components/responses/403.yaml

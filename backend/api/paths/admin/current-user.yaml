@@ -10,6 +10,8 @@ get:
         application/json:
           schema:
             $ref: ../../components/schemas/GetUser.yaml
+    '401':
+      $ref: ../../components/responses/401.yaml
     '403':
       $ref: ../../components/responses/403.yaml
     '404':

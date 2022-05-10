@@ -22,6 +22,8 @@ get:
         application/json:
           schema:
             $ref: ../../components/schemas/GetTag.yaml
+    '401':
+      $ref: ../../components/responses/401.yaml
     '403':
       $ref: ../../components/responses/403.yaml
     '404':
@@ -52,6 +54,8 @@ patch:
   responses:
     '204':
       description: Tag updated successfully.
+    '401':
+      $ref: ../../components/responses/401.yaml
     '403':
       $ref: ../../components/responses/403.yaml
 
@@ -76,5 +80,7 @@ delete:
   responses:
     '204':
       description: Tag deleted successfully.
+    '401':
+      $ref: ../../components/responses/401.yaml
     '403':
       $ref: ../../components/responses/403.yaml

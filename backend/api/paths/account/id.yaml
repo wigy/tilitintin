@@ -38,6 +38,8 @@ get:
                               type: integer
                               example: 31
 
+    '401':
+      $ref: ../../components/responses/401.yaml
     '403':
       $ref: ../../components/responses/403.yaml
     '404':
@@ -68,5 +70,7 @@ patch:
   responses:
     '204':
       description: Account updated successfully.
+    '401':
+      $ref: ../../components/responses/401.yaml
     '403':
       $ref: ../../components/responses/403.yaml
