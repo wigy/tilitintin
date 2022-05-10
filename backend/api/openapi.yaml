@@ -25,7 +25,7 @@ security:
 
 paths:
   /auth:
-    $ref: paths/auth.yaml
+    $ref: paths/auth/index.yaml
 
   /auth/refresh:
     $ref: paths/auth/refresh.yaml
@@ -34,7 +34,7 @@ paths:
     $ref: paths/auth/ui.yaml
 
   /db:
-    $ref: paths/db.yaml
+    $ref: paths/db/index.yaml
 
   /db/{databaseName}:
     $ref: paths/db/id.yaml
@@ -46,34 +46,34 @@ paths:
     $ref: paths/db/download.yaml
 
   /db/{databaseName}/account:
-    $ref: paths/account.yaml
+    $ref: paths/account/index.yaml
 
   /db/{databaseName}/account/{id}:
     $ref: paths/account/id.yaml
 
   /db/{databaseName}/document:
-    $ref: paths/document.yaml
+    $ref: paths/document/index.yaml
 
   /db/{databaseName}/document/{id}:
     $ref: paths/document/id.yaml
 
   /db/{databaseName}/entry:
-    $ref: paths/entry.yaml
+    $ref: paths/entry/index.yaml
 
   /db/{databaseName}/entry/{id}:
     $ref: paths/entry/id.yaml
 
   /db/{databaseName}/heading:
-    $ref: paths/heading.yaml
+    $ref: paths/heading/index.yaml
 
   /db/{databaseName}/period:
-    $ref: paths/period.yaml
+    $ref: paths/period/index.yaml
 
   /db/{databaseName}/period/{id}:
     $ref: paths/period/id.yaml
 
   /db/{databaseName}/report:
-    $ref: paths/report.yaml
+    $ref: paths/report/index.yaml
 
   /db/{databaseName}/report/{format}/{id}:
     $ref: paths/report/id.yaml
@@ -82,10 +82,10 @@ paths:
     $ref: paths/report/account.yaml
 
   /db/{databaseName}/settings:
-    $ref: paths/settings.yaml
+    $ref: paths/settings/index.yaml
 
   /db/{databaseName}/tags:
-    $ref: paths/tags.yaml
+    $ref: paths/tags/index.yaml
 
   /db/{databaseName}/tags/{id}:
     $ref: paths/tags/id.yaml
