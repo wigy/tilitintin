@@ -7,7 +7,7 @@ get:
   - in: path
     name: databaseName
     schema:
-      $ref: ../components/types/databaseName.yaml
+      $ref: ../../components/types/databaseName.yaml
     required: true
   responses:
     '200':
@@ -17,11 +17,11 @@ get:
           schema:
             type: array
             items:
-              $ref: ../components/schemas/GetTag.yaml
+              $ref: ../../components/schemas/GetTag.yaml
     '401':
-      $ref: ../components/responses/401.yaml
+      $ref: ../../components/responses/401.yaml
     '403':
-      $ref: ../components/responses/403.yaml
+      $ref: ../../components/responses/403.yaml
 
 post:
   operationId: createTag
@@ -32,23 +32,23 @@ post:
   - in: path
     name: databaseName
     schema:
-      $ref: ../components/types/databaseName.yaml
+      $ref: ../../components/types/databaseName.yaml
     required: true
   requestBody:
     content:
       application/json:
         schema:
-          $ref: ../components/schemas/CreateTag.yaml
+          $ref: ../../components/schemas/CreateTag.yaml
   responses:
     '200':
       description: Newly created tag.
       content:
         application/json:
           schema:
-            $ref: ../components/schemas/GetTag.yaml
+            $ref: ../../components/schemas/GetTag.yaml
     '400':
-      $ref: ../components/responses/400.yaml
+      $ref: ../../components/responses/400.yaml
     '401':
-      $ref: ../components/responses/401.yaml
+      $ref: ../../components/responses/401.yaml
     '403':
-      $ref: ../components/responses/403.yaml
+      $ref: ../../components/responses/403.yaml

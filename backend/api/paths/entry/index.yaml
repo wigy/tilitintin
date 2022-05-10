@@ -7,12 +7,12 @@ get:
   - in: path
     name: databaseName
     schema:
-      $ref: ../components/types/databaseName.yaml
+      $ref: ../../components/types/databaseName.yaml
     required: true
   - in: query
     name: account_id
     schema:
-      $ref: ../components/types/id.yaml
+      $ref: ../../components/types/id.yaml
     description: If given, limit to the entries associated with this account ID.
   responses:
     '200':
@@ -22,11 +22,11 @@ get:
           schema:
             type: array
             items:
-              $ref: ../components/schemas/GetEntry.yaml
+              $ref: ../../components/schemas/GetEntry.yaml
     '401':
-      $ref: ../components/responses/401.yaml
+      $ref: ../../components/responses/401.yaml
     '403':
-      $ref: ../components/responses/403.yaml
+      $ref: ../../components/responses/403.yaml
 
 post:
   operationId: createEntry
@@ -36,24 +36,24 @@ post:
   - in: path
     name: databaseName
     schema:
-      $ref: ../components/types/databaseName.yaml
+      $ref: ../../components/types/databaseName.yaml
     required: true
   summary: Create new transaction line
   requestBody:
     content:
       application/json:
         schema:
-          $ref: ../components/schemas/CreateEntry.yaml
+          $ref: ../../components/schemas/CreateEntry.yaml
   responses:
     '200':
       description: Newly created entry.
       content:
         application/json:
           schema:
-            $ref: ../components/schemas/GetEntry.yaml
+            $ref: ../../components/schemas/GetEntry.yaml
     '400':
-      $ref: ../components/responses/400.yaml
+      $ref: ../../components/responses/400.yaml
     '401':
-      $ref: ../components/responses/401.yaml
+      $ref: ../../components/responses/401.yaml
     '403':
-      $ref: ../components/responses/403.yaml
+      $ref: ../../components/responses/403.yaml

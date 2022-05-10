@@ -7,7 +7,7 @@ get:
   - in: path
     name: databaseName
     schema:
-      $ref: ../components/types/databaseName.yaml
+      $ref: ../../components/types/databaseName.yaml
     required: true
   responses:
     '200':
@@ -18,34 +18,34 @@ get:
             type: object
             properties:
               balance-sheet-detailed:
-                $ref: ../components/schemas/ReportQuarters.yaml
+                $ref: ../../components/schemas/ReportQuarters.yaml
               balance-sheet:
-                $ref: ../components/schemas/ReportQuarters.yaml
+                $ref: ../../components/schemas/ReportQuarters.yaml
               income-statement-detailed:
                 allOf:
-                  - $ref: ../components/schemas/ReportQuarters.yaml
+                  - $ref: ../../components/schemas/ReportQuarters.yaml
                   - type: object
                     properties:
                       byTags:
-                        $ref: ../components/types/reportOptionToggle.yaml
+                        $ref: ../../components/types/reportOptionToggle.yaml
               income-statement:
                 allOf:
-                  - $ref: ../components/schemas/ReportQuarters.yaml
+                  - $ref: ../../components/schemas/ReportQuarters.yaml
                   - type: object
                     properties:
                       byTags:
-                        $ref: ../components/types/reportOptionToggle.yaml
+                        $ref: ../../components/types/reportOptionToggle.yaml
               general-journal:
                 type: object
                 properties:
                   compact:
-                    $ref: ../components/types/reportOptionToggleDefault.yaml
+                    $ref: ../../components/types/reportOptionToggleDefault.yaml
               general-ledger:
                 type: object
                 properties:
                   compact:
-                    $ref: ../components/types/reportOptionToggleDefault.yaml
+                    $ref: ../../components/types/reportOptionToggleDefault.yaml
     '401':
-      $ref: ../components/responses/401.yaml
+      $ref: ../../components/responses/401.yaml
     '403':
-      $ref: ../components/responses/403.yaml
+      $ref: ../../components/responses/403.yaml

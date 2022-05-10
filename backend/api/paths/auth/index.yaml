@@ -27,7 +27,7 @@ post:
       content:
         application/json:
           schema:
-            $ref: ../components/schemas/LoginData.yaml
+            $ref: ../../components/schemas/LoginData.yaml
     '401':
       description: Login failed.
       content:

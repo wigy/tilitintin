@@ -7,7 +7,7 @@ get:
   - in: path
     name: databaseName
     schema:
-      $ref: ../components/types/databaseName.yaml
+      $ref: ../../components/types/databaseName.yaml
     required: true
   responses:
     '200':
@@ -17,11 +17,11 @@ get:
           schema:
             type: array
             items:
-              $ref: ../components/schemas/Settings.yaml
+              $ref: ../../components/schemas/Settings.yaml
     '401':
-      $ref: ../components/responses/401.yaml
+      $ref: ../../components/responses/401.yaml
     '403':
-      $ref: ../components/responses/403.yaml
+      $ref: ../../components/responses/403.yaml
 
 patch:
   operationId: chenageSettings
@@ -32,7 +32,7 @@ patch:
   - in: path
     name: databaseName
     schema:
-      $ref: ../components/types/databaseName.yaml
+      $ref: ../../components/types/databaseName.yaml
     required: true
   requestBody:
     content:
@@ -45,8 +45,8 @@ patch:
     '204':
       description: Settings changed successfully.
     '401':
-      $ref: ../components/responses/401.yaml
+      $ref: ../../components/responses/401.yaml
     '403':
-      $ref: ../components/responses/403.yaml
+      $ref: ../../components/responses/403.yaml
     '500':
       description: Tried to change a setting that is not allowed to be changed.

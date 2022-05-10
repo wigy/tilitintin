@@ -7,7 +7,7 @@ get:
   - in: path
     name: databaseName
     schema:
-      $ref: ../components/types/databaseName.yaml
+      $ref: ../../components/types/databaseName.yaml
     required: true
   responses:
     '200':
@@ -19,8 +19,8 @@ get:
           schema:
             type: array
             items:
-              $ref: ../components/schemas/Heading.yaml
+              $ref: ../../components/schemas/Heading.yaml
     '401':
-      $ref: ../components/responses/401.yaml
+      $ref: ../../components/responses/401.yaml
     '403':
-      $ref: ../components/responses/403.yaml
+      $ref: ../../components/responses/403.yaml

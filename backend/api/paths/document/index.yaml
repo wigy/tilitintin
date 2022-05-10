@@ -6,7 +6,7 @@ get:
   - in: path
     name: databaseName
     schema:
-      $ref: ../components/types/databaseName.yaml
+      $ref: ../../components/types/databaseName.yaml
     required: true
   - in: query
     name: entries
@@ -16,7 +16,7 @@ get:
   - in: query
     name: period
     schema:
-      $ref: ../components/types/id.yaml
+      $ref: ../../components/types/id.yaml
     description: If given, limit to the documents in the period with this ID.
   summary: List of all transactions
   responses:
@@ -27,11 +27,11 @@ get:
           schema:
             type: array
             items:
-              $ref: ../components/schemas/GetDocuments.yaml
+              $ref: ../../components/schemas/GetDocuments.yaml
     '401':
-      $ref: ../components/responses/401.yaml
+      $ref: ../../components/responses/401.yaml
     '403':
-      $ref: ../components/responses/403.yaml
+      $ref: ../../components/responses/403.yaml
 
 post:
   operationId: createDocument
@@ -41,24 +41,24 @@ post:
   - in: path
     name: databaseName
     schema:
-      $ref: ../components/types/databaseName.yaml
+      $ref: ../../components/types/databaseName.yaml
     required: true
   summary: Create new transaction
   requestBody:
     content:
       application/json:
         schema:
-          $ref: ../components/schemas/CreateDocument.yaml
+          $ref: ../../components/schemas/CreateDocument.yaml
   responses:
     '200':
       description: Newly created document.
       content:
         application/json:
           schema:
-            $ref: ../components/schemas/GetDocument.yaml
+            $ref: ../../components/schemas/GetDocument.yaml
     '400':
-      $ref: ../components/responses/400.yaml
+      $ref: ../../components/responses/400.yaml
     '401':
-      $ref: ../components/responses/401.yaml
+      $ref: ../../components/responses/401.yaml
     '403':
-      $ref: ../components/responses/403.yaml
+      $ref: ../../components/responses/403.yaml
