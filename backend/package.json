@@ -19,7 +19,7 @@
     "express": "^4.17.1",
     "glob": "^7.1.6",
     "json2csv": "^5.0.3",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "knex": "^0.21.6",
     "libfyffe": "^0.5.3",
     "moment": "^2.29.0",
